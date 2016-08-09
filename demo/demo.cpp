@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    main/demo.cpp
+/// @brief   The demo code
+///
+/// @author  Mu Yang <emfomy@gmail.com>
+///
+
+#include <iostream>
+#include <isvd.hpp>
+
+using namespace std;
+using namespace isvd;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Main function
+///
+int main() {
+  cout << "iSVD "
+       << ISVD_VERSION_MAJOR << "."
+       << ISVD_VERSION_MINOR << "."
+       << ISVD_VERSION_PATCH << " demo" << endl << endl;
+
+  return 0;
+}

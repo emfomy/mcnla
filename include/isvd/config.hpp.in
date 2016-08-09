@@ -1,0 +1,30 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/isvd/config.hpp
+/// @brief   The configured options and settings
+///
+/// @author  Mu Yang <emfomy@gmail.com>
+///
+
+#ifndef ISVD_CONFIG_HPP_
+#define ISVD_CONFIG_HPP_
+
+#ifndef __cplusplus
+#error C++ is required.
+#elif __cplusplus < 201103L
+#warning C++11 is required.
+#endif
+
+#define ISVD_VERSION_MAJOR @ISVD_VERSION_MAJOR@ ///< The major version of iSVD.
+#define ISVD_VERSION_MINOR @ISVD_VERSION_MINOR@ ///< The minor version of iSVD.
+#define ISVD_VERSION_PATCH @ISVD_VERSION_PATCH@ ///< The patch version of iSVD.
+
+#include <cassert>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The namespace iSVD
+///
+namespace isvd {
+
+}  // namespace isvd
+
+#endif  // ISVD_CONFIG_HPP_
