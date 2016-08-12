@@ -25,6 +25,12 @@
 ///
 namespace isvd {
 
+  /// Define the type of index.
+  typedef int64_t index_t;
+
+  /// Define the type of size.
+  typedef uint64_t size_t;
+
 }  // namespace isvd
 
 #endif  // ISVD_CONFIG_HPP_
