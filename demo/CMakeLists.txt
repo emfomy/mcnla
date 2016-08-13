@@ -10,9 +10,11 @@ find_package(MPI REQUIRED)
 if(MPI_FOUND)
   message(STATUS "Found MPI")
   set(INCS ${INCS} "${MPI_INCLUDE_PATH}")
+  set(LIBS ${LIBS} "${MPI_LIBRARIES}")
   set(COMFLGS "${COMFLGS} ${MPI_COMPILE_FLAGS}")
   set(LNKFLGS "${LNKFLGS} ${MPI_LINK_FLAGS}")
 endif()
+set(MPI_PROCS 4 CACHE PATH "The number of MPI processes")
 
 # MKL
 if(NOT DEFINED MKLROOT)
@@ -44,7 +46,7 @@ set_target_properties(demo PROPERTIES LINK_FLAGS    ${LNKFLGS})
 # Add rule 'run'
 add_custom_target(
   run
-  COMMAND ./demo
+  COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./demo
   DEPENDS demo
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Running demo"
