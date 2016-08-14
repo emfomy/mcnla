@@ -8,29 +8,36 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
 #include <isvd.hpp>
 #include <mpi.h>
 #include <mkl.h>
 
 using namespace std;
+using namespace boost::accumulators;
 using namespace isvd;
 
 int mpi_size;
 int mpi_rank;
 
-void createA( int m0, int n, int k, double *matrix_a, double *matrix_u_true, int iseed[4] );
-void sketch( int Nj, int m, int m0, int n, int k, double *matrix_a, double *matrices_qjt, int iseed[4] );
-void integrate( int N, int mj, int k, double *matrices_qjt, double *matrix_qjt );
-void reconstruct( int m0, int n, int k, double *matrix_a, double *matrix_qt,
-                  double *matrix_u, double *matrix_vt, double *vector_s );
-void check( int m0, int k, double *matrix_u_true, double *matrix_u );
+void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int iseed[4] );
+void sketch( const int Nj, const int m, const int m0, const int n, const int k,
+             const double *matrix_a, double *matrices_qjt, int iseed[4] );
+void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt );
+void reconstruct( const int m0, const int n, const int k,
+                  const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
+void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u, double &smax, double &smin );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
-  double start_time = 0.0, total_time;
+  double start_time = 0.0, total_time = 0.0, smax, smin;
 
+  // ====================================================================================================================== //
   // Initialize MPI
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
@@ -43,16 +50,21 @@ int main( int argc, char **argv ) {
          << ISVD_VERSION_PATCH << " demo" << endl << endl;
   }
 
+  int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
+  int m0       = ( argc > 2 ) ? atoi(argv[2]) : 100;
+  int n        = ( argc > 3 ) ? atoi(argv[3]) : 10000;
+  int k        = ( argc > 4 ) ? atoi(argv[4]) : 10;
+  int num_test = ( argc > 5 ) ? atoi(argv[5]) : 100;
+
+  // ====================================================================================================================== //
   // Initialize random seed
   srand(time(NULL) ^ mpi_rank);
   srand(rand());
   int iseed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
 
+  // ====================================================================================================================== //
   // Set parameters
-  int Nj = 4;
-  int m0 = 100;
-  int n = 10000;
-  int k = 10;
+  bool verbose = false;
   int N = Nj * mpi_size;
   int mj = (m0-1) / mpi_size + 1;
   int m = mj * mpi_size;
@@ -61,98 +73,99 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == 0 ) { printf("m = %d, n = %d, k = %d, N = %d, K = %d\n\n", m, n, k, N, mpi_size); }
 
   // ====================================================================================================================== //
-  // Matrix generating
+  // Allocate memory
+  auto matrix_a      = Malloc<double>(m0 * n);
+  auto matrix_u_true = Malloc<double>(m0 * k);
+  auto matrix_qt     = Malloc<double>(k * m);
+  auto matrix_u      = Malloc<double>(m0 * k);
+  auto matrix_vt     = Malloc<double>(k  * n);
+  auto vector_s      = Malloc<double>(k);
+  auto matrix_qjt    = Malloc<double>(k * mj);
+  auto matrices_qit  = Malloc<double>(k * mj * N);
+  auto matrices_qjt  = Malloc<double>(k * mj * N);
+  accumulator_set<double, stats<tag::variance>> acc;
 
-  if ( mpi_rank == 0 )  {cout << "Generating matrix .............. " << flush; }
-
-  double *matrix_a      = Malloc<double>(m0 * n);
-  double *matrix_u_true = Malloc<double>(m0 * k);
+  // ====================================================================================================================== //
+  // Generate matrix
+  if ( verbose && mpi_rank == 0 )  {cout << "Generating matrix .............. " << flush; }
   if ( mpi_rank == 0 ) {
     createA(m0, n, k, matrix_a, matrix_u_true, iseed);
   }
   MPI_Bcast(matrix_a, m0*n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  if ( verbose && mpi_rank == 0 ) { cout << "done" << endl << endl; }
 
-  if ( mpi_rank == 0 ) { cout << "done" << endl << endl; }
-
-  MPI_Barrier(MPI_COMM_WORLD);
+  // ====================================================================================================================== //
+  // Run iSVD
   if ( mpi_rank == 0 ) {
     cout << "Start iSVD." << endl;
-    start_time = dsecnd();
   }
 
-  // ====================================================================================================================== //
-  // Random sketching
-
-  if ( mpi_rank == 0 ) { cout << "Sketching ...................... " << flush; }
-
-  double *matrices_qit = Calloc<double>(k * mj * N);
-  double *matrices_qjt = Malloc<double>(k * mj * N);
-  sketch(Nj, m, m0, n, k, matrix_a, matrices_qit, iseed);
-  for ( auto i = 0; i < Nj; ++i ) {
-    MPI_Alltoall(matrices_qit+i*k*m, k*mj, MPI_DOUBLE, matrices_qjt+i*k*m, k*mj, MPI_DOUBLE, MPI_COMM_WORLD);
-  }
-
-  if ( mpi_rank == 0 ) { cout << "done" << endl; }
-
-  // ====================================================================================================================== //
-  // Integration
-
-  if ( mpi_rank == 0 ) { cout << "Integrating .................... " << flush; }
-
-  double *matrix_qt = nullptr;
-  if ( mpi_rank == 0 ) {
-    matrix_qt        = Malloc<double>(k * m);
-  }
-  double *matrix_qjt = Malloc<double>(k * mj);
-  integrate(N, mj, k, matrices_qjt, matrix_qjt);
-  MPI_Gather(matrix_qjt, k*mj, MPI_DOUBLE, matrix_qt, k*mj, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-  if ( mpi_rank == 0 ) { cout << "done" << endl; }
-
-  // ====================================================================================================================== //
-  // SVD reconstruction
-
-  if ( mpi_rank == 0 ) { cout << "Reconstructing ................. " << flush; }
-
-  double *matrix_u  = nullptr;
-  double *matrix_vt = nullptr;
-  double *vector_s  = nullptr;
-  if ( mpi_rank == 0 ) {
-    matrix_u  = Malloc<double>(m0 * k);
-    matrix_vt = Malloc<double>(k  * n);
-    vector_s  = Malloc<double>(k);
-    reconstruct(m0, n, k, matrix_a, matrix_qt, matrix_u, matrix_vt, vector_s);
-  }
-
-  if ( mpi_rank == 0 ) { cout << "done" << endl; }
-
-  MPI_Barrier(MPI_COMM_WORLD);
-  if ( mpi_rank == 0 ) {
-    total_time = dsecnd() - start_time;
-  }
-
-  if ( mpi_rank == 0 ) { cout << "Using " << total_time << " seconds." << endl; }
-
-  // ====================================================================================================================== //
-  // Check result
-
-  if ( mpi_rank == 0 ) {
-    printf("\nS: ");
-    for ( auto xx = 0; xx < k; ++xx ) {
-      printf("%12.6f", vector_s[xx]);
+  for ( auto t = 0; t < num_test; ++t ) {
+    MPI_Barrier(MPI_COMM_WORLD);
+    if ( mpi_rank == 0 ) {
+      start_time = dsecnd();
     }
-    printf("\n");
-    check(m0, k, matrix_u_true, matrix_u);
+
+    // ================================================================================================================== //
+    // Random sketch
+    if ( verbose && mpi_rank == 0 ) { cout << "Sketching ...................... " << flush; }
+    fill(matrices_qit, matrices_qit+k*mj*N, 0.0);
+    sketch(Nj, m, m0, n, k, matrix_a, matrices_qit, iseed);
+    for ( auto i = 0; i < Nj; ++i ) {
+      MPI_Alltoall(matrices_qit+i*k*m, k*mj, MPI_DOUBLE, matrices_qjt+i*k*m, k*mj, MPI_DOUBLE, MPI_COMM_WORLD);
+    }
+    if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
+
+    // ================================================================================================================== //
+    // Integrate
+    if ( verbose && mpi_rank == 0 ) { cout << "Integrating .................... " << flush; }
+    integrate(N, mj, k, matrices_qjt, matrix_qjt);
+    MPI_Gather(matrix_qjt, k*mj, MPI_DOUBLE, matrix_qt, k*mj, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
+
+    // ================================================================================================================== //
+    // Reconstruct SVD
+    if ( verbose && mpi_rank == 0 ) { cout << "Reconstructing ................. " << flush; }
+    if ( mpi_rank == 0 ) {
+      reconstruct(m0, n, k, matrix_a, matrix_qt, matrix_u, matrix_vt, vector_s);
+    }
+    if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
+
+    // ================================================================================================================== //
+    // Check time
+    MPI_Barrier(MPI_COMM_WORLD);
+    if ( mpi_rank == 0 ) {
+      total_time += dsecnd() - start_time;
+    }
+
+    // ================================================================================================================== //
+    // Check result
+    if ( mpi_rank == 0 ) {
+      check(m0, k, matrix_u_true, matrix_u, smax, smin);
+    }
+    if ( verbose && mpi_rank == 0 ) {
+      printf("\nS: "); for ( auto xx = 0; xx < k; ++xx ) { printf("%12.6f", vector_s[xx]); } printf("\n");
+      printf("svd(U_true' * U): max = %.4f,\t min = %.4f\n", smax, smin); fflush(stdout);
+    }
+    if ( mpi_rank == 0 ) { printf("%4d: %.4f\n", t, smin); }
+    if ( mpi_rank == 0 ) { acc(smin); }
+  }
+
+  if ( mpi_rank == 0 ) {
+    cout << "Using " << total_time / num_test << " seconds averagely." << endl;
+    cout << "mean(min(svd(U_true' * U))) = " << mean(acc) << endl;
+    cout << "sd(min(svd(U_true' * U)))   = " << sqrt(variance(acc)) << endl;
+
   }
 
   // ====================================================================================================================== //
   // Free memory
-
   Free(matrix_a);
   Free(matrix_u_true);
   Free(matrix_qt);
   Free(matrix_u);
   Free(matrix_vt);
+  Free(vector_s);
   Free(matrix_qjt);
   Free(matrices_qjt);
   Free(matrices_qit);
@@ -163,7 +176,7 @@ int main( int argc, char **argv ) {
   return 0;
 }
 
-void createA( int m0, int n, int k, double *matrix_a, double *matrix_u_true, int iseed[4] ) {
+void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int iseed[4] ) {
   auto matrix_u     = Malloc<double>(m0 * m0);
   auto matrix_v     = Malloc<double>(n  * m0);
   auto vector_tau_u = Malloc<double>(m0);
@@ -200,7 +213,8 @@ void createA( int m0, int n, int k, double *matrix_a, double *matrix_u_true, int
   Free(vector_tau_v);
 }
 
-void sketch( int Nj, int m, int m0, int n, int k, double *matrix_a, double *matrices_qjt, int iseed[4] ) {
+void sketch( const int Nj, const int m, const int m0, const int n, const int k,
+             const double *matrix_a, double *matrices_qjt, int iseed[4] ) {
   auto matrix_oit = Malloc<double>(k * n);
   auto vector_tau = Malloc<double>(k);
 
@@ -217,7 +231,7 @@ void sketch( int Nj, int m, int m0, int n, int k, double *matrix_a, double *matr
   Free(vector_tau);
 }
 
-void integrate( int N, int mj, int k, double *matrices_qjt, double *matrix_qjt ) {
+void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt ) {
   auto matrix_b   = Malloc<double>(k * k * N);
   auto matrix_d   = Malloc<double>(k * k * N);
   auto matrix_c   = Malloc<double>(k * k);
@@ -337,8 +351,8 @@ void integrate( int N, int mj, int k, double *matrices_qjt, double *matrix_qjt )
   Free(vector_e);
 }
 
-void reconstruct( int m0, int n, int k, double *matrix_a, double *matrix_qt,
-                  double *matrix_u, double *matrix_vt, double *vector_s ) {
+void reconstruct( const int m0, const int n, const int k,
+                  const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s ) {
   auto matrix_w   = Malloc<double>(k * k);
   auto vector_tmp = Malloc<double>(k);
 
@@ -356,8 +370,8 @@ void reconstruct( int m0, int n, int k, double *matrix_a, double *matrix_qt,
   Free(vector_tmp);
 }
 
-void check( int m0, int k, double *matrix_u_true, double *matrix_u ) {
-  auto matrix_tmp = Malloc<double>(k * k);
+void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u, double &smax, double &smin ) {
+  auto matrix_tmp  = Malloc<double>(k * k);
   auto vector_tmp1 = Malloc<double>(k);
   auto vector_tmp2 = Malloc<double>(k);
 
@@ -366,9 +380,10 @@ void check( int m0, int k, double *matrix_u_true, double *matrix_u ) {
 
   // Compute the SVD of TMP
   LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'N', 'N', k, k, matrix_tmp, k, vector_tmp1, nullptr, 1, nullptr, 1, vector_tmp2);
-  cout << "s_max(U_true' * U) = " << abs(vector_tmp1[cblas_idamax(k, vector_tmp1, 1)]) << endl;
-  cout << "s_min(U_true' * U) = " << abs(vector_tmp1[cblas_idamin(k, vector_tmp1, 1)]) << endl;
+  smax = abs(vector_tmp1[cblas_idamax(k, vector_tmp1, 1)]);
+  smin = abs(vector_tmp1[cblas_idamin(k, vector_tmp1, 1)]);
 
+  // Free memory
   Free(matrix_tmp);
   Free(vector_tmp1);
   Free(vector_tmp2);
