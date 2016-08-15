@@ -9,6 +9,7 @@
 #define ISVD_HPP_
 
 #include <isvd/config.hpp>
+#include <isvd/matrix.hpp>
 #include <isvd/utility.hpp>
 
 #endif  // ISVD_HPP_

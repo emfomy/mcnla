@@ -35,19 +35,36 @@ if(MKL_FOUND)
   set(COMFLGS "${COMFLGS} -m64")
 endif()
 
+# # Set target
+# add_executable(demo demo.cpp)
+# include_directories("${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
+# include_directories(SYSTEM ${INCS})
+# target_link_libraries(demo ${LIBS})
+# set_target_properties(demo PROPERTIES COMPILE_FLAGS ${COMFLGS})
+# set_target_properties(demo PROPERTIES LINK_FLAGS    ${LNKFLGS})
+
+# # Add rule 'run'
+# add_custom_target(
+#   run
+#   COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./demo
+#   DEPENDS demo
+#   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#   COMMENT "Running demo"
+# )
+
 # Set target
-add_executable(demo demo.cpp)
+add_executable(test test.cpp)
 include_directories("${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
 include_directories(SYSTEM ${INCS})
-target_link_libraries(demo ${LIBS})
-set_target_properties(demo PROPERTIES COMPILE_FLAGS ${COMFLGS})
-set_target_properties(demo PROPERTIES LINK_FLAGS    ${LNKFLGS})
+target_link_libraries(test ${LIBS})
+set_target_properties(test PROPERTIES COMPILE_FLAGS ${COMFLGS})
+set_target_properties(test PROPERTIES LINK_FLAGS    ${LNKFLGS})
 
 # Add rule 'run'
 add_custom_target(
   run
-  COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./demo
-  DEPENDS demo
+  COMMAND ./test
+  DEPENDS test
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMENT "Running demo"
+  COMMENT "Running test"
 )
