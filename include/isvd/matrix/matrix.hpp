@@ -16,8 +16,40 @@
 //
 namespace isvd {
 
-template <class    _Data> class Matrix;
-template <typename _Type> class MatrixData;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The enumeration of matrix storage layout.
+///
+enum class Layout {
+  COLMAJOR,  ///< Column-major order.
+  ROWMAJOR,  ///< Row-major order.
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The interface of matrix data storage.
+///
+/// @tparam _Type  The type of numeric value in matrix.
+///
+template <typename _Type>
+class MatrixData {
+
+ public:
+
+  /// Type alias
+  typedef _Type ValueType;
+
+ public:
+
+  // Constructors
+  MatrixData() noexcept;
+
+  // Destructor
+  virtual ~MatrixData() noexcept;
+
+  // Gets data
+  index_t getNrow() const noexcept;
+  index_t getNcol() const noexcept;
+
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of matrix.
@@ -40,7 +72,6 @@ class Matrix {
   // Constructors
   Matrix() noexcept;
   Matrix( const Matrix &other ) noexcept;
-  Matrix( Matrix &&other ) noexcept;
   Matrix( _Data *data ) noexcept;
 
   // Destructor
@@ -48,45 +79,11 @@ class Matrix {
 
   // Operators
   Matrix& operator=( const Matrix &other ) noexcept;
-  Matrix& operator=( Matrix &&other ) noexcept;
 
   // Gets data
   index_t getNrow() const noexcept;
   index_t getNcol() const noexcept;
   _Data*  getData() const noexcept;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of matrix data storage.
-///
-/// @tparam _Type  The type of numeric value in matrix.
-///
-template <typename _Type>
-class MatrixData {
-
- public:
-
-  /// Type alias
-  typedef _Type ValueType;
-
- public:
-
-  // Constructors
-  MatrixData() noexcept;
-  MatrixData( const MatrixData &other ) noexcept;
-  MatrixData( MatrixData &&other ) noexcept;
-
-  // Destructor
-  virtual ~MatrixData() noexcept;
-
-  // Operators
-  MatrixData& operator=( const MatrixData &other ) noexcept;
-  MatrixData& operator=( MatrixData &&other ) noexcept;
-
-  // Gets data
-  index_t getNrow() const noexcept;
-  index_t getNcol() const noexcept;
 
 };
 

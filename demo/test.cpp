@@ -9,6 +9,7 @@
 #include <isvd.hpp>
 
 template class isvd::Matrix<isvd::MatrixData<double>>;
+template class isvd::Matrix<isvd::DenseMatrixData<double>>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -18,4 +19,6 @@ int main() {
             << ISVD_VERSION_MAJOR << "."
             << ISVD_VERSION_MINOR << "."
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
+
+  isvd::Matrix<isvd::DenseMatrixData<double>> dense_matrix;
 }

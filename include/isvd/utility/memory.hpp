@@ -9,7 +9,6 @@
 #define ISVD_UTILITY_MEMORY_HPP_
 
 #include <isvd/config.hpp>
-#include <mkl.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -25,8 +24,8 @@ namespace isvd {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-_Type* Malloc( const index_t num ) {
-  return static_cast<_Type*>(mkl_malloc(num * sizeof(_Type*), 64));
+_Type* Malloc( const index_t num ) noexcept {
+  return static_cast<_Type*>(malloc(num * sizeof(_Type*)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +37,8 @@ _Type* Malloc( const index_t num ) {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-_Type* Calloc( const index_t num ) {
-  return static_cast<_Type*>(mkl_calloc(num, sizeof(_Type*), 64));
+_Type* Calloc( const index_t num ) noexcept {
+  return static_cast<_Type*>(calloc(num, sizeof(_Type*)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,8 +50,8 @@ _Type* Calloc( const index_t num ) {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-_Type* Realloc( _Type *&ptr, const index_t num ) {
-  return static_cast<_Type*>(mkl_realloc(ptr, num * sizeof(_Type*)));
+_Type* Realloc( _Type *&ptr, const index_t num ) noexcept {
+  return static_cast<_Type*>(realloc(ptr, num * sizeof(_Type*)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +62,8 @@ _Type* Realloc( _Type *&ptr, const index_t num ) {
 /// @param   ptr    The pointer to the array.
 ///
 template <typename _Type>
-void Free( _Type *&ptr ) {
-  mkl_free(ptr);
+void Free( _Type *&ptr ) noexcept {
+  free(ptr);
   ptr = nullptr;
 }
 

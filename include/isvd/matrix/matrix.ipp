@@ -33,16 +33,6 @@ Matrix<_Data>::Matrix(
   : data_(other.data_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Move constructor.
-///
-template <class _Data>
-Matrix<_Data>::Matrix(
-    Matrix &&other
-) noexcept {
-  data_ = std::move(other.data_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given data.
 ///
 template <class _Data>
@@ -63,17 +53,6 @@ Matrix<_Data>& Matrix<_Data>::operator=(
     const Matrix &other
 ) noexcept {
   data_ = other.data_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Move assignment operator.
-///
-template <class _Data>
-Matrix<_Data>& Matrix<_Data>::operator=(
-    Matrix &&other
-) noexcept {
-  data_ = std::move(other.data_);
   return *this;
 }
 
