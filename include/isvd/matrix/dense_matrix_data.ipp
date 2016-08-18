@@ -34,8 +34,8 @@ DenseMatrixData<_Type, _layout>::DenseMatrixData(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
-  setNrow(&this, nrow);
-  setNcol(&this, ncol);
+  setNrow(*this, nrow);
+  setNcol(*this, ncol);
   pitch_ = dim1_;
   value_ = Malloc<_Type>(pitch_ * dim2_);
 }
@@ -49,8 +49,8 @@ DenseMatrixData<_Type, _layout>::DenseMatrixData(
     const index_t ncol,
     const index_t pitch
 ) noexcept {
-  setNrow(&this, nrow);
-  setNcol(&this, ncol);
+  setNrow(*this, nrow);
+  setNcol(*this, ncol);
   pitch_ = pitch;
   value_ = Malloc<_Type>(pitch_ * dim2_);
   assert(pitch_ >= dim1_);
@@ -68,8 +68,8 @@ DenseMatrixData<_Type, _layout>::DenseMatrixData(
     const index_t pitch,
     _Type *&value
 ) noexcept {
-  setNrow(&this, nrow);
-  setNcol(&this, ncol);
+  setNrow(*this, nrow);
+  setNcol(*this, ncol);
   pitch_ = pitch;
   value_ = value;
   value = nullptr;
@@ -94,13 +94,13 @@ Layout DenseMatrixData<_Type, _layout>::getLayout() const noexcept { return _lay
 /// Gets the number of rows.
 ///
 template <typename _Type, Layout _layout>
-index_t DenseMatrixData<_Type, _layout>::getNrow() const noexcept { return getNrow(&this); }
+index_t DenseMatrixData<_Type, _layout>::getNrow() const noexcept { return getNrow(*this); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
 template <typename _Type, Layout _layout>
-index_t DenseMatrixData<_Type, _layout>::getNcol() const noexcept { return getNcol(&this); }
+index_t DenseMatrixData<_Type, _layout>::getNcol() const noexcept { return getNcol(*this); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the leading dimension.

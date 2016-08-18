@@ -23,8 +23,8 @@ namespace isvd {
 /// @tparam _layout The storage layout of matrix.
 ///
 //@{
-template <typename _Type, Layout _layout = Layout::COLMAJOR>
-class DenseMatrixData : MatrixData<_Type> {
+template <typename _Type, Layout _layout>
+class DenseMatrixData : public MatrixData<_Type> {
 
  protected:
 
@@ -49,7 +49,7 @@ class DenseMatrixData : MatrixData<_Type> {
   DenseMatrixData( const index_t nrow, const index_t ncol, const index_t pitch, _Type *&value ) noexcept;
 
   // Destructor
-  virtual ~DenseMatrixData() noexcept;
+  ~DenseMatrixData() noexcept;
 
   // Gets data
   Layout  getLayout() const noexcept;
@@ -79,25 +79,28 @@ class DenseMatrixData : MatrixData<_Type> {
 /// @tparam _Type  The type of numeric value in matrix.
 /// @tparam _layout The storage layout of matrix.
 ///
-template <typename _Type, Layout _layout>
-class Matrix<DenseMatrixData<_Type, _layout>> {
+template <typename _Type, Layout _layout = Layout::COLMAJOR>
+class DenseMatrix : public Matrix<DenseMatrixData<_Type, _layout>> {
+
+ public:
+
+  /// Type alias
+  typedef DenseMatrixData<_Type, _layout> DataType;
 
  public:
 
   // Constructors
-  // Matrix() noexcept;
-  // Matrix( const Matrix &other ) noexcept;
-  // Matrix( Matrix &&other ) noexcept;
-  // Matrix( class DataType *data ) noexcept;
-
-  // Destructor
-  // ~Matrix() noexcept;
-
-  // Operators
-  // Matrix& operator=( const Matrix &other ) noexcept;
-  // Matrix& operator=( Matrix &&other ) noexcept;
+  DenseMatrix() noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Type *&value ) noexcept;
 
   // Gets data
+  Layout  getLayout() const noexcept;
+  index_t getNrow() const noexcept;
+  index_t getNcol() const noexcept;
+  index_t getPitch() const noexcept;
+  _Type*  getValue() const noexcept;
 
 };
 

@@ -43,7 +43,7 @@ class MatrixData {
   MatrixData() noexcept;
 
   // Destructor
-  virtual ~MatrixData() noexcept;
+  ~MatrixData() noexcept;
 
   // Gets data
   index_t getNrow() const noexcept;
@@ -63,6 +63,8 @@ class Matrix {
 
   /// Type alias
   typedef _Data DataType;
+
+ private:
 
   /// The matrix storage
   std::shared_ptr<DataType> data_;
