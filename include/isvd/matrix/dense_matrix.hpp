@@ -58,7 +58,7 @@ class DenseMatrixData : public MatrixData<_Type> {
   index_t getPitch() const noexcept;
   _Type*  getValue() const noexcept;
 
- private:
+ protected:
 
   // Gets data
   static index_t getNcol( const DenseMatrixData<_Type, Layout::COLMAJOR> &data ) noexcept;

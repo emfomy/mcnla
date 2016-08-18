@@ -21,7 +21,7 @@ namespace isvd {
 ///
 template <typename _Type, Layout _layout>
 DenseMatrix<_Type, _layout>::DenseMatrix() noexcept
-  : Matrix<DataType>(new DataType(0, 0)) {}
+  : Matrix<DataType>(new DataType()) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given size information.

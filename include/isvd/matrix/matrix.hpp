@@ -64,7 +64,7 @@ class Matrix {
   /// Type alias
   typedef _Data DataType;
 
- private:
+ protected:
 
   /// The matrix storage
   std::shared_ptr<DataType> data_;
