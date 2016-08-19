@@ -25,6 +25,11 @@ enum class Layout {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The implementation namespace.
+//
+namespace impl {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of matrix data storage.
 ///
 /// @tparam _Type  The type of numeric value in matrix.
@@ -35,7 +40,7 @@ class MatrixData {
  public:
 
   /// Type alias
-  typedef _Type ValueType;
+  using ValueType = _Type;
 
  public:
 
@@ -52,35 +57,30 @@ class MatrixData {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of matrix.
+/// The interface of matrix base.
 ///
 /// @tparam _Data  The storage data type.
 ///
 template <class _Data>
-class Matrix {
-
- public:
-
-  /// Type alias
-  typedef _Data DataType;
+class MatrixBase {
 
  protected:
 
   /// The matrix storage
-  std::shared_ptr<DataType> data_;
+  std::shared_ptr<_Data> data_;
 
  public:
 
   // Constructors
-  Matrix() noexcept;
-  Matrix( const Matrix &other ) noexcept;
-  Matrix( _Data *data ) noexcept;
+  MatrixBase() noexcept;
+  MatrixBase( const MatrixBase &other ) noexcept;
+  MatrixBase( _Data *data ) noexcept;
 
   // Destructor
-  ~Matrix() noexcept;
+  ~MatrixBase() noexcept;
 
   // Operators
-  Matrix& operator=( const Matrix &other ) noexcept;
+  MatrixBase& operator=( const MatrixBase &other ) noexcept;
 
   // Gets data
   index_t getNrow() const noexcept;
@@ -88,6 +88,8 @@ class Matrix {
   _Data*  getData() const noexcept;
 
 };
+
+}  // namespace impl
 
 }  // namespace isvd
 

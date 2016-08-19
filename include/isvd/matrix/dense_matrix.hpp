@@ -17,7 +17,12 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The implementation of dense matrix data storage.
+//  The implementation namespace.
+//
+namespace impl {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The dense matrix data storage.
 ///
 /// @tparam _Type   The type of numeric value in matrix.
 /// @tparam _layout The storage layout of matrix.
@@ -74,34 +79,47 @@ class DenseMatrixData : public MatrixData<_Type> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The implementation of dense matrix.
+/// The dense matrix base.
 ///
+/// @tparam _Data  The storage data type.
 /// @tparam _Type  The type of numeric value in matrix.
-/// @tparam _layout The storage layout of matrix.
 ///
-template <typename _Type, Layout _layout = Layout::COLMAJOR>
-class DenseMatrix : public Matrix<DenseMatrixData<_Type, _layout>> {
+template <class _Data>
+class DenseMatrixBase : MatrixBase<_Data> {
 
- public:
+ private:
 
   /// Type alias
-  typedef DenseMatrixData<_Type, _layout> DataType;
+  using ValueType = typename _Data::ValueType;
 
  public:
 
   // Constructors
-  DenseMatrix() noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Type *&value ) noexcept;
+  DenseMatrixBase() noexcept;
+  DenseMatrixBase( const index_t nrow, const index_t ncol ) noexcept;
+  DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
+  DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch, ValueType *&value ) noexcept;
 
   // Gets data
   Layout  getLayout() const noexcept;
   index_t getNrow() const noexcept;
   index_t getNcol() const noexcept;
   index_t getPitch() const noexcept;
-  _Type*  getValue() const noexcept;
+  ValueType* getValue() const noexcept;
 
+};
+
+}  // namespace impl
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The dense matrix.
+///
+/// @tparam _Type  The type of numeric value in matrix.
+/// @tparam _layout The storage layout of matrix.
+///
+template <typename _Type, Layout _layout = Layout::COLMAJOR>
+class DenseMatrix : public impl::DenseMatrixBase<impl::DenseMatrixData<_Type, _layout>> {
+  using impl::DenseMatrixBase<impl::DenseMatrixData<_Type, _layout>>::DenseMatrixBase;
 };
 
 }  // namespace isvd

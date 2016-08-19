@@ -1,15 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/matrix.ipp
-/// @brief   The implementation of matrix interface.
+/// @file    include/isvd/matrix/matrix_base.ipp
+/// @brief   The implementation of matrix base interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_MATRIX_IPP_
-#define ISVD_MATRIX_MATRIX_IPP_
+#ifndef ISVD_MATRIX_MATRIX_BASE_IPP_
+#define ISVD_MATRIX_MATRIX_BASE_IPP_
 
 #include <isvd/matrix/matrix.hpp>
-#include <utility>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -17,18 +16,23 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The implementation namespace.
+//
+namespace impl {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Default constructor.
 ///
 template <class _Data>
-Matrix<_Data>::Matrix() noexcept
+MatrixBase<_Data>::MatrixBase() noexcept
   : data_(new _Data()) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Copy constructor.
 ///
 template <class _Data>
-Matrix<_Data>::Matrix(
-    const Matrix &other
+MatrixBase<_Data>::MatrixBase(
+    const MatrixBase &other
 ) noexcept
   : data_(other.data_) {}
 
@@ -36,21 +40,21 @@ Matrix<_Data>::Matrix(
 /// Construct with given data.
 ///
 template <class _Data>
-Matrix<_Data>::Matrix( _Data *data ) noexcept
+MatrixBase<_Data>::MatrixBase( _Data *data ) noexcept
   : data_(data) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Default destructor.
 ///
 template <class _Data>
-Matrix<_Data>::~Matrix() noexcept {}
+MatrixBase<_Data>::~MatrixBase() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Copy assignment operator.
 ///
 template <class _Data>
-Matrix<_Data>& Matrix<_Data>::operator=(
-    const Matrix &other
+MatrixBase<_Data>& MatrixBase<_Data>::operator=(
+    const MatrixBase &other
 ) noexcept {
   data_ = other.data_;
   return *this;
@@ -60,7 +64,7 @@ Matrix<_Data>& Matrix<_Data>::operator=(
 /// Gets the number of rows.
 ///
 template <class _Data>
-index_t Matrix<_Data>::getNrow() const noexcept {
+index_t MatrixBase<_Data>::getNrow() const noexcept {
   return data_->getNrow();
 }
 
@@ -68,7 +72,7 @@ index_t Matrix<_Data>::getNrow() const noexcept {
 /// Gets the number of columns.
 ///
 template <class _Data>
-index_t Matrix<_Data>::getNcol() const noexcept {
+index_t MatrixBase<_Data>::getNcol() const noexcept {
   return data_->getNcol();
 }
 
@@ -76,10 +80,12 @@ index_t Matrix<_Data>::getNcol() const noexcept {
 /// Gets the data storage
 ///
 template <class _Data>
-_Data* Matrix<_Data>::getData() const noexcept {
+_Data* MatrixBase<_Data>::getData() const noexcept {
   return data_.get();
 }
 
+}  // namespace impl
+
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_MATRIX_IPP_
+#endif  // ISVD_MATRIX_MATRIX_BASE_IPP_

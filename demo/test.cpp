@@ -8,8 +8,8 @@
 #include <iostream>
 #include <isvd.hpp>
 
-template class isvd::Matrix<isvd::MatrixData<double>>;
-template class isvd::Matrix<isvd::DenseMatrixData<double, isvd::Layout::COLMAJOR>>;
+template class isvd::DenseMatrix<double, isvd::Layout::COLMAJOR>;
+template class isvd::DenseSubmatrix<double, isvd::Layout::COLMAJOR>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -21,4 +21,5 @@ int main() {
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
 
   isvd::DenseMatrix<double> dense_matrix;
+  isvd::DenseSubmatrix<double> dense_submatrix;
 }

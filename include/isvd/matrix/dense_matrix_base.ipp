@@ -1,15 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_matrix.ipp
-/// @brief   The implementation of dense matrix.
+/// @file    include/isvd/matrix/dense_matrix_base.ipp
+/// @brief   The implementation of dense matrix base.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_MATRIX_IPP_
-#define ISVD_MATRIX_DENSE_MATRIX_IPP_
+#ifndef ISVD_MATRIX_DENSE_MATRIX_BASE_IPP_
+#define ISVD_MATRIX_DENSE_MATRIX_BASE_IPP_
 
 #include <isvd/matrix/dense_matrix.hpp>
-#include <isvd/utility/memory.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -17,77 +16,85 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Construct with given size information.
-///
-template <typename _Type, Layout _layout>
-DenseMatrix<_Type, _layout>::DenseMatrix() noexcept
-  : Matrix<DataType>(new DataType()) {}
+//  The implementation namespace.
+//
+namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given size information.
 ///
-template <typename _Type, Layout _layout>
-DenseMatrix<_Type, _layout>::DenseMatrix(
+template <class _Data>
+DenseMatrixBase<_Data>::DenseMatrixBase() noexcept
+  : MatrixBase<_Data>(new _Data()) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Construct with given size information.
+///
+template <class _Data>
+DenseMatrixBase<_Data>::DenseMatrixBase(
     const index_t nrow,
     const index_t ncol
 ) noexcept
-  : Matrix<DataType>(new DataType(nrow, ncol)) {}
+  : MatrixBase<_Data>(new _Data(nrow, ncol)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given size information.
 ///
-template <typename _Type, Layout _layout>
-DenseMatrix<_Type, _layout>::DenseMatrix(
+template <class _Data>
+DenseMatrixBase<_Data>::DenseMatrixBase(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch
 ) noexcept
-  : Matrix<DataType>(new DataType(nrow, ncol, pitch)) {}
+  : MatrixBase<_Data>(new _Data(nrow, ncol, pitch)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given raw data.
 ///
 /// @attention  DO NOT FREE #value!!
 ///
-template <typename _Type, Layout _layout>
-DenseMatrix<_Type, _layout>::DenseMatrix(
+template <class _Data>
+DenseMatrixBase<_Data>::DenseMatrixBase(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    _Type *&value
+    ValueType *&value
 ) noexcept
-  : Matrix<DataType>(new DataType(nrow, ncol, pitch, value)) {}
+  : MatrixBase<_Data>(new _Data(nrow, ncol, pitch, value)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the storage layout.
 ///
-template <typename _Type, Layout _layout>
-Layout DenseMatrix<_Type, _layout>::getLayout() const noexcept { return this.data_->_layout; }
+template <class _Data>
+Layout DenseMatrixBase<_Data>::getLayout() const noexcept { return this.data_->_layout; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of rows.
 ///
-template <typename _Type, Layout _layout>
-index_t DenseMatrix<_Type, _layout>::getNrow() const noexcept { return this.data_->getNrow(&this); }
+template <class _Data>
+index_t DenseMatrixBase<_Data>::getNrow() const noexcept { return this.data_->getNrow(*this); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
-template <typename _Type, Layout _layout>
-index_t DenseMatrix<_Type, _layout>::getNcol() const noexcept { return this.data_->getNcol(&this); }
+template <class _Data>
+index_t DenseMatrixBase<_Data>::getNcol() const noexcept { return this.data_->getNcol(*this); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the leading dimension.
 ///
-template <typename _Type, Layout _layout>
-index_t DenseMatrix<_Type, _layout>::getPitch() const noexcept { return this.data_->pitch_; }
+template <class _Data>
+index_t DenseMatrixBase<_Data>::getPitch() const noexcept { return this.data_->pitch_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
-template <typename _Type, Layout _layout>
-_Type* DenseMatrix<_Type, _layout>::getValue() const noexcept { return this.data_->value_; }
+template <class _Data>
+typename DenseMatrixBase<_Data>::ValueType*
+    DenseMatrixBase<_Data>::getValue() const noexcept { return this.data_->value_; }
+
+}  // namespace impl
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_MATRIX_IPP_
+#endif  // ISVD_MATRIX_DENSE_MATRIX_BASE_IPP_

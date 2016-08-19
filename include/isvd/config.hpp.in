@@ -21,15 +21,15 @@
 #include <cassert>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The namespace iSVD
-///
+//  The namespace iSVD
+//
 namespace isvd {
 
   /// Define the type of index.
-  typedef int64_t index_t;
+  using index_t = int64_t;
 
   /// Define the type of size.
-  typedef uint64_t size_t;
+  using size_t = uint64_t;
 
 }  // namespace isvd
 

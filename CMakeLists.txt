@@ -16,3 +16,4 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 # Add subdirectories
 add_subdirectory(include)
 add_subdirectory(demo)
+add_subdirectory(doxygen)
