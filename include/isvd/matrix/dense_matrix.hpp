@@ -21,15 +21,16 @@ namespace isvd {
 //
 namespace impl {
 
+template <typename _Scalar, Layout _layout> class DenseBlockData;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix data storage.
 ///
 /// @tparam _Scalar    The scalar type of matrix.
 /// @tparam _layout    The storage layout of matrix.
-/// @tparam _is_block  Mark as block matrix.
 ///
 //@{
-template <typename _Scalar, Layout _layout, bool _is_block>
+template <typename _Scalar, Layout _layout>
 class DenseMatrixData : public MatrixData<_Scalar> {
 
  protected:
@@ -58,17 +59,28 @@ class DenseMatrixData : public MatrixData<_Scalar> {
   DenseMatrixData() noexcept;
   DenseMatrixData( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrixData( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  DenseMatrixData( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *&value ) noexcept;
+  DenseMatrixData( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *value ) noexcept;
 
   // Destructor
   ~DenseMatrixData() noexcept;
 
   // Gets data
-  Layout   getLayout() const noexcept;
-  index_t  getNrow() const noexcept;
-  index_t  getNcol() const noexcept;
-  index_t  getPitch() const noexcept;
-  _Scalar* getValue() const noexcept;
+  Layout  getLayout() const noexcept;
+  index_t getNrow() const noexcept;
+  index_t getNcol() const noexcept;
+  index_t getPitch() const noexcept;
+  _Scalar*       getValue() noexcept;
+  const _Scalar* getValue() const noexcept;
+  _Scalar&       getValue( const index_t rowid, const index_t colid ) noexcept;
+  const _Scalar& getValue( const index_t rowid, const index_t colid ) const noexcept;
+
+  // Gets block
+  DenseBlockData<_Scalar, _layout>* getBlock() noexcept;
+  DenseBlockData<_Scalar, _layout>* getBlock( const index_t rowid, const index_t colid,
+                                              const index_t nrow, const index_t ncol ) noexcept;
+  DenseBlockData<_Scalar, _layout>* getRows( const index_t rowid, const index_t nrow ) noexcept;
+  DenseBlockData<_Scalar, _layout>* getCols( const index_t colid, const index_t ncol ) noexcept;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,14 +103,17 @@ class DenseMatrixBase : public MatrixBase<_Data> {
   DenseMatrixBase() noexcept;
   DenseMatrixBase( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch, ScalarType *&value ) noexcept;
+  DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch, ScalarType *value ) noexcept;
 
   // Gets data
   Layout  getLayout() const noexcept;
   index_t getNrow() const noexcept;
   index_t getNcol() const noexcept;
   index_t getPitch() const noexcept;
-  ScalarType* getValue() const noexcept;
+  ScalarType*       getValue() noexcept;
+  const ScalarType* getValue() const noexcept;
+  ScalarType&       getValue( const index_t rowid, const index_t colid ) noexcept;
+  const ScalarType& getValue( const index_t rowid, const index_t colid ) const noexcept;
 
 };
 
@@ -111,19 +126,8 @@ class DenseMatrixBase : public MatrixBase<_Data> {
 /// @tparam _layout  The storage layout of matrix.
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class DenseMatrix : public impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, false>> {
-  using impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, false>>::DenseMatrixBase;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix block.
-///
-/// @tparam _Scalar  The type of numeric value in matrix.
-/// @tparam _layout  The storage layout of matrix.
-///
-template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class DenseBlock : public impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, true>> {
-  using impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, true>>::DenseMatrixBase;
+class DenseMatrix : public impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout>> {
+  using impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout>>::DenseMatrixBase;
 };
 
 }  // namespace isvd
