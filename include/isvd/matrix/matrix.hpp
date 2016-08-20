@@ -32,15 +32,15 @@ namespace impl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of matrix data storage.
 ///
-/// @tparam _Type  The type of numeric value in matrix.
+/// @tparam _Scalar  The scalar type of matrix.
 ///
-template <typename _Type>
+template <typename _Scalar>
 class MatrixData {
 
  public:
 
   /// Type alias
-  using ValueType = _Type;
+  using ScalarType = _Scalar;
 
  public:
 
@@ -53,6 +53,16 @@ class MatrixData {
   // Gets data
   index_t getNrow() const noexcept;
   index_t getNcol() const noexcept;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+ private:
+
+  // Constructors
+  MatrixData( MatrixData &&other ) noexcept;
+
+  // Operators
+  MatrixData& operator=( MatrixData &&other ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 
@@ -86,6 +96,16 @@ class MatrixBase {
   index_t getNrow() const noexcept;
   index_t getNcol() const noexcept;
   _Data*  getData() const noexcept;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+ private:
+
+  // Constructors
+  MatrixBase( MatrixBase &&other ) noexcept;
+
+  // Operators
+  MatrixBase& operator=( MatrixBase &&other ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

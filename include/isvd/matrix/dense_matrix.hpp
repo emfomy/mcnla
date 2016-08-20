@@ -24,12 +24,13 @@ namespace impl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix data storage.
 ///
-/// @tparam _Type   The type of numeric value in matrix.
-/// @tparam _layout The storage layout of matrix.
+/// @tparam _Scalar    The scalar type of matrix.
+/// @tparam _layout    The storage layout of matrix.
+/// @tparam _is_block  Mark as block matrix.
 ///
 //@{
-template <typename _Type, Layout _layout>
-class DenseMatrixData : public MatrixData<_Type> {
+template <typename _Scalar, Layout _layout, bool _is_block>
+class DenseMatrixData : public MatrixData<_Scalar> {
 
  protected:
 
@@ -49,7 +50,7 @@ class DenseMatrixData : public MatrixData<_Type> {
   index_t pitch_;
 
   /// The data array.
-  _Type  *value_;
+  _Scalar *value_;
 
  public:
 
@@ -57,32 +58,32 @@ class DenseMatrixData : public MatrixData<_Type> {
   DenseMatrixData() noexcept;
   DenseMatrixData( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrixData( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  DenseMatrixData( const index_t nrow, const index_t ncol, const index_t pitch, _Type *&value ) noexcept;
+  DenseMatrixData( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *&value ) noexcept;
 
   // Destructor
   ~DenseMatrixData() noexcept;
 
   // Gets data
-  Layout  getLayout() const noexcept;
-  index_t getNrow() const noexcept;
-  index_t getNcol() const noexcept;
-  index_t getPitch() const noexcept;
-  _Type*  getValue() const noexcept;
+  Layout   getLayout() const noexcept;
+  index_t  getNrow() const noexcept;
+  index_t  getNcol() const noexcept;
+  index_t  getPitch() const noexcept;
+  _Scalar* getValue() const noexcept;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix base.
 ///
-/// @tparam _Data  The storage data type.
-/// @tparam _Type  The type of numeric value in matrix.
+/// @tparam _Data    The storage data type.
+/// @tparam _Scalar  The type of numeric value in matrix.
 ///
 template <class _Data>
-class DenseMatrixBase : MatrixBase<_Data> {
+class DenseMatrixBase : public MatrixBase<_Data> {
 
  private:
 
   /// Type alias
-  using ValueType = typename _Data::ValueType;
+  using ScalarType = typename _Data::ScalarType;
 
  public:
 
@@ -90,14 +91,14 @@ class DenseMatrixBase : MatrixBase<_Data> {
   DenseMatrixBase() noexcept;
   DenseMatrixBase( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch, ValueType *&value ) noexcept;
+  DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch, ScalarType *&value ) noexcept;
 
   // Gets data
   Layout  getLayout() const noexcept;
   index_t getNrow() const noexcept;
   index_t getNcol() const noexcept;
   index_t getPitch() const noexcept;
-  ValueType* getValue() const noexcept;
+  ScalarType* getValue() const noexcept;
 
 };
 
@@ -106,12 +107,23 @@ class DenseMatrixBase : MatrixBase<_Data> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix.
 ///
-/// @tparam _Type  The type of numeric value in matrix.
-/// @tparam _layout The storage layout of matrix.
+/// @tparam _Scalar  The type of numeric value in matrix.
+/// @tparam _layout  The storage layout of matrix.
 ///
-template <typename _Type, Layout _layout = Layout::COLMAJOR>
-class DenseMatrix : public impl::DenseMatrixBase<impl::DenseMatrixData<_Type, _layout>> {
-  using impl::DenseMatrixBase<impl::DenseMatrixData<_Type, _layout>>::DenseMatrixBase;
+template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
+class DenseMatrix : public impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, false>> {
+  using impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, false>>::DenseMatrixBase;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The dense matrix block.
+///
+/// @tparam _Scalar  The type of numeric value in matrix.
+/// @tparam _layout  The storage layout of matrix.
+///
+template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
+class DenseBlock : public impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, true>> {
+  using impl::DenseMatrixBase<impl::DenseMatrixData<_Scalar, _layout, true>>::DenseMatrixBase;
 };
 
 }  // namespace isvd

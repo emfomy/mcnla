@@ -9,7 +9,7 @@
 #include <isvd.hpp>
 
 template class isvd::DenseMatrix<double>;
-template class isvd::DenseSubmatrix<double>;
+template class isvd::DenseBlock<double>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -21,5 +21,5 @@ int main() {
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
 
   isvd::DenseMatrix<double> dense_matrix;
-  isvd::DenseSubmatrix<double> dense_submatrix;
+  isvd::DenseBlock<double> dense_block;
 }

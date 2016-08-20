@@ -51,14 +51,14 @@ DenseMatrixBase<_Data>::DenseMatrixBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given raw data.
 ///
-/// @attention  DO NOT FREE #value!!
+/// @attention  DO NOT FREE @a value!!
 ///
 template <class _Data>
 DenseMatrixBase<_Data>::DenseMatrixBase(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    ValueType *&value
+    ScalarType *&value
 ) noexcept
   : MatrixBase<_Data>(new _Data(nrow, ncol, pitch, value)) {}
 
@@ -66,32 +66,32 @@ DenseMatrixBase<_Data>::DenseMatrixBase(
 /// Gets the storage layout.
 ///
 template <class _Data>
-Layout DenseMatrixBase<_Data>::getLayout() const noexcept { return this.data_->_layout; }
+Layout DenseMatrixBase<_Data>::getLayout() const noexcept { return this.data_->getLayout(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of rows.
 ///
 template <class _Data>
-index_t DenseMatrixBase<_Data>::getNrow() const noexcept { return this.data_->getNrow(*this); }
+index_t DenseMatrixBase<_Data>::getNrow() const noexcept { return this.data_->getNrow(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
 template <class _Data>
-index_t DenseMatrixBase<_Data>::getNcol() const noexcept { return this.data_->getNcol(*this); }
+index_t DenseMatrixBase<_Data>::getNcol() const noexcept { return this.data_->getNcol(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the leading dimension.
 ///
 template <class _Data>
-index_t DenseMatrixBase<_Data>::getPitch() const noexcept { return this.data_->pitch_; }
+index_t DenseMatrixBase<_Data>::getPitch() const noexcept { return this.data_->getPitch(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
 template <class _Data>
-typename DenseMatrixBase<_Data>::ValueType*
-    DenseMatrixBase<_Data>::getValue() const noexcept { return this.data_->value_; }
+typename DenseMatrixBase<_Data>::ScalarType*
+    DenseMatrixBase<_Data>::getValue() const noexcept { return this.data_->getValue(); }
 
 }  // namespace impl
 

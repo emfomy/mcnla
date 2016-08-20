@@ -23,26 +23,26 @@ namespace impl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Default constructor.
 ///
-template <typename _Type>
-MatrixData<_Type>::MatrixData() noexcept {}
+template <typename _Scalar>
+MatrixData<_Scalar>::MatrixData() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Default destructor.
 ///
-template <typename _Type>
-MatrixData<_Type>::~MatrixData() noexcept {}
+template <typename _Scalar>
+MatrixData<_Scalar>::~MatrixData() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of rows.
 ///
-template <typename _Type>
-index_t MatrixData<_Type>::getNrow() const noexcept { return 0; }
+template <typename _Scalar>
+index_t MatrixData<_Scalar>::getNrow() const noexcept { return 0; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
-template <typename _Type>
-index_t MatrixData<_Type>::getNcol() const noexcept { return 0; }
+template <typename _Scalar>
+index_t MatrixData<_Scalar>::getNcol() const noexcept { return 0; }
 
 }  // namespace impl
 

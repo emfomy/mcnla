@@ -17,10 +17,11 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  The allocator.
-/// Allocates an array of #_Type with size #num.
+/// Allocates an array of @a _Type with size @a num.
 ///
 /// @tparam  _Type  The type of the array.
 /// @param   num    The number of objects.
+///
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
@@ -30,10 +31,11 @@ _Type* Malloc( const index_t num ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  The callocator.
-/// Allocates an array of #_Type with size #num and initializes with zero.
+/// Allocates an array of @a _Type with size @a num and initializes with zero.
 ///
 /// @tparam  _Type  The type of the array.
 /// @param   num    The number of objects.
+///
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
@@ -43,10 +45,12 @@ _Type* Calloc( const index_t num ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  The reallocator.
-/// Reallocates an array of #_Type with size #num.
+/// Reallocates an array of @a _Type with size @a num.
 ///
 /// @tparam  _Type  The type of the array.
 /// @param   num    The number of objects.
+/// @param   ptr    The pointer to the array.
+///
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
@@ -56,7 +60,7 @@ _Type* Realloc( _Type *&ptr, const index_t num ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  The deallocator.
-/// Deallocates #ptr and set it to @c nullptr.
+/// Deallocates @a ptr and set it to @c nullptr.
 ///
 /// @tparam  _Type  The type of the array.
 /// @param   ptr    The pointer to the array.

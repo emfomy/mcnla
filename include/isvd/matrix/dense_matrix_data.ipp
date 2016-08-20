@@ -24,8 +24,8 @@ namespace impl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Default constructor.
 ///
-template <typename _Type, Layout _layout>
-DenseMatrixData<_Type, _layout>::DenseMatrixData() noexcept
+template <typename _Scalar, Layout _layout, bool _is_block>
+DenseMatrixData<_Scalar, _layout, _is_block>::DenseMatrixData() noexcept
   : nrow_(0),
     ncol_(0),
     pitch_(0),
@@ -34,21 +34,21 @@ DenseMatrixData<_Type, _layout>::DenseMatrixData() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given size information.
 ///
-template <typename _Type, Layout _layout>
-DenseMatrixData<_Type, _layout>::DenseMatrixData(
+template <typename _Scalar, Layout _layout, bool _is_block>
+DenseMatrixData<_Scalar, _layout, _is_block>::DenseMatrixData(
     const index_t nrow,
     const index_t ncol
 ) noexcept
   : nrow_(nrow),
     ncol_(ncol),
     pitch_(dim1_),
-    value_(Malloc<_Type>(pitch_ * dim2_)) {}
+    value_(Malloc<_Scalar>(pitch_ * dim2_)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given size information.
 ///
-template <typename _Type, Layout _layout>
-DenseMatrixData<_Type, _layout>::DenseMatrixData(
+template <typename _Scalar, Layout _layout, bool _is_block>
+DenseMatrixData<_Scalar, _layout, _is_block>::DenseMatrixData(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch
@@ -56,21 +56,21 @@ DenseMatrixData<_Type, _layout>::DenseMatrixData(
   : nrow_(nrow),
     ncol_(ncol),
     pitch_(pitch),
-    value_(Malloc<_Type>(pitch_ * dim2_)) {
+    value_(Malloc<_Scalar>(pitch_ * dim2_)) {
   assert(pitch_ >= dim1_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Construct with given raw data.
 ///
-/// @attention  DO NOT FREE #value!!
+/// @attention  DO NOT FREE @a value!!
 ///
-template <typename _Type, Layout _layout>
-DenseMatrixData<_Type, _layout>::DenseMatrixData(
+template <typename _Scalar, Layout _layout, bool _is_block>
+DenseMatrixData<_Scalar, _layout, _is_block>::DenseMatrixData(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    _Type *&value
+    _Scalar *&value
 ) noexcept
   : nrow_(nrow),
     ncol_(ncol),
@@ -83,40 +83,42 @@ DenseMatrixData<_Type, _layout>::DenseMatrixData(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Default destructor.
 ///
-template <typename _Type, Layout _layout>
-DenseMatrixData<_Type, _layout>::~DenseMatrixData() noexcept {
-  Free(value_);
+template <typename _Scalar, Layout _layout, bool _is_block>
+DenseMatrixData<_Scalar, _layout, _is_block>::~DenseMatrixData() noexcept {
+  if ( !_is_block ) {
+    Free(value_);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the storage layout.
 ///
-template <typename _Type, Layout _layout>
-Layout DenseMatrixData<_Type, _layout>::getLayout() const noexcept { return _layout; }
+template <typename _Scalar, Layout _layout, bool _is_block>
+Layout DenseMatrixData<_Scalar, _layout, _is_block>::getLayout() const noexcept { return _layout; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of rows.
 ///
-template <typename _Type, Layout _layout>
-index_t DenseMatrixData<_Type, _layout>::getNrow() const noexcept { return nrow_; }
+template <typename _Scalar, Layout _layout, bool _is_block>
+index_t DenseMatrixData<_Scalar, _layout, _is_block>::getNrow() const noexcept { return nrow_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
-template <typename _Type, Layout _layout>
-index_t DenseMatrixData<_Type, _layout>::getNcol() const noexcept { return ncol_; }
+template <typename _Scalar, Layout _layout, bool _is_block>
+index_t DenseMatrixData<_Scalar, _layout, _is_block>::getNcol() const noexcept { return ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the leading dimension.
 ///
-template <typename _Type, Layout _layout>
-index_t DenseMatrixData<_Type, _layout>::getPitch() const noexcept { return pitch_; }
+template <typename _Scalar, Layout _layout, bool _is_block>
+index_t DenseMatrixData<_Scalar, _layout, _is_block>::getPitch() const noexcept { return pitch_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the number of columns.
 ///
-template <typename _Type, Layout _layout>
-_Type* DenseMatrixData<_Type, _layout>::getValue() const noexcept { return value_; }
+template <typename _Scalar, Layout _layout, bool _is_block>
+_Scalar* DenseMatrixData<_Scalar, _layout, _is_block>::getValue() const noexcept { return value_; }
 
 }  // namespace impl
 
