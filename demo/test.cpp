@@ -8,8 +8,8 @@
 #include <iostream>
 #include <isvd.hpp>
 
-template class isvd::DenseMatrix<double, isvd::Layout::COLMAJOR>;
-template class isvd::DenseSubmatrix<double, isvd::Layout::COLMAJOR>;
+template class isvd::DenseMatrix<double>;
+template class isvd::DenseSubmatrix<double>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function

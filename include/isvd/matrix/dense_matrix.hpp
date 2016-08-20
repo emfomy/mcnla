@@ -33,11 +33,17 @@ class DenseMatrixData : public MatrixData<_Type> {
 
  protected:
 
+  /// The number of rows.
+  index_t nrow_;
+
+  /// The number of columns.
+  index_t ncol_;
+
   /// The size of major dimension.
-  index_t dim1_;
+  index_t &dim1_ = (_layout == Layout::COLMAJOR) ? nrow_ : ncol_;
 
   /// The size of minor dimension.
-  index_t dim2_;
+  index_t &dim2_ = (_layout == Layout::COLMAJOR) ? ncol_ : nrow_;
 
   /// The leading dimension.
   index_t pitch_;
@@ -62,20 +68,6 @@ class DenseMatrixData : public MatrixData<_Type> {
   index_t getNcol() const noexcept;
   index_t getPitch() const noexcept;
   _Type*  getValue() const noexcept;
-
- protected:
-
-  // Gets data
-  static index_t getNcol( const DenseMatrixData<_Type, Layout::COLMAJOR> &data ) noexcept;
-  static index_t getNcol( const DenseMatrixData<_Type, Layout::ROWMAJOR> &data ) noexcept;
-  static index_t getNrow( const DenseMatrixData<_Type, Layout::COLMAJOR> &data ) noexcept;
-  static index_t getNrow( const DenseMatrixData<_Type, Layout::ROWMAJOR> &data ) noexcept;
-
-  // Sets data
-  static void setNcol( DenseMatrixData<_Type, Layout::COLMAJOR> &data, const index_t ncol ) noexcept;
-  static void setNcol( DenseMatrixData<_Type, Layout::ROWMAJOR> &data, const index_t ncol ) noexcept;
-  static void setNrow( DenseMatrixData<_Type, Layout::COLMAJOR> &data, const index_t nrow ) noexcept;
-  static void setNrow( DenseMatrixData<_Type, Layout::ROWMAJOR> &data, const index_t nrow ) noexcept;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

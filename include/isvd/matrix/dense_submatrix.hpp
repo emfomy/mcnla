@@ -39,6 +39,17 @@ class DenseSubmatrixData : public DenseMatrixData<_Type, _layout> {
   ~DenseSubmatrixData() noexcept;
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The dense submatrix base.
+///
+/// @tparam _Data  The storage data type.
+/// @tparam _Type  The type of numeric value in matrix.
+///
+template <class _Data>
+class DenseSubmatrixBase : DenseMatrixBase<_Data> {
+  using DenseMatrixBase<_Data>::DenseMatrixBase;
+};
+
 }  // namespace impl
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,8 +59,8 @@ class DenseSubmatrixData : public DenseMatrixData<_Type, _layout> {
 /// @tparam _layout The storage layout of matrix.
 ///
 template <typename _Type, Layout _layout = Layout::COLMAJOR>
-class DenseSubmatrix : public impl::DenseMatrixBase<impl::DenseSubmatrixData<_Type, _layout>> {
-  using impl::DenseMatrixBase<impl::DenseSubmatrixData<_Type, _layout>>::DenseMatrixBase;
+class DenseSubmatrix : public impl::DenseSubmatrixBase<impl::DenseSubmatrixData<_Type, _layout>> {
+  using impl::DenseSubmatrixBase<impl::DenseSubmatrixData<_Type, _layout>>::DenseSubmatrixBase;
 };
 
 }  // namespace isvd
