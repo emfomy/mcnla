@@ -32,7 +32,7 @@ namespace impl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of matrix data storage.
 ///
-/// @tparam _Scalar  The scalar type of matrix.
+/// @tparam  _Scalar  The scalar type of matrix.
 ///
 template <typename _Scalar>
 class MatrixData {
@@ -54,25 +54,15 @@ class MatrixData {
   index_t getNrow() const noexcept;
   index_t getNcol() const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
- private:
-
-  // Constructors
-  MatrixData( MatrixData &&other ) noexcept;
-
-  // Operators
-  MatrixData& operator=( MatrixData &&other ) noexcept;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of matrix base.
+/// The interface of matrix.
 ///
-/// @tparam _Data  The storage data type.
+/// @tparam  _Data  The storage data type.
 ///
 template <class _Data>
-class MatrixBase {
+class Matrix {
 
  protected:
 
@@ -82,29 +72,27 @@ class MatrixBase {
  public:
 
   // Constructors
-  MatrixBase() noexcept;
-  MatrixBase( const MatrixBase &other ) noexcept;
-  MatrixBase( _Data *data ) noexcept;
+  template <typename... Args>
+  Matrix( Args... args ) noexcept;
+  Matrix( const Matrix &other ) noexcept;
+  Matrix( _Data *data ) noexcept;
 
   // Destructor
-  ~MatrixBase() noexcept;
+  ~Matrix() noexcept;
 
   // Operators
-  MatrixBase& operator=( const MatrixBase &other ) noexcept;
-
-  // Gets data
-  index_t getNrow() const noexcept;
-  index_t getNcol() const noexcept;
-  _Data*  getData() const noexcept;
+  Matrix& operator=( const Matrix &other ) noexcept;
+  _Data* operator*() const noexcept;
+  _Data* operator->() const noexcept;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
  private:
 
   // Constructors
-  MatrixBase( MatrixBase &&other ) noexcept;
+  Matrix( Matrix &&other ) noexcept;
 
   // Operators
-  MatrixBase& operator=( MatrixBase &&other ) noexcept;
+  Matrix& operator=( Matrix &&other ) noexcept;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };

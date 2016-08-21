@@ -23,10 +23,11 @@ int main() {
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
 
   isvd::DenseMatrix<double> matrix(10, 20, 30);
-  for ( auto i = 0; i < matrix.getNrow(); ++i ) {
-    for ( auto j = 0; j < matrix.getNcol(); ++j ) {
-      matrix.getValue(i, j) = i*j;
+  for ( auto i = 0; i < matrix->getNrow(); ++i ) {
+    for ( auto j = 0; j < matrix->getNcol(); ++j ) {
+      matrix->getValue(i, j) = i*j;
     }
   }
-  // std::cout << *(matrix.getData());
+  isvd::impl::DenseMatrixData<double, isvd::Layout::COLMAJOR>* data = *matrix;
+  // std::cout << *(matrix->getData());
 }

@@ -24,10 +24,9 @@ namespace impl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense block data storage.
 ///
-/// @tparam _Scalar    The scalar type of matrix.
-/// @tparam _layout    The storage layout of matrix.
+/// @tparam  _Scalar  The scalar type of matrix.
+/// @tparam  _layout  The storage layout of matrix.
 ///
-//@{
 template <typename _Scalar, Layout _layout>
 class DenseBlockData : public DenseMatrixData<_Scalar, _layout> {
 
@@ -47,12 +46,12 @@ class DenseBlockData : public DenseMatrixData<_Scalar, _layout> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense block.
 ///
-/// @tparam _Scalar  The type of numeric value in matrix.
-/// @tparam _layout  The storage layout of matrix.
+/// @tparam  _Scalar  The type of numeric value in matrix.
+/// @tparam  _layout  The storage layout of matrix.
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class DenseBlock : public impl::DenseMatrixBase<impl::DenseBlockData<_Scalar, _layout>> {
-  using impl::DenseMatrixBase<impl::DenseBlockData<_Scalar, _layout>>::DenseMatrixBase;
+class DenseBlock : public impl::Matrix<impl::DenseBlockData<_Scalar, _layout>> {
+  using impl::Matrix<impl::DenseBlockData<_Scalar, _layout>>::Matrix;
 };
 
 }  // namespace isvd

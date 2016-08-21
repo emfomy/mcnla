@@ -23,7 +23,7 @@ namespace isvd {
 namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default constructor.
+/// @brief  Default constructor.
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrixData<_Scalar, _layout>::DenseMatrixData() noexcept
@@ -33,7 +33,7 @@ DenseMatrixData<_Scalar, _layout>::DenseMatrixData() noexcept
     value_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Construct with given size information.
+/// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrixData<_Scalar, _layout>::DenseMatrixData(
@@ -46,7 +46,7 @@ DenseMatrixData<_Scalar, _layout>::DenseMatrixData(
     value_(Malloc<_Scalar>(pitch_ * dim2_)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Construct with given size information.
+/// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrixData<_Scalar, _layout>::DenseMatrixData(
@@ -62,7 +62,7 @@ DenseMatrixData<_Scalar, _layout>::DenseMatrixData(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Construct with given raw data.
+/// @brief  Construct with given raw data.
 ///
 /// @attention  DO NOT FREE @a value!!
 ///
@@ -81,7 +81,7 @@ DenseMatrixData<_Scalar, _layout>::DenseMatrixData(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default destructor.
+/// @brief  Default destructor.
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrixData<_Scalar, _layout>::~DenseMatrixData() noexcept {
@@ -89,43 +89,43 @@ DenseMatrixData<_Scalar, _layout>::~DenseMatrixData() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the storage layout.
+/// @brief  Gets the storage layout.
 ///
 template <typename _Scalar, Layout _layout>
 Layout DenseMatrixData<_Scalar, _layout>::getLayout() const noexcept { return _layout; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the number of rows.
+/// @brief  Gets the number of rows.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrixData<_Scalar, _layout>::getNrow() const noexcept { return nrow_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the number of columns.
+/// @brief  Gets the number of columns.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrixData<_Scalar, _layout>::getNcol() const noexcept { return ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the leading dimension.
+/// @brief  Gets the leading dimension.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrixData<_Scalar, _layout>::getPitch() const noexcept { return pitch_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the raw value array.
+/// @brief  Gets the raw value array.
 ///
 template <typename _Scalar, Layout _layout>
 _Scalar* DenseMatrixData<_Scalar, _layout>::getValue() noexcept { return value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the raw value array.
+/// @brief  Gets the raw value array.
 ///
 template <typename _Scalar, Layout _layout>
 const _Scalar* DenseMatrixData<_Scalar, _layout>::getValue() const noexcept { return value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the value of given index.
+/// @brief  Gets the value of given index.
 ///
 template <typename _Scalar, Layout _layout>
 _Scalar& DenseMatrixData<_Scalar, _layout>::getValue(
@@ -138,7 +138,7 @@ _Scalar& DenseMatrixData<_Scalar, _layout>::getValue(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the value of given index.
+/// @brief  Gets the value of given index.
 ///
 template <typename _Scalar, Layout _layout>
 const _Scalar& DenseMatrixData<_Scalar, _layout>::getValue(
@@ -151,7 +151,7 @@ const _Scalar& DenseMatrixData<_Scalar, _layout>::getValue(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets a block matrix.
+/// @brief  Gets a block matrix.
 ///
 template <typename _Scalar, Layout _layout>
 DenseBlockData<_Scalar, _layout>* DenseMatrixData<_Scalar, _layout>::getBlock() noexcept {
@@ -159,7 +159,7 @@ DenseBlockData<_Scalar, _layout>* DenseMatrixData<_Scalar, _layout>::getBlock() 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets a block matrix.
+/// @brief  Gets a block matrix.
 ///
 template <typename _Scalar, Layout _layout>
 DenseBlockData<_Scalar, _layout>* DenseMatrixData<_Scalar, _layout>::getBlock(
@@ -174,7 +174,7 @@ DenseBlockData<_Scalar, _layout>* DenseMatrixData<_Scalar, _layout>::getBlock(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets a block matrix.
+/// @brief  Gets a block matrix.
 ///
 template <typename _Scalar, Layout _layout>
 DenseBlockData<_Scalar, _layout>* DenseMatrixData<_Scalar, _layout>::getRows(
@@ -186,7 +186,7 @@ DenseBlockData<_Scalar, _layout>* DenseMatrixData<_Scalar, _layout>::getRows(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets a block matrix.
+/// @brief  Gets a block matrix.
 ///
 template <typename _Scalar, Layout _layout>
 DenseBlockData<_Scalar, _layout>* DenseMatrixData<_Scalar, _layout>::getCols(

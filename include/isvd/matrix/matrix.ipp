@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/matrix_base.ipp
-/// @brief   The implementation of matrix base interface.
+/// @file    include/isvd/matrix/matrix.ipp
+/// @brief   The implementation of matrix interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
@@ -21,68 +21,56 @@ namespace isvd {
 namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default constructor.
+/// @brief  Default constructor.
 ///
-template <class _Data>
-MatrixBase<_Data>::MatrixBase() noexcept
-  : data_(new _Data()) {}
+template <class _Data> template<typename... Args>
+Matrix<_Data>::Matrix(
+    Args... args
+) noexcept
+  : data_(new _Data(args...)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Copy constructor.
+/// @brief  Copy constructor.
 ///
 template <class _Data>
-MatrixBase<_Data>::MatrixBase(
-    const MatrixBase &other
+Matrix<_Data>::Matrix(
+    const Matrix &other
 ) noexcept
   : data_(other.data_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Construct with given data.
+/// @brief  Construct with given data.
 ///
 template <class _Data>
-MatrixBase<_Data>::MatrixBase( _Data *data ) noexcept
+Matrix<_Data>::Matrix( _Data *data ) noexcept
   : data_(data) {}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default destructor.
-///
-template <class _Data>
-MatrixBase<_Data>::~MatrixBase() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Copy assignment operator.
+/// @brief  Default destructor.
 ///
 template <class _Data>
-MatrixBase<_Data>& MatrixBase<_Data>::operator=(
-    const MatrixBase &other
-) noexcept {
-  data_ = other.data_;
-  return *this;
-}
+Matrix<_Data>::~Matrix() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the number of rows.
+/// @brief  Copy assignment operator.
 ///
 template <class _Data>
-index_t MatrixBase<_Data>::getNrow() const noexcept {
-  return data_->getNrow();
-}
+Matrix<_Data>& Matrix<_Data>::operator=( const Matrix &other ) noexcept { data_ = other.data_; return *this; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the number of columns.
+/// @brief  Member assess operator.
+/// Gets the data storage.
 ///
 template <class _Data>
-index_t MatrixBase<_Data>::getNcol() const noexcept {
-  return data_->getNcol();
-}
+_Data* Matrix<_Data>::operator*() const noexcept { return data_.get(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the data storage
+/// @brief  Member assess operator.
+/// Assesses member of #data_.
 ///
 template <class _Data>
-_Data* MatrixBase<_Data>::getData() const noexcept {
-  return data_.get();
-}
+_Data* Matrix<_Data>::operator->() const noexcept { return data_.get(); }
 
 }  // namespace impl
 

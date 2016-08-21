@@ -21,14 +21,14 @@ namespace isvd {
 namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default constructor.
+/// @brief  Default constructor.
 ///
 template <typename _Scalar, Layout _layout>
 DenseBlockData<_Scalar, _layout>::DenseBlockData() noexcept
   : DenseMatrixData<_Scalar, _layout>() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Construct with given raw data.
+/// @brief  Construct with given raw data.
 ///
 /// @attention  DO NOT FREE @a value!!
 ///
@@ -42,7 +42,7 @@ DenseBlockData<_Scalar, _layout>::DenseBlockData(
   : DenseMatrixData<_Scalar, _layout>(nrow, ncol, pitch, value) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Default destructor.
+/// @brief  Default destructor.
 ///
 template <typename _Scalar, Layout _layout>
 DenseBlockData<_Scalar, _layout>::~DenseBlockData() noexcept {}
