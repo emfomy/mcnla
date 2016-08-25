@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/matrix_base.hpp
-/// @brief   The matrix interface.
+/// @file    include/isvd/matrix/vector_base.hpp
+/// @brief   The vector interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_MATRIX_BASE_HPP_
-#define ISVD_MATRIX_MATRIX_BASE_HPP_
+#ifndef ISVD_MATRIX_VECTOR_BASE_HPP_
+#define ISVD_MATRIX_VECTOR_BASE_HPP_
 
 #include <isvd/config.hpp>
 #include <isvd/utility/crtp.hpp>
@@ -22,19 +22,17 @@ namespace isvd {
 namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of matrix.
+/// The interface of vector.
 ///
 /// @tparam  _Derived  The derived class type.
 ///
 template <class _Derived>
-class MatrixBase : public CrtpBase<_Derived, MatrixBase<_Derived>> {
+class VectorBase : public CrtpBase<_Derived, VectorBase<_Derived>> {
 
  public:
 
   // Gets matrix information
-  inline index_t getNrow() const noexcept;
-  inline index_t getNcol() const noexcept;
-  inline index_t getSize() const noexcept;
+  inline index_t getLength() const noexcept;
 
 };
 
@@ -42,4 +40,4 @@ class MatrixBase : public CrtpBase<_Derived, MatrixBase<_Derived>> {
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_MATRIX_BASE_HPP_
+#endif  // ISVD_MATRIX_VECTOR_BASE_HPP_

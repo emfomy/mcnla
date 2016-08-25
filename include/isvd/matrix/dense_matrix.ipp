@@ -130,6 +130,20 @@ template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>::~DenseMatrix() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Print to stream.
+///
+template <typename __Scalar, Layout __layout>
+std::ostream& operator<< ( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix ) {
+  for ( auto i = 0; i < matrix.nrow_; ++i ) {
+    for ( auto j = 0; j < matrix.ncol_; ++j ) {
+      out << matrix.getValueImpl(i, j) << '\t';
+    }
+    out << std::endl;
+  }
+  return out;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the storage layout.
 ///
 template <typename _Scalar, Layout _layout>
@@ -154,13 +168,13 @@ template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::getPitchImpl() const noexcept { return pitch_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size.
+/// @brief  Gets the offset of starting position.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::getSizeImpl() const noexcept { return nrow_ * ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size.
+/// @brief  Gets the length of data array.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::getOffsetImpl() const noexcept { return offset_; }
@@ -188,12 +202,12 @@ const _Scalar* DenseMatrix<_Scalar, _layout>::getValueImpl() const noexcept { re
 ///
 template <typename _Scalar, Layout _layout>
 _Scalar& DenseMatrix<_Scalar, _layout>::getValueImpl(
-    const index_t rowid,
-    const index_t colid
+    const index_t rowidx,
+    const index_t colidx
 ) noexcept {
-  assert(rowid >= 0 && rowid < nrow_);
-  assert(colid >= 0 && colid < ncol_);
-  return getValueImpl()[(_layout == Layout::COLMAJOR) ? (rowid + colid * pitch_) : (colid + rowid * pitch_)];
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  return getValueImpl()[(_layout == Layout::COLMAJOR) ? (rowidx + colidx * pitch_) : (colidx + rowidx * pitch_)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,12 +215,12 @@ _Scalar& DenseMatrix<_Scalar, _layout>::getValueImpl(
 ///
 template <typename _Scalar, Layout _layout>
 const _Scalar& DenseMatrix<_Scalar, _layout>::getValueImpl(
-    const index_t rowid,
-    const index_t colid
+    const index_t rowidx,
+    const index_t colidx
 ) const noexcept {
-  assert(rowid >= 0 && rowid < nrow_);
-  assert(colid >= 0 && colid < ncol_);
-  return getValueImpl()[(_layout == Layout::COLMAJOR) ? (rowid + colid * pitch_) : (colid + rowid * pitch_)];
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  return getValueImpl()[(_layout == Layout::COLMAJOR) ? (rowidx + colidx * pitch_) : (colidx + rowidx * pitch_)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,14 +228,14 @@ const _Scalar& DenseMatrix<_Scalar, _layout>::getValueImpl(
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getBlockImpl(
-    const index_t rowid,
-    const index_t colid,
+    const index_t rowidx,
+    const index_t colidx,
     const index_t nrow,
     const index_t ncol
 ) noexcept {
-  assert(rowid >= 0 && rowid + nrow <= nrow_);
-  assert(colid >= 0 && colid + ncol <= ncol_);
-  return DenseMatrix<_Scalar, _layout>(*this, nrow, ncol, &getValueImpl(rowid, colid) - getValueImpl());
+  assert(rowidx >= 0 && rowidx + nrow <= nrow_);
+  assert(colidx >= 0 && colidx + ncol <= ncol_);
+  return DenseMatrix<_Scalar, _layout>(*this, nrow, ncol, &getValueImpl(rowidx, colidx) - getValueImpl());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,10 +243,10 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getBlockImpl(
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getRowsImpl(
-    const index_t rowid,
+    const index_t rowidx,
     const index_t nrow
 ) noexcept {
-  return DenseMatrix<_Scalar, _layout>(*this, nrow, ncol_, &getValueImpl(rowid, 0) - getValueImpl());
+  return DenseMatrix<_Scalar, _layout>(*this, nrow, ncol_, &getValueImpl(rowidx, 0) - getValueImpl());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,10 +254,10 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getRowsImpl(
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getColsImpl(
-    const index_t colid,
+    const index_t colidx,
     const index_t ncol
 ) noexcept {
-  return DenseMatrix<_Scalar, _layout>(*this, nrow_, ncol, &getValueImpl(0, colid) - getValueImpl());
+  return DenseMatrix<_Scalar, _layout>(*this, nrow_, ncol, &getValueImpl(0, colidx) - getValueImpl());
 }
 
 }  // namespace isvd

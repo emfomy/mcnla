@@ -8,6 +8,7 @@
 #ifndef ISVD_MATRIX_DENSE_MATRIX_HPP_
 #define ISVD_MATRIX_DENSE_MATRIX_HPP_
 
+#include <iostream>
 #include <memory>
 #include <isvd/config.hpp>
 #include <isvd/matrix/dense_matrix_base.hpp>
@@ -18,7 +19,7 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix data storage.
+/// The dense matrix class.
 ///
 /// @tparam  _Scalar  The scalar type of matrix.
 /// @tparam  _layout  The storage layout of matrix.
@@ -64,8 +65,8 @@ class DenseMatrix : public impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>, 
   DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *value ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-               _Scalar *value, const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *value,
+               const index_t capability, const index_t offset = 0 ) noexcept;
 
   // Destructor
   ~DenseMatrix() noexcept;
@@ -74,6 +75,10 @@ class DenseMatrix : public impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>, 
 
   // Constructors
   DenseMatrix( const DenseMatrix &other, const index_t nrow, const index_t ncol, const index_t offset ) noexcept;
+
+  // Operators
+  template <typename __Scalar, Layout __layout>
+  friend std::ostream& operator<< ( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
 
   // Gets matrix information
   inline Layout  getLayoutImpl() const noexcept;
@@ -87,13 +92,14 @@ class DenseMatrix : public impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>, 
   // Gets data
   inline       _Scalar* getValueImpl() noexcept;
   inline const _Scalar* getValueImpl() const noexcept;
-  inline       _Scalar& getValueImpl( const index_t rowid, const index_t colid ) noexcept;
-  inline const _Scalar& getValueImpl( const index_t rowid, const index_t colid ) const noexcept;
+  inline       _Scalar& getValueImpl( const index_t rowidx, const index_t colidx ) noexcept;
+  inline const _Scalar& getValueImpl( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Gets block
-  inline DenseMatrix getBlockImpl( const index_t rowid, const index_t colid, const index_t nrow, const index_t ncol ) noexcept;
-  inline DenseMatrix getRowsImpl( const index_t rowid, const index_t nrow ) noexcept;
-  inline DenseMatrix getColsImpl( const index_t colid, const index_t ncol ) noexcept;
+  inline DenseMatrix getBlockImpl( const index_t rowidx, const index_t colidx,
+                                   const index_t nrow, const index_t ncol ) noexcept;
+  inline DenseMatrix getRowsImpl( const index_t rowidx, const index_t nrow ) noexcept;
+  inline DenseMatrix getColsImpl( const index_t colidx, const index_t ncol ) noexcept;
 
 };
 

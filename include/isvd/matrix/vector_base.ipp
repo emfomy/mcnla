@@ -1,15 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/matrix_base.hpp
-/// @brief   The matrix interface.
+/// @file    include/isvd/matrix/vector_base.ipp
+/// @brief   The implementation of vector interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_MATRIX_BASE_HPP_
-#define ISVD_MATRIX_MATRIX_BASE_HPP_
+#ifndef ISVD_MATRIX_VECTOR_BASE_IPP_
+#define ISVD_MATRIX_VECTOR_BASE_IPP_
 
-#include <isvd/config.hpp>
-#include <isvd/utility/crtp.hpp>
+#include <isvd/matrix/vector_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -22,24 +21,13 @@ namespace isvd {
 namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of matrix.
-///
-/// @tparam  _Derived  The derived class type.
+/// @brief  Gets the length.
 ///
 template <class _Derived>
-class MatrixBase : public CrtpBase<_Derived, MatrixBase<_Derived>> {
-
- public:
-
-  // Gets matrix information
-  inline index_t getNrow() const noexcept;
-  inline index_t getNcol() const noexcept;
-  inline index_t getSize() const noexcept;
-
-};
+inline index_t VectorBase<_Derived>::getLength() const noexcept { return this->derived().getLengthImpl(); }
 
 }  // namespace impl
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_MATRIX_BASE_HPP_
+#endif  // ISVD_MATRIX_VECTOR_BASE_IPP_

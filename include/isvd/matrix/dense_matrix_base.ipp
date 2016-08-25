@@ -8,7 +8,7 @@
 #ifndef ISVD_MATRIX_DENSE_MATRIX_BASE_IPP_
 #define ISVD_MATRIX_DENSE_MATRIX_BASE_IPP_
 
-#include <isvd/matrix/dense_base.hpp>
+#include <isvd/matrix/dense_matrix_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -33,51 +33,57 @@ template <class _Derived, typename _Scalar>
 inline index_t DenseMatrixBase<_Derived, _Scalar>::getPitch() const noexcept { return this->derived().getPitchImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of starting position.
+///
+template <class _Derived, typename _Scalar>
+inline index_t DenseMatrixBase<_Derived, _Scalar>::getOffset() const noexcept { return this->derived().getOffsetImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value of given index.
 ///
 template <class _Derived, typename _Scalar>
 inline _Scalar& DenseMatrixBase<_Derived, _Scalar>::getValue(
-    const index_t rowid,
-    const index_t colid
-) noexcept { return this->derived().getValueImpl(rowid, colid); }
+    const index_t rowidx,
+    const index_t colidx
+) noexcept { return this->derived().getValueImpl(rowidx, colidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value of given index.
 ///
 template <class _Derived, typename _Scalar>
 inline const _Scalar& DenseMatrixBase<_Derived, _Scalar>::getValue(
-    const index_t rowid,
-    const index_t colid
-) const noexcept { return this->derived().getValueImpl(rowid, colid); }
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept { return this->derived().getValueImpl(rowidx, colidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a block matrix.
 ///
 template <class _Derived, typename _Scalar>
 _Derived DenseMatrixBase<_Derived, _Scalar>::getBlock(
-    const index_t rowid,
-    const index_t colid,
+    const index_t rowidx,
+    const index_t colidx,
     const index_t nrow,
     const index_t ncol
-) noexcept { return this->derived().getBlockImpl(rowid, colid, nrow, ncol); }
+) noexcept { return this->derived().getBlockImpl(rowidx, colidx, nrow, ncol); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a block matrix.
 ///
 template <class _Derived, typename _Scalar>
 _Derived DenseMatrixBase<_Derived, _Scalar>::getRows(
-    const index_t rowid,
+    const index_t rowidx,
     const index_t nrow
-) noexcept { return this->derived().getRowsImpl(rowid, nrow); }
+) noexcept { return this->derived().getRowsImpl(rowidx, nrow); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a block matrix.
 ///
 template <class _Derived, typename _Scalar>
 _Derived DenseMatrixBase<_Derived, _Scalar>::getCols(
-    const index_t colid,
+    const index_t colidx,
     const index_t ncol
-) noexcept { return this->derived().getRowsImpl(colid, ncol); }
+) noexcept { return this->derived().getRowsImpl(colidx, ncol); }
 
 }  // namespace impl
 
