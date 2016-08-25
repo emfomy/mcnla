@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/matrix_data.ipp
-/// @brief   The implementation of matrix data storage interface.
+/// @file    include/isvd/matrix/dense_base.ipp
+/// @brief   The implementation of dense interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_MATRIX_DATA_IPP_
-#define ISVD_MATRIX_MATRIX_DATA_IPP_
+#ifndef ISVD_MATRIX_DENSE_BASE_IPP_
+#define ISVD_MATRIX_DENSE_BASE_IPP_
 
-#include <isvd/matrix/matrix.hpp>
+#include <isvd/matrix/dense_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -21,31 +21,25 @@ namespace isvd {
 namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor.
+/// @brief  Gets the length of data array.
 ///
-template <typename _Scalar>
-MatrixData<_Scalar>::MatrixData() noexcept {}
+template <class _Derived, typename _Scalar>
+inline index_t DenseBase<_Derived, _Scalar>::getCapability() const noexcept { return this->derived().getCapabilityImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default destructor.
+/// @brief  Gets the data array.
 ///
-template <typename _Scalar>
-MatrixData<_Scalar>::~MatrixData() noexcept {}
+template <class _Derived, typename _Scalar>
+inline _Scalar* DenseBase<_Derived, _Scalar>::getValue() noexcept { return this->derived().getValueImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of rows.
+/// @brief  Gets the data array.
 ///
-template <typename _Scalar>
-index_t MatrixData<_Scalar>::getNrow() const noexcept { return 0; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of columns.
-///
-template <typename _Scalar>
-index_t MatrixData<_Scalar>::getNcol() const noexcept { return 0; }
+template <class _Derived, typename _Scalar>
+inline const _Scalar* DenseBase<_Derived, _Scalar>::getValue() const noexcept { return this->derived().getValueImpl(); }
 
 }  // namespace impl
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_MATRIX_DATA_IPP_
+#endif  // ISVD_MATRIX_DENSE_BASE_IPP_

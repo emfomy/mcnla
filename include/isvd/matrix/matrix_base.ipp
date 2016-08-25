@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_block_data.ipp
-/// @brief   The implementation of dense matrix data storage.
+/// @file    include/isvd/matrix/matrix_base.ipp
+/// @brief   The implementation of matrix interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_BLOCK_DATA_IPP_
-#define ISVD_MATRIX_DENSE_BLOCK_DATA_IPP_
+#ifndef ISVD_MATRIX_MATRIX_BASE_IPP_
+#define ISVD_MATRIX_MATRIX_BASE_IPP_
 
-#include <isvd/matrix/dense_block.hpp>
+#include <isvd/matrix/matrix_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -21,34 +21,25 @@ namespace isvd {
 namespace impl {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor.
+/// @brief  Gets the number of rows.
 ///
-template <typename _Scalar, Layout _layout>
-DenseBlockData<_Scalar, _layout>::DenseBlockData() noexcept
-  : DenseMatrixData<_Scalar, _layout>() {}
+template <class _Derived>
+inline index_t MatrixBase<_Derived>::getNrow() const noexcept { return this->derived().getNrowImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
+/// @brief  Gets the number of columns.
 ///
-/// @attention  DO NOT FREE @a value!!
-///
-template <typename _Scalar, Layout _layout>
-DenseBlockData<_Scalar, _layout>::DenseBlockData(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t pitch,
-    _Scalar *value
-) noexcept
-  : DenseMatrixData<_Scalar, _layout>(nrow, ncol, pitch, value) {}
+template <class _Derived>
+inline index_t MatrixBase<_Derived>::getNcol() const noexcept { return this->derived().getNcolImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default destructor.
+/// @brief  Gets the size.
 ///
-template <typename _Scalar, Layout _layout>
-DenseBlockData<_Scalar, _layout>::~DenseBlockData() noexcept {}
+template <class _Derived>
+inline index_t MatrixBase<_Derived>::getSize() const noexcept { return this->derived().getSizeImpl(); }
 
 }  // namespace impl
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_BLOCK_DATA_IPP_
+#endif  // ISVD_MATRIX_MATRIX_BASE_IPP_
