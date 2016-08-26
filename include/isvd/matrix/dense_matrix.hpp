@@ -10,13 +10,36 @@
 
 #include <iostream>
 #include <memory>
-#include <isvd/config.hpp>
+#include <isvd/isvd.hpp>
 #include <isvd/matrix/dense_matrix_base.hpp>
+#include <isvd/matrix/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
+
+template <typename _Scalar> class DenseVector;
+template <typename _Scalar, Layout _layout> class DenseMatrix;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The implementation namespace.
+//
+namespace impl {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The dense matrix traits.
+///
+/// @tparam  _Scalar  The scalar type of matrix.
+/// @tparam  _layout  The storage layout of matrix.
+///
+template <typename _Scalar, Layout _layout>
+struct Traits<DenseMatrix<_Scalar, _layout>> {
+  using ScalarType = _Scalar;
+  using VectorType = DenseVector<_Scalar>;
+};
+
+}  // namespace impl
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix class.
@@ -24,27 +47,28 @@ namespace isvd {
 /// @tparam  _Scalar  The scalar type of matrix.
 /// @tparam  _layout  The storage layout of matrix.
 ///
-//@{
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class DenseMatrix : public impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>, _Scalar> {
+class DenseMatrix : public impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>> {
 
   friend impl::MatrixBase<DenseMatrix<_Scalar, _layout>>;
-  friend impl::DenseBase<DenseMatrix<_Scalar, _layout>, _Scalar>;
-  friend impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>, _Scalar>;
+  friend impl::DenseBase<DenseMatrix<_Scalar, _layout>>;
+  friend impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>>;
+
+  friend DenseVector<_Scalar>;
 
  protected:
 
   /// The number of rows.
-  const index_t nrow_;
+  index_t nrow_;
 
   /// The number of columns.
-  const index_t ncol_;
+  index_t ncol_;
 
   /// The size of major dimension.
-  const index_t &dim1_ = (_layout == Layout::COLMAJOR) ? nrow_ : ncol_;
+  index_t &dim1_ = (_layout == Layout::COLMAJOR) ? nrow_ : ncol_;
 
   /// The size of minor dimension.
-  const index_t &dim2_ = (_layout == Layout::COLMAJOR) ? ncol_ : nrow_;
+  index_t &dim2_ = (_layout == Layout::COLMAJOR) ? ncol_ : nrow_;
 
   /// The leading dimension.
   const index_t pitch_;
@@ -95,11 +119,25 @@ class DenseMatrix : public impl::DenseMatrixBase<DenseMatrix<_Scalar, _layout>, 
   inline       _Scalar& getValueImpl( const index_t rowidx, const index_t colidx ) noexcept;
   inline const _Scalar& getValueImpl( const index_t rowidx, const index_t colidx ) const noexcept;
 
-  // Gets block
+  // Resize
+  inline void resizeImpl( const index_t nrow, const index_t ncol ) noexcept;
+
+  // Gets matrix block
   inline DenseMatrix getBlockImpl( const index_t rowidx, const index_t colidx,
                                    const index_t nrow, const index_t ncol ) noexcept;
-  inline DenseMatrix getRowsImpl( const index_t rowidx, const index_t nrow ) noexcept;
   inline DenseMatrix getColsImpl( const index_t colidx, const index_t ncol ) noexcept;
+  inline DenseMatrix getRowsImpl( const index_t rowidx, const index_t nrow ) noexcept;
+
+  // Gets vector segment
+  inline DenseVector<_Scalar> getColImpl( const index_t colidx ) noexcept;
+  inline DenseVector<_Scalar> getColImpl( const index_t colidx, const index_t rowidx, const index_t nrow ) noexcept;
+  inline DenseVector<_Scalar> getRowImpl( const index_t rowidx ) noexcept;
+  inline DenseVector<_Scalar> getRowImpl( const index_t rowidx, const index_t colidx, const index_t ncol ) noexcept;
+
+  // Gets internal information
+  inline index_t getOffsetInternal( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline index_t getColIncInternal() const noexcept;
+  inline index_t getRowIncInternal() const noexcept;
 
 };
 

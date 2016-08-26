@@ -8,29 +8,8 @@
 #ifndef ISVD_CONFIG_HPP_
 #define ISVD_CONFIG_HPP_
 
-#ifndef __cplusplus
-#error C++ is required.
-#elif __cplusplus < 201103L
-#warning C++11 is required.
-#endif
-
 #define ISVD_VERSION_MAJOR @ISVD_VERSION_MAJOR@ ///< The major version of iSVD.
 #define ISVD_VERSION_MINOR @ISVD_VERSION_MINOR@ ///< The minor version of iSVD.
 #define ISVD_VERSION_PATCH @ISVD_VERSION_PATCH@ ///< The patch version of iSVD.
-
-#include <cassert>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace
-//
-namespace isvd {
-
-  /// Define the type of index.
-  using index_t = int64_t;
-
-  /// Define the type of size.
-  using size_t = uint64_t;
-
-}  // namespace isvd
 
 #endif  // ISVD_CONFIG_HPP_

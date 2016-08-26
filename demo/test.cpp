@@ -10,13 +10,13 @@
 
 template class isvd::DenseMatrix<double>;
 template class isvd::impl::MatrixBase<isvd::DenseMatrix<double>>;
-template class isvd::impl::DenseBase<isvd::DenseMatrix<double>, double>;
-template class isvd::impl::DenseMatrixBase<isvd::DenseMatrix<double>, double>;
+template class isvd::impl::DenseBase<isvd::DenseMatrix<double>>;
+template class isvd::impl::DenseMatrixBase<isvd::DenseMatrix<double>>;
 
 template class isvd::DenseVector<double>;
 template class isvd::impl::VectorBase<isvd::DenseVector<double>>;
-template class isvd::impl::DenseBase<isvd::DenseVector<double>, double>;
-template class isvd::impl::DenseVectorBase<isvd::DenseVector<double>, double>;
+template class isvd::impl::DenseBase<isvd::DenseVector<double>>;
+template class isvd::impl::DenseVectorBase<isvd::DenseVector<double>>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -35,6 +35,7 @@ int main() {
   }
   std::cout << matrix << std::endl;
   std::cout << matrix.getBlock(1, 2, 3, 4) << std::endl;
+  std::cout << matrix.getRow(1, 2, 3) << std::endl;
 
   isvd::DenseVector<double> vector(10, 2);
   for ( auto i = 0; i < vector.getLength(); ++i ) {

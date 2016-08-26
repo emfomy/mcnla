@@ -95,6 +95,22 @@ DenseVector<_Scalar>::DenseVector(
     value_(other.value_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct from another matrix.
+///
+template <typename _Scalar> template <Layout _layout>
+DenseVector<_Scalar>::DenseVector(
+    const DenseMatrix<_Scalar, _layout> &other,
+    const index_t length,
+    const index_t increment,
+    const index_t offset
+) noexcept
+  : length_(length),
+    increment_(increment),
+    offset_(offset),
+    capability_(other.capability_),
+    value_(other.value_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default destructor.
 ///
 template <typename _Scalar>
@@ -168,6 +184,19 @@ const _Scalar& DenseVector<_Scalar>::getValueImpl(
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
   return getValueImpl()[idx * increment_];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resize the vector
+///
+/// @attention  THE NEW SPACE IS NO INITIALIZED.
+///
+template <typename _Scalar>
+void DenseVector<_Scalar>::resizeImpl(
+    const index_t length
+) noexcept {
+  assert(length >= 0 && length <= capability_);
+  length_ = length;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

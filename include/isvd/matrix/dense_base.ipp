@@ -23,20 +23,24 @@ namespace impl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of data array.
 ///
-template <class _Derived, typename _Scalar>
-inline index_t DenseBase<_Derived, _Scalar>::getCapability() const noexcept { return this->derived().getCapabilityImpl(); }
+template <class _Derived>
+index_t DenseBase<_Derived>::getCapability() const noexcept { return this->derived().getCapabilityImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data array.
 ///
-template <class _Derived, typename _Scalar>
-inline _Scalar* DenseBase<_Derived, _Scalar>::getValue() noexcept { return this->derived().getValueImpl(); }
+template <class _Derived>
+typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexcept {
+  return this->derived().getValueImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data array.
 ///
-template <class _Derived, typename _Scalar>
-inline const _Scalar* DenseBase<_Derived, _Scalar>::getValue() const noexcept { return this->derived().getValueImpl(); }
+template <class _Derived>
+const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() const noexcept {
+  return this->derived().getValueImpl();
+}
 
 }  // namespace impl
 

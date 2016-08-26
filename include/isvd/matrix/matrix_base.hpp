@@ -8,7 +8,7 @@
 #ifndef ISVD_MATRIX_MATRIX_BASE_HPP_
 #define ISVD_MATRIX_MATRIX_BASE_HPP_
 
-#include <isvd/config.hpp>
+#include <isvd/isvd.hpp>
 #include <isvd/utility/crtp.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,10 +31,13 @@ class MatrixBase : public CrtpBase<_Derived, MatrixBase<_Derived>> {
 
  public:
 
-  // Gets matrix information
+  // Gets information
   inline index_t getNrow() const noexcept;
   inline index_t getNcol() const noexcept;
   inline index_t getSize() const noexcept;
+
+  // Resize
+  inline void resize( const index_t ncol, const index_t nrow ) noexcept;
 
 };
 

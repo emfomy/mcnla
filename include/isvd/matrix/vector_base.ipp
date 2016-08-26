@@ -24,7 +24,13 @@ namespace impl {
 /// @brief  Gets the length.
 ///
 template <class _Derived>
-inline index_t VectorBase<_Derived>::getLength() const noexcept { return this->derived().getLengthImpl(); }
+index_t VectorBase<_Derived>::getLength() const noexcept { return this->derived().getLengthImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resize the vector
+///
+template <class _Derived>
+void VectorBase<_Derived>::resize( const index_t length ) noexcept { return this->derived().resizeImpl(length); }
 
 }  // namespace impl
 
