@@ -21,6 +21,11 @@ namespace isvd {
 bool IndexRange::operator==( const IndexRange& other ) const noexcept { return (start == other.start && end == other.end); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The not-equal-to operator
+///
+bool IndexRange::operator!=( const IndexRange& other ) const noexcept { return !(*this == other); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the length of the range.
 ///
 index_t IndexRange::getLength() const noexcept { return (end-start); }

@@ -277,7 +277,7 @@ void DenseCube<_Scalar, _layout>::resizeImpl(
     const index_t npage
 ) noexcept {
   assert(nrow >= 0 && ncol >= 0 && npage >= 0);
-  assert(((_layout == Layout::COLMAJOR) ? (ncol * pitch_) : (nrow * pitch_)) <= page_pitch_);
+  assert((isColMajor(_layout) ? (ncol * pitch_) : (nrow * pitch_)) <= page_pitch_);
   assert(npage * page_pitch_ <= data_.getCapability());
   nrow_ = nrow;
   ncol_ = ncol;
@@ -404,7 +404,7 @@ index_t DenseCube<_Scalar, _layout>::getIndexInternal(
   assert(rowidx >= 0 && rowidx <= nrow_);
   assert(colidx >= 0 && colidx <= ncol_);
   assert(pageidx >= 0 && pageidx <= npage_);
-  return ((_layout == Layout::COLMAJOR) ? (rowidx + colidx * pitch_) : (colidx + rowidx * pitch_)) + pageidx * page_pitch_;
+  return (isColMajor(_layout) ? (rowidx + colidx * pitch_) : (colidx + rowidx * pitch_)) + pageidx * page_pitch_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -412,7 +412,7 @@ index_t DenseCube<_Scalar, _layout>::getIndexInternal(
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getColIncInternal() const noexcept {
-  return (_layout == Layout::COLMAJOR) ? 1 : pitch_;
+  return isColMajor(_layout) ? 1 : pitch_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,7 +420,7 @@ index_t DenseCube<_Scalar, _layout>::getColIncInternal() const noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getRowIncInternal() const noexcept {
-  return (_layout == Layout::COLMAJOR) ? pitch_ : 1;
+  return isColMajor(_layout) ? pitch_ : 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

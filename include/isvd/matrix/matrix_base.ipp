@@ -23,14 +23,18 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.
 ///
-template <class _Derived>
-index_t MatrixBase<_Derived>::getNrow() const noexcept { return this->derived().getNrowImpl(); }
+template <class _Derived> template <TransOption _trans>
+index_t MatrixBase<_Derived>::getNrow() const noexcept {
+  return !isTranspose(_trans) ?this->derived().getNrowImpl() : this->derived().getNcolImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of columns.
 ///
-template <class _Derived>
-index_t MatrixBase<_Derived>::getNcol() const noexcept { return this->derived().getNcolImpl(); }
+template <class _Derived> template <TransOption _trans>
+index_t MatrixBase<_Derived>::getNcol() const noexcept {
+  return !isTranspose(_trans) ?this->derived().getNcolImpl() : this->derived().getNrowImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
@@ -39,7 +43,7 @@ template <class _Derived>
 index_t MatrixBase<_Derived>::getSize() const noexcept { return getNrow() * getNcol(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the matrix
+/// @brief  Resize the matrix.
 ///
 template <class _Derived>
 void MatrixBase<_Derived>::resize(
@@ -48,7 +52,7 @@ void MatrixBase<_Derived>::resize(
 ) noexcept { return this->derived().resizeImpl(nrow, ncol); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range
+/// @brief  Converts the index range.
 ///
 template <class _Derived>
 IndexRange MatrixBase<_Derived>::convertRowRange(
@@ -56,7 +60,7 @@ IndexRange MatrixBase<_Derived>::convertRowRange(
 ) const noexcept { return range.convert(getNrow()); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range
+/// @brief  Converts the index range.
 ///
 template <class _Derived>
 IndexRange MatrixBase<_Derived>::convertColRange(

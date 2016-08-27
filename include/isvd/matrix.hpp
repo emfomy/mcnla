@@ -8,7 +8,6 @@
 #ifndef ISVD_MATRIX_HPP_
 #define ISVD_MATRIX_HPP_
 
-#include <isvd/matrix/enum.hpp>
 #include <isvd/matrix/index_range.hpp>
 #include <isvd/matrix/index_range.ipp>
 

@@ -11,6 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <isvd/config.hpp>
 #include <isvd/matrix.hpp>
+#include <isvd/operation.hpp>
 #include <isvd/utility.hpp>
 
 

@@ -43,7 +43,8 @@ struct IndexRange {
 #endif
 
   // Operators
-  bool operator==( const IndexRange& other ) const noexcept;
+  inline bool operator==( const IndexRange& other ) const noexcept;
+  inline bool operator!=( const IndexRange& other ) const noexcept;
 
   // Gets data
   inline index_t getLength() const noexcept;

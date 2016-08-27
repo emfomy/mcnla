@@ -39,7 +39,7 @@ template <class _Derived>
 void VectorBase<_Derived>::resize( const index_t length ) noexcept { return this->derived().resizeImpl(length); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range
+/// @brief  Converts the index range.
 ///
 template <class _Derived>
 IndexRange VectorBase<_Derived>::convertRange( const IndexRange range ) const noexcept { return range.convert(getLength()); }

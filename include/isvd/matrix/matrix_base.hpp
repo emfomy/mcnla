@@ -33,8 +33,8 @@ class MatrixBase : public CrtpBase<_Derived, MatrixBase<_Derived>> {
  public:
 
   // Gets information
-  inline index_t getNrow() const noexcept;
-  inline index_t getNcol() const noexcept;
+  template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
+  template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
   inline index_t getSize() const noexcept;
 
   // Resizes

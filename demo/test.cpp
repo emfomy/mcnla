@@ -32,50 +32,23 @@ int main() {
             << ISVD_VERSION_MINOR << "."
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
 
-  isvd::DenseVector<double> vector(10, 2);
-  for ( auto i = 0; i < vector.getLength(); ++i ) {
-    vector(i) = i;
-  }
-  std::cout << vector << std::endl;
-  std::cout << vector.getSegment({1, 2}) << std::endl;
-
-  isvd::DenseMatrix<double> matrix(10, 20, 30);
-  for ( auto i = 0; i < matrix.getNrow(); ++i ) {
-    for ( auto j = 0; j < matrix.getNcol(); ++j ) {
-      matrix(i, j) = i*j;
+  isvd::DenseMatrix<double> matA(5, 5, 15);
+  for ( auto i = 0; i < matA.getNrow(); ++i ) {
+    for ( auto j = 0; j < matA.getNcol(); ++j ) {
+      matA(i, j) = i*j*j;
     }
   }
-  std::cout << matrix << std::endl;
-  std::cout << matrix.getBlock(isvd::IndexRange::FULL, {3, 5}) << std::endl;
-  std::cout << matrix.getRow(1, {3, 5}) << std::endl;
-  std::cout << matrix.getCol(2, {4, 6}) << std::endl;
-  std::cout << matrix.getDiagonal() << std::endl;
-  std::cout << matrix.getDiagonal(-2) << std::endl;
-  std::cout << matrix.getDiagonal(2) << std::endl;
-  std::cout << matrix.getDiagonal(12) << std::endl;
+  std::cout << matA << std::endl;
 
-  matrix.resize(20, 10);
-  for ( auto i = 0; i < matrix.getNrow(); ++i ) {
-    for ( auto j = 0; j < matrix.getNcol(); ++j ) {
-      matrix(i, j) = i*j;
+  isvd::DenseMatrix<double> matB(5, 8);
+  for ( auto i = 0; i < matB.getNrow(); ++i ) {
+    for ( auto j = 0; j < matB.getNcol(); ++j ) {
+      matB(i, j) = i*j*j;
     }
   }
-  std::cout << matrix << std::endl;
-  std::cout << matrix.getBlock({1, 2}, {3, 4}) << std::endl;
-  std::cout << matrix.getRow(1, {3, 5}) << std::endl;
-  std::cout << matrix.getCol(2, {4, 6}) << std::endl;
-  std::cout << matrix.getDiagonal() << std::endl;
-  std::cout << matrix.getDiagonal(-12) << std::endl;
-  std::cout << matrix.getDiagonal(-2) << std::endl;
-  std::cout << matrix.getDiagonal(2) << std::endl;
+  std::cout << matB << std::endl;
 
-  isvd::DenseCube<double> cube(5, 10, 15);
-  for ( auto i = 0; i < cube.getNrow(); ++i ) {
-    for ( auto j = 0; j < cube.getNcol(); ++j ) {
-      for ( auto k = 0; k < cube.getNpage(); ++k ) {
-        cube(i, j, k) = i*j*k;
-      }
-    }
-  }
-  std::cout << cube.getPage(1) << std::endl;
+  isvd::DenseMatrix<double> matC(5, 8, 10);
+  isvd::blas::symm(1.0, matA, matB, 0.0, matC);
+  std::cout << matC << std::endl;
 }

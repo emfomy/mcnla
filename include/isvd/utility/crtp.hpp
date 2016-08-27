@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/utility/crtp.hpp
-/// @brief   The curiously recurring template pattern utilities
+/// @brief   The curiously recurring template pattern utilities.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///

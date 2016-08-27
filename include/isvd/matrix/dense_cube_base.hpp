@@ -10,7 +10,6 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/utility/crtp.hpp>
-#include <isvd/matrix/enum.hpp>
 #include <isvd/matrix/index_range.hpp>
 #include <isvd/matrix/cube_base.hpp>
 #include <isvd/matrix/dense_base.hpp>
@@ -50,7 +49,7 @@ class DenseCubeBase
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
   // Gets information
-  inline Layout  getLayout() const noexcept;
+  inline Layout getLayout() const noexcept;
   inline index_t getPitch() const noexcept;
   inline index_t getPagePitch() const noexcept;
 

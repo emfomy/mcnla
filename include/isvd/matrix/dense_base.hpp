@@ -43,6 +43,10 @@ class DenseData {
   // Destructor
   ~DenseData() noexcept;
 
+  // Operators
+  inline bool operator==( const DenseData& other ) const noexcept;
+  inline bool operator!=( const DenseData& other ) const noexcept;
+
   // Gets data
   inline        index_t getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;

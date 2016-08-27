@@ -33,6 +33,7 @@ namespace internal {
 ///
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
+  static const Layout layout     = _layout;
   using ScalarType = _Scalar;
   using VectorType = DenseVector<_Scalar>;
 };
@@ -61,10 +62,10 @@ class DenseMatrix : public internal::DenseMatrixBase<DenseMatrix<_Scalar, _layou
   index_t ncol_;
 
   /// The size of major dimension.
-  index_t &dim1_ = (_layout == Layout::COLMAJOR) ? nrow_ : ncol_;
+  index_t &dim1_ = isColMajor(_layout) ? nrow_ : ncol_;
 
   /// The size of minor dimension.
-  index_t &dim2_ = (_layout == Layout::COLMAJOR) ? ncol_ : nrow_;
+  index_t &dim2_ = isColMajor(_layout) ? ncol_ : nrow_;
 
   /// The leading dimension.
   const index_t pitch_;
@@ -97,7 +98,7 @@ class DenseMatrix : public internal::DenseMatrixBase<DenseMatrix<_Scalar, _layou
   friend std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
 
   // Gets information
-  inline Layout  getLayoutImpl() const noexcept;
+  inline Layout getLayoutImpl() const noexcept;
   inline index_t getNrowImpl() const noexcept;
   inline index_t getNcolImpl() const noexcept;
   inline index_t getPitchImpl() const noexcept;

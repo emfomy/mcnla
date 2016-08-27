@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/utility/memory.hpp
-/// @brief   The memory utilities
+/// @brief   The memory utilities.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
@@ -25,7 +25,7 @@ namespace isvd {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-_Type* Malloc( const index_t num ) noexcept {
+inline _Type* Malloc( const index_t num ) noexcept {
   return static_cast<_Type*>(malloc(num * sizeof(_Type*)));
 }
 
@@ -39,7 +39,7 @@ _Type* Malloc( const index_t num ) noexcept {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-_Type* Calloc( const index_t num ) noexcept {
+inline _Type* Calloc( const index_t num ) noexcept {
   return static_cast<_Type*>(calloc(num, sizeof(_Type*)));
 }
 
@@ -54,7 +54,7 @@ _Type* Calloc( const index_t num ) noexcept {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-_Type* Realloc( _Type *&ptr, const index_t num ) noexcept {
+inline _Type* Realloc( _Type *&ptr, const index_t num ) noexcept {
   return static_cast<_Type*>(realloc(ptr, num * sizeof(_Type*)));
 }
 
@@ -66,7 +66,7 @@ _Type* Realloc( _Type *&ptr, const index_t num ) noexcept {
 /// @param   ptr    The pointer to the array.
 ///
 template <typename _Type>
-void Free( _Type *&ptr ) noexcept {
+inline void Free( _Type *&ptr ) noexcept {
   free(ptr);
   ptr = nullptr;
 }
