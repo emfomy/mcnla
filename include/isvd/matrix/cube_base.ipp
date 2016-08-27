@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/matrix_base.ipp
-/// @brief   The implementation of matrix interface.
+/// @file    include/isvd/matrix/cube_base.ipp
+/// @brief   The implementation of cube interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_MATRIX_BASE_IPP_
-#define ISVD_MATRIX_MATRIX_BASE_IPP_
+#ifndef ISVD_MATRIX_CUBE_BASE_IPP_
+#define ISVD_MATRIX_CUBE_BASE_IPP_
 
-#include <isvd/matrix/matrix_base.hpp>
+#include <isvd/matrix/cube_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -24,34 +24,41 @@ namespace internal {
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getNrow() const noexcept { return this->derived().getNrowImpl(); }
+index_t CubeBase<_Derived>::getNrow() const noexcept { return this->derived().getNrowImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of columns.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getNcol() const noexcept { return this->derived().getNcolImpl(); }
+index_t CubeBase<_Derived>::getNcol() const noexcept { return this->derived().getNcolImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of pages.
+///
+template <class _Derived>
+index_t CubeBase<_Derived>::getNpage() const noexcept { return this->derived().getNpageImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getSize() const noexcept { return getNrow() * getNcol(); }
+index_t CubeBase<_Derived>::getSize() const noexcept { return getNrow() * getNcol() * getNpage(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the matrix
+/// @brief  Resize the cube
 ///
 template <class _Derived>
-void MatrixBase<_Derived>::resize(
+void CubeBase<_Derived>::resize(
     const index_t nrow,
-    const index_t ncol
-) noexcept { return this->derived().resizeImpl(nrow, ncol); }
+    const index_t ncol,
+    const index_t npage
+) noexcept { return this->derived().resizeImpl(nrow, ncol, npage); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts the index range
 ///
 template <class _Derived>
-IndexRange MatrixBase<_Derived>::convertRowRange(
+IndexRange CubeBase<_Derived>::convertRowRange(
     const IndexRange range
 ) const noexcept { return range.convert(getNrow()); }
 
@@ -59,12 +66,20 @@ IndexRange MatrixBase<_Derived>::convertRowRange(
 /// @brief  Converts the index range
 ///
 template <class _Derived>
-IndexRange MatrixBase<_Derived>::convertColRange(
+IndexRange CubeBase<_Derived>::convertColRange(
     const IndexRange range
 ) const noexcept { return range.convert(getNcol()); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Converts the index range
+///
+template <class _Derived>
+IndexRange CubeBase<_Derived>::convertPageRange(
+    const IndexRange range
+) const noexcept { return range.convert(getNpage()); }
 
 }  // namespace internal
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_MATRIX_BASE_IPP_
+#endif  // ISVD_MATRIX_CUBE_BASE_IPP_

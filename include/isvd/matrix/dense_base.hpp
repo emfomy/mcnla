@@ -18,9 +18,42 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The implementation namespace.
+/// The dense data storage.
+///
+/// @tparam  _Scalar  The scalar type.
+///
+template <typename _Scalar>
+class DenseData {
+
+ protected:
+
+  /// The length of data array.
+  const index_t capability_;
+
+  /// The data array.
+  std::shared_ptr<_Scalar> value_;
+
+ public:
+
+  // Constructors
+  DenseData() noexcept;
+  DenseData( const index_t capability ) noexcept;
+  DenseData( const index_t capability, _Scalar *value ) noexcept;
+
+  // Destructor
+  ~DenseData() noexcept;
+
+  // Gets data
+  inline        index_t getCapability() const noexcept;
+  inline       _Scalar* getValue() noexcept;
+  inline const _Scalar* getValue() const noexcept;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The internal namespace.
 //
-namespace impl {
+namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of matrix.
@@ -37,14 +70,19 @@ class DenseBase : public CrtpBase<_Derived, DenseBase<_Derived>> {
 
   // Gets information
   inline index_t getCapability() const noexcept;
+  inline index_t getOffset() const noexcept;
 
-  // Gets data
+  // Gets data storage
+  inline DenseData<ScalarType>& getData() noexcept;
+  inline const DenseData<ScalarType>& getData() const noexcept;
+
+  // Operators
   inline ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
 
 };
 
-}  // namespace impl
+}  // namespace internal
 
 }  // namespace isvd
 

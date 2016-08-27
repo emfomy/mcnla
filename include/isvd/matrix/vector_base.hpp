@@ -10,6 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/utility/crtp.hpp>
+#include <isvd/matrix/index_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -17,9 +18,9 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The implementation namespace.
+//  The internal namespace.
 //
-namespace impl {
+namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of vector.
@@ -33,13 +34,19 @@ class VectorBase : public CrtpBase<_Derived, VectorBase<_Derived>> {
 
   // Gets information
   inline index_t getLength() const noexcept;
+  inline index_t getSize() const noexcept;
 
-  // Resize
+  // Resizes
   inline void resize( const index_t length ) noexcept;
+
+ protected:
+
+  // Converts range
+  inline IndexRange convertRange( const IndexRange range ) const noexcept;
 
 };
 
-}  // namespace impl
+}  // namespace internal
 
 }  // namespace isvd
 

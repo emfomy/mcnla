@@ -9,6 +9,7 @@
 #define ISVD_MATRIX_DENSE_BASE_IPP_
 
 #include <isvd/matrix/dense_base.hpp>
+#include <isvd/utility/memory.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -16,22 +17,97 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The implementation namespace.
+/// @brief  Default constructor.
+///
+template <typename _Scalar>
+DenseData<_Scalar>::DenseData() noexcept
+  : capability_(0),
+    value_(nullptr) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+DenseData<_Scalar>::DenseData(
+    const index_t capability
+) noexcept
+  : capability_(capability),
+    value_(Malloc<_Scalar>(capability)) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+DenseData<_Scalar>::DenseData(
+    const index_t capability,
+    _Scalar *value
+) noexcept
+  : capability_(capability),
+    value_(value) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default destructor.
+///
+template <typename _Scalar>
+DenseData<_Scalar>::~DenseData() noexcept {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the length of data array.
+///
+template <typename _Scalar>
+index_t DenseData<_Scalar>::getCapability() const noexcept { return capability_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
+///
+template <typename _Scalar>
+_Scalar* DenseData<_Scalar>::getValue() noexcept { return value_.get(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
+///
+template <typename _Scalar>
+const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return value_.get(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The internal namespace.
 //
-namespace impl {
+namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of data array.
 ///
 template <class _Derived>
-index_t DenseBase<_Derived>::getCapability() const noexcept { return this->derived().getCapabilityImpl(); }
+index_t DenseBase<_Derived>::getCapability() const noexcept { return getData().getCapability(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of starting position.
+///
+template <class _Derived>
+index_t DenseBase<_Derived>::getOffset() const noexcept { return this->derived().getOffsetImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the data storage.
+///
+template <class _Derived>
+DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() noexcept {
+  return this->derived().getDataImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the data storage.
+///
+template <class _Derived>
+const DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() const noexcept {
+  return this->derived().getDataImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data array.
 ///
 template <class _Derived>
 typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexcept {
-  return this->derived().getValueImpl();
+  return getData().getValue() + getOffset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,10 +115,10 @@ typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexce
 ///
 template <class _Derived>
 const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() const noexcept {
-  return this->derived().getValueImpl();
+  return getData().getValue() + getOffset();
 }
 
-}  // namespace impl
+}  // namespace internal
 
 }  // namespace isvd
 

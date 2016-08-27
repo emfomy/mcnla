@@ -8,9 +8,9 @@
 #ifndef ISVD_MATRIX_DENSE_VECTOR_BASE_HPP_
 #define ISVD_MATRIX_DENSE_VECTOR_BASE_HPP_
 
-#include <memory>
 #include <isvd/isvd.hpp>
 #include <isvd/utility/crtp.hpp>
+#include <isvd/matrix/index_range.hpp>
 #include <isvd/matrix/vector_base.hpp>
 #include <isvd/matrix/dense_base.hpp>
 
@@ -20,9 +20,9 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The implementation namespace.
+//  The internal namespace.
 //
-namespace impl {
+namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of dense vector.
@@ -42,20 +42,19 @@ class DenseVectorBase
 
  public:
 
+  // Operators
+  inline ScalarType& operator()( const index_t idx ) noexcept;
+  inline const ScalarType& operator()( const index_t idx ) const noexcept;
+
   // Gets information
   inline index_t getIncrement() const noexcept;
-  inline index_t getOffset() const noexcept;
-
-  // Gets data
-  inline ScalarType& getValue( const index_t idx ) noexcept;
-  inline const ScalarType& getValue( const index_t idx ) const noexcept;
 
   // Gets vecot segment
-  inline _Derived getSegment( const index_t idx, const index_t length ) noexcept;
+  inline _Derived getSegment( const IndexRange range = IndexRange::FULL ) noexcept;
 
 };
 
-}  // namespace impl
+}  // namespace internal
 
 }  // namespace isvd
 

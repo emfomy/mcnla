@@ -8,10 +8,10 @@
 #ifndef ISVD_MATRIX_DENSE_MATRIX_BASE_HPP_
 #define ISVD_MATRIX_DENSE_MATRIX_BASE_HPP_
 
-#include <memory>
 #include <isvd/isvd.hpp>
 #include <isvd/utility/crtp.hpp>
 #include <isvd/matrix/enum.hpp>
+#include <isvd/matrix/index_range.hpp>
 #include <isvd/matrix/matrix_base.hpp>
 #include <isvd/matrix/dense_base.hpp>
 
@@ -21,9 +21,9 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The implementation namespace.
+//  The internal namespace.
 //
-namespace impl {
+namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of dense matrix.
@@ -44,29 +44,26 @@ class DenseMatrixBase
 
  public:
 
+  // Operators
+  inline ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;
+  inline const ScalarType& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+
   // Gets information
   inline Layout  getLayout() const noexcept;
   inline index_t getPitch() const noexcept;
-  inline index_t getOffset() const noexcept;
-
-  // Gets data
-  inline ScalarType& getValue( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const ScalarType& getValue( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Gets matrix block
-  inline _Derived getBlock( const index_t rowidx, const index_t colidx, const index_t nrow, const index_t ncol ) noexcept;
-  inline _Derived getRows( const index_t rowidx, const index_t nrow ) noexcept;
-  inline _Derived getCols( const index_t colidx, const index_t ncol ) noexcept;
+  inline _Derived getBlock( const IndexRange rowrange = IndexRange::FULL,
+                            const IndexRange colrange = IndexRange::FULL ) noexcept;
 
   // Gets vector segment
-  inline VectorType getRow( const index_t rowidx ) noexcept;
-  inline VectorType getRow( const index_t rowidx, const index_t colidx, const index_t ncol ) noexcept;
-  inline VectorType getCol( const index_t colidx ) noexcept;
-  inline VectorType getCol( const index_t colidx, const index_t rowidx, const index_t nrow ) noexcept;
+  inline VectorType getCol( const index_t colidx, const IndexRange rowrange = IndexRange::FULL ) noexcept;
+  inline VectorType getRow( const index_t rowidx, const IndexRange colrange = IndexRange::FULL ) noexcept;
+  inline VectorType getDiagonal( const index_t idx = 0 ) noexcept;
 
 };
 
-}  // namespace impl
+}  // namespace internal
 
 }  // namespace isvd
 
