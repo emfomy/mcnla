@@ -21,24 +21,6 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-typename DenseMatrixBase<_Derived>::ScalarType& DenseMatrixBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx
-) noexcept { return this->derived().getElementImpl(rowidx, colidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-const typename DenseMatrixBase<_Derived>::ScalarType& DenseMatrixBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx
-) const noexcept { return this->derived().getElementImpl(rowidx, colidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the storage layout.
 ///
 template <class _Derived>
@@ -84,6 +66,14 @@ template <class _Derived>
 typename DenseMatrixBase<_Derived>::VectorType DenseMatrixBase<_Derived>::getDiagonal(
     const index_t idx
 ) noexcept { return this->derived().getDiagonalImpl(idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Vectorize the matrix.
+///
+template <class _Derived>
+typename DenseMatrixBase<_Derived>::VectorType DenseMatrixBase<_Derived>::vectorize() noexcept {
+  return this->derived().vectorizeImpl();
+}
 
 }  // namespace internal
 

@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/utility/blas.hpp
-/// @brief   The BLAS conventions
+/// @file    include/isvd/blas/blas.hpp
+/// @brief   The BLAS definitions
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_UTILUTY_BLAS_HPP_
-#define ISVD_UTILUTY_BLAS_HPP_
+#ifndef ISVD_BLAS_BLAS_HPP_
+#define ISVD_BLAS_BLAS_HPP_
 
 #include <isvd/isvd.hpp>
-#include <isvd/utility/blasf.hpp>
+#include <isvd/blas/blasf.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -57,4 +57,4 @@ struct SideChar {
 
 }  // namespace isvd
 
-#endif  // ISVD_UTILUTY_BLAS_HPP_
+#endif  // ISVD_BLAS_BLAS_HPP_

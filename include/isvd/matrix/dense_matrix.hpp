@@ -122,6 +122,7 @@ class DenseMatrix : public internal::DenseMatrixBase<DenseMatrix<_Scalar, _layou
   inline DenseVector<_Scalar> getColImpl( const index_t colidx, const IndexRange rowrange ) noexcept;
   inline DenseVector<_Scalar> getRowImpl( const index_t rowidx, const IndexRange colrange ) noexcept;
   inline DenseVector<_Scalar> getDiagonalImpl( const index_t idx ) noexcept;
+  inline DenseVector<_Scalar> vectorizeImpl() noexcept;
 
   // Gets internal information
   inline index_t getIndexInternal( const index_t rowidx, const index_t colidx ) const noexcept;

@@ -38,16 +38,10 @@ class DenseCubeBase
   using CrtpBase<_Derived, DenseCubeBase<_Derived>>::derived;
 
  private:
-  using ScalarType = typename Traits<_Derived>::ScalarType;
   using MatrixType = typename Traits<_Derived>::MatrixType;
   using VectorType = typename Traits<_Derived>::VectorType;
 
  public:
-
-  // Operators
-  inline ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
-  inline const ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
-
   // Gets information
   inline Layout getLayout() const noexcept;
   inline index_t getPitch() const noexcept;
@@ -69,6 +63,7 @@ class DenseCubeBase
   inline VectorType getTube( const index_t rowidx, const index_t colidx,
                              const IndexRange pagerange = IndexRange::FULL ) noexcept;
   inline VectorType getDiagonal( const index_t pageidx, const index_t idx = 0 ) noexcept;
+  inline VectorType vectorize() noexcept;
 
 };
 

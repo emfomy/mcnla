@@ -76,7 +76,7 @@ template <typename _Scalar>
 _Scalar* DenseData<_Scalar>::getValue() noexcept { return value_.get(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @copydoc  getValue
 ///
 template <typename _Scalar>
 const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return value_.get(); }
@@ -107,7 +107,7 @@ DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getDat
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data storage.
+/// @copydoc  getData
 ///
 template <class _Derived>
 const DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() const noexcept {
@@ -123,7 +123,7 @@ typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexce
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data array.
+/// @copydoc  getValue
 ///
 template <class _Derived>
 const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() const noexcept {

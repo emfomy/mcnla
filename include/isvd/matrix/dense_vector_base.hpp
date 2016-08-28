@@ -37,14 +37,7 @@ class DenseVectorBase
 
   using CrtpBase<_Derived, DenseVectorBase<_Derived>>::derived;
 
- private:
-  using ScalarType = typename Traits<_Derived>::ScalarType;
-
  public:
-
-  // Operators
-  inline ScalarType& operator()( const index_t idx ) noexcept;
-  inline const ScalarType& operator()( const index_t idx ) const noexcept;
 
   // Gets information
   inline index_t getIncrement() const noexcept;

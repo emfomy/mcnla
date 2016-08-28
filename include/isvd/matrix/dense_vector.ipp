@@ -122,37 +122,37 @@ std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vecto
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of entries.
+/// @copydoc  isvd::internal::VectorBase::getLength
 ///
 template <typename _Scalar>
 index_t DenseVector<_Scalar>::getLengthImpl() const noexcept { return length_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the increment.
+/// @copydoc  isvd::internal::DenseVectorBase::getIncrement
 ///
 template <typename _Scalar>
 index_t DenseVector<_Scalar>::getIncrementImpl() const noexcept { return increment_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset of starting position.
+/// @copydoc  isvd::internal::DenseBase::getOffset
 ///
 template <typename _Scalar>
 index_t DenseVector<_Scalar>::getOffsetImpl() const noexcept { return offset_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data storage.
+/// @copydoc  isvd::internal::DenseBase::getData
 ///
 template <typename _Scalar>
 DenseData<_Scalar>& DenseVector<_Scalar>::getDataImpl() noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data storage.
+/// @copydoc  isvd::internal::DenseBase::getData
 ///
 template <typename _Scalar>
 const DenseData<_Scalar>& DenseVector<_Scalar>::getDataImpl() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
+/// @copydoc  isvd::internal::VectorBase::getElement
 ///
 template <typename _Scalar>
 _Scalar& DenseVector<_Scalar>::getElementImpl(
@@ -163,7 +163,7 @@ _Scalar& DenseVector<_Scalar>::getElementImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
+/// @copydoc  isvd::internal::VectorBase::getElement
 ///
 template <typename _Scalar>
 const _Scalar& DenseVector<_Scalar>::getElementImpl(
@@ -174,7 +174,7 @@ const _Scalar& DenseVector<_Scalar>::getElementImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the vector.
+/// @copydoc  isvd::internal::VectorBase::resize
 ///
 /// @attention  THE NEW SPACE IS NOT INITIALIZED.
 ///
@@ -187,7 +187,7 @@ void DenseVector<_Scalar>::resizeImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a segment vector.
+/// @copydoc  isvd::internal::DenseVectorBase::getSegment
 ///
 template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::getSegmentImpl(
@@ -205,7 +205,7 @@ index_t DenseVector<_Scalar>::getIndexInternal(
     const index_t idx
 ) const noexcept {
   assert(idx >= 0 && idx <= length_);
-  return idx * increment_;
+  return idx * increment_ + offset_;
 }
 
 }  // namespace isvd

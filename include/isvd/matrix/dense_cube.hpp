@@ -136,6 +136,7 @@ class DenseCube : public internal::DenseCubeBase<DenseCube<_Scalar, _layout>> {
   inline DenseVector<_Scalar> getRowImpl( const index_t rowidx, const index_t pageidx, const IndexRange colrange ) noexcept;
   inline DenseVector<_Scalar> getTubeImpl( const index_t rowidx, const index_t colidx, const IndexRange pagerange ) noexcept;
   inline DenseVector<_Scalar> getDiagonalImpl( const index_t pageidx, const index_t idx ) noexcept;
+  inline DenseVector<_Scalar> vectorizeImpl() noexcept;
 
   // Gets internal information
   inline index_t getIndexInternal( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;

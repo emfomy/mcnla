@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/operation/dense_symm.hpp
+/// @file    include/isvd/blas/dense_symm.hpp
 /// @brief   The BLAS SYMM routine for dense matrices
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_OPERATION_DENSE_SYMM_HPP_
-#define ISVD_OPERATION_DENSE_SYMM_HPP_
+#ifndef ISVD_BLAS_DENSE_SYMM_HPP_
+#define ISVD_BLAS_DENSE_SYMM_HPP_
 
 #include <utility>
 #include <isvd/matrix.hpp>
-#include <isvd/utility/blas.hpp>
+#include <isvd/blas/blas.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -68,16 +68,16 @@ static inline void symm(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes a matrix-matrix product where one input matrix is symmetric/Hermitian.
 ///
-template<SideOption _side = SideOption::LEFT,
-         UploOption _uplo = UploOption::LOWER, class _Derived>
+template <SideOption _side = SideOption::LEFT,
+          UploOption _uplo = UploOption::LOWER, class _Derived>
 inline void symm(
     const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
     const isvd::internal::DenseMatrixBase<_Derived> &a,
     const isvd::internal::DenseMatrixBase<_Derived> &b,
     const typename isvd::internal::Traits<_Derived>::ScalarType beta,
           isvd::internal::DenseMatrixBase<_Derived> &c ) noexcept {
-  assert(c.getData() != a.getData());
-  assert(c.getData() != b.getData());
+  assert(c.getValue() != a.getValue());
+  assert(c.getValue() != b.getValue());
 
   if ( isColMajor(isvd::internal::Traits<_Derived>::layout) ) {
     if ( isLeftSide(_side) ) {
@@ -112,8 +112,22 @@ inline void symm(
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc isvd::blas::symm
+///
+template <SideOption _side = SideOption::LEFT,
+          UploOption _uplo = UploOption::LOWER, class _Derived>
+inline void symm(
+    const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
+    const isvd::internal::DenseMatrixBase<_Derived> &a,
+    const isvd::internal::DenseMatrixBase<_Derived> &b,
+    const typename isvd::internal::Traits<_Derived>::ScalarType beta,
+          isvd::internal::DenseMatrixBase<_Derived> &&c ) noexcept {
+  symm(alpha, a, b, beta, c);
+}
+
 }  // namespace blas
 
 }  // namespace isvd
 
-#endif  // ISVD_OPERATION_DENSE_SYMM_HPP_
+#endif  // ISVD_BLAS_DENSE_SYMM_HPP_

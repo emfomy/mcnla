@@ -30,6 +30,9 @@ namespace internal {
 template <class _Derived>
 class CubeBase : public CrtpBase<_Derived, CubeBase<_Derived>> {
 
+ private:
+  using ScalarType = typename Traits<_Derived>::ScalarType;
+
  public:
 
   // Gets information
@@ -37,6 +40,12 @@ class CubeBase : public CrtpBase<_Derived, CubeBase<_Derived>> {
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
   inline index_t getNpage() const noexcept;
   inline index_t getSize() const noexcept;
+
+  // Gets element
+  inline ScalarType& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline const ScalarType& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  inline ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline const ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t ncol, const index_t nrow, const index_t npage ) noexcept;

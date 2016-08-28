@@ -21,26 +21,6 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-typename DenseCubeBase<_Derived>::ScalarType& DenseCubeBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx,
-    const index_t pageidx
-) noexcept { return this->derived().getElementImpl(rowidx, colidx, pageidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-const typename DenseCubeBase<_Derived>::ScalarType& DenseCubeBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx,
-    const index_t pageidx
-) const noexcept { return this->derived().getElementImpl(rowidx, colidx, pageidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the storage layout.
 ///
 template <class _Derived>
@@ -117,6 +97,14 @@ typename DenseCubeBase<_Derived>::VectorType DenseCubeBase<_Derived>::getDiagona
     const index_t pageidx,
     const index_t idx
 ) noexcept { return this->derived().getDiagonalImpl(pageidx, idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Vectorize the matrix.
+///
+template <class _Derived>
+typename DenseCubeBase<_Derived>::VectorType DenseCubeBase<_Derived>::vectorize() noexcept {
+  return this->derived().vectorizeImpl();
+}
 
 }  // namespace internal
 

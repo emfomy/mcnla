@@ -38,14 +38,9 @@ class DenseMatrixBase
   using CrtpBase<_Derived, DenseMatrixBase<_Derived>>::derived;
 
  private:
-  using ScalarType = typename Traits<_Derived>::ScalarType;
   using VectorType = typename Traits<_Derived>::VectorType;
 
  public:
-
-  // Operators
-  inline ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const ScalarType& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Gets information
   inline Layout getLayout() const noexcept;
@@ -59,6 +54,7 @@ class DenseMatrixBase
   inline VectorType getCol( const index_t colidx, const IndexRange rowrange = IndexRange::FULL ) noexcept;
   inline VectorType getRow( const index_t rowidx, const IndexRange colrange = IndexRange::FULL ) noexcept;
   inline VectorType getDiagonal( const index_t idx = 0 ) noexcept;
+  inline VectorType vectorize() noexcept;
 
 };
 

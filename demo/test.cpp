@@ -48,7 +48,7 @@ int main() {
   }
   std::cout << matB << std::endl;
 
-  isvd::DenseMatrix<double> matC(5, 8, 10);
-  isvd::blas::symm(1.0, matA, matB, 0.0, matC);
+  isvd::DenseMatrix<double> matC(5, 5);
+  isvd::blas::syrk(1, matB, 0, matC);
   std::cout << matC << std::endl;
 }

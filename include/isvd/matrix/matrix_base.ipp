@@ -36,6 +36,42 @@ index_t MatrixBase<_Derived>::getNcol() const noexcept {
   return !isTranspose(_trans) ?this->derived().getNcolImpl() : this->derived().getNrowImpl();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element.
+///
+template <class _Derived>
+typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::getElement(
+    const index_t rowidx,
+    const index_t colidx
+) noexcept { return this->derived().getElementImpl(rowidx, colidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+const typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::getElement(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept { return this->derived().getElementImpl(rowidx, colidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) noexcept { return getElement(rowidx, colidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+const typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept { return getElement(rowidx, colidx); }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///

@@ -36,6 +36,46 @@ index_t CubeBase<_Derived>::getNcol() const noexcept {
   return !isTranspose(_trans) ?this->derived().getNcolImpl() : this->derived().getNrowImpl();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element.
+///
+template <class _Derived>
+typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::getElement(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) noexcept { return this->derived().getElementImpl(rowidx, colidx, pageidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+const typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::getElement(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept { return this->derived().getElementImpl(rowidx, colidx, pageidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::operator()(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) noexcept { return getElement(rowidx, colidx, pageidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+const typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::operator()(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept { return getElement(rowidx, colidx, pageidx); }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of pages.
 ///

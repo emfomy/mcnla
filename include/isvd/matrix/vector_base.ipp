@@ -32,6 +32,38 @@ index_t VectorBase<_Derived>::getLength() const noexcept { return this->derived(
 template <class _Derived>
 index_t VectorBase<_Derived>::getSize() const noexcept { return getLength(); }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element of given index.
+///
+template <class _Derived>
+typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::getElement(
+    const index_t idx
+) noexcept { return this->derived().getElementImpl(idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+const typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::getElement(
+    const index_t idx
+) const noexcept { return this->derived().getElementImpl(idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::operator()(
+    const index_t idx
+) noexcept { return getElement(idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <class _Derived>
+const typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::operator()(
+    const index_t idx
+) const noexcept { return getElement(idx); }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the vector
 ///

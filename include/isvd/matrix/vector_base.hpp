@@ -30,11 +30,20 @@ namespace internal {
 template <class _Derived>
 class VectorBase : public CrtpBase<_Derived, VectorBase<_Derived>> {
 
+ private:
+  using ScalarType = typename Traits<_Derived>::ScalarType;
+
  public:
 
   // Gets information
   inline index_t getLength() const noexcept;
   inline index_t getSize() const noexcept;
+
+  // Gets element
+  inline ScalarType& getElement( const index_t idx ) noexcept;
+  inline const ScalarType& getElement( const index_t idx ) const noexcept;
+  inline ScalarType& operator()( const index_t idx ) noexcept;
+  inline const ScalarType& operator()( const index_t idx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;

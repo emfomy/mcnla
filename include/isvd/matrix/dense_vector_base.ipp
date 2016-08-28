@@ -21,22 +21,6 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-typename DenseVectorBase<_Derived>::ScalarType& DenseVectorBase<_Derived>::operator()(
-    const index_t idx
-) noexcept { return this->derived().getElementImpl(idx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-const typename DenseVectorBase<_Derived>::ScalarType& DenseVectorBase<_Derived>::operator()(
-    const index_t idx
-) const noexcept { return this->derived().getElementImpl(idx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the storage layout.
 ///
 template <class _Derived>

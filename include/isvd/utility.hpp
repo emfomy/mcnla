@@ -9,8 +9,6 @@
 #define ISVD_UTILITY_HPP_
 
 #include <isvd/utility/memory.hpp>
-#include <isvd/utility/blas.hpp>
-#include <isvd/utility/blasf.hpp>
 #include <isvd/utility/crtp.hpp>
 
 #endif  // ISVD_UTILITY_HPP_

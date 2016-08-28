@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/utility/blasf.hpp
+/// @file    include/isvd/blas/blasf.hpp
 /// @brief   The 64-bit Fortran BLAS routines and functions
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_UTILUTY_BLASF_HPP_
-#define ISVD_UTILUTY_BLASF_HPP_
+#ifndef ISVD_BLAS_BLASF_HPP_
+#define ISVD_BLAS_BLASF_HPP_
 
 #include <cstdint>
 #include <complex>
@@ -281,4 +281,4 @@ extern void zher2k_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const 
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-#endif  // ISVD_UTILUTY_BLASF_HPP_
+#endif  // ISVD_BLAS_BLASF_HPP_
