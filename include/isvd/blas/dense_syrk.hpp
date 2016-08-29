@@ -32,24 +32,24 @@ namespace internal {
 ///
 //@{
 static inline void syrk(
-    const char uplo, const char trans, const int64_t n, const int64_t k,
-    const float alpha, const float* a, const int64_t lda,
-    const float beta, float* c, const int64_t ldc
+    const char uplo, const char trans, const index_t n, const index_t k,
+    const float alpha, const float* a, const index_t lda,
+    const float beta, float* c, const index_t ldc
 ) noexcept { ssyrk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc); }
 static inline void syrk(
-    const char uplo, const char trans, const int64_t n, const int64_t k,
-    const double alpha, const double* a, const int64_t lda,
-    const double beta, double* c, const int64_t ldc
+    const char uplo, const char trans, const index_t n, const index_t k,
+    const double alpha, const double* a, const index_t lda,
+    const double beta, double* c, const index_t ldc
 ) noexcept { dsyrk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc); }
 static inline void syrk(
-    const char uplo, const char trans, const int64_t n, const int64_t k,
-    const std::complex<float> alpha, const std::complex<float>* a, const int64_t lda,
-    const std::complex<float> beta, std::complex<float>* c, const int64_t ldc
+    const char uplo, const char trans, const index_t n, const index_t k,
+    const std::complex<float> alpha, const std::complex<float>* a, const index_t lda,
+    const std::complex<float> beta, std::complex<float>* c, const index_t ldc
 ) noexcept { cherk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc); }
 static inline void syrk(
-    const char uplo, const char trans, const int64_t n, const int64_t k,
-    const std::complex<double> alpha, const std::complex<double>* a, const int64_t lda,
-    const std::complex<double> beta, std::complex<double>* c, const int64_t ldc
+    const char uplo, const char trans, const index_t n, const index_t k,
+    const std::complex<double> alpha, const std::complex<double>* a, const index_t lda,
+    const std::complex<double> beta, std::complex<double>* c, const index_t ldc
 ) noexcept { zherk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc); }
 //@}
 

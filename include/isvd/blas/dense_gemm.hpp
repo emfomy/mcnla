@@ -32,26 +32,26 @@ namespace internal {
 ///
 //@{
 static inline void gemm(
-    const char transa, const char transb, const int64_t m, const int64_t n, const int64_t k,
-    const float alpha, const float *a, const int64_t lda, const float *b, const int64_t ldb,
-    const float beta, float *c, const int64_t ldc
+    const char transa, const char transb, const index_t m, const index_t n, const index_t k,
+    const float alpha, const float *a, const index_t lda, const float *b, const index_t ldb,
+    const float beta, float *c, const index_t ldc
 ) noexcept { sgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc); }
 static inline void gemm(
-    const char transa, const char transb, const int64_t m, const int64_t n, const int64_t k,
-    const double alpha, const double *a, const int64_t lda, const double *b, const int64_t ldb,
-    const double beta, double *c, const int64_t ldc
+    const char transa, const char transb, const index_t m, const index_t n, const index_t k,
+    const double alpha, const double *a, const index_t lda, const double *b, const index_t ldb,
+    const double beta, double *c, const index_t ldc
 ) noexcept { dgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc); }
 static inline void gemm(
-    const char transa, const char transb, const int64_t m, const int64_t n, const int64_t k,
-    const std::complex<float> alpha, const std::complex<float> *a, const int64_t lda,
-    const std::complex<float> *b, const int64_t ldb,
-    const std::complex<float> beta, std::complex<float> *c, const int64_t ldc
+    const char transa, const char transb, const index_t m, const index_t n, const index_t k,
+    const std::complex<float> alpha, const std::complex<float> *a, const index_t lda,
+    const std::complex<float> *b, const index_t ldb,
+    const std::complex<float> beta, std::complex<float> *c, const index_t ldc
 ) noexcept { cgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc); }
 static inline void gemm(
-    const char transa, const char transb, const int64_t m, const int64_t n, const int64_t k,
-    const std::complex<double> alpha, const std::complex<double> *a, const int64_t lda,
-    const std::complex<double> *b, const int64_t ldb,
-    const std::complex<double> beta, std::complex<double> *c, const int64_t ldc
+    const char transa, const char transb, const index_t m, const index_t n, const index_t k,
+    const std::complex<double> alpha, const std::complex<double> *a, const index_t lda,
+    const std::complex<double> *b, const index_t ldb,
+    const std::complex<double> beta, std::complex<double> *c, const index_t ldc
 ) noexcept { zgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc); }
 //@}
 

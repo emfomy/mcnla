@@ -1,22 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas.hpp
-/// @brief   The BLAS header.
+/// @file    include/isvd/lapack.hpp
+/// @brief   The LAPACK header.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_HPP_
-#define ISVD_BLAS_HPP_
+#ifndef ISVD_LAPACK_HPP_
+#define ISVD_LAPACK_HPP_
 
-#include <isvd/blas/blas.hpp>
-#include <isvd/blas/blasf.hpp>
-
-#include <isvd/blas/dense_scal.hpp>
-#include <isvd/blas/dense_copy.hpp>
-
-#include <isvd/blas/dense_gemm.hpp>
-#include <isvd/blas/dense_symm.hpp>
-#include <isvd/blas/dense_syrk.hpp>
+#include <isvd/lapack/lapack.hpp>
+#include <isvd/lapack/lapackf.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The iSVD namespace
@@ -24,10 +17,10 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The BLAS namespace
+/// The LAPACK namespace
 ///
-namespace blas {}  // namespace blas
+namespace lapack {}  // namespace lapack
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_HPP_
+#endif  // ISVD_LAPACK_HPP_

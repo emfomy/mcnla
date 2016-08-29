@@ -11,6 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <isvd/matrix.hpp>
 #include <isvd/blas.hpp>
+#include <isvd/lapack.hpp>
 #include <isvd/utility.hpp>
 
 

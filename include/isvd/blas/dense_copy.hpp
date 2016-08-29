@@ -32,16 +32,16 @@ namespace internal {
 ///
 //@{
 static inline void copy(
-    const int64_t n, const float* x, const int64_t incx, float* y, const int64_t incy
+    const index_t n, const float* x, const index_t incx, float* y, const index_t incy
 ) noexcept { scopy_(&n, x, &incx, y, &incy); }
 static inline void copy(
-    const int64_t n, const double* x, const int64_t incx, double* y, const int64_t incy
+    const index_t n, const double* x, const index_t incx, double* y, const index_t incy
 ) noexcept { dcopy_(&n, x, &incx, y, &incy); }
 static inline void copy(
-    const int64_t n, const std::complex<float>* x, const int64_t incx, std::complex<float>* y, const int64_t incy
+    const index_t n, const std::complex<float>* x, const index_t incx, std::complex<float>* y, const index_t incy
 ) noexcept { ccopy_(&n, x, &incx, y, &incy); }
 static inline void copy(
-    const int64_t n, const std::complex<double>* x, const int64_t incx, std::complex<double>* y, const int64_t incy
+    const index_t n, const std::complex<double>* x, const index_t incx, std::complex<double>* y, const index_t incy
 ) noexcept { zcopy_(&n, x, &incx, y, &incy); }
 //@}
 

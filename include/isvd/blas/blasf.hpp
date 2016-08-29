@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/blas/blasf.hpp
-/// @brief   The 64-bit Fortran BLAS routines and functions
+/// @brief   The Fortran BLAS routines and functions
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
@@ -8,15 +8,15 @@
 #ifndef ISVD_BLAS_BLASF_HPP_
 #define ISVD_BLAS_BLASF_HPP_
 
-#include <cstdint>
 #include <complex>
+#include <isvd/isvd.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 extern "C" {
 
 #define CPP_CHAR1 char
-#define CPP_INT8  int64_t
+#define CPP_INT8  isvd::index_t
 #define CPP_REAL4 float
 #define CPP_REAL8 double
 #define CPP_COMP4 std::complex<float>
@@ -277,7 +277,21 @@ extern void zherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const F
 extern void cher2k_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k, const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT8 lda, const FORTRAN_COMP4 b, const FORTRAN_INT8 ldb, const FORTRAN_COMP4 beta, FORTRAN_COMP4 c, const FORTRAN_INT8 ldc );
 extern void zher2k_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k, const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT8 lda, const FORTRAN_COMP8 b, const FORTRAN_INT8 ldb, const FORTRAN_COMP8 beta, FORTRAN_COMP8 c, const FORTRAN_INT8 ldc );
 
-}
+#undef CPP_CHAR1
+#undef CPP_INT8
+#undef CPP_REAL4
+#undef CPP_REAL8
+#undef CPP_COMP4
+#undef CPP_COMP8
+
+#undef FORTRAN_CHAR1
+#undef FORTRAN_INT8
+#undef FORTRAN_REAL4
+#undef FORTRAN_REAL8
+#undef FORTRAN_COMP4
+#undef FORTRAN_COMP8
+
+}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

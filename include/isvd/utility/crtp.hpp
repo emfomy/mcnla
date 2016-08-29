@@ -35,6 +35,7 @@ template <typename _Derived> struct Traits;
 ///
 template <class _Derived, class _Base = void>
 class CrtpBase {
+
   friend _Derived;
   friend _Base;
 

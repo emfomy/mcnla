@@ -182,13 +182,6 @@ static constexpr bool isRightSide( const SideOption side ) noexcept {
   return !!(side & SideOption::RIGHT);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The BLAS namespace
-///
-namespace blas {
-
-}  // namespace blas
-
 }  // namespace isvd
 
 #endif  // ISVD_ISVD_HPP_

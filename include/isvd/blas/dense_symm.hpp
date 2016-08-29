@@ -32,32 +32,32 @@ namespace internal {
 ///
 //@{
 static inline void symm(
-    const char side, const char uplo, const int64_t m, const int64_t n,
-    const float alpha, const float *a, const int64_t lda, const float *b, const int64_t ldb,
-    const float beta, float *c, const int64_t ldc
+    const char side, const char uplo, const index_t m, const index_t n,
+    const float alpha, const float *a, const index_t lda, const float *b, const index_t ldb,
+    const float beta, float *c, const index_t ldc
 ) noexcept {
   ssymm_(&side, &uplo, &m, &n, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
 }
 static inline void symm(
-    const char side, const char uplo, const int64_t m, const int64_t n,
-    const double alpha, const double *a, const int64_t lda, const double *b, const int64_t ldb,
-    const double beta, double *c, const int64_t ldc
+    const char side, const char uplo, const index_t m, const index_t n,
+    const double alpha, const double *a, const index_t lda, const double *b, const index_t ldb,
+    const double beta, double *c, const index_t ldc
 ) noexcept {
   dsymm_(&side, &uplo, &m, &n, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
 }
 static inline void symm(
-    const char side, const char uplo, const int64_t m, const int64_t n,
-    const std::complex<float> alpha, const std::complex<float> *a, const int64_t lda,
-    const std::complex<float> *b, const int64_t ldb,
-    const std::complex<float> beta, std::complex<float> *c, const int64_t ldc
+    const char side, const char uplo, const index_t m, const index_t n,
+    const std::complex<float> alpha, const std::complex<float> *a, const index_t lda,
+    const std::complex<float> *b, const index_t ldb,
+    const std::complex<float> beta, std::complex<float> *c, const index_t ldc
 ) noexcept {
   chemm_(&side, &uplo, &m, &n, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
 }
 static inline void symm(
-    const char side, const char uplo, const int64_t m, const int64_t n,
-    const std::complex<double> alpha, const std::complex<double> *a, const int64_t lda,
-    const std::complex<double> *b, const int64_t ldb,
-    const std::complex<double> beta, std::complex<double> *c, const int64_t ldc
+    const char side, const char uplo, const index_t m, const index_t n,
+    const std::complex<double> alpha, const std::complex<double> *a, const index_t lda,
+    const std::complex<double> *b, const index_t ldb,
+    const std::complex<double> beta, std::complex<double> *c, const index_t ldc
 ) noexcept {
   zhemm_(&side, &uplo, &m, &n, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
 }

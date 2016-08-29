@@ -83,7 +83,7 @@ int main( int argc, char **argv ) {
   auto matrix_qjt    = Malloc<double>(k * mj);
   auto matrices_qit  = Malloc<double>(k * mj * N);
   auto matrices_qjt  = Malloc<double>(k * mj * N);
-  accumulator_set<double, stats<variance>> acc;
+  accumulator_set<double, stats<tag::variance>> acc;
 
   // ====================================================================================================================== //
   // Generate matrix

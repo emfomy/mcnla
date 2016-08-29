@@ -32,23 +32,17 @@ namespace internal {
 ///
 //@{
 static inline void scal(
-    const int64_t n, const float alpha, float* x, const int64_t incx
+    const index_t n, const float alpha, float* x, const index_t incx
 ) noexcept { sscal_(&n, &alpha, x, &incx); }
 static inline void scal(
-    const int64_t n, const double alpha, double* x, const int64_t incx
+    const index_t n, const double alpha, double* x, const index_t incx
 ) noexcept { dscal_(&n, &alpha, x, &incx); }
 static inline void scal(
-    const int64_t n, const std::complex<float> alpha, std::complex<float>* x, const int64_t incx
+    const index_t n, const std::complex<float> alpha, std::complex<float>* x, const index_t incx
 ) noexcept { cscal_(&n, &alpha, x, &incx); }
 static inline void scal(
-    const int64_t n, const std::complex<double> alpha, std::complex<double>* x, const int64_t incx
+    const index_t n, const std::complex<double> alpha, std::complex<double>* x, const index_t incx
 ) noexcept { zscal_(&n, &alpha, x, &incx); }
-static inline void scal(
-    const int64_t n, const float alpha, std::complex<float>* x, const int64_t incx
-) noexcept { csscal_(&n, &alpha, x, &incx); }
-static inline void scal(
-    const int64_t n, const double alpha, std::complex<double>* x, const int64_t incx
-) noexcept { zdscal_(&n, &alpha, x, &incx); }
 //@}
 
 }  // namespace internal
