@@ -30,13 +30,6 @@ bool IndexRange::operator!=( const IndexRange& other ) const noexcept { return !
 ///
 index_t IndexRange::getLength() const noexcept { return (end-start); }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Gets the length of the range.
-///
-IndexRange IndexRange::convert( const index_t last ) const noexcept {
-  return (*this == FULL) ? IndexRange{0, last} : *this;
-}
-
 }  // namespace isvd
 
 #endif  // ISVD_MATRIX_INDEX_RANGE_IPP_

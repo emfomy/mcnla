@@ -20,12 +20,36 @@ namespace isvd {
 //
 namespace internal {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <class _Derived>
+CubeBase<_Derived>::CubeBase() noexcept
+  : nrow_(0),
+    ncol_(0),
+    npage_(0) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Derived>
+CubeBase<_Derived>::CubeBase(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t npage
+) noexcept
+  : nrow_(nrow),
+    ncol_(ncol),
+    npage_(npage) {
+  assert(nrow_ > 0 && ncol_ > 0 && npage > 0);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived> template <TransOption _trans>
 index_t CubeBase<_Derived>::getNrow() const noexcept {
-  return !isTranspose(_trans) ?this->derived().getNrowImpl() : this->derived().getNcolImpl();
+  return !isTranspose(_trans) ? nrow_ : ncol_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,48 +57,8 @@ index_t CubeBase<_Derived>::getNrow() const noexcept {
 ///
 template <class _Derived> template <TransOption _trans>
 index_t CubeBase<_Derived>::getNcol() const noexcept {
-  return !isTranspose(_trans) ?this->derived().getNcolImpl() : this->derived().getNrowImpl();
+  return !isTranspose(_trans) ? ncol_ : nrow_;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::getElement(
-    const index_t rowidx,
-    const index_t colidx,
-    const index_t pageidx
-) noexcept { return this->derived().getElementImpl(rowidx, colidx, pageidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-const typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::getElement(
-    const index_t rowidx,
-    const index_t colidx,
-    const index_t pageidx
-) const noexcept { return this->derived().getElementImpl(rowidx, colidx, pageidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx,
-    const index_t pageidx
-) noexcept { return getElement(rowidx, colidx, pageidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-const typename CubeBase<_Derived>::ScalarType& CubeBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx,
-    const index_t pageidx
-) const noexcept { return getElement(rowidx, colidx, pageidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of pages.
@@ -86,41 +70,7 @@ index_t CubeBase<_Derived>::getNpage() const noexcept { return this->derived().g
 /// @brief  Gets the size.
 ///
 template <class _Derived>
-index_t CubeBase<_Derived>::getSize() const noexcept { return getNrow() * getNcol() * getNpage(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the cube
-///
-template <class _Derived>
-void CubeBase<_Derived>::resize(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t npage
-) noexcept { return this->derived().resizeImpl(nrow, ncol, npage); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range.
-///
-template <class _Derived>
-IndexRange CubeBase<_Derived>::convertRowRange(
-    const IndexRange range
-) const noexcept { return range.convert(getNrow()); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range.
-///
-template <class _Derived>
-IndexRange CubeBase<_Derived>::convertColRange(
-    const IndexRange range
-) const noexcept { return range.convert(getNcol()); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range.
-///
-template <class _Derived>
-IndexRange CubeBase<_Derived>::convertPageRange(
-    const IndexRange range
-) const noexcept { return range.convert(getNpage()); }
+index_t CubeBase<_Derived>::getSize() const noexcept { return nrow_ * ncol_ * npage_; }
 
 }  // namespace internal
 

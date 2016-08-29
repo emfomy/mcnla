@@ -10,7 +10,8 @@
 
 #include <iostream>
 #include <isvd/isvd.hpp>
-#include <isvd/matrix/dense_matrix_base.hpp>
+#include <isvd/matrix/matrix_base.hpp>
+#include <isvd/matrix/dense_base.hpp>
 #include <isvd/matrix/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +34,7 @@ namespace internal {
 ///
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
-  static const Layout layout     = _layout;
+  static const Layout layout = _layout;
   using ScalarType = _Scalar;
   using VectorType = DenseVector<_Scalar>;
 };
@@ -47,34 +48,31 @@ struct Traits<DenseMatrix<_Scalar, _layout>> {
 /// @tparam  _layout  The storage layout.
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class DenseMatrix : public internal::DenseMatrixBase<DenseMatrix<_Scalar, _layout>> {
+class DenseMatrix
+  : public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
+    public internal::DenseBase<DenseMatrix<_Scalar, _layout>> {
 
-  friend internal::MatrixBase<DenseMatrix<_Scalar, _layout>>;
-  friend internal::DenseBase<DenseMatrix<_Scalar, _layout>>;
-  friend internal::DenseMatrixBase<DenseMatrix<_Scalar, _layout>>;
+ public:
+
+  static const Layout layout = _layout;
+  using ScalarType = _Scalar;
+
+ private:
+
+  using MatrixBaseType = internal::MatrixBase<DenseMatrix<_Scalar>>;
+  using DenseBaseType  = internal::DenseBase<DenseMatrix<_Scalar>>;
 
  protected:
-
-  /// The number of rows.
-  index_t nrow_;
-
-  /// The number of columns.
-  index_t ncol_;
-
-  /// The size of major dimension.
-  index_t &dim1_ = isColMajor(_layout) ? nrow_ : ncol_;
-
-  /// The size of minor dimension.
-  index_t &dim2_ = isColMajor(_layout) ? ncol_ : nrow_;
 
   /// The leading dimension.
   const index_t pitch_;
 
-  /// The offset of starting position.
-  const index_t offset_;
-
-  /// The data storage
-  DenseData<_Scalar> data_;
+  using MatrixBaseType::nrow_;
+  using MatrixBaseType::ncol_;
+  using MatrixBaseType::dim1_;
+  using MatrixBaseType::dim2_;
+  using DenseBaseType::offset_;
+  using DenseBaseType::data_;
 
  public:
 
@@ -83,7 +81,10 @@ class DenseMatrix : public internal::DenseMatrixBase<DenseMatrix<_Scalar, _layou
   DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *value ) noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *value,
+               const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                const DenseData<_Scalar> &data, const index_t offset = 0 ) noexcept;
@@ -91,38 +92,34 @@ class DenseMatrix : public internal::DenseMatrixBase<DenseMatrix<_Scalar, _layou
   // Destructor
   ~DenseMatrix() noexcept;
 
- protected:
-
   // Operators
   template <typename __Scalar, Layout __layout>
   friend std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
 
   // Gets information
-  inline Layout getLayoutImpl() const noexcept;
-  inline index_t getNrowImpl() const noexcept;
-  inline index_t getNcolImpl() const noexcept;
-  inline index_t getPitchImpl() const noexcept;
-  inline index_t getOffsetImpl() const noexcept;
-
-  // Gets data storage
-  inline DenseData<_Scalar>& getDataImpl() noexcept;
-  inline const DenseData<_Scalar>& getDataImpl() const noexcept;
+  inline index_t getPitch() const noexcept;
 
   // Gets element
-  inline       _Scalar& getElementImpl( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const _Scalar& getElementImpl( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline       _Scalar& getElement( const index_t rowidx, const index_t colidx ) noexcept;
+  inline const _Scalar& getElement( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline       _Scalar& operator()( const index_t rowidx, const index_t colidx ) noexcept;
+  inline const _Scalar& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  inline void resizeImpl( const index_t nrow, const index_t ncol ) noexcept;
+  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
   // Gets matrix block
-  inline DenseMatrix getBlockImpl( const IndexRange rowrange, const IndexRange colrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getBlock( const IndexRange rowrange, const IndexRange colrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getCols( const IndexRange rowrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getRows( const IndexRange colrange ) noexcept;
 
   // Gets vector segment
-  inline DenseVector<_Scalar> getColImpl( const index_t colidx, const IndexRange rowrange ) noexcept;
-  inline DenseVector<_Scalar> getRowImpl( const index_t rowidx, const IndexRange colrange ) noexcept;
-  inline DenseVector<_Scalar> getDiagonalImpl( const index_t idx ) noexcept;
-  inline DenseVector<_Scalar> vectorizeImpl() noexcept;
+  inline DenseVector<_Scalar> getCol( const index_t colidx, const IndexRange rowrange ) noexcept;
+  inline DenseVector<_Scalar> getRow( const index_t rowidx, const IndexRange colrange ) noexcept;
+  inline DenseVector<_Scalar> getDiagonal( const index_t idx = 0 ) noexcept;
+  inline DenseVector<_Scalar> vectorize() noexcept;
+
+ protected:
 
   // Gets internal information
   inline index_t getIndexInternal( const index_t rowidx, const index_t colidx ) const noexcept;

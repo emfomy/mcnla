@@ -14,5 +14,4 @@
 #include <isvd/lapack.hpp>
 #include <isvd/utility.hpp>
 
-
 #endif  // ISVD_HPP_

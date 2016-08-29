@@ -11,6 +11,7 @@
 #include <memory>
 #include <isvd/isvd.hpp>
 #include <isvd/utility/crtp.hpp>
+#include <isvd/matrix/dense_data.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -18,59 +19,38 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense data storage.
-///
-/// @tparam  _Scalar  The scalar type.
-///
-template <typename _Scalar>
-class DenseData {
-
- protected:
-
-  /// The length of data array.
-  const index_t capability_;
-
-  /// The data array.
-  std::shared_ptr<_Scalar> value_;
-
- public:
-
-  // Constructors
-  DenseData() noexcept;
-  DenseData( const index_t capability ) noexcept;
-  DenseData( const index_t capability, _Scalar *value ) noexcept;
-
-  // Destructor
-  ~DenseData() noexcept;
-
-  // Operators
-  inline bool operator==( const DenseData& other ) const noexcept;
-  inline bool operator!=( const DenseData& other ) const noexcept;
-
-  // Gets data
-  inline        index_t getCapability() const noexcept;
-  inline       _Scalar* getValue() noexcept;
-  inline const _Scalar* getValue() const noexcept;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
 //
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of matrix.
+/// The interface of dense type.
 ///
 /// @tparam  _Derived  The derived class type.
 ///
 template <class _Derived>
-class DenseBase : public CrtpBase<_Derived, DenseBase<_Derived>> {
+class DenseBase {
 
  private:
+
   using ScalarType = typename Traits<_Derived>::ScalarType;
 
+ protected:
+
+  /// The offset of starting position.
+  const index_t offset_;
+
+  /// The data storage
+  DenseData<ScalarType> data_;
+
  public:
+
+  // Constructors
+  DenseBase() noexcept;
+  DenseBase( const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseBase( const index_t capability, ScalarType *value, const index_t offset = 0 ) noexcept;
+  DenseBase( const index_t capability, std::shared_ptr<ScalarType> value, const index_t offset = 0 ) noexcept;
+  DenseBase( const DenseData<ScalarType>& data, const index_t offset = 0 ) noexcept;
 
   // Gets information
   inline index_t getCapability() const noexcept;

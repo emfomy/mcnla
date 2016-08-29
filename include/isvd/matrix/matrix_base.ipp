@@ -20,12 +20,33 @@ namespace isvd {
 //
 namespace internal {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <class _Derived>
+MatrixBase<_Derived>::MatrixBase() noexcept
+  : nrow_(0),
+    ncol_(0) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Derived>
+MatrixBase<_Derived>::MatrixBase(
+    const index_t nrow,
+    const index_t ncol
+) noexcept
+  : nrow_(nrow),
+    ncol_(ncol) {
+  assert(nrow_ > 0 && ncol_ > 0);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived> template <TransOption _trans>
 index_t MatrixBase<_Derived>::getNrow() const noexcept {
-  return !isTranspose(_trans) ?this->derived().getNrowImpl() : this->derived().getNcolImpl();
+  return !isTranspose(_trans) ? nrow_ : ncol_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,75 +54,14 @@ index_t MatrixBase<_Derived>::getNrow() const noexcept {
 ///
 template <class _Derived> template <TransOption _trans>
 index_t MatrixBase<_Derived>::getNcol() const noexcept {
-  return !isTranspose(_trans) ?this->derived().getNcolImpl() : this->derived().getNrowImpl();
+  return !isTranspose(_trans) ? ncol_ : nrow_;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element.
-///
-template <class _Derived>
-typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::getElement(
-    const index_t rowidx,
-    const index_t colidx
-) noexcept { return this->derived().getElementImpl(rowidx, colidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-const typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::getElement(
-    const index_t rowidx,
-    const index_t colidx
-) const noexcept { return this->derived().getElementImpl(rowidx, colidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx
-) noexcept { return getElement(rowidx, colidx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-const typename MatrixBase<_Derived>::ScalarType& MatrixBase<_Derived>::operator()(
-    const index_t rowidx,
-    const index_t colidx
-) const noexcept { return getElement(rowidx, colidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getSize() const noexcept { return getNrow() * getNcol(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the matrix.
-///
-template <class _Derived>
-void MatrixBase<_Derived>::resize(
-    const index_t nrow,
-    const index_t ncol
-) noexcept { return this->derived().resizeImpl(nrow, ncol); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range.
-///
-template <class _Derived>
-IndexRange MatrixBase<_Derived>::convertRowRange(
-    const IndexRange range
-) const noexcept { return range.convert(getNrow()); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range.
-///
-template <class _Derived>
-IndexRange MatrixBase<_Derived>::convertColRange(
-    const IndexRange range
-) const noexcept { return range.convert(getNcol()); }
+index_t MatrixBase<_Derived>::getSize() const noexcept { return nrow_ * ncol_; }
 
 }  // namespace internal
 

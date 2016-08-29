@@ -17,74 +17,65 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor.
-///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData() noexcept
-  : capability_(0),
-    value_(nullptr) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given size information.
-///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData(
-    const index_t capability
-) noexcept
-  : capability_(capability),
-    value_(Malloc<_Scalar>(capability)) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given size information.
-///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData(
-    const index_t capability,
-    _Scalar *value
-) noexcept
-  : capability_(capability),
-    value_(value) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default destructor.
-///
-template <typename _Scalar>
-DenseData<_Scalar>::~DenseData() noexcept {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The equal-to operator
-///
-template <typename _Scalar>
-bool DenseData<_Scalar>::operator==( const DenseData& other ) const noexcept { return this->value_ == other.value_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The not-equal-to operator
-///
-template <typename _Scalar>
-bool DenseData<_Scalar>::operator!=( const DenseData& other ) const noexcept { return this->value_ != other.value_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of data array.
-///
-template <typename _Scalar>
-index_t DenseData<_Scalar>::getCapability() const noexcept { return capability_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
-///
-template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::getValue() noexcept { return value_.get(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return value_.get(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
 //
 namespace internal {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <class _Derived>
+DenseBase<_Derived>::DenseBase() noexcept
+  : offset_(0),
+    data_() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Derived>
+DenseBase<_Derived>::DenseBase(
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : offset_(offset),
+    data_(capability) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <class _Derived>
+DenseBase<_Derived>::DenseBase(
+    const index_t capability,
+    ScalarType *value,
+    const index_t offset
+) noexcept
+  : offset_(offset),
+    data_(capability, value) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <class _Derived>
+DenseBase<_Derived>::DenseBase(
+    const index_t capability,
+    std::shared_ptr<ScalarType> value,
+    const index_t offset
+) noexcept
+  : offset_(offset),
+    data_(capability, value) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct from data storage.
+///
+template <class _Derived>
+DenseBase<_Derived>::DenseBase(
+    const DenseData<ScalarType>& data,
+    const index_t offset
+) noexcept
+  : offset_(offset),
+    data_(data) {
+  assert(offset_ >= 0 && offset_ <= data_.getCapability());
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of data array.
@@ -96,23 +87,19 @@ index_t DenseBase<_Derived>::getCapability() const noexcept { return getData().g
 /// @brief  Gets the offset of starting position.
 ///
 template <class _Derived>
-index_t DenseBase<_Derived>::getOffset() const noexcept { return this->derived().getOffsetImpl(); }
+index_t DenseBase<_Derived>::getOffset() const noexcept { return offset_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data storage.
 ///
 template <class _Derived>
-DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() noexcept {
-  return this->derived().getDataImpl();
-}
+DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getData
 ///
 template <class _Derived>
-const DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() const noexcept {
-  return this->derived().getDataImpl();
-}
+const DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data array.

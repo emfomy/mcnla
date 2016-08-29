@@ -61,17 +61,17 @@ static inline void gemm(
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
 template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL, class _Derived>
+          TransOption _transb = isvd::TransOption::NORMAL, typename _Scalar, Layout _layout>
 inline void gemm(
-    const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
-    const isvd::internal::DenseMatrixBase<_Derived> &a,
-    const isvd::internal::DenseMatrixBase<_Derived> &b,
-    const typename isvd::internal::Traits<_Derived>::ScalarType beta,
-          isvd::internal::DenseMatrixBase<_Derived> &c ) noexcept {
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
+    const DenseMatrix<_Scalar, _layout> &a,
+    const DenseMatrix<_Scalar, _layout> &b,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
+          DenseMatrix<_Scalar, _layout> &c ) noexcept {
   assert(c.getValue() != a.getValue());
   assert(c.getValue() != b.getValue());
 
-  if ( isColMajor(isvd::internal::Traits<_Derived>::layout) ) {
+  if ( isColMajor(_layout) ) {
     assert(c.getNrow() == a.template getNrow<_transa>());
     assert(c.getNcol() == b.template getNcol<_transb>());
     assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
@@ -94,13 +94,13 @@ inline void gemm(
 /// @copydoc isvd::blas::gemm
 ///
 template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL, class _Derived>
+          TransOption _transb = isvd::TransOption::NORMAL, typename _Scalar, Layout _layout>
 inline void gemm(
-    const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
-    const isvd::internal::DenseMatrixBase<_Derived> &a,
-    const isvd::internal::DenseMatrixBase<_Derived> &b,
-    const typename isvd::internal::Traits<_Derived>::ScalarType beta,
-          isvd::internal::DenseMatrixBase<_Derived> &&c ) noexcept {
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
+    const DenseMatrix<_Scalar, _layout> &a,
+    const DenseMatrix<_Scalar, _layout> &b,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
+          DenseMatrix<_Scalar, _layout> &&c ) noexcept {
   gemm(alpha, a, b, beta, c);
 }
 

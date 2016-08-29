@@ -28,30 +28,22 @@ namespace internal {
 /// @tparam  _Derived  The derived class type.
 ///
 template <class _Derived>
-class VectorBase : public CrtpBase<_Derived, VectorBase<_Derived>> {
+class VectorBase {
 
- private:
-  using ScalarType = typename Traits<_Derived>::ScalarType;
+ protected:
+
+  /// The number of entries.
+  index_t length_;
 
  public:
+
+  // Constructors
+  VectorBase() noexcept;
+  VectorBase( const index_t length ) noexcept;
 
   // Gets information
   inline index_t getLength() const noexcept;
   inline index_t getSize() const noexcept;
-
-  // Gets element
-  inline ScalarType& getElement( const index_t idx ) noexcept;
-  inline const ScalarType& getElement( const index_t idx ) const noexcept;
-  inline ScalarType& operator()( const index_t idx ) noexcept;
-  inline const ScalarType& operator()( const index_t idx ) const noexcept;
-
-  // Resizes
-  inline void resize( const index_t length ) noexcept;
-
- protected:
-
-  // Converts range
-  inline IndexRange convertRange( const IndexRange range ) const noexcept;
 
 };
 

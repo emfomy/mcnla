@@ -50,10 +50,10 @@ static inline void copy(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies vector to another vector.
 ///
-template <class _Derived>
+template <typename _Scalar>
 inline void copy(
-    const isvd::internal::DenseVectorBase<_Derived> &x,
-          isvd::internal::DenseVectorBase<_Derived> &y ) noexcept {
+    const DenseVector<_Scalar> &x,
+          DenseVector<_Scalar> &y ) noexcept {
   assert(y.getValue() != x.getValue());
   assert(y.getLength() == x.getLength());
   internal::copy(x.getLength(), x.getValue(), x.getIncrement(), y.getValue(), y.getIncrement());
@@ -62,10 +62,10 @@ inline void copy(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies vector to another vector.
 ///
-template <class _Derived>
+template <typename _Scalar>
 inline void copy(
-    const isvd::internal::DenseVectorBase<_Derived> &x,
-          isvd::internal::DenseVectorBase<_Derived> &&y ) noexcept {
+    const DenseVector<_Scalar> &x,
+          DenseVector<_Scalar> &&y ) noexcept {
   copy(x, y);
 }
 

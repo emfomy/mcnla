@@ -10,7 +10,8 @@
 
 #include <iostream>
 #include <isvd/isvd.hpp>
-#include <isvd/matrix/dense_cube_base.hpp>
+#include <isvd/matrix/cube_base.hpp>
+#include <isvd/matrix/dense_base.hpp>
 #include <isvd/matrix/dense_matrix.hpp>
 #include <isvd/matrix/dense_vector.hpp>
 
@@ -49,94 +50,101 @@ struct Traits<DenseCube<_Scalar, _layout>> {
 /// @tparam  _layout  The storage layout.
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class DenseCube : public internal::DenseCubeBase<DenseCube<_Scalar, _layout>> {
+class DenseCube
+  : public internal::CubeBase<DenseCube<_Scalar, _layout>>,
+    public internal::DenseBase<DenseCube<_Scalar, _layout>>{
 
-  friend internal::CubeBase<DenseCube<_Scalar, _layout>>;
-  friend internal::DenseBase<DenseCube<_Scalar, _layout>>;
-  friend internal::DenseCubeBase<DenseCube<_Scalar, _layout>>;
+ public:
+
+  static const Layout layout = _layout;
+  using ScalarType = _Scalar;
+
+ private:
+
+  using CubeBaseType  = internal::CubeBase<DenseCube<_Scalar>>;
+  using DenseBaseType = internal::DenseBase<DenseCube<_Scalar>>;
 
  protected:
 
-  /// The number of rows.
-  index_t nrow_;
-
-  /// The number of columns.
-  index_t ncol_;
-
-  /// The number of pages.
-  index_t npage_;
-
-  /// The size of major dimension.
-  index_t &dim1_ = isColMajor(_layout) ? nrow_ : ncol_;
-
-  /// The size of minor dimension.
-  index_t &dim2_ = isColMajor(_layout) ? ncol_ : nrow_;
-
   /// The leading dimension.
-  const index_t pitch_;
+  const index_t pitch1_;
 
-  /// The page dimension.
-  const index_t page_pitch_;
+  /// The second dimension.
+  const index_t pitch2_;
 
-  /// The offset of starting position.
-  const index_t offset_;
-
-  /// The data storage
-  DenseData<_Scalar> data_;
+  using CubeBaseType::nrow_;
+  using CubeBaseType::ncol_;
+  using CubeBaseType::npage_;
+  using CubeBaseType::dim1_;
+  using CubeBaseType::dim2_;
+  using DenseBaseType::offset_;
+  using DenseBaseType::data_;
 
  public:
 
   // Constructors
   DenseCube() noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch, const index_t page_pitch ) noexcept;
+             const index_t pitch1, const index_t pitch2 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch, const index_t page_pitch, _Scalar *value ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch, const index_t page_pitch,
-             _Scalar *value, const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch, const index_t page_pitch,
-             const DenseData<_Scalar> &data, const index_t offset = 0 ) noexcept;
+             const index_t pitch1, const index_t pitch2, _Scalar *value ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+             const index_t pitch1, const index_t pitch2, std::shared_ptr<_Scalar> value ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+             const index_t pitch1, const index_t pitch2, _Scalar *value,
+             const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+             const index_t pitch1, const index_t pitch2, std::shared_ptr<_Scalar> value,
+             const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+             const index_t pitch1, const index_t pitch2, const DenseData<_Scalar> &data, const index_t offset = 0 ) noexcept;
 
   // Destructor
   ~DenseCube() noexcept;
 
- protected:
-
   // Gets information
-  inline Layout getLayoutImpl() const noexcept;
-  inline index_t getNrowImpl() const noexcept;
-  inline index_t getNcolImpl() const noexcept;
-  inline index_t getNpageImpl() const noexcept;
-  inline index_t getPitchImpl() const noexcept;
-  inline index_t getPagePitchImpl() const noexcept;
-  inline index_t getOffsetImpl() const noexcept;
-
-  // Gets data storage
-  inline DenseData<_Scalar>& getDataImpl() noexcept;
-  inline const DenseData<_Scalar>& getDataImpl() const noexcept;
+  inline Layout getLayout() const noexcept;
+  inline index_t getNrow() const noexcept;
+  inline index_t getNcol() const noexcept;
+  inline index_t getNpage() const noexcept;
+  inline index_t getPitch1() const noexcept;
+  inline index_t getPitch2() const noexcept;
+  inline index_t getOffset() const noexcept;
 
   // Gets element
-  inline       _Scalar& getElementImpl( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
-  inline const _Scalar& getElementImpl( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  inline       _Scalar& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline const _Scalar& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  inline       _Scalar& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline const _Scalar& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
   // Resizes
-  inline void resizeImpl( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
+  inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
 
   // Gets cube block
-  inline DenseCube getBlockImpl( const IndexRange rowrange, const IndexRange colrange, const IndexRange pagerange ) noexcept;
+  inline DenseCube<_Scalar, _layout> getBlock( const IndexRange rowrange, const IndexRange colrange,
+                                                                          const IndexRange pagerange ) noexcept;
+  inline DenseCube<_Scalar, _layout> getTubes( const IndexRange rowrange, const IndexRange colrange ) noexcept;
+  inline DenseCube<_Scalar, _layout> getPages( const IndexRange pagerange ) noexcept;
+  inline DenseCube<_Scalar, _layout> getColPages( const IndexRange rowrange ) noexcept;
+  inline DenseCube<_Scalar, _layout> getRowPages( const IndexRange colrange ) noexcept;
 
   // Gets matrix block
-  inline DenseMatrix<_Scalar, _layout> getPageImpl( const index_t pageidx,
-                                                    const IndexRange rowrange, const IndexRange colrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getPage( const index_t pageidx, const IndexRange rowrange,
+                                                                       const IndexRange colrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getCols( const index_t pageidx, const IndexRange rowrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getRows( const index_t pageidx, const IndexRange colrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> unfold() noexcept;
 
   // Gets vector segment
-  inline DenseVector<_Scalar> getColImpl( const index_t colidx, const index_t pageidx, const IndexRange rowrange ) noexcept;
-  inline DenseVector<_Scalar> getRowImpl( const index_t rowidx, const index_t pageidx, const IndexRange colrange ) noexcept;
-  inline DenseVector<_Scalar> getTubeImpl( const index_t rowidx, const index_t colidx, const IndexRange pagerange ) noexcept;
-  inline DenseVector<_Scalar> getDiagonalImpl( const index_t pageidx, const index_t idx ) noexcept;
-  inline DenseVector<_Scalar> vectorizeImpl() noexcept;
+  inline DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx, const IndexRange rowrange ) noexcept;
+  inline DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx, const IndexRange colrange ) noexcept;
+  inline DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx, const IndexRange pagerange ) noexcept;
+  inline DenseVector<_Scalar> getDiagonal( const index_t pageidx, const index_t idx ) noexcept;
+  inline DenseVector<_Scalar> vectorize() noexcept;
+
+ protected:
 
   // Gets internal information
   inline index_t getIndexInternal( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;

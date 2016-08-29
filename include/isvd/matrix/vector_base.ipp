@@ -21,60 +21,34 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <class _Derived>
+VectorBase<_Derived>::VectorBase() noexcept
+  : length_(0) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Derived>
+VectorBase<_Derived>::VectorBase(
+    const index_t length
+) noexcept
+  : length_(length) {
+  assert(length_ > 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length.
 ///
 template <class _Derived>
-index_t VectorBase<_Derived>::getLength() const noexcept { return this->derived().getLengthImpl(); }
+index_t VectorBase<_Derived>::getLength() const noexcept { return length_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
 template <class _Derived>
-index_t VectorBase<_Derived>::getSize() const noexcept { return getLength(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element of given index.
-///
-template <class _Derived>
-typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::getElement(
-    const index_t idx
-) noexcept { return this->derived().getElementImpl(idx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-const typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::getElement(
-    const index_t idx
-) const noexcept { return this->derived().getElementImpl(idx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::operator()(
-    const index_t idx
-) noexcept { return getElement(idx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
-///
-template <class _Derived>
-const typename VectorBase<_Derived>::ScalarType& VectorBase<_Derived>::operator()(
-    const index_t idx
-) const noexcept { return getElement(idx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the vector
-///
-template <class _Derived>
-void VectorBase<_Derived>::resize( const index_t length ) noexcept { return this->derived().resizeImpl(length); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Converts the index range.
-///
-template <class _Derived>
-IndexRange VectorBase<_Derived>::convertRange( const IndexRange range ) const noexcept { return range.convert(getLength()); }
+index_t VectorBase<_Derived>::getSize() const noexcept { return length_; }
 
 }  // namespace internal
 

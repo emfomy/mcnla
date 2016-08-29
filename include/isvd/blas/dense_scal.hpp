@@ -28,7 +28,7 @@ namespace blas {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @scaldoc isvd::blas::scal
+/// @copydoc isvd::blas::scal
 ///
 //@{
 static inline void scal(
@@ -50,20 +50,20 @@ static inline void scal(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the product of a vector by a scalar.
 ///
-template <class _Derived>
+template <typename _Scalar>
 inline void scal(
-    const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
-    isvd::internal::DenseVectorBase<_Derived> &x ) noexcept {
+    const _Scalar alpha,
+          DenseVector<_Scalar> &x ) noexcept {
   internal::scal(x.getLength(), alpha, x.getValue(), x.getIncrement());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies vector to another vector.
 ///
-template <class _Derived>
+template <typename _Scalar>
 inline void scal(
-    const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
-    isvd::internal::DenseVectorBase<_Derived> &&x ) noexcept {
+    const _Scalar alpha,
+          DenseVector<_Scalar> &&x ) noexcept {
   scal(alpha, x);
 }
 

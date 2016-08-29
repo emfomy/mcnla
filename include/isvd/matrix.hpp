@@ -20,13 +20,8 @@
 
 #include <isvd/matrix/dense_base.hpp>
 #include <isvd/matrix/dense_base.ipp>
-
-#include <isvd/matrix/dense_vector_base.hpp>
-#include <isvd/matrix/dense_vector_base.ipp>
-#include <isvd/matrix/dense_matrix_base.hpp>
-#include <isvd/matrix/dense_matrix_base.ipp>
-#include <isvd/matrix/dense_cube_base.hpp>
-#include <isvd/matrix/dense_cube_base.ipp>
+#include <isvd/matrix/dense_data.hpp>
+#include <isvd/matrix/dense_data.ipp>
 
 #include <isvd/matrix/dense_vector.hpp>
 #include <isvd/matrix/dense_vector.ipp>

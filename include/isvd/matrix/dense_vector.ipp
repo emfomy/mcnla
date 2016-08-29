@@ -8,7 +8,7 @@
 #ifndef ISVD_MATRIX_DENSE_VECTOR_IPP_
 #define ISVD_MATRIX_DENSE_VECTOR_IPP_
 
-#include <isvd/matrix/dense_matrix.hpp>
+#include <isvd/matrix/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -20,10 +20,9 @@ namespace isvd {
 ///
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector() noexcept
-  : length_(0),
-    increment_(0),
-    offset_(0),
-    data_() {}
+  : VectorBaseType(),
+    DenseBaseType(),
+    increment_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -33,11 +32,9 @@ DenseVector<_Scalar>::DenseVector(
     const index_t length,
     const index_t increment
 ) noexcept
-  : length_(length),
-    increment_(increment),
-    offset_(0),
-    data_(increment_ * length_) {
-  assert(length_ > 0);
+  : VectorBaseType(length),
+    DenseBaseType(increment * length),
+    increment_(increment) {
   assert(increment_ > 0);
 }
 
@@ -52,11 +49,26 @@ DenseVector<_Scalar>::DenseVector(
     const index_t increment,
     _Scalar *value
 ) noexcept
-  : length_(length),
-    increment_(increment),
-    offset_(0),
-    data_(increment_ * length_, value) {
-  assert(length_ > 0);
+  : VectorBaseType(length),
+    DenseBaseType(length * increment, value),
+    increment_(increment) {
+  assert(increment_ > 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+/// @attention  DO NOT FREE @a value!!
+///
+template <typename _Scalar>
+DenseVector<_Scalar>::DenseVector(
+    const index_t length,
+    const index_t increment,
+    std::shared_ptr<_Scalar> value
+) noexcept
+  : VectorBaseType(length),
+    DenseBaseType(length * increment, value),
+    increment_(increment) {
   assert(increment_ > 0);
 }
 
@@ -73,14 +85,31 @@ DenseVector<_Scalar>::DenseVector(
     const index_t capability,
     const index_t offset
 ) noexcept
-  : length_(length),
-    increment_(increment),
-    offset_(offset),
-    data_(capability, value) {
-  assert(length_ > 0);
+  : VectorBaseType(length),
+    DenseBaseType(capability, value, offset),
+    increment_(increment) {
   assert(increment_ > 0);
   assert(capability >= increment_ * length_);
-  assert(offset_ >= 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+/// @attention  DO NOT FREE @a value!!
+///
+template <typename _Scalar>
+DenseVector<_Scalar>::DenseVector(
+    const index_t length,
+    const index_t increment,
+    std::shared_ptr<_Scalar> value,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : VectorBaseType(length),
+    DenseBaseType(capability, value, offset),
+    increment_(increment) {
+  assert(increment_ > 0);
+  assert(capability >= increment_ * length_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,14 +122,11 @@ DenseVector<_Scalar>::DenseVector(
     const DenseData<_Scalar> &data,
     const index_t offset
 ) noexcept
-  : length_(length),
-    increment_(increment),
-    offset_(offset),
-    data_(data) {
-  assert(length_ > 0);
+  : VectorBaseType(length),
+    DenseBaseType(data, offset),
+    increment_(increment) {
   assert(increment_ > 0);
   assert(data.getCapability() >= increment_ * length_);
-  assert(offset_ >= 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,40 +148,16 @@ std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vecto
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::VectorBase::getLength
+/// @brief  Gets the increment.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getLengthImpl() const noexcept { return length_; }
+index_t DenseVector<_Scalar>::getIncrement() const noexcept { return increment_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseVectorBase::getIncrement
+/// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getIncrementImpl() const noexcept { return increment_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseBase::getOffset
-///
-template <typename _Scalar>
-index_t DenseVector<_Scalar>::getOffsetImpl() const noexcept { return offset_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseBase::getData
-///
-template <typename _Scalar>
-DenseData<_Scalar>& DenseVector<_Scalar>::getDataImpl() noexcept { return data_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseBase::getData
-///
-template <typename _Scalar>
-const DenseData<_Scalar>& DenseVector<_Scalar>::getDataImpl() const noexcept { return data_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::VectorBase::getElement
-///
-template <typename _Scalar>
-_Scalar& DenseVector<_Scalar>::getElementImpl(
+_Scalar& DenseVector<_Scalar>::getElement(
     const index_t idx
 ) noexcept {
   assert(idx >= 0 && idx < length_);
@@ -163,10 +165,10 @@ _Scalar& DenseVector<_Scalar>::getElementImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::VectorBase::getElement
+/// @copydoc  getElement
 ///
 template <typename _Scalar>
-const _Scalar& DenseVector<_Scalar>::getElementImpl(
+const _Scalar& DenseVector<_Scalar>::getElement(
     const index_t idx
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
@@ -174,26 +176,42 @@ const _Scalar& DenseVector<_Scalar>::getElementImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::VectorBase::resize
+/// @copydoc  getElement
+///
+template <typename _Scalar>
+_Scalar& DenseVector<_Scalar>::operator()(
+    const index_t idx
+) noexcept { return getElement(idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <typename _Scalar>
+const _Scalar& DenseVector<_Scalar>::operator()(
+    const index_t idx
+) const noexcept { return getElement(idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resize the vector.
 ///
 /// @attention  THE NEW SPACE IS NOT INITIALIZED.
 ///
 template <typename _Scalar>
-void DenseVector<_Scalar>::resizeImpl(
+void DenseVector<_Scalar>::resize(
     const index_t length
 ) noexcept {
-  assert(length >= 0 && length <= data_.getCapability());
+  assert(length > 0 && length <= data_.getCapability());
   length_ = length;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseVectorBase::getSegment
+/// @brief  Gets the vector segment.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar> DenseVector<_Scalar>::getSegmentImpl(
+DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IndexRange range
 ) noexcept {
-  assert(range.start >= 0 && range.end <= length_ && range.getLength() >= 0);
+  assert(range.start >= 0 && range.end <= length_ && range.getLength() > 0);
   return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start));
 }
 

@@ -21,13 +21,10 @@ namespace isvd {
 ///
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>::DenseCube() noexcept
-  : nrow_(0),
-    ncol_(0),
-    npage_(0),
-    pitch_(0),
-    page_pitch_(0),
-    offset_(0),
-    data_() {}
+  : CubeBaseType(),
+    DenseBaseType(),
+    pitch1_(0),
+    pitch2_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -38,14 +35,26 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t ncol,
     const index_t npage
 ) noexcept
-  : nrow_(nrow),
-    ncol_(ncol),
-    npage_(npage),
-    pitch_(dim1_),
-    page_pitch_(pitch_ * dim2_),
-    offset_(0),
-    data_(page_pitch_ * npage_) {
-  assert(nrow_ > 0 && ncol_ > 0 && npage > 0);
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(dim1_ * dim2_ * npage_),
+    pitch1_(dim1_),
+    pitch2_(dim2_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>::DenseCube(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t npage,
+    const index_t pitch1
+) noexcept
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(pitch1 * dim2_ * npage_),
+    pitch1_(pitch1),
+    pitch2_(dim2_) {
+  assert(pitch1_ >= dim1_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,40 +65,14 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t nrow,
     const index_t ncol,
     const index_t npage,
-    const index_t pitch
+    const index_t pitch1,
+    const index_t pitch2
 ) noexcept
-  : nrow_(nrow),
-    ncol_(ncol),
-    npage_(npage),
-    pitch_(pitch),
-    page_pitch_(pitch_ * dim2_),
-    offset_(0),
-    data_(page_pitch_ * npage_) {
-  assert(nrow_ > 0 && ncol_ > 0 && npage > 0);
-  assert(pitch_ >= dim1_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given size information.
-///
-template <typename _Scalar, Layout _layout>
-DenseCube<_Scalar, _layout>::DenseCube(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t npage,
-    const index_t pitch,
-    const index_t page_pitch
-) noexcept
-  : nrow_(nrow),
-    ncol_(ncol),
-    npage_(npage),
-    pitch_(pitch),
-    page_pitch_(page_pitch),
-    offset_(0),
-    data_(page_pitch_ * npage_) {
-  assert(nrow_ > 0 && ncol_ > 0 && npage > 0);
-  assert(pitch_ >= dim1_);
-  assert(page_pitch_ >= pitch_ * dim2_);
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(pitch1 * pitch2 * npage_),
+    pitch1_(pitch1),
+    pitch2_(pitch2) {
+  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,20 +85,15 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t nrow,
     const index_t ncol,
     const index_t npage,
-    const index_t pitch,
-    const index_t page_pitch,
+    const index_t pitch1,
+    const index_t pitch2,
     _Scalar *value
 ) noexcept
-  : nrow_(nrow),
-    ncol_(ncol),
-    npage_(npage),
-    pitch_(pitch),
-    page_pitch_(page_pitch),
-    offset_(0),
-    data_(page_pitch_ * npage_, value) {
-  assert(nrow_ > 0 && ncol_ > 0 && npage > 0);
-  assert(pitch_ >= dim1_);
-  assert(page_pitch_ >= pitch_ * dim2_);
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(pitch1 * pitch2 * npage_, value),
+    pitch1_(pitch1),
+    pitch2_(pitch2) {
+  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,24 +106,63 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t nrow,
     const index_t ncol,
     const index_t npage,
-    const index_t pitch,
-    const index_t page_pitch,
+    const index_t pitch1,
+    const index_t pitch2,
+    std::shared_ptr<_Scalar> value
+) noexcept
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(pitch1 * pitch2 * npage_, value),
+    pitch1_(pitch1),
+    pitch2_(pitch2) {
+  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+/// @attention  DO NOT FREE @a value!!
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>::DenseCube(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t npage,
+    const index_t pitch1,
+    const index_t pitch2,
     _Scalar *value,
     const index_t capability,
     const index_t offset
 ) noexcept
-  : nrow_(nrow),
-    ncol_(ncol),
-    npage_(npage),
-    pitch_(pitch),
-    page_pitch_(page_pitch),
-    offset_(offset),
-    data_(capability, value) {
-  assert(nrow_ > 0 && ncol_ > 0 && npage > 0);
-  assert(pitch >= dim1_);
-  assert(page_pitch_ >= pitch_ * dim2_);
-  assert(capability >= page_pitch_ * npage_);
-  assert(offset_ >= 0);
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(capability, value, offset),
+    pitch1_(pitch1),
+    pitch2_(pitch2) {
+  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+  assert(capability >= pitch1_ * pitch2_ * npage_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+/// @attention  DO NOT FREE @a value!!
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>::DenseCube(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t npage,
+    const index_t pitch1,
+    const index_t pitch2,
+    std::shared_ptr<_Scalar> value,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(capability, value, offset),
+    pitch1_(pitch1),
+    pitch2_(pitch2) {
+  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+  assert(capability >= pitch1_ * pitch2_ * npage_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,23 +173,17 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t nrow,
     const index_t ncol,
     const index_t npage,
-    const index_t pitch,
-    const index_t page_pitch,
+    const index_t pitch1,
+    const index_t pitch2,
     const DenseData<_Scalar> &data,
     const index_t offset
 ) noexcept
-  : nrow_(nrow),
-    ncol_(ncol),
-    npage_(npage),
-    pitch_(pitch),
-    page_pitch_(page_pitch),
-    offset_(offset),
-    data_(data) {
-  assert(nrow_ > 0 && ncol_ > 0 && npage > 0);
-  assert(pitch >= dim1_);
-  assert(page_pitch_ >= pitch_ * dim2_);
-  assert(data.getCapability() >= page_pitch_ * npage_);
-  assert(offset_ >= 0);
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(data, offset),
+    pitch1_(pitch1),
+    pitch2_(pitch2) {
+  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+  assert(data.getCapability() >= pitch1_ * pitch2_ * npage_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,64 +193,22 @@ template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>::~DenseCube() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getLayout
+/// @brief  Gets the leading dimension.
 ///
 template <typename _Scalar, Layout _layout>
-Layout DenseCube<_Scalar, _layout>::getLayoutImpl() const noexcept { return _layout; }
+index_t DenseCube<_Scalar, _layout>::getPitch1() const noexcept { return pitch1_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::CubeBase::getNrow
+/// @brief  Gets the second dimension.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getNrowImpl() const noexcept { return nrow_; }
+index_t DenseCube<_Scalar, _layout>::getPitch2() const noexcept { return pitch2_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::CubeBase::getNcol
+/// @brief  Gets the element of given index.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getNcolImpl() const noexcept { return ncol_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::CubeBase::getNpage
-///
-template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getNpageImpl() const noexcept { return npage_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getPitch
-///
-template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getPitchImpl() const noexcept { return pitch_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getPagePitch
-///
-template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getPagePitchImpl() const noexcept { return page_pitch_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset of starting position.
-///
-template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getOffsetImpl() const noexcept { return offset_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseBase::getData
-///
-template <typename _Scalar, Layout _layout>
-DenseData<_Scalar>& DenseCube<_Scalar, _layout>::getDataImpl() noexcept { return data_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseBase::getData
-///
-template <typename _Scalar, Layout _layout>
-const DenseData<_Scalar>& DenseCube<_Scalar, _layout>::getDataImpl() const noexcept { return data_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::CubeBase::getElement
-///
-template <typename _Scalar, Layout _layout>
-_Scalar& DenseCube<_Scalar, _layout>::getElementImpl(
+_Scalar& DenseCube<_Scalar, _layout>::getElement(
     const index_t rowidx,
     const index_t colidx,
     const index_t pageidx
@@ -251,10 +220,10 @@ _Scalar& DenseCube<_Scalar, _layout>::getElementImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::CubeBase::getElement
+/// @copydoc  getElement
 ///
 template <typename _Scalar, Layout _layout>
-const _Scalar& DenseCube<_Scalar, _layout>::getElementImpl(
+const _Scalar& DenseCube<_Scalar, _layout>::getElement(
     const index_t rowidx,
     const index_t colidx,
     const index_t pageidx
@@ -266,109 +235,220 @@ const _Scalar& DenseCube<_Scalar, _layout>::getElementImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::CubeBase::resize
+/// @copydoc  getElement
+///
+template <typename _Scalar, Layout _layout>
+_Scalar& DenseCube<_Scalar, _layout>::operator()(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) noexcept { return getElement(rowidx, colidx, pageidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getElement
+///
+template <typename _Scalar, Layout _layout>
+const _Scalar& DenseCube<_Scalar, _layout>::operator()(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept { return getElement(rowidx, colidx, pageidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resize the cube.
 ///
 /// @attention  THE NEW SPACE IS NOT INITIALIZED.
 ///
 template <typename _Scalar, Layout _layout>
-void DenseCube<_Scalar, _layout>::resizeImpl(
+void DenseCube<_Scalar, _layout>::resize(
     const index_t nrow,
     const index_t ncol,
     const index_t npage
 ) noexcept {
-  assert(nrow >= 0 && ncol >= 0 && npage >= 0);
-  assert((isColMajor(_layout) ? (ncol * pitch_) : (nrow * pitch_)) <= page_pitch_);
-  assert(npage * page_pitch_ <= data_.getCapability());
+  assert(nrow > 0 && ncol > 0 && npage > 0);
+  assert(isColMajor(_layout) ? ncol : nrow <= pitch1_);
+  assert(isColMajor(_layout) ? nrow : ncol <= pitch2_);
+  assert(pitch1_ * pitch2_ * npage <= data_.getCapability());
   nrow_ = nrow;
   ncol_ = ncol;
   npage_ = npage;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getBlock
+/// @brief  Gets a cube block.
 ///
 template <typename _Scalar, Layout _layout>
-DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlockImpl(
+DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlock(
     const IndexRange rowrange,
     const IndexRange colrange,
     const IndexRange pagerange
 ) noexcept {
-  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  assert(pagerange.start >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
-  return DenseCube<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pagerange.getLength(), pitch_, page_pitch_,
+  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() > 0);
+  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() > 0);
+  assert(pagerange.start >= 0 && pagerange.end <= npage_ && pagerange.getLength() > 0);
+  return DenseCube<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pagerange.getLength(), pitch1_, pitch2_,
                                      data_, getIndexInternal(rowrange.start, colrange.start, pagerange.start));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getPage
+/// @brief  Gets a cube block.
 ///
 template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPageImpl(
+DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getTubes(
+    const IndexRange rowrange,
+    const IndexRange colrange
+) noexcept {
+  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() > 0);
+  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() > 0);
+  return DenseCube<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), npage_, pitch1_, pitch2_,
+                                     data_, getIndexInternal(rowrange.start, colrange.start, 0));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a cube block.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPages(
+    const IndexRange pagerange
+) noexcept {
+  assert(pagerange.start >= 0 && pagerange.end <= npage_ && pagerange.getLength() > 0);
+  return DenseCube<_Scalar, _layout>(nrow_, ncol_, pagerange.getLength(), pitch1_, pitch2_,
+                                     data_, getIndexInternal(0, 0, pagerange.start));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a cube block.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getColPages(
+    const IndexRange colrange
+) noexcept {
+  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() > 0);
+  return DenseCube<_Scalar, _layout>(nrow_, colrange.getLength(), npage_, pitch1_, pitch2_,
+                                     data_, getIndexInternal(0, colrange.start, 0));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a cube block.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getRowPages(
+    const IndexRange rowrange
+) noexcept {
+  assert(rowrange.start >= 0 && rowrange.end <= ncol_ && rowrange.getLength() > 0);
+  return DenseCube<_Scalar, _layout>(rowrange.getLength(), ncol_, npage_, pitch1_, pitch2_,
+                                     data_, getIndexInternal(rowrange.start, 0, 0));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a matrix block.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPage(
     const index_t pageidx,
     const IndexRange rowrange,
     const IndexRange colrange
 ) noexcept {
-  assert(pageidx >= 0 && pageidx <= npage_);
-  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch_,
+  assert(pageidx >= 0 && pageidx < npage_);
+  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() > 0);
+  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() > 0);
+  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch1_,
                                        data_, getIndexInternal(rowrange.start, colrange.start, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getCol
+/// @brief  Gets a matrix block.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getColImpl(
+DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getCols(
+    const index_t pageidx,
+    const IndexRange colrange
+) noexcept {
+  assert(pageidx >= 0 && pageidx < npage_);
+  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() > 0);
+  return DenseMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), pitch1_,
+                                       data_, getIndexInternal(0, colrange.start, pageidx));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a matrix block.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getRows(
+    const index_t pageidx,
+    const IndexRange rowrange
+) noexcept {
+  assert(pageidx >= 0 && pageidx < npage_);
+  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() > 0);
+  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, pitch1_,
+                                       data_, getIndexInternal(rowrange.start, 0, pageidx));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Unfold the cube.
+///
+/// @attention  !!!
+///
+/// @todo  Finish the description of the attention.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
+  return DenseMatrix<_Scalar, _layout>(dim1_, pitch2_ * npage_, pitch1_, data_, getIndexInternal(0, 0, 0));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a vector segment.
+///
+template <typename _Scalar, Layout _layout>
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getCol(
     const index_t colidx,
     const index_t pageidx,
     const IndexRange rowrange
 ) noexcept {
-  assert(colidx >= 0 && colidx <= ncol_);
-  assert(pageidx >= 0 && pageidx <= npage_);
-  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
+  assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
+  assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() > 0);
   return DenseVector<_Scalar>(rowrange.getLength(), getColIncInternal(),
                               data_, getIndexInternal(rowrange.start, colidx, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getRow
+/// @brief  Gets a vector segment.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRowImpl(
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRow(
     const index_t rowidx,
     const index_t pageidx,
     const IndexRange colrange
 ) noexcept {
-  assert(rowidx >= 0 && rowidx <= nrow_);
-  assert(pageidx >= 0 && pageidx <= npage_);
-  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(pageidx >= 0 && pageidx < npage_);
+  assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() > 0);
   return DenseVector<_Scalar>(colrange.getLength(), getRowIncInternal(),
                               data_, getIndexInternal(rowidx, colrange.start, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getTube
+/// @brief  Gets a vector segment.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTubeImpl(
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTube(
     const index_t rowidx,
     const index_t colidx,
     const IndexRange pagerange
 ) noexcept {
-  assert(rowidx >= 0 && rowidx <= nrow_);
-  assert(colidx >= 0 && colidx <= ncol_);
-  assert(pagerange.start >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  assert(pagerange.start >= 0 && pagerange.end <= npage_ && pagerange.getLength() > 0);
   return DenseVector<_Scalar>(pagerange.getLength(), getTubeIncInternal(),
                               data_, getIndexInternal(rowidx, colidx, pagerange.start));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::getDiagonal
+/// @brief  Gets a diagonal vector.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonalImpl(
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
     const index_t pageidx, const index_t idx
 ) noexcept {
   assert(idx > -nrow_ && idx < ncol_);
@@ -389,15 +469,19 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonalImpl(
       length = ncol_ - idx;
     }
   }
-  return DenseVector<_Scalar>(length, pitch_+1, data_, idx0);
+  return DenseVector<_Scalar>(length, pitch1_+1, data_, idx0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::DenseCubeBase::vectorize
+/// @brief  Vectorize the cube.
+///
+/// @attention  !!!
+///
+/// @todo  Finish the description of the attention.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorizeImpl() noexcept {
-  return DenseVector<_Scalar>(page_pitch_ * npage_, 1, data_, getIndexInternal(0, 0, 0));
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
+  return DenseVector<_Scalar>(pitch1_ * pitch2_ * npage_, 1, data_, getIndexInternal(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -409,10 +493,11 @@ index_t DenseCube<_Scalar, _layout>::getIndexInternal(
     const index_t colidx,
     const index_t pageidx
 ) const noexcept {
-  assert(rowidx >= 0 && rowidx <= nrow_);
-  assert(colidx >= 0 && colidx <= ncol_);
-  assert(pageidx >= 0 && pageidx <= npage_);
-  return (isColMajor(_layout) ? (rowidx + colidx * pitch_) : (colidx + rowidx * pitch_)) + pageidx * page_pitch_ + offset_;
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
+  return (isColMajor(_layout) ? (rowidx + colidx * pitch1_) : (colidx + rowidx * pitch1_))
+         + pageidx * pitch1_ * pitch2_ + offset_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,7 +505,7 @@ index_t DenseCube<_Scalar, _layout>::getIndexInternal(
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getColIncInternal() const noexcept {
-  return isColMajor(_layout) ? 1 : pitch_;
+  return isColMajor(_layout) ? 1 : pitch1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -428,7 +513,7 @@ index_t DenseCube<_Scalar, _layout>::getColIncInternal() const noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getRowIncInternal() const noexcept {
-  return isColMajor(_layout) ? pitch_ : 1;
+  return isColMajor(_layout) ? pitch1_ : 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -436,7 +521,7 @@ index_t DenseCube<_Scalar, _layout>::getRowIncInternal() const noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getTubeIncInternal() const noexcept {
-  return page_pitch_;
+  return pitch1_ * pitch2_;
 }
 
 }  // namespace isvd

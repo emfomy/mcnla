@@ -9,7 +9,8 @@
 #define ISVD_MATRIX_DENSE_VECTOR_HPP_
 
 #include <isvd/isvd.hpp>
-#include <isvd/matrix/dense_vector_base.hpp>
+#include <isvd/matrix/vector_base.hpp>
+#include <isvd/matrix/dense_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -41,25 +42,27 @@ struct Traits<DenseVector<_Scalar>> {
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class DenseVector : public internal::DenseVectorBase<DenseVector<_Scalar>> {
+class DenseVector
+  : public internal::VectorBase<DenseVector<_Scalar>>,
+    public internal::DenseBase<DenseVector<_Scalar>> {
 
-  friend internal::VectorBase<DenseVector<_Scalar>>;
-  friend internal::DenseBase<DenseVector<_Scalar>>;
-  friend internal::DenseVectorBase<DenseVector<_Scalar>>;
+ public:
+
+  using ScalarType = _Scalar;
+
+ private:
+
+  using VectorBaseType = internal::VectorBase<DenseVector<_Scalar>>;
+  using DenseBaseType  = internal::DenseBase<DenseVector<_Scalar>>;
 
  protected:
-
-  /// The number of entries.
-  index_t length_;
 
   /// The increment.
   const index_t increment_;
 
-  /// The offset of starting position.
-  const index_t offset_;
-
-  /// The data storage
-  DenseData<_Scalar> data_;
+  using VectorBaseType::length_;
+  using DenseBaseType::offset_;
+  using DenseBaseType::data_;
 
  public:
 
@@ -67,7 +70,10 @@ class DenseVector : public internal::DenseVectorBase<DenseVector<_Scalar>> {
   DenseVector() noexcept;
   DenseVector( const index_t length, const index_t increment = 1 ) noexcept;
   DenseVector( const index_t length, const index_t increment, _Scalar *value ) noexcept;
+  DenseVector( const index_t length, const index_t increment, std::shared_ptr<_Scalar> value ) noexcept;
   DenseVector( const index_t length, const index_t increment, _Scalar *value,
+               const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseVector( const index_t length, const index_t increment, std::shared_ptr<_Scalar> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
   DenseVector( const index_t length, const index_t increment,
                const DenseData<_Scalar> &data, const index_t offset = 0 ) noexcept;
@@ -75,30 +81,26 @@ class DenseVector : public internal::DenseVectorBase<DenseVector<_Scalar>> {
   // Destructor
   ~DenseVector() noexcept;
 
- protected:
-
   // Operators
   template <typename __Scalar>
   friend std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
 
   // Gets information
-  inline index_t getLengthImpl() const noexcept;
-  inline index_t getIncrementImpl() const noexcept;
-  inline index_t getOffsetImpl() const noexcept;
-
-  // Gets data storage
-  inline DenseData<_Scalar>& getDataImpl() noexcept;
-  inline const DenseData<_Scalar>& getDataImpl() const noexcept;
+  inline index_t getIncrement() const noexcept;
 
   // Gets element
-  inline       _Scalar& getElementImpl( const index_t idx ) noexcept;
-  inline const _Scalar& getElementImpl( const index_t idx ) const noexcept;
+  inline       _Scalar& getElement( const index_t idx ) noexcept;
+  inline const _Scalar& getElement( const index_t idx ) const noexcept;
+  inline       _Scalar& operator()( const index_t idx ) noexcept;
+  inline const _Scalar& operator()( const index_t idx ) const noexcept;
 
   // Resizes
-  inline void resizeImpl( const index_t length ) noexcept;
+  inline void resize( const index_t length ) noexcept;
 
   // Gets segment
-  inline DenseVector getSegmentImpl( const IndexRange range ) noexcept;
+  inline DenseVector<_Scalar> getSegment( const IndexRange range ) noexcept;
+
+ protected:
 
   // Gets internal information
   inline index_t getIndexInternal( const index_t idx ) const noexcept;

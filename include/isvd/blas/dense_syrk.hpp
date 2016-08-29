@@ -56,19 +56,19 @@ static inline void syrk(
 }  // namespace internal
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Performs a symmetric/Hermitian rank-k update..
+/// @brief  Performs a symmetric/Hermitian rank-k update.
 ///
 template <UploOption _uplo = UploOption::LOWER,
-          TransOption _trans = TransOption::NORMAL, class _Derived>
+          TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
 inline void syrk(
-    const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
-    const isvd::internal::DenseMatrixBase<_Derived> &a,
-    const typename isvd::internal::Traits<_Derived>::ScalarType beta,
-          isvd::internal::DenseMatrixBase<_Derived> &c ) noexcept {
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
+    const DenseMatrix<_Scalar, _layout> &a,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
+          DenseMatrix<_Scalar, _layout> &c ) noexcept {
   assert(c.getValue() != a.getValue());
   assert(c.getNrow() == c.getNcol());
 
-  if ( isColMajor(isvd::internal::Traits<_Derived>::layout) ) {
+  if ( isColMajor(_layout) ) {
     assert(c.getNrow() == a.template getNrow<_trans>());
     internal::syrk(UploChar<_uplo>::value, TransChar<_trans>::value,
                    c.template getNrow(), a.template getNcol<_trans>(),
@@ -85,12 +85,12 @@ inline void syrk(
 /// @copydoc isvd::blas::syrk
 ///
 template <SideOption _side = SideOption::LEFT,
-          UploOption _uplo = UploOption::LOWER, class _Derived>
+          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
-    const typename isvd::internal::Traits<_Derived>::ScalarType alpha,
-    const isvd::internal::DenseMatrixBase<_Derived> &a,
-    const typename isvd::internal::Traits<_Derived>::ScalarType beta,
-          isvd::internal::DenseMatrixBase<_Derived> &&c ) noexcept {
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
+    const DenseMatrix<_Scalar, _layout> &a,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
+          DenseMatrix<_Scalar, _layout> &&c ) noexcept {
   syrk(alpha, a, beta, c);
 }
 
