@@ -5,7 +5,6 @@
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#include <cstdio>
 #include <iostream>
 #include <iomanip>
 #include <isvd.hpp>
@@ -23,42 +22,43 @@ int main() {
             << ISVD_VERSION_MINOR << "."
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
 
-  isvd::index_t m = 6, n = 5, k = 3, lda = 7, lwork = 64*n, info;
+  isvd::index_t iseed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
+  isvd::index_t n = 6, lda = 8, lwork, lwork2, info;
+  double dlwork2;
 
-  isvd::DenseMatrix<double> matA(m, n, lda), matA2(m, n, lda), matA3(m, n, lda);
-  isvd::DenseVector<double> vecTau(n), vecTau2(n), vecTau3(n), vecWork(lwork);
-
-  for ( auto i = 0; i < matA.getNrow(); ++i ) {
-    for ( auto j = 0; j < matA.getNcol(); ++j ) {
-      matA(i, j) = double(rand()) / RAND_MAX;
-    }
-  }
-
+  // Generate A
+  isvd::DenseMatrix<double, isvd::Layout::ROWMAJOR> matA(n, n, lda), matA2(n, n, lda);
+  isvd::lapack::larnv<3>(matA.vectorize(), iseed);
   isvd::blas::copy(matA.vectorize(), matA2.vectorize());
-  isvd::blas::copy(matA.vectorize(), matA3.vectorize());
 
   std::cout << "A" << std::endl;
   std::cout << matA << std::endl;
   std::cout << matA2 << std::endl;
-  std::cout << matA3 << std::endl;
   std::cout << std::endl;
 
-  isvd::lapack::geqrf(matA, vecTau, vecWork);
-  assert(isvd::lapack::internal::geqrf(m, n, matA2.getValue(), lda, vecTau2.getValue(), vecWork.getValue(), lwork) == 0);
-  dgeqrf_(&m, &n, matA3.getValue(), &lda, vecTau3.getValue(), vecWork.getValue(), &lwork, &info); assert(info == 0);
+  // Query
+  lwork = isvd::lapack::syevQuery<'V', isvd::UploOption::UPPER>(matA);
+  lwork2 = -1;
+  dsyev_("V", "U", &n, nullptr, &lda, nullptr, &dlwork2, &lwork2, &info); assert(info == 0);
+  lwork2 = dlwork2;
 
-  std::cout << "geqrf" << std::endl;
+  std::cout << "lwork" << std::endl;
+  std::cout << lwork << std::endl;
+  std::cout << lwork2 << std::endl;
+
+  isvd::DenseVector<double> vecW(n), vecW2(n), vecWork(lwork), vecRwork(3*n);
+
+  // SYEV
+  isvd::lapack::syev<'V', isvd::UploOption::UPPER>(matA, vecW, vecWork, vecRwork);
+  dsyev_("V", "U", &n, matA2.getValue(), &lda, vecW2.getValue(), vecWork.getValue(), &lwork2, &info); assert(info == 0);
+
+  std::cout << "V" << std::endl;
   std::cout << matA << std::endl;
   std::cout << matA2 << std::endl;
-  std::cout << matA3 << std::endl;
   std::cout << std::endl;
 
-  isvd::lapack::orgqr(matA, vecTau, vecWork, n, k);
-  assert(isvd::lapack::internal::orgqr(m, n, k, matA2.getValue(), lda, vecTau2.getValue(), vecWork.getValue(), lwork) == 0);
-  dorgqr_(&m, &n, &k, matA3.getValue(), &lda, vecTau3.getValue(), vecWork.getValue(), &lwork, &info); assert(info == 0);
-
-  std::cout << "orgqr" << std::endl;
-  std::cout << matA << std::endl;
-  std::cout << matA2 << std::endl;
-  std::cout << matA3 << std::endl;
+  std::cout << "W" << std::endl;
+  std::cout << vecW << std::endl;
+  std::cout << vecW2 << std::endl;
+  std::cout << std::endl;
 }

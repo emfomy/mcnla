@@ -12,6 +12,28 @@
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+extern "C" {
+
+#include <isvd/plugin/blas_plugin_start.h>
+
+// Copies vector to another vector.
+extern void scopy_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx, FORTRAN_REAL4 y,
+                    const FORTRAN_INT8 incy );
+extern void dcopy_( const FORTRAN_INT8 n, const FORTRAN_REAL8 x, const FORTRAN_INT8 incx, FORTRAN_REAL8 y,
+                    const FORTRAN_INT8 incy );
+extern void ccopy_( const FORTRAN_INT8 n, const FORTRAN_COMP4 x, const FORTRAN_INT8 incx, FORTRAN_COMP4 y,
+                    const FORTRAN_INT8 incy );
+extern void zcopy_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_INT8 incx, FORTRAN_COMP8 y,
+                    const FORTRAN_INT8 incy );
+
+#include <isvd/plugin/blas_plugin_end.h>
+
+}  // extern "C"
+
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
 //
@@ -54,7 +76,8 @@ static inline void copy(
 template <typename _Scalar>
 inline void copy(
     const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &y ) noexcept {
+          DenseVector<_Scalar> &y
+) noexcept {
   assert(y.getLength() == x.getLength());
   internal::copy(x.getLength(), x.getValue(), x.getIncrement(), y.getValue(), y.getIncrement());
 }
@@ -62,7 +85,8 @@ inline void copy(
 template <typename _Scalar>
 inline void copy(
     const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &&y ) noexcept {
+          DenseVector<_Scalar> &&y
+) noexcept {
   copy(x, y);
 }
 //@}

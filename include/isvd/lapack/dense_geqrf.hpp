@@ -113,7 +113,8 @@ template <typename _Scalar, Layout _layout>
 inline void geqrf(
     DenseMatrix<_Scalar, _layout> &a,
     DenseVector<_Scalar> &tau,
-    DenseVector<_Scalar> &work ) noexcept {
+    DenseVector<_Scalar> &work
+) noexcept {
   assert(tau.getLength() >= std::min(a.getNrow(), a.getNcol()));
   assert(work.getLength() >= a.getNcol());
 
@@ -140,7 +141,8 @@ template <typename _Scalar, Layout _layout>
 inline void gelqf(
     DenseMatrix<_Scalar, _layout> &a,
     DenseVector<_Scalar> &tau,
-    DenseVector<_Scalar> &work ) noexcept {
+    DenseVector<_Scalar> &work
+) noexcept {
   geqrf(a.transpose(), tau, work);
 }
 

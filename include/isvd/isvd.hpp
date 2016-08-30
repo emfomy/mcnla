@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/isvd.hpp
-/// @brief   The configured options and settings.
+/// @brief   The core header.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
@@ -14,28 +14,16 @@
 #warning C++11 is required.
 #endif
 
-#define ISVD_VERSION_MAJOR @ISVD_VERSION_MAJOR@ ///< The major version of iSVD.
-#define ISVD_VERSION_MINOR @ISVD_VERSION_MINOR@ ///< The minor version of iSVD.
-#define ISVD_VERSION_PATCH @ISVD_VERSION_PATCH@ ///< The patch version of iSVD.
-
 #include <cassert>
 #include <cstdint>
 #include <complex>
 #include <type_traits>
+#include <isvd/config.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The iSVD namespace
 ///
 namespace isvd {
-
-/// The type of index.
-using index_t = int@ISVD_SYSTEM_WORD_SIZE@_t;
-
-/// The type of size.
-using size_t = uint@ISVD_SYSTEM_WORD_SIZE@_t;
-
-/// The format width
-const size_t ios_width = 12;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The enumeration of matrix storage layout.

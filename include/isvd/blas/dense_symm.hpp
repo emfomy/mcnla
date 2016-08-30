@@ -12,6 +12,34 @@
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+extern "C" {
+
+#include <isvd/plugin/blas_plugin_start.h>
+
+// Computes a matrix-matrix product where one input matrix is symmetric.
+extern void ssymm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT8 lda, const FORTRAN_REAL4 b,
+                    const FORTRAN_INT8 ldb, const FORTRAN_REAL4 beta, FORTRAN_REAL4 c, const FORTRAN_INT8 ldc );
+extern void dsymm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT8 lda, const FORTRAN_REAL8 b,
+                    const FORTRAN_INT8 ldb, const FORTRAN_REAL8 beta, FORTRAN_REAL8 c, const FORTRAN_INT8 ldc );
+
+// Computes a matrix-matrix product where one input matrix is Hermitian.
+extern void chemm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT8 lda, const FORTRAN_COMP4 b,
+                    const FORTRAN_INT8 ldb, const FORTRAN_COMP4 beta, FORTRAN_COMP4 c, const FORTRAN_INT8 ldc );
+extern void zhemm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT8 lda, const FORTRAN_COMP8 b,
+                    const FORTRAN_INT8 ldb, const FORTRAN_COMP8 beta, FORTRAN_COMP8 c, const FORTRAN_INT8 ldc );
+
+#include <isvd/plugin/blas_plugin_end.h>
+
+}  // extern "C"
+
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
 //
@@ -76,7 +104,8 @@ inline void symm(
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &c ) noexcept {
+          DenseMatrix<_Scalar, _layout> &c
+) noexcept {
   if ( isColMajor(_layout) ) {
     if ( isLeftSide(_side) ) {
       assert(a.getNrow() == a.getNcol());
@@ -89,7 +118,7 @@ inline void symm(
       assert(a.getNrow() == c.getNrow());
       assert(a.getNcol() == c.getNcol());
     }
-    internal::symm(SideChar<_side>::value, UploChar<_uplo>::value, c.getNrow(), c.getNcol(),
+    internal::symm(SideChar<_side>::value, UploChar<_uplo, _layout>::value, c.getNrow(), c.getNcol(),
                    alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(),
                    beta, c.getValue(), c.getPitch());
   } else {
@@ -104,7 +133,7 @@ inline void symm(
       assert(b.getNcol() == c.getNcol());
       assert(b.getNrow() == c.getNrow());
     }
-    internal::symm(SideChar<_side>::value, UploChar<_uplo>::value, c.getNcol(), c.getNrow(),
+    internal::symm(SideChar<_side>::value, UploChar<_uplo, _layout>::value, c.getNcol(), c.getNrow(),
                    alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(),
                    beta, c.getValue(), c.getPitch());
   }
@@ -117,7 +146,8 @@ inline void symm(
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &&c ) noexcept {
+          DenseMatrix<_Scalar, _layout> &&c
+) noexcept {
   symm<_side, _uplo>(alpha, a, b, beta, c);
 }
 //@}

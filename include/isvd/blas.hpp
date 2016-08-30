@@ -9,7 +9,6 @@
 #define ISVD_BLAS_HPP_
 
 #include <isvd/blas/blas.hpp>
-#include <isvd/blas/blasf.hpp>
 
 #include <isvd/blas/dense_scal.hpp>
 #include <isvd/blas/dense_copy.hpp>

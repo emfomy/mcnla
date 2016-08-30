@@ -33,10 +33,12 @@ template <typename _Derived> struct Traits;
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-struct ScalarTraits : Traits<_Scalar> {
+struct ScalarTraits {
   static_assert(std::is_floating_point<_Scalar>::value, "'_Scalar' must be a floating point type!");
   using RealType = _Scalar;
   using ComplexType = std::complex<_Scalar>;
+  static const bool is_real = true;
+  static const bool is_complex = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +51,8 @@ struct ScalarTraits<std::complex<_Scalar>> {
   static_assert(std::is_floating_point<_Scalar>::value, "'_Scalar' must be a floating point type!");
   using RealType = _Scalar;
   using ComplexType = std::complex<_Scalar>;
+  static const bool is_real = false;
+  static const bool is_complex = true;
 };
 
 }  // namespace internal

@@ -23,17 +23,18 @@ namespace blas {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
 ///
-template <TransOption _trans, bool isreal = true>
+template <TransOption _trans, typename _Scalar>
 struct TransChar {
-  static const char value = !isTranspose(_trans) ? 'N' : isreal ? 'T' : !isConjugate(_trans) ? 'T' : 'C';
+  static const char value =
+      !isTranspose(_trans) ? 'N' : ((isvd::internal::ScalarTraits<_Scalar>::is_complex && !!isConjugate(_trans)) ? 'C' : 'T');
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert upper/lower option to char.
 ///
-template <UploOption _uplo>
+template <UploOption _uplo, Layout _layout>
 struct UploChar {
-  static const char value = isLower(_uplo) ? 'L' : 'U';
+  static const char value = (isLower(_uplo) ^ isColMajor(_layout)) ? 'L' : 'U';
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

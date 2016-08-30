@@ -18,21 +18,25 @@ extern "C" {
 
 #include <isvd/plugin/lapack_plugin_start.h>
 
-// Generates the real orthogonal or complex unitary matrix Q of the QR factorization formed by GEQRF.
+// Generates the real orthogonal matrix Q of the QR factorization formed by GEQRF.
 extern void sorgqr_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_REAL4 a, const FORTRAN_INT8 lda,
                      const FORTRAN_REAL4 tau, FORTRAN_REAL4 work, FORTRAN_INT8 lwork, FORTRAN_INT8 info );
 extern void dorgqr_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_REAL8 a, const FORTRAN_INT8 lda,
                      const FORTRAN_REAL8 tau, FORTRAN_REAL8 work, FORTRAN_INT8 lwork, FORTRAN_INT8 info );
+
+// Generates the real complex unitary Q of the QR factorization formed by GEQRF.
 extern void cungqr_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_COMP4 a, const FORTRAN_INT8 lda,
                      const FORTRAN_COMP4 tau, FORTRAN_COMP4 work, FORTRAN_INT8 lwork, FORTRAN_INT8 info );
 extern void zungqr_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_COMP8 a, const FORTRAN_INT8 lda,
                      const FORTRAN_COMP8 tau, FORTRAN_COMP8 work, FORTRAN_INT8 lwork, FORTRAN_INT8 info );
 
-// Generates the real orthogonal or complex unitary matrix Q of the LQ factorization formed by GELQF.
+// Generates the real orthogonal matrix Q of the LQ factorization formed by GELQF.
 extern void sorglq_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_REAL4 a, const FORTRAN_INT8 lda,
                      const FORTRAN_REAL4 tau, FORTRAN_REAL4 work, FORTRAN_INT8 lwork, FORTRAN_INT8 info );
 extern void dorglq_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_REAL8 a, const FORTRAN_INT8 lda,
                      const FORTRAN_REAL8 tau, FORTRAN_REAL8 work, FORTRAN_INT8 lwork, FORTRAN_INT8 info );
+
+// Generates the complex unitary matrix Q of the LQ factorization formed by GELQF.
 extern void cunglq_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_COMP4 a, const FORTRAN_INT8 lda,
                      const FORTRAN_COMP4 tau, FORTRAN_COMP4 work, FORTRAN_INT8 lwork, FORTRAN_INT8 info );
 extern void zunglq_( const FORTRAN_INT8 m, const FORTRAN_INT8 n, const FORTRAN_INT8 k, FORTRAN_COMP8 a, const FORTRAN_INT8 lda,
@@ -115,7 +119,8 @@ inline void orgqr(
     const DenseVector<_Scalar> &tau,
           DenseVector<_Scalar> &work,
     const index_t ncol,
-    const index_t rank ) noexcept {
+    const index_t rank
+) noexcept {
   assert(ncol >= rank && rank >= 0);
   assert(a.getNrow() >= ncol && a.getNcol() >= ncol);
   assert(tau.getLength() >= rank);
@@ -147,7 +152,8 @@ inline void orglq(
     const DenseVector<_Scalar> &tau,
           DenseVector<_Scalar> &work,
     const index_t nrow,
-    const index_t rank ) noexcept {
+    const index_t rank
+) noexcept {
   orgqr(a.transpose(), tau, work, nrow, rank);
 }
 

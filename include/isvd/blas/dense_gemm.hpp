@@ -12,6 +12,36 @@
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+extern "C" {
+
+#include <isvd/plugin/blas_plugin_start.h>
+
+// Computes a matrix-matrix product with general matrices.
+extern void sgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_INT8 k, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT8 lda,
+                    const FORTRAN_REAL4 b, const FORTRAN_INT8 ldb, const FORTRAN_REAL4 beta, FORTRAN_REAL4 c,
+                    const FORTRAN_INT8 ldc );
+extern void dgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_INT8 k, const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT8 lda,
+                    const FORTRAN_REAL8 b, const FORTRAN_INT8 ldb, const FORTRAN_REAL8 beta, FORTRAN_REAL8 c,
+                    const FORTRAN_INT8 ldc );
+extern void cgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_INT8 k, const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT8 lda,
+                    const FORTRAN_COMP4 b, const FORTRAN_INT8 ldb, const FORTRAN_COMP4 beta, FORTRAN_COMP4 c,
+                    const FORTRAN_INT8 ldc );
+extern void zgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
+                    const FORTRAN_INT8 k, const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT8 lda,
+                    const FORTRAN_COMP8 b, const FORTRAN_INT8 ldb, const FORTRAN_COMP8 beta, FORTRAN_COMP8 c,
+                    const FORTRAN_INT8 ldc );
+
+#include <isvd/plugin/blas_plugin_end.h>
+
+}  // extern "C"
+
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
 //
@@ -69,12 +99,13 @@ inline void gemm(
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &c ) noexcept {
+          DenseMatrix<_Scalar, _layout> &c
+) noexcept {
   if ( isColMajor(_layout) ) {
     assert(c.getNrow() == a.template getNrow<_transa>());
     assert(c.getNcol() == b.template getNcol<_transb>());
     assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
-    internal::gemm(TransChar<_transa>::value, TransChar<_transb>::value,
+    internal::gemm(TransChar<_transa, _Scalar>::value, TransChar<_transb, _Scalar>::value,
                    c.getNrow(), c.getNcol(), a.template getNcol<_transa>(),
                    alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(),
                    beta, c.getValue(), c.getPitch());
@@ -82,7 +113,7 @@ inline void gemm(
     assert(c.getNcol() == b.template getNcol<_transb>());
     assert(c.getNrow() == a.template getNrow<_transa>());
     assert(b.template getNrow<_transb>() == a.template getNcol<_transa>());
-    internal::gemm(TransChar<_transb>::value, TransChar<_transa>::value,
+    internal::gemm(TransChar<_transb, _Scalar>::value, TransChar<_transa, _Scalar>::value,
                    c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),
                    alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(),
                    beta, c.getValue(), c.getPitch());
@@ -97,7 +128,8 @@ inline void gemm(
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &&c ) noexcept {
+          DenseMatrix<_Scalar, _layout> &&c
+) noexcept {
   gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 //@}

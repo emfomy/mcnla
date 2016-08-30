@@ -12,6 +12,24 @@
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+extern "C" {
+
+#include <isvd/plugin/blas_plugin_start.h>
+
+// Computes the product of a vector by a scalar.
+extern void sscal_( const FORTRAN_INT8 n, const FORTRAN_REAL4 alpha, FORTRAN_REAL4 x, const FORTRAN_INT8 incx );
+extern void dscal_( const FORTRAN_INT8 n, const FORTRAN_REAL8 alpha, FORTRAN_REAL8 x, const FORTRAN_INT8 incx );
+extern void cscal_( const FORTRAN_INT8 n, const FORTRAN_COMP4 alpha, FORTRAN_COMP4 x, const FORTRAN_INT8 incx );
+extern void zscal_( const FORTRAN_INT8 n, const FORTRAN_COMP8 alpha, FORTRAN_COMP8 x, const FORTRAN_INT8 incx );
+
+#include <isvd/plugin/blas_plugin_end.h>
+
+}  // extern "C"
+
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
 //
@@ -54,14 +72,16 @@ static inline void scal(
 template <typename _Scalar>
 inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
-          DenseVector<_Scalar> &x ) noexcept {
+          DenseVector<_Scalar> &x
+) noexcept {
   internal::scal(x.getLength(), alpha, x.getValue(), x.getIncrement());
 }
 
 template <typename _Scalar>
 inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
-          DenseVector<_Scalar> &&x ) noexcept {
+          DenseVector<_Scalar> &&x
+) noexcept {
   scal(alpha, x);
 }
 //@}
