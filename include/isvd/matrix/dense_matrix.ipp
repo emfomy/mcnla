@@ -8,7 +8,7 @@
 #ifndef ISVD_MATRIX_DENSE_MATRIX_IPP_
 #define ISVD_MATRIX_DENSE_MATRIX_IPP_
 
-#include <cstdlib>
+#include <iomanip>
 #include <isvd/matrix/dense_matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ template <typename __Scalar, Layout __layout>
 std::ostream& operator<< ( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix ) {
   for ( auto i = 0; i < matrix.nrow_; ++i ) {
     for ( auto j = 0; j < matrix.ncol_; ++j ) {
-      out << matrix(i, j) << '\t';
+      out << std::setw(ios_width) << matrix(i, j);
     }
     out << std::endl;
   }
@@ -239,8 +239,8 @@ void DenseMatrix<_Scalar, _layout>::resize(
     const index_t ncol
 ) noexcept {
   assert(nrow > 0 && ncol > 0);
-  assert(isColMajor(_layout) ? ncol : nrow <= pitch_);
-  assert((isColMajor(_layout) ? (ncol * pitch_) : (nrow * pitch_)) <= data_.getCapability());
+  assert((isColMajor(_layout) ? nrow : ncol) <= pitch_);
+  assert((isColMajor(_layout) ? (pitch_ * ncol) : (pitch_ * nrow)) <= data_.getCapability());
   nrow_ = nrow;
   ncol_ = ncol;
 }
@@ -296,7 +296,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
 /// @copydoc  getCol
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
+DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getColSegment(
     const index_t colidx,
     const IndexRange rowrange
 ) noexcept {
@@ -320,7 +320,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
 /// @copydoc  getRow
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
+DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
     const index_t rowidx,
     const IndexRange colrange
 ) noexcept {

@@ -141,7 +141,7 @@ DenseVector<_Scalar>::~DenseVector() noexcept {}
 template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vector ) {
   for ( auto i = 0; i < vector.length_; ++i ) {
-    out << vector(i) << '\t';
+    out << std::setw(ios_width) << vector(i) << '\t';
   }
   out << std::endl;
   return out;

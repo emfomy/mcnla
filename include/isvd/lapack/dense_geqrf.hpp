@@ -114,7 +114,7 @@ inline void geqrf(
     DenseMatrix<_Scalar, _layout> &a,
     DenseVector<_Scalar> &tau,
     DenseVector<_Scalar> &work ) noexcept {
-  assert(tau.getLength() == std::min(a.getNrow(), a.getNcol()));
+  assert(tau.getLength() >= std::min(a.getNrow(), a.getNcol()));
   assert(work.getLength() >= a.getNcol());
 
   if ( isColMajor(_layout) ) {
@@ -141,16 +141,7 @@ inline void gelqf(
     DenseMatrix<_Scalar, _layout> &a,
     DenseVector<_Scalar> &tau,
     DenseVector<_Scalar> &work ) noexcept {
-  assert(tau.getLength() == std::min(a.getNrow(), a.getNcol()));
-  assert(work.getLength() >= a.getNrow());
-
-  if ( isColMajor(_layout) ) {
-    assert(internal::geqrf(a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
-                           tau.getValue(), work.getValue(), work.getLength()) == 0);
-  } else {
-    assert(internal::gelqf(a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
-                           tau.getValue(), work.getValue(), work.getLength()) == 0);
-  }
+  geqrf(a.transpose(), tau, work);
 }
 
 template <class _TypeA, class _TypeTau, class _TypeWork>

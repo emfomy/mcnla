@@ -13,7 +13,11 @@ set(ISVD_VERSION_PATCH 0)
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+# Set word size
+set(ISVD_SYSTEM_WORD_SIZE 32 CACHE PATH "The system word size.")
+
 # Add subdirectories
+add_subdirectory(cmake)
 add_subdirectory(include)
-add_subdirectory(demo)
 add_subdirectory(doxygen)
+add_subdirectory(demo)

@@ -144,11 +144,11 @@ class DenseCube
 
   // Gets vector segment
   inline DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx ) noexcept;
-  inline DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx, const IndexRange rowrange ) noexcept;
+  inline DenseVector<_Scalar> getColSegment( const index_t colidx, const index_t pageidx, const IndexRange rowrange ) noexcept;
   inline DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx ) noexcept;
-  inline DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx, const IndexRange colrange ) noexcept;
+  inline DenseVector<_Scalar> getRowSegment( const index_t rowidx, const index_t pageidx, const IndexRange colrange ) noexcept;
   inline DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx ) noexcept;
-  inline DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx, const IndexRange pagerange ) noexcept;
+  inline DenseVector<_Scalar> getTubeSegment( const index_t rowidx, const index_t colidx, const IndexRange pagerange ) noexcept;
   inline DenseVector<_Scalar> getDiagonal( const index_t pageidx, const index_t idx ) noexcept;
   inline DenseVector<_Scalar> vectorize() noexcept;
 

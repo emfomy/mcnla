@@ -121,9 +121,9 @@ class DenseMatrix
 
   // Gets vector segment
   inline DenseVector<_Scalar> getCol( const index_t colidx ) noexcept;
-  inline DenseVector<_Scalar> getCol( const index_t colidx, const IndexRange rowrange ) noexcept;
+  inline DenseVector<_Scalar> getColSegment( const index_t colidx, const IndexRange rowrange ) noexcept;
   inline DenseVector<_Scalar> getRow( const index_t rowidx ) noexcept;
-  inline DenseVector<_Scalar> getRow( const index_t rowidx, const IndexRange colrange ) noexcept;
+  inline DenseVector<_Scalar> getRowSegment( const index_t rowidx, const IndexRange colrange ) noexcept;
   inline DenseVector<_Scalar> getDiagonal( const index_t idx = 0 ) noexcept;
   inline DenseVector<_Scalar> vectorize() noexcept;
 

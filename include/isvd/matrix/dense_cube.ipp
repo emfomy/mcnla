@@ -266,8 +266,8 @@ void DenseCube<_Scalar, _layout>::resize(
     const index_t npage
 ) noexcept {
   assert(nrow > 0 && ncol > 0 && npage > 0);
-  assert(isColMajor(_layout) ? ncol : nrow <= pitch1_);
-  assert(isColMajor(_layout) ? nrow : ncol <= pitch2_);
+  assert((isColMajor(_layout) ? nrow : ncol) <= pitch1_);
+  assert((isColMajor(_layout) ? ncol : nrow) <= pitch2_);
   assert(pitch1_ * pitch2_ * npage <= data_.getCapability());
   nrow_ = nrow;
   ncol_ = ncol;
@@ -424,7 +424,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getCol(
 /// @brief  Gets a vector segment.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getCol(
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getColSegment(
     const index_t colidx,
     const index_t pageidx,
     const IndexRange rowrange
@@ -454,7 +454,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRow(
 /// @brief  Gets a vector segment.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRow(
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRowSegment(
     const index_t rowidx,
     const index_t pageidx,
     const IndexRange colrange
@@ -484,7 +484,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTube(
 /// @brief  Gets a vector segment.
 ///
 template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTube(
+DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTubeSegment(
     const index_t rowidx,
     const index_t colidx,
     const IndexRange pagerange

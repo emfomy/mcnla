@@ -13,6 +13,8 @@
 
 #include <isvd/lapack/dense_geqrf.hpp>
 #include <isvd/lapack/dense_gerqf.hpp>
+#include <isvd/lapack/dense_orgqr.hpp>
+#include <isvd/lapack/dense_orgrq.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The iSVD namespace

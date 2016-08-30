@@ -141,14 +141,14 @@ inline void geqlf(
     DenseMatrix<_Scalar, _layout> &a,
     DenseVector<_Scalar> &tau,
     DenseVector<_Scalar> &work ) noexcept {
-  assert(tau.getLength() == std::min(a.getNrow(), a.getNcol()));
+  assert(tau.getLength() >= std::min(a.getNrow(), a.getNcol()));
   assert(work.getLength() >= a.getNrow());
 
   if ( isColMajor(_layout) ) {
-    assert(internal::gerqf(a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
+    assert(internal::geqlf(a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
                            tau.getValue(), work.getValue(), work.getLength()) == 0);
   } else {
-    assert(internal::geqlf(a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
+    assert(internal::gerqf(a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
                            tau.getValue(), work.getValue(), work.getLength()) == 0);
   }
 }
