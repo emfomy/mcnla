@@ -9,7 +9,7 @@
 #define ISVD_MATRIX_VECTOR_BASE_HPP_
 
 #include <isvd/isvd.hpp>
-#include <isvd/utility/crtp.hpp>
+#include <isvd/utility/traits.hpp>
 #include <isvd/matrix/index_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

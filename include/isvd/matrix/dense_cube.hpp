@@ -36,9 +36,10 @@ namespace internal {
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseCube<_Scalar, _layout>> {
   static const Layout layout = _layout;
-  using ScalarType = _Scalar;
-  using VectorType = DenseVector<_Scalar>;
-  using MatrixType = DenseMatrix<_Scalar, _layout>;
+  using ScalarType    = _Scalar;
+  using VectorType    = DenseVector<_Scalar>;
+  using MatrixType    = DenseMatrix<_Scalar, _layout>;
+  using TransposeType = DenseCube<_Scalar, changeLayout(_layout)>;
 };
 
 }  // namespace internal
@@ -57,12 +58,15 @@ class DenseCube
  public:
 
   static const Layout layout = _layout;
-  using ScalarType = _Scalar;
+  using ScalarType    = _Scalar;
+  using VectorType    = DenseVector<_Scalar>;
+  using MatrixType    = DenseMatrix<_Scalar, _layout>;
+  using TransposeType = DenseCube<_Scalar, changeLayout(_layout)>;
 
  private:
 
-  using CubeBaseType  = internal::CubeBase<DenseCube<_Scalar>>;
-  using DenseBaseType = internal::DenseBase<DenseCube<_Scalar>>;
+  using CubeBaseType  = internal::CubeBase<DenseCube<_Scalar, _layout>>;
+  using DenseBaseType = internal::DenseBase<DenseCube<_Scalar, _layout>>;
 
  protected:
 
@@ -123,23 +127,27 @@ class DenseCube
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
 
   // Gets cube block
-  inline DenseCube<_Scalar, _layout> getBlock( const IndexRange rowrange, const IndexRange colrange,
-                                                                          const IndexRange pagerange ) noexcept;
+  inline DenseCube<_Scalar, _layout> getCube( const IndexRange rowrange, const IndexRange colrange,
+                                                                         const IndexRange pagerange ) noexcept;
   inline DenseCube<_Scalar, _layout> getTubes( const IndexRange rowrange, const IndexRange colrange ) noexcept;
   inline DenseCube<_Scalar, _layout> getPages( const IndexRange pagerange ) noexcept;
   inline DenseCube<_Scalar, _layout> getColPages( const IndexRange rowrange ) noexcept;
   inline DenseCube<_Scalar, _layout> getRowPages( const IndexRange colrange ) noexcept;
 
   // Gets matrix block
-  inline DenseMatrix<_Scalar, _layout> getPage( const index_t pageidx, const IndexRange rowrange,
-                                                                       const IndexRange colrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getPage( const index_t pageidx ) noexcept;
   inline DenseMatrix<_Scalar, _layout> getCols( const index_t pageidx, const IndexRange rowrange ) noexcept;
   inline DenseMatrix<_Scalar, _layout> getRows( const index_t pageidx, const IndexRange colrange ) noexcept;
+  inline DenseMatrix<_Scalar, _layout> getBlock( const index_t pageidx, const IndexRange rowrange,
+                                                                        const IndexRange colrange ) noexcept;
   inline DenseMatrix<_Scalar, _layout> unfold() noexcept;
 
   // Gets vector segment
+  inline DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx ) noexcept;
   inline DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx, const IndexRange rowrange ) noexcept;
+  inline DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx ) noexcept;
   inline DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx, const IndexRange colrange ) noexcept;
+  inline DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx ) noexcept;
   inline DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx, const IndexRange pagerange ) noexcept;
   inline DenseVector<_Scalar> getDiagonal( const index_t pageidx, const index_t idx ) noexcept;
   inline DenseVector<_Scalar> vectorize() noexcept;

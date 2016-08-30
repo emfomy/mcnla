@@ -60,17 +60,16 @@ static inline void gemm(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
+//@{
 template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL, typename _Scalar, Layout _layout>
+          TransOption _transb = isvd::TransOption::NORMAL,
+          typename _Scalar, Layout _layout>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c ) noexcept {
-  assert(c.getValue() != a.getValue());
-  assert(c.getValue() != b.getValue());
-
   if ( isColMajor(_layout) ) {
     assert(c.getNrow() == a.template getNrow<_transa>());
     assert(c.getNcol() == b.template getNcol<_transb>());
@@ -90,19 +89,18 @@ inline void gemm(
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc isvd::blas::gemm
-///
 template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL, typename _Scalar, Layout _layout>
+          TransOption _transb = isvd::TransOption::NORMAL,
+          typename _Scalar, Layout _layout>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &&c ) noexcept {
-  gemm(alpha, a, b, beta, c);
+  gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
+//@}
 
 }  // namespace blas
 

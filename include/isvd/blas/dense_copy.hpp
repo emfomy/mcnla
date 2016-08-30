@@ -50,24 +50,22 @@ static inline void copy(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies vector to another vector.
 ///
+//@{
 template <typename _Scalar>
 inline void copy(
     const DenseVector<_Scalar> &x,
           DenseVector<_Scalar> &y ) noexcept {
-  assert(y.getValue() != x.getValue());
   assert(y.getLength() == x.getLength());
   internal::copy(x.getLength(), x.getValue(), x.getIncrement(), y.getValue(), y.getIncrement());
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copies vector to another vector.
-///
 template <typename _Scalar>
 inline void copy(
     const DenseVector<_Scalar> &x,
           DenseVector<_Scalar> &&y ) noexcept {
   copy(x, y);
 }
+//@}
 
 }  // namespace blas
 

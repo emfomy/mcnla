@@ -35,8 +35,9 @@ namespace internal {
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
   static const Layout layout = _layout;
-  using ScalarType = _Scalar;
-  using VectorType = DenseVector<_Scalar>;
+  using ScalarType    = _Scalar;
+  using VectorType    = DenseVector<_Scalar>;
+  using TransposeType = DenseMatrix<_Scalar, changeLayout(_layout)>;
 };
 
 }  // namespace internal
@@ -55,12 +56,14 @@ class DenseMatrix
  public:
 
   static const Layout layout = _layout;
-  using ScalarType = _Scalar;
+  using ScalarType    = _Scalar;
+  using VectorType    = DenseVector<_Scalar>;
+  using TransposeType = DenseMatrix<_Scalar, changeLayout(_layout)>;
 
  private:
 
-  using MatrixBaseType = internal::MatrixBase<DenseMatrix<_Scalar>>;
-  using DenseBaseType  = internal::DenseBase<DenseMatrix<_Scalar>>;
+  using MatrixBaseType = internal::MatrixBase<DenseMatrix<_Scalar, _layout>>;
+  using DenseBaseType  = internal::DenseBase<DenseMatrix<_Scalar, _layout>>;
 
  protected:
 
@@ -105,6 +108,9 @@ class DenseMatrix
   inline       _Scalar& operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const _Scalar& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
+  // Transpose
+  inline DenseMatrix<_Scalar, changeLayout(_layout)> transpose() noexcept;
+
   // Resizes
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
@@ -114,7 +120,9 @@ class DenseMatrix
   inline DenseMatrix<_Scalar, _layout> getRows( const IndexRange colrange ) noexcept;
 
   // Gets vector segment
+  inline DenseVector<_Scalar> getCol( const index_t colidx ) noexcept;
   inline DenseVector<_Scalar> getCol( const index_t colidx, const IndexRange rowrange ) noexcept;
+  inline DenseVector<_Scalar> getRow( const index_t rowidx ) noexcept;
   inline DenseVector<_Scalar> getRow( const index_t rowidx, const IndexRange colrange ) noexcept;
   inline DenseVector<_Scalar> getDiagonal( const index_t idx = 0 ) noexcept;
   inline DenseVector<_Scalar> vectorize() noexcept;

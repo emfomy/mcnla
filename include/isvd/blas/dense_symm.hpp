@@ -68,7 +68,8 @@ static inline void symm(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes a matrix-matrix product where one input matrix is symmetric/Hermitian.
 ///
-template <SideOption _side = SideOption::LEFT,
+//@{
+template <SideOption _side,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
@@ -76,9 +77,6 @@ inline void symm(
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c ) noexcept {
-  assert(c.getValue() != a.getValue());
-  assert(c.getValue() != b.getValue());
-
   if ( isColMajor(_layout) ) {
     if ( isLeftSide(_side) ) {
       assert(a.getNrow() == a.getNcol());
@@ -112,10 +110,7 @@ inline void symm(
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc isvd::blas::symm
-///
-template <SideOption _side = SideOption::LEFT,
+template <SideOption _side,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
@@ -123,8 +118,9 @@ inline void symm(
     const DenseMatrix<_Scalar, _layout> &b,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &&c ) noexcept {
-  symm(alpha, a, b, beta, c);
+  symm<_side, _uplo>(alpha, a, b, beta, c);
 }
+//@}
 
 }  // namespace blas
 

@@ -219,6 +219,16 @@ const _Scalar& DenseMatrix<_Scalar, _layout>::operator()(
 ) const noexcept { return getElement(rowidx, colidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the transpose of the matrix.
+///
+/// @attention  THE STORAGE LAYOUT IS ALSO CHANGED.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, changeLayout(_layout)> DenseMatrix<_Scalar, _layout>::transpose() noexcept {
+  return DenseMatrix<_Scalar, changeLayout(_layout)>(ncol_, nrow_, pitch_, data_, offset_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the matrix.
 ///
 /// @attention  THE NEW SPACE IS NOT INITIALIZED.
@@ -276,17 +286,38 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getRows(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
+    const index_t colidx
+) noexcept {
+  assert(colidx >= 0 && colidx < ncol_);
+  return DenseVector<_Scalar>(nrow_, getColIncInternal(), data_, getIndexInternal(0, colidx));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getCol
+///
+template <typename _Scalar, Layout _layout>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
     const index_t colidx,
     const IndexRange rowrange
 ) noexcept {
   assert(colidx >= 0 && colidx < ncol_);
   assert(rowrange.start >= 0 && rowrange.end <= nrow_ && rowrange.getLength() > 0);
-  return DenseVector<_Scalar>(rowrange.getLength(), getColIncInternal(),
-                              data_, getIndexInternal(rowrange.start, colidx));
+  return DenseVector<_Scalar>(rowrange.getLength(), getColIncInternal(), data_, getIndexInternal(rowrange.start, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector segment.
+///
+template <typename _Scalar, Layout _layout>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
+    const index_t rowidx
+) noexcept {
+  assert(rowidx >= 0 && rowidx < nrow_);
+  return DenseVector<_Scalar>(ncol_, getRowIncInternal(), data_, getIndexInternal(rowidx, 0));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getRow
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
@@ -295,8 +326,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
 ) noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colrange.start >= 0 && colrange.end <= ncol_ && colrange.getLength() > 0);
-  return DenseVector<_Scalar>(colrange.getLength(), getRowIncInternal(),
-                              data_, getIndexInternal(rowidx, colrange.start));
+  return DenseVector<_Scalar>(colrange.getLength(), getRowIncInternal(), data_, getIndexInternal(rowidx, colrange.start));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -11,6 +11,9 @@
 #include <isvd/lapack/lapack.hpp>
 #include <isvd/lapack/lapackf.hpp>
 
+#include <isvd/lapack/dense_geqrf.hpp>
+#include <isvd/lapack/dense_gerqf.hpp>
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The iSVD namespace
 ///

@@ -58,6 +58,7 @@ static inline void syrk(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Performs a symmetric/Hermitian rank-k update.
 ///
+//@{
 template <UploOption _uplo = UploOption::LOWER,
           TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
 inline void syrk(
@@ -65,9 +66,7 @@ inline void syrk(
     const DenseMatrix<_Scalar, _layout> &a,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c ) noexcept {
-  assert(c.getValue() != a.getValue());
   assert(c.getNrow() == c.getNcol());
-
   if ( isColMajor(_layout) ) {
     assert(c.getNrow() == a.template getNrow<_trans>());
     internal::syrk(UploChar<_uplo>::value, TransChar<_trans>::value,
@@ -81,18 +80,16 @@ inline void syrk(
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc isvd::blas::syrk
-///
-template <SideOption _side = SideOption::LEFT,
-          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <UploOption _uplo = UploOption::LOWER,
+          TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
 inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &&c ) noexcept {
-  syrk(alpha, a, beta, c);
+  syrk<_uplo, _trans>(alpha, a, beta, c);
 }
+//@}
 
 }  // namespace blas
 

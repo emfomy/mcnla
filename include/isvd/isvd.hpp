@@ -16,6 +16,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <complex>
 #include <type_traits>
 #include <isvd/config.hpp>
 
@@ -52,8 +53,8 @@ static constexpr Layout operator&( const Layout a, const Layout b ) noexcept {
   return static_cast<const Layout>(static_cast<const int>(a) & static_cast<const int>(b));
 }
 
-static inline Layout operator^=( Layout& a, const Layout b ) noexcept {
-  return a = static_cast<const Layout>(static_cast<const int>(a) ^ static_cast<const int>(b));
+static constexpr Layout operator^( const Layout a, const Layout b ) noexcept {
+  return static_cast<const Layout>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -64,6 +65,10 @@ static constexpr bool isColMajor( const Layout layout ) noexcept {
 
 static constexpr bool isRowMajor( const Layout layout ) noexcept {
   return !!(layout & Layout::ROWMAJOR);
+}
+
+static constexpr Layout changeLayout( const Layout layout ) noexcept {
+  return layout ^ Layout::ROWMAJOR;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,8 +95,8 @@ static constexpr TransOption operator&( const TransOption a, const TransOption b
   return static_cast<const TransOption>(static_cast<const int>(a) & static_cast<const int>(b));
 }
 
-static inline TransOption operator^=( TransOption& a, const TransOption b ) noexcept {
-  return a = static_cast<const TransOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
+static constexpr TransOption operator^( const TransOption a, const TransOption b ) noexcept {
+  return static_cast<const TransOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -128,8 +133,8 @@ static constexpr UploOption operator&( const UploOption a, const UploOption b ) 
   return static_cast<const UploOption>(static_cast<const int>(a) & static_cast<const int>(b));
 }
 
-static inline UploOption operator^=( UploOption& a, const UploOption b ) noexcept {
-  return a = static_cast<const UploOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
+static constexpr UploOption operator^( const UploOption a, const UploOption b ) noexcept {
+  return static_cast<const UploOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -168,8 +173,8 @@ static constexpr SideOption operator&( const SideOption a, const SideOption b ) 
   return static_cast<const SideOption>(static_cast<const int>(a) & static_cast<const int>(b));
 }
 
-static inline SideOption operator^=( SideOption& a, const SideOption b ) noexcept {
-  return a = static_cast<const SideOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
+static constexpr SideOption operator^( const SideOption a, const SideOption b ) noexcept {
+  return static_cast<const SideOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -180,6 +185,10 @@ static constexpr bool isLeftSide( const SideOption side ) noexcept {
 
 static constexpr bool isRightSide( const SideOption side ) noexcept {
   return !!(side & SideOption::RIGHT);
+}
+
+static constexpr SideOption changeSide( const SideOption side ) noexcept {
+  return side ^ SideOption::RIGHT;
 }
 
 }  // namespace isvd

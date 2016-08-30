@@ -8,7 +8,6 @@
 #ifndef ISVD_BLAS_BLASF_HPP_
 #define ISVD_BLAS_BLASF_HPP_
 
-#include <complex>
 #include <isvd/isvd.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

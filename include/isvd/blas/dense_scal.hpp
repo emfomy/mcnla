@@ -50,22 +50,21 @@ static inline void scal(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the product of a vector by a scalar.
 ///
+//@{
 template <typename _Scalar>
 inline void scal(
-    const _Scalar alpha,
+    const typename DenseVector<_Scalar>::ScalarType alpha,
           DenseVector<_Scalar> &x ) noexcept {
   internal::scal(x.getLength(), alpha, x.getValue(), x.getIncrement());
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copies vector to another vector.
-///
 template <typename _Scalar>
 inline void scal(
-    const _Scalar alpha,
+    const typename DenseVector<_Scalar>::ScalarType alpha,
           DenseVector<_Scalar> &&x ) noexcept {
   scal(alpha, x);
 }
+//@}
 
 }  // namespace blas
 
