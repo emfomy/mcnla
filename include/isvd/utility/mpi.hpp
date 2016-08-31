@@ -1,0 +1,50 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/isvd/utility/mpi.hpp
+/// @brief   The MPI utilities.
+///
+/// @author  Mu Yang <emfomy@gmail.com>
+///
+
+#ifndef ISVD_UTILITY_MPI_HPP_
+#define ISVD_UTILITY_MPI_HPP_
+
+#include <isvd/isvd.hpp>
+#include <mpi.h>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The MPI namespace.
+///
+namespace mpi {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Returns the size of the group associated with a communicator.
+///
+/// @param  comm  The communicator.
+///
+/// @return       The number of processes in the group of @p comm.
+///]
+static inline index_t getCommSize( const MPI_Comm comm ) noexcept {
+  index_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Determines the rank of the calling process in the communicator.
+///
+/// @param  comm  The communicator.
+///
+/// @return       The rank of the calling process in group of @p comm.
+///]
+static inline index_t getCommRank( const MPI_Comm comm ) noexcept {
+  index_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
+}
+
+}  // namespace mpi
+
+}  // namespace isvd
+
+#endif  // ISVD_UTILITY_MPI_HPP_

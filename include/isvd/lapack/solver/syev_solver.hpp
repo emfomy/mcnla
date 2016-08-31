@@ -25,6 +25,8 @@ namespace lapack {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  The eigenvalue solver for symmetric or symmetric or Hermitian matrices.
 ///
+/// @tparam  _Matrix  The matrix type.
+///
 template <class _Matrix, JobOption _jobz, UploOption _uplo = UploOption::LOWER>
 class SyevSolver {
 
@@ -32,13 +34,13 @@ class SyevSolver {
 
  private:
 
-  using ScalarType     = typename isvd::internal::Traits<_Matrix>::ScalarType;
-  using VectorType     = typename isvd::internal::Traits<_Matrix>::VectorType;
-  using RealVectorType = typename isvd::internal::Traits<_Matrix>::RealVectorType;
-  static const Layout layout = isvd::internal::Traits<_Matrix>::layout;
+  static const Layout layout = _Matrix::layout;
+  using ScalarType     = typename _Matrix::ScalarType;
+  using VectorType     = typename _Matrix::VectorType;
+  using RealVectorType = typename _Matrix::RealVectorType;
   static const bool is_real  = isvd::internal::ScalarTraits<ScalarType>::is_real;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a isvd::DenseMatrix!");
+  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
  protected:
 

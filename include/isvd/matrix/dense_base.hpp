@@ -38,7 +38,7 @@ class DenseBase {
  protected:
 
   /// The offset of starting position.
-  const index_t offset_;
+  index_t offset_;
 
   /// The data storage
   DenseData<ScalarType> data_;

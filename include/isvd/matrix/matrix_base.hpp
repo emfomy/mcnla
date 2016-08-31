@@ -53,6 +53,12 @@ class MatrixBase {
   // Constructors
   MatrixBase() noexcept;
   MatrixBase( const index_t nrow, const index_t ncol ) noexcept;
+  MatrixBase( const MatrixBase &other ) noexcept;
+  MatrixBase( MatrixBase &&other ) noexcept;
+
+  // Operators
+  inline MatrixBase& operator=( const MatrixBase &other ) noexcept;
+  inline MatrixBase& operator=( MatrixBase &&other ) noexcept;
 
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;

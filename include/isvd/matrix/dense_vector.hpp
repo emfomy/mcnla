@@ -51,7 +51,10 @@ class DenseVector
 
  public:
 
-  using ScalarType = _Scalar;
+  using ScalarType     = _Scalar;
+  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using VectorType     = DenseVector<ScalarType>;
+  using RealVectorType = DenseVector<RealScalarType>;
 
  private:
 
@@ -61,7 +64,7 @@ class DenseVector
  protected:
 
   /// The increment.
-  const index_t increment_;
+  index_t increment_;
 
   using VectorBaseType::length_;
   using DenseBaseType::offset_;

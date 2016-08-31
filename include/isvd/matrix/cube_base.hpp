@@ -56,6 +56,12 @@ class CubeBase {
   // Constructors
   CubeBase() noexcept;
   CubeBase( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
+  CubeBase( const CubeBase &other ) noexcept;
+  CubeBase( CubeBase &&other ) noexcept;
+
+  // Operators
+  inline CubeBase& operator=( const CubeBase &other ) noexcept;
+  inline CubeBase& operator=( CubeBase &&other ) noexcept;
 
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;

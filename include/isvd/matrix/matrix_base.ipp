@@ -42,6 +42,44 @@ MatrixBase<_Derived>::MatrixBase(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+template <class _Derived>
+MatrixBase<_Derived>::MatrixBase( const MatrixBase &other ) noexcept
+  : nrow_(other.nrow),
+    ncol_(other.ncol) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <class _Derived>
+MatrixBase<_Derived>::MatrixBase( MatrixBase &&other ) noexcept
+  : nrow_(other.nrow),
+    ncol_(other.ncol) {
+  other.nrow_ = 0;
+  other.ncol_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy assignment operator.
+///
+template <class _Derived>
+MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( const MatrixBase &other ) noexcept {
+  nrow_ = other.nrow_; ncol_ = other.ncol_;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <class _Derived>
+MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( MatrixBase &&other ) noexcept {
+  nrow_ = other.nrow_; ncol_ = other.ncol_;
+  other.nrow_ = 0;     other.ncol_ = 0;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived> template <TransOption _trans>

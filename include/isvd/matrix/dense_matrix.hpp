@@ -29,8 +29,8 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix traits.
 ///
-/// @tparam  _Scalar  The scalar type of matrix.
-/// @tparam  _layout  The storage layout of matrix.
+/// @tparam  _Scalar  The scalar type.
+/// @tparam  _layout  The storage layout.
 ///
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
@@ -58,9 +58,11 @@ class DenseMatrix
  public:
 
   static const Layout layout = _layout;
-  using ScalarType    = _Scalar;
-  using VectorType    = DenseVector<_Scalar>;
-  using TransposeType = DenseMatrix<_Scalar, changeLayout(_layout)>;
+  using ScalarType     = _Scalar;
+  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using VectorType     = DenseVector<ScalarType>;
+  using RealVectorType = DenseVector<RealScalarType>;
+  using TransposeType  = DenseMatrix<_Scalar, changeLayout(_layout)>;
 
  private:
 
@@ -70,7 +72,7 @@ class DenseMatrix
  protected:
 
   /// The leading dimension.
-  const index_t pitch_;
+  index_t pitch_;
 
   using MatrixBaseType::nrow_;
   using MatrixBaseType::ncol_;

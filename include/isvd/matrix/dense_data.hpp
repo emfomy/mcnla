@@ -27,7 +27,7 @@ class DenseData {
  protected:
 
   /// The length of data array.
-  const index_t capability_;
+  index_t capability_;
 
   /// The data array.
   std::shared_ptr<_Scalar> value_;

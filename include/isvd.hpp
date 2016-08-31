@@ -9,6 +9,7 @@
 #define ISVD_HPP_
 
 #include <isvd/isvd.hpp>
+#include <isvd/core.hpp>
 #include <isvd/matrix.hpp>
 #include <isvd/blas.hpp>
 #include <isvd/lapack.hpp>

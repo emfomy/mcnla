@@ -46,6 +46,47 @@ CubeBase<_Derived>::CubeBase(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+template <class _Derived>
+CubeBase<_Derived>::CubeBase( const CubeBase &other ) noexcept
+  : nrow_(other.nrow_),
+    ncol_(other.ncol_),
+    npage_(other.npage_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <class _Derived>
+CubeBase<_Derived>::CubeBase( CubeBase &&other ) noexcept
+  : nrow_(other.nrow_),
+    ncol_(other.ncol_),
+    npage_(other.npage_) {
+  other.nrow_ = 0;
+  other.ncol_ = 0;
+  other.npage_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy assignment operator.
+///
+template <class _Derived>
+CubeBase<_Derived>& CubeBase<_Derived>::operator=( const CubeBase &other ) noexcept {
+  nrow_ = other.nrow_; ncol_ = other.ncol_; npage_ = other.npage_;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <class _Derived>
+CubeBase<_Derived>& CubeBase<_Derived>::operator=( CubeBase &&other ) noexcept {
+  nrow_ = other.nrow_; ncol_ = other.ncol_; npage_ = other.npage_;
+  other.nrow_ = 0;     other.ncol_ = 0;     other.npage_ = 0;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived> template <TransOption _trans>
@@ -65,7 +106,7 @@ index_t CubeBase<_Derived>::getNcol() const noexcept {
 /// @brief  Gets the number of pages.
 ///
 template <class _Derived>
-index_t CubeBase<_Derived>::getNpage() const noexcept { return this->derived().getNpageImpl(); }
+index_t CubeBase<_Derived>::getNpage() const noexcept { return npage_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.

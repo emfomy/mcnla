@@ -59,10 +59,11 @@ class DenseCube
  public:
 
   static const Layout layout = _layout;
-  using ScalarType    = _Scalar;
-  using VectorType    = DenseVector<_Scalar>;
-  using MatrixType    = DenseMatrix<_Scalar, _layout>;
-  using TransposeType = DenseCube<_Scalar, changeLayout(_layout)>;
+  using ScalarType     = _Scalar;
+  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using VectorType     = DenseVector<ScalarType>;
+  using RealVectorType = DenseVector<RealScalarType>;
+  using MatrixType     = DenseMatrix<ScalarType, _layout>;
 
  private:
 
@@ -72,10 +73,10 @@ class DenseCube
  protected:
 
   /// The leading dimension.
-  const index_t pitch1_;
+  index_t pitch1_;
 
   /// The second dimension.
-  const index_t pitch2_;
+  index_t pitch2_;
 
   using CubeBaseType::nrow_;
   using CubeBaseType::ncol_;
@@ -110,13 +111,8 @@ class DenseCube
   ~DenseCube() noexcept;
 
   // Gets information
-  inline Layout getLayout() const noexcept;
-  inline index_t getNrow() const noexcept;
-  inline index_t getNcol() const noexcept;
-  inline index_t getNpage() const noexcept;
   inline index_t getPitch1() const noexcept;
   inline index_t getPitch2() const noexcept;
-  inline index_t getOffset() const noexcept;
 
   // Gets element
   inline       _Scalar& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
