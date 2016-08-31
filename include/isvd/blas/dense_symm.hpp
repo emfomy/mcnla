@@ -118,7 +118,7 @@ inline void symm(
       assert(a.getNrow() == c.getNrow());
       assert(a.getNcol() == c.getNcol());
     }
-    internal::symm(SideChar<_side>::value, UploChar<_uplo, _layout>::value, c.getNrow(), c.getNcol(),
+    internal::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNrow(), c.getNcol(),
                    alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(),
                    beta, c.getValue(), c.getPitch());
   } else {
@@ -133,7 +133,7 @@ inline void symm(
       assert(b.getNcol() == c.getNcol());
       assert(b.getNrow() == c.getNrow());
     }
-    internal::symm(SideChar<_side>::value, UploChar<_uplo, _layout>::value, c.getNcol(), c.getNrow(),
+    internal::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNcol(), c.getNrow(),
                    alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(),
                    beta, c.getValue(), c.getPitch());
   }

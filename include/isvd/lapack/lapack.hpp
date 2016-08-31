@@ -47,8 +47,8 @@ using DiagChar = isvd::blas::DiagChar<_uplo>;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert side option to char.
 ///
-template <SideOption _side>
-using SideChar = isvd::blas::SideChar<_side>;
+template <SideOption _side, Layout _layout>
+using SideChar = isvd::blas::SideChar<_side, _layout>;
 
 }  // namespace lapack
 

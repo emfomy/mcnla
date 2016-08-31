@@ -86,8 +86,7 @@ static inline index_t syev(
 /// @brief  Computes all eigenvalues and, optionally, eigenvectors of a symmetric or Hermitian matrix.
 ///
 //@{
-template <JobOption _jobz, UploOption _uplo = UploOption::LOWER,
-          typename _Scalar, Layout _layout>
+template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syev(
     DenseMatrix<_Scalar, _layout> &a,
     DenseVector<typename isvd::internal::ScalarTraits<_Scalar>::RealType> &w,
@@ -121,8 +120,7 @@ inline void syev( _TypeA &&a, _TypeW &&w, _TypeWork &&work, _TypeRwork &&rwork )
 /// @return  The optimal length of parameter @p work.
 ///
 //@{
-template <JobOption _jobz, UploOption _uplo = UploOption::LOWER,
-          typename _Scalar, Layout _layout>
+template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline index_t syevQuery(
     DenseMatrix<_Scalar, _layout> &a
 ) noexcept {

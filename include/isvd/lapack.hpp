@@ -11,6 +11,7 @@
 #include <isvd/lapack/lapack.hpp>
 
 #include <isvd/lapack/dense_syev.hpp>
+#include <isvd/lapack/dense_gesvd.hpp>
 
 #include <isvd/lapack/dense_geqrf.hpp>
 #include <isvd/lapack/dense_gerqf.hpp>

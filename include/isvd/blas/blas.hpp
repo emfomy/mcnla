@@ -48,9 +48,9 @@ struct DiagChar {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert side option to char.
 ///
-template <SideOption _side>
+template <SideOption _side, Layout _layout>
 struct SideChar {
-  static const char value = isLeftSide(_side) ? 'L' : 'R';
+  static const char value = (isLeftSide(_side) ^ isColMajor(_layout)) ? 'L' : 'R';
 };
 
 }  // namespace blas
