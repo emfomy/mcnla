@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/dense_syev.hpp
-/// @brief   The LAPACK SYEV routine for dense matrices
+/// @file    include/isvd/lapack/routine/syev.hpp
+/// @brief   The LAPACK SYEV routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_DENSE_SYEV_HPP_
-#define ISVD_LAPACK_DENSE_SYEV_HPP_
+#ifndef ISVD_LAPACK_ROUTINE_SYEV_HPP_
+#define ISVD_LAPACK_ROUTINE_SYEV_HPP_
 
-#include <utility>
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix.hpp>
 #include <isvd/lapack/lapack.hpp>
@@ -119,10 +118,9 @@ inline void syev( _TypeA &&a, _TypeW &&w, _TypeWork &&work, _TypeRwork &&rwork )
 ///
 /// @return  The optimal length of parameter @p work.
 ///
-//@{
 template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline index_t syevQuery(
-    DenseMatrix<_Scalar, _layout> &a
+    const DenseMatrix<_Scalar, _layout> &a
 ) noexcept {
   static_assert(_jobz == 'N' || _jobz == 'V', "Job undefined!");
   assert(a.getNrow() == a.getNcol());
@@ -132,14 +130,8 @@ inline index_t syevQuery(
   return lwork;
 }
 
-template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, class _TypeA>
-inline index_t syevQuery( _TypeA &&a ) noexcept {
-  return syevQuery<_jobz, _uplo>(a);
-}
-//@}
-
 }  // namespace lapack
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_DENSE_SYEV_HPP_
+#endif  // ISVD_LAPACK_ROUTINE_SYEV_HPP_

@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/dense_larnv.hpp
-/// @brief   The LAPACK LARNV & GELQF routines for dense matrices
+/// @file    include/isvd/lapack/routine/larnv.hpp
+/// @brief   The LAPACK LARNV & GELQF routines.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_DENSE_LARNV_HPP_
-#define ISVD_LAPACK_DENSE_LARNV_HPP_
+#ifndef ISVD_LAPACK_ROUTINE_LARNV_HPP_
+#define ISVD_LAPACK_ROUTINE_LARNV_HPP_
 
-#include <utility>
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix.hpp>
 #include <isvd/lapack/lapack.hpp>
@@ -90,4 +89,4 @@ inline void larnv( _TypeX &&x, const index_t iseed[4] ) noexcept {
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_DENSE_LARNV_HPP_
+#endif  // ISVD_LAPACK_ROUTINE_LARNV_HPP_

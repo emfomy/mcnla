@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/dense_scal.hpp
-/// @brief   The BLAS SCAL routine for dense matrices
+/// @file    include/isvd/blas/routine/scal.hpp
+/// @brief   The BLAS SCAL routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_DENSE_SCAL_HPP_
-#define ISVD_BLAS_DENSE_SCAL_HPP_
+#ifndef ISVD_BLAS_ROUTINE_SCAL_HPP_
+#define ISVD_BLAS_ROUTINE_SCAL_HPP_
 
-#include <utility>
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
@@ -90,4 +89,4 @@ inline void scal(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_DENSE_SCAL_HPP_
+#endif  // ISVD_BLAS_ROUTINE_SCAL_HPP_

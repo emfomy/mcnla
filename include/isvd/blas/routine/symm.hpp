@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/dense_symm.hpp
-/// @brief   The BLAS SYMM routine for dense matrices
+/// @file    include/isvd/blas/routine/symm.hpp
+/// @brief   The BLAS SYMM routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_DENSE_SYMM_HPP_
-#define ISVD_BLAS_DENSE_SYMM_HPP_
+#ifndef ISVD_BLAS_ROUTINE_SYMM_HPP_
+#define ISVD_BLAS_ROUTINE_SYMM_HPP_
 
-#include <utility>
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
@@ -156,4 +155,4 @@ inline void symm(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_DENSE_SYMM_HPP_
+#endif  // ISVD_BLAS_ROUTINE_SYMM_HPP_

@@ -35,9 +35,11 @@ namespace internal {
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
   static const Layout layout = _layout;
-  using ScalarType    = _Scalar;
-  using VectorType    = DenseVector<_Scalar>;
-  using TransposeType = DenseMatrix<_Scalar, changeLayout(_layout)>;
+  using ScalarType     = _Scalar;
+  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using VectorType     = DenseVector<ScalarType>;
+  using RealVectorType = DenseVector<RealScalarType>;
+  using TransposeType  = DenseMatrix<_Scalar, changeLayout(_layout)>;
 };
 
 }  // namespace internal

@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/dense_gemm.hpp
-/// @brief   The BLAS GEMM routine for dense matrices
+/// @file    include/isvd/blas/routine/gemm.hpp
+/// @brief   The BLAS GEMM routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_DENSE_GEMM_HPP_
-#define ISVD_BLAS_DENSE_GEMM_HPP_
+#ifndef ISVD_BLAS_ROUTINE_GEMM_HPP_
+#define ISVD_BLAS_ROUTINE_GEMM_HPP_
 
-#include <utility>
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
@@ -138,4 +137,4 @@ inline void gemm(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_DENSE_GEMM_HPP_
+#endif  // ISVD_BLAS_ROUTINE_GEMM_HPP_

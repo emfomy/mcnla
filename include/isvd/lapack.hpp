@@ -9,16 +9,8 @@
 #define ISVD_LAPACK_HPP_
 
 #include <isvd/lapack/lapack.hpp>
-
-#include <isvd/lapack/dense_syev.hpp>
-#include <isvd/lapack/dense_gesvd.hpp>
-
-#include <isvd/lapack/dense_geqrf.hpp>
-#include <isvd/lapack/dense_gerqf.hpp>
-#include <isvd/lapack/dense_orgqr.hpp>
-#include <isvd/lapack/dense_orgrq.hpp>
-
-#include <isvd/lapack/dense_larnv.hpp>
+#include <isvd/lapack/routine.hpp>
+#include <isvd/lapack/solver.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The iSVD namespace

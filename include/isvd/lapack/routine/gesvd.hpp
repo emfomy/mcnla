@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/dense_gesvd.hpp
-/// @brief   The LAPACK GESVD routine for dense matrices
+/// @file    include/isvd/lapack/routine/gesvd.hpp
+/// @brief   The LAPACK GESVD routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_DENSE_GESVD_HPP_
-#define ISVD_LAPACK_DENSE_GESVD_HPP_
+#ifndef ISVD_LAPACK_ROUTINE_GESVD_HPP_
+#define ISVD_LAPACK_ROUTINE_GESVD_HPP_
 
-#include <utility>
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix.hpp>
 #include <isvd/lapack/lapack.hpp>
@@ -176,4 +175,4 @@ inline index_t gesvdQuery( _TypeA &&a ) noexcept {
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_DENSE_GESVD_HPP_
+#endif  // ISVD_LAPACK_ROUTINE_GESVD_HPP_

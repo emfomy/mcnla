@@ -31,7 +31,10 @@ namespace internal {
 ///
 template <typename _Scalar>
 struct Traits<DenseVector<_Scalar>> {
-  using ScalarType = _Scalar;
+  using ScalarType     = _Scalar;
+  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using VectorType     = DenseVector<ScalarType>;
+  using RealVectorType = DenseVector<RealScalarType>;
 };
 
 }  // namespace internal

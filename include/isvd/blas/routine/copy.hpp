@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/dense_copy.hpp
-/// @brief   The BLAS COPY routine for dense matrices
+/// @file    include/isvd/blas/routine/copy.hpp
+/// @brief   The BLAS COPY routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_DENSE_COPY_HPP_
-#define ISVD_BLAS_DENSE_COPY_HPP_
+#ifndef ISVD_BLAS_ROUTINE_COPY_HPP_
+#define ISVD_BLAS_ROUTINE_COPY_HPP_
 
-#include <utility>
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
@@ -95,4 +94,4 @@ inline void copy(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_DENSE_COPY_HPP_
+#endif  // ISVD_BLAS_ROUTINE_COPY_HPP_

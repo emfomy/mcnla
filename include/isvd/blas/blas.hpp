@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/blas/blas.hpp
-/// @brief   The BLAS definitions
+/// @brief   The BLAS definitions.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
@@ -34,7 +34,7 @@ struct TransChar {
 ///
 template <UploOption _uplo, Layout _layout>
 struct UploChar {
-  static const char value = (isLower(_uplo) ^ isColMajor(_layout)) ? 'L' : 'U';
+  static const char value = (isLower(_uplo) ^ isRowMajor(_layout)) ? 'L' : 'U';
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ struct DiagChar {
 ///
 template <SideOption _side, Layout _layout>
 struct SideChar {
-  static const char value = (isLeftSide(_side) ^ isColMajor(_layout)) ? 'L' : 'R';
+  static const char value = (isLeftSide(_side) ^ isRowMajor(_layout)) ? 'L' : 'R';
 };
 
 }  // namespace blas

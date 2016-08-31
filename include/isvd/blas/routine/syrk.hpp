@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/dense_syrk.hpp
-/// @brief   The BLAS SYRK routine for dense matrices
+/// @file    include/isvd/blas/routine/syrk.hpp
+/// @brief   The BLAS SYRK routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_DENSE_SYRK_HPP_
-#define ISVD_BLAS_DENSE_SYRK_HPP_
+#ifndef ISVD_BLAS_ROUTINE_SYRK_HPP_
+#define ISVD_BLAS_ROUTINE_SYRK_HPP_
 
-#include <utility>
 #include <isvd/matrix.hpp>
 #include <isvd/blas/blas.hpp>
 
@@ -125,4 +124,4 @@ inline void syrk(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_DENSE_SYRK_HPP_
+#endif  // ISVD_BLAS_ROUTINE_SYRK_HPP_
