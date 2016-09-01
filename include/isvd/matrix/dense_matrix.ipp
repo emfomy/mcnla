@@ -126,13 +126,13 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix( DenseMatrix &&other ) noexcept
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy constructor.
+/// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( const DenseMatrix &other ) noexcept {
-  MatrixBaseType::operator=(other), DenseBaseType::operator=(other), pitch_ = other.pitch_;
+  MatrixBaseType::operator=(other); DenseBaseType::operator=(other); pitch_ = other.pitch_;
   return *this;
 }
 
@@ -141,7 +141,7 @@ DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( const D
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( DenseMatrix &&other ) noexcept {
-  MatrixBaseType::operator=(other), DenseBaseType::operator=(other), pitch_ = other.pitch_; other.pitch_ = 0;
+  MatrixBaseType::operator=(other); DenseBaseType::operator=(other); pitch_ = other.pitch_; other.pitch_ = 0;
   return *this;
 }
 

@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/solver/syev_solver.hpp
-/// @brief   The definition of LAPACK SYEV solver.
+/// @file    include/isvd/lapack/driver/syev_driver.hpp
+/// @brief   The definition of LAPACK SYEV driver.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_SOLVER_SYEV_SOLVER_HPP_
-#define ISVD_LAPACK_SOLVER_SYEV_SOLVER_HPP_
+#ifndef ISVD_LAPACK_DRIVER_SYEV_DRIVER_HPP_
+#define ISVD_LAPACK_DRIVER_SYEV_DRIVER_HPP_
 
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix.hpp>
-#include <isvd/lapack/routine.hpp>
+#include <isvd/lapack/lapack.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -23,12 +23,12 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  The eigenvalue solver for symmetric or symmetric or Hermitian matrices.
+/// @brief  Computes all eigenvalues and, optionally, eigenvectors of a symmetric or Hermitian matrix.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo = UploOption::LOWER>
-class SyevSolver {
+class SyevDriver {
 
   static_assert(_jobz == 'N' || _jobz == 'V', "Job undefined!");
 
@@ -56,7 +56,7 @@ class SyevSolver {
  public:
 
   // Constructor
-  SyevSolver( const _Matrix &a ) noexcept;
+  SyevDriver( const _Matrix &a ) noexcept;
 
   // Computes
   inline void compute( _Matrix &a, RealVectorType &w ) noexcept;
@@ -69,10 +69,14 @@ class SyevSolver {
   inline       RealVectorType& getRwork() noexcept;
   inline const RealVectorType& getRwork() const noexcept;
 
+ protected:
+
+  inline index_t query( const _Matrix &a ) const noexcept;
+
 };
 
 }  // namespace lapack
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_SOLVER_SYEV_SOLVER_HPP_
+#endif  // ISVD_LAPACK_DRIVER_SYEV_DRIVER_HPP_

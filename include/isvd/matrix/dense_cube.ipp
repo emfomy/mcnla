@@ -137,6 +137,51 @@ DenseCube<_Scalar, _layout>::DenseCube(
   assert(data.getCapability() >= pitch1_ * pitch2_ * npage_);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>::DenseCube( const DenseCube &other ) noexcept
+  : CubeBaseType(other),
+    DenseBaseType(other),
+    pitch1_(other.pitch1_),
+    pitch2_(other.pitch2_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>::DenseCube( DenseCube &&other ) noexcept
+  : CubeBaseType(std::move(other)),
+    DenseBaseType(std::move(other)),
+    pitch1_(other.pitch1_),
+    pitch2_(other.pitch2_) {
+  other.pitch1_ = 0; other.pitch2_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy assignment operator.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>& DenseCube<_Scalar, _layout>::operator=( const DenseCube &other ) noexcept {
+  CubeBaseType::operator=(other); DenseBaseType::operator=(other);
+  pitch1_ = other.pitch1_; pitch2_ = other.pitch2_;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>& DenseCube<_Scalar, _layout>::operator=( DenseCube &&other ) noexcept {
+  CubeBaseType::operator=(other); DenseBaseType::operator=(other);
+  pitch1_ = other.pitch1_; pitch2_ = other.pitch2_;
+  other.pitch1_ = 0;       other.pitch2_ = 0;
+  return *this;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading dimension.
 ///

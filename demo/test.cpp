@@ -8,30 +8,50 @@
 #include <iostream>
 #include <isvd.hpp>
 
+template class isvd::DenseVector<double>;
+template class isvd::DenseMatrix<double>;
+template class isvd::DenseCube<double>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
-int main( int argc, char **argv ) {
+int main() {
   std::cout << "iSVD "
             << ISVD_VERSION_MAJOR << "."
             << ISVD_VERSION_MINOR << "."
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
 
-  // MPI_Init(&argc, &argv);
+  isvd::index_t iseed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
+  isvd::index_t m = 6, n = 6, ld = 8, info;
 
-  // isvd::Solver<isvd::DenseMatrix<double>,
-  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
-  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
-  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>> solver(MPI_COMM_WORLD);
+  // Generate A
+  isvd::DenseMatrix<double> matA(m, n, ld),  matA2(m, n, ld);
+  isvd::lapack::larnv<3>(matA.vectorize(), iseed);
+  isvd::blas::copy(matA.vectorize(), matA2.vectorize());
 
-  // solver.setSize(10, 20).setRank(5).setOverRank(2).setNumSketch(8);
+  std::cout << "A" << std::endl;
+  std::cout << matA << std::endl;
+  std::cout << matA2 << std::endl;
+  std::cout << std::endl;
 
-  // solver.initialize();
+  // SYEV Driver
+  isvd::lapack::SyevDriver<isvd::DenseMatrix<double>, 'V'> syev_driver(matA);
 
-  // MPI_Finalize();
+  isvd::DenseVector<double> vecW(m), vecW2(m), vecWork(204);
 
-  isvd::DenseMatrix<double> a(3, 3), b(4, 4);
-  std::cout << a.getPitch() << '\t' << b.getPitch() << std::endl;
-  a = std::move(b);
-  std::cout << a.getPitch() << '\t' << b.getPitch() << std::endl;
+  // compute
+  syev_driver.compute(matA, vecW);
+  isvd::index_t lwork = vecWork.getLength();
+  std::cout << "lwork = " << lwork << std::endl << std::endl;
+  dsyev_("V", "L", &m, matA2.getValue(), &ld, vecW2.getValue(), vecWork.getValue(), &lwork, &info); assert(info == 0);
+
+  std::cout << "V" << std::endl;
+  std::cout << matA << std::endl;
+  std::cout << matA2 << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "W" << std::endl;
+  std::cout << vecW << std::endl;
+  std::cout << vecW2 << std::endl;
+  std::cout << std::endl;
 }

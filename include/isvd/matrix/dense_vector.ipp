@@ -109,7 +109,7 @@ DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy constructor.
+/// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///

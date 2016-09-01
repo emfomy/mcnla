@@ -61,7 +61,7 @@ MatrixBase<_Derived>::MatrixBase( MatrixBase &&other ) noexcept
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy constructor.
+/// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
