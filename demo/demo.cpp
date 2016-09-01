@@ -25,7 +25,7 @@ int mpi_rank;
 
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int iseed[4] );
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
-             const double *matrix_a, double *matrices_qjt, int iseed[4] );
+             const double *matrix_a, double *matrices_qit, int iseed[4] );
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt );
 void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );

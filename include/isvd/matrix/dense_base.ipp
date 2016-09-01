@@ -46,18 +46,6 @@ DenseBase<_Derived>::DenseBase(
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
     const index_t capability,
-    ScalarType *value,
-    const index_t offset
-) noexcept
-  : offset_(offset),
-    data_(capability, value) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <class _Derived>
-DenseBase<_Derived>::DenseBase(
-    const index_t capability,
     std::shared_ptr<ScalarType> value,
     const index_t offset
 ) noexcept
@@ -75,6 +63,44 @@ DenseBase<_Derived>::DenseBase(
   : offset_(offset),
     data_(data) {
   assert(offset_ >= 0 && offset_ <= data_.getCapability());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+template <class _Derived>
+DenseBase<_Derived>::DenseBase( const DenseBase &other ) noexcept
+  : offset_(other.offset_),
+    data_(other.data_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <class _Derived>
+DenseBase<_Derived>::DenseBase( DenseBase &&other ) noexcept
+  : offset_(other.offset_),
+    data_(std::move(other.data_)) {
+  other.offset_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
+template <class _Derived>
+DenseBase<_Derived>& DenseBase<_Derived>::operator=( const DenseBase &other ) noexcept {
+  offset_ = other.offset_; data_ = other.data_;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <class _Derived>
+DenseBase<_Derived>& DenseBase<_Derived>::operator=( DenseBase &&other ) noexcept {
+  offset_ = other.offset_; data_ = std::move(other.data_); other.offset_ = 0;
+  return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

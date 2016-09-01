@@ -46,22 +46,24 @@ MatrixBase<_Derived>::MatrixBase(
 ///
 template <class _Derived>
 MatrixBase<_Derived>::MatrixBase( const MatrixBase &other ) noexcept
-  : nrow_(other.nrow),
-    ncol_(other.ncol) {}
+  : nrow_(other.nrow_),
+    ncol_(other.ncol_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <class _Derived>
 MatrixBase<_Derived>::MatrixBase( MatrixBase &&other ) noexcept
-  : nrow_(other.nrow),
-    ncol_(other.ncol) {
+  : nrow_(other.nrow_),
+    ncol_(other.ncol_) {
   other.nrow_ = 0;
   other.ncol_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy assignment operator.
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <class _Derived>
 MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( const MatrixBase &other ) noexcept {

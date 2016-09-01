@@ -40,27 +40,48 @@ DenseData<_Scalar>::DenseData(
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData(
     const index_t capability,
-    _Scalar *value
-) noexcept
-  : capability_(capability),
-    value_(value) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData(
-    const index_t capability,
     std::shared_ptr<_Scalar> value
 ) noexcept
   : capability_(capability),
     value_(value) {}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default destructor.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
 ///
 template <typename _Scalar>
-DenseData<_Scalar>::~DenseData() noexcept {}
+DenseData<_Scalar>::DenseData( const DenseData &other ) noexcept
+  : capability_(other.capability_),
+    value_(other.value_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar>
+DenseData<_Scalar>::DenseData( DenseData &&other ) noexcept
+  : capability_(other.capability_),
+    value_(std::move(other.value_)) {
+  other.capability_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
+template <typename _Scalar>
+DenseData<_Scalar>& DenseData<_Scalar>::operator=( const DenseData &other ) noexcept {
+  capability_ = other.capability_; value_ = other.value_;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar>
+DenseData<_Scalar>& DenseData<_Scalar>::operator=( DenseData &&other ) noexcept {
+  capability_ = other.capability_; value_ = std::move(other.value_); other.capability_ = 0;
+  return *this;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The equal-to operator

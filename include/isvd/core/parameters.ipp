@@ -84,10 +84,16 @@ template <typename _RealScalar>
 index_t Parameters<_RealScalar>::getMaxIteration() const noexcept { return max_iteration_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets tolerance for converge condition.
+/// @brief  Gets the tolerance of converge condition.
 ///
 template <typename _RealScalar>
 _RealScalar Parameters<_RealScalar>::getTolerance() const noexcept { return tolerance_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the random seed.
+///
+template <typename _RealScalar>
+index_t* Parameters<_RealScalar>::getSeed() const noexcept { return seed_; }
 
 }  // namespace internal
 

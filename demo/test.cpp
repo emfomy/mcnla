@@ -17,16 +17,21 @@ int main( int argc, char **argv ) {
             << ISVD_VERSION_MINOR << "."
             << ISVD_VERSION_PATCH << " test" << std::endl << std::endl;
 
-  MPI_Init(&argc, &argv);
+  // MPI_Init(&argc, &argv);
 
-  isvd::Solver<isvd::DenseMatrix<double>,
-               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
-               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
-               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>> solver(MPI_COMM_WORLD);
+  // isvd::Solver<isvd::DenseMatrix<double>,
+  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
+  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
+  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>> solver(MPI_COMM_WORLD);
 
-  solver.setSize(10, 20).setRank(5).setOverRank(2).setNumSketch(8);
+  // solver.setSize(10, 20).setRank(5).setOverRank(2).setNumSketch(8);
 
-  solver.initialize();
+  // solver.initialize();
 
-  MPI_Finalize();
+  // MPI_Finalize();
+
+  isvd::DenseMatrix<double> a(3, 3), b(4, 4);
+  std::cout << a.getPitch() << '\t' << b.getPitch() << std::endl;
+  a = std::move(b);
+  std::cout << a.getPitch() << '\t' << b.getPitch() << std::endl;
 }

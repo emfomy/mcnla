@@ -68,7 +68,9 @@ CubeBase<_Derived>::CubeBase( CubeBase &&other ) noexcept
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy assignment operator.
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <class _Derived>
 CubeBase<_Derived>& CubeBase<_Derived>::operator=( const CubeBase &other ) noexcept {

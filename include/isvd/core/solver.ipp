@@ -33,7 +33,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexcept {
   assert(parameters_.getNcol() >= parameters_.getNrow() && parameters_.getNrow() > 0);
-  assert(parameters_.getNcol() >= parameters_.getDimSketch());
+  assert(parameters_.getNrow() >= parameters_.getDimSketch());
   assert(parameters_.getRank() > 0 && parameters_.getOverRank() >= 0);
   assert(parameters_.getNumSketch() > 0);
 
@@ -102,6 +102,38 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketch( const index_t num_sketch ) noexcept {
   parameters_.num_sketch_ = num_sketch;
   parameters_.is_initialized_ = false; return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the maximum iteration
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setMaxIteration( const index_t max_iteration ) noexcept {
+  parameters_.max_iteration_ = max_iteration;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the tolerance of converge condition.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setTolerance( const RealScalarType tolerance ) noexcept {
+  parameters_.tolerance_ = tolerance;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the random seed.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSeed( const index_t seed[4] ) noexcept {
+  for ( auto i = 0; i < 4; ++i ) {
+    parameters_.seed_[i] = seed[i];
+  }
+  return *this;
 }
 
 }  // namespace isvd

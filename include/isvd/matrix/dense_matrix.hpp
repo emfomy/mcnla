@@ -87,19 +87,17 @@ class DenseMatrix
   DenseMatrix() noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *value ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, _Scalar *value,
-               const index_t capability, const index_t offset = 0 ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                const DenseData<_Scalar> &data, const index_t offset = 0 ) noexcept;
-
-  // Destructor
-  ~DenseMatrix() noexcept;
+  DenseMatrix( const DenseMatrix &other ) noexcept;
+  DenseMatrix( DenseMatrix &&other ) noexcept;
 
   // Operators
+  inline DenseMatrix& operator=( const DenseMatrix &other ) noexcept;
+  inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
   template <typename __Scalar, Layout __layout>
   friend std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
 

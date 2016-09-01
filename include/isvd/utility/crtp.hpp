@@ -23,7 +23,7 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The CRTP interface.
 ///
-/// @tparam  _Derived  The derived class type.
+/// @tparam  _Derived  The derived type.
 /// @tparam  _Base     The interface class type.
 ///
 template <class _Derived, class _Base = void>
@@ -39,12 +39,12 @@ class CrtpBase {
  protected:
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief  Gets the derived class.
+  /// @brief  Gets the derived.
   ///
   inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief  Gets the constant derived class.
+  /// @brief  Gets the constant derived.
   ///
   inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); };
 

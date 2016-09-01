@@ -25,7 +25,7 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of vector.
 ///
-/// @tparam  _Derived  The derived class type.
+/// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
 class VectorBase {
@@ -40,6 +40,12 @@ class VectorBase {
   // Constructors
   VectorBase() noexcept;
   VectorBase( const index_t length ) noexcept;
+  VectorBase( const VectorBase &other ) noexcept;
+  VectorBase( VectorBase &&other ) noexcept;
+
+  // Operators
+  inline VectorBase& operator=( const VectorBase &other ) noexcept;
+  inline VectorBase& operator=( VectorBase &&other ) noexcept;
 
   // Gets information
   inline index_t getLength() const noexcept;

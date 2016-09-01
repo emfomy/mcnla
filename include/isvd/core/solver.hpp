@@ -87,6 +87,9 @@ class Solver {
   inline Solver& setRank( const index_t rank ) noexcept;
   inline Solver& setOverRank( const index_t over_rank ) noexcept;
   inline Solver& setNumSketch( const index_t num_sketch_each ) noexcept;
+  inline Solver& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline Solver& setTolerance( const RealScalarType tolerance ) noexcept;
+  inline Solver& setSeed( const index_t seed[4] ) noexcept;
 
 };
 

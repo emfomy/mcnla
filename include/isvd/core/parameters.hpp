@@ -62,11 +62,14 @@ class Parameters {
   /// The number of random sketches per MPI node.
   index_t num_sketch_ = 0;
 
-  /// The maximum iteration
+  /// The maximum iteration.
   index_t max_iteration_ = 0;
 
-  /// The tolerance for converge condition.
+  /// The tolerance of converge condition.
   _RealScalar tolerance_ = 1e-4;
+
+  /// The number of random sketches per MPI node.
+  index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
 
  public:
 
@@ -84,6 +87,7 @@ class Parameters {
   inline index_t getNumSketchAll() const noexcept;
   inline index_t getMaxIteration() const noexcept;
   inline _RealScalar getTolerance() const noexcept;
+  inline index_t* getSeed() const noexcept;
 };
 
 }  // namespace internal

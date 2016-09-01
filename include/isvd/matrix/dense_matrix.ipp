@@ -55,26 +55,6 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-/// @attention  DO NOT FREE @a value!!
-///
-template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>::DenseMatrix(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t pitch,
-    _Scalar *value
-) noexcept
-  : MatrixBaseType(nrow, ncol),
-    DenseBaseType(pitch * dim2_, value),
-    pitch_(pitch) {
-  assert(pitch_ >= dim1_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
-///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t nrow,
@@ -90,29 +70,6 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
-///
-template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>::DenseMatrix(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t pitch,
-    _Scalar *value,
-    const index_t capability,
-    const index_t offset
-) noexcept
-  : MatrixBaseType(nrow, ncol),
-    DenseBaseType(capability, value, offset),
-    pitch_(pitch) {
-  assert(pitch_ >= dim1_);
-  assert(capability >= pitch_ * dim2_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>::DenseMatrix(
@@ -148,11 +105,45 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   assert(data.getCapability() >= pitch_ * dim2_);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default destructor.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
 ///
 template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>::~DenseMatrix() noexcept {}
+DenseMatrix<_Scalar, _layout>::DenseMatrix( const DenseMatrix &other ) noexcept
+  : MatrixBaseType(other),
+    DenseBaseType(other),
+    pitch_(other.pitch_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout>::DenseMatrix( DenseMatrix &&other ) noexcept
+  : MatrixBaseType(std::move(other)),
+    DenseBaseType(std::move(other)),
+    pitch_(other.pitch_) {
+  other.pitch_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( const DenseMatrix &other ) noexcept {
+  MatrixBaseType::operator=(other), DenseBaseType::operator=(other), pitch_ = other.pitch_;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( DenseMatrix &&other ) noexcept {
+  MatrixBaseType::operator=(other), DenseBaseType::operator=(other), pitch_ = other.pitch_; other.pitch_ = 0;
+  return *this;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
@@ -338,23 +329,23 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 ) noexcept {
   assert(idx > -nrow_ && idx < ncol_);
   index_t length;
-  index_t idx0;
+  index_t internal_idx;
   if ( idx < 0 ) {
-    idx0 = getIndexInternal(-idx, 0);
+    internal_idx = getIndexInternal(-idx, 0);
     if ( nrow_ + idx > ncol_ && nrow_ > ncol_ ) {
       length = ncol_;
     } else {
       length = nrow_ + idx;
     }
   } else {
-    idx0 = getIndexInternal(0, idx);
+    internal_idx = getIndexInternal(0, idx);
     if ( ncol_ - idx > nrow_ && ncol_ > nrow_ ) {
       length = nrow_;
     } else {
       length = ncol_ - idx;
     }
   }
-  return DenseVector<_Scalar>(length, pitch_+1, data_, idx0);
+  return DenseVector<_Scalar>(length, pitch_+1, data_, internal_idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

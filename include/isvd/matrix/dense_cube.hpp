@@ -95,20 +95,18 @@ class DenseCube
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch1, const index_t pitch2, _Scalar *value ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2, std::shared_ptr<_Scalar> value ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch1, const index_t pitch2, _Scalar *value,
-             const index_t capability, const index_t offset = 0 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2, std::shared_ptr<_Scalar> value,
              const index_t capability, const index_t offset = 0 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2, const DenseData<_Scalar> &data, const index_t offset = 0 ) noexcept;
+  DenseCube( const DenseCube &other ) noexcept;
+  DenseCube( DenseCube &&other ) noexcept;
 
-  // Destructor
-  ~DenseCube() noexcept;
+  // Operators
+  inline DenseCube& operator=( const DenseCube &other ) noexcept;
+  inline DenseCube& operator=( DenseCube &&other ) noexcept;
 
   // Gets information
   inline index_t getPitch1() const noexcept;

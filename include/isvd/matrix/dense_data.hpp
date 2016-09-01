@@ -37,13 +37,13 @@ class DenseData {
   // Constructors
   DenseData() noexcept;
   DenseData( const index_t capability ) noexcept;
-  DenseData( const index_t capability, _Scalar *value ) noexcept;
   DenseData( const index_t capability, std::shared_ptr<_Scalar> value ) noexcept;
-
-  // Destructor
-  ~DenseData() noexcept;
+  DenseData( const DenseData &other ) noexcept;
+  DenseData( DenseData &&other ) noexcept;
 
   // Operators
+  inline DenseData& operator=( const DenseData &other ) noexcept;
+  inline DenseData& operator=( DenseData &&other ) noexcept;
   inline bool operator==( const DenseData& other ) const noexcept;
   inline bool operator!=( const DenseData& other ) const noexcept;
 

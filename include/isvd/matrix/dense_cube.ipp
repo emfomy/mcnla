@@ -78,29 +78,6 @@ DenseCube<_Scalar, _layout>::DenseCube(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-/// @attention  DO NOT FREE @a value!!
-///
-template <typename _Scalar, Layout _layout>
-DenseCube<_Scalar, _layout>::DenseCube(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t npage,
-    const index_t pitch1,
-    const index_t pitch2,
-    _Scalar *value
-) noexcept
-  : CubeBaseType(nrow, ncol, npage),
-    DenseBaseType(pitch1 * pitch2 * npage_, value),
-    pitch1_(pitch1),
-    pitch2_(pitch2) {
-  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
-///
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>::DenseCube(
     const index_t nrow,
@@ -119,32 +96,6 @@ DenseCube<_Scalar, _layout>::DenseCube(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
-///
-template <typename _Scalar, Layout _layout>
-DenseCube<_Scalar, _layout>::DenseCube(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t npage,
-    const index_t pitch1,
-    const index_t pitch2,
-    _Scalar *value,
-    const index_t capability,
-    const index_t offset
-) noexcept
-  : CubeBaseType(nrow, ncol, npage),
-    DenseBaseType(capability, value, offset),
-    pitch1_(pitch1),
-    pitch2_(pitch2) {
-  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
-  assert(capability >= pitch1_ * pitch2_ * npage_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
 ///
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>::DenseCube(
@@ -185,12 +136,6 @@ DenseCube<_Scalar, _layout>::DenseCube(
   assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
   assert(data.getCapability() >= pitch1_ * pitch2_ * npage_);
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default destructor.
-///
-template <typename _Scalar, Layout _layout>
-DenseCube<_Scalar, _layout>::~DenseCube() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading dimension.

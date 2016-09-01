@@ -49,9 +49,11 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
  public:
 
   static const Layout layout = _Matrix::layout;
-  using ScalarType     = typename _Matrix::ScalarType;
-  using RealScalarType = typename _Matrix::RealScalarType;
-  using DenseCubeType  = isvd::DenseCube<ScalarType, Layout::ROWMAJOR>;
+  using ScalarType      = typename _Matrix::ScalarType;
+  using RealScalarType  = typename _Matrix::RealScalarType;
+  using DenseVectorType = isvd::DenseVector<ScalarType>;
+  using DenseMatrixType = isvd::DenseMatrix<ScalarType, Layout::ROWMAJOR>;
+  using DenseCubeType   = isvd::DenseCube<ScalarType, Layout::ROWMAJOR>;
 
   static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
@@ -59,6 +61,12 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
 
   /// The number of random sketches per MPI node.
   const internal::Parameters<RealScalarType> &parameters_;
+
+  /// The matrix Omega.
+  DenseMatrixType matrix_omega_;
+
+  /// The vector Tau.
+  DenseVectorType matrix_tau_;
 
  public:
 

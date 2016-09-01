@@ -41,25 +41,6 @@ DenseVector<_Scalar>::DenseVector(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-/// @attention  DO NOT FREE @a value!!
-///
-template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
-    const index_t length,
-    const index_t increment,
-    _Scalar *value
-) noexcept
-  : VectorBaseType(length),
-    DenseBaseType(length * increment, value),
-    increment_(increment) {
-  assert(increment_ > 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
-///
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
@@ -74,28 +55,6 @@ DenseVector<_Scalar>::DenseVector(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
-///
-template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
-    const index_t length,
-    const index_t increment,
-    _Scalar *value,
-    const index_t capability,
-    const index_t offset
-) noexcept
-  : VectorBaseType(length),
-    DenseBaseType(capability, value, offset),
-    increment_(increment) {
-  assert(increment_ > 0);
-  assert(capability >= increment_ * length_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-/// @attention  DO NOT FREE @a value!!
 ///
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
@@ -129,11 +88,45 @@ DenseVector<_Scalar>::DenseVector(
   assert(data.getCapability() >= increment_ * length_);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default destructor.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::~DenseVector() noexcept {}
+DenseVector<_Scalar>::DenseVector( const DenseVector &other ) noexcept
+  : VectorBaseType(other),
+    DenseBaseType(other),
+    increment_(other.increment_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar>
+DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
+  : VectorBaseType(std::move(other)),
+    DenseBaseType(std::move(other)),
+    increment_(other.increment_) {
+  other.increment_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
+template <typename _Scalar>
+DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other ) noexcept {
+  VectorBaseType::operator=(other), DenseBaseType::operator=(other), increment_ = other.increment_;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar>
+DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noexcept {
+  VectorBaseType::operator=(other), DenseBaseType::operator=(other), increment_ = other.increment_; other.increment_ = 0;
+  return *this;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.

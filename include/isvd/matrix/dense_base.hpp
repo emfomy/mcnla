@@ -26,7 +26,7 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of dense type.
 ///
-/// @tparam  _Derived  The derived class type.
+/// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
 class DenseBase {
@@ -48,9 +48,14 @@ class DenseBase {
   // Constructors
   DenseBase() noexcept;
   DenseBase( const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseBase( const index_t capability, ScalarType *value, const index_t offset = 0 ) noexcept;
   DenseBase( const index_t capability, std::shared_ptr<ScalarType> value, const index_t offset = 0 ) noexcept;
   DenseBase( const DenseData<ScalarType>& data, const index_t offset = 0 ) noexcept;
+  DenseBase( const DenseBase &other ) noexcept;
+  DenseBase( DenseBase &&other ) noexcept;
+
+  // Operators
+  inline DenseBase& operator=( const DenseBase &other ) noexcept;
+  inline DenseBase& operator=( DenseBase &&other ) noexcept;
 
   // Gets information
   inline index_t getCapability() const noexcept;
@@ -60,7 +65,7 @@ class DenseBase {
   inline DenseData<ScalarType>& getData() noexcept;
   inline const DenseData<ScalarType>& getData() const noexcept;
 
-  // Operators
+  // Gets data array.
   inline ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
 
