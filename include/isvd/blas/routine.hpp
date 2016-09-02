@@ -8,8 +8,8 @@
 #ifndef ISVD_BLAS_ROUTINE_HPP_
 #define ISVD_BLAS_ROUTINE_HPP_
 
-#include <isvd/blas/routine/scal.hpp>
 #include <isvd/blas/routine/copy.hpp>
+#include <isvd/blas/routine/scal.hpp>
 
 #include <isvd/blas/routine/gemm.hpp>
 #include <isvd/blas/routine/symm.hpp>

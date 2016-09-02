@@ -22,7 +22,7 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector() noexcept
   : VectorBaseType(),
     DenseBaseType(),
-    increment_(0) {}
+    increment_(1) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -105,7 +105,7 @@ DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
   : VectorBaseType(std::move(other)),
     DenseBaseType(std::move(other)),
     increment_(other.increment_) {
-  other.increment_ = 0;
+  other.increment_ = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other 
 ///
 template <typename _Scalar>
 DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noexcept {
-  VectorBaseType::operator=(other), DenseBaseType::operator=(other), increment_ = other.increment_; other.increment_ = 0;
+  VectorBaseType::operator=(other), DenseBaseType::operator=(other), increment_ = other.increment_; other.increment_ = 1;
   return *this;
 }
 

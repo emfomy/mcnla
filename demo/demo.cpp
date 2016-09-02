@@ -12,7 +12,7 @@
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-#include <isvd.hpp>
+#include <isvd/utility.hpp>
 #include <mpi.h>
 #include <mkl.h>
 
@@ -179,20 +179,16 @@ int main( int argc, char **argv ) {
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int iseed[4] ) {
   auto matrix_u     = Malloc<double>(m0 * m0);
   auto matrix_v     = Malloc<double>(n  * m0);
-  auto vector_tau_u = Malloc<double>(m0);
-  auto vector_tau_v = Malloc<double>(m0);
+  auto vector_tmp_s = Malloc<double>(m0);
+  auto vector_tmp_b = Malloc<double>(m0);
 
   // Generate U & V using normal random
   LAPACKE_dlarnv(3, iseed, m0*m0, matrix_u);
   LAPACKE_dlarnv(3, iseed, n*m0,  matrix_v);
 
   // Orthogonalize U & V
-  LAPACKE_dgeqrf(LAPACK_COL_MAJOR, m0, m0, matrix_u, m0, vector_tau_u);
-  LAPACKE_dgeqrf(LAPACK_COL_MAJOR, n,  m0, matrix_v, n,  vector_tau_v);
-
-  // Construct U & V
-  LAPACKE_dorgqr(LAPACK_COL_MAJOR, m0, m0, m0, matrix_u, m0, vector_tau_u);
-  LAPACKE_dorgqr(LAPACK_COL_MAJOR, n,  m0, m0, matrix_v, n,  vector_tau_v);
+  LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'O', 'N', m0, m0, matrix_u, m0, vector_tmp_s, nullptr, 1, nullptr, 1, vector_tmp_b);
+  LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'O', 'N', n,  m0, matrix_v, n,  vector_tmp_s, nullptr, 1, nullptr, 1, vector_tmp_b);
 
   // Copy U
   cblas_dcopy(m0*k, matrix_u, 1, matrix_u_true, 1);
@@ -209,26 +205,30 @@ void createA( const int m0, const int n, const int k, double *matrix_a, double *
   // Free memory
   Free(matrix_u);
   Free(matrix_v);
-  Free(vector_tau_u);
-  Free(vector_tau_v);
+  Free(vector_tmp_s);
+  Free(vector_tmp_b);
 }
 
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
              const double *matrix_a, double *matrices_qjt, int iseed[4] ) {
   auto matrix_oit = Malloc<double>(k * n);
-  auto vector_tau = Malloc<double>(k);
+  auto vector_tmp_s = Malloc<double>(k);
+  auto vector_tmp_b = Malloc<double>(k);
 
   for ( auto i = 0; i < Nj; ++i ) {
     LAPACKE_dlarnv(3, iseed, k*n, matrix_oit);
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans,
                 k, m0, n, 1.0, matrix_oit, k, matrix_a, m0, 0.0, matrices_qjt+i*k*m, k);
-    LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m0, k, matrices_qjt+i*k*m, k, vector_tau);
-    LAPACKE_dorgqr(LAPACK_ROW_MAJOR, m0, k, k, matrices_qjt+i*k*m, k, vector_tau);
+
+
+    LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'N', 'O', k, m0, matrices_qjt+i*k*m, k,
+                   vector_tmp_s, nullptr, 1, nullptr, 1, vector_tmp_b);
   }
 
   // Free memory
   Free(matrix_oit);
-  Free(vector_tau);
+  Free(vector_tmp_s);
+  Free(vector_tmp_b);
 }
 
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt ) {

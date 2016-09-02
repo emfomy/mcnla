@@ -32,9 +32,20 @@ class SketcherBase : public internal::CrtpBase<_Derived, SketcherBase<_Derived>>
 
  private:
 
-  using ScalarType    = typename Traits<_Derived>::ScalarType;
-  using MatrixType    = typename Traits<_Derived>::MatrixType;
+  using ScalarType     = typename Traits<_Derived>::ScalarType;
+  using RealScalarType = typename Traits<_Derived>::RealScalarType;
+  using MatrixType     = typename Traits<_Derived>::MatrixType;
   using DenseCubeType = isvd::DenseCube<ScalarType, Layout::ROWMAJOR>;
+
+ protected:
+
+  /// The parameters.
+  const internal::Parameters<RealScalarType> &parameters_;
+
+ protected:
+
+  // Constructor
+  SketcherBase( const internal::Parameters<RealScalarType> &parameters ) noexcept;
 
  public:
 

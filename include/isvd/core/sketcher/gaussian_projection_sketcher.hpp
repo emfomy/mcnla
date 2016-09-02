@@ -46,6 +46,10 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
 
   friend internal::SketcherBase<GaussianProjectionSketcher<_Matrix>>;
 
+ private:
+
+  using BaseType = internal::SketcherBase<GaussianProjectionSketcher<_Matrix>>;
+
  public:
 
   static const Layout layout = _Matrix::layout;

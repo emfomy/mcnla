@@ -43,7 +43,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 
   cube_q_ = DenseCubeType(parameters_.getNrow(), parameters_.getDimSketch(), parameters_.getNumSketch());
 
-  parameters_.is_initialized_ = true;
+  parameters_.initialized_ = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSize( const index_t nrow, const index_t ncol ) noexcept {
   parameters_.nrow_ = nrow; parameters_.ncol_ = ncol;
-  parameters_.is_initialized_ = false; return *this;
+  parameters_.initialized_ = false; return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setRank( const index_t rank ) noexcept {
   parameters_.rank_ = rank;
-  parameters_.is_initialized_ = false; return *this;
+  parameters_.initialized_ = false; return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setOverRank( const index_t over_rank ) noexcept {
   parameters_.over_rank_ = over_rank;
-  parameters_.is_initialized_ = false; return *this;
+  parameters_.initialized_ = false; return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketch( const index_t num_sketch ) noexcept {
   parameters_.num_sketch_ = num_sketch;
-  parameters_.is_initialized_ = false; return *this;
+  parameters_.initialized_ = false; return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

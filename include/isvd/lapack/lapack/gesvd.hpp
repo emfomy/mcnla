@@ -1,16 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/routine/gesvd.hpp
-/// @brief   The LAPACK GESVD routine.
+/// @file    include/isvd/lapack/lapack/gesvd.hpp
+/// @brief   The LAPACK GESVD.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_ROUTINE_GESVD_HPP_
-#define ISVD_LAPACK_ROUTINE_GESVD_HPP_
+#ifndef ISVD_LAPACK_LAPACK_GESVD_HPP_
+#define ISVD_LAPACK_LAPACK_GESVD_HPP_
 
-#include <isvd/utility/traits.hpp>
-#include <isvd/matrix.hpp>
-#include <isvd/lapack/lapack.hpp>
+#include <isvd/isvd.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
@@ -58,7 +56,7 @@ namespace lapack {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc isvd::lapack::gesvd
+/// @brief  Computes the singular value decomposition of a general rectangular matrix.
 ///
 //@{
 static inline index_t gesvd(
@@ -97,82 +95,8 @@ static inline index_t gesvd(
 
 }  // namespace internal
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the singular value decomposition of a general rectangular matrix.
-///
-//@{
-template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Layout _layout>
-inline void gesvd(
-    DenseMatrix<_Scalar, _layout> &a,
-    DenseVector<typename isvd::internal::ScalarTraits<_Scalar>::RealType> &s,
-    DenseMatrix<_Scalar, _layout> &u,
-    DenseMatrix<_Scalar, _layout> &vt,
-    DenseVector<_Scalar> &work,
-    DenseVector<typename isvd::internal::ScalarTraits<_Scalar>::RealType> &rwork
-) noexcept {
-  static_assert(_jobu  == 'A' || _jobu  == 'S' || _jobu  == 'O' || _jobu  == 'N', "Job undefined!");
-  static_assert(_jobvt == 'A' || _jobvt == 'S' || _jobvt == 'O' || _jobvt == 'N', "Job undefined!");
-  static_assert(_jobu  != 'O' || _jobvt != 'O', "Job conflict!");
-
-  if ( _jobu == 'A' ) {
-    assert(u.getNrow() == a.getNrow() && u.getNcol() == a.getNrow());
-  } else if ( _jobu == 'S' ) {
-    assert(u.getNrow() == a.getNrow() && u.getNcol() == std::min(a.getNrow(), a.getNcol()));
-  }
-
-  if ( _jobvt == 'A' ) {
-    assert(vt.getNcol() == a.getNcol() && vt.getNrow() == a.getNcol());
-  } else if ( _jobvt == 'S' ) {
-    assert(vt.getNcol() == a.getNcol() && vt.getNrow() == std::min(a.getNrow(), a.getNcol()));
-  }
-
-  if ( isvd::internal::ScalarTraits<_Scalar>::is_real ) {
-    assert(work.getLength() >= 3 * std::min(a.getNrow(), a.getNcol()) + std::max(a.getNrow(), a.getNcol()));
-    assert(work.getLength() >= 5 * std::min(a.getNrow(), a.getNcol()));
-  } else {
-    assert(work.getLength() >= 2 * std::min(a.getNrow(), a.getNcol()) + std::max(a.getNrow(), a.getNcol()));
-    assert(rwork.getLength() >= 5 * std::min(a.getNrow(), a.getNcol()));
-  }
-
-  assert(internal::gesvd(_jobu, _jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
-                         s.getValue(), u.getValue(), u.getPitch(), vt.getValue(), vt.getPitch(),
-                         work.getValue(), work.getLength(), rwork.getValue()) == 0);
-}
-
-template <JobOption _jobu, JobOption _jobvt,
-          class _TypeA, class _TypeS, class _TypeU, class _TypeVt, class _TypeWork, class _TypeRwork>
-inline void gesvd( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt, _TypeWork &&work, _TypeRwork &&rwork ) noexcept {
-  gesvd<_jobu, _jobvt>(a, s, u, vt, work, rwork);
-}
-//@}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Query the optimal workspace size for isvd::lapack::gesvd.
-///
-/// @return  The optimal length of parameter @p work.
-///
-//@{
-template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Layout _layout>
-inline index_t gesvdQuery(
-    DenseMatrix<_Scalar, _layout> &a
-) noexcept {
-  static_assert(_jobu  == 'A' || _jobu  == 'S' || _jobu  == 'O' || _jobu  == 'N', "Job undefined!");
-  static_assert(_jobvt == 'A' || _jobvt == 'S' || _jobvt == 'O' || _jobvt == 'N', "Job undefined!");
-  static_assert(_jobu  != 'O' || _jobvt != 'O', "Job conflict!");
-  _Scalar lwork;
-  assert(internal::gesvd(_jobu, _jobvt, a.getNrow(), a.getNcol(), nullptr, a.getPitch(), nullptr,
-                         nullptr, a.getNrow(), nullptr, a.getNcol(), &lwork, -1, nullptr) == 0);
-  return lwork;
-}
-
-template <JobOption _jobu, JobOption _jobvt, class _TypeA>
-inline index_t gesvdQuery( _TypeA &&a ) noexcept {
-  return gesvdQuery<_jobu, _jobvt>(a);
-}
-//@}
-
 }  // namespace lapack
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_ROUTINE_GESVD_HPP_
+#endif  // ISVD_LAPACK_LAPACK_GESVD_HPP_

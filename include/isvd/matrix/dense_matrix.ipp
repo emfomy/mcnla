@@ -23,7 +23,7 @@ template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>::DenseMatrix() noexcept
   : MatrixBaseType(),
     DenseBaseType(),
-    pitch_(0) {}
+    pitch_(1) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -122,7 +122,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix( DenseMatrix &&other ) noexcept
   : MatrixBaseType(std::move(other)),
     DenseBaseType(std::move(other)),
     pitch_(other.pitch_) {
-  other.pitch_ = 0;
+  other.pitch_ = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( const D
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( DenseMatrix &&other ) noexcept {
-  MatrixBaseType::operator=(other); DenseBaseType::operator=(other); pitch_ = other.pitch_; other.pitch_ = 0;
+  MatrixBaseType::operator=(other); DenseBaseType::operator=(other); pitch_ = other.pitch_; other.pitch_ = 1;
   return *this;
 }
 

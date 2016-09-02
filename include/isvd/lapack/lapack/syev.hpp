@@ -1,16 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/routine/syev.hpp
-/// @brief   The LAPACK SYEV routine.
+/// @file    include/isvd/lapack/lapack/syev.hpp
+/// @brief   The LAPACK SYEV.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_ROUTINE_SYEV_HPP_
-#define ISVD_LAPACK_ROUTINE_SYEV_HPP_
+#ifndef ISVD_LAPACK_LAPACK_SYEV_HPP_
+#define ISVD_LAPACK_LAPACK_SYEV_HPP_
 
-#include <isvd/utility/traits.hpp>
-#include <isvd/matrix.hpp>
-#include <isvd/lapack/lapack.hpp>
+#include <isvd/isvd.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
@@ -85,4 +83,4 @@ static inline index_t syev(
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_ROUTINE_SYEV_HPP_
+#endif  // ISVD_LAPACK_LAPACK_SYEV_HPP_

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/driver/syev_driver.ipp
+/// @file    include/isvd/lapack/driver/syev.ipp
 /// @brief   The implementation of LAPACK SYEV driver.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_DRIVER_SYEV_DRIVER_IPP_
-#define ISVD_LAPACK_DRIVER_SYEV_DRIVER_IPP_
+#ifndef ISVD_LAPACK_DRIVER_SYEV_IPP_
+#define ISVD_LAPACK_DRIVER_SYEV_IPP_
 
-#include <isvd/lapack/driver/syev_driver.hpp>
+#include <isvd/lapack/driver/syev.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -25,39 +25,31 @@ namespace lapack {
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo>
 SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
-    const _Matrix &a
+    const index_t dim
 ) noexcept
-  : dim_(a.getNrow()),
-    work_(query(a)),
-    rwork_(is_real ? RealVectorType() : RealVectorType(3*dim_)) {
-  assert(a.getNrow() == a.getNcol());
+  : dim_(dim),
+    work_(dim),
+    rwork_(is_real ? RealVectorType() : RealVectorType(3*dim)) {
   assert(dim_ > 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the eigenvalue decomposition.
-///
-/// @attention  MATRIX @p a WILL BE DESTORIED!
+/// @brief  Construct with given size information.
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo>
-void SyevDriver<_Matrix, _jobz, _uplo>::compute(
-    _Matrix &a,
-    RealVectorType &w
-) noexcept {
-  assert(a.getNrow() == dim_ && a.getNcol() == dim_);
+SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
+    const _Matrix &a
+) noexcept
+  : SyevDriver(a.getNrow()) {
   assert(a.getNrow() == a.getNcol());
-  assert(w.getLength() == a.getNrow());
-
-  assert(internal::syev(_jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),
-                        w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo> template <class _TypeA, class _TypeW>
-void SyevDriver<_Matrix, _jobz, _uplo>::compute( _TypeA &&a, _TypeW &&w ) noexcept {
-  compute<_jobz, _uplo>(a, w);
+void SyevDriver<_Matrix, _jobz, _uplo>::operator()( _TypeA &&a, _TypeW &&w ) noexcept {
+  compute(a, w);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,16 +85,31 @@ const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Ma
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Computes the eigenvalue decomposition.
+///
+/// @attention  MATRIX @p a WILL BE DESTORIED!
+///
+template <class _Matrix, JobOption _jobz, UploOption _uplo>
+void SyevDriver<_Matrix, _jobz, _uplo>::compute(
+    _Matrix &a,
+    RealVectorType &w
+) noexcept {
+  assert(a.getNrow() == dim_ && a.getNcol() == dim_);
+  assert(w.getLength() == a.getNrow());
+
+  assert(internal::syev(_jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),
+                        w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Query the optimal workspace size.
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo>
 index_t SyevDriver<_Matrix, _jobz, _uplo>::query(
-    const _Matrix &a
+    const index_t dim
 ) const noexcept {
-  assert(a.getNrow() == a.getNcol());
   ScalarType lwork;
-  assert(internal::syev(_jobz, UploChar<_uplo, layout>::value, a.getNrow(),
-                        nullptr, a.getPitch(), nullptr, &lwork, -1, nullptr) == 0);
+  assert(internal::syev(_jobz, UploChar<_uplo, layout>::value, dim, nullptr, dim, nullptr, &lwork, -1, nullptr) == 0);
   return lwork;
 }
 
@@ -110,4 +117,4 @@ index_t SyevDriver<_Matrix, _jobz, _uplo>::query(
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_DRIVER_SYEV_DRIVER_IPP_
+#endif  // ISVD_LAPACK_DRIVER_SYEV_IPP_

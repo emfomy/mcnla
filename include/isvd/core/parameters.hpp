@@ -45,7 +45,7 @@ class Parameters {
  protected:
 
   /// The tag shows if the solver is initialized or not.
-  bool is_initialized_ = false;
+  bool initialized_ = false;
 
   /// The number of rows of the matrix.
   index_t nrow_ = 0;

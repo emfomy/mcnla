@@ -23,7 +23,7 @@ namespace isvd {
 template <class _Matrix>
 GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
     const internal::Parameters<RealScalarType> &parameters
-) noexcept : parameters_(parameters) {}
+) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.

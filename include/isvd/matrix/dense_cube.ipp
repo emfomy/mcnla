@@ -23,8 +23,8 @@ template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>::DenseCube() noexcept
   : CubeBaseType(),
     DenseBaseType(),
-    pitch1_(0),
-    pitch2_(0) {}
+    pitch1_(1),
+    pitch2_(1) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -156,7 +156,7 @@ DenseCube<_Scalar, _layout>::DenseCube( DenseCube &&other ) noexcept
     DenseBaseType(std::move(other)),
     pitch1_(other.pitch1_),
     pitch2_(other.pitch2_) {
-  other.pitch1_ = 0; other.pitch2_ = 0;
+  other.pitch1_ = 1; other.pitch2_ = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>& DenseCube<_Scalar, _layout>::operator=( DenseCube &&other ) noexcept {
   CubeBaseType::operator=(other); DenseBaseType::operator=(other);
   pitch1_ = other.pitch1_; pitch2_ = other.pitch2_;
-  other.pitch1_ = 0;       other.pitch2_ = 0;
+  other.pitch1_ = 1;       other.pitch2_ = 1;
   return *this;
 }
 

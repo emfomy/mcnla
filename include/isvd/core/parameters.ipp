@@ -33,7 +33,7 @@ Parameters<_RealScalar>::Parameters( const MPI_Comm comm ) noexcept
 /// @brief  Check if the solver is initialized.
 ///
 template <typename _RealScalar>
-bool Parameters<_RealScalar>::isInitialized() const noexcept { return is_initialized_; }
+bool Parameters<_RealScalar>::isInitialized() const noexcept { return initialized_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix.
