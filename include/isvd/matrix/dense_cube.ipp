@@ -8,7 +8,6 @@
 #ifndef ISVD_MATRIX_DENSE_CUBE_IPP_
 #define ISVD_MATRIX_DENSE_CUBE_IPP_
 
-#include <cstdlib>
 #include <isvd/matrix/dense_cube.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -782,7 +781,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc
+/// @copydoc  vectorize
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexcept {

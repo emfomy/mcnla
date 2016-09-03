@@ -41,7 +41,14 @@ inline void copy(
 ) noexcept {
   copy(x, y);
 }
+//@}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies matrix to another matrix.
+///
+/// @attention  The out-of-range spaces are also copied. It is efficient if the leading dimension is much larger than the size.
+///
+//@{
 template <typename _Scalar, Layout _layout>
 inline void copy(
     const DenseMatrix<_Scalar, _layout> &x,
@@ -59,7 +66,14 @@ inline void copy(
   assert(x.getSizes() == y.getSizes() && y.getPitch() == x.getPitch());
   copy(x.vectorize(), y.vectorize());
 }
+//@}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies cube to another cube.
+///
+/// @attention  The out-of-range spaces are also copied. It is efficient if the dimensions is much larger than the sizes.
+///
+//@{
 template <typename _Scalar, Layout _layout>
 inline void copy(
     const DenseCube<_Scalar, _layout> &x,

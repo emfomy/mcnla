@@ -8,7 +8,6 @@
 #ifndef ISVD_MATRIX_DENSE_BASE_HPP_
 #define ISVD_MATRIX_DENSE_BASE_HPP_
 
-#include <memory>
 #include <isvd/isvd.hpp>
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix/dense_data.hpp>

@@ -27,7 +27,7 @@ namespace mpi {
 /// @param  comm  The communicator.
 ///
 /// @return       The number of processes in the group of @p comm.
-///]
+///
 static inline index_t getCommSize( const MPI_Comm comm ) noexcept {
   index_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
 }
@@ -38,7 +38,7 @@ static inline index_t getCommSize( const MPI_Comm comm ) noexcept {
 /// @param  comm  The communicator.
 ///
 /// @return       The rank of the calling process in group of @p comm.
-///]
+///
 static inline index_t getCommRank( const MPI_Comm comm ) noexcept {
   index_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
 }

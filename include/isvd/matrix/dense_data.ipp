@@ -32,7 +32,7 @@ DenseData<_Scalar>::DenseData(
     const index_t capability
 ) noexcept
   : capability_(capability),
-    value_(Malloc<_Scalar>(capability)) {}
+    value_(malloc<_Scalar>(capability)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.

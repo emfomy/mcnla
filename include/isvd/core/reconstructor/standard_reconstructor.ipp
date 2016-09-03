@@ -43,8 +43,6 @@ void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  isvd::internal::ReconstructorBase::reconstruct
 ///
-/// @todo  Uses low-rank GESVD driver.
-///
 template <class _Matrix>
 void StandardReconstructor<_Matrix>::reconstructImpl(
     const _Matrix &matrix_a,

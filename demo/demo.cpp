@@ -74,15 +74,15 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate memory
-  auto matrix_a      = Malloc<double>(m0 * n);
-  auto matrix_u_true = Malloc<double>(m0 * k);
-  auto matrix_qt     = Malloc<double>(k * m);
-  auto matrix_u      = Malloc<double>(m0 * k);
-  auto matrix_vt     = Malloc<double>(k  * n);
-  auto vector_s      = Malloc<double>(k);
-  auto matrix_qjt    = Malloc<double>(k * mj);
-  auto matrices_qit  = Malloc<double>(k * mj * N);
-  auto matrices_qjt  = Malloc<double>(k * mj * N);
+  auto matrix_a      = malloc<double>(m0 * n);
+  auto matrix_u_true = malloc<double>(m0 * k);
+  auto matrix_qt     = malloc<double>(k * m);
+  auto matrix_u      = malloc<double>(m0 * k);
+  auto matrix_vt     = malloc<double>(k  * n);
+  auto vector_s      = malloc<double>(k);
+  auto matrix_qjt    = malloc<double>(k * mj);
+  auto matrices_qit  = malloc<double>(k * mj * N);
+  auto matrices_qjt  = malloc<double>(k * mj * N);
   accumulator_set<double, stats<tag::variance>> acc;
 
   // ====================================================================================================================== //
@@ -160,15 +160,15 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Free memory
-  Free(matrix_a);
-  Free(matrix_u_true);
-  Free(matrix_qt);
-  Free(matrix_u);
-  Free(matrix_vt);
-  Free(vector_s);
-  Free(matrix_qjt);
-  Free(matrices_qjt);
-  Free(matrices_qit);
+  free(matrix_a);
+  free(matrix_u_true);
+  free(matrix_qt);
+  free(matrix_u);
+  free(matrix_vt);
+  free(vector_s);
+  free(matrix_qjt);
+  free(matrices_qjt);
+  free(matrices_qit);
 
   // Finalize MPI
   MPI_Finalize();
@@ -177,10 +177,10 @@ int main( int argc, char **argv ) {
 }
 
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int iseed[4] ) {
-  auto matrix_u     = Malloc<double>(m0 * m0);
-  auto matrix_v     = Malloc<double>(n  * m0);
-  auto vector_tmp_s = Malloc<double>(m0);
-  auto vector_tmp_b = Malloc<double>(m0);
+  auto matrix_u     = malloc<double>(m0 * m0);
+  auto matrix_v     = malloc<double>(n  * m0);
+  auto vector_tmp_s = malloc<double>(m0);
+  auto vector_tmp_b = malloc<double>(m0);
 
   // Generate U & V using normal random
   LAPACKE_dlarnv(3, iseed, m0*m0, matrix_u);
@@ -203,17 +203,17 @@ void createA( const int m0, const int n, const int k, double *matrix_a, double *
   cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, m0, n, m0, 1.0, matrix_u, m0, matrix_v, n, 0.0, matrix_a, m0);
 
   // Free memory
-  Free(matrix_u);
-  Free(matrix_v);
-  Free(vector_tmp_s);
-  Free(vector_tmp_b);
+  free(matrix_u);
+  free(matrix_v);
+  free(vector_tmp_s);
+  free(vector_tmp_b);
 }
 
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
              const double *matrix_a, double *matrices_qjt, int iseed[4] ) {
-  auto matrix_oit = Malloc<double>(k * n);
-  auto vector_tmp_s = Malloc<double>(k);
-  auto vector_tmp_b = Malloc<double>(k);
+  auto matrix_oit = malloc<double>(k * n);
+  auto vector_tmp_s = malloc<double>(k);
+  auto vector_tmp_b = malloc<double>(k);
 
   for ( auto i = 0; i < Nj; ++i ) {
     LAPACKE_dlarnv(3, iseed, k*n, matrix_oit);
@@ -226,18 +226,18 @@ void sketch( const int Nj, const int m, const int m0, const int n, const int k,
   }
 
   // Free memory
-  Free(matrix_oit);
-  Free(vector_tmp_s);
-  Free(vector_tmp_b);
+  free(matrix_oit);
+  free(vector_tmp_s);
+  free(vector_tmp_b);
 }
 
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt ) {
-  auto matrix_b   = Malloc<double>(k * k * N);
-  auto matrix_d   = Malloc<double>(k * k * N);
-  auto matrix_c   = Malloc<double>(k * k);
-  auto matrix_xjt = Malloc<double>(k * mj);
-  auto matrix_tmp = Malloc<double>(k * mj);
-  auto vector_e   = Malloc<double>(k);
+  auto matrix_b   = malloc<double>(k * k * N);
+  auto matrix_d   = malloc<double>(k * k * N);
+  auto matrix_c   = malloc<double>(k * k);
+  auto matrix_xjt = malloc<double>(k * mj);
+  auto matrix_tmp = malloc<double>(k * mj);
+  auto vector_e   = malloc<double>(k);
 
   bool is_converged = false;
 
@@ -343,18 +343,18 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
   }
 
   // Free memory
-  Free(matrix_b);
-  Free(matrix_d);
-  Free(matrix_c);
-  Free(matrix_xjt);
-  Free(matrix_tmp);
-  Free(vector_e);
+  free(matrix_b);
+  free(matrix_d);
+  free(matrix_c);
+  free(matrix_xjt);
+  free(matrix_tmp);
+  free(vector_e);
 }
 
 void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s ) {
-  auto matrix_w   = Malloc<double>(k * k);
-  auto vector_tmp = Malloc<double>(k);
+  auto matrix_w   = malloc<double>(k * k);
+  auto vector_tmp = malloc<double>(k);
 
   // V := Q' * A
   cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, k, n, m0, 1.0, matrix_qt, k, matrix_a, m0, 0.0, matrix_vt, k);
@@ -366,14 +366,14 @@ void reconstruct( const int m0, const int n, const int k,
   cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, m0, k, k, 1.0, matrix_qt, k, matrix_w, k, 0.0, matrix_u, m0);
 
   // Free memory
-  Free(matrix_w);
-  Free(vector_tmp);
+  free(matrix_w);
+  free(vector_tmp);
 }
 
 void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u, double &smax, double &smin ) {
-  auto matrix_tmp  = Malloc<double>(k * k);
-  auto vector_tmp1 = Malloc<double>(k);
-  auto vector_tmp2 = Malloc<double>(k);
+  auto matrix_tmp  = malloc<double>(k * k);
+  auto vector_tmp1 = malloc<double>(k);
+  auto vector_tmp2 = malloc<double>(k);
 
   // TMP := Utrue' * U
   cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, k, k, m0, 1.0, matrix_u_true, m0, matrix_u, m0, 0.0, matrix_tmp, k);
@@ -384,7 +384,7 @@ void check( const int m0, const int k, const double *matrix_u_true, const double
   smin = abs(vector_tmp1[cblas_idamin(k, vector_tmp1, 1)]);
 
   // Free memory
-  Free(matrix_tmp);
-  Free(vector_tmp1);
-  Free(vector_tmp2);
+  free(matrix_tmp);
+  free(vector_tmp1);
+  free(vector_tmp2);
 }

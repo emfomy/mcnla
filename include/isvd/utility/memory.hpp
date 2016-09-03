@@ -25,8 +25,8 @@ namespace isvd {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-inline _Type* Malloc( const index_t num ) noexcept {
-  return static_cast<_Type*>(malloc(num * sizeof(_Type*)));
+inline _Type* malloc( const index_t num ) noexcept {
+  return static_cast<_Type*>(std::malloc(num * sizeof(_Type*)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,8 +39,8 @@ inline _Type* Malloc( const index_t num ) noexcept {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-inline _Type* Calloc( const index_t num ) noexcept {
-  return static_cast<_Type*>(calloc(num, sizeof(_Type*)));
+inline _Type* calloc( const index_t num ) noexcept {
+  return static_cast<_Type*>(std::calloc(num, sizeof(_Type*)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,8 +54,8 @@ inline _Type* Calloc( const index_t num ) noexcept {
 /// @return         The pointer to the array.
 ///
 template <typename _Type>
-inline _Type* Realloc( _Type *&ptr, const index_t num ) noexcept {
-  return static_cast<_Type*>(realloc(ptr, num * sizeof(_Type*)));
+inline _Type* realloc( _Type *&ptr, const index_t num ) noexcept {
+  return static_cast<_Type*>(std::realloc(ptr, num * sizeof(_Type*)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,8 +66,8 @@ inline _Type* Realloc( _Type *&ptr, const index_t num ) noexcept {
 /// @param   ptr    The pointer to the array.
 ///
 template <typename _Type>
-inline void Free( _Type *&ptr ) noexcept {
-  free(ptr);
+inline void free( _Type *&ptr ) noexcept {
+  std::free(ptr);
   ptr = nullptr;
 }
 
