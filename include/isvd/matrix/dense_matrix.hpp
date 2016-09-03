@@ -86,6 +86,7 @@ class DenseMatrix
   // Constructors
   DenseMatrix() noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
+  DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value,
@@ -117,17 +118,26 @@ class DenseMatrix
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
   // Gets matrix block
-  inline DenseMatrix<_Scalar, _layout> getBlock( const IndexRange rowrange, const IndexRange colrange ) noexcept;
-  inline DenseMatrix<_Scalar, _layout> getCols( const IndexRange rowrange ) noexcept;
-  inline DenseMatrix<_Scalar, _layout> getRows( const IndexRange colrange ) noexcept;
+  inline       DenseMatrix<_Scalar, _layout> getBlock( const IndexRange rowrange, const IndexRange colrange ) noexcept;
+  inline const DenseMatrix<_Scalar, _layout> getBlock( const IndexRange rowrange, const IndexRange colrange ) const noexcept;
+  inline       DenseMatrix<_Scalar, _layout> getCols( const IndexRange rowrange ) noexcept;
+  inline const DenseMatrix<_Scalar, _layout> getCols( const IndexRange rowrange ) const noexcept;
+  inline       DenseMatrix<_Scalar, _layout> getRows( const IndexRange colrange ) noexcept;
+  inline const DenseMatrix<_Scalar, _layout> getRows( const IndexRange colrange ) const noexcept;
 
   // Gets vector segment
-  inline DenseVector<_Scalar> getCol( const index_t colidx ) noexcept;
-  inline DenseVector<_Scalar> getColSegment( const index_t colidx, const IndexRange rowrange ) noexcept;
-  inline DenseVector<_Scalar> getRow( const index_t rowidx ) noexcept;
-  inline DenseVector<_Scalar> getRowSegment( const index_t rowidx, const IndexRange colrange ) noexcept;
-  inline DenseVector<_Scalar> getDiagonal( const index_t idx = 0 ) noexcept;
-  inline DenseVector<_Scalar> vectorize() noexcept;
+  inline       DenseVector<_Scalar> getCol( const index_t colidx ) noexcept;
+  inline const DenseVector<_Scalar> getCol( const index_t colidx ) const noexcept;
+  inline       DenseVector<_Scalar> getColSegment( const index_t colidx, const IndexRange rowrange ) noexcept;
+  inline const DenseVector<_Scalar> getColSegment( const index_t colidx, const IndexRange rowrange ) const noexcept;
+  inline       DenseVector<_Scalar> getRow( const index_t rowidx ) noexcept;
+  inline const DenseVector<_Scalar> getRow( const index_t rowidx ) const noexcept;
+  inline       DenseVector<_Scalar> getRowSegment( const index_t rowidx, const IndexRange colrange ) noexcept;
+  inline const DenseVector<_Scalar> getRowSegment( const index_t rowidx, const IndexRange colrange ) const noexcept;
+  inline       DenseVector<_Scalar> getDiagonal( const index_t idx = 0 ) noexcept;
+  inline const DenseVector<_Scalar> getDiagonal( const index_t idx = 0 ) const noexcept;
+  inline       DenseVector<_Scalar> vectorize() noexcept;
+  inline const DenseVector<_Scalar> vectorize() const noexcept;
 
  protected:
 

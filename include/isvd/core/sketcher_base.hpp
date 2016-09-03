@@ -32,20 +32,18 @@ class SketcherBase : public internal::CrtpBase<_Derived, SketcherBase<_Derived>>
 
  private:
 
-  using ScalarType     = typename Traits<_Derived>::ScalarType;
-  using RealScalarType = typename Traits<_Derived>::RealScalarType;
-  using MatrixType     = typename Traits<_Derived>::MatrixType;
-  using DenseCubeType = isvd::DenseCube<ScalarType, Layout::ROWMAJOR>;
+  using ScalarType       = typename Traits<_Derived>::ScalarType;
+  using MatrixType       = typename Traits<_Derived>::MatrixType;
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<RealScalarType> &parameters_;
+  const internal::Parameters<ScalarType> &parameters_;
 
  protected:
 
   // Constructor
-  SketcherBase( const internal::Parameters<RealScalarType> &parameters ) noexcept;
+  SketcherBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
 
  public:
 
@@ -53,7 +51,7 @@ class SketcherBase : public internal::CrtpBase<_Derived, SketcherBase<_Derived>>
   void initialize() noexcept;
 
   // Random sketches
-  inline void sketch( const MatrixType &matrix_a, DenseCubeType &cube_q ) noexcept;
+  inline void sketch( const MatrixType &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
 
 };
 

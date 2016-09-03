@@ -91,6 +91,7 @@ class DenseCube
   // Constructors
   DenseCube() noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
+  DenseCube( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2 ) noexcept;
@@ -122,30 +123,56 @@ class DenseCube
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
 
   // Gets cube block
-  inline DenseCube<_Scalar, _layout> getCube( const IndexRange rowrange, const IndexRange colrange,
-                                                                         const IndexRange pagerange ) noexcept;
-  inline DenseCube<_Scalar, _layout> getTubes( const IndexRange rowrange, const IndexRange colrange ) noexcept;
-  inline DenseCube<_Scalar, _layout> getPages( const IndexRange pagerange ) noexcept;
-  inline DenseCube<_Scalar, _layout> getColPages( const IndexRange rowrange ) noexcept;
-  inline DenseCube<_Scalar, _layout> getRowPages( const IndexRange colrange ) noexcept;
+  inline       DenseCube<_Scalar, _layout> getCube( const IndexRange rowrange, const IndexRange colrange,
+                                                    const IndexRange pagerange ) noexcept;
+  inline const DenseCube<_Scalar, _layout> getCube( const IndexRange rowrange, const IndexRange colrange,
+                                                    const IndexRange pagerange ) const noexcept;
+  inline       DenseCube<_Scalar, _layout> getTubes( const IndexRange rowrange, const IndexRange colrange ) noexcept;
+  inline const DenseCube<_Scalar, _layout> getTubes( const IndexRange rowrange, const IndexRange colrange ) const noexcept;
+  inline       DenseCube<_Scalar, _layout> getPages( const IndexRange pagerange ) noexcept;
+  inline const DenseCube<_Scalar, _layout> getPages( const IndexRange pagerange ) const noexcept;
+  inline       DenseCube<_Scalar, _layout> getColPages( const IndexRange rowrange ) noexcept;
+  inline const DenseCube<_Scalar, _layout> getColPages( const IndexRange rowrange ) const noexcept;
+  inline       DenseCube<_Scalar, _layout> getRowPages( const IndexRange colrange ) noexcept;
+  inline const DenseCube<_Scalar, _layout> getRowPages( const IndexRange colrange ) const noexcept;
 
   // Gets matrix block
-  inline DenseMatrix<_Scalar, _layout> getPage( const index_t pageidx ) noexcept;
-  inline DenseMatrix<_Scalar, _layout> getCols( const index_t pageidx, const IndexRange rowrange ) noexcept;
-  inline DenseMatrix<_Scalar, _layout> getRows( const index_t pageidx, const IndexRange colrange ) noexcept;
-  inline DenseMatrix<_Scalar, _layout> getBlock( const index_t pageidx, const IndexRange rowrange,
-                                                                        const IndexRange colrange ) noexcept;
-  inline DenseMatrix<_Scalar, _layout> unfold() noexcept;
+  inline       DenseMatrix<_Scalar, _layout> getPage( const index_t pageidx ) noexcept;
+  inline const DenseMatrix<_Scalar, _layout> getPage( const index_t pageidx ) const noexcept;
+  inline       DenseMatrix<_Scalar, _layout> getCols( const index_t pageidx, const IndexRange rowrange ) noexcept;
+  inline const DenseMatrix<_Scalar, _layout> getCols( const index_t pageidx, const IndexRange rowrange ) const noexcept;
+  inline       DenseMatrix<_Scalar, _layout> getRows( const index_t pageidx, const IndexRange colrange ) noexcept;
+  inline const DenseMatrix<_Scalar, _layout> getRows( const index_t pageidx, const IndexRange colrange ) const noexcept;
+  inline       DenseMatrix<_Scalar, _layout> getBlock( const index_t pageidx, const IndexRange rowrange,
+                                                                              const IndexRange colrange ) noexcept;
+  inline const DenseMatrix<_Scalar, _layout> getBlock( const index_t pageidx, const IndexRange rowrange,
+                                                                              const IndexRange colrange ) const noexcept;
+  inline       DenseMatrix<_Scalar, _layout> unfold() noexcept;
+  inline const DenseMatrix<_Scalar, _layout> unfold() const noexcept;
 
   // Gets vector segment
-  inline DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx ) noexcept;
-  inline DenseVector<_Scalar> getColSegment( const index_t colidx, const index_t pageidx, const IndexRange rowrange ) noexcept;
-  inline DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx ) noexcept;
-  inline DenseVector<_Scalar> getRowSegment( const index_t rowidx, const index_t pageidx, const IndexRange colrange ) noexcept;
-  inline DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx ) noexcept;
-  inline DenseVector<_Scalar> getTubeSegment( const index_t rowidx, const index_t colidx, const IndexRange pagerange ) noexcept;
-  inline DenseVector<_Scalar> getDiagonal( const index_t pageidx, const index_t idx ) noexcept;
+  inline       DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx ) noexcept;
+  inline const DenseVector<_Scalar> getCol( const index_t colidx, const index_t pageidx ) const noexcept;
+  inline       DenseVector<_Scalar> getColSegment( const index_t colidx, const index_t pageidx,
+                                                   const IndexRange rowrange ) noexcept;
+  inline const DenseVector<_Scalar> getColSegment( const index_t colidx, const index_t pageidx,
+                                                   const IndexRange rowrange ) const noexcept;
+  inline       DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx ) noexcept;
+  inline const DenseVector<_Scalar> getRow( const index_t rowidx, const index_t pageidx ) const noexcept;
+  inline       DenseVector<_Scalar> getRowSegment( const index_t rowidx, const index_t pageidx,
+                                                   const IndexRange colrange ) noexcept;
+  inline const DenseVector<_Scalar> getRowSegment( const index_t rowidx, const index_t pageidx,
+                                                   const IndexRange colrange ) const noexcept;
+  inline       DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx ) noexcept;
+  inline const DenseVector<_Scalar> getTube( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline       DenseVector<_Scalar> getTubeSegment( const index_t rowidx, const index_t colidx,
+                                                    const IndexRange pagerange ) noexcept;
+  inline const DenseVector<_Scalar> getTubeSegment( const index_t rowidx, const index_t colidx,
+                                                    const IndexRange pagerange ) const noexcept;
+  inline       DenseVector<_Scalar> getDiagonal( const index_t pageidx, const index_t idx ) noexcept;
+  inline const DenseVector<_Scalar> getDiagonal( const index_t pageidx, const index_t idx ) const noexcept;
   inline DenseVector<_Scalar> vectorize() noexcept;
+  inline const DenseVector<_Scalar> vectorize() const noexcept;
 
  protected:
 

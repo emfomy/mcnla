@@ -24,12 +24,16 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The parameters of iSVD solver.
 ///
-/// @tparam  _RealScalar  The real scalar type type.
+/// @tparam  _Scalar  The scalar type type.
 ///
-template <typename _RealScalar>
+template <typename _Scalar>
 class Parameters {
 
   template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor> friend class Solver;
+
+ private:
+
+  using RealScalar = typename ScalarTraits<_Scalar>::RealType;
 
  public:
 
@@ -50,6 +54,9 @@ class Parameters {
   /// The tag shows if the solver is initialized or not.
   bool initialized_ = false;
 
+  /// The tag shows if the solver is computed or not.
+  bool computed_ = false;
+
   /// The number of rows of the matrix.
   index_t nrow_ = 0;
 
@@ -69,7 +76,7 @@ class Parameters {
   index_t max_iteration_ = 0;
 
   /// The tolerance of converge condition.
-  _RealScalar tolerance_ = 1e-4;
+  RealScalar tolerance_ = 1e-4;
 
   /// The number of random sketches per MPI node.
   index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
@@ -81,6 +88,7 @@ class Parameters {
 
   // Gets parameter
   inline bool isInitialized() const noexcept;
+  inline bool isComputed() const noexcept;
   inline index_t getNrow() const noexcept;
   inline index_t getNcol() const noexcept;
   inline index_t getRank() const noexcept;
@@ -89,7 +97,7 @@ class Parameters {
   inline index_t getNumSketch() const noexcept;
   inline index_t getNumSketchAll() const noexcept;
   inline index_t getMaxIteration() const noexcept;
-  inline _RealScalar getTolerance() const noexcept;
+  inline RealScalar getTolerance() const noexcept;
   inline const index_t* getSeed() const noexcept;
 };
 

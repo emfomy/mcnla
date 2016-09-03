@@ -23,26 +23,30 @@ int main( int argc, char **argv ) {
   isvd::blas::gemm<isvd::TransOption::NORMAL, isvd::TransOption::TRANS>(1.0, matA, matB, 2.0, matC);
 
 
-  // MPI_Init(&argc, &argv);
+  MPI_Init(&argc, &argv);
 
-  // isvd::Solver<isvd::DenseMatrix<double, isvd::Layout::ROWMAJOR>,
-  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double, isvd::Layout::ROWMAJOR>>,
-  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double, isvd::Layout::ROWMAJOR>>,
-  //              isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double, isvd::Layout::ROWMAJOR>>> solver(MPI_COMM_WORLD, 0);
+  isvd::Solver<isvd::DenseMatrix<double>,
+               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
+               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
+               isvd::StandardReconstructor<isvd::DenseMatrix<double>>> solver(MPI_COMM_WORLD, 0);
 
-  // isvd::index_t iseed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
-  // isvd::index_t m = 5, n = 10;
+  isvd::index_t iseed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
+  isvd::index_t m = 5, n = 10, k = 2, p = 1, N = 8;
 
-  // // Generate A
-  // isvd::DenseMatrix<double, isvd::Layout::ROWMAJOR> matrix_a(m, n);
-  // isvd::lapack::larnv<3>(matrix_a.vectorize(), iseed);
-  // std::cout << "A:\n" << matrix_a << std::endl;
+  // Generate A
+  isvd::DenseMatrix<double> matrix_a(m, n);
+  isvd::lapack::larnv<3>(matrix_a.vectorize(), iseed);
+  std::cout << "A:\n" << matrix_a << std::endl;
 
-  // solver.setSize(matrix_a).setRank(2).setOverRank(2).setNumSketch(8).setSeed(iseed);
+  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketch(N).setSeed(iseed);
 
-  // solver.initialize();
+  solver.initialize();
 
-  // solver.compute(matrix_a);
+  solver.compute(matrix_a);
 
-  // MPI_Finalize();
+  std::cout << "S:\n"  << solver.getSingularValues() << std::endl;
+  std::cout << "U:\n"  << solver.getLeftSingularVectors() << std::endl;
+  std::cout << "Vt:\n" << solver.getRightSingularVectors() << std::endl;
+
+  MPI_Finalize();
 }

@@ -88,7 +88,7 @@ DenseVector<_Scalar>::DenseVector(
   assert(data.getCapability() >= increment_ * length_);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 template <typename _Scalar>
@@ -97,7 +97,7 @@ DenseVector<_Scalar>::DenseVector( const DenseVector &other ) noexcept
     DenseBaseType(other),
     increment_(other.increment_) {}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <typename _Scalar>
@@ -108,7 +108,7 @@ DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
   other.increment_ = 1;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
@@ -119,7 +119,7 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other 
   return *this;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
 template <typename _Scalar>
@@ -134,7 +134,7 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noe
 template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vector ) {
   for ( auto i = 0; i < vector.length_; ++i ) {
-    out << std::setw(ios_width) << vector(i) << '\t';
+    out << std::setw(ios_width) << vector(i);
   }
   out << std::endl;
   return out;
@@ -204,6 +204,17 @@ template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IndexRange range
 ) noexcept {
+  assert(range.start >= 0 && range.end <= length_ && range.getLength() > 0);
+  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getSegment
+///
+template <typename _Scalar>
+const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
+    const IndexRange range
+) const noexcept {
   assert(range.start >= 0 && range.end <= length_ && range.getLength() > 0);
   return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start));
 }

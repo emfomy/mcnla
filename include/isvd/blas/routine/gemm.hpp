@@ -65,9 +65,9 @@ inline void gemm(
   const TransOption transa = isRowMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
   const TransOption transb = isRowMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
 
-  assert(c.getNcol()                   == b.template getNcol<_transb>());
   assert(c.getNrow()                   == a.template getNrow<_transa>());
-  assert(b.template getNrow<_transb>() == a.template getNcol<_transa>());
+  assert(c.getNcol()                   == b.template getNcol<_transb>());
+  assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
 
   gemm(TransChar<transb, _Scalar>::value, TransChar<transa, _Scalar>::value,
        c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),

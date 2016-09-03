@@ -49,10 +49,10 @@ class GesvdDriver {
  protected:
 
   /// The number of rows.
-  const index_t nrow_;
+  index_t nrow_;
 
   /// The number of columns.
-  const index_t ncol_;
+  index_t ncol_;
 
   /// The workspace.
   VectorType work_;
@@ -63,12 +63,20 @@ class GesvdDriver {
  public:
 
   // Constructors
+  GesvdDriver() noexcept;
   GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
   GesvdDriver( const _Matrix &a ) noexcept;
 
   // Operators
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
   inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
+
+  // Resizes
+  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
+  inline void resize( const _Matrix &a ) noexcept;
+
+  // Get sizes
+  inline std::pair<index_t, index_t> getSizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;

@@ -54,6 +54,7 @@ class MatrixBase {
   // Constructors
   MatrixBase() noexcept;
   MatrixBase( const index_t nrow, const index_t ncol ) noexcept;
+  MatrixBase( const std::pair<index_t, index_t> sizes ) noexcept;
   MatrixBase( const MatrixBase &other ) noexcept;
   MatrixBase( MatrixBase &&other ) noexcept;
 

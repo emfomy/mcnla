@@ -47,7 +47,7 @@ class SyevDriver {
  protected:
 
   /// The dimension.
-  const index_t dim_;
+  index_t dim_;
 
   /// The workspace.
   VectorType work_;
@@ -58,12 +58,20 @@ class SyevDriver {
  public:
 
   // Constructor
+  SyevDriver() noexcept;
   SyevDriver( const index_t dim ) noexcept;
   SyevDriver( const _Matrix &a ) noexcept;
 
   // Operators
   template <class _TypeA, class _TypeW>
   inline void operator()( _TypeA &&a, _TypeW &&w ) noexcept;
+
+  // Resizes
+  inline void resize( const index_t dim ) noexcept;
+  inline void resize( const _Matrix &a ) noexcept;
+
+  // Get sizes
+  inline index_t getSizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;

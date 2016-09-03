@@ -27,7 +27,7 @@ namespace blas {
 //@{
 template <typename _Scalar>
 inline void scal(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const _Scalar alpha,
           DenseVector<_Scalar> &x
 ) noexcept {
   internal::scal(x.getLength(), alpha, x.getValue(), x.getIncrement());
@@ -35,7 +35,7 @@ inline void scal(
 
 template <typename _Scalar>
 inline void scal(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const _Scalar alpha,
           DenseVector<_Scalar> &&x
 ) noexcept {
   scal(alpha, x);

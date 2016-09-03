@@ -57,6 +57,7 @@ class CubeBase {
   // Constructors
   CubeBase() noexcept;
   CubeBase( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
+  CubeBase( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
   CubeBase( const CubeBase &other ) noexcept;
   CubeBase( CubeBase &&other ) noexcept;
 

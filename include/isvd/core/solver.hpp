@@ -40,14 +40,12 @@ class Solver {
 
   using ScalarType      = typename _Matrix::ScalarType;
   using RealScalarType  = typename _Matrix::RealScalarType;
-  using DenseVectorType = isvd::DenseVector<ScalarType>;
-  using DenseMatrixType = isvd::DenseMatrix<ScalarType, Layout::ROWMAJOR>;
-  using DenseCubeType   = isvd::DenseCube<ScalarType, Layout::ROWMAJOR>;
+  using ParametersType  = internal::Parameters<ScalarType>;
 
  protected:
 
   /// The parameters.
-  internal::Parameters<RealScalarType> parameters_;
+  ParametersType parameters_;
 
   /// @copydoc  isvd::internal::Parameters::mpi_comm
   const MPI_Comm &mpi_comm_ = parameters_.mpi_comm;
@@ -68,10 +66,31 @@ class Solver {
   _Integrator integrator_;
 
   /// The reconstructor.
-  _Sketcher reconstructor_;
+  _Reconstructor reconstructor_;
+
+  /// The matrix Qc.
+  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
 
   /// The cube Q.
-  DenseCubeType cube_q_;
+  DenseCube<ScalarType, Layout::ROWMAJOR> cube_q_;
+
+  /// The vector S.
+  DenseVector<RealScalarType> vector_s_;
+
+  /// The vector Sl.
+  DenseVector<RealScalarType> vector_sl_;
+
+  /// The matrix U.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_;
+
+  /// The matrix Ul.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_ul_;
+
+  /// The matrix Vt.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_;
+
+  /// The matrix Vlt.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vlt_;
 
  public:
 
@@ -84,8 +103,13 @@ class Solver {
   // Compute
   void compute( const _Matrix &matrix ) noexcept;
 
+  // Gets matrices
+  inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectors() const noexcept;
+
   // Gets value
-  const internal::Parameters<RealScalarType>& getParameters() const noexcept;
+  inline const ParametersType& getParameters() const noexcept;
 
   // Sets value
   inline Solver& setSize( const index_t nrow, const index_t ncol ) noexcept;

@@ -30,7 +30,7 @@ inline void copy(
     const DenseVector<_Scalar> &x,
           DenseVector<_Scalar> &y
 ) noexcept {
-  assert(y.getSizes() == x.getSizes());
+  assert(x.getSizes() == y.getSizes());
   internal::copy(x.getLength(), x.getValue(), x.getIncrement(), y.getValue(), y.getIncrement());
 }
 
@@ -40,6 +40,42 @@ inline void copy(
           DenseVector<_Scalar> &&y
 ) noexcept {
   copy(x, y);
+}
+
+template <typename _Scalar, Layout _layout>
+inline void copy(
+    const DenseMatrix<_Scalar, _layout> &x,
+          DenseMatrix<_Scalar, _layout> &y
+) noexcept {
+  assert(x.getSizes() == y.getSizes() && y.getPitch() == x.getPitch());
+  copy(x.vectorize(), y.vectorize());
+}
+
+template <typename _Scalar, Layout _layout>
+inline void copy(
+    const DenseMatrix<_Scalar, _layout> &x,
+          DenseMatrix<_Scalar, _layout> &&y
+) noexcept {
+  assert(x.getSizes() == y.getSizes() && y.getPitch() == x.getPitch());
+  copy(x.vectorize(), y.vectorize());
+}
+
+template <typename _Scalar, Layout _layout>
+inline void copy(
+    const DenseCube<_Scalar, _layout> &x,
+          DenseCube<_Scalar, _layout> &y
+) noexcept {
+  assert(x.getSizes() == y.getSizes() && y.getPitch1() == x.getPitch1() &&  y.getPitch2() == x.getPitch2());
+  copy(x.vectorize(), y.vectorize());
+}
+
+template <typename _Scalar, Layout _layout>
+inline void copy(
+    const DenseCube<_Scalar, _layout> &x,
+          DenseCube<_Scalar, _layout> &&y
+) noexcept {
+  assert(x.getSizes() == y.getSizes() && y.getPitch1() == x.getPitch1() &&  y.getPitch2() == x.getPitch2());
+  copy(x.vectorize(), y.vectorize());
 }
 //@}
 

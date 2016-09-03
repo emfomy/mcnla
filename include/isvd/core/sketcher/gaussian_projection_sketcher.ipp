@@ -9,62 +9,60 @@
 #define ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_
 
 #include <isvd/core/sketcher/gaussian_projection_sketcher.hpp>
-#include <isvd/blas.hpp>
-#include <isvd/lapack.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given parameters.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::internal::SketcherBase::SketcherBase
 ///
 template <class _Matrix>
 GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
-    const internal::Parameters<RealScalarType> &parameters
+    const internal::Parameters<ScalarType> &parameters
 ) noexcept : BaseType(parameters) {}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Initializes.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::internal::SketcherBase::initialize
 ///
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
 
-  if ( matrix_omega_.getNrow() != parameters_.getNcol() ||
-       matrix_omega_.getNcol() != parameters_.getDimSketch() ) {
-    matrix_omega_ = DenseMatrixType(parameters_.getNcol(), parameters_.getDimSketch());
+  const auto matrix_omega_sizes = std::make_pair(parameters_.getNcol(), parameters_.getDimSketch());
+  if ( matrix_omega_.getSizes() != matrix_omega_sizes ) {
+    matrix_omega_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_omega_sizes);
   }
 
-  if ( vector_s_.getLength() != parameters_.getDimSketch() ) {
-    vector_s_ = DenseVectorType(parameters_.getDimSketch());
+  const auto vector_s_sizes = parameters_.getDimSketch();
+  if ( vector_s_.getSizes() != vector_s_sizes ) {
+    vector_s_ = DenseVector<RealScalarType>(vector_s_sizes);
+  }
+
+  const auto gesvd_sizes = std::make_pair(parameters_.getNrow(), parameters_.getDimSketch());
+  if ( gesvd_driver_.getSizes() != gesvd_sizes ) {
+    gesvd_driver_.resize(gesvd_sizes);
   }
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Random sketches.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::internal::SketcherBase::sketch
 ///
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::sketchImpl(
     const _Matrix &matrix_a,
-          DenseCubeType &cube_q
+          DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q
 ) noexcept {
   assert(parameters_.isInitialized());
-  assert(matrix_a.getNcol() == matrix_omega_.getNrow());
-  assert(cube_q.getNrow()   == matrix_a.getNrow());
-  assert(cube_q.getNcol()   == matrix_omega_.getNcol());
-  assert(cube_q.getNpage()  == parameters_.getNumSketch());
-
-  lapack::GesvdDriver<_Matrix, 'O', 'N'> gesvd_driver(cube_q.getPage(0));
-  _Matrix matrix_empty;
+  assert(matrix_a.getSizes() == std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
+  assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(), parameters_.getNumSketch()));
 
   for ( auto i = 0; i < parameters_.getNumSketch(); ++i ) {
     lapack::larnv<3>(matrix_omega_.vectorize(), parameters_.getSeed());
-    blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, matrix_a, matrix_omega_, 0.0, cube_q.getPage(i));
-    gesvd_driver(cube_q.getPage(i), vector_s_, matrix_empty, matrix_empty);
+    blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, cube_q.getPage(i));
+    gesvd_driver_(cube_q.getPage(i), vector_s_, matrix_empty_, matrix_empty_);
   }
-  #pragma warning "todo"
 }
 
 }  // namespace isvd

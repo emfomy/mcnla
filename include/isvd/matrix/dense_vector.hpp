@@ -102,7 +102,8 @@ class DenseVector
   inline void resize( const index_t length ) noexcept;
 
   // Gets segment
-  inline DenseVector<_Scalar> getSegment( const IndexRange range ) noexcept;
+  inline       DenseVector<_Scalar> getSegment( const IndexRange range ) noexcept;
+  inline const DenseVector<_Scalar> getSegment( const IndexRange range ) const noexcept;
 
  protected:
 

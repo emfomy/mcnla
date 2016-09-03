@@ -23,8 +23,8 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
 ///
-template <typename _RealScalar>
-Parameters<_RealScalar>::Parameters( const MPI_Comm comm, const index_t root ) noexcept
+template <typename _Scalar>
+Parameters<_Scalar>::Parameters( const MPI_Comm comm, const index_t root ) noexcept
   : mpi_comm(comm),
     mpi_size(mpi::getCommSize(comm)),
     mpi_rank(mpi::getCommRank(comm)),
@@ -33,68 +33,74 @@ Parameters<_RealScalar>::Parameters( const MPI_Comm comm, const index_t root ) n
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Check if the solver is initialized.
 ///
-template <typename _RealScalar>
-bool Parameters<_RealScalar>::isInitialized() const noexcept { return initialized_; }
+template <typename _Scalar>
+bool Parameters<_Scalar>::isInitialized() const noexcept { return initialized_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Check if the solver is computed.
+///
+template <typename _Scalar>
+bool Parameters<_Scalar>::isComputed() const noexcept { return computed_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix.
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getNrow() const noexcept { return nrow_; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getNrow() const noexcept { return nrow_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of column of the matrix.
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getNcol() const noexcept { return ncol_; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getNcol() const noexcept { return ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the desired rank of approximate SVD.
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getRank() const noexcept { return rank_; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getRank() const noexcept { return rank_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the oversampling dimension.
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getOverRank() const noexcept { return over_rank_; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getOverRank() const noexcept { return over_rank_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the dimension of random sketches.
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getDimSketch() const noexcept { return rank_ + over_rank_; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getDimSketch() const noexcept { return rank_ + over_rank_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches per MPI node.
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getNumSketch() const noexcept { return num_sketch_; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getNumSketch() const noexcept { return num_sketch_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches of all MPI nodes.
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getNumSketchAll() const noexcept { return num_sketch_ * mpi_size; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getNumSketchAll() const noexcept { return num_sketch_ * mpi_size; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the maximum iteration
 ///
-template <typename _RealScalar>
-index_t Parameters<_RealScalar>::getMaxIteration() const noexcept { return max_iteration_; }
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getMaxIteration() const noexcept { return max_iteration_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the tolerance of converge condition.
 ///
-template <typename _RealScalar>
-_RealScalar Parameters<_RealScalar>::getTolerance() const noexcept { return tolerance_; }
+template <typename _Scalar>
+typename Parameters<_Scalar>::RealScalar Parameters<_Scalar>::getTolerance() const noexcept { return tolerance_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the random seed.
 ///
-template <typename _RealScalar>
-const index_t* Parameters<_RealScalar>::getSeed() const noexcept { return seed_; }
+template <typename _Scalar>
+const index_t* Parameters<_Scalar>::getSeed() const noexcept { return seed_; }
 
 }  // namespace internal
 

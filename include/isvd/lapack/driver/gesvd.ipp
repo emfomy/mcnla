@@ -21,6 +21,16 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver() noexcept
+  : nrow_(0),
+    ncol_(0),
+    work_(),
+    rwork_() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
@@ -50,6 +60,40 @@ GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
 template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept {
   compute(a, s, u, vt);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resize the driver
+///
+template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+void GesvdDriver<_Matrix, _jobu, _jobvt>::resize(
+    const index_t nrow, const index_t ncol
+) noexcept {
+  assert(nrow > 0 && ncol > 0);
+  nrow_ = nrow;
+  ncol_ = ncol;
+  work_ = VectorType(query(nrow, ncol));
+  if ( is_real ) {
+    rwork_ = RealVectorType(5 * std::min(nrow, ncol));
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  resize
+///
+template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+void GesvdDriver<_Matrix, _jobu, _jobvt>::resize(
+    const _Matrix &a
+) noexcept {
+  resize(a.getNrow(), a.getNcol());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+std::pair<index_t, index_t> GesvdDriver<_Matrix, _jobu, _jobvt>::getSizes() const noexcept {
+  return std::make_pair(nrow_, ncol_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +142,7 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
     _Matrix &u,
     _Matrix &vt
 ) noexcept {
+  assert(nrow_ > 0 && ncol_ > 0);
   assert(a.getSizes() == std::make_pair(nrow_, ncol_));
 
   if ( _jobu == 'A' ) {

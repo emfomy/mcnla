@@ -1,24 +1,24 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/sketcher/gaussian_projection_sketcher.hpp
-/// @brief   The Gaussian projection sketcher.
+/// @file    include/isvd/core/reconstructor/standard_reconstructor.hpp
+/// @brief   The standard reconstructor.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
-#define ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
+#ifndef ISVD_CORE_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
+#define ISVD_CORE_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
 
 #include <isvd/isvd.hpp>
 #include <isvd/blas.hpp>
 #include <isvd/lapack.hpp>
-#include <isvd/core/sketcher_base.hpp>
+#include <isvd/core/reconstructor_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
 
-template <class _Matrix> class GaussianProjectionSketcher;
+template <class _Matrix> class StandardReconstructor;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
@@ -26,12 +26,12 @@ template <class _Matrix> class GaussianProjectionSketcher;
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gaussian projection sketcher traits.
+/// The Gaussian projection reconstructor traits.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<GaussianProjectionSketcher<_Matrix>> {
+struct Traits<StandardReconstructor<_Matrix>> {
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
@@ -40,18 +40,18 @@ struct Traits<GaussianProjectionSketcher<_Matrix>> {
 }  // namespace internal
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of iSVD sketcher.
+/// The interface of iSVD reconstructor.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProjectionSketcher<_Matrix>> {
+class StandardReconstructor : public internal::ReconstructorBase<StandardReconstructor<_Matrix>> {
 
-  friend internal::SketcherBase<GaussianProjectionSketcher<_Matrix>>;
+  friend internal::ReconstructorBase<StandardReconstructor<_Matrix>>;
 
  private:
 
-  using BaseType = internal::SketcherBase<GaussianProjectionSketcher<_Matrix>>;
+  using BaseType = internal::ReconstructorBase<StandardReconstructor<_Matrix>>;
 
  public:
 
@@ -66,33 +66,34 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
   /// The parameters.
   const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
-  /// The matrix Omega.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_omega_;
+  /// The matrix W.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;
 
-  /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
-
-  /// The GESVD driver
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
+  /// The GESVD driver.
+  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::COLMAJOR>, 'S', 'O'> gesvd_driver_;
 
   /// The empty matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_empty_;
 
  public:
 
   // Constructor
-  GaussianProjectionSketcher( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  StandardReconstructor( const internal::Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 
   // Initializes
   void initializeImpl() noexcept;
 
-  // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
+  // Reconstructs
+  void reconstructImpl( const _Matrix &matrix_a,
+                        const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_q,
+                              DenseVector<RealScalarType> &vector_s,
+                              DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_u,
+                              DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_vt ) noexcept;
 
 };
 
 }  // namespace isvd
 
-#endif  // ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
+#endif  // ISVD_CORE_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_

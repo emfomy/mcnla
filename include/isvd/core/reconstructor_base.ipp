@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/sketcher_base.ipp
-/// @brief   The implementation of iSVD sketcher interface.
+/// @file    include/isvd/core/reconstructor_base.ipp
+/// @brief   The implementation of iSVD reconstructor interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_CORE_SKETCHER_BASE_IPP_
-#define ISVD_CORE_SKETCHER_BASE_IPP_
+#ifndef ISVD_CORE_RECONSTRUCTOR_BASE_IPP_
+#define ISVD_CORE_RECONSTRUCTOR_BASE_IPP_
 
-#include <isvd/core/sketcher_base.hpp>
+#include <isvd/core/reconstructor_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -24,7 +24,7 @@ namespace internal {
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-SketcherBase<_Derived>::SketcherBase(
+ReconstructorBase<_Derived>::ReconstructorBase(
     const internal::Parameters<ScalarType> &parameters
 ) noexcept : parameters_(parameters) {}
 
@@ -32,19 +32,22 @@ SketcherBase<_Derived>::SketcherBase(
 /// @brief  Initializes.
 ///
 template <class _Derived>
-void SketcherBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
+void ReconstructorBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Random sketches.
+/// @brief  Reconstructs SVD.
 ///
 template <class _Derived>
-void SketcherBase<_Derived>::sketch(
+void ReconstructorBase<_Derived>::reconstruct(
     const MatrixType &matrix_a,
-          DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q
-) noexcept { this->derived().sketchImpl(matrix_a, cube_q); }
+    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_q,
+          DenseVector<RealScalarType> &vector_s,
+          DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_u,
+          DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_vt
+) noexcept { this->derived().reconstructImpl(matrix_a, matrix_q, vector_s, matrix_u, matrix_vt); }
 
 }  // namespace internal
 
 }  // namespace isvd
 
-#endif  // ISVD_CORE_SKETCHER_BASE_IPP_
+#endif  // ISVD_CORE_RECONSTRUCTOR_BASE_IPP_

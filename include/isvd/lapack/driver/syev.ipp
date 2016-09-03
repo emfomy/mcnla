@@ -21,6 +21,15 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <class _Matrix, JobOption _jobz, UploOption _uplo>
+SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver() noexcept
+  : dim_(0),
+    work_(),
+    rwork_() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo>
@@ -51,6 +60,38 @@ template <class _Matrix, JobOption _jobz, UploOption _uplo> template <class _Typ
 void SyevDriver<_Matrix, _jobz, _uplo>::operator()( _TypeA &&a, _TypeW &&w ) noexcept {
   compute(a, w);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resizes the driver
+///
+template <class _Matrix, JobOption _jobz, UploOption _uplo>
+void SyevDriver<_Matrix, _jobz, _uplo>::resize(
+    const index_t dim
+) noexcept {
+  assert(dim_ > 0);
+  dim_ = dim;
+  work_ = VectorType(dim);
+  if ( is_real ) {
+    rwork_ = RealVectorType(3*dim);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  resize
+///
+template <class _Matrix, JobOption _jobz, UploOption _uplo>
+void SyevDriver<_Matrix, _jobz, _uplo>::resize(
+    const _Matrix &a
+) noexcept {
+  assert(a.getNrow() == a.getNcol());
+  resize(a.getNrow());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Matrix, JobOption _jobz, UploOption _uplo>
+index_t SyevDriver<_Matrix, _jobz, _uplo>::getSizes() const noexcept { return dim_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the workspace
@@ -94,6 +135,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
     _Matrix &a,
     RealVectorType &w
 ) noexcept {
+  assert(dim_ > 0);
   assert(a.getSizes() == std::make_pair(dim_, dim_));
   assert(w.getLength() == a.getNrow());
 
