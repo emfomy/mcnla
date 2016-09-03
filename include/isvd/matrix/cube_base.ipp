@@ -116,6 +116,14 @@ index_t CubeBase<_Derived>::getNpage() const noexcept { return npage_; }
 template <class _Derived>
 index_t CubeBase<_Derived>::getSize() const noexcept { return nrow_ * ncol_ * npage_; }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::tuple<index_t, index_t, index_t> CubeBase<_Derived>::getSizes() const noexcept {
+  return std::make_tuple(nrow_, ncol_, npage_);
+}
+
 }  // namespace internal
 
 }  // namespace isvd

@@ -42,6 +42,9 @@ class Parameters {
   /// The MPI rank.
   const index_t mpi_rank;
 
+  /// The MPI root.
+  const index_t mpi_root;
+
  protected:
 
   /// The tag shows if the solver is initialized or not.
@@ -74,7 +77,7 @@ class Parameters {
  public:
 
   // Constructors
-  Parameters( const MPI_Comm comm ) noexcept;
+  Parameters( const MPI_Comm comm, const index_t root ) noexcept;
 
   // Gets parameter
   inline bool isInitialized() const noexcept;
@@ -87,7 +90,7 @@ class Parameters {
   inline index_t getNumSketchAll() const noexcept;
   inline index_t getMaxIteration() const noexcept;
   inline _RealScalar getTolerance() const noexcept;
-  inline index_t* getSeed() const noexcept;
+  inline const index_t* getSeed() const noexcept;
 };
 
 }  // namespace internal

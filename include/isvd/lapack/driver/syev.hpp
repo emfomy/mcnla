@@ -25,7 +25,7 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::lapack::internal::gesv
+/// @copydoc  isvd::lapack::internal::syev
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
@@ -42,7 +42,7 @@ class SyevDriver {
   using RealVectorType = typename _Matrix::RealVectorType;
   static const bool is_real = isvd::internal::ScalarTraits<ScalarType>::is_real;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
  protected:
 

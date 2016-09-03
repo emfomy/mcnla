@@ -86,6 +86,12 @@ index_t VectorBase<_Derived>::getLength() const noexcept { return length_; }
 template <class _Derived>
 index_t VectorBase<_Derived>::getSize() const noexcept { return length_; }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+index_t VectorBase<_Derived>::getSizes() const noexcept { return length_; }
+
 }  // namespace internal
 
 }  // namespace isvd

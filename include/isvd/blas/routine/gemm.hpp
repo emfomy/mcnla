@@ -22,47 +22,89 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The internal namespace
+//
+namespace internal {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::blas::internal::gemm
+///
+//@{
+template <TransOption _transa = TransOption::NORMAL,
+          TransOption _transb = TransOption::NORMAL,
+          typename _Scalar, Layout _layouta, Layout _layoutb>
+inline void gemm(
+    const _Scalar alpha,
+    const DenseMatrix<_Scalar, _layouta> &a,
+    const DenseMatrix<_Scalar, _layoutb> &b,
+    const _Scalar beta,
+          DenseMatrix<_Scalar, Layout::COLMAJOR> &c
+) noexcept {
+  const TransOption transa = isColMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
+  const TransOption transb = isColMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
+
+  assert(c.getNrow()                   == a.template getNrow<_transa>());
+  assert(c.getNcol()                   == b.template getNcol<_transb>());
+  assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
+
+  gemm(TransChar<transa, _Scalar>::value, TransChar<transb, _Scalar>::value,
+       c.getNrow(), c.getNcol(), a.template getNcol<_transa>(),
+       alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(), beta, c.getValue(), c.getPitch());
+}
+
+template <TransOption _transa = TransOption::NORMAL,
+          TransOption _transb = TransOption::NORMAL,
+          typename _Scalar, Layout _layouta, Layout _layoutb>
+inline void gemm(
+    const _Scalar alpha,
+    const DenseMatrix<_Scalar, _layouta> &a,
+    const DenseMatrix<_Scalar, _layoutb> &b,
+    const _Scalar beta,
+          DenseMatrix<_Scalar, Layout::ROWMAJOR> &c
+) noexcept {
+  const TransOption transa = isRowMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
+  const TransOption transb = isRowMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
+
+  assert(c.getNcol()                   == b.template getNcol<_transb>());
+  assert(c.getNrow()                   == a.template getNrow<_transa>());
+  assert(b.template getNrow<_transb>() == a.template getNcol<_transa>());
+
+  gemm(TransChar<transb, _Scalar>::value, TransChar<transa, _Scalar>::value,
+       c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),
+       alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
+}
+//@}
+
+}  // namespace internal
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  isvd::blas::internal::gemm
 ///
 //@{
 template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL, typename _Scalar, Layout _layout>
+          TransOption _transb = isvd::TransOption::NORMAL,
+          typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
-    const DenseMatrix<_Scalar, _layout> &a,
-    const DenseMatrix<_Scalar, _layout> &b,
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &c
+    const _Scalar alpha,
+    const DenseMatrix<_Scalar, _layouta> &a,
+    const DenseMatrix<_Scalar, _layoutb> &b,
+    const _Scalar beta,
+          DenseMatrix<_Scalar, _layoutc> &c
 ) noexcept {
-  if ( isColMajor(_layout) ) {
-    assert(c.getNrow() == a.template getNrow<_transa>());
-    assert(c.getNcol() == b.template getNcol<_transb>());
-    assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
-    internal::gemm(TransChar<_transa, _Scalar>::value, TransChar<_transb, _Scalar>::value,
-                   c.getNrow(), c.getNcol(), a.template getNcol<_transa>(),
-                   alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(),
-                   beta, c.getValue(), c.getPitch());
-  } else {
-    assert(c.getNcol() == b.template getNcol<_transb>());
-    assert(c.getNrow() == a.template getNrow<_transa>());
-    assert(b.template getNrow<_transb>() == a.template getNcol<_transa>());
-    internal::gemm(TransChar<_transb, _Scalar>::value, TransChar<_transa, _Scalar>::value,
-                   c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),
-                   alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(),
-                   beta, c.getValue(), c.getPitch());
-  }
+  internal::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 
 template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL, typename _Scalar, Layout _layout>
+          TransOption _transb = isvd::TransOption::NORMAL,
+          typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
-    const DenseMatrix<_Scalar, _layout> &a,
-    const DenseMatrix<_Scalar, _layout> &b,
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &&c
+    const _Scalar alpha,
+    const DenseMatrix<_Scalar, _layouta> &a,
+    const DenseMatrix<_Scalar, _layoutb> &b,
+    const _Scalar beta,
+          DenseMatrix<_Scalar, _layoutc> &&c
 ) noexcept {
-  gemm<_transa, _transb>(alpha, a, b, beta, c);
+  internal::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 //@}
 

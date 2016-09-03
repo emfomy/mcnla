@@ -24,10 +24,11 @@ namespace internal {
 /// @brief  Default constructor
 ///
 template <typename _RealScalar>
-Parameters<_RealScalar>::Parameters( const MPI_Comm comm ) noexcept
+Parameters<_RealScalar>::Parameters( const MPI_Comm comm, const index_t root ) noexcept
   : mpi_comm(comm),
     mpi_size(mpi::getCommSize(comm)),
-    mpi_rank(mpi::getCommRank(comm)) {}
+    mpi_rank(mpi::getCommRank(comm)),
+    mpi_root(root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Check if the solver is initialized.
@@ -93,7 +94,7 @@ _RealScalar Parameters<_RealScalar>::getTolerance() const noexcept { return tole
 /// @brief  Gets the random seed.
 ///
 template <typename _RealScalar>
-index_t* Parameters<_RealScalar>::getSeed() const noexcept { return seed_; }
+const index_t* Parameters<_RealScalar>::getSeed() const noexcept { return seed_; }
 
 }  // namespace internal
 

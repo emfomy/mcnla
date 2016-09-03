@@ -98,18 +98,18 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
     _Matrix &u,
     _Matrix &vt
 ) noexcept {
-  assert(a.getNrow() == nrow_ && a.getNcol() == ncol_);
+  assert(a.getSizes() == std::make_pair(nrow_, ncol_));
 
   if ( _jobu == 'A' ) {
-    assert(u.getNrow() == nrow_ && u.getNcol() == nrow_);
+    assert(u.getSizes() == std::make_pair(nrow_, nrow_));
   } else if ( _jobu == 'S' ) {
-    assert(u.getNrow() == nrow_ && u.getNcol() == std::min(nrow_, ncol_));
+    assert(u.getSizes() == std::make_pair(nrow_, std::min(nrow_, ncol_)));
   }
 
   if ( _jobvt == 'A' ) {
-    assert(vt.getNcol() == ncol_ && vt.getNrow() == ncol_);
+    assert(u.getSizes() == std::make_pair(ncol_, ncol_));
   } else if ( _jobvt == 'S' ) {
-    assert(vt.getNcol() == ncol_ && vt.getNrow() == std::min(nrow_, ncol_));
+    assert(vt.getSizes() == std::make_pair(std::min(nrow_, ncol_), ncol_));
   }
 
   if ( isColMajor(layout) ) {

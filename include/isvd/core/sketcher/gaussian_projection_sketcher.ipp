@@ -31,8 +31,14 @@ GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
 
-  matrix_omega_ = DenseMatrixType(parameters_.getNrow(), parameters_.getDimSketch());
-  matrix_tau_   = DenseVectorType(parameters_.getDimSketch());
+  if ( matrix_omega_.getNrow() != parameters_.getNcol() ||
+       matrix_omega_.getNcol() != parameters_.getDimSketch() ) {
+    matrix_omega_ = DenseMatrixType(parameters_.getNcol(), parameters_.getDimSketch());
+  }
+
+  if ( vector_s_.getLength() != parameters_.getDimSketch() ) {
+    vector_s_ = DenseVectorType(parameters_.getDimSketch());
+  }
 
 }
 
@@ -46,19 +52,17 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 ) noexcept {
   assert(parameters_.isInitialized());
   assert(matrix_a.getNcol() == matrix_omega_.getNrow());
-  assert(cube_q.getNrow() == matrix_a.getNrow());
-  assert(cube_q.getNcol() == matrix_omega_.getNcol());
-  assert(cube_q.getNpage() == parameters_.getNumSketch());
+  assert(cube_q.getNrow()   == matrix_a.getNrow());
+  assert(cube_q.getNcol()   == matrix_omega_.getNcol());
+  assert(cube_q.getNpage()  == parameters_.getNumSketch());
+
+  lapack::GesvdDriver<_Matrix, 'O', 'N'> gesvd_driver(cube_q.getPage(0));
+  _Matrix matrix_empty;
 
   for ( auto i = 0; i < parameters_.getNumSketch(); ++i ) {
-    // LAPACKE_dlarnv(3, iseed, k*n, matrix_oit);
-    // cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans,
-    //             k, m0, n, 1.0, matrix_oit, k, matrix_a, m0, 0.0, matrices_qjt+i*k*m, k);
-    // LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m0, k, matrices_qjt+i*k*m, k, vector_tau);
-    // LAPACKE_dorgqr(LAPACK_ROW_MAJOR, m0, k, k, matrices_qjt+i*k*m, k, vector_tau);
-
-    lapack::larnv<3>(matrix_omega_, parameters_.getSeed());
-    blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, cube_q.getPage(i));
+    lapack::larnv<3>(matrix_omega_.vectorize(), parameters_.getSeed());
+    blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, matrix_a, matrix_omega_, 0.0, cube_q.getPage(i));
+    gesvd_driver(cube_q.getPage(i), vector_s_, matrix_empty, matrix_empty);
   }
   #pragma warning "todo"
 }

@@ -44,7 +44,7 @@ class GesvdDriver {
   using RealVectorType = typename _Matrix::RealVectorType;
   static const bool is_real = isvd::internal::ScalarTraits<ScalarType>::is_real;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
  protected:
 
@@ -66,7 +66,7 @@ class GesvdDriver {
   GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
   GesvdDriver( const _Matrix &a ) noexcept;
 
-  // OPerators
+  // Operators
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
   inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
 

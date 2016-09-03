@@ -94,7 +94,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
     _Matrix &a,
     RealVectorType &w
 ) noexcept {
-  assert(a.getNrow() == dim_ && a.getNcol() == dim_);
+  assert(a.getSizes() == std::make_pair(dim_, dim_));
   assert(w.getLength() == a.getNrow());
 
   assert(internal::syev(_jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),

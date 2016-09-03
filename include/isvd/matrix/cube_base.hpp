@@ -8,6 +8,7 @@
 #ifndef ISVD_MATRIX_CUBE_BASE_HPP_
 #define ISVD_MATRIX_CUBE_BASE_HPP_
 
+#include <tuple>
 #include <isvd/isvd.hpp>
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix/index_range.hpp>
@@ -68,6 +69,7 @@ class CubeBase {
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
   inline index_t getNpage() const noexcept;
   inline index_t getSize() const noexcept;
+  inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;
 
  protected:
 

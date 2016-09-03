@@ -58,6 +58,9 @@ class Solver {
   /// @copydoc  isvd::internal::Parameters::mpi_rank
   const index_t &mpi_rank_ = parameters_.mpi_rank;
 
+  /// @copydoc  isvd::internal::Parameters::mpi_root
+  const index_t &mpi_root_ = parameters_.mpi_root;
+
   /// The sketcher.
   _Sketcher sketcher_;
 
@@ -73,10 +76,13 @@ class Solver {
  public:
 
   // Constructor
-  Solver( const MPI_Comm mpi_comm ) noexcept;
+  Solver( const MPI_Comm mpi_comm, const index_t mpi_root ) noexcept;
 
   // Initializes
   void initialize() noexcept;
+
+  // Compute
+  void compute( const _Matrix &matrix ) noexcept;
 
   // Gets value
   const internal::Parameters<RealScalarType>& getParameters() const noexcept;

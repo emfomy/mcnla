@@ -53,7 +53,7 @@ class SketcherBase : public internal::CrtpBase<_Derived, SketcherBase<_Derived>>
   void initialize() noexcept;
 
   // Random sketches
-  inline void sketch( const MatrixType &matrix_a, DenseCubeType &cube_qj ) noexcept;
+  inline void sketch( const MatrixType &matrix_a, DenseCubeType &cube_q ) noexcept;
 
 };
 

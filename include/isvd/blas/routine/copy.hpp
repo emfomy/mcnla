@@ -30,7 +30,7 @@ inline void copy(
     const DenseVector<_Scalar> &x,
           DenseVector<_Scalar> &y
 ) noexcept {
-  assert(y.getLength() == x.getLength());
+  assert(y.getSizes() == x.getSizes());
   internal::copy(x.getLength(), x.getValue(), x.getIncrement(), y.getValue(), y.getIncrement());
 }
 

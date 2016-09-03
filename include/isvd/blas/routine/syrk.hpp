@@ -28,9 +28,9 @@ namespace blas {
 template <UploOption _uplo = UploOption::LOWER,
           TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
 inline void syrk(
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
+    const _Scalar alpha,
     const DenseMatrix<_Scalar, _layout> &a,
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
+    const _Scalar beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
   assert(c.getNrow() == c.getNcol());
@@ -50,9 +50,9 @@ inline void syrk(
 template <UploOption _uplo = UploOption::LOWER,
           TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
 inline void syrk(
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
+    const _Scalar alpha,
     const DenseMatrix<_Scalar, _layout> &a,
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
+    const _Scalar beta,
           DenseMatrix<_Scalar, _layout> &&c
 ) noexcept {
   syrk<_uplo, _trans>(alpha, a, beta, c);

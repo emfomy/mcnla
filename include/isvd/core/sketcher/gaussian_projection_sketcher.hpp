@@ -30,8 +30,9 @@ namespace internal {
 ///
 template <class _Matrix>
 struct Traits<GaussianProjectionSketcher<_Matrix>> {
-  using ScalarType = typename _Matrix::ScalarType;
-  using MatrixType = _Matrix;
+  using ScalarType     = typename _Matrix::ScalarType;
+  using RealScalarType = typename _Matrix::RealScalarType;
+  using MatrixType     = _Matrix;
 };
 
 }  // namespace internal
@@ -53,24 +54,25 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
  public:
 
   static const Layout layout = _Matrix::layout;
-  using ScalarType      = typename _Matrix::ScalarType;
-  using RealScalarType  = typename _Matrix::RealScalarType;
-  using DenseVectorType = isvd::DenseVector<ScalarType>;
-  using DenseMatrixType = isvd::DenseMatrix<ScalarType, Layout::ROWMAJOR>;
-  using DenseCubeType   = isvd::DenseCube<ScalarType, Layout::ROWMAJOR>;
+  using ScalarType          = typename _Matrix::ScalarType;
+  using RealScalarType      = typename _Matrix::RealScalarType;
+  using DenseVectorType     = isvd::DenseVector<ScalarType>;
+  using DenseRealVectorType = isvd::DenseVector<RealScalarType>;
+  using DenseMatrixType     = isvd::DenseMatrix<ScalarType, Layout::ROWMAJOR>;
+  using DenseCubeType       = isvd::DenseCube<ScalarType, Layout::ROWMAJOR>;
 
   static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
  protected:
 
   /// The number of random sketches per MPI node.
-  const internal::Parameters<RealScalarType> &parameters_;
+  const internal::Parameters<RealScalarType> &parameters_ = BaseType::parameters_;
 
   /// The matrix Omega.
   DenseMatrixType matrix_omega_;
 
-  /// The vector Tau.
-  DenseVectorType matrix_tau_;
+  /// The vector s.
+  DenseRealVectorType vector_s_;
 
  public:
 
@@ -83,7 +85,7 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
   void initializeImpl() noexcept;
 
   // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, DenseCubeType &cube_qj ) noexcept;
+  void sketchImpl( const _Matrix &matrix_a, DenseCubeType &cube_q ) noexcept;
 
 };
 

@@ -103,6 +103,12 @@ index_t MatrixBase<_Derived>::getNcol() const noexcept {
 template <class _Derived>
 index_t MatrixBase<_Derived>::getSize() const noexcept { return nrow_ * ncol_; }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::pair<index_t, index_t> MatrixBase<_Derived>::getSizes() const noexcept { return std::make_pair(nrow_, ncol_); }
+
 }  // namespace internal
 
 }  // namespace isvd

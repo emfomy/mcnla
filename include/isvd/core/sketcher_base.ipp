@@ -38,8 +38,8 @@ void SketcherBase<_Derived>::initialize() noexcept { this->derived().initializeI
 /// @brief  Random sketches.
 ///
 template <class _Derived>
-void SketcherBase<_Derived>::sketch( const MatrixType &matrix_a, DenseCubeType &cube_qj ) noexcept {
-  this->derived().sketchImpl(matrix_a, cube_qj);
+void SketcherBase<_Derived>::sketch( const MatrixType &matrix_a, DenseCubeType &cube_q ) noexcept {
+  this->derived().sketchImpl(matrix_a, cube_q);
 }
 
 }  // namespace internal
