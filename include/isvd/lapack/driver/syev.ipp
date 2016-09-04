@@ -62,6 +62,14 @@ void SyevDriver<_Matrix, _jobz, _uplo>::operator()( _TypeA &&a, _TypeW &&w ) noe
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Computes eigenvalues only.
+///
+template <class _Matrix, JobOption _jobz, UploOption _uplo> template <class _TypeA, class _TypeW>
+void SyevDriver<_Matrix, _jobz, _uplo>::computeValues( _TypeA &&a, _TypeW &&w ) noexcept {
+  compute<'N'>(a, w);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the driver
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo>
@@ -128,9 +136,10 @@ const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Ma
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the eigenvalue decomposition.
 ///
-/// @attention  MATRIX @p a WILL BE DESTORIED!
+/// @attention  The eigenvectors are Stored in columnwise for column-major storage, in rowwise for row-major storage.
+/// @attention  Matrix @p a will be destroyed!
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, UploOption _uplo> template <JobOption __jobz>
 void SyevDriver<_Matrix, _jobz, _uplo>::compute(
     _Matrix &a,
     RealVectorType &w
@@ -139,7 +148,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
   assert(a.getSizes() == std::make_pair(dim_, dim_));
   assert(w.getLength() == a.getNrow());
 
-  assert(internal::syev(_jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),
+  assert(internal::syev(__jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),
                         w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
 }
 

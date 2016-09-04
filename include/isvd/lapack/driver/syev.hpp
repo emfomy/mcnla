@@ -66,6 +66,10 @@ class SyevDriver {
   template <class _TypeA, class _TypeW>
   inline void operator()( _TypeA &&a, _TypeW &&w ) noexcept;
 
+  // Computes eigenvalues
+  template <class _TypeA, class _TypeW>
+  inline void computeValues( _TypeA &&a, _TypeW &&w ) noexcept;
+
   // Resizes
   inline void resize( const index_t dim ) noexcept;
   inline void resize( const _Matrix &a ) noexcept;
@@ -82,6 +86,7 @@ class SyevDriver {
  protected:
 
   // Computes
+  template <JobOption __jobz = _jobz>
   inline void compute( _Matrix &a, RealVectorType &w ) noexcept;
 
   // Queries

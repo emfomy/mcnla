@@ -25,8 +25,8 @@ namespace blas {
 /// @copydoc  isvd::blas::internal::syrk
 ///
 //@{
-template <UploOption _uplo = UploOption::LOWER,
-          TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
+template <TransOption _trans = TransOption::NORMAL,
+          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const _Scalar alpha,
     const DenseMatrix<_Scalar, _layout> &a,
@@ -47,15 +47,15 @@ inline void syrk(
   }
 }
 
-template <UploOption _uplo = UploOption::LOWER,
-          TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
+template <TransOption _trans = TransOption::NORMAL,
+          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const _Scalar alpha,
     const DenseMatrix<_Scalar, _layout> &a,
     const _Scalar beta,
           DenseMatrix<_Scalar, _layout> &&c
 ) noexcept {
-  syrk<_uplo, _trans>(alpha, a, beta, c);
+  syrk<_trans, _uplo>(alpha, a, beta, c);
 }
 //@}
 

@@ -45,7 +45,7 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     isvd::lapack::larnv<3>(matrix_a.vectorize(), seed);
   }
-  isvd::mpi::Bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
+  isvd::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
   if ( mpi_rank == mpi_root ) {
     std::cout << "A:\n" << matrix_a << std::endl;
   }
@@ -56,11 +56,11 @@ int main( int argc, char **argv ) {
 
   solver.compute(matrix_a);
 
-  // if ( mpi_rank == mpi_root ) {
-  //   std::cout << "S:\n"  << solver.getSingularValues() << std::endl;
-  //   std::cout << "U:\n"  << solver.getLeftSingularVectors() << std::endl;
-  //   std::cout << "Vt:\n" << solver.getRightSingularVectors() << std::endl;
-  // }
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "S:\n"  << solver.getSingularValues() << std::endl;
+    std::cout << "U:\n"  << solver.getLeftSingularVectors() << std::endl;
+    std::cout << "Vt:\n" << solver.getRightSingularVectors() << std::endl;
+  }
 
   MPI_Finalize();
 }

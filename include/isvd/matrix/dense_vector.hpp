@@ -91,6 +91,7 @@ class DenseVector
 
   // Gets information
   inline index_t getIncrement() const noexcept;
+  inline bool isShrunk() const noexcept;
 
   // Gets element
   inline       _Scalar& getElement( const index_t idx ) noexcept;

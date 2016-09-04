@@ -8,6 +8,7 @@
 #ifndef ISVD_CORE_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_IPP_
 #define ISVD_CORE_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_IPP_
 
+#include <cmath>
 #include <isvd/core/integrator/kolmogorov_nagumo_type_integrator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +67,8 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
   if ( cube_d_.getSizes() != cube_b_sizes || !cube_b_.isShrunk() ) {
     cube_d_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_b_sizes);
   }
+  matrix_b_ = cube_b_.getPage(0);
+  matrix_d_ = cube_d_.getPage(0);
 
   const auto matrix_c_sizes = std::make_pair(parameters_.getDimSketch(), parameters_.getDimSketch());
   if ( matrix_c_.getSizes() != matrix_c_sizes ) {
@@ -90,20 +93,121 @@ template <class _Matrix>
 void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
   assert(parameters_.isInitialized());
 
+  const auto mpi_comm = parameters_.mpi_comm;
   const auto mpi_size = parameters_.mpi_size;
+  const auto mpi_root = parameters_.mpi_root;
+  const auto dim_sketch     = parameters_.getDimSketch();
+  const auto max_iteration = parameters_.getMaxIteration();
+  const auto tolerance     = parameters_.getTolerance();
 
   // Exchange Q
   for ( auto i = 0; i < cube_q_.getNpage(); ++i ) {
     cube_q_.getPage(i).getRows({parameters_.getNrow(), nrow_all_});
-    mpi::Alltoall(cube_q_.getPage(i), cube_qj_.getPages({i*mpi_size, (i+1)*mpi_size}), parameters_.mpi_comm);
+    mpi::alltoall(cube_q_.getPage(i), cube_qj_.getPages({i*mpi_size, (i+1)*mpi_size}), mpi_comm);
   }
 
-  // Qc := Q[0-page]
+  // Qc := Q0
   blas::copy(cube_qj_.getPage(0), matrix_qcj_);
-#pragma todo
+
+  bool is_converged = false;
+  for ( auto iter = 0; iter < max_iteration && !is_converged; ++iter ) {
+
+    // ================================================================================================================== //
+    // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
+
+    // Bi := sum( Qij' * Qcj )
+    for ( auto i = 0; i < mpi_size; ++i ) {
+      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), matrix_qcj_, 0.0, cube_d_.getPage(i));
+    }
+    mpi::allreduce(cube_d_, cube_b_, MPI_SUM, mpi_comm);
+
+    // Xj' := 0, D := 0
+    zeroize(matrix_xj_);
+    zeroize(matrix_d_);
+
+    for ( auto i = 0; i < mpi_size; ++i ) {
+      // D += Bi' * Bi
+      blas::syrk<TransOption::TRANS>(1.0, cube_b_.getPage(i), 1.0, matrix_d_);
+
+      // Xj += Qij * Bi
+      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), cube_b_.getPage(i), 1.0, matrix_xj_);
+    }
+
+    // Xj -= Qcj * D
+    blas::symm<SideOption::RIGHT>(-1.0, matrix_qcj_, matrix_d_, 1.0, matrix_xj_);
+
+    // Xj' /= N
+    blas::scal(1.0/mpi_size, matrix_xj_.vectorize());
+
+    // ================================================================================================================== //
+    // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
+
+    // B := I/4 - sum(Xj' * Xj)
+    blas::syrk<TransOption::TRANS>(-1.0, matrix_xj_, 0.0, matrix_d_);
+    mpi::allreduce(matrix_d_, matrix_b_, MPI_SUM, mpi_comm);
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      matrix_b_(i, i) += 0.25;
+    }
+
+    // Compute the eigen-decomposition of B -> B' * E * B
+    syev_driver_(matrix_b_, vector_e_);
+
+    // B := E^(1/4) * B
+    for ( auto i = 0; i < dim_sketch; ++i ) {
+      blas::scal(pow(vector_e_(i), 0.25), matrix_b_.getCol(i));
+    }
+
+    // D := I/2 + B' * B
+    blas::syrk<TransOption::TRANS>(1.0, matrix_b_, 0.0, matrix_d_);
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      matrix_d_(i, i) += 0.5;
+    }
+
+    // Compute the eigen-decomposition of D -> D' * E * D
+    syev_driver_(matrix_d_, vector_e_);
+
+    // B := D
+    blas::copy(matrix_d_, matrix_b_);
+
+    // D := E^(1/4) * D
+    for ( auto i = 0; i < dim_sketch; ++i ) {
+      blas::scal(pow(vector_e_(i), 0.25), matrix_d_.getCol(i));
+    }
+
+    // B := E^(1/4) \ B
+    for ( auto i = 0; i < dim_sketch; ++i ) {
+      blas::scal(pow(vector_e_(i), -0.25), matrix_b_.getCol(i));
+    }
+
+    // C := D' * D
+    blas::syrk<TransOption::TRANS>(1.0, matrix_d_, 0.0, matrix_c_);
+
+    // ================================================================================================================== //
+    // Qc := Qc * C + X * inv(C)
+
+    // Qcj := Qcj * C
+    blas::copy(matrix_qcj_, matrix_tmp_);
+    blas::symm<SideOption::RIGHT>(1.0, matrix_tmp_, matrix_c_, 0.0, matrix_qcj_);
+
+    // Check convergence
+    if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
+      for ( auto i = 0; i < dim_sketch; ++i ) {
+        matrix_c_(i, i) -= 1.0;
+      }
+      syev_driver_.computeValues(matrix_c_, vector_e_);
+      is_converged = !(blas::amax(vector_e_) > tolerance);
+    }
+    MPI_Bcast(&is_converged, 1, MPI_BYTE, mpi_root, mpi_comm);
+
+    // inv(C) := B' * B
+    blas::syrk<TransOption::TRANS>(1.0, matrix_b_, 0.0, matrix_c_);
+
+    // Qcj += Xj * inv(C)
+    blas::symm<SideOption::RIGHT>(1.0, matrix_xj_, matrix_c_, 1.0, matrix_qcj_);
+  }
 
   // Gather Qc
-  mpi::Gather(matrix_qcj_, matrix_qc_, parameters_.mpi_root, parameters_.mpi_comm);
+  mpi::gather(matrix_qcj_, matrix_qc_, mpi_root, mpi_comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

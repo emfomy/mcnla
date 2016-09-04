@@ -70,10 +70,10 @@ class Parameters {
   index_t num_sketch_each_ = 0;
 
   /// The maximum iteration.
-  index_t max_iteration_ = 0;
+  index_t max_iteration_ = 256;
 
   /// The tolerance of converge condition.
-  RealScalar tolerance_ = 1e-4;
+  RealScalar tolerance_ = 1e-6;
 
  public:
 

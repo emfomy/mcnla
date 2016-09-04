@@ -60,6 +60,9 @@ class GesvdDriver {
   /// The real workspace.
   RealVectorType rwork_;
 
+  /// Empty matrix.
+  _Matrix matrix_empty_;
+
  public:
 
   // Constructors
@@ -70,6 +73,10 @@ class GesvdDriver {
   // Operators
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
   inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
+
+  // Computes eigenvalues
+  template <class _TypeA, class _TypeS>
+  inline void computeValues( _TypeA &&a, _TypeS &&s ) noexcept;
 
   // Resizes
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
@@ -87,6 +94,7 @@ class GesvdDriver {
  protected:
 
   // Computes
+  template <JobOption __jobu = _jobu, JobOption __jobvt = _jobvt>
   inline void compute( _Matrix &a, RealVectorType &s, _Matrix &u, _Matrix &vt ) noexcept;
 
   // Queries

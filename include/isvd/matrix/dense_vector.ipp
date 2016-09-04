@@ -148,6 +148,14 @@ template <typename _Scalar>
 index_t DenseVector<_Scalar>::getIncrement() const noexcept { return increment_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Determines if the dimensions is equal to the sizes.
+///
+template <typename _Scalar>
+bool DenseVector<_Scalar>::isShrunk() const noexcept {
+  return (increment_ == 1);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>

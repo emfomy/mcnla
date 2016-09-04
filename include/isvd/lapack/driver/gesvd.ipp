@@ -63,6 +63,14 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::operator()( _TypeA &&a, _TypeS &&s, _T
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Computes singular values only.
+///
+template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <class _TypeA, class _TypeS>
+void GesvdDriver<_Matrix, _jobu, _jobvt>::computeValues( _TypeA &&a, _TypeS &&s ) noexcept {
+  compute<'N', 'N'>(a, s, matrix_empty_, matrix_empty_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the driver
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
@@ -133,9 +141,11 @@ const typename GesvdDriver<_Matrix, _jobu, _jobvt>::RealVectorType&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the singular value decomposition.
 ///
-/// @attention  MATRIX @p a WILL BE DESTORIED!
+/// @attention  The left singular vectors are stored in columnwise for column-major storage, in rowwise for row-major storage.
+/// @attention  The right singular vectors are stored in rowwise for column-major storage, in columnwise for row-major storage.
+/// @attention  Matrix @p a will be destroyed!
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <JobOption __jobu, JobOption __jobvt>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
     _Matrix &a,
     RealVectorType &s,
@@ -145,24 +155,24 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   assert(nrow_ > 0 && ncol_ > 0);
   assert(a.getSizes() == std::make_pair(nrow_, ncol_));
 
-  if ( _jobu == 'A' ) {
+  if ( __jobu == 'A' ) {
     assert(u.getSizes() == std::make_pair(nrow_, nrow_));
-  } else if ( _jobu == 'S' ) {
+  } else if ( __jobu == 'S' ) {
     assert(u.getSizes() == std::make_pair(nrow_, std::min(nrow_, ncol_)));
   }
 
-  if ( _jobvt == 'A' ) {
+  if ( __jobvt == 'A' ) {
     assert(u.getSizes() == std::make_pair(ncol_, ncol_));
-  } else if ( _jobvt == 'S' ) {
+  } else if ( __jobvt == 'S' ) {
     assert(vt.getSizes() == std::make_pair(std::min(nrow_, ncol_), ncol_));
   }
 
   if ( isColMajor(layout) ) {
-    assert(internal::gesvd(_jobu, _jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
+    assert(internal::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
                            s.getValue(), u.getValue(), u.getPitch(), vt.getValue(), vt.getPitch(),
                            work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
   } else {
-    assert(internal::gesvd(_jobvt, _jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
+    assert(internal::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
                            s.getValue(), vt.getValue(), vt.getPitch(), u.getValue(), u.getPitch(),
                            work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
   }
