@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/reconstructor_base.hpp
-/// @brief   The iSVD reconstructor interface.
+/// @file    include/isvd/core/integrator_base.hpp
+/// @brief   The iSVD integrator interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_CORE_RECONSTRUCTOR_BASE_HPP_
-#define ISVD_CORE_RECONSTRUCTOR_BASE_HPP_
+#ifndef ISVD_CORE_INTEGRATOR_BASE_HPP_
+#define ISVD_CORE_INTEGRATOR_BASE_HPP_
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix.hpp>
@@ -23,12 +23,12 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of iSVD reconstructor.
+/// The interface of iSVD integrator.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<_Derived>> {
+class IntegratorBase : public internal::CrtpBase<_Derived, IntegratorBase<_Derived>> {
 
  public:
 
@@ -44,7 +44,7 @@ class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<
  protected:
 
   // Constructor
-  ReconstructorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  IntegratorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
 
  public:
 
@@ -52,12 +52,11 @@ class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<
   void initialize() noexcept;
 
   // Reconstructs
-  inline void reconstruct( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
+  inline void integrate() noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectors() const noexcept;
+  inline DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() noexcept;
+  inline DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() noexcept;
 
 };
 
@@ -65,4 +64,4 @@ class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<
 
 }  // namespace isvd
 
-#endif  // ISVD_CORE_RECONSTRUCTOR_BASE_HPP_
+#endif  // ISVD_CORE_INTEGRATOR_BASE_HPP_

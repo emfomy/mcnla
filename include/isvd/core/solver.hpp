@@ -13,6 +13,8 @@
 #include <isvd/utility.hpp>
 #include <isvd/core/parameters.hpp>
 #include <isvd/core/sketcher_base.hpp>
+#include <isvd/core/integrator_base.hpp>
+#include <isvd/core/reconstructor_base.hpp>
 #include <mpi.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,11 +37,24 @@ class Solver {
                 "'_Matrix' is not a matrix!");
   static_assert(std::is_base_of<internal::SketcherBase<_Sketcher>, _Sketcher>::value,
                 "'_Sketcher' is not a sketcher!");
+  static_assert(std::is_base_of<internal::IntegratorBase<_Integrator>, _Integrator>::value,
+                "'_Integrator' is not a integrator!");
+  static_assert(std::is_base_of<internal::ReconstructorBase<_Reconstructor>, _Reconstructor>::value,
+                "'_Reconstructor' is not a reconstructor!");
+
+  static_assert(std::is_same<_Matrix, typename internal::SketcherBase<_Sketcher>::MatrixType>::value,
+                "The matrix type does not fit!");
+  static_assert(std::is_same<_Matrix, typename internal::IntegratorBase<_Sketcher>::MatrixType>::value,
+                "The matrix type does not fit!");
+  static_assert(std::is_same<_Matrix, typename internal::ReconstructorBase<_Sketcher>::MatrixType>::value,
+                "The matrix type does not fit!");
+
 
  public:
 
   using ScalarType      = typename _Matrix::ScalarType;
   using RealScalarType  = typename _Matrix::RealScalarType;
+  using MatrixType      = _Matrix;
   using ParametersType  = internal::Parameters<ScalarType>;
 
  protected:
@@ -53,11 +68,14 @@ class Solver {
   /// @copydoc  isvd::internal::Parameters::mpi_size
   const index_t &mpi_size_ = parameters_.mpi_size;
 
-  /// @copydoc  isvd::internal::Parameters::mpi_rank
-  const index_t &mpi_rank_ = parameters_.mpi_rank;
-
   /// @copydoc  isvd::internal::Parameters::mpi_root
   const index_t &mpi_root_ = parameters_.mpi_root;
+
+  /// The MPI rank.
+  const index_t mpi_rank_;
+
+  /// The random seed
+  index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
 
   /// The sketcher.
   _Sketcher sketcher_;
@@ -68,34 +86,10 @@ class Solver {
   /// The reconstructor.
   _Reconstructor reconstructor_;
 
-  /// The matrix Qc.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
-
-  /// The cube Q.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_q_;
-
-  /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
-
-  /// The vector Sl.
-  DenseVector<RealScalarType> vector_sl_;
-
-  /// The matrix U.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_;
-
-  /// The matrix Ul.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_ul_;
-
-  /// The matrix Vt.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_;
-
-  /// The matrix Vlt.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vlt_;
-
  public:
 
   // Constructor
-  Solver( const MPI_Comm mpi_comm, const index_t mpi_root ) noexcept;
+  Solver( const MPI_Comm mpi_comm, const index_t mpi_root = 0 ) noexcept;
 
   // Initializes
   void initialize() noexcept;
@@ -116,7 +110,7 @@ class Solver {
   inline Solver& setSize( const _Matrix &matrix ) noexcept;
   inline Solver& setRank( const index_t rank ) noexcept;
   inline Solver& setOverRank( const index_t over_rank ) noexcept;
-  inline Solver& setNumSketch( const index_t num_sketch_each ) noexcept;
+  inline Solver& setNumSketch( const index_t num_sketch_each_each ) noexcept;
   inline Solver& setMaxIteration( const index_t max_iteration ) noexcept;
   inline Solver& setTolerance( const RealScalarType tolerance ) noexcept;
   inline Solver& setSeed( const index_t seed[4] ) noexcept;

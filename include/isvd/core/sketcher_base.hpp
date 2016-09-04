@@ -30,20 +30,23 @@ namespace internal {
 template <class _Derived>
 class SketcherBase : public internal::CrtpBase<_Derived, SketcherBase<_Derived>> {
 
- private:
+ public:
 
-  using ScalarType       = typename Traits<_Derived>::ScalarType;
-  using MatrixType       = typename Traits<_Derived>::MatrixType;
+  using MatrixType = typename Traits<_Derived>::MatrixType;
+  using ScalarType = typename MatrixType::ScalarType;
 
  protected:
 
   /// The parameters.
   const internal::Parameters<ScalarType> &parameters_;
 
+  /// The random seed
+  index_t *seed_;
+
  protected:
 
   // Constructor
-  SketcherBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  SketcherBase( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  public:
 

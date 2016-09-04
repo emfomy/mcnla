@@ -43,9 +43,6 @@ class Parameters {
   /// The MPI size.
   const index_t mpi_size;
 
-  /// The MPI rank.
-  const index_t mpi_rank;
-
   /// The MPI root.
   const index_t mpi_root;
 
@@ -70,7 +67,7 @@ class Parameters {
   index_t over_rank_ = 0;
 
   /// The number of random sketches per MPI node.
-  index_t num_sketch_ = 0;
+  index_t num_sketch_each_ = 0;
 
   /// The maximum iteration.
   index_t max_iteration_ = 0;
@@ -78,13 +75,10 @@ class Parameters {
   /// The tolerance of converge condition.
   RealScalar tolerance_ = 1e-4;
 
-  /// The number of random sketches per MPI node.
-  index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
-
  public:
 
   // Constructors
-  Parameters( const MPI_Comm comm, const index_t root ) noexcept;
+  Parameters( const MPI_Comm comm, const index_t root = 0 ) noexcept;
 
   // Gets parameter
   inline bool isInitialized() const noexcept;
@@ -95,10 +89,9 @@ class Parameters {
   inline index_t getOverRank() const noexcept;
   inline index_t getDimSketch() const noexcept;
   inline index_t getNumSketch() const noexcept;
-  inline index_t getNumSketchAll() const noexcept;
+  inline index_t getNumSketchEach() const noexcept;
   inline index_t getMaxIteration() const noexcept;
   inline RealScalar getTolerance() const noexcept;
-  inline const index_t* getSeed() const noexcept;
 };
 
 }  // namespace internal

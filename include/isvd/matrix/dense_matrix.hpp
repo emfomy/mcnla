@@ -9,6 +9,7 @@
 #define ISVD_MATRIX_DENSE_MATRIX_HPP_
 
 #include <iostream>
+#include <utility>
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/matrix_base.hpp>
 #include <isvd/matrix/dense_base.hpp>
@@ -88,6 +89,7 @@ class DenseMatrix
   DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
   DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
+  DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<_Scalar> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
@@ -104,6 +106,7 @@ class DenseMatrix
 
   // Gets information
   inline index_t getPitch() const noexcept;
+  inline bool isShrunk() const noexcept;
 
   // Gets element
   inline       _Scalar& getElement( const index_t rowidx, const index_t colidx ) noexcept;

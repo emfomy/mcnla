@@ -26,21 +26,19 @@ template <class _Matrix> class StandardReconstructor;
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gaussian projection reconstructor traits.
+/// The standard reconstructor traits.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
 struct Traits<StandardReconstructor<_Matrix>> {
-  using ScalarType     = typename _Matrix::ScalarType;
-  using RealScalarType = typename _Matrix::RealScalarType;
-  using MatrixType     = _Matrix;
+  using MatrixType = _Matrix;
 };
 
 }  // namespace internal
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of iSVD reconstructor.
+/// The standard reconstructor.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
@@ -58,6 +56,7 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
   static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
+  using MatrixType     = _Matrix;
 
   static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
@@ -69,11 +68,32 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
   /// The matrix W.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;
 
-  /// The GESVD driver.
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::COLMAJOR>, 'S', 'O'> gesvd_driver_;
+  /// The vector S.
+  DenseVector<RealScalarType> vector_s_;
+
+  /// The vector Sl.
+  DenseVector<RealScalarType> vector_sl_;
+
+  /// The matrix U.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_;
+
+  /// The matrix Ul.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_ul_;
+
+  /// The matrix Vt.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_;
+
+  /// The matrix Vlt.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vlt_;
+
+  /// The empty vector.
+  DenseVector<RealScalarType> vector_real_empty_;
 
   /// The empty matrix.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_empty_;
+
+  /// The GESVD driver.
+  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::COLMAJOR>, 'S', 'O'> gesvd_driver_;
 
  public:
 
@@ -86,11 +106,12 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
   void initializeImpl() noexcept;
 
   // Reconstructs
-  void reconstructImpl( const _Matrix &matrix_a,
-                        const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_q,
-                              DenseVector<RealScalarType> &vector_s,
-                              DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_u,
-                              DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_vt ) noexcept;
+  void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
+
+  // Gets matrices
+  inline const DenseVector<RealScalarType>& getSingularValuesImpl() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectorsImpl() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectorsImpl() const noexcept;
 
 };
 

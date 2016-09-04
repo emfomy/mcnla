@@ -32,15 +32,13 @@ namespace internal {
 ///
 template <class _Matrix>
 struct Traits<GaussianProjectionSketcher<_Matrix>> {
-  using ScalarType     = typename _Matrix::ScalarType;
-  using RealScalarType = typename _Matrix::RealScalarType;
-  using MatrixType     = _Matrix;
+  using MatrixType = _Matrix;
 };
 
 }  // namespace internal
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of iSVD sketcher.
+/// The Gaussian projection sketcher.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
@@ -58,6 +56,7 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
   static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
+  using MatrixType     = _Matrix;
 
   static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
@@ -81,7 +80,7 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
  public:
 
   // Constructor
-  GaussianProjectionSketcher( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  GaussianProjectionSketcher( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  protected:
 

@@ -20,8 +20,8 @@ namespace isvd {
 ///
 template <class _Matrix>
 GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
-    const internal::Parameters<ScalarType> &parameters
-) noexcept : BaseType(parameters) {}
+    const internal::Parameters<ScalarType> &parameters, index_t *seed
+) noexcept : BaseType(parameters, seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  isvd::internal::SketcherBase::initialize
@@ -56,10 +56,11 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 ) noexcept {
   assert(parameters_.isInitialized());
   assert(matrix_a.getSizes() == std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
-  assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(), parameters_.getNumSketch()));
+  assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
+                                                                       parameters_.getNumSketchEach()));
 
-  for ( auto i = 0; i < parameters_.getNumSketch(); ++i ) {
-    lapack::larnv<3>(matrix_omega_.vectorize(), parameters_.getSeed());
+  for ( auto i = 0; i < parameters_.getNumSketchEach(); ++i ) {
+    lapack::larnv<3>(matrix_omega_.vectorize(), this->seed_);
     blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, cube_q.getPage(i));
     gesvd_driver_(cube_q.getPage(i), vector_s_, matrix_empty_, matrix_empty_);
   }

@@ -32,7 +32,9 @@ DenseData<_Scalar>::DenseData(
     const index_t capability
 ) noexcept
   : capability_(capability),
-    value_(malloc<_Scalar>(capability)) {}
+    value_(malloc<_Scalar>(capability)) {
+  assert(capability > 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -43,7 +45,9 @@ DenseData<_Scalar>::DenseData(
     std::shared_ptr<_Scalar> value
 ) noexcept
   : capability_(capability),
-    value_(value) {}
+    value_(value) {
+  assert(capability > 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.

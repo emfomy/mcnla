@@ -9,6 +9,8 @@
 #define ISVD_MATRIX_DENSE_CUBE_HPP_
 
 #include <iostream>
+#include <utility>
+#include <tuple>
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/cube_base.hpp>
 #include <isvd/matrix/dense_base.hpp>
@@ -95,6 +97,7 @@ class DenseCube
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2 ) noexcept;
+  DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2, std::shared_ptr<_Scalar> value ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
@@ -112,6 +115,8 @@ class DenseCube
   // Gets information
   inline index_t getPitch1() const noexcept;
   inline index_t getPitch2() const noexcept;
+  inline std::pair<index_t, index_t> getPitches() const noexcept;
+  inline bool isShrunk() const noexcept;
 
   // Gets element
   inline       _Scalar& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;

@@ -40,11 +40,35 @@ void ReconstructorBase<_Derived>::initialize() noexcept { this->derived().initia
 template <class _Derived>
 void ReconstructorBase<_Derived>::reconstruct(
     const MatrixType &matrix_a,
-    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_q,
-          DenseVector<RealScalarType> &vector_s,
-          DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_u,
-          DenseMatrix<ScalarType, Layout::COLMAJOR> &matrix_vt
-) noexcept { this->derived().reconstructImpl(matrix_a, matrix_q, vector_s, matrix_u, matrix_vt); }
+    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
+) noexcept { this->derived().reconstructImpl(matrix_a, matrix_qc); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::Solver::getSingularValues
+///
+template <class _Derived>
+const DenseVector<typename ReconstructorBase<_Derived>::RealScalarType>&
+    ReconstructorBase<_Derived>::getSingularValues() const noexcept {
+  return this->derived().getSingularValuesImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::Solver::getLeftSingularVectors
+///
+template <class _Derived>
+const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLMAJOR>&
+    ReconstructorBase<_Derived>::getLeftSingularVectors() const noexcept {
+  return this->derived().getLeftSingularVectorsImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::Solver::getRightSingularVectors
+///
+template <class _Derived>
+const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLMAJOR>&
+    ReconstructorBase<_Derived>::getRightSingularVectors() const noexcept {
+  return this->derived().getRightSingularVectorsImpl();
+}
 
 }  // namespace internal
 

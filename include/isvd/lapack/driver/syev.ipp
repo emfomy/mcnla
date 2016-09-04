@@ -68,7 +68,7 @@ template <class _Matrix, JobOption _jobz, UploOption _uplo>
 void SyevDriver<_Matrix, _jobz, _uplo>::resize(
     const index_t dim
 ) noexcept {
-  assert(dim_ > 0);
+  assert(dim > 0);
   dim_ = dim;
   work_ = VectorType(dim);
   if ( is_real ) {

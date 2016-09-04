@@ -188,7 +188,7 @@ const _Scalar& DenseVector<_Scalar>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the vector.
 ///
-/// @attention  THE NEW SPACE IS NOT INITIALIZED.
+/// @attention  The new space is not initialized.
 ///
 template <typename _Scalar>
 void DenseVector<_Scalar>::resize(
@@ -205,8 +205,8 @@ template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IndexRange range
 ) noexcept {
-  assert(range.start >= 0 && range.end <= length_ && range.getLength() > 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start));
+  assert(range.start >= 0 && range.end <= length_ && range.getLength() >= 0);
+  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,8 +216,8 @@ template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IndexRange range
 ) const noexcept {
-  assert(range.start >= 0 && range.end <= length_ && range.getLength() > 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start));
+  assert(range.start >= 0 && range.end <= length_ && range.getLength() >= 0);
+  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,8 +227,7 @@ template <typename _Scalar>
 index_t DenseVector<_Scalar>::getIndexInternal(
     const index_t idx
 ) const noexcept {
-  assert(idx >= 0 && idx <= length_);
-  return idx * increment_ + offset_;
+  return idx * increment_;
 }
 
 }  // namespace isvd

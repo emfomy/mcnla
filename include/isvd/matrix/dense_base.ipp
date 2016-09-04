@@ -38,7 +38,9 @@ DenseBase<_Derived>::DenseBase(
     const index_t offset
 ) noexcept
   : offset_(offset),
-    data_(capability) {}
+    data_(capability) {
+  assert(offset >= 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -50,7 +52,9 @@ DenseBase<_Derived>::DenseBase(
     const index_t offset
 ) noexcept
   : offset_(offset),
-    data_(capability, value) {}
+    data_(capability, value) {
+  assert(offset >= 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.

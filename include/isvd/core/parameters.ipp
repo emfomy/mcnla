@@ -27,7 +27,6 @@ template <typename _Scalar>
 Parameters<_Scalar>::Parameters( const MPI_Comm comm, const index_t root ) noexcept
   : mpi_comm(comm),
     mpi_size(mpi::getCommSize(comm)),
-    mpi_rank(mpi::getCommRank(comm)),
     mpi_root(root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,16 +72,16 @@ template <typename _Scalar>
 index_t Parameters<_Scalar>::getDimSketch() const noexcept { return rank_ + over_rank_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of random sketches per MPI node.
-///
-template <typename _Scalar>
-index_t Parameters<_Scalar>::getNumSketch() const noexcept { return num_sketch_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches of all MPI nodes.
 ///
 template <typename _Scalar>
-index_t Parameters<_Scalar>::getNumSketchAll() const noexcept { return num_sketch_ * mpi_size; }
+index_t Parameters<_Scalar>::getNumSketch() const noexcept { return num_sketch_each_ * mpi_size; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of random sketches per MPI node.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::getNumSketchEach() const noexcept { return num_sketch_each_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the maximum iteration
@@ -95,12 +94,6 @@ index_t Parameters<_Scalar>::getMaxIteration() const noexcept { return max_itera
 ///
 template <typename _Scalar>
 typename Parameters<_Scalar>::RealScalar Parameters<_Scalar>::getTolerance() const noexcept { return tolerance_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the random seed.
-///
-template <typename _Scalar>
-const index_t* Parameters<_Scalar>::getSeed() const noexcept { return seed_; }
 
 }  // namespace internal
 

@@ -25,8 +25,8 @@ namespace internal {
 ///
 template <class _Derived>
 SketcherBase<_Derived>::SketcherBase(
-    const internal::Parameters<ScalarType> &parameters
-) noexcept : parameters_(parameters) {}
+    const internal::Parameters<ScalarType> &parameters, index_t *seed
+) noexcept : parameters_(parameters), seed_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.

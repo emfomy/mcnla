@@ -23,9 +23,9 @@ using namespace isvd;
 int mpi_size;
 int mpi_rank;
 
-void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int iseed[4] );
+void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int seed[4] );
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
-             const double *matrix_a, double *matrices_qit, int iseed[4] );
+             const double *matrix_a, double *matrices_qit, int seed[4] );
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt );
 void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
@@ -60,7 +60,7 @@ int main( int argc, char **argv ) {
   // Initialize random seed
   srand(time(NULL) ^ mpi_rank);
   srand(rand());
-  int iseed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
+  int seed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
 
   // ====================================================================================================================== //
   // Set parameters
@@ -89,7 +89,7 @@ int main( int argc, char **argv ) {
   // Generate matrix
   if ( verbose && mpi_rank == 0 )  {cout << "Generating matrix .............. " << flush; }
   if ( mpi_rank == 0 ) {
-    createA(m0, n, k, matrix_a, matrix_u_true, iseed);
+    createA(m0, n, k, matrix_a, matrix_u_true, seed);
   }
   MPI_Bcast(matrix_a, m0*n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
   if ( verbose && mpi_rank == 0 ) { cout << "done" << endl << endl; }
@@ -110,7 +110,7 @@ int main( int argc, char **argv ) {
     // Random sketch
     if ( verbose && mpi_rank == 0 ) { cout << "Sketching ...................... " << flush; }
     fill(matrices_qit, matrices_qit+k*mj*N, 0.0);
-    sketch(Nj, m, m0, n, k, matrix_a, matrices_qit, iseed);
+    sketch(Nj, m, m0, n, k, matrix_a, matrices_qit, seed);
     for ( auto i = 0; i < Nj; ++i ) {
       MPI_Alltoall(matrices_qit+i*k*m, k*mj, MPI_DOUBLE, matrices_qjt+i*k*m, k*mj, MPI_DOUBLE, MPI_COMM_WORLD);
     }
@@ -176,15 +176,15 @@ int main( int argc, char **argv ) {
   return 0;
 }
 
-void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int iseed[4] ) {
+void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int seed[4] ) {
   auto matrix_u     = malloc<double>(m0 * m0);
   auto matrix_v     = malloc<double>(n  * m0);
   auto vector_tmp_s = malloc<double>(m0);
   auto vector_tmp_b = malloc<double>(m0);
 
   // Generate U & V using normal random
-  LAPACKE_dlarnv(3, iseed, m0*m0, matrix_u);
-  LAPACKE_dlarnv(3, iseed, n*m0,  matrix_v);
+  LAPACKE_dlarnv(3, seed, m0*m0, matrix_u);
+  LAPACKE_dlarnv(3, seed, n*m0,  matrix_v);
 
   // Orthogonalize U & V
   LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'O', 'N', m0, m0, matrix_u, m0, vector_tmp_s, nullptr, 1, nullptr, 1, vector_tmp_b);
@@ -210,13 +210,13 @@ void createA( const int m0, const int n, const int k, double *matrix_a, double *
 }
 
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
-             const double *matrix_a, double *matrices_qjt, int iseed[4] ) {
+             const double *matrix_a, double *matrices_qjt, int seed[4] ) {
   auto matrix_oit = malloc<double>(k * n);
   auto vector_tmp_s = malloc<double>(k);
   auto vector_tmp_b = malloc<double>(k);
 
   for ( auto i = 0; i < Nj; ++i ) {
-    LAPACKE_dlarnv(3, iseed, k*n, matrix_oit);
+    LAPACKE_dlarnv(3, seed, k*n, matrix_oit);
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans,
                 k, m0, n, 1.0, matrix_oit, k, matrix_a, m0, 0.0, matrices_qjt+i*k*m, k);
 

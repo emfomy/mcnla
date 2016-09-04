@@ -79,7 +79,7 @@ inline void copy(
     const DenseCube<_Scalar, _layout> &x,
           DenseCube<_Scalar, _layout> &y
 ) noexcept {
-  assert(x.getSizes() == y.getSizes() && y.getPitch1() == x.getPitch1() &&  y.getPitch2() == x.getPitch2());
+  assert(x.getSizes() == y.getSizes() && y.getPitches() == x.getPitches());
   copy(x.vectorize(), y.vectorize());
 }
 
@@ -88,7 +88,7 @@ inline void copy(
     const DenseCube<_Scalar, _layout> &x,
           DenseCube<_Scalar, _layout> &&y
 ) noexcept {
-  assert(x.getSizes() == y.getSizes() && y.getPitch1() == x.getPitch1() &&  y.getPitch2() == x.getPitch2());
+  assert(x.getSizes() == y.getSizes() && y.getPitches() == x.getPitches());
   copy(x.vectorize(), y.vectorize());
 }
 //@}

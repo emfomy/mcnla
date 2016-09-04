@@ -46,10 +46,10 @@ class CubeBase {
   /// The number of pages.
   index_t npage_;
 
-  /// The size of major dimension.
+  /// The leading size.
   index_t &dim1_ = isColMajor(layout) ? nrow_ : ncol_;
 
-  /// The size of minor dimension.
+  /// The second size.
   index_t &dim2_ = isColMajor(layout) ? ncol_ : nrow_;
 
  public:
@@ -68,6 +68,8 @@ class CubeBase {
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
+  inline index_t getDim1() const noexcept;
+  inline index_t getDim2() const noexcept;
   inline index_t getNpage() const noexcept;
   inline index_t getSize() const noexcept;
   inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;

@@ -11,7 +11,7 @@ set_target_properties(demo PROPERTIES LINK_FLAGS    ${LNKFLGS})
 # Add rule 'run'
 add_custom_target(
   run
-  COMMAND ./demo
+  COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./demo
   DEPENDS demo
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Running demo"
