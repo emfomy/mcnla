@@ -9,5 +9,9 @@
 #define ISVD_UTILITY_HPP_
 
 #include <isvd/utility/memory.hpp>
+#include <isvd/utility/traits.hpp>
+#include <isvd/utility/crtp.hpp>
+#include <isvd/utility/mpi.hpp>
+#include <isvd/utility/matrix.hpp>
 
 #endif  // ISVD_UTILITY_HPP_
