@@ -16,3 +16,5 @@
 #undef REAL8_SELECT2
 #undef COMP4_SELECT1
 #undef COMP8_SELECT1
+
+} // extern "C"

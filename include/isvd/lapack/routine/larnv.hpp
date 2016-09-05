@@ -30,7 +30,7 @@ namespace lapack {
 template <index_t idist, typename _Scalar>
 inline void larnv(
     DenseVector<_Scalar> &x,
-    const index_t iseed[4]
+    index_t iseed[4]
 ) noexcept {
   static_assert(isvd::internal::ScalarTraits<_Scalar>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
                 "The value of 'idist' is invalid!");
@@ -40,7 +40,7 @@ inline void larnv(
 template <index_t idist, typename _Scalar>
 inline void larnv(
     DenseVector<_Scalar> &&x,
-    const index_t iseed[4]
+    index_t iseed[4]
 ) noexcept {
   larnv<idist>(x, iseed);
 }

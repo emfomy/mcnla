@@ -1,3 +1,5 @@
+extern "C" {
+
 #define CPP_CHAR1 char
 #define CPP_INT8  isvd::index_t
 #define CPP_REAL4 float

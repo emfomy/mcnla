@@ -12,19 +12,15 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/lapack_plugin_start.h>
 
 // Returns a vector of random numbers from a uniform or normal distribution.
-extern void slarnv_( const FORTRAN_INT8 idist, const FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_REAL4 x );
-extern void dlarnv_( const FORTRAN_INT8 idist, const FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_REAL8 x );
-extern void clarnv_( const FORTRAN_INT8 idist, const FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_COMP4 x );
-extern void zlarnv_( const FORTRAN_INT8 idist, const FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_COMP8 x );
+extern void slarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_REAL4 x );
+extern void dlarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_REAL8 x );
+extern void clarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_COMP4 x );
+extern void zlarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_COMP8 x );
 
 #include <isvd/plugin/lapack_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -48,16 +44,16 @@ namespace internal {
 ///
 //@{
 static inline void larnv(
-    const index_t idist, const index_t iseed[4], const index_t n, float *x
+    const index_t idist, index_t iseed[4], const index_t n, float *x
 ) noexcept { slarnv_(&idist, iseed, &n, x); }
 static inline void larnv(
-    const index_t idist, const index_t iseed[4], const index_t n, double *x
+    const index_t idist, index_t iseed[4], const index_t n, double *x
 ) noexcept { dlarnv_(&idist, iseed, &n, x); }
 static inline void larnv(
-    const index_t idist, const index_t iseed[4], const index_t n, std::complex<float> *x
+    const index_t idist, index_t iseed[4], const index_t n, std::complex<float> *x
 ) noexcept { clarnv_(&idist, iseed, &n, x); }
 static inline void larnv(
-    const index_t idist, const index_t iseed[4], const index_t n, std::complex<double> *x
+    const index_t idist, index_t iseed[4], const index_t n, std::complex<double> *x
 ) noexcept { zlarnv_(&idist, iseed, &n, x); }
 //@}
 

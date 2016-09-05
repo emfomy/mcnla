@@ -51,7 +51,7 @@ int main( int argc, char **argv ) {
   }
 
   int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
-  int m0       = ( argc > 2 ) ? atoi(argv[2]) : 100;
+  int m0       = ( argc > 2 ) ? atoi(argv[2]) : 1000;
   int n        = ( argc > 3 ) ? atoi(argv[3]) : 10000;
   int k        = ( argc > 4 ) ? atoi(argv[4]) : 10;
   int num_test = ( argc > 5 ) ? atoi(argv[5]) : 100;

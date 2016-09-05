@@ -4,6 +4,12 @@
 set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall -Wextra -Wpedantic" PARENT_SCOPE)
 # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic" PARENT_SCOPE)
 
+# MKL
+set(ISVD_USE_MKL false CACHE PATH "Uses MKL as BLAS and LAPACK.")
+if(ISVD_USE_MKL)
+  set(DEFS ${DEFS} "-DISVD_USE_MKL")
+endif()
+
 # MPI
 find_package(MPI REQUIRED)
 if(MPI_FOUND)
@@ -30,5 +36,6 @@ endif()
 
 set(INCS    "${INCS}"    PARENT_SCOPE)
 set(LIBS    "${LIBS}"    PARENT_SCOPE)
+set(DEFS    "${DEFS}"    PARENT_SCOPE)
 set(COMFLGS "${COMFLGS}" PARENT_SCOPE)
 set(LNKFLGS "${LNKFLGS}" PARENT_SCOPE)

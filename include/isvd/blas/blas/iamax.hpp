@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/blas_plugin_start.h>
 
 // Finds the index of the element with maximum absolute value.
@@ -23,8 +21,6 @@ extern CPP_INT8 icamax_( const FORTRAN_INT8 n, const FORTRAN_COMP4 x, const FORT
 extern CPP_INT8 izamax_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_INT8 incx );
 
 #include <isvd/plugin/blas_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

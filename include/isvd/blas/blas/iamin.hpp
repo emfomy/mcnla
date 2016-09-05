@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
+#ifdef ISVD_USE_MKL
 
 #include <isvd/plugin/blas_plugin_start.h>
 
@@ -24,7 +24,12 @@ extern CPP_INT8 izamin_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORT
 
 #include <isvd/plugin/blas_plugin_end.h>
 
-}  // extern "C"
+#else  // ISVD_USE_MKL
+
+#include <cmath>
+#include <complex>
+
+#endif  // ISVD_USE_MKL
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -47,6 +52,7 @@ namespace internal {
 /// @brief  Finds the index of the element with minimum absolute value.
 ///
 //@{
+#ifdef ISVD_USE_MKL
 static inline index_t iamin(
     const index_t n, const float* x, const index_t incx
 ) noexcept { return isamin_(&n, x, &incx) - 1; }
@@ -59,6 +65,21 @@ static inline index_t iamin(
 static inline index_t iamin(
     const index_t n, const std::complex<double>* x, const index_t incx
 ) noexcept { return izamin_(&n, x, &incx) - 1; }
+#else  // ISVD_USE_MKL
+template <typename _Scalar>
+inline index_t iamin(
+    const index_t n, const _Scalar* x, const index_t incx
+) noexcept {
+  if ( n < 1 || incx <= 0 ) { return -1; }
+  if ( n == 1 ) { return 0; }
+  index_t idamin = 0;
+  auto smin = std::abs(x[0]);
+  for ( index_t i = 1, j = incx; i < n; ++i, j += incx ) {
+    if ( std::abs(x[j]) < smin) { idamin = i; }
+  }
+  return idamin;
+}
+#endif  // ISVD_USE_MKL
 //@}
 
 }  // namespace internal

@@ -14,7 +14,7 @@
 #include <isvd.hpp>
 
 void create( isvd::DenseMatrix<double> &matrix_a, isvd::DenseMatrix<double> &matrix_u_true,
-             const isvd::index_t rank, const isvd::index_t seed[4] ) noexcept;
+             const isvd::index_t rank, isvd::index_t seed[4] ) noexcept;
 void check( const isvd::DenseMatrix<double> &matrix_u, const isvd::DenseMatrix<double> &matrix_u_true,
             double &smax, double &smin ) noexcept;
 
@@ -50,7 +50,7 @@ int main( int argc, char **argv ) {
   // Set parameters
   int argi = 0;
   isvd::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  isvd::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  isvd::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
   isvd::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
   isvd::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   isvd::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
@@ -125,7 +125,7 @@ void create(
           isvd::DenseMatrix<double> &matrix_a,
           isvd::DenseMatrix<double> &matrix_u_true,
     const isvd::index_t rank,
-    const isvd::index_t seed[4]
+          isvd::index_t seed[4]
 ) noexcept {
   matrix_u_true = isvd::DenseMatrix<double>(matrix_a.getNrow(), rank);
 

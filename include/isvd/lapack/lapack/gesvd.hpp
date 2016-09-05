@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/lapack_plugin_start.h>
 
 // Computes the singular value decomposition of a general rectangular matrix.
@@ -26,17 +24,15 @@ extern void dgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const 
                      FORTRAN_REAL8 vt, const FORTRAN_INT8 ldvt, FORTRAN_REAL8 work, const FORTRAN_INT8 lwork,
                                           FORTRAN_INT8 info );
 extern void cgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                     FORTRAN_COMP4 a, const FORTRAN_INT8 lda, FORTRAN_COMP4 s, FORTRAN_COMP4 u, const FORTRAN_INT8 ldu,
+                     FORTRAN_COMP4 a, const FORTRAN_INT8 lda, FORTRAN_REAL4 s, FORTRAN_COMP4 u, const FORTRAN_INT8 ldu,
                      FORTRAN_COMP4 vt, const FORTRAN_INT8 ldvt, FORTRAN_COMP4 work, const FORTRAN_INT8 lwork,
                      FORTRAN_REAL4 rwork, FORTRAN_INT8 info );
 extern void zgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                     FORTRAN_COMP8 a, const FORTRAN_INT8 lda, FORTRAN_COMP8 s, FORTRAN_COMP8 u, const FORTRAN_INT8 ldu,
+                     FORTRAN_COMP8 a, const FORTRAN_INT8 lda, FORTRAN_REAL8 s, FORTRAN_COMP8 u, const FORTRAN_INT8 ldu,
                      FORTRAN_COMP8 vt, const FORTRAN_INT8 ldvt, FORTRAN_COMP8 work, const FORTRAN_INT8 lwork,
                      FORTRAN_REAL8 rwork, FORTRAN_INT8 info );
 
 #include <isvd/plugin/lapack_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -77,7 +73,7 @@ static inline index_t gesvd(
 }
 static inline index_t gesvd(
     const char jobu, const char jobvt, const index_t m, const index_t n,
-    std::complex<float> *a, const index_t lda, std::complex<float> *s,
+    std::complex<float> *a, const index_t lda, float *s,
     std::complex<float> *u, const index_t ldu, std::complex<float> *vt, const index_t ldvt,
     std::complex<float> *work, const index_t lwork, float *rwork
 ) noexcept {
@@ -85,7 +81,7 @@ static inline index_t gesvd(
 }
 static inline index_t gesvd(
     const char jobu, const char jobvt, const index_t m, const index_t n,
-    std::complex<double> *a, const index_t lda, std::complex<double> *s,
+    std::complex<double> *a, const index_t lda, double *s,
     std::complex<double> *u, const index_t ldu, std::complex<double> *vt, const index_t ldvt,
     std::complex<double> *work, const index_t lwork, double *rwork
 ) noexcept {

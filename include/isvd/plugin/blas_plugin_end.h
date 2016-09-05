@@ -1,3 +1,5 @@
+
+
 #undef CPP_CHAR1
 #undef CPP_INT8
 #undef CPP_REAL4
@@ -11,3 +13,5 @@
 #undef FORTRAN_REAL8
 #undef FORTRAN_COMP4
 #undef FORTRAN_COMP8
+
+}  // extern "C"

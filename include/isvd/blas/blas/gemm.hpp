@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/blas_plugin_start.h>
 
 // Computes a matrix-matrix product with general matrices.
@@ -35,8 +33,6 @@ extern void zgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, cons
                     const FORTRAN_INT8 ldc );
 
 #include <isvd/plugin/blas_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

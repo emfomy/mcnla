@@ -28,9 +28,9 @@ namespace blas {
 template <TransOption _trans = TransOption::NORMAL,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
   const TransOption trans = isColMajor(_layout) ? _trans : _trans ^ TransOption::TRANS;
@@ -46,9 +46,9 @@ inline void syrk(
 template <TransOption _trans = TransOption::NORMAL,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &&c
 ) noexcept {
   syrk<_trans, _uplo>(alpha, a, beta, c);

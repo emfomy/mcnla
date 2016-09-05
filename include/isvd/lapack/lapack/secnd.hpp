@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/lapack_plugin_start.h>
 
 // Returns elapsed time in seconds. Use to estimate real time between two calls to this function.
@@ -21,8 +19,6 @@ extern CPP_REAL4 ssecnd_();
 extern CPP_REAL8 dsecnd_();
 
 #include <isvd/plugin/lapack_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
