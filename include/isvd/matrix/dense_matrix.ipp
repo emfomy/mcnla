@@ -504,9 +504,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Vectorize the matrix.
 ///
-/// @attention  !!!
-///
-/// @todo  Finish the description of the attention.
+/// @attention  The output vector contains the out-of-range spaces.
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
