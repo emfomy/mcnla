@@ -44,7 +44,7 @@ namespace lapack {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc isvd::lapack::larnv
+/// @brief  Returns a vector of random numbers from a uniform or normal distribution.
 ///
 //@{
 static inline void larnv(

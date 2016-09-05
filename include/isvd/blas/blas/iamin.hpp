@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/blas/iamax.hpp
-/// @brief   The BLAS IAMAX.
+/// @file    include/isvd/blas/blas/iamin.hpp
+/// @brief   The BLAS IAMIN.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_BLAS_IAMAX_HPP_
-#define ISVD_BLAS_BLAS_IAMAX_HPP_
+#ifndef ISVD_BLAS_BLAS_IAMIN_HPP_
+#define ISVD_BLAS_BLAS_IAMIN_HPP_
 
 #include <isvd/isvd.hpp>
 
@@ -16,11 +16,11 @@ extern "C" {
 
 #include <isvd/plugin/blas_plugin_start.h>
 
-// Finds the index of the element with maximum absolute value.
-extern CPP_INT8 isamax_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 idamax_( const FORTRAN_INT8 n, const FORTRAN_REAL8 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 icamax_( const FORTRAN_INT8 n, const FORTRAN_COMP4 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 izamax_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_INT8 incx );
+// Finds the index of the element with minimum absolute value.
+extern CPP_INT8 isamin_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx );
+extern CPP_INT8 idamin_( const FORTRAN_INT8 n, const FORTRAN_REAL8 x, const FORTRAN_INT8 incx );
+extern CPP_INT8 icamin_( const FORTRAN_INT8 n, const FORTRAN_COMP4 x, const FORTRAN_INT8 incx );
+extern CPP_INT8 izamin_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_INT8 incx );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -44,21 +44,21 @@ namespace blas {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Finds the index of the element with maximum absolute value.
+/// @brief  Finds the index of the element with minimum absolute value.
 ///
 //@{
-static inline index_t iamax(
+static inline index_t iamin(
     const index_t n, const float* x, const index_t incx
-) noexcept { return isamax_(&n, x, &incx) - 1; }
-static inline index_t iamax(
+) noexcept { return isamin_(&n, x, &incx) - 1; }
+static inline index_t iamin(
     const index_t n, const double* x, const index_t incx
-) noexcept { return idamax_(&n, x, &incx) - 1; }
-static inline index_t iamax(
+) noexcept { return idamin_(&n, x, &incx) - 1; }
+static inline index_t iamin(
     const index_t n, const std::complex<float>* x, const index_t incx
-) noexcept { return icamax_(&n, x, &incx) - 1; }
-static inline index_t iamax(
+) noexcept { return icamin_(&n, x, &incx) - 1; }
+static inline index_t iamin(
     const index_t n, const std::complex<double>* x, const index_t incx
-) noexcept { return izamax_(&n, x, &incx) - 1; }
+) noexcept { return izamin_(&n, x, &incx) - 1; }
 //@}
 
 }  // namespace internal
@@ -67,4 +67,4 @@ static inline index_t iamax(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_BLAS_IAMAX_HPP_
+#endif  // ISVD_BLAS_BLAS_IAMIN_HPP_

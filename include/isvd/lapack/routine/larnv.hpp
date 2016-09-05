@@ -24,7 +24,7 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Returns a vector of random numbers from a uniform or normal distribution.
+/// @copydoc isvd::lapack::internal::larnv
 ///
 //@{
 template <index_t idist, typename _Scalar>

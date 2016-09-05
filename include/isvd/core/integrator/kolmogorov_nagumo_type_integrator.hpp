@@ -95,9 +95,6 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
   /// The matrix B.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_b_;
 
-  /// The cube D.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_d_;
-
   /// The matrix D.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_d_;
 

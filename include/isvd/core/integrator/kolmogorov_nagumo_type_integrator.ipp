@@ -64,15 +64,14 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
   if ( cube_b_.getSizes() != cube_b_sizes || !cube_b_.isShrunk() ) {
     cube_b_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_b_sizes);
   }
-  if ( cube_d_.getSizes() != cube_b_sizes || !cube_b_.isShrunk() ) {
-    cube_d_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_b_sizes);
-  }
   matrix_b_ = cube_b_.getPage(0);
-  matrix_d_ = cube_d_.getPage(0);
 
-  const auto matrix_c_sizes = std::make_pair(parameters_.getDimSketch(), parameters_.getDimSketch());
-  if ( matrix_c_.getSizes() != matrix_c_sizes ) {
-    matrix_c_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
+  const auto matrix_b_sizes = matrix_b_.getSizes();
+  if ( matrix_d_.getSizes() != matrix_b_sizes ) {
+    matrix_d_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_b_sizes);
+  }
+  if ( matrix_c_.getSizes() != matrix_b_sizes ) {
+    matrix_c_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_b_sizes);
   }
 
   const auto vector_e_sizes = parameters_.getDimSketch();
@@ -117,9 +116,9 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // Bi := sum( Qij' * Qcj )
     for ( auto i = 0; i < mpi_size; ++i ) {
-      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), matrix_qcj_, 0.0, cube_d_.getPage(i));
+      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), matrix_qcj_, 0.0, cube_b_.getPage(i));
     }
-    mpi::allreduce(cube_d_, cube_b_, MPI_SUM, mpi_comm);
+    mpi::allreduce(cube_b_, MPI_SUM, mpi_comm);
 
     // Xj' := 0, D := 0
     zeroize(matrix_xj_);
