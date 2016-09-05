@@ -67,6 +67,30 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the name of the sketcher.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherName() const noexcept {
+  return sketcher_.getName();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the name of the integrator.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorName() const noexcept {
+  return integrator_.getName();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the name of the reconstructor.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorName() const noexcept {
+  return reconstructor_.getName();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the singular values.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>

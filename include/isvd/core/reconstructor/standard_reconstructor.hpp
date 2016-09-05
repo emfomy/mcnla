@@ -53,17 +53,19 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
 
  public:
 
-  static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
   const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+
+  /// The name.
+  const char *name_ = "Standard Reconstructor";
 
   /// The matrix W.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;
@@ -107,6 +109,9 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
 
   // Reconstructs
   void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
+
+  // Gets name
+  inline const char* getNameImpl() const noexcept;
 
   // Gets matrices
   inline const DenseVector<RealScalarType>& getSingularValuesImpl() const noexcept;

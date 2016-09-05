@@ -66,6 +66,14 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::internal::SketcherBase::getName
+///
+template <class _Matrix>
+const char* GaussianProjectionSketcher<_Matrix>::getNameImpl() const noexcept {
+  return name_;
+}
+
 }  // namespace isvd
 
 #endif  // ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_

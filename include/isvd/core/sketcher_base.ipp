@@ -43,6 +43,14 @@ void SketcherBase<_Derived>::sketch(
           DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q
 ) noexcept { this->derived().sketchImpl(matrix_a, cube_q); }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::Solver::getSketcherName
+///
+template <class _Derived>
+const char* SketcherBase<_Derived>::getName() const noexcept {
+  return this->derived().getNameImpl();
+}
+
 }  // namespace internal
 
 }  // namespace isvd

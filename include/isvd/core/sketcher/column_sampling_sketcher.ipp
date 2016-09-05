@@ -64,6 +64,14 @@ void ColumnSamplingSketcher<_Matrix>::sketchImpl(
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::internal::SketcherBase::getName
+///
+template <class _Matrix>
+const char* ColumnSamplingSketcher<_Matrix>::getNameImpl() const noexcept {
+  return name_;
+}
+
 }  // namespace isvd
 
 #endif  // ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_IPP_

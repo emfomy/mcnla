@@ -25,9 +25,10 @@ namespace blas {
 ///
 template <TransOption _trans, typename _Scalar>
 struct TransChar {
-  static_assert(!!isTranspose(_trans) || !isConjugate(_trans), "Conjugate no-transpose is nor supported!");
-  static const char value =
-      !isTranspose(_trans) ? 'N' : ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+  static const char value = !isTranspose(_trans)
+      ? ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
+      : ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+  static_assert(value != '?', "Conjugate no-transpose is nor supported!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

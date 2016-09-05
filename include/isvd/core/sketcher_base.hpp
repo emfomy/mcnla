@@ -56,6 +56,9 @@ class SketcherBase : public internal::CrtpBase<_Derived, SketcherBase<_Derived>>
   // Random sketches
   inline void sketch( const MatrixType &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
 
+  // Gets name
+  inline const char* getName() const noexcept;
+
 };
 
 }  // namespace internal

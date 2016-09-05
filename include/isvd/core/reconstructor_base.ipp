@@ -44,6 +44,14 @@ void ReconstructorBase<_Derived>::reconstruct(
 ) noexcept { this->derived().reconstructImpl(matrix_a, matrix_qc); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::Solver::getReconstructorName
+///
+template <class _Derived>
+const char* ReconstructorBase<_Derived>::getName() const noexcept {
+  return this->derived().getNameImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  isvd::Solver::getSingularValues
 ///
 template <class _Derived>

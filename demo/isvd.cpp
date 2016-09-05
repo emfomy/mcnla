@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    main/isvd.cpp
+/// @file    demo/isvd.cpp
 /// @brief   The iSVD algorithm
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
@@ -152,7 +152,7 @@ int main( int argc, char **argv ) {
   }
 
   if ( mpi_rank == 0 ) {
-    cout << "Using " << total_time / num_test << " seconds averagely." << endl;
+    cout << "Used " << total_time / num_test << " seconds averagely." << endl;
     cout << "mean(min(svd(U_true' * U))) = " << mean(acc) << endl;
     cout << "sd(min(svd(U_true' * U)))   = " << sqrt(variance(acc)) << endl;
 

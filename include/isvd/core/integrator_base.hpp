@@ -54,6 +54,9 @@ class IntegratorBase : public internal::CrtpBase<_Derived, IntegratorBase<_Deriv
   // Reconstructs
   inline void integrate() noexcept;
 
+  // Gets name
+  inline const char* getName() const noexcept;
+
   // Gets matrices
   inline DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() noexcept;
   inline DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() noexcept;

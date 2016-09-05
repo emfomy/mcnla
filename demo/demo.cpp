@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    main/demo.cpp
+/// @file    demo/demo.cpp
 /// @brief   The demo code
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
@@ -69,6 +69,11 @@ int main( int argc, char **argv ) {
                isvd::StandardReconstructor<isvd::DenseMatrix<double>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketch(Nj).setSeed(seed);
   solver.initialize();
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "Uses " << solver.getSketcherName() << "." << std::endl;
+    std::cout << "Uses " << solver.getIntegratorName() << "." << std::endl;
+    std::cout << "Uses " << solver.getReconstructorName() << "." << std::endl << std::endl;
+  }
 
   // ====================================================================================================================== //
   // Generate matrix
@@ -112,7 +117,7 @@ int main( int argc, char **argv ) {
 
   // Display statistics results
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Using " << total_time / num_test << " seconds averagely." << std::endl;
+    std::cout << "Used " << total_time / num_test << " seconds averagely." << std::endl;
     std::cout << "mean(min(svd(U_true' * U))) = " << boost::accumulators::mean(acc) << std::endl;
     std::cout << "sd(min(svd(U_true' * U)))   = " << std::sqrt(boost::accumulators::variance(acc)) << std::endl;
   }

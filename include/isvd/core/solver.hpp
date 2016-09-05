@@ -103,6 +103,11 @@ class Solver {
   // Compute
   void compute( const _Matrix &matrix ) noexcept;
 
+  // Gets name
+  inline const char* getSketcherName() const noexcept;
+  inline const char* getIntegratorName() const noexcept;
+  inline const char* getReconstructorName() const noexcept;
+
   // Gets matrices
   inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;

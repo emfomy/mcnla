@@ -54,17 +54,19 @@ class ColumnSamplingSketcher : public internal::SketcherBase<ColumnSamplingSketc
 
  public:
 
-  static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
   const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+
+  /// The name.
+  const char *name_ = "Column Sampling Sketcher";
 
   /// The vector S.
   DenseVector<RealScalarType> vector_s_;
@@ -93,6 +95,9 @@ class ColumnSamplingSketcher : public internal::SketcherBase<ColumnSamplingSketc
 
   // Random sketches
   void sketchImpl( const _Matrix &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
+
+  // Gets name
+  inline const char* getNameImpl() const noexcept;
 
 };
 

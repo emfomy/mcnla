@@ -53,17 +53,19 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
 
  public:
 
-  static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
   const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+
+  /// The name.
+  const char *name_ = "Gaussian Projection Sketcher";
 
   /// The matrix Omega.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_omega_;
@@ -89,6 +91,9 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
 
   // Random sketches
   void sketchImpl( const _Matrix &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
+
+  // Gets name
+  inline const char* getNameImpl() const noexcept;
 
 };
 

@@ -53,17 +53,19 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
 
  public:
 
-  static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
   const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+
+  /// The name.
+  const char *name_ = "Kolmogorov-Nagumo-Type Integrator";
 
   /// The number of rows of the matrix per MPI node.
   index_t nrow_each_;
@@ -125,6 +127,9 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
 
   // Integrates
   void integrateImpl() noexcept;
+
+  // Gets name
+  inline const char* getNameImpl() const noexcept;
 
   // Gets matrices
   inline DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;

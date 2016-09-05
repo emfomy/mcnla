@@ -54,6 +54,9 @@ class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<
   // Reconstructs
   inline void reconstruct( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
+  // Gets name
+  inline const char* getName() const noexcept;
+
   // Gets matrices
   inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;
