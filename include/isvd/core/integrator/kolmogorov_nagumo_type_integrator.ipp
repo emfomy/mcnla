@@ -8,8 +8,8 @@
 #ifndef ISVD_CORE_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_IPP_
 #define ISVD_CORE_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_IPP_
 
-#include <cmath>
 #include <isvd/core/integrator/kolmogorov_nagumo_type_integrator.hpp>
+#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -100,7 +100,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto tolerance     = parameters_.getTolerance();
 
   // Exchange Q
-  for ( auto i = 0; i < cube_q_.getNpage(); ++i ) {
+  for ( index_t i = 0; i < cube_q_.getNpage(); ++i ) {
     cube_q_.getPage(i).getRows({parameters_.getNrow(), nrow_all_});
     mpi::alltoall(cube_q_.getPage(i), cube_qj_.getPages({i*mpi_size, (i+1)*mpi_size}), mpi_comm);
   }
@@ -109,13 +109,13 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
   blas::copy(cube_qj_.getPage(0), matrix_qcj_);
 
   bool is_converged = false;
-  for ( auto iter = 0; iter < max_iteration && !is_converged; ++iter ) {
+  for ( index_t iter = 0; iter < max_iteration && !is_converged; ++iter ) {
 
     // ================================================================================================================== //
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
     // Bi := sum( Qij' * Qcj )
-    for ( auto i = 0; i < mpi_size; ++i ) {
+    for ( index_t i = 0; i < mpi_size; ++i ) {
       blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), matrix_qcj_, 0.0, cube_b_.getPage(i));
     }
     mpi::allreduce(cube_b_, MPI_SUM, mpi_comm);
@@ -124,7 +124,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     zeroize(matrix_xj_);
     zeroize(matrix_d_);
 
-    for ( auto i = 0; i < mpi_size; ++i ) {
+    for ( index_t i = 0; i < mpi_size; ++i ) {
       // D += Bi' * Bi
       blas::syrk<TransOption::TRANS>(1.0, cube_b_.getPage(i), 1.0, matrix_d_);
 
@@ -152,7 +152,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     syev_driver_(matrix_b_, vector_e_);
 
     // B := E^(1/4) * B
-    for ( auto i = 0; i < dim_sketch; ++i ) {
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
       blas::scal(pow(vector_e_(i), 0.25), matrix_b_.getCol(i));
     }
 
@@ -169,12 +169,12 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     blas::copy(matrix_d_, matrix_b_);
 
     // D := E^(1/4) * D
-    for ( auto i = 0; i < dim_sketch; ++i ) {
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
       blas::scal(pow(vector_e_(i), 0.25), matrix_d_.getCol(i));
     }
 
     // B := E^(1/4) \ B
-    for ( auto i = 0; i < dim_sketch; ++i ) {
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
       blas::scal(pow(vector_e_(i), -0.25), matrix_b_.getCol(i));
     }
 
@@ -190,7 +190,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // Check convergence
     if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
-      for ( auto i = 0; i < dim_sketch; ++i ) {
+      for ( index_t i = 0; i < dim_sketch; ++i ) {
         matrix_c_(i, i) -= 1.0;
       }
       syev_driver_.computeValues(matrix_c_, vector_e_);

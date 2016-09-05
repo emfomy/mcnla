@@ -8,8 +8,8 @@
 #ifndef ISVD_MATRIX_DENSE_MATRIX_IPP_
 #define ISVD_MATRIX_DENSE_MATRIX_IPP_
 
-#include <iomanip>
 #include <isvd/matrix/dense_matrix.hpp>
+#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -175,8 +175,8 @@ DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( DenseMa
 ///
 template <typename __Scalar, Layout __layout>
 std::ostream& operator<< ( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix ) {
-  for ( auto i = 0; i < matrix.nrow_; ++i ) {
-    for ( auto j = 0; j < matrix.ncol_; ++j ) {
+  for ( index_t i = 0; i < matrix.nrow_; ++i ) {
+    for ( index_t j = 0; j < matrix.ncol_; ++j ) {
       out << std::setw(ios_width) << matrix(i, j);
     }
     out << std::endl;

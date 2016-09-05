@@ -15,6 +15,9 @@
 #include <isvd/core/sketcher_base.hpp>
 #include <isvd/core/integrator_base.hpp>
 #include <isvd/core/reconstructor_base.hpp>
+#include <isvd/core/sketcher/gaussian_projection_sketcher.hpp>
+#include <isvd/core/integrator/kolmogorov_nagumo_type_integrator.hpp>
+#include <isvd/core/reconstructor/standard_reconstructor.hpp>
 #include <mpi.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +33,10 @@ namespace isvd {
 /// @tparam  _Integrator     The integrator type.
 /// @tparam  _Reconstructor  The reconstructor type.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+template <class _Matrix,
+          class _Sketcher = GaussianProjectionSketcher<_Matrix>,
+          class _Integrator = KolmogorovNagumoTypeIntegrator<_Matrix>,
+          class _Reconstructor = StandardReconstructor<_Matrix>>
 class Solver {
 
   static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value,

@@ -196,7 +196,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSeed( const index_t seed[4] ) noexcept {
-  for ( auto i = 0; i < 4; ++i ) {
+  for ( index_t i = 0; i < 4; ++i ) {
     seed_[i] = seed[i];
   }
   return *this;

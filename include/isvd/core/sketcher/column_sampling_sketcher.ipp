@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/sketcher/gaussian_projection_sketcher.ipp
-/// @brief   The implementation of Gaussian projection sketcher.
+/// @file    include/isvd/core/sketcher/column_sampling_sketcher.ipp
+/// @brief   The implementation of column sampling sketcher.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_
-#define ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_
+#ifndef ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_IPP_
+#define ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_IPP_
 
-#include <isvd/core/sketcher/gaussian_projection_sketcher.hpp>
+#include <isvd/core/sketcher/column_sampling_sketcher.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -19,7 +19,7 @@ namespace isvd {
 /// @copydoc  isvd::internal::SketcherBase::SketcherBase
 ///
 template <class _Matrix>
-GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
+ColumnSamplingSketcher<_Matrix>::ColumnSamplingSketcher(
     const internal::Parameters<ScalarType> &parameters, index_t *seed
 ) noexcept : BaseType(parameters, seed) {}
 
@@ -27,12 +27,7 @@ GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
 /// @copydoc  isvd::internal::SketcherBase::initialize
 ///
 template <class _Matrix>
-void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
-
-  const auto matrix_omega_sizes = std::make_pair(parameters_.getNcol(), parameters_.getDimSketch());
-  if ( matrix_omega_.getSizes() != matrix_omega_sizes ) {
-    matrix_omega_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_omega_sizes);
-  }
+void ColumnSamplingSketcher<_Matrix>::initializeImpl() noexcept {
 
   const auto vector_s_sizes = parameters_.getDimSketch();
   if ( vector_s_.getSizes() != vector_s_sizes ) {
@@ -44,13 +39,15 @@ void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
     gesvd_driver_.resize(gesvd_sizes);
   }
 
+  srand(this->seed_[0]);
+  random_distribution_ = std::uniform_int_distribution<index_t>(0, parameters_.getNcol()-1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  isvd::internal::SketcherBase::sketch
 ///
 template <class _Matrix>
-void GaussianProjectionSketcher<_Matrix>::sketchImpl(
+void ColumnSamplingSketcher<_Matrix>::sketchImpl(
     const _Matrix &matrix_a,
           DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q
 ) noexcept {
@@ -60,12 +57,13 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
                                                                        parameters_.getNumSketchEach()));
 
   for ( index_t i = 0; i < parameters_.getNumSketchEach(); ++i ) {
-    lapack::larnv<3>(matrix_omega_.vectorize(), this->seed_);
-    blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, cube_q.getPage(i));
+    for ( index_t j = 0; j < parameters_.getDimSketch(); ++j ) {
+      blas::copy(matrix_a.getCol(random_distribution_(random_generator_)), cube_q.getCol(j, i));
+    }
     gesvd_driver_(cube_q.getPage(i), vector_s_, matrix_empty_, matrix_empty_);
   }
 }
 
 }  // namespace isvd
 
-#endif  // ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_
+#endif  // ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_IPP_

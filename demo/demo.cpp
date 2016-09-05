@@ -56,7 +56,9 @@ int main( int argc, char **argv ) {
   isvd::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
   isvd::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
   assert(k <= m && m <= n);
-  if ( mpi_rank == mpi_root ) { printf("m = %d, n = %d, k = %d, N = %d, K = %d\n\n", m, n, k, Nj*mpi_size, mpi_size); }
+  if ( mpi_rank == mpi_root ) {
+    printf("m = %d, n = %d, k = %d, p = %d, N = %d, K = %d\n\n", m, n, k, p, Nj*mpi_size, mpi_size);
+  }
 
   // ====================================================================================================================== //
   // Initialize solver
@@ -85,7 +87,7 @@ int main( int argc, char **argv ) {
     std::cout << "Start iSVD." << std::endl;
   }
 
-  for ( auto t = 0; t < num_test; ++t ) {
+  for ( isvd::index_t t = 0; t < num_test; ++t ) {
     MPI_Barrier(MPI_COMM_WORLD);
     if ( mpi_rank == mpi_root ) {
       start_time = isvd::lapack::secnd();
@@ -149,10 +151,10 @@ void create(
   isvd::blas::copy(matrix_u.getCols({0, rank}), matrix_u_true);
 
   // A := U * S * V'
-  for ( auto i = 0; i < rank; ++i ) {
+  for ( isvd::index_t i = 0; i < rank; ++i ) {
     isvd::blas::scal(1.0/(i+1), matrix_u.getCol(i));
   }
-  for ( auto i = rank; i < matrix_a.getNrow(); ++i ) {
+  for ( isvd::index_t i = rank; i < matrix_a.getNrow(); ++i ) {
     isvd::blas::scal(1e-2/(i-rank+1), matrix_u.getCol(i));
   }
   isvd::blas::gemm<isvd::TransOption::NORMAL, isvd::TransOption::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
