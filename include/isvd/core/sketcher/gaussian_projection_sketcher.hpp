@@ -71,11 +71,11 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
   /// The vector S.
   DenseVector<RealScalarType> vector_s_;
 
-  /// The GESVD driver
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
-
   /// The empty matrix.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
+
+  /// The GESVD driver
+  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
 
  public:
 

@@ -1,15 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/routine/scal.hpp
-/// @brief   The BLAS SCAL routine.
+/// @file    include/isvd/blas/routine/iamin.hpp
+/// @brief   The BLAS IAMIN routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_BLAS_ROUTINE_SCAL_HPP_
-#define ISVD_BLAS_ROUTINE_SCAL_HPP_
+#ifndef ISVD_BLAS_ROUTINE_IAMIN_HPP_
+#define ISVD_BLAS_ROUTINE_IAMIN_HPP_
 
+#include <cmath>
+#include <complex>
 #include <isvd/matrix.hpp>
-#include <isvd/blas/blas/scal.hpp>
+#include <isvd/blas/blas/iamin.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -22,23 +24,27 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::scal
+/// @copydoc  isvd::blas::internal::iamin
 ///
 //@{
 template <typename _Scalar>
-inline void scal(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
-          DenseVector<_Scalar> &x
+inline index_t iamin(
+    const DenseVector<_Scalar> &x
 ) noexcept {
-  internal::scal(x.getLength(), alpha, x.getValue(), x.getIncrement());
+  return internal::iamin(x.getLength(), x.getValue(), x.getIncrement());
 }
+//@}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Finds the element with minimum absolute value.
+///
+//@{
 template <typename _Scalar>
-inline void scal(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
-          DenseVector<_Scalar> &&x
+inline _Scalar amin(
+    const DenseVector<_Scalar> &x
 ) noexcept {
-  scal(alpha, x);
+  index_t idx = internal::iamin(x.getLength(), x.getValue(), x.getIncrement());
+  return std::abs(x(idx));
 }
 //@}
 
@@ -46,4 +52,4 @@ inline void scal(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_ROUTINE_SCAL_HPP_
+#endif  // ISVD_BLAS_ROUTINE_IAMIN_HPP_

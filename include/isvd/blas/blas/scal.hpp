@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/blas_plugin_start.h>
 
 // Computes the product of a vector by a scalar.
@@ -23,8 +21,6 @@ extern void cscal_( const FORTRAN_INT8 n, const FORTRAN_COMP4 alpha, FORTRAN_COM
 extern void zscal_( const FORTRAN_INT8 n, const FORTRAN_COMP8 alpha, FORTRAN_COMP8 x, const FORTRAN_INT8 incx );
 
 #include <isvd/plugin/blas_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

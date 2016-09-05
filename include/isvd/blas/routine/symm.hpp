@@ -28,10 +28,10 @@ namespace blas {
 template <SideOption _side,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
   if ( isColMajor(_layout) ) {
@@ -66,10 +66,10 @@ inline void symm(
 template <SideOption _side,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
     const DenseMatrix<_Scalar, _layout> &b,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &&c
 ) noexcept {
   symm<_side, _uplo>(alpha, a, b, beta, c);

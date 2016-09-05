@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/blas_plugin_start.h>
 
 // Computes a matrix-matrix product where one input matrix is symmetric.
@@ -33,8 +31,6 @@ extern void zhemm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FO
                     const FORTRAN_INT8 ldb, const FORTRAN_COMP8 beta, FORTRAN_COMP8 c, const FORTRAN_INT8 ldc );
 
 #include <isvd/plugin/blas_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/blas_plugin_start.h>
 
 // Copies vector to another vector.
@@ -27,8 +25,6 @@ extern void zcopy_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_I
                     const FORTRAN_INT8 incy );
 
 #include <isvd/plugin/blas_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

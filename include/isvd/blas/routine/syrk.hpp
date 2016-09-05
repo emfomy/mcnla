@@ -28,31 +28,27 @@ namespace blas {
 template <TransOption _trans = TransOption::NORMAL,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
+  const TransOption trans = isColMajor(_layout) ? _trans : _trans ^ TransOption::TRANS;
+
   assert(c.getNrow() == c.getNcol());
-  if ( isColMajor(_layout) ) {
-    assert(c.getNrow() == a.template getNrow<_trans>());
-    internal::syrk(UploChar<_uplo, _layout>::value, TransChar<_trans, _Scalar>::value,
-                   c.template getNrow(), a.template getNcol<_trans>(),
-                   alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
-  } else {
-    assert(c.getNcol() == a.template getNcol<_trans>());
-    internal::syrk(UploChar<_uplo, _layout>::value, TransChar<_trans, _Scalar>::value,
-                   c.template getNcol(), a.template getNrow<_trans>(),
-                   alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
-  }
+  assert(c.getNrow() == a.template getNrow<_trans>());
+
+  internal::syrk(UploChar<_uplo, _layout>::value, TransChar<trans, _Scalar>::value,
+                 c.getNrow(), a.template getNcol<trans>(),
+                 alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
 }
 
 template <TransOption _trans = TransOption::NORMAL,
           UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &&c
 ) noexcept {
   syrk<_trans, _uplo>(alpha, a, beta, c);

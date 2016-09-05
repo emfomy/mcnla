@@ -12,8 +12,6 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-extern "C" {
-
 #include <isvd/plugin/blas_plugin_start.h>
 
 // Performs a symmetric rank-k update.
@@ -33,8 +31,6 @@ extern void zherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const F
                     FORTRAN_COMP8 c, const FORTRAN_INT8 ldc );
 
 #include <isvd/plugin/blas_plugin_end.h>
-
-}  // extern "C"
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

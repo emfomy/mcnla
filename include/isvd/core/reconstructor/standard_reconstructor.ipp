@@ -78,7 +78,7 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
   // Vt := Q' * A
   blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qc, matrix_a, 0.0, matrix_vlt_);
 
-  // Compute the SVD of Vt (W := left singular vectors, Vt := right singular vectors, S := singular values)
+  // Compute the SVD of Vt -> W * S * Vt
   gesvd_driver_(matrix_vlt_, vector_sl_, matrix_w_, matrix_empty_);
 
   // U := Q * W

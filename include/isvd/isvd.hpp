@@ -20,6 +20,11 @@
 #include <type_traits>
 #include <isvd/config.hpp>
 
+#ifdef ISVD_USE_MKL
+#define MKL_Complex8 std::complex<float>
+#define MKL_Complex16 std::complex<double>
+#endif  // ISVD_USE_MKL
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The iSVD namespace
 ///

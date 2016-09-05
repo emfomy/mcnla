@@ -11,6 +11,7 @@
 #include <isvd/blas/routine/copy.hpp>
 #include <isvd/blas/routine/scal.hpp>
 #include <isvd/blas/routine/iamax.hpp>
+#include <isvd/blas/routine/iamin.hpp>
 
 #include <isvd/blas/routine/gemm.hpp>
 #include <isvd/blas/routine/symm.hpp>

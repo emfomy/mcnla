@@ -9,5 +9,6 @@
 #define ISVD_LAPACK_ROUTINE_HPP_
 
 #include <isvd/lapack/routine/larnv.hpp>
+#include <isvd/lapack/routine/secnd.hpp>
 
 #endif  // ISVD_LAPACK_ROUTINE_HPP_

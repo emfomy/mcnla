@@ -85,10 +85,10 @@ template <TransOption _transa = isvd::TransOption::NORMAL,
           TransOption _transb = isvd::TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layouta> &a,
     const DenseMatrix<_Scalar, _layoutb> &b,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
           DenseMatrix<_Scalar, _layoutc> &c
 ) noexcept {
   internal::gemm<_transa, _transb>(alpha, a, b, beta, c);
@@ -98,10 +98,10 @@ template <TransOption _transa = isvd::TransOption::NORMAL,
           TransOption _transb = isvd::TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
-    const _Scalar alpha,
+    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layouta> &a,
     const DenseMatrix<_Scalar, _layoutb> &b,
-    const _Scalar beta,
+    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
           DenseMatrix<_Scalar, _layoutc> &&c
 ) noexcept {
   internal::gemm<_transa, _transb>(alpha, a, b, beta, c);

@@ -37,7 +37,7 @@ SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
     const index_t dim
 ) noexcept
   : dim_(dim),
-    work_(dim),
+    work_(query(dim)),
     rwork_(is_real ? RealVectorType() : RealVectorType(3*dim)) {
   assert(dim_ > 0);
 }
@@ -78,7 +78,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::resize(
 ) noexcept {
   assert(dim > 0);
   dim_ = dim;
-  work_ = VectorType(dim);
+  work_ = VectorType(query(dim));
   if ( is_real ) {
     rwork_ = RealVectorType(3*dim);
   }
@@ -147,7 +147,6 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
   assert(dim_ > 0);
   assert(a.getSizes() == std::make_pair(dim_, dim_));
   assert(w.getLength() == a.getNrow());
-
   assert(internal::syev(__jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),
                         w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
 }

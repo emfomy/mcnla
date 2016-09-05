@@ -550,13 +550,15 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlock(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Unfold the cube.
 ///
-/// @attention  !!!
-///
-/// @todo  Finish the description of the attention.
+/// @attention  The output matrix contains the out-of-range spaces in the second dimension.
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
-  return DenseMatrix<_Scalar, _layout>(dim1_, pitch2_ * npage_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+  if ( isColMajor(_layout) ) {
+    return DenseMatrix<_Scalar, _layout>(nrow_, pitch2_ * npage_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+  } else {
+    return DenseMatrix<_Scalar, _layout>(pitch2_ * npage_, ncol_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -564,7 +566,11 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() const noexcept {
-  return DenseMatrix<_Scalar, _layout>(dim1_, pitch2_ * npage_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+  if ( isColMajor(_layout) ) {
+    return DenseMatrix<_Scalar, _layout>(nrow_, pitch2_ * npage_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+  } else {
+    return DenseMatrix<_Scalar, _layout>(pitch2_ * npage_, ncol_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -804,9 +810,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Vectorize the cube.
 ///
-/// @attention  !!!
-///
-/// @todo  Finish the description of the attention.
+/// @attention  The output vector contains the out-of-range spaces.
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
