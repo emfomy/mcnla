@@ -84,8 +84,8 @@ struct MpiScalarTraits<std::complex<double>> {
 ///
 /// @return       The number of processes in the group of @p comm.
 ///
-static inline index_t getCommSize( const MPI_Comm comm ) noexcept {
-  index_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
+static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
+  mpi_int_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,8 +95,8 @@ static inline index_t getCommSize( const MPI_Comm comm ) noexcept {
 ///
 /// @return       The rank of the calling process in group of @p comm.
 ///
-static inline index_t getCommRank( const MPI_Comm comm ) noexcept {
-  index_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
+static inline mpi_int_t getCommRank( const MPI_Comm comm ) noexcept {
+  mpi_int_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ static inline index_t getCommRank( const MPI_Comm comm ) noexcept {
 /// @param  root  The root rank.
 /// @param  comm  The communicator.
 ///
-static inline bool isCommRoot( const index_t root, const MPI_Comm comm ) noexcept {
+static inline bool isCommRoot( const mpi_int_t root, const MPI_Comm comm ) noexcept {
   return (getCommRank(comm) == root);
 }
 
@@ -117,7 +117,7 @@ static inline bool isCommRoot( const index_t root, const MPI_Comm comm ) noexcep
 template <typename _Scalar, Layout _layout>
 inline void bcast(
           DenseMatrix<_Scalar, _layout> buffer,
-    const index_t root,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
@@ -133,14 +133,14 @@ template <typename _Scalar, Layout _layout>
 inline void gather(
     const DenseMatrix<_Scalar, _layout> send,
           DenseMatrix<_Scalar, _layout> recv,
-    const index_t root,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   assert(send.isShrunk());
   assert(recv.isShrunk());
   assert(isCommRoot(root, comm) ? send.getDim1()                     == recv.getDim1() : true);
   assert(isCommRoot(root, comm) ? send.getDim2() * getCommSize(comm) == recv.getDim2() : true);
-  index_t size = send.getSize();
+  mpi_int_t size = send.getSize();
   MPI_Gather(send.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type,
              recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, root, comm);
 }
@@ -161,7 +161,7 @@ inline void allreduce(
   assert(send.isShrunk());
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
-  index_t size = send.getSize();
+  mpi_int_t size = send.getSize();
   MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
@@ -175,7 +175,7 @@ inline void allreduce(
   assert(send.isShrunk());
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
-  index_t size = send.getSize();
+  mpi_int_t size = send.getSize();
   MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
@@ -189,7 +189,7 @@ inline void allreduce(
   assert(send.isShrunk());
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
-  index_t size = send.getSize();
+  mpi_int_t size = send.getSize();
   MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 //@}
@@ -207,7 +207,7 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  index_t size = buffer.getSize();
+  mpi_int_t size = buffer.getSize();
   MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
@@ -218,7 +218,7 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  index_t size = buffer.getSize();
+  mpi_int_t size = buffer.getSize();
   MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
@@ -229,7 +229,7 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  index_t size = buffer.getSize();
+  mpi_int_t size = buffer.getSize();
   MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 //@}
@@ -251,7 +251,7 @@ inline void alltoall(
   assert(send.getDim1()  == recv.getDim1());
   assert(send.getDim2()  == recv.getDim2() * recv.getNpage());
   assert(recv.getNpage() == getCommSize(comm));
-  index_t size = recv.getDim1() * recv.getDim2();
+  mpi_int_t size = recv.getDim1() * recv.getDim2();
   MPI_Alltoall(send.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type,
                recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, comm);
 }
@@ -268,7 +268,7 @@ inline void alltoall(
 ) noexcept {
   assert(buffer.isShrunk());
   assert(buffer.getNpage() == getCommSize(comm));
-  index_t size = buffer.getDim1() * buffer.getDim2();
+  mpi_int_t size = buffer.getDim1() * buffer.getDim2();
   MPI_Alltoall(MPI_IN_PLACE, size, internal::MpiScalarTraits<_Scalar>::data_type,
                buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, comm);
 }

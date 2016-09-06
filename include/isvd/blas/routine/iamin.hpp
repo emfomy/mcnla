@@ -40,7 +40,7 @@ inline index_t iamin(
 ///
 //@{
 template <typename _Scalar>
-inline _Scalar amin(
+inline typename isvd::internal::ScalarTraits<_Scalar>::RealType amin(
     const DenseVector<_Scalar> &x
 ) noexcept {
   index_t idx = internal::iamin(x.getLength(), x.getValue(), x.getIncrement());

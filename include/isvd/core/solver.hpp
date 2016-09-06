@@ -72,13 +72,13 @@ class Solver {
   const MPI_Comm &mpi_comm_ = parameters_.mpi_comm;
 
   /// @copydoc  isvd::internal::Parameters::mpi_size
-  const index_t &mpi_size_ = parameters_.mpi_size;
+  const mpi_int_t &mpi_size_ = parameters_.mpi_size;
 
   /// @copydoc  isvd::internal::Parameters::mpi_root
-  const index_t &mpi_root_ = parameters_.mpi_root;
+  const mpi_int_t &mpi_root_ = parameters_.mpi_root;
 
   /// The MPI rank.
-  const index_t mpi_rank_;
+  const mpi_int_t mpi_rank_;
 
   /// The random seed
   index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
@@ -95,7 +95,7 @@ class Solver {
  public:
 
   // Constructor
-  Solver( const MPI_Comm mpi_comm, const index_t mpi_root = 0 ) noexcept;
+  Solver( const MPI_Comm mpi_comm, const mpi_int_t mpi_root = 0 ) noexcept;
 
   // Initializes
   void initialize() noexcept;

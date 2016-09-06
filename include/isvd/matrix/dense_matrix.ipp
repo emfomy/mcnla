@@ -108,7 +108,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= dim1_);
   assert(pitch_ > 0);
-  assert(capability >= pitch_ * dim2_);
+  assert(capability >= pitch_ * dim2_ - (pitch_-dim1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= dim1_);
   assert(pitch_ > 0);
-  assert(data.getCapability() >= pitch_ * dim2_);
+  assert(data.getCapability() >= pitch_ * dim2_ - (pitch_-dim1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

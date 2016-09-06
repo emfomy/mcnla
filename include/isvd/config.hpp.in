@@ -20,13 +20,13 @@
 namespace isvd {
 
 /// The type of index.
-using index_t = int@ISVD_SYSTEM_WORD_SIZE@_t;
+using index_t = int@ISVD_SYSTEM_INT_SIZE@_t;
 
 /// The type of size.
-using size_t = uint@ISVD_SYSTEM_WORD_SIZE@_t;
+using size_t = uint@ISVD_SYSTEM_INT_SIZE@_t;
 
 /// The type of index.
-static const index_t system_word_size = @ISVD_SYSTEM_WORD_SIZE@;
+static const index_t system_int_size = @ISVD_SYSTEM_INT_SIZE@;
 
 /// The format width
 static const size_t ios_width = 12;

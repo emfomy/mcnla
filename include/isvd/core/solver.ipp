@@ -21,7 +21,7 @@ namespace isvd {
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
     const MPI_Comm mpi_comm,
-    const index_t mpi_root
+    const mpi_int_t mpi_root
 ) noexcept
   : parameters_(mpi_comm, mpi_root),
     mpi_rank_(mpi::getCommRank(mpi_comm)),

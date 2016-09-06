@@ -137,7 +137,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch2_(pitch2) {
   assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
-  assert(capability >= pitch1_ * pitch2_ * npage_);
+  assert(capability >= pitch1_ * pitch2_ * npage_ - (pitch1_-dim1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch2_(pitch2) {
   assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
-  assert(data.getCapability() >= pitch1_ * pitch2_ * npage_);
+  assert(data.getCapability() >= pitch1_ * pitch2_ * npage_ - (pitch1_-dim1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

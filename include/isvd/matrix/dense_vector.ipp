@@ -69,7 +69,7 @@ DenseVector<_Scalar>::DenseVector(
     DenseBaseType(capability, value, offset),
     increment_(increment) {
   assert(increment_ > 0);
-  assert(capability >= increment_ * length_);
+  assert(capability >= increment_ * (length_-1) + 1 + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ DenseVector<_Scalar>::DenseVector(
     DenseBaseType(data, offset),
     increment_(increment) {
   assert(increment_ > 0);
-  assert(data.getCapability() >= increment_ * length_);
+  assert(data.getCapability() >= increment_ * (length_-1) + 1 + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

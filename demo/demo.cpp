@@ -6,7 +6,7 @@
 ///
 
 #include <iostream>
-#include <algorithm>
+#include <iomanip>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
@@ -27,9 +27,9 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize MPI
   MPI_Init(&argc, &argv);
-  isvd::index_t mpi_root = 0;
-  isvd::index_t mpi_size = isvd::mpi::getCommSize(MPI_COMM_WORLD);
-  isvd::index_t mpi_rank = isvd::mpi::getCommRank(MPI_COMM_WORLD);
+  isvd::mpi_int_t mpi_root = 0;
+  isvd::mpi_int_t mpi_size = isvd::mpi::getCommSize(MPI_COMM_WORLD);
+  isvd::mpi_int_t mpi_rank = isvd::mpi::getCommRank(MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Display program information
@@ -50,14 +50,19 @@ int main( int argc, char **argv ) {
   // Set parameters
   int argi = 0;
   isvd::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  isvd::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
+  isvd::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
   isvd::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
   isvd::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   isvd::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
   isvd::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
-    printf("m = %d, n = %d, k = %d, p = %d, N = %d, K = %d\n\n", m, n, k, p, Nj*mpi_size, mpi_size);
+    std::cout << "m = " << m
+            << ", n = " << n
+            << ", k = " << k
+            << ", p = " << p
+            << ", N = " << Nj*mpi_size
+            << ", K = " << mpi_size << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -110,7 +115,7 @@ int main( int argc, char **argv ) {
     // Check result
     if ( mpi_rank == mpi_root ) {
       check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin);
-      printf("%4d: %.4f\n", t, smin);
+      std::cout << std::setw(4) << t << ": " << std::fixed << std::setprecision(4) << smin << std::endl;
       acc(smin);
     }
   }

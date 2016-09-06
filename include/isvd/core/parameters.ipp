@@ -24,7 +24,7 @@ namespace internal {
 /// @brief  Default constructor
 ///
 template <typename _Scalar>
-Parameters<_Scalar>::Parameters( const MPI_Comm comm, const index_t root ) noexcept
+Parameters<_Scalar>::Parameters( const MPI_Comm comm, const mpi_int_t root ) noexcept
   : mpi_comm(comm),
     mpi_size(mpi::getCommSize(comm)),
     mpi_root(root) {}

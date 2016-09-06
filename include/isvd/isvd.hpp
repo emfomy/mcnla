@@ -30,6 +30,9 @@
 ///
 namespace isvd {
 
+/// The type of MPI integer.
+using mpi_int_t = int32_t;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The enumeration of matrix storage layout.
 ///
@@ -37,8 +40,6 @@ enum class Layout {
   COLMAJOR = 0x0,  ///< Column-major order.
   ROWMAJOR = 0x1,  ///< Row-major order.
 };
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 static constexpr bool operator !( const Layout layout ) noexcept {
   return !static_cast<const bool>(layout);
@@ -55,8 +56,6 @@ static constexpr Layout operator&( const Layout a, const Layout b ) noexcept {
 static constexpr Layout operator^( const Layout a, const Layout b ) noexcept {
   return static_cast<const Layout>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
-
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 static constexpr bool isColMajor( const Layout layout ) noexcept {
   return !(layout & Layout::ROWMAJOR);
@@ -80,8 +79,6 @@ enum class TransOption {
   CONJTRANS = TRANS | CONJ,  ///< Conjugate transpose.
 };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 static constexpr bool operator !( const TransOption trans ) noexcept {
   return !static_cast<const bool>(trans);
 }
@@ -97,8 +94,6 @@ static constexpr TransOption operator&( const TransOption a, const TransOption b
 static constexpr TransOption operator^( const TransOption a, const TransOption b ) noexcept {
   return static_cast<const TransOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
-
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 static constexpr bool isTranspose( const TransOption trans ) noexcept {
   return !!(trans & TransOption::TRANS);
@@ -118,8 +113,6 @@ enum class UploOption {
   UNITUPPER = 0x3, ///< Unit diagonal upper triangular storage.
 };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 static constexpr bool operator!( const UploOption uplo ) noexcept {
   return !static_cast<const bool>(uplo);
 }
@@ -135,8 +128,6 @@ static constexpr UploOption operator&( const UploOption a, const UploOption b ) 
 static constexpr UploOption operator^( const UploOption a, const UploOption b ) noexcept {
   return static_cast<const UploOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
-
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 static constexpr bool isLower( const UploOption uplo ) noexcept {
   return !(uplo & UploOption::UPPER);
@@ -158,8 +149,6 @@ enum class SideOption {
   RIGHT = 0x1,  ///< Right-hand side.
 };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
 static constexpr bool operator!( const SideOption side ) noexcept {
   return !static_cast<const bool>(side);
 }
@@ -175,8 +164,6 @@ static constexpr SideOption operator&( const SideOption a, const SideOption b ) 
 static constexpr SideOption operator^( const SideOption a, const SideOption b ) noexcept {
   return static_cast<const SideOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
 }
-
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 static constexpr bool isLeftSide( const SideOption side ) noexcept {
   return !(side & SideOption::RIGHT);
