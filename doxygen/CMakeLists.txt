@@ -1,5 +1,8 @@
 # The CMake setting of 'doxygen/'
 
+# DOxygen
+find_package(Doxygen REQUIRED)
+
 # Create configure files
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
