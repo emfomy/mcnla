@@ -119,7 +119,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    const DenseData<_Scalar> &data,
+    const DataType &data,
     const index_t offset
 ) noexcept
   : MatrixBaseType(nrow, ncol),

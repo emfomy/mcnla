@@ -101,15 +101,15 @@ class DenseMatrix
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<ScalarType> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-               const DenseData<ScalarType> &data, const index_t offset = 0 ) noexcept;
+               const DataType &data, const index_t offset = 0 ) noexcept;
   DenseMatrix( const DenseMatrix &other ) noexcept;
   DenseMatrix( DenseMatrix &&other ) noexcept;
 
   // Operators
   inline DenseMatrix& operator=( const DenseMatrix &other ) noexcept;
   inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
-  template <typename _ScalarType, Layout __layout>
-  friend std::ostream& operator<<( std::ostream &out, const DenseMatrix<_ScalarType, __layout> &matrix );
+  template <typename __Scalar, Layout __layout>
+  friend std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
 
   // Gets information
   inline index_t getPitch() const noexcept;

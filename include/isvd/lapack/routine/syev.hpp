@@ -27,10 +27,17 @@ namespace lapack {
 /// @copydoc  isvd::lapack::SyevDriver::compute
 ///
 //@{
+template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+inline void syev(
+    DenseMatrix<_Scalar, _layout> &a,
+    DenseVector<typename isvd::internal::ScalarTraits<_Scalar>::RealType> &w
+) noexcept {
+  SyevDriver<DenseMatrix<_Scalar, _layout>, _jobz, _uplo> driver(a);
+  driver(a, w);
+}
 template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, class _TypeA, class _TypeW>
 inline void syev( _TypeA &&a, _TypeW &&w ) noexcept {
-  SyevDriver<typename std::remove_reference<_TypeA>::type, _jobz, _uplo> driver(a);
-  driver(a, w);
+  syev<_jobz, _uplo>(a, w);
 }
 //@}
 

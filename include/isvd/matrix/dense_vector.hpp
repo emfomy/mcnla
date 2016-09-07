@@ -83,16 +83,15 @@ class DenseVector
   DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value ) noexcept;
   DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseVector( const index_t length, const index_t increment,
-               const DenseData<ScalarType> &data, const index_t offset = 0 ) noexcept;
+  DenseVector( const index_t length, const index_t increment, const DataType &data, const index_t offset = 0 ) noexcept;
   DenseVector( const DenseVector &other ) noexcept;
   DenseVector( DenseVector &&other ) noexcept;
 
   // Operators
   inline DenseVector& operator=( const DenseVector &other ) noexcept;
   inline DenseVector& operator=( DenseVector &&other ) noexcept;
-  template <typename _ScalarType>
-  friend std::ostream& operator<<( std::ostream &out, const DenseVector<_ScalarType> &vector );
+  template <typename __Scalar>
+  friend std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
 
   // Gets information
   inline index_t getIncrement() const noexcept;

@@ -79,7 +79,7 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
     const index_t increment,
-    const DenseData<_Scalar> &data,
+    const DataType &data,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),

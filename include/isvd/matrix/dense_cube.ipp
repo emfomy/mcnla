@@ -150,7 +150,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t npage,
     const index_t pitch1,
     const index_t pitch2,
-    const DenseData<_Scalar> &data,
+    const DataType &data,
     const index_t offset
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
