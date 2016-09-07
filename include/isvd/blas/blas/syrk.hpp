@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Performs a symmetric rank-k update.
 extern void ssyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,

@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Computes the product of a vector by a scalar.
 extern void sscal_( const FORTRAN_INT8 n, const FORTRAN_REAL4 alpha, FORTRAN_REAL4 x, const FORTRAN_INT8 incx );

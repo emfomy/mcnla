@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Copies vector to another vector.
 extern void scopy_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx, FORTRAN_REAL4 y,

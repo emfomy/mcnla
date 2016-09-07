@@ -10,6 +10,7 @@
 
 #include <iterator>
 #include <isvd/isvd.hpp>
+#include <isvd/matrix/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -33,9 +34,10 @@ class DenseVectorIterator : public std::iterator<std::forward_iterator_tag, _Sca
 
  protected:
 
-  /// The offset of starting position.
+  /// The index.
   index_t idx_;
 
+  /// The vector.
   DenseVector<_Scalar> *vector_;
 
  public:

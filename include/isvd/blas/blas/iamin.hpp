@@ -14,7 +14,7 @@
 
 #ifdef ISVD_USE_MKL
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Finds the index of the element with minimum absolute value.
 extern CPP_INT8 isamin_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx );

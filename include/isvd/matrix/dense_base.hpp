@@ -33,6 +33,7 @@ class DenseBase {
  private:
 
   using ScalarType = typename Traits<_Derived>::ScalarType;
+  using DataType   = DenseData<ScalarType>;
 
  protected:
 
@@ -61,8 +62,8 @@ class DenseBase {
   inline index_t getOffset() const noexcept;
 
   // Gets data storage
-  inline DenseData<ScalarType>& getData() noexcept;
-  inline const DenseData<ScalarType>& getData() const noexcept;
+  inline DataType& getData() noexcept;
+  inline const DataType& getData() const noexcept;
 
   // Gets data array.
   inline ScalarType* getValue() noexcept;

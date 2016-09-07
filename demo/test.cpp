@@ -13,12 +13,15 @@
 ///
 int main( int argc, char **argv ) {
   srand(time(NULL));
-  isvd::index_t seed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
 
-  isvd::DenseVector<double> vec(100);
-  isvd::lapack::larnv<3>(vec, seed);
-  for ( auto& v : vec ) {
-    std::cout << std::setw(12) << v;
+  isvd::DenseCube<double> cube(5, 5, 5);
+  int i = 1;
+  for ( auto& v : cube ) {
+    v = i++;
+  }
+  for ( auto v : cube ) {
+    std::cout << std::setw(4) << v;
   }
   std::cout << std::endl;
+  std::cout << cube.unfold().transpose() << std::endl;
 }

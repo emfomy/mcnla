@@ -92,6 +92,8 @@ DenseVector<_Scalar>::DenseVector(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector( const DenseVector &other ) noexcept
   : VectorBaseType(other),
@@ -249,8 +251,8 @@ template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IndexRange range
 ) noexcept {
-  assert(range.start >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start) + offset_);
+  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
+  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,8 +262,8 @@ template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IndexRange range
 ) const noexcept {
-  assert(range.start >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.start) + offset_);
+  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
+  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

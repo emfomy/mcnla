@@ -1,5 +1,3 @@
-
-
 #undef CPP_CHAR1
 #undef CPP_INT8
 #undef CPP_REAL4

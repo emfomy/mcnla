@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/lapack_plugin_start.h>
+#include <isvd/plugin/lapack_plugin_begin.h>
 
 // Computes the singular value decomposition of a general rectangular matrix.
 extern void sgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT8 m, const FORTRAN_INT8 n,

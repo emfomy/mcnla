@@ -93,7 +93,7 @@ template <typename _Scalar>
 DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::operator++() noexcept {
   assert(vector_ != nullptr);
 
-  auto length = vector_->getLength();
+  const auto length = vector_->getLength();
   if ( ++idx_ >= length ) {
     idx_ = length;
   }

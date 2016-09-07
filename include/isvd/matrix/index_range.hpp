@@ -20,10 +20,10 @@ namespace isvd {
 ///
 struct IndexRange {
 
-  /// The starting index.
-  index_t start;
+  /// The beginning index.
+  index_t begin;
 
-  /// The ending index.
+  /// The end index.
   index_t end;
 
   // Operators

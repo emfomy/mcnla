@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/lapack_plugin_start.h>
+#include <isvd/plugin/lapack_plugin_begin.h>
 
 // Computes all eigenvalues and, optionally, eigenvectors of a symmetric matrix.
 extern void ssyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_REAL4 a,

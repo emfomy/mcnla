@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Computes a matrix-matrix product where one input matrix is symmetric.
 extern void ssymm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 m, const FORTRAN_INT8 n,

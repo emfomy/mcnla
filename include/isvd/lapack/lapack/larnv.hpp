@@ -12,7 +12,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/lapack_plugin_start.h>
+#include <isvd/plugin/lapack_plugin_begin.h>
 
 // Returns a vector of random numbers from a uniform or normal distribution.
 extern void slarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_REAL4 x );

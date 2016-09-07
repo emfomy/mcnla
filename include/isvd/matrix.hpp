@@ -30,8 +30,12 @@
 
 #include <isvd/matrix/dense_matrix.hpp>
 #include <isvd/matrix/dense_matrix.ipp>
+#include <isvd/matrix/dense_matrix_iterator.hpp>
+#include <isvd/matrix/dense_matrix_iterator.ipp>
 
 #include <isvd/matrix/dense_cube.hpp>
 #include <isvd/matrix/dense_cube.ipp>
+#include <isvd/matrix/dense_cube_iterator.hpp>
+#include <isvd/matrix/dense_cube_iterator.ipp>
 
 #endif  // ISVD_MATRIX_HPP_

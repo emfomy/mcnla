@@ -19,7 +19,6 @@
 namespace isvd {
 
 template <typename _Scalar> class DenseVector;
-template <typename _Scalar> class DenseVectorIterator;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
@@ -55,9 +54,11 @@ class DenseVector
 
   using ScalarType     = _Scalar;
   using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
 
+  using DataType       = DenseData<ScalarType>;
   using IteratorType   = internal::DenseVectorIterator<ScalarType>;
 
  private:
@@ -79,19 +80,19 @@ class DenseVector
   // Constructors
   DenseVector() noexcept;
   DenseVector( const index_t length, const index_t increment = 1 ) noexcept;
-  DenseVector( const index_t length, const index_t increment, std::shared_ptr<_Scalar> value ) noexcept;
-  DenseVector( const index_t length, const index_t increment, std::shared_ptr<_Scalar> value,
+  DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value ) noexcept;
+  DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
   DenseVector( const index_t length, const index_t increment,
-               const DenseData<_Scalar> &data, const index_t offset = 0 ) noexcept;
+               const DenseData<ScalarType> &data, const index_t offset = 0 ) noexcept;
   DenseVector( const DenseVector &other ) noexcept;
   DenseVector( DenseVector &&other ) noexcept;
 
   // Operators
   inline DenseVector& operator=( const DenseVector &other ) noexcept;
   inline DenseVector& operator=( DenseVector &&other ) noexcept;
-  template <typename __Scalar>
-  friend std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
+  template <typename _ScalarType>
+  friend std::ostream& operator<<( std::ostream &out, const DenseVector<_ScalarType> &vector );
 
   // Gets information
   inline index_t getIncrement() const noexcept;
@@ -104,17 +105,17 @@ class DenseVector
   inline const IteratorType end() const noexcept;
 
   // Gets element
-  inline       _Scalar& getElem( const index_t idx ) noexcept;
-  inline const _Scalar& getElem( const index_t idx ) const noexcept;
-  inline       _Scalar& operator()( const index_t idx ) noexcept;
-  inline const _Scalar& operator()( const index_t idx ) const noexcept;
+  inline       ScalarType& getElem( const index_t idx ) noexcept;
+  inline const ScalarType& getElem( const index_t idx ) const noexcept;
+  inline       ScalarType& operator()( const index_t idx ) noexcept;
+  inline const ScalarType& operator()( const index_t idx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;
 
   // Gets segment
-  inline       DenseVector<_Scalar> getSegment( const IndexRange range ) noexcept;
-  inline const DenseVector<_Scalar> getSegment( const IndexRange range ) const noexcept;
+  inline       DenseVector getSegment( const IndexRange range ) noexcept;
+  inline const DenseVector getSegment( const IndexRange range ) const noexcept;
 
  protected:
 
