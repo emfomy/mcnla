@@ -100,7 +100,7 @@ int main( int argc, char **argv ) {
   for ( isvd::index_t t = 0; t < num_test; ++t ) {
     MPI_Barrier(MPI_COMM_WORLD);
     if ( mpi_rank == mpi_root ) {
-      start_time = isvd::lapack::secnd();
+      start_time = MPI_Wtime();
     }
 
     // Run solver
@@ -109,7 +109,7 @@ int main( int argc, char **argv ) {
     // Check time
     MPI_Barrier(MPI_COMM_WORLD);
     if ( mpi_rank == mpi_root ) {
-      total_time += isvd::lapack::secnd() - start_time;
+      total_time += MPI_Wtime() - start_time;
     }
 
     // Check result
@@ -146,16 +146,13 @@ void create(
   isvd::DenseMatrix<double> matrix_empty;
   isvd::DenseVector<double> vector_s(matrix_a.getNrow());
 
-  isvd::lapack::GesvdDriver<isvd::DenseMatrix<double>, 'O', 'N'> driver_u(matrix_u);
-  isvd::lapack::GesvdDriver<isvd::DenseMatrix<double>, 'O', 'N'> driver_v(matrix_v);
-
   // Generate U & V using normal random
   isvd::lapack::larnv<3>(matrix_u.vectorize(), seed);
   isvd::lapack::larnv<3>(matrix_v.vectorize(), seed);
 
   // Orthogonalize U & V
-  driver_u(matrix_u, vector_s, matrix_empty, matrix_empty);
-  driver_v(matrix_v, vector_s, matrix_empty, matrix_empty);
+  isvd::lapack::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
+  isvd::lapack::gesvd<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
 
   // Copy U
   isvd::blas::copy(matrix_u.getCols({0, rank}), matrix_u_true);
@@ -187,8 +184,7 @@ void check(
   isvd::blas::gemm<isvd::TransOption::TRANS, isvd::TransOption::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);
 
   // Compute the SVD of U2
-  isvd::lapack::GesvdDriver<isvd::DenseMatrix<double>, 'N', 'N'> driver(matrix_u2);
-  driver(matrix_u2, vector_s, matrix_empty, matrix_empty);
+  isvd::lapack::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
   smax = isvd::blas::amax(vector_s);
   smin = isvd::blas::amin(vector_s);
 }

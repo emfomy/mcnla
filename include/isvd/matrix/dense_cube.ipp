@@ -35,9 +35,9 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t npage
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    DenseBaseType(dim1_ * dim2_ * npage_),
-    pitch1_(dim1_),
-    pitch2_(dim2_) {
+    DenseBaseType(size1_ * size2_ * npage_),
+    pitch1_(size1_),
+    pitch2_(size2_) {
   assert(pitch1_ > 0 && pitch2_ > 0);
 }
 
@@ -61,10 +61,10 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t pitch1
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    DenseBaseType(pitch1 * dim2_ * npage_),
+    DenseBaseType(pitch1 * size2_ * npage_),
     pitch1_(pitch1),
-    pitch2_(dim2_) {
-  assert(pitch1_ >= dim1_);
+    pitch2_(size2_) {
+  assert(pitch1_ >= size1_);
   assert(pitch1_ > 0 && pitch2_ > 0);
 }
 
@@ -83,7 +83,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(pitch1 * pitch2 * npage_),
     pitch1_(pitch1),
     pitch2_(pitch2) {
-  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+  assert(pitch1_ >= size1_ && pitch2_ >= size2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
 }
 
@@ -113,7 +113,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(pitch1 * pitch2 * npage_, value),
     pitch1_(pitch1),
     pitch2_(pitch2) {
-  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+  assert(pitch1_ >= size1_ && pitch2_ >= size2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
 }
 
@@ -135,9 +135,9 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(capability, value, offset),
     pitch1_(pitch1),
     pitch2_(pitch2) {
-  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+  assert(pitch1_ >= size1_ && pitch2_ >= size2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
-  assert(capability >= pitch1_ * pitch2_ * npage_ - (pitch1_-dim1_) + offset_);
+  assert(capability >= pitch1_ * pitch2_ * npage_ - (pitch1_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,9 +157,9 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(data, offset),
     pitch1_(pitch1),
     pitch2_(pitch2) {
-  assert(pitch1_ >= dim1_ && pitch2_ >= dim2_);
+  assert(pitch1_ >= size1_ && pitch2_ >= size2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
-  assert(data.getCapability() >= pitch1_ * pitch2_ * npage_ - (pitch1_-dim1_) + offset_);
+  assert(data.getCapability() >= pitch1_ * pitch2_ * npage_ - (pitch1_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,14 +232,14 @@ std::pair<index_t, index_t> DenseCube<_Scalar, _layout>::getPitches() const noex
 ///
 template <typename _Scalar, Layout _layout>
 bool DenseCube<_Scalar, _layout>::isShrunk() const noexcept {
-  return (dim1_ == pitch1_ && dim2_ == pitch2_);
+  return (size1_ == pitch1_ && size2_ == pitch2_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar, Layout _layout>
-_Scalar& DenseCube<_Scalar, _layout>::getElement(
+_Scalar& DenseCube<_Scalar, _layout>::getElem(
     const index_t rowidx,
     const index_t colidx,
     const index_t pageidx
@@ -251,10 +251,10 @@ _Scalar& DenseCube<_Scalar, _layout>::getElement(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar, Layout _layout>
-const _Scalar& DenseCube<_Scalar, _layout>::getElement(
+const _Scalar& DenseCube<_Scalar, _layout>::getElem(
     const index_t rowidx,
     const index_t colidx,
     const index_t pageidx
@@ -266,24 +266,24 @@ const _Scalar& DenseCube<_Scalar, _layout>::getElement(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar, Layout _layout>
 _Scalar& DenseCube<_Scalar, _layout>::operator()(
     const index_t rowidx,
     const index_t colidx,
     const index_t pageidx
-) noexcept { return getElement(rowidx, colidx, pageidx); }
+) noexcept { return getElem(rowidx, colidx, pageidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar, Layout _layout>
 const _Scalar& DenseCube<_Scalar, _layout>::operator()(
     const index_t rowidx,
     const index_t colidx,
     const index_t pageidx
-) const noexcept { return getElement(rowidx, colidx, pageidx); }
+) const noexcept { return getElem(rowidx, colidx, pageidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the cube.

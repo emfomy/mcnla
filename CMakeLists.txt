@@ -24,14 +24,19 @@ else()
 endif()
 
 # Add subdirectories
-add_subdirectory(cmake)
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
+  add_subdirectory(cmake)
+endif()
 add_subdirectory(include)
 add_subdirectory(doxygen)
-add_subdirectory(demo)
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
+  add_subdirectory(demo)
+endif()
 
 # Display message
 message(STATUS "================================================================")
 message(STATUS "Set 'ISVD_SYSTEM_INT_SIZE' to change the system integer size: 32(LP64) / 64(ILP64).")
 message(STATUS "Set 'ISVD_USE_MKL' to enable Intel MKL.")
 message(STATUS "Set 'MPI_PROCS' to set the number of MPI processes.")
+message(STATUS "Set 'CMAKE_BUILD_TYPE=Doc' for creating documentation only.")
 message(STATUS "================================================================")

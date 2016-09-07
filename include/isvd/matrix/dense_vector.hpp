@@ -11,6 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/vector_base.hpp>
 #include <isvd/matrix/dense_base.hpp>
+#include <isvd/matrix/dense_vector_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -18,6 +19,7 @@
 namespace isvd {
 
 template <typename _Scalar> class DenseVector;
+template <typename _Scalar> class DenseVectorIterator;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
@@ -32,7 +34,7 @@ namespace internal {
 template <typename _Scalar>
 struct Traits<DenseVector<_Scalar>> {
   using ScalarType     = _Scalar;
-  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
 };
@@ -52,14 +54,16 @@ class DenseVector
  public:
 
   using ScalarType     = _Scalar;
-  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
 
+  using IteratorType   = internal::DenseVectorIterator<ScalarType>;
+
  private:
 
-  using VectorBaseType = internal::VectorBase<DenseVector<_Scalar>>;
-  using DenseBaseType  = internal::DenseBase<DenseVector<_Scalar>>;
+  using VectorBaseType = internal::VectorBase<DenseVector<ScalarType>>;
+  using DenseBaseType  = internal::DenseBase<DenseVector<ScalarType>>;
 
  protected:
 
@@ -93,9 +97,15 @@ class DenseVector
   inline index_t getIncrement() const noexcept;
   inline bool isShrunk() const noexcept;
 
+  // Gets iterator
+  inline       IteratorType begin() noexcept;
+  inline const IteratorType begin() const noexcept;
+  inline       IteratorType end() noexcept;
+  inline const IteratorType end() const noexcept;
+
   // Gets element
-  inline       _Scalar& getElement( const index_t idx ) noexcept;
-  inline const _Scalar& getElement( const index_t idx ) const noexcept;
+  inline       _Scalar& getElem( const index_t idx ) noexcept;
+  inline const _Scalar& getElem( const index_t idx ) const noexcept;
   inline       _Scalar& operator()( const index_t idx ) noexcept;
   inline const _Scalar& operator()( const index_t idx ) const noexcept;
 

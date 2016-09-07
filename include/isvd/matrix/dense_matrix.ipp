@@ -34,8 +34,8 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t ncol
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(dim1_ * dim2_),
-    pitch_(dim1_) {
+    DenseBaseType(size1_ * size2_),
+    pitch_(size1_) {
   assert(pitch_ > 0);
 }
 
@@ -58,9 +58,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t pitch
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(pitch * dim2_),
+    DenseBaseType(pitch * size2_),
     pitch_(pitch) {
-  assert(pitch_ >= dim1_);
+  assert(pitch_ >= size1_);
   assert(pitch_ > 0);
 }
 
@@ -85,9 +85,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     std::shared_ptr<_Scalar> value
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(pitch * dim2_, value),
+    DenseBaseType(pitch * size2_, value),
     pitch_(pitch) {
-  assert(pitch_ >= dim1_);
+  assert(pitch_ >= size1_);
   assert(pitch_ > 0);
 }
 
@@ -106,9 +106,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(capability, value, offset),
     pitch_(pitch) {
-  assert(pitch_ >= dim1_);
+  assert(pitch_ >= size1_);
   assert(pitch_ > 0);
-  assert(capability >= pitch_ * dim2_ - (pitch_-dim1_) + offset_);
+  assert(capability >= pitch_ * size2_ - (pitch_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,9 +125,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(data, offset),
     pitch_(pitch) {
-  assert(pitch_ >= dim1_);
+  assert(pitch_ >= size1_);
   assert(pitch_ > 0);
-  assert(data.getCapability() >= pitch_ * dim2_ - (pitch_-dim1_) + offset_);
+  assert(data.getCapability() >= pitch_ * size2_ - (pitch_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,14 +195,14 @@ index_t DenseMatrix<_Scalar, _layout>::getPitch() const noexcept { return pitch_
 ///
 template <typename _Scalar, Layout _layout>
 bool DenseMatrix<_Scalar, _layout>::isShrunk() const noexcept {
-  return (dim1_ == pitch_);
+  return (size1_ == pitch_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar, Layout _layout>
-_Scalar& DenseMatrix<_Scalar, _layout>::getElement(
+_Scalar& DenseMatrix<_Scalar, _layout>::getElem(
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
@@ -212,10 +212,10 @@ _Scalar& DenseMatrix<_Scalar, _layout>::getElement(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar, Layout _layout>
-const _Scalar& DenseMatrix<_Scalar, _layout>::getElement(
+const _Scalar& DenseMatrix<_Scalar, _layout>::getElem(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -225,22 +225,22 @@ const _Scalar& DenseMatrix<_Scalar, _layout>::getElement(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar, Layout _layout>
 _Scalar& DenseMatrix<_Scalar, _layout>::operator()(
     const index_t rowidx,
     const index_t colidx
-) noexcept { return getElement(rowidx, colidx); }
+) noexcept { return getElem(rowidx, colidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar, Layout _layout>
 const _Scalar& DenseMatrix<_Scalar, _layout>::operator()(
     const index_t rowidx,
     const index_t colidx
-) const noexcept { return getElement(rowidx, colidx); }
+) const noexcept { return getElem(rowidx, colidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the transpose of the matrix.
@@ -508,7 +508,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
-  return DenseVector<_Scalar>(pitch_ * dim2_, 1, data_, getIndexInternal(0, 0) + offset_);
+  return DenseVector<_Scalar>(pitch_ * size2_, 1, data_, getIndexInternal(0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -516,7 +516,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noexcept {
-  return DenseVector<_Scalar>(pitch_ * dim2_, 1, data_, getIndexInternal(0, 0) + offset_);
+  return DenseVector<_Scalar>(pitch_ * size2_, 1, data_, getIndexInternal(0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -22,6 +22,8 @@
 //
 namespace isvd {
 
+template <typename _Scalar> class DenseVector;
+template <typename _Scalar, Layout _layout> class DenseMatrix;
 template <typename _Scalar, Layout _layout> class DenseCube;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +41,7 @@ template <typename _Scalar, Layout _layout>
 struct Traits<DenseCube<_Scalar, _layout>> {
   static const Layout layout = _layout;
   using ScalarType     = _Scalar;
-  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
   using MatrixType     = DenseMatrix<ScalarType, _layout>;
@@ -62,7 +64,7 @@ class DenseCube
 
   static const Layout layout = _layout;
   using ScalarType     = _Scalar;
-  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
   using MatrixType     = DenseMatrix<ScalarType, _layout>;
@@ -83,8 +85,8 @@ class DenseCube
   using CubeBaseType::nrow_;
   using CubeBaseType::ncol_;
   using CubeBaseType::npage_;
-  using CubeBaseType::dim1_;
-  using CubeBaseType::dim2_;
+  using CubeBaseType::size1_;
+  using CubeBaseType::size2_;
   using DenseBaseType::offset_;
   using DenseBaseType::data_;
 
@@ -119,8 +121,8 @@ class DenseCube
   inline bool isShrunk() const noexcept;
 
   // Gets element
-  inline       _Scalar& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
-  inline const _Scalar& getElement( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  inline       _Scalar& getElem( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline const _Scalar& getElem( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
   inline       _Scalar& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
   inline const _Scalar& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 

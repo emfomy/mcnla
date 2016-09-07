@@ -81,10 +81,10 @@ template <class _Derived>
 index_t VectorBase<_Derived>::getLength() const noexcept { return length_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size.
+/// @brief  Gets the number of elements.
 ///
 template <class _Derived>
-index_t VectorBase<_Derived>::getSize() const noexcept { return length_; }
+index_t VectorBase<_Derived>::getNelem() const noexcept { return length_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.

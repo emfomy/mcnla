@@ -46,6 +46,8 @@ class DenseData {
   inline DenseData& operator=( DenseData &&other ) noexcept;
   inline bool operator==( const DenseData& other ) const noexcept;
   inline bool operator!=( const DenseData& other ) const noexcept;
+  inline       _Scalar* operator*() noexcept;
+  inline const _Scalar* operator*() const noexcept;
 
   // Gets data
   inline        index_t getCapability() const noexcept;

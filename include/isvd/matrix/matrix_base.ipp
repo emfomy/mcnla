@@ -110,19 +110,19 @@ index_t MatrixBase<_Derived>::getNcol() const noexcept {
 /// @brief  Gets the leading size.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getDim1() const noexcept { return dim1_; }
+index_t MatrixBase<_Derived>::getSize1() const noexcept { return size1_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second size.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getDim2() const noexcept { return dim2_; }
+index_t MatrixBase<_Derived>::getSize2() const noexcept { return size2_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size.
+/// @brief  Gets the number of elements.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getSize() const noexcept { return nrow_ * ncol_; }
+index_t MatrixBase<_Derived>::getNelem() const noexcept { return nrow_ * ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.

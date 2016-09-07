@@ -1,17 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/lapack/routine/secnd.hpp
-/// @brief   The LAPACK SECND routine.
+/// @file    include/isvd/lapack/routine/syev.hpp
+/// @brief   The LAPACK SYEV routine.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_LAPACK_ROUTINE_SECND_HPP_
-#define ISVD_LAPACK_ROUTINE_SECND_HPP_
+#ifndef ISVD_LAPACK_ROUTINE_SYEV_HPP_
+#define ISVD_LAPACK_ROUTINE_SYEV_HPP_
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix.hpp>
 #include <isvd/lapack/lapack.hpp>
-#include <isvd/lapack/lapack/secnd.hpp>
+#include <isvd/lapack/driver/syev.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -24,14 +24,18 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc isvd::lapack::internal::secnd
+/// @copydoc  isvd::lapack::SyevDriver::compute
 ///
 //@{
-static inline double secnd() noexcept { return internal::secnd(); }
+template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, class _TypeA, class _TypeW>
+inline void syev( _TypeA &&a, _TypeW &&w ) noexcept {
+  SyevDriver<typename std::remove_reference<_TypeA>::type, _jobz, _uplo> driver(a);
+  driver(a, w);
+}
 //@}
 
 }  // namespace lapack
 
 }  // namespace isvd
 
-#endif  // ISVD_LAPACK_ROUTINE_SECND_HPP_
+#endif  // ISVD_LAPACK_ROUTINE_SYEV_HPP_

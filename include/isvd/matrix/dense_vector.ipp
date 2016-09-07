@@ -156,10 +156,46 @@ bool DenseVector<_Scalar>::isShrunk() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to beginning.
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() noexcept {
+  IteratorType retval(this);
+  return retval.setBegin();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  begin
+///
+template <typename _Scalar>
+const typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() const noexcept {
+  const IteratorType retval(this);
+  return retval.setBegin();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to end.
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() noexcept {
+  IteratorType retval(this);
+  return retval.setEnd();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  end
+///
+template <typename _Scalar>
+const typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() const noexcept {
+  const IteratorType retval(this);
+  return retval.setEnd();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>
-_Scalar& DenseVector<_Scalar>::getElement(
+_Scalar& DenseVector<_Scalar>::getElem(
     const index_t idx
 ) noexcept {
   assert(idx >= 0 && idx < length_);
@@ -167,10 +203,10 @@ _Scalar& DenseVector<_Scalar>::getElement(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar>
-const _Scalar& DenseVector<_Scalar>::getElement(
+const _Scalar& DenseVector<_Scalar>::getElem(
     const index_t idx
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
@@ -178,20 +214,20 @@ const _Scalar& DenseVector<_Scalar>::getElement(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar>
 _Scalar& DenseVector<_Scalar>::operator()(
     const index_t idx
-) noexcept { return getElement(idx); }
+) noexcept { return getElem(idx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElement
+/// @copydoc  getElem
 ///
 template <typename _Scalar>
 const _Scalar& DenseVector<_Scalar>::operator()(
     const index_t idx
-) const noexcept { return getElement(idx); }
+) const noexcept { return getElem(idx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the vector.

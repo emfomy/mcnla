@@ -20,6 +20,7 @@
 //
 namespace isvd {
 
+template <typename _Scalar> class DenseVector;
 template <typename _Scalar, Layout _layout> class DenseMatrix;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
   static const Layout layout = _layout;
   using ScalarType     = _Scalar;
-  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
   using TransposeType  = DenseMatrix<_Scalar, changeLayout(_layout)>;
@@ -60,7 +61,7 @@ class DenseMatrix
 
   static const Layout layout = _layout;
   using ScalarType     = _Scalar;
-  using RealScalarType = typename isvd::internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
   using TransposeType  = DenseMatrix<_Scalar, changeLayout(_layout)>;
@@ -77,8 +78,8 @@ class DenseMatrix
 
   using MatrixBaseType::nrow_;
   using MatrixBaseType::ncol_;
-  using MatrixBaseType::dim1_;
-  using MatrixBaseType::dim2_;
+  using MatrixBaseType::size1_;
+  using MatrixBaseType::size2_;
   using DenseBaseType::offset_;
   using DenseBaseType::data_;
 
@@ -109,8 +110,8 @@ class DenseMatrix
   inline bool isShrunk() const noexcept;
 
   // Gets element
-  inline       _Scalar& getElement( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const _Scalar& getElement( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline       _Scalar& getElem( const index_t rowidx, const index_t colidx ) noexcept;
+  inline const _Scalar& getElem( const index_t rowidx, const index_t colidx ) const noexcept;
   inline       _Scalar& operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const _Scalar& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 

@@ -88,13 +88,29 @@ DenseData<_Scalar>& DenseData<_Scalar>::operator=( DenseData &&other ) noexcept 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The equal-to operator
+/// @copydoc  getValue
+///
+template <typename _Scalar>
+_Scalar* DenseData<_Scalar>::operator*() noexcept {
+  return getValue();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValue
+///
+template <typename _Scalar>
+const _Scalar* DenseData<_Scalar>::operator*() const noexcept {
+  return getValue();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Equal-to operator.
 ///
 template <typename _Scalar>
 bool DenseData<_Scalar>::operator==( const DenseData& other ) const noexcept { return this->value_ == other.value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The not-equal-to operator
+/// @brief  Not-equal-to operator.
 ///
 template <typename _Scalar>
 bool DenseData<_Scalar>::operator!=( const DenseData& other ) const noexcept { return this->value_ != other.value_; }

@@ -49,7 +49,7 @@ class VectorBase {
 
   // Gets information
   inline index_t getLength() const noexcept;
-  inline index_t getSize() const noexcept;
+  inline index_t getNelem() const noexcept;
   inline index_t getSizes() const noexcept;
 
 };
