@@ -8,9 +8,9 @@
 #ifndef ISVD_MATRIX_COO_COO_DATA_HPP_
 #define ISVD_MATRIX_COO_COO_DATA_HPP_
 
+#include <isvd/isvd.hpp>
 #include <array>
 #include <memory>
-#include <isvd/isvd.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.

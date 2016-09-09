@@ -8,8 +8,8 @@
 #ifndef ISVD_MATRIX_DENSE_DENSE_CUBE_ITERATOR_HPP_
 #define ISVD_MATRIX_DENSE_DENSE_CUBE_ITERATOR_HPP_
 
-#include <iterator>
 #include <isvd/isvd.hpp>
+#include <iterator>
 #include <isvd/matrix/dense/dense_cube.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,15 +74,22 @@ class DenseCubeIterator : public std::iterator<std::forward_iterator_tag, _Scala
   // Gets value
   inline       _Scalar& getValue() noexcept;
   inline const _Scalar& getValue() const noexcept;
-  inline       index_t getRowIdx() noexcept;
-  inline       index_t getColIdx() noexcept;
-  inline       index_t getPageIdx() noexcept;
-  inline       index_t getIdx1() noexcept;
-  inline       index_t getIdx2() noexcept;
+  inline       index_t getRowIdx() const noexcept;
+  inline       index_t getColIdx() const noexcept;
+  inline       index_t getPageIdx() const noexcept;
+  inline       index_t getIdx1() const noexcept;
+  inline       index_t getIdx2() const noexcept;
+  inline       index_t getPos() const noexcept;
 
-  // Sets to begin & end
+  // Sets to begin/end
   inline DenseCubeIterator& setBegin() noexcept;
   inline DenseCubeIterator& setEnd() noexcept;
+
+  // Gets the begin/end iterator
+  static inline       DenseCubeIterator begin( DenseCube<_Scalar, _layout> *cube ) noexcept;
+  static inline const DenseCubeIterator begin( const DenseCube<_Scalar, _layout> *cube ) noexcept;
+  static inline       DenseCubeIterator end( DenseCube<_Scalar, _layout> *cube ) noexcept;
+  static inline const DenseCubeIterator end( const DenseCube<_Scalar, _layout> *cube ) noexcept;
 
 };
 

@@ -8,8 +8,8 @@
 #ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 #define ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 
-#include <iterator>
 #include <isvd/isvd.hpp>
+#include <iterator>
 #include <isvd/matrix/dense/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,11 +61,18 @@ class DenseVectorIterator : public std::iterator<std::forward_iterator_tag, _Sca
   // Gets value
   inline       _Scalar& getValue() noexcept;
   inline const _Scalar& getValue() const noexcept;
-  inline       index_t getIdx() noexcept;
+  inline       index_t getIdx() const noexcept;
+  inline       index_t getPos() const noexcept;
 
-  // Sets to begin & end
+  // Sets to begin/end
   inline DenseVectorIterator& setBegin() noexcept;
   inline DenseVectorIterator& setEnd() noexcept;
+
+  // Gets the begin/end iterator
+  static inline       DenseVectorIterator begin( DenseVector<_Scalar> *vector ) noexcept;
+  static inline const DenseVectorIterator begin( const DenseVector<_Scalar> *vector ) noexcept;
+  static inline       DenseVectorIterator end( DenseVector<_Scalar> *vector ) noexcept;
+  static inline const DenseVectorIterator end( const DenseVector<_Scalar> *vector ) noexcept;
 
 };
 

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense/dense_vector_iterator.ipp
-/// @brief   The implementation of dense vector iterator.
+/// @file    include/isvd/matrix/coo/coo_vector_iterator.ipp
+/// @brief   The implementation of COO vector iterator.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_IPP_
-#define ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_IPP_
+#ifndef ISVD_MATRIX_COO_COO_VECTOR_ITERATOR_IPP_
+#define ISVD_MATRIX_COO_COO_VECTOR_ITERATOR_IPP_
 
-#include <isvd/matrix/dense/dense_vector_iterator.hpp>
+#include <isvd/matrix/coo/coo_vector_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -24,38 +24,38 @@ namespace internal {
 /// @brief  Default constructor.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>::DenseVectorIterator() noexcept
-  : idx_(0),
+CooVectorIterator<_Scalar>::CooVectorIterator() noexcept
+  : pos_(0),
     vector_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given vector.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>::DenseVectorIterator(
-    DenseVector<_Scalar> *vector
+CooVectorIterator<_Scalar>::CooVectorIterator(
+    CooVector<_Scalar> *vector
 ) noexcept
-  : idx_(0),
+  : pos_(0),
     vector_(vector) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>::DenseVectorIterator(
-    const DenseVectorIterator &other
+CooVectorIterator<_Scalar>::CooVectorIterator(
+    const CooVectorIterator &other
 ) noexcept
-  : idx_(other.idx_),
+  : pos_(other.pos_),
     vector_(other.vector_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::operator=(
-    const DenseVectorIterator &other
+CooVectorIterator<_Scalar>& CooVectorIterator<_Scalar>::operator=(
+    const CooVectorIterator &other
 ) noexcept {
-  idx_ = other.idx_;
+  pos_ = other.pos_;
   vector_ = other.vector_;
   return *this;
 }
@@ -64,8 +64,8 @@ DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::operator=(
 /// @brief  Equal-to operator.
 ///
 template <typename _Scalar>
-bool DenseVectorIterator<_Scalar>::operator==(
-    const DenseVectorIterator &other
+bool CooVectorIterator<_Scalar>::operator==(
+    const CooVectorIterator &other
 ) const noexcept {
   if ( this == &other ) {
     return true;
@@ -78,8 +78,8 @@ bool DenseVectorIterator<_Scalar>::operator==(
 /// @brief  Not-equal-to operator.
 ///
 template <typename _Scalar>
-bool DenseVectorIterator<_Scalar>::operator!=(
-    const DenseVectorIterator &other
+bool CooVectorIterator<_Scalar>::operator!=(
+    const CooVectorIterator &other
 ) const noexcept {
   return !(*this == other);
 }
@@ -88,12 +88,12 @@ bool DenseVectorIterator<_Scalar>::operator!=(
 /// @brief  Prefix increment operator.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::operator++() noexcept {
+CooVectorIterator<_Scalar>& CooVectorIterator<_Scalar>::operator++() noexcept {
   assert(vector_ != nullptr);
 
-  const auto length = vector_->getLength();
-  if ( ++idx_ >= length ) {
-    idx_ = length;
+  const auto nnz = vector_->getNnz();
+  if ( ++pos_ >= nnz ) {
+    pos_ = nnz;
   }
   return *this;
 }
@@ -102,7 +102,7 @@ DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::operator++() noexcep
 /// @brief  Postfix increment operator.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::operator++( int ) noexcept {
+CooVectorIterator<_Scalar>& CooVectorIterator<_Scalar>::operator++( int ) noexcept {
   auto retval(*this);
   (*this)++;
   return retval;
@@ -112,7 +112,7 @@ DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::operator++( int ) no
 /// @copydoc  getValue
 ///
 template <typename _Scalar>
-_Scalar& DenseVectorIterator<_Scalar>::operator*() noexcept {
+_Scalar& CooVectorIterator<_Scalar>::operator*() noexcept {
   return getValue();
 }
 
@@ -120,7 +120,7 @@ _Scalar& DenseVectorIterator<_Scalar>::operator*() noexcept {
 /// @copydoc  getValue
 ///
 template <typename _Scalar>
-const _Scalar& DenseVectorIterator<_Scalar>::operator*() const noexcept {
+const _Scalar& CooVectorIterator<_Scalar>::operator*() const noexcept {
   return getValue();
 }
 
@@ -128,7 +128,7 @@ const _Scalar& DenseVectorIterator<_Scalar>::operator*() const noexcept {
 /// @copydoc  getValue
 ///
 template <typename _Scalar>
-_Scalar* DenseVectorIterator<_Scalar>::operator->() noexcept {
+_Scalar* CooVectorIterator<_Scalar>::operator->() noexcept {
   return &getValue();
 }
 
@@ -136,7 +136,7 @@ _Scalar* DenseVectorIterator<_Scalar>::operator->() noexcept {
 /// @copydoc  getValue
 ///
 template <typename _Scalar>
-const _Scalar* DenseVectorIterator<_Scalar>::operator->() const noexcept {
+const _Scalar* CooVectorIterator<_Scalar>::operator->() const noexcept {
   return &getValue();
 }
 
@@ -146,40 +146,40 @@ const _Scalar* DenseVectorIterator<_Scalar>::operator->() const noexcept {
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar>
-_Scalar& DenseVectorIterator<_Scalar>::getValue() noexcept {
-  return (*vector_)(idx_);
+_Scalar& CooVectorIterator<_Scalar>::getValue() noexcept {
+  return vector_->getValue()[pos_];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <typename _Scalar>
-const _Scalar& DenseVectorIterator<_Scalar>::getValue() const noexcept {
-  return (*vector_)(idx_);
+const _Scalar& CooVectorIterator<_Scalar>::getValue() const noexcept {
+  return vector_->getValue()[pos_];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the index.
 ///
 template <typename _Scalar>
-index_t DenseVectorIterator<_Scalar>::getIdx() const noexcept {
-  return idx_;
+index_t CooVectorIterator<_Scalar>::getIdx() const noexcept {
+  return vector_->getIdx()[pos_];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
 template <typename _Scalar>
-index_t DenseVectorIterator<_Scalar>::getPos() const noexcept {
-  return vector_.getPos(idx_);
+index_t CooVectorIterator<_Scalar>::getPos() const noexcept {
+  return pos_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to beginning.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::setBegin() noexcept {
-  idx_ = 0;
+CooVectorIterator<_Scalar>& CooVectorIterator<_Scalar>::setBegin() noexcept {
+  pos_ = 0;
   return *this;
 }
 
@@ -187,8 +187,8 @@ DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::setBegin() noexcept 
 /// @brief  Sets the iterator to end.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::setEnd() noexcept {
-  idx_ = (vector_ != nullptr) ? vector_->getLength() : 0;
+CooVectorIterator<_Scalar>& CooVectorIterator<_Scalar>::setEnd() noexcept {
+  pos_ = (vector_ != nullptr) ? vector_->getNnz() : 0;
   return *this;
 }
 
@@ -196,36 +196,36 @@ DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::setEnd() noexcept {
 /// @brief  Gets the to beginning iterator.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar> DenseVectorIterator<_Scalar>::begin( DenseVector<_Scalar> *vector ) noexcept {
-  return DenseVectorIterator(vector).setBegin();
+CooVectorIterator<_Scalar> CooVectorIterator<_Scalar>::begin( CooVector<_Scalar> *vector ) noexcept {
+  return CooVectorIterator(vector).setBegin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  begin
 ///
 template <typename _Scalar>
-const DenseVectorIterator<_Scalar> DenseVectorIterator<_Scalar>::begin( const DenseVector<_Scalar> *vector ) noexcept {
-  return DenseVectorIterator(const_cast<DenseVector<_Scalar>*>(vector)).setBegin();
+const CooVectorIterator<_Scalar> CooVectorIterator<_Scalar>::begin( const CooVector<_Scalar> *vector ) noexcept {
+  return CooVectorIterator(const_cast<CooVector<_Scalar>*>(vector)).setBegin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to end iterator.
 ///
 template <typename _Scalar>
-DenseVectorIterator<_Scalar> DenseVectorIterator<_Scalar>::end( DenseVector<_Scalar> *vector ) noexcept {
-  return DenseVectorIterator(vector).setEnd();
+CooVectorIterator<_Scalar> CooVectorIterator<_Scalar>::end( CooVector<_Scalar> *vector ) noexcept {
+  return CooVectorIterator(vector).setEnd();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  end
 ///
 template <typename _Scalar>
-const DenseVectorIterator<_Scalar> DenseVectorIterator<_Scalar>::end( const DenseVector<_Scalar> *vector ) noexcept {
-  return DenseVectorIterator(const_cast<DenseVector<_Scalar>*>(vector)).setEnd();
+const CooVectorIterator<_Scalar> CooVectorIterator<_Scalar>::end( const CooVector<_Scalar> *vector ) noexcept {
+  return CooVectorIterator(const_cast<CooVector<_Scalar>*>(vector)).setEnd();
 }
 
 }  // namespace internal
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_IPP_
+#endif  // ISVD_MATRIX_COO_COO_VECTOR_ITERATOR_IPP_

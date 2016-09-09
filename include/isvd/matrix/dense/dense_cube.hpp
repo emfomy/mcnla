@@ -8,10 +8,10 @@
 #ifndef ISVD_MATRIX_DENSE_DENSE_CUBE_HPP_
 #define ISVD_MATRIX_DENSE_DENSE_CUBE_HPP_
 
+#include <isvd/isvd.hpp>
 #include <iostream>
 #include <utility>
 #include <tuple>
-#include <isvd/isvd.hpp>
 #include <isvd/matrix/cube_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
@@ -61,6 +61,8 @@ template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseCube
   : public internal::CubeBase<DenseCube<_Scalar, _layout>>,
     public internal::DenseBase<DenseCube<_Scalar, _layout>>{
+
+  friend class internal::DenseCubeIterator<_Scalar, _layout>;
 
  public:
 
@@ -191,10 +193,10 @@ class DenseCube
  protected:
 
   // Gets internal information
-  inline index_t getIndexInternal( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
-  inline index_t getColIncInternal() const noexcept;
-  inline index_t getRowIncInternal() const noexcept;
-  inline index_t getTubeIncInternal() const noexcept;
+  inline index_t getPos( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  inline index_t getColInc() const noexcept;
+  inline index_t getRowInc() const noexcept;
+  inline index_t getTubeInc() const noexcept;
 
 };
 

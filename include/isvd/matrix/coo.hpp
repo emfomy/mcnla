@@ -9,8 +9,13 @@
 #define ISVD_MATRIX_COO_HPP_
 
 #include <isvd/matrix/coo/coo_base.hpp>
-#include <isvd/matrix/coo/coo_base.hpp>
+#include <isvd/matrix/coo/coo_base.ipp>
 #include <isvd/matrix/coo/coo_data.hpp>
-#include <isvd/matrix/coo/coo_data.hpp>
+#include <isvd/matrix/coo/coo_data.ipp>
+
+#include <isvd/matrix/coo/coo_vector.hpp>
+#include <isvd/matrix/coo/coo_vector.ipp>
+#include <isvd/matrix/coo/coo_vector_iterator.hpp>
+#include <isvd/matrix/coo/coo_vector_iterator.ipp>
 
 #endif  // ISVD_MATRIX_COO_HPP_

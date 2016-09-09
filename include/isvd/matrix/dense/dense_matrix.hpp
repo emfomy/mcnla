@@ -8,9 +8,9 @@
 #ifndef ISVD_MATRIX_DENSE_DENSE_MATRIX_HPP_
 #define ISVD_MATRIX_DENSE_DENSE_MATRIX_HPP_
 
+#include <isvd/isvd.hpp>
 #include <iostream>
 #include <utility>
-#include <isvd/isvd.hpp>
 #include <isvd/matrix/matrix_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
@@ -57,6 +57,8 @@ template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseMatrix
   : public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
     public internal::DenseBase<DenseMatrix<_Scalar, _layout>> {
+
+  friend class internal::DenseMatrixIterator<_Scalar, _layout>;
 
  public:
 
@@ -158,9 +160,9 @@ class DenseMatrix
  protected:
 
   // Gets internal information
-  inline index_t getIndexInternal( const index_t rowidx, const index_t colidx ) const noexcept;
-  inline index_t getColIncInternal() const noexcept;
-  inline index_t getRowIncInternal() const noexcept;
+  inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline index_t getColInc() const noexcept;
+  inline index_t getRowInc() const noexcept;
 
 };
 

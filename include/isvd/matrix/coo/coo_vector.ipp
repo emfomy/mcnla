@@ -1,15 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense/dense_vector.ipp
-/// @brief   The implementation of dense vector.
+/// @file    include/isvd/matrix/coo/coo_vector.ipp
+/// @brief   The implementation of COO vector.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_IPP_
-#define ISVD_MATRIX_DENSE_DENSE_VECTOR_IPP_
+#ifndef ISVD_MATRIX_COO_COO_VECTOR_IPP_
+#define ISVD_MATRIX_COO_COO_VECTOR_IPP_
 
-#include <isvd/matrix/dense/dense_vector.hpp>
+#include <isvd/matrix/coo/coo_vector.hpp>
 #include <iomanip>
+#include <algorithm>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -20,74 +21,60 @@ namespace isvd {
 /// @brief  Default constructor.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector() noexcept
+CooVector<_Scalar>::CooVector() noexcept
   : VectorBaseType(),
-    DenseBaseType(),
-    increment_(1) {}
+    CooBaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
-    const index_t length,
-    const index_t increment
+CooVector<_Scalar>::CooVector(
+    const index_t length
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(increment * length),
-    increment_(increment) {
-  assert(increment_ > 0);
-}
+    CooBaseType(length) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
+CooVector<_Scalar>::CooVector(
     const index_t length,
-    const index_t increment,
-    std::shared_ptr<_Scalar> value
-) noexcept
-  : VectorBaseType(length),
-    DenseBaseType(length * increment, value),
-    increment_(increment) {
-  assert(increment_ > 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
-    const index_t length,
-    const index_t increment,
+    const index_t nnz,
     std::shared_ptr<_Scalar> value,
+    std::shared_ptr<index_t> idx
+) noexcept
+  : VectorBaseType(length),
+    CooBaseType(nnz, nnz, value, {idx}) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector(
+    const index_t length,
+    const index_t nnz,
+    std::shared_ptr<_Scalar> value,
+    std::shared_ptr<index_t> idx,
     const index_t capability,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(capability, value, offset),
-    increment_(increment) {
-  assert(increment_ > 0);
-  assert(capability >= increment_ * (length_-1) + 1 + offset_);
-}
+    CooBaseType(nnz, capability, value, {idx}, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
+CooVector<_Scalar>::CooVector(
     const index_t length,
-    const index_t increment,
+    const index_t nnz,
     const DataType &data,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(data, offset),
-    increment_(increment) {
-  assert(increment_ > 0);
-  assert(data.getCapability() >= increment_ * (length_-1) + 1 + offset_);
-}
+    CooBaseType(nnz, data, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -95,21 +82,17 @@ DenseVector<_Scalar>::DenseVector(
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector( const DenseVector &other ) noexcept
+CooVector<_Scalar>::CooVector( const CooVector &other ) noexcept
   : VectorBaseType(other),
-    DenseBaseType(other),
-    increment_(other.increment_) {}
+    CooBaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
+CooVector<_Scalar>::CooVector( CooVector &&other ) noexcept
   : VectorBaseType(std::move(other)),
-    DenseBaseType(std::move(other)),
-    increment_(other.increment_) {
-  other.increment_ = 1;
-}
+    CooBaseType(std::move(other)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -117,8 +100,8 @@ DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other ) noexcept {
-  VectorBaseType::operator=(other); DenseBaseType::operator=(other); increment_ = other.increment_;
+CooVector<_Scalar>& CooVector<_Scalar>::operator=( const CooVector &other ) noexcept {
+  VectorBaseType::operator=(other); CooBaseType::operator=(other);
   return *this;
 }
 
@@ -126,9 +109,8 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other 
 /// @brief  Move assignment operator.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noexcept {
-  VectorBaseType::operator=(std::move(other)); DenseBaseType::operator=(std::move(other));
-  increment_ = other.increment_; other.increment_ = 1;
+CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept {
+  VectorBaseType::operator=(std::move(other)); CooBaseType::operator=(std::move(other));
   return *this;
 }
 
@@ -136,7 +118,7 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noe
 /// @brief  Print to stream.
 ///
 template <typename __Scalar>
-std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vector ) {
+std::ostream& operator<< ( std::ostream &out, const CooVector<__Scalar> &vector ) {
   for ( index_t i = 0; i < vector.length_; ++i ) {
     out << std::setw(ios_width) << vector(i);
   }
@@ -145,24 +127,26 @@ std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vecto
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the increment.
+/// @brief  Gets the index array.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getIncrement() const noexcept { return increment_; }
+index_t* CooVector<_Scalar>::getIdx() noexcept {
+  return CooBaseType::template getIdx<0>();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Determines if the dimensions is equal to the sizes.
+/// @copydoc  getIdx
 ///
 template <typename _Scalar>
-bool DenseVector<_Scalar>::isShrunk() const noexcept {
-  return (increment_ == 1);
+const index_t* CooVector<_Scalar>::getIdx() const noexcept {
+  return CooBaseType::template getIdx<0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator to beginning.
 ///
 template <typename _Scalar>
-typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() noexcept {
+typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::begin() noexcept {
   return IteratorType::begin(this);
 }
 
@@ -170,16 +154,15 @@ typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() noexce
 /// @copydoc  begin
 ///
 template <typename _Scalar>
-const typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() const noexcept {
-  const IteratorType retval(this);
-  return retval.setBegin();
+const typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::begin() const noexcept {
+  return IteratorType::begin(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator to end.
 ///
 template <typename _Scalar>
-typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() noexcept {
+typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::end() noexcept {
   return IteratorType::end(this);
 }
 
@@ -187,38 +170,39 @@ typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() noexcept
 /// @copydoc  end
 ///
 template <typename _Scalar>
-const typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() const noexcept {
-  const IteratorType retval(this);
-  return retval.setEnd();
+const typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::end() const noexcept {
+  return IteratorType::end(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>
-_Scalar& DenseVector<_Scalar>::getElem(
+_Scalar& CooVector<_Scalar>::getElem(
     const index_t idx
 ) noexcept {
   assert(idx >= 0 && idx < length_);
-  return this->getValue()[getPos(idx)];
+  auto it = getIterator(idx);
+  return (it != end()) ? *it : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getElem
 ///
 template <typename _Scalar>
-const _Scalar& DenseVector<_Scalar>::getElem(
+const _Scalar& CooVector<_Scalar>::getElem(
     const index_t idx
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
-  return this->getValue()[getPos(idx)];
+  auto it = getIterator(idx);
+  return (it != end()) ? *it : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getElem
 ///
 template <typename _Scalar>
-_Scalar& DenseVector<_Scalar>::operator()(
+_Scalar& CooVector<_Scalar>::operator()(
     const index_t idx
 ) noexcept { return getElem(idx); }
 
@@ -226,7 +210,7 @@ _Scalar& DenseVector<_Scalar>::operator()(
 /// @copydoc  getElem
 ///
 template <typename _Scalar>
-const _Scalar& DenseVector<_Scalar>::operator()(
+const _Scalar& CooVector<_Scalar>::operator()(
     const index_t idx
 ) const noexcept { return getElem(idx); }
 
@@ -236,10 +220,10 @@ const _Scalar& DenseVector<_Scalar>::operator()(
 /// @attention  The new space is not initialized.
 ///
 template <typename _Scalar>
-void DenseVector<_Scalar>::resize(
+void CooVector<_Scalar>::resize(
     const index_t length
 ) noexcept {
-  assert(length > 0 && length <= data_.getCapability());
+  assert(length > 0);
   length_ = length;
 }
 
@@ -247,34 +231,55 @@ void DenseVector<_Scalar>::resize(
 /// @brief  Gets the vector segment.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
+CooVector<_Scalar> CooVector<_Scalar>::getSegment(
     const IdxRange range
 ) noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getPos(range.begin) + offset_);
+  index_t pos, nnz; getPosNnz(range, pos, nnz);
+  return CooVector<_Scalar>(range.getLength(), nnz, data_, pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getSegment
 ///
 template <typename _Scalar>
-const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
+const CooVector<_Scalar> CooVector<_Scalar>::getSegment(
     const IdxRange range
 ) const noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getPos(range.begin) + offset_);
+  index_t pos, nnz; getPosNnz(range, pos, nnz);
+  return CooVector<_Scalar>(range.getLength(), nnz, data_, pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the internal position of given index.
+/// @brief  Gets the iterator of given index.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getPos(
+typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::getIterator(
     const index_t idx
 ) const noexcept {
-  return idx * increment_;
+  auto it = begin();
+  for ( ; it != end(); ++it ) {
+    if ( it.getIdx() == idx ) {
+      break;
+    }
+  }
+  return it;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position and nonzero elements of given index range.
+///
+template <typename _Scalar>
+void CooVector<_Scalar>::getPosNnz(
+    const IdxRange range,
+          index_t &pos,
+          index_t &nnz
+) const noexcept {
+  pos = (std::find_if(begin(), end(), [=]( const index_t i ) { return i >= range.begin; })).getPos();
+  nnz = (std::find_if(begin(), end(), [=]( const index_t i ) { return i >= range.end; })).getPos() - pos;
 }
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_DENSE_VECTOR_IPP_
+#endif  // ISVD_MATRIX_COO_COO_VECTOR_IPP_

@@ -8,8 +8,8 @@
 #ifndef ISVD_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HPP_
 #define ISVD_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HPP_
 
-#include <iterator>
 #include <isvd/isvd.hpp>
+#include <iterator>
 #include <isvd/matrix/dense/dense_matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,14 +71,21 @@ class DenseMatrixIterator : public std::iterator<std::forward_iterator_tag, _Sca
   // Gets value
   inline       _Scalar& getValue() noexcept;
   inline const _Scalar& getValue() const noexcept;
-  inline       index_t getRowIdx() noexcept;
-  inline       index_t getColIdx() noexcept;
-  inline       index_t getIdx1() noexcept;
-  inline       index_t getIdx2() noexcept;
+  inline       index_t getRowIdx() const noexcept;
+  inline       index_t getColIdx() const noexcept;
+  inline       index_t getIdx1() const noexcept;
+  inline       index_t getIdx2() const noexcept;
+  inline       index_t getPos() const noexcept;
 
-  // Sets to begin & end
+  // Sets to begin/end
   inline DenseMatrixIterator& setBegin() noexcept;
   inline DenseMatrixIterator& setEnd() noexcept;
+
+  // Gets the begin/end iterator
+  static inline       DenseMatrixIterator begin( DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
+  static inline const DenseMatrixIterator begin( const DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
+  static inline       DenseMatrixIterator end( DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
+  static inline const DenseMatrixIterator end( const DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
 
 };
 

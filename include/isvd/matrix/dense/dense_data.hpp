@@ -8,8 +8,8 @@
 #ifndef ISVD_MATRIX_DENSE_DENSE_DATA_HPP_
 #define ISVD_MATRIX_DENSE_DENSE_DATA_HPP_
 
-#include <memory>
 #include <isvd/isvd.hpp>
+#include <memory>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.

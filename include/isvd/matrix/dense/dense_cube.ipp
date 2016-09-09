@@ -242,8 +242,7 @@ bool DenseCube<_Scalar, _layout>::isShrunk() const noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::begin() noexcept {
-  IteratorType retval(this);
-  return retval.setBegin();
+  return IteratorType::begin(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,8 +259,7 @@ const typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _lay
 ///
 template <typename _Scalar, Layout _layout>
 typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::end() noexcept {
-  IteratorType retval(this);
-  return retval.setEnd();
+  return IteratorType::end(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -285,7 +283,7 @@ _Scalar& DenseCube<_Scalar, _layout>::getElem(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
-  return this->getValue()[getIndexInternal(rowidx, colidx, pageidx)];
+  return this->getValue()[getPos(rowidx, colidx, pageidx)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,7 +298,7 @@ const _Scalar& DenseCube<_Scalar, _layout>::getElem(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
-  return this->getValue()[getIndexInternal(rowidx, colidx, pageidx)];
+  return this->getValue()[getPos(rowidx, colidx, pageidx)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -366,7 +364,7 @@ DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getCube(
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
   assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pagerange.getLength(), pitch1_, pitch2_,
-                                     data_, getIndexInternal(rowrange.begin, colrange.begin, pagerange.begin) + offset_);
+                                     data_, getPos(rowrange.begin, colrange.begin, pagerange.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -382,7 +380,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getCube(
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
   assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pagerange.getLength(), pitch1_, pitch2_,
-                                     data_, getIndexInternal(rowrange.begin, colrange.begin, pagerange.begin) + offset_);
+                                     data_, getPos(rowrange.begin, colrange.begin, pagerange.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -396,7 +394,7 @@ DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getTubes(
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), npage_, pitch1_, pitch2_,
-                                     data_, getIndexInternal(rowrange.begin, colrange.begin, 0) + offset_);
+                                     data_, getPos(rowrange.begin, colrange.begin, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,7 +408,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getTubes(
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), npage_, pitch1_, pitch2_,
-                                     data_, getIndexInternal(rowrange.begin, colrange.begin, 0) + offset_);
+                                     data_, getPos(rowrange.begin, colrange.begin, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,7 +420,7 @@ DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPages(
 ) noexcept {
   assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(nrow_, ncol_, pagerange.getLength(), pitch1_, pitch2_,
-                                     data_, getIndexInternal(0, 0, pagerange.begin) + offset_);
+                                     data_, getPos(0, 0, pagerange.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -434,7 +432,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPages(
 ) const noexcept {
   assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(nrow_, ncol_, pagerange.getLength(), pitch1_, pitch2_,
-                                     data_, getIndexInternal(0, 0, pagerange.begin) + offset_);
+                                     data_, getPos(0, 0, pagerange.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -446,7 +444,7 @@ DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getColPages(
 ) noexcept {
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(nrow_, colrange.getLength(), npage_, pitch1_, pitch2_,
-                                     data_, getIndexInternal(0, colrange.begin, 0) + offset_);
+                                     data_, getPos(0, colrange.begin, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -458,7 +456,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getColPages(
 ) const noexcept {
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(nrow_, colrange.getLength(), npage_, pitch1_, pitch2_,
-                                     data_, getIndexInternal(0, colrange.begin, 0) + offset_);
+                                     data_, getPos(0, colrange.begin, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -470,7 +468,7 @@ DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getRowPages(
 ) noexcept {
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(rowrange.getLength(), ncol_, npage_, pitch1_, pitch2_,
-                                     data_, getIndexInternal(rowrange.begin, 0, 0) + offset_);
+                                     data_, getPos(rowrange.begin, 0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,7 +480,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getRowPages(
 ) const noexcept {
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   return DenseCube<_Scalar, _layout>(rowrange.getLength(), ncol_, npage_, pitch1_, pitch2_,
-                                     data_, getIndexInternal(rowrange.begin, 0, 0) + offset_);
+                                     data_, getPos(rowrange.begin, 0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -493,7 +491,7 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPage(
     const index_t pageidx
 ) noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
-  return DenseMatrix<_Scalar, _layout>(nrow_, ncol_, pitch1_, data_, getIndexInternal(0, 0, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(nrow_, ncol_, pitch1_, data_, getPos(0, 0, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -504,7 +502,7 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPage(
     const index_t pageidx
 ) const noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
-  return DenseMatrix<_Scalar, _layout>(nrow_, ncol_, pitch1_, data_, getIndexInternal(0, 0, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(nrow_, ncol_, pitch1_, data_, getPos(0, 0, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -517,8 +515,8 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getCols(
 ) noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), pitch1_,
-                                       data_, getIndexInternal(0, colrange.begin, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), pitch1_, data_,
+                                       getPos(0, colrange.begin, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -531,8 +529,8 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getCols(
 ) const noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), pitch1_,
-                                       data_, getIndexInternal(0, colrange.begin, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), pitch1_, data_,
+                                       getPos(0, colrange.begin, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -545,8 +543,8 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getRows(
 ) noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, pitch1_,
-                                       data_, getIndexInternal(rowrange.begin, 0, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, pitch1_, data_,
+                                       getPos(rowrange.begin, 0, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -559,8 +557,8 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getRows(
 ) const noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, pitch1_,
-                                       data_, getIndexInternal(rowrange.begin, 0, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, pitch1_, data_,
+                                       getPos(rowrange.begin, 0, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -575,8 +573,8 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlock(
   assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch1_,
-                                       data_, getIndexInternal(rowrange.begin, colrange.begin, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch1_, data_,
+                                       getPos(rowrange.begin, colrange.begin, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -591,8 +589,8 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlock(
   assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch1_,
-                                       data_, getIndexInternal(rowrange.begin, colrange.begin, pageidx) + offset_);
+  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch1_, data_,
+                                       getPos(rowrange.begin, colrange.begin, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -603,9 +601,9 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlock(
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
   if ( isColMajor(_layout) ) {
-    return DenseMatrix<_Scalar, _layout>(nrow_, pitch2_ * npage_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+    return DenseMatrix<_Scalar, _layout>(nrow_, pitch2_ * npage_, pitch1_, data_, getPos(0, 0, 0) + offset_);
   } else {
-    return DenseMatrix<_Scalar, _layout>(pitch2_ * npage_, ncol_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+    return DenseMatrix<_Scalar, _layout>(pitch2_ * npage_, ncol_, pitch1_, data_, getPos(0, 0, 0) + offset_);
   }
 }
 
@@ -615,9 +613,9 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() const noexcept {
   if ( isColMajor(_layout) ) {
-    return DenseMatrix<_Scalar, _layout>(nrow_, pitch2_ * npage_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+    return DenseMatrix<_Scalar, _layout>(nrow_, pitch2_ * npage_, pitch1_, data_, getPos(0, 0, 0) + offset_);
   } else {
-    return DenseMatrix<_Scalar, _layout>(pitch2_ * npage_, ncol_, pitch1_, data_, getIndexInternal(0, 0, 0) + offset_);
+    return DenseMatrix<_Scalar, _layout>(pitch2_ * npage_, ncol_, pitch1_, data_, getPos(0, 0, 0) + offset_);
   }
 }
 
@@ -631,7 +629,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getCol(
 ) noexcept {
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
-  return DenseVector<_Scalar>(nrow_, getColIncInternal(), data_, getIndexInternal(0, colidx, pageidx) + offset_);
+  return DenseVector<_Scalar>(nrow_, getColInc(), data_, getPos(0, colidx, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -644,7 +642,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getCol(
 ) const noexcept {
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
-  return DenseVector<_Scalar>(nrow_, getColIncInternal(), data_, getIndexInternal(0, colidx, pageidx) + offset_);
+  return DenseVector<_Scalar>(nrow_, getColInc(), data_, getPos(0, colidx, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -659,8 +657,8 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getColSegment(
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseVector<_Scalar>(rowrange.getLength(), getColIncInternal(),
-                              data_, getIndexInternal(rowrange.begin, colidx, pageidx) + offset_);
+  return DenseVector<_Scalar>(rowrange.getLength(), getColInc(),
+                              data_, getPos(rowrange.begin, colidx, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -675,8 +673,8 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getColSegment(
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseVector<_Scalar>(rowrange.getLength(), getColIncInternal(),
-                              data_, getIndexInternal(rowrange.begin, colidx, pageidx) + offset_);
+  return DenseVector<_Scalar>(rowrange.getLength(), getColInc(),
+                              data_, getPos(rowrange.begin, colidx, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -689,8 +687,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRow(
 ) noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(pageidx >= 0 && pageidx < npage_);
-  return DenseVector<_Scalar>(ncol_, getRowIncInternal(),
-                              data_, getIndexInternal(rowidx, 0, pageidx) + offset_);
+  return DenseVector<_Scalar>(ncol_, getRowInc(), data_, getPos(rowidx, 0, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -703,8 +700,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRow(
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(pageidx >= 0 && pageidx < npage_);
-  return DenseVector<_Scalar>(ncol_, getRowIncInternal(),
-                              data_, getIndexInternal(rowidx, 0, pageidx) + offset_);
+  return DenseVector<_Scalar>(ncol_, getRowInc(), data_, getPos(rowidx, 0, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -719,8 +715,8 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRowSegment(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(pageidx >= 0 && pageidx < npage_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseVector<_Scalar>(colrange.getLength(), getRowIncInternal(),
-                              data_, getIndexInternal(rowidx, colrange.begin, pageidx) + offset_);
+  return DenseVector<_Scalar>(colrange.getLength(), getRowInc(),
+                              data_, getPos(rowidx, colrange.begin, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -735,8 +731,8 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRowSegment(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(pageidx >= 0 && pageidx < npage_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseVector<_Scalar>(colrange.getLength(), getRowIncInternal(),
-                              data_, getIndexInternal(rowidx, colrange.begin, pageidx) + offset_);
+  return DenseVector<_Scalar>(colrange.getLength(), getRowInc(),
+                              data_, getPos(rowidx, colrange.begin, pageidx) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -749,8 +745,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTube(
 ) noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
-  return DenseVector<_Scalar>(npage_, getTubeIncInternal(),
-                              data_, getIndexInternal(rowidx, colidx, 0) + offset_);
+  return DenseVector<_Scalar>(npage_, getTubeInc(), data_, getPos(rowidx, colidx, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -763,8 +758,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTube(
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
-  return DenseVector<_Scalar>(npage_, getTubeIncInternal(),
-                              data_, getIndexInternal(rowidx, colidx, 0) + offset_);
+  return DenseVector<_Scalar>(npage_, getTubeInc(), data_, getPos(rowidx, colidx, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -779,8 +773,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTubeSegment(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
   assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
-  return DenseVector<_Scalar>(pagerange.getLength(), getTubeIncInternal(),
-                              data_, getIndexInternal(rowidx, colidx, pagerange.begin) + offset_);
+  return DenseVector<_Scalar>(pagerange.getLength(), getTubeInc(), data_, getPos(rowidx, colidx, pagerange.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -795,8 +788,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTubeSegment(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
   assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
-  return DenseVector<_Scalar>(pagerange.getLength(), getTubeIncInternal(),
-                              data_, getIndexInternal(rowidx, colidx, pagerange.begin) + offset_);
+  return DenseVector<_Scalar>(pagerange.getLength(), getTubeInc(), data_, getPos(rowidx, colidx, pagerange.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -810,14 +802,14 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
   index_t length;
   index_t idx0;
   if ( idx < 0 ) {
-    idx0 = getIndexInternal(-idx, 0, pageidx);
+    idx0 = getPos(-idx, 0, pageidx);
     if ( nrow_ + idx > ncol_ && nrow_ > ncol_ ) {
       length = ncol_;
     } else {
       length = nrow_ + idx;
     }
   } else {
-    idx0 = getIndexInternal(0, idx, pageidx);
+    idx0 = getPos(0, idx, pageidx);
     if ( ncol_ - idx > nrow_ && ncol_ > nrow_ ) {
       length = nrow_;
     } else {
@@ -838,14 +830,14 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
   index_t length;
   index_t idx0;
   if ( idx < 0 ) {
-    idx0 = getIndexInternal(-idx, 0, pageidx);
+    idx0 = getPos(-idx, 0, pageidx);
     if ( nrow_ + idx > ncol_ && nrow_ > ncol_ ) {
       length = ncol_;
     } else {
       length = nrow_ + idx;
     }
   } else {
-    idx0 = getIndexInternal(0, idx, pageidx);
+    idx0 = getPos(0, idx, pageidx);
     if ( ncol_ - idx > nrow_ && ncol_ > nrow_ ) {
       length = nrow_;
     } else {
@@ -862,7 +854,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
-  return DenseVector<_Scalar>(pitch1_ * pitch2_ * npage_, 1, data_, getIndexInternal(0, 0, 0) + offset_);
+  return DenseVector<_Scalar>(pitch1_ * pitch2_ * npage_, 1, data_, getPos(0, 0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -870,14 +862,14 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexcept {
-  return DenseVector<_Scalar>(pitch1_ * pitch2_ * npage_, 1, data_, getIndexInternal(0, 0, 0) + offset_);
+  return DenseVector<_Scalar>(pitch1_ * pitch2_ * npage_, 1, data_, getPos(0, 0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the internal index of given index.
+/// @brief  Gets the internal position of given index.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getIndexInternal(
+index_t DenseCube<_Scalar, _layout>::getPos(
     const index_t rowidx,
     const index_t colidx,
     const index_t pageidx
@@ -890,7 +882,7 @@ index_t DenseCube<_Scalar, _layout>::getIndexInternal(
 /// @brief  Gets the column increment.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getColIncInternal() const noexcept {
+index_t DenseCube<_Scalar, _layout>::getColInc() const noexcept {
   return isColMajor(_layout) ? 1 : pitch1_;
 }
 
@@ -898,7 +890,7 @@ index_t DenseCube<_Scalar, _layout>::getColIncInternal() const noexcept {
 /// @brief  Gets the row increment.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getRowIncInternal() const noexcept {
+index_t DenseCube<_Scalar, _layout>::getRowInc() const noexcept {
   return isColMajor(_layout) ? pitch1_ : 1;
 }
 
@@ -906,7 +898,7 @@ index_t DenseCube<_Scalar, _layout>::getRowIncInternal() const noexcept {
 /// @brief  Gets the tube increment.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getTubeIncInternal() const noexcept {
+index_t DenseCube<_Scalar, _layout>::getTubeInc() const noexcept {
   return pitch1_ * pitch2_;
 }
 

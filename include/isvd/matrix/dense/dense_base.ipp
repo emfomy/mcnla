@@ -122,13 +122,13 @@ index_t DenseBase<_Derived>::getOffset() const noexcept { return offset_; }
 /// @brief  Gets the data storage.
 ///
 template <class _Derived>
-DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() noexcept { return data_; }
+typename DenseBase<_Derived>::DataType& DenseBase<_Derived>::getData() noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getData
 ///
 template <class _Derived>
-const DenseData<typename DenseBase<_Derived>::ScalarType>& DenseBase<_Derived>::getData() const noexcept { return data_; }
+const typename DenseBase<_Derived>::DataType& DenseBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data array.

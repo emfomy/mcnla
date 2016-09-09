@@ -54,7 +54,7 @@ class CooBase : public SparseBase<_Derived> {
   // Constructors
   CooBase() noexcept;
   CooBase( const index_t capability, const index_t offset = 0 ) noexcept;
-  CooBase( const index_t capability, const index_t nnz, std::shared_ptr<ScalarType> value,
+  CooBase( const index_t nnz, const index_t capability, std::shared_ptr<ScalarType> value,
            std::array<std::shared_ptr<index_t>, ndim> idx, const index_t offset = 0 ) noexcept;
   CooBase( const index_t nnz, const DataType& data, const index_t offset = 0 ) noexcept;
   CooBase( const CooBase &other ) noexcept;
@@ -68,15 +68,22 @@ class CooBase : public SparseBase<_Derived> {
   inline index_t getCapability() const noexcept;
   inline index_t getOffset() const noexcept;
 
+  // Sets information
+  inline void setNnz( const index_t nnz ) noexcept;
+
   // Gets data storage
   inline DataType& getData() noexcept;
   inline const DataType& getData() const noexcept;
 
-  // Gets data array.
+  // Gets data array
   inline       ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
-  template <index_t dim> inline       index_t* getValue() noexcept;
-  template <index_t dim> inline const index_t* getValue() const noexcept;
+
+ protected:
+
+  // Gets index array
+  template <index_t dim> inline       index_t* getIdx() noexcept;
+  template <index_t dim> inline const index_t* getIdx() const noexcept;
 
 };
 

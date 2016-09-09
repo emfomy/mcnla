@@ -50,6 +50,8 @@ class DenseVector
   : public internal::VectorBase<DenseVector<_Scalar>>,
     public internal::DenseBase<DenseVector<_Scalar>> {
 
+  friend class internal::DenseVectorIterator<_Scalar>;
+
  public:
 
   using ScalarType     = _Scalar;
@@ -119,7 +121,7 @@ class DenseVector
  protected:
 
   // Gets internal information
-  inline index_t getIndexInternal( const index_t idx ) const noexcept;
+  inline index_t getPos( const index_t idx ) const noexcept;
 
 };
 

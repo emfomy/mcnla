@@ -8,14 +8,20 @@
 #include <iostream>
 #include <isvd.hpp>
 
+template class isvd::CooVector<double>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
 
-  std::array<std::shared_ptr<int>, 3> idx{std::shared_ptr<int>(new int[3]), std::shared_ptr<int>(new int[4]), std::shared_ptr<int>(new int[5])};
-  auto idx2 = std::move(idx);
-  for ( auto i = 0; i < 3; ++i ) {
-    std::cout << idx2[i].get() << std::endl;
+  isvd::CooVector<double> coovec(10, 5, std::shared_ptr<double>(new double[5]),
+                                 std::shared_ptr<isvd::index_t>(new isvd::index_t[5]));
+
+  int i = 0;
+  for ( auto &v : coovec ) {
+    v = ++i;
   }
+
+  std::cout << coovec << std::endl;
 }

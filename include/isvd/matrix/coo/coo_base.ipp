@@ -57,8 +57,8 @@ CooBase<_Derived>::CooBase(
   : SparseBaseType(nnz),
     offset_(offset),
     data_(capability, value, idx) {
-  assert(capability_ >= nnz_);
   assert(offset_ >= 0);
+  assert(capability >= nnz_ + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,14 +67,14 @@ CooBase<_Derived>::CooBase(
 template <class _Derived>
 CooBase<_Derived>::CooBase(
     const index_t nnz,
-    const DenseData<ScalarType>& data,
+    const DataType& data,
     const index_t offset
 ) noexcept
   : SparseBaseType(nnz),
     offset_(offset),
     data_(data) {
-  assert(data_.getCapability() >= nnz_);
-  assert(offset_ >= 0 && offset_ <= data_.getCapability());
+  assert(offset_ >= 0);
+  assert(data_.getCapability() >= nnz_ + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,16 +130,22 @@ template <class _Derived>
 index_t CooBase<_Derived>::getOffset() const noexcept { return offset_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of starting position.
+///
+template <class _Derived>
+void CooBase<_Derived>::setNnz( const index_t nnz ) noexcept { nnz_ = nnz; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data storage.
 ///
 template <class _Derived>
-DenseData<typename CooBase<_Derived>::ScalarType>& CooBase<_Derived>::getData() noexcept { return data_; }
+typename CooBase<_Derived>::DataType& CooBase<_Derived>::getData() noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getData
 ///
 template <class _Derived>
-const DenseData<typename CooBase<_Derived>::ScalarType>& CooBase<_Derived>::getData() const noexcept { return data_; }
+const typename CooBase<_Derived>::DataType& CooBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value array.

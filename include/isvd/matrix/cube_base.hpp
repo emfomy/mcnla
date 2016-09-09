@@ -8,8 +8,8 @@
 #ifndef ISVD_MATRIX_CUBE_BASE_HPP_
 #define ISVD_MATRIX_CUBE_BASE_HPP_
 
-#include <tuple>
 #include <isvd/isvd.hpp>
+#include <tuple>
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix/tensor_base.hpp>
 #include <isvd/matrix/idx_range.hpp>
