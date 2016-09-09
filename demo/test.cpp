@@ -12,16 +12,10 @@
 /// Main function
 ///
 int main( int argc, char **argv ) {
-  srand(time(NULL));
 
-  isvd::DenseCube<double> cube(5, 5, 5);
-  int i = 1;
-  for ( auto& v : cube ) {
-    v = i++;
+  std::array<std::shared_ptr<int>, 3> idx{std::shared_ptr<int>(new int[3]), std::shared_ptr<int>(new int[4]), std::shared_ptr<int>(new int[5])};
+  auto idx2 = std::move(idx);
+  for ( auto i = 0; i < 3; ++i ) {
+    std::cout << idx2[i].get() << std::endl;
   }
-  for ( auto v : cube ) {
-    std::cout << std::setw(4) << v;
-  }
-  std::cout << std::endl;
-  std::cout << cube.unfold().transpose() << std::endl;
 }

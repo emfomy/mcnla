@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_base.hpp
+/// @file    include/isvd/matrix/dense/dense_base.hpp
 /// @brief   The dense interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_BASE_HPP_
-#define ISVD_MATRIX_DENSE_BASE_HPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_BASE_HPP_
+#define ISVD_MATRIX_DENSE_DENSE_BASE_HPP_
 
 #include <isvd/isvd.hpp>
 #include <isvd/utility/traits.hpp>
-#include <isvd/matrix/dense_data.hpp>
+#include <isvd/matrix/dense/dense_data.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -41,7 +41,7 @@ class DenseBase {
   index_t offset_;
 
   /// The data storage
-  DenseData<ScalarType> data_;
+  DataType data_;
 
  public:
 
@@ -49,7 +49,7 @@ class DenseBase {
   DenseBase() noexcept;
   DenseBase( const index_t capability, const index_t offset = 0 ) noexcept;
   DenseBase( const index_t capability, std::shared_ptr<ScalarType> value, const index_t offset = 0 ) noexcept;
-  DenseBase( const DenseData<ScalarType>& data, const index_t offset = 0 ) noexcept;
+  DenseBase( const DataType& data, const index_t offset = 0 ) noexcept;
   DenseBase( const DenseBase &other ) noexcept;
   DenseBase( DenseBase &&other ) noexcept;
 
@@ -75,4 +75,4 @@ class DenseBase {
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_BASE_HPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_BASE_HPP_

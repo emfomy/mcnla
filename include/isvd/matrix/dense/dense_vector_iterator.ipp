@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_vector_iterator.ipp
+/// @file    include/isvd/matrix/dense/dense_vector_iterator.ipp
 /// @brief   The implementation of dense vector iterator.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_VECTOR_ITERATOR_IPP_
-#define ISVD_MATRIX_DENSE_VECTOR_ITERATOR_IPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_IPP_
+#define ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_IPP_
 
-#include <isvd/matrix/dense_vector_iterator.hpp>
+#include <isvd/matrix/dense/dense_vector_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -190,4 +190,4 @@ DenseVectorIterator<_Scalar>& DenseVectorIterator<_Scalar>::setEnd() noexcept {
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_VECTOR_ITERATOR_IPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_IPP_

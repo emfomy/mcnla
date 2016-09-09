@@ -103,7 +103,7 @@ const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 /// @brief  Gets the left singular vectors.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getLeftSingularVectors() const noexcept {
   return reconstructor_.getLeftSingularVectors();
 }
@@ -112,18 +112,9 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 /// @brief  Gets the right singular vectors.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getRightSingularVectors() const noexcept {
   return reconstructor_.getRightSingularVectors();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the parameters.
-///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ParametersType&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getParameters() const noexcept {
-  return parameters_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

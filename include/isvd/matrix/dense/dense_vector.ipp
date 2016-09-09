@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_vector.ipp
+/// @file    include/isvd/matrix/dense/dense_vector.ipp
 /// @brief   The implementation of dense vector.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_VECTOR_IPP_
-#define ISVD_MATRIX_DENSE_VECTOR_IPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_IPP_
+#define ISVD_MATRIX_DENSE_DENSE_VECTOR_IPP_
 
-#include <isvd/matrix/dense_vector.hpp>
+#include <isvd/matrix/dense/dense_vector.hpp>
 #include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
 ///
 template <typename _Scalar>
 DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other ) noexcept {
-  VectorBaseType::operator=(other), DenseBaseType::operator=(other), increment_ = other.increment_;
+  VectorBaseType::operator=(other); DenseBaseType::operator=(other); increment_ = other.increment_;
   return *this;
 }
 
@@ -127,7 +127,8 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other 
 ///
 template <typename _Scalar>
 DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noexcept {
-  VectorBaseType::operator=(other), DenseBaseType::operator=(other), increment_ = other.increment_; other.increment_ = 1;
+  VectorBaseType::operator=(std::move(other)); DenseBaseType::operator=(std::move(other));
+  increment_ = other.increment_; other.increment_ = 1;
   return *this;
 }
 
@@ -249,7 +250,7 @@ void DenseVector<_Scalar>::resize(
 ///
 template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
-    const IndexRange range
+    const IdxRange range
 ) noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
   return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.begin) + offset_);
@@ -260,7 +261,7 @@ DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
 ///
 template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
-    const IndexRange range
+    const IdxRange range
 ) const noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
   return DenseVector<_Scalar>(range.getLength(), increment_, data_, getIndexInternal(range.begin) + offset_);
@@ -278,4 +279,4 @@ index_t DenseVector<_Scalar>::getIndexInternal(
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_VECTOR_IPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_VECTOR_IPP_

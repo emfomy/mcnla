@@ -11,7 +11,8 @@
 #include <tuple>
 #include <isvd/isvd.hpp>
 #include <isvd/utility/traits.hpp>
-#include <isvd/matrix/index_range.hpp>
+#include <isvd/matrix/tensor_base.hpp>
+#include <isvd/matrix/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -29,11 +30,11 @@ namespace internal {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class CubeBase {
+class CubeBase : public TensorBase<_Derived> {
 
  private:
 
-  static const Layout layout = Traits<_Derived>::layout;
+  static constexpr Layout layout = Traits<_Derived>::layout;
 
  protected:
 
@@ -77,9 +78,9 @@ class CubeBase {
  protected:
 
   // Converts range
-  inline IndexRange convertRowRange( const IndexRange range ) const noexcept;
-  inline IndexRange convertColRange( const IndexRange range ) const noexcept;
-  inline IndexRange convertPageRange( const IndexRange range ) const noexcept;
+  inline IdxRange convertRowRange( const IdxRange range ) const noexcept;
+  inline IdxRange convertColRange( const IdxRange range ) const noexcept;
+  inline IdxRange convertPageRange( const IdxRange range ) const noexcept;
 
 };
 

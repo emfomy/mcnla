@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/index_range.hpp
+/// @file    include/isvd/matrix/idx_range.hpp
 /// @brief   The index range class.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
@@ -18,7 +18,7 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The index range.
 ///
-struct IndexRange {
+struct IdxRange {
 
   /// The beginning index.
   index_t begin;
@@ -27,8 +27,8 @@ struct IndexRange {
   index_t end;
 
   // Operators
-  inline bool operator==( const IndexRange& other ) const noexcept;
-  inline bool operator!=( const IndexRange& other ) const noexcept;
+  inline bool operator==( const IdxRange& other ) const noexcept;
+  inline bool operator!=( const IdxRange& other ) const noexcept;
 
   // Gets data
   inline index_t getLength() const noexcept;

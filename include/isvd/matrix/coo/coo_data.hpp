@@ -1,13 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_data.hpp
-/// @brief   The dense data storage.
+/// @file    include/isvd/matrix/coo/coo_data.hpp
+/// @brief   The COO data storage.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_DATA_HPP_
-#define ISVD_MATRIX_DENSE_DATA_HPP_
+#ifndef ISVD_MATRIX_COO_COO_DATA_HPP_
+#define ISVD_MATRIX_COO_COO_DATA_HPP_
 
+#include <array>
 #include <memory>
 #include <isvd/isvd.hpp>
 
@@ -17,12 +18,13 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense data storage.
+/// The coordinate list (COO) data storage.
 ///
 /// @tparam  _Scalar  The scalar type.
+/// @tparam  _ndim    The dimension.
 ///
-template <typename _Scalar>
-class DenseData {
+template <typename _Scalar, index_t _ndim>
+class CooData {
 
  protected:
 
@@ -32,20 +34,23 @@ class DenseData {
   /// The data array.
   std::shared_ptr<_Scalar> value_;
 
+  /// The index array.
+  std::array<std::shared_ptr<index_t>, _ndim> idx_;
+
  public:
 
   // Constructors
-  DenseData() noexcept;
-  DenseData( const index_t capability ) noexcept;
-  DenseData( const index_t capability, std::shared_ptr<_Scalar> value ) noexcept;
-  DenseData( const DenseData &other ) noexcept;
-  DenseData( DenseData &&other ) noexcept;
+  CooData() noexcept;
+  CooData( const index_t capability ) noexcept;
+  CooData( const index_t capability, std::shared_ptr<_Scalar> value, std::array<std::shared_ptr<index_t>, _ndim> idx ) noexcept;
+  CooData( const CooData &other ) noexcept;
+  CooData( CooData &&other ) noexcept;
 
   // Operators
-  inline DenseData& operator=( const DenseData &other ) noexcept;
-  inline DenseData& operator=( DenseData &&other ) noexcept;
-  inline bool operator==( const DenseData& other ) const noexcept;
-  inline bool operator!=( const DenseData& other ) const noexcept;
+  inline CooData& operator=( const CooData &other ) noexcept;
+  inline CooData& operator=( CooData &&other ) noexcept;
+  inline bool operator==( const CooData& other ) const noexcept;
+  inline bool operator!=( const CooData& other ) const noexcept;
   inline       _Scalar* operator*() noexcept;
   inline const _Scalar* operator*() const noexcept;
 
@@ -53,9 +58,10 @@ class DenseData {
   inline        index_t getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;
+  template <index_t dim> inline index_t* getIdx() const noexcept;
 
 };
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_DATA_HPP_
+#endif  // ISVD_MATRIX_COO_COO_DATA_HPP_

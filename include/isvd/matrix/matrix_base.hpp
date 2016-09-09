@@ -11,7 +11,8 @@
 #include <utility>
 #include <isvd/isvd.hpp>
 #include <isvd/utility/traits.hpp>
-#include <isvd/matrix/index_range.hpp>
+#include <isvd/matrix/tensor_base.hpp>
+#include <isvd/matrix/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -29,11 +30,11 @@ namespace internal {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class MatrixBase {
+class MatrixBase : public TensorBase<_Derived> {
 
  private:
 
-  static const Layout layout = Traits<_Derived>::layout;
+  static constexpr Layout layout = Traits<_Derived>::layout;
 
  protected:
 

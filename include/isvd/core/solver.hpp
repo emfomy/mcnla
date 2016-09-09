@@ -110,11 +110,8 @@ class Solver {
 
   // Gets matrices
   inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectors() const noexcept;
-
-  // Gets value
-  inline const ParametersType& getParameters() const noexcept;
+  inline const DenseMatrix<ScalarType>& getLeftSingularVectors() const noexcept;
+  inline const DenseMatrix<ScalarType>& getRightSingularVectors() const noexcept;
 
   // Sets value
   inline Solver& setSize( const index_t nrow, const index_t ncol ) noexcept;

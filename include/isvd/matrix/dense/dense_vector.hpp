@@ -1,17 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_vector.hpp
+/// @file    include/isvd/matrix/dense/dense_vector.hpp
 /// @brief   The dense vector class.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_VECTOR_HPP_
-#define ISVD_MATRIX_DENSE_VECTOR_HPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_HPP_
+#define ISVD_MATRIX_DENSE_DENSE_VECTOR_HPP_
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/vector_base.hpp>
-#include <isvd/matrix/dense_base.hpp>
-#include <isvd/matrix/dense_vector_iterator.hpp>
+#include <isvd/matrix/dense/dense_base.hpp>
+#include <isvd/matrix/dense/dense_vector_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -113,8 +113,8 @@ class DenseVector
   inline void resize( const index_t length ) noexcept;
 
   // Gets segment
-  inline       DenseVector getSegment( const IndexRange range ) noexcept;
-  inline const DenseVector getSegment( const IndexRange range ) const noexcept;
+  inline       DenseVector getSegment( const IdxRange range ) noexcept;
+  inline const DenseVector getSegment( const IdxRange range ) const noexcept;
 
  protected:
 
@@ -125,4 +125,4 @@ class DenseVector
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_VECTOR_HPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_VECTOR_HPP_

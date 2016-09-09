@@ -1,20 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_matrix.hpp
+/// @file    include/isvd/matrix/dense/dense_matrix.hpp
 /// @brief   The dense matrix class.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_MATRIX_HPP_
-#define ISVD_MATRIX_DENSE_MATRIX_HPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_MATRIX_HPP_
+#define ISVD_MATRIX_DENSE_DENSE_MATRIX_HPP_
 
 #include <iostream>
 #include <utility>
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/matrix_base.hpp>
-#include <isvd/matrix/dense_base.hpp>
-#include <isvd/matrix/dense_vector.hpp>
-#include <isvd/matrix/dense_matrix_iterator.hpp>
+#include <isvd/matrix/dense/dense_base.hpp>
+#include <isvd/matrix/dense/dense_vector.hpp>
+#include <isvd/matrix/dense/dense_matrix_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -37,7 +37,7 @@ namespace internal {
 ///
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
-  static const Layout layout = _layout;
+  static constexpr Layout layout = _layout;
   using ScalarType     = _Scalar;
   using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
   using VectorType     = DenseVector<ScalarType>;
@@ -60,7 +60,7 @@ class DenseMatrix
 
  public:
 
-  static const Layout layout = _layout;
+  static constexpr Layout layout = _layout;
 
   using ScalarType     = _Scalar;
   using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
@@ -134,22 +134,22 @@ class DenseMatrix
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
   // Gets matrix block
-  inline       DenseMatrix getBlock( const IndexRange rowrange, const IndexRange colrange ) noexcept;
-  inline const DenseMatrix getBlock( const IndexRange rowrange, const IndexRange colrange ) const noexcept;
-  inline       DenseMatrix getCols( const IndexRange rowrange ) noexcept;
-  inline const DenseMatrix getCols( const IndexRange rowrange ) const noexcept;
-  inline       DenseMatrix getRows( const IndexRange colrange ) noexcept;
-  inline const DenseMatrix getRows( const IndexRange colrange ) const noexcept;
+  inline       DenseMatrix getBlock( const IdxRange rowrange, const IdxRange colrange ) noexcept;
+  inline const DenseMatrix getBlock( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
+  inline       DenseMatrix getCols( const IdxRange rowrange ) noexcept;
+  inline const DenseMatrix getCols( const IdxRange rowrange ) const noexcept;
+  inline       DenseMatrix getRows( const IdxRange colrange ) noexcept;
+  inline const DenseMatrix getRows( const IdxRange colrange ) const noexcept;
 
   // Gets vector segment
   inline       VectorType getCol( const index_t colidx ) noexcept;
   inline const VectorType getCol( const index_t colidx ) const noexcept;
-  inline       VectorType getColSegment( const index_t colidx, const IndexRange rowrange ) noexcept;
-  inline const VectorType getColSegment( const index_t colidx, const IndexRange rowrange ) const noexcept;
+  inline       VectorType getColSegment( const index_t colidx, const IdxRange rowrange ) noexcept;
+  inline const VectorType getColSegment( const index_t colidx, const IdxRange rowrange ) const noexcept;
   inline       VectorType getRow( const index_t rowidx ) noexcept;
   inline const VectorType getRow( const index_t rowidx ) const noexcept;
-  inline       VectorType getRowSegment( const index_t rowidx, const IndexRange colrange ) noexcept;
-  inline const VectorType getRowSegment( const index_t rowidx, const IndexRange colrange ) const noexcept;
+  inline       VectorType getRowSegment( const index_t rowidx, const IdxRange colrange ) noexcept;
+  inline const VectorType getRowSegment( const index_t rowidx, const IdxRange colrange ) const noexcept;
   inline       VectorType getDiagonal( const index_t idx = 0 ) noexcept;
   inline const VectorType getDiagonal( const index_t idx = 0 ) const noexcept;
   inline       VectorType vectorize() noexcept;
@@ -166,4 +166,4 @@ class DenseMatrix
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_MATRIX_HPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_MATRIX_HPP_

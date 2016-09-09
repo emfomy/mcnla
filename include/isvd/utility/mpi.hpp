@@ -42,7 +42,7 @@ struct MpiScalarTraits {};
 ///
 template <>
 struct MpiScalarTraits<float> {
-  constexpr static const MPI_Datatype &data_type = MPI_FLOAT;
+  static constexpr const MPI_Datatype &data_type = MPI_FLOAT;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ struct MpiScalarTraits<float> {
 ///
 template <>
 struct MpiScalarTraits<double> {
-  constexpr static const MPI_Datatype &data_type = MPI_DOUBLE;
+  static constexpr const MPI_Datatype &data_type = MPI_DOUBLE;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ struct MpiScalarTraits<double> {
 ///
 template <>
 struct MpiScalarTraits<std::complex<float>> {
-  constexpr static const MPI_Datatype &data_type = MPI_COMPLEX;
+  static constexpr const MPI_Datatype &data_type = MPI_COMPLEX;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ struct MpiScalarTraits<std::complex<float>> {
 ///
 template <>
 struct MpiScalarTraits<std::complex<double>> {
-  constexpr static const MPI_Datatype &data_type = MPI_DOUBLE_COMPLEX;
+  static constexpr const MPI_Datatype &data_type = MPI_DOUBLE_COMPLEX;
 };
 
 }  // internal

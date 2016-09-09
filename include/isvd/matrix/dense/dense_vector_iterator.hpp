@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_vector_iterator.hpp
+/// @file    include/isvd/matrix/dense/dense_vector_iterator.hpp
 /// @brief   The dense vector iterator class.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_VECTOR_ITERATOR_HPP_
-#define ISVD_MATRIX_DENSE_VECTOR_ITERATOR_HPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
+#define ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 
 #include <iterator>
 #include <isvd/isvd.hpp>
-#include <isvd/matrix/dense_vector.hpp>
+#include <isvd/matrix/dense/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -73,4 +73,4 @@ class DenseVectorIterator : public std::iterator<std::forward_iterator_tag, _Sca
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_VECTOR_ITERATOR_HPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_

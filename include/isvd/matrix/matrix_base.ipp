@@ -94,17 +94,13 @@ MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( MatrixBase &&other ) noex
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived> template <TransOption _trans>
-index_t MatrixBase<_Derived>::getNrow() const noexcept {
-  return !isTranspose(_trans) ? nrow_ : ncol_;
-}
+index_t MatrixBase<_Derived>::getNrow() const noexcept { return !isTranspose(_trans) ? nrow_ : ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of columns.
 ///
 template <class _Derived> template <TransOption _trans>
-index_t MatrixBase<_Derived>::getNcol() const noexcept {
-  return !isTranspose(_trans) ? ncol_ : nrow_;
-}
+index_t MatrixBase<_Derived>::getNcol() const noexcept { return !isTranspose(_trans) ? ncol_ : nrow_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading size.

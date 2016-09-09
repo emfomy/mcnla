@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/index_range.ipp
+/// @file    include/isvd/matrix/idx_range.ipp
 /// @brief   The implementation of index range.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
@@ -18,17 +18,17 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-bool IndexRange::operator==( const IndexRange& other ) const noexcept { return (begin == other.begin && end == other.end); }
+bool IdxRange::operator==( const IdxRange& other ) const noexcept { return (begin == other.begin && end == other.end); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
-bool IndexRange::operator!=( const IndexRange& other ) const noexcept { return !(*this == other); }
+bool IdxRange::operator!=( const IdxRange& other ) const noexcept { return !(*this == other); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of the range.
 ///
-index_t IndexRange::getLength() const noexcept { return (end-begin); }
+index_t IdxRange::getLength() const noexcept { return (end-begin); }
 
 }  // namespace isvd
 

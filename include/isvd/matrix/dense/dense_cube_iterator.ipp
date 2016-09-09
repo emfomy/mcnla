@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/cube/dense_cube_iterator.ipp
+/// @file    include/isvd/matrix/dense/dense_cube_iterator.ipp
 /// @brief   The implementation of dense cube iterator.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_CUBE_ITERATOR_IPP_
-#define ISVD_MATRIX_DENSE_CUBE_ITERATOR_IPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_CUBE_ITERATOR_IPP_
+#define ISVD_MATRIX_DENSE_DENSE_CUBE_ITERATOR_IPP_
 
-#include <isvd/matrix/dense_cube_iterator.hpp>
+#include <isvd/matrix/dense/dense_cube_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -242,4 +242,4 @@ DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::setEnd
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_CUBE_ITERATOR_IPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_CUBE_ITERATOR_IPP_

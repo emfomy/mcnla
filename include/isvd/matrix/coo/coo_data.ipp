@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_data.ipp
-/// @brief   The implementation of dense data storage.
+/// @file    include/isvd/matrix/coo/coo_data.ipp
+/// @brief   The implementation of COO data storage.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_DATA_IPP_
-#define ISVD_MATRIX_DENSE_DATA_IPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_DATA_IPP_
+#define ISVD_MATRIX_DENSE_DENSE_DATA_IPP_
 
-#include <isvd/matrix/dense_data.hpp>
+#include <isvd/matrix/coo/coo_data.hpp>
 #include <isvd/utility/memory.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,51 +19,60 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData() noexcept
+template <typename _Scalar, index_t _ndim>
+CooData<_Scalar>::CooData() noexcept
   : capability_(0),
-    value_(nullptr) {}
+    value_(nullptr)
+    idx_({nullptr}) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData(
+template <typename _Scalar, index_t _ndim>
+CooData<_Scalar>::CooData(
     const index_t capability
 ) noexcept
   : capability_(capability),
     value_(malloc<_Scalar>(capability)) {
   assert(capability > 0);
+  for ( index_t i = 0; i < _ndim; ++i ) {
+    idx_[i] = malloc<index_t>(capability);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData(
+template <typename _Scalar, index_t _ndim>
+CooData<_Scalar>::CooData(
     const index_t capability,
-    std::shared_ptr<_Scalar> value
+    std::shared_ptr<_Scalar> value,
+    std::array<std::shared_ptr<index_t>, _ndim> idx
 ) noexcept
   : capability_(capability),
-    value_(value) {
+    value_(value),
+    idx_(idx) {
   assert(capability > 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData( const DenseData &other ) noexcept
+template <typename _Scalar, index_t _ndim>
+CooData<_Scalar>::CooData( const CooData &other ) noexcept
   : capability_(other.capability_),
-    value_(other.value_) {}
+    value_(other.value_),
+    idx_(idx) {
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData( DenseData &&other ) noexcept
+template <typename _Scalar, index_t _ndim>
+CooData<_Scalar>::CooData( CooData &&other ) noexcept
   : capability_(other.capability_),
-    value_(std::move(other.value_)) {
+    value_(std::move(other.value_)),
+    idx_(std::move(other.idx_)) {
   other.capability_ = 0;
 }
 
@@ -72,67 +81,68 @@ DenseData<_Scalar>::DenseData( DenseData &&other ) noexcept
 ///
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>& DenseData<_Scalar>::operator=( const DenseData &other ) noexcept {
-  capability_ = other.capability_; value_ = other.value_;
+template <typename _Scalar, index_t _ndim>
+CooData<_Scalar>& CooData<_Scalar>::operator=( const CooData &other ) noexcept {
+  capability_ = other.capability_; value_ = other.value_; idx_ = other.idx_;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>& DenseData<_Scalar>::operator=( DenseData &&other ) noexcept {
-  capability_ = other.capability_; value_ = std::move(other.value_); other.capability_ = 0;
-  return *this;
+template <typename _Scalar, index_t _ndim>
+CooData<_Scalar>& CooData<_Scalar>::operator=( CooData &&other ) noexcept {
+  capability_ = other.capability_; value_ = std::move(other.value_);  idx_ = std::move(other.idx_; other.capability_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::operator*() noexcept {
-  return getValue();
-}
+template <typename _Scalar, index_t _ndim>
+_Scalar* CooData<_Scalar>::operator*() noexcept { return getValue(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::operator*() const noexcept {
-  return getValue();
-}
+template <typename _Scalar, index_t _ndim>
+const _Scalar* CooData<_Scalar>::operator*() const noexcept { return getValue(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-template <typename _Scalar>
-bool DenseData<_Scalar>::operator==( const DenseData& other ) const noexcept { return this->value_ == other.value_; }
+template <typename _Scalar, index_t _ndim>
+bool CooData<_Scalar>::operator==( const CooData& other ) const noexcept { return this->value_ == other.value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
-template <typename _Scalar>
-bool DenseData<_Scalar>::operator!=( const DenseData& other ) const noexcept { return this->value_ != other.value_; }
+template <typename _Scalar, index_t _ndim>
+bool CooData<_Scalar>::operator!=( const CooData& other ) const noexcept { return this->value_ != other.value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of data array.
 ///
-template <typename _Scalar>
-index_t DenseData<_Scalar>::getCapability() const noexcept { return capability_; }
+template <typename _Scalar, index_t _ndim>
+index_t CooData<_Scalar>::getCapability() const noexcept { return capability_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value array.
 ///
-template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::getValue() noexcept { return value_.get(); }
+template <typename _Scalar, index_t _ndim>
+_Scalar* CooData<_Scalar>::getValue() noexcept { return value_.get(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return value_.get(); }
+template <typename _Scalar, index_t _ndim>
+const _Scalar* CooData<_Scalar>::getValue() const noexcept { return value_.get(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
+///
+template <typename _Scalar, index_t _ndim> template <index_t dim>
+index_t* CooData<_Scalar>::getIdx() const noexcept { assert(dim > 0 && dim < _ndim); return idx_[dim].get(); }
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_DATA_IPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_DATA_IPP_

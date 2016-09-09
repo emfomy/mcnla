@@ -30,7 +30,7 @@ namespace internal {}
 ///
 template <TransOption _trans, typename _Scalar>
 struct TransChar {
-  static const char value = !isTranspose(_trans)
+  static constexpr char value = !isTranspose(_trans)
       ? ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
       : ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
   static_assert(value != '?', "Conjugate no-transpose is nor supported!");
@@ -41,7 +41,7 @@ struct TransChar {
 ///
 template <UploOption _uplo, Layout _layout>
 struct UploChar {
-  static const char value = (isLower(_uplo) ^ isRowMajor(_layout)) ? 'L' : 'U';
+  static constexpr char value = (isLower(_uplo) ^ isRowMajor(_layout)) ? 'L' : 'U';
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ struct UploChar {
 ///
 template <UploOption _uplo>
 struct DiagChar {
-  static const char value = !isUnitDiag(_uplo) ? 'N' : 'U';
+  static constexpr char value = !isUnitDiag(_uplo) ? 'N' : 'U';
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ struct DiagChar {
 ///
 template <SideOption _side, Layout _layout>
 struct SideChar {
-  static const char value = (isLeftSide(_side) ^ isRowMajor(_layout)) ? 'L' : 'R';
+  static constexpr char value = (isLeftSide(_side) ^ isRowMajor(_layout)) ? 'L' : 'R';
 };
 
 }  // namespace blas

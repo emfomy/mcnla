@@ -36,11 +36,11 @@ class SyevDriver {
 
  private:
 
-  static const Layout layout = _Matrix::layout;
+  static constexpr Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using VectorType     = typename _Matrix::VectorType;
   using RealVectorType = typename _Matrix::RealVectorType;
-  static const bool is_real = isvd::internal::ScalarTraits<ScalarType>::is_real;
+  static constexpr bool is_real = isvd::internal::ScalarTraits<ScalarType>::is_real;
 
   static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 

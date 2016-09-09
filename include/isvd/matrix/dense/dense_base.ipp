@@ -1,15 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/dense_base.ipp
+/// @file    include/isvd/matrix/dense/dense_base.ipp
 /// @brief   The implementation of dense interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_DENSE_BASE_IPP_
-#define ISVD_MATRIX_DENSE_BASE_IPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_BASE_IPP_
+#define ISVD_MATRIX_DENSE_DENSE_BASE_IPP_
 
-#include <isvd/matrix/dense_base.hpp>
-#include <isvd/utility/memory.hpp>
+#include <isvd/matrix/dense/dense_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -39,7 +38,7 @@ DenseBase<_Derived>::DenseBase(
 ) noexcept
   : offset_(offset),
     data_(capability) {
-  assert(offset >= 0);
+  assert(offset_ >= 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +52,7 @@ DenseBase<_Derived>::DenseBase(
 ) noexcept
   : offset_(offset),
     data_(capability, value) {
-  assert(offset >= 0);
+  assert(offset_ >= 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +60,7 @@ DenseBase<_Derived>::DenseBase(
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
-    const DenseData<ScalarType>& data,
+    const DataType& data,
     const index_t offset
 ) noexcept
   : offset_(offset),
@@ -151,4 +150,4 @@ const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() 
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_DENSE_BASE_IPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_BASE_IPP_
