@@ -15,13 +15,14 @@ template class isvd::CooVector<double>;
 ///
 int main( int argc, char **argv ) {
 
-  isvd::CooVector<double> coovec(10, 5, std::shared_ptr<double>(new double[5]),
-                                 std::shared_ptr<isvd::index_t>(new isvd::index_t[5]));
+  // isvd::CooVector<double> vec(10, 5, std::shared_ptr<double>(new double[5]),
+  //                                std::shared_ptr<isvd::index_t>(new isvd::index_t[5]));
+  isvd::DenseVector<double> vec(10);
 
   int i = 0;
-  for ( auto &v : coovec ) {
+  for ( auto &v : vec ) {
     v = ++i;
   }
 
-  std::cout << coovec << std::endl;
+  std::cout << vec << std::endl;
 }

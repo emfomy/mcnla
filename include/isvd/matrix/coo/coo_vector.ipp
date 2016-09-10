@@ -143,54 +143,10 @@ const index_t* CooVector<_Scalar>::getIdx() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to beginning.
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::begin() noexcept {
-  return IteratorType::begin(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  begin
-///
-template <typename _Scalar>
-const typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::begin() const noexcept {
-  return IteratorType::begin(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to end.
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::end() noexcept {
-  return IteratorType::end(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  end
-///
-template <typename _Scalar>
-const typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::end() const noexcept {
-  return IteratorType::end(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>
-_Scalar& CooVector<_Scalar>::getElem(
-    const index_t idx
-) noexcept {
-  assert(idx >= 0 && idx < length_);
-  auto it = getIterator(idx);
-  return (it != end()) ? *it : 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElem
-///
-template <typename _Scalar>
-const _Scalar& CooVector<_Scalar>::getElem(
+_Scalar CooVector<_Scalar>::getElem(
     const index_t idx
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
@@ -202,17 +158,147 @@ const _Scalar& CooVector<_Scalar>::getElem(
 /// @copydoc  getElem
 ///
 template <typename _Scalar>
-_Scalar& CooVector<_Scalar>::operator()(
-    const index_t idx
-) noexcept { return getElem(idx); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElem
-///
-template <typename _Scalar>
-const _Scalar& CooVector<_Scalar>::operator()(
+_Scalar CooVector<_Scalar>::operator()(
     const index_t idx
 ) const noexcept { return getElem(idx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position of given index.
+//
+/// @attention  Returns @c -1 if the index does not exist!
+///
+template <typename _Scalar>
+index_t CooVector<_Scalar>::getPos(
+    const index_t idx
+) const noexcept {
+  for ( auto it = begin() ; it != end(); ++it ) {
+    if ( it.getIdx() == idx ) {
+      return it.getPos();
+    }
+  }
+  return -1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position and nonzero elements of given index range.
+///
+template <typename _Scalar>
+void CooVector<_Scalar>::getPosNnz(
+    const IdxRange range,
+          index_t &pos,
+          index_t &nnz
+) const noexcept {
+  auto it = begin();
+  for ( ; it != end(); ++it ) {
+    if ( it.getIdx() >= range.begin ) {
+      break;
+    }
+  }
+  pos = it.getPos();
+
+  for ( ; it != end(); ++it ) {
+    if ( it.getIdx() >= range.end ) {
+      break;
+    }
+  }
+  nnz = it.getPos() - pos;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to beginning.
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::begin() noexcept {
+  return IteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  begin
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::begin() const noexcept {
+  return ConstIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  begin
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::cbegin() const noexcept {
+  return ConstIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to end.
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::end() noexcept {
+  return IteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  end
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::end() const noexcept {
+  return ConstIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  end
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::cend() const noexcept {
+  return ConstIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator of given index.
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::getIterator(
+    const index_t idx
+) noexcept {
+  auto it = begin();
+  for ( ; it != end(); ++it ) {
+    if ( it.getIdx() == idx ) {
+      break;
+    }
+  }
+  return it;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIterator
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::getIterator(
+    const index_t idx
+) const noexcept {
+  auto it = begin();
+  for ( ; it != end(); ++it ) {
+    if ( it.getIdx() == idx ) {
+      break;
+    }
+  }
+  return it;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIterator
+///
+template <typename _Scalar>
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::getConstIterator(
+    const index_t idx
+) const noexcept {
+  auto it = begin();
+  for ( ; it != end(); ++it ) {
+    if ( it.getIdx() == idx ) {
+      break;
+    }
+  }
+  return it;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the vector.
@@ -223,7 +309,7 @@ template <typename _Scalar>
 void CooVector<_Scalar>::resize(
     const index_t length
 ) noexcept {
-  assert(length > 0);
+  assert(length > 0 && length >= nnz_);
   length_ = length;
 }
 
@@ -249,35 +335,6 @@ const CooVector<_Scalar> CooVector<_Scalar>::getSegment(
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
   index_t pos, nnz; getPosNnz(range, pos, nnz);
   return CooVector<_Scalar>(range.getLength(), nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator of given index.
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::getIterator(
-    const index_t idx
-) const noexcept {
-  auto it = begin();
-  for ( ; it != end(); ++it ) {
-    if ( it.getIdx() == idx ) {
-      break;
-    }
-  }
-  return it;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the internal position and nonzero elements of given index range.
-///
-template <typename _Scalar>
-void CooVector<_Scalar>::getPosNnz(
-    const IdxRange range,
-          index_t &pos,
-          index_t &nnz
-) const noexcept {
-  pos = (std::find_if(begin(), end(), [=]( const index_t i ) { return i >= range.begin; })).getPos();
-  nnz = (std::find_if(begin(), end(), [=]( const index_t i ) { return i >= range.end; })).getPos() - pos;
 }
 
 }  // namespace isvd

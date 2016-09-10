@@ -60,8 +60,9 @@ class CooVector
   using VectorType     = CooVector<ScalarType>;
   using RealVectorType = CooVector<RealScalarType>;
 
-  using DataType       = CooData<ScalarType, 1>;
-  using IteratorType   = internal::CooVectorIterator<ScalarType>;
+  using DataType          = CooData<ScalarType, 1>;
+  using IteratorType      = CooVectorIterator<ScalarType>;
+  using ConstIteratorType = CooVectorConstIterator<ScalarType>;
 
  private:
 
@@ -98,17 +99,24 @@ class CooVector
   inline       index_t* getIdx() noexcept;
   inline const index_t* getIdx() const noexcept;
 
-  // Gets iterator
-  inline       IteratorType begin() noexcept;
-  inline const IteratorType begin() const noexcept;
-  inline       IteratorType end() noexcept;
-  inline const IteratorType end() const noexcept;
-
   // Gets element
-  inline       ScalarType& getElem( const index_t idx ) noexcept;
-  inline const ScalarType& getElem( const index_t idx ) const noexcept;
-  inline       ScalarType& operator()( const index_t idx ) noexcept;
-  inline const ScalarType& operator()( const index_t idx ) const noexcept;
+  inline ScalarType getElem( const index_t idx ) const noexcept;
+  inline ScalarType operator()( const index_t idx ) const noexcept;
+
+  // Gets the internal position
+  inline index_t getPos( const index_t idx ) const noexcept;
+  inline void getPosNnz( const IdxRange range, index_t &pos, index_t &nnz ) const noexcept;
+
+  // Gets iterator
+  inline IteratorType      begin() noexcept;
+  inline ConstIteratorType begin() const noexcept;
+  inline ConstIteratorType cbegin() const noexcept;
+  inline IteratorType      end() noexcept;
+  inline ConstIteratorType end() const noexcept;
+  inline ConstIteratorType cend() const noexcept;
+  inline IteratorType      getIterator( const index_t idx ) noexcept;
+  inline ConstIteratorType getIterator( const index_t idx ) const noexcept;
+  inline ConstIteratorType getConstIterator( const index_t idx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;
@@ -116,12 +124,6 @@ class CooVector
   // Gets segment
   inline       CooVector getSegment( const IdxRange range ) noexcept;
   inline const CooVector getSegment( const IdxRange range ) const noexcept;
-
- protected:
-
-  // Gets internal information
-  inline IteratorType getIterator( const index_t idx ) const noexcept;
-  inline void getPosNnz( const IdxRange range, index_t &pos, index_t &nnz ) const noexcept;
 
 };
 

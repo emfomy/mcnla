@@ -30,42 +30,43 @@ namespace internal {
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _layout  The storage layout.
 ///
-template <typename _Scalar, Layout _layout>
-class DenseCubeIterator : public std::iterator<std::forward_iterator_tag, _Scalar> {
+template <typename _Scalar, Layout _layout, class _Cube>
+class DenseCubeIteratorBase : public std::iterator<std::forward_iterator_tag, _Scalar> {
 
  protected:
 
-  /// The leading index.
-  index_t idx1_;
-
-  /// The second index.
-  index_t idx2_;
-
-  /// The page index.
-  index_t idx3_;
-
   /// The row index.
-  index_t &rowidx_ = isColMajor(_layout) ? idx1_ : idx2_;
+  index_t rowidx_;
 
   /// The column index.
-  index_t &colidx_ = isColMajor(_layout) ? idx2_ : idx1_;
+  index_t colidx_;
+
+  /// The page index.
+  index_t pageidx_;
+
+  /// The leading index.
+  index_t &idx1_ = isColMajor(_layout) ? rowidx_ : colidx_;
+
+  /// The second index.
+  index_t &idx2_ = isColMajor(_layout) ? colidx_ : rowidx_;
 
   /// The cube.
-  DenseCube<_Scalar, _layout> *cube_;
+  _Cube *cube_;
 
  public:
 
   // Constructors
-  DenseCubeIterator() noexcept;
-  DenseCubeIterator( DenseCube<_Scalar, _layout> *cube ) noexcept;
-  DenseCubeIterator( const DenseCubeIterator &other ) noexcept;
+  DenseCubeIteratorBase() noexcept;
+  DenseCubeIteratorBase( _Cube *cube ) noexcept;
+  DenseCubeIteratorBase( _Cube *cube, const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  DenseCubeIteratorBase( const DenseCubeIteratorBase &other ) noexcept;
 
   // Operators
-  inline DenseCubeIterator& operator=( const DenseCubeIterator &other ) noexcept;
-  inline bool operator==( const DenseCubeIterator &other ) const noexcept;
-  inline bool operator!=( const DenseCubeIterator &other ) const noexcept;
-  inline DenseCubeIterator& operator++() noexcept;
-  inline DenseCubeIterator& operator++( int ) noexcept;
+  inline DenseCubeIteratorBase& operator=( const DenseCubeIteratorBase &other ) noexcept;
+  inline bool operator==( const DenseCubeIteratorBase &other ) const noexcept;
+  inline bool operator!=( const DenseCubeIteratorBase &other ) const noexcept;
+  inline DenseCubeIteratorBase& operator++() noexcept;
+  inline DenseCubeIteratorBase  operator++( int ) noexcept;
   inline       _Scalar& operator*() noexcept;
   inline const _Scalar& operator*() const noexcept;
   inline       _Scalar* operator->() noexcept;
@@ -82,18 +83,22 @@ class DenseCubeIterator : public std::iterator<std::forward_iterator_tag, _Scala
   inline       index_t getPos() const noexcept;
 
   // Sets to begin/end
-  inline DenseCubeIterator& setBegin() noexcept;
-  inline DenseCubeIterator& setEnd() noexcept;
+  inline DenseCubeIteratorBase& setBegin() noexcept;
+  inline DenseCubeIteratorBase& setEnd() noexcept;
 
   // Gets the begin/end iterator
-  static inline       DenseCubeIterator begin( DenseCube<_Scalar, _layout> *cube ) noexcept;
-  static inline const DenseCubeIterator begin( const DenseCube<_Scalar, _layout> *cube ) noexcept;
-  static inline       DenseCubeIterator end( DenseCube<_Scalar, _layout> *cube ) noexcept;
-  static inline const DenseCubeIterator end( const DenseCube<_Scalar, _layout> *cube ) noexcept;
+  static inline DenseCubeIteratorBase getBegin( _Cube *cube ) noexcept;
+  static inline DenseCubeIteratorBase getEnd( _Cube *cube ) noexcept;
 
 };
 
 }  // namespace internal
+
+template <typename _Scalar, Layout _layout>
+using DenseCubeIterator = internal::DenseCubeIteratorBase<_Scalar, _layout, DenseCube<_Scalar, _layout>>;
+
+template <typename _Scalar, Layout _layout>
+using DenseCubeConstIterator = internal::DenseCubeIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
 
 }  // namespace isvd
 

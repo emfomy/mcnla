@@ -29,8 +29,8 @@ namespace internal {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar>
-class DenseVectorIterator : public std::iterator<std::forward_iterator_tag, _Scalar> {
+template <typename _Scalar, class _Vector>
+class DenseVectorIteratorBase : public std::iterator<std::forward_iterator_tag, _Scalar> {
 
  protected:
 
@@ -38,21 +38,21 @@ class DenseVectorIterator : public std::iterator<std::forward_iterator_tag, _Sca
   index_t idx_;
 
   /// The vector.
-  DenseVector<_Scalar> *vector_;
+  _Vector *vector_;
 
  public:
 
   // Constructors
-  DenseVectorIterator() noexcept;
-  DenseVectorIterator( DenseVector<_Scalar> *vector ) noexcept;
-  DenseVectorIterator( const DenseVectorIterator &other ) noexcept;
+  DenseVectorIteratorBase() noexcept;
+  DenseVectorIteratorBase( _Vector *vector, const index_t idx = 0 ) noexcept;
+  DenseVectorIteratorBase( const DenseVectorIteratorBase &other ) noexcept;
 
   // Operators
-  inline DenseVectorIterator& operator=( const DenseVectorIterator &other ) noexcept;
-  inline bool operator==( const DenseVectorIterator &other ) const noexcept;
-  inline bool operator!=( const DenseVectorIterator &other ) const noexcept;
-  inline DenseVectorIterator& operator++() noexcept;
-  inline DenseVectorIterator& operator++( int ) noexcept;
+  inline DenseVectorIteratorBase& operator=( const DenseVectorIteratorBase &other ) noexcept;
+  inline bool operator==( const DenseVectorIteratorBase &other ) const noexcept;
+  inline bool operator!=( const DenseVectorIteratorBase &other ) const noexcept;
+  inline DenseVectorIteratorBase& operator++() noexcept;
+  inline DenseVectorIteratorBase  operator++( int ) noexcept;
   inline       _Scalar& operator*() noexcept;
   inline const _Scalar& operator*() const noexcept;
   inline       _Scalar* operator->() noexcept;
@@ -65,18 +65,22 @@ class DenseVectorIterator : public std::iterator<std::forward_iterator_tag, _Sca
   inline       index_t getPos() const noexcept;
 
   // Sets to begin/end
-  inline DenseVectorIterator& setBegin() noexcept;
-  inline DenseVectorIterator& setEnd() noexcept;
+  inline DenseVectorIteratorBase& setBegin() noexcept;
+  inline DenseVectorIteratorBase& setEnd() noexcept;
 
   // Gets the begin/end iterator
-  static inline       DenseVectorIterator begin( DenseVector<_Scalar> *vector ) noexcept;
-  static inline const DenseVectorIterator begin( const DenseVector<_Scalar> *vector ) noexcept;
-  static inline       DenseVectorIterator end( DenseVector<_Scalar> *vector ) noexcept;
-  static inline const DenseVectorIterator end( const DenseVector<_Scalar> *vector ) noexcept;
+  static inline DenseVectorIteratorBase getBegin( _Vector *vector ) noexcept;
+  static inline DenseVectorIteratorBase getEnd( _Vector *vector ) noexcept;
 
 };
 
 }  // namespace internal
+
+template <typename _Scalar>
+using DenseVectorIterator = internal::DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
+
+template <typename _Scalar>
+using DenseVectorConstIterator = internal::DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
 
 }  // namespace isvd
 

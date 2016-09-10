@@ -50,8 +50,6 @@ class DenseVector
   : public internal::VectorBase<DenseVector<_Scalar>>,
     public internal::DenseBase<DenseVector<_Scalar>> {
 
-  friend class internal::DenseVectorIterator<_Scalar>;
-
  public:
 
   using ScalarType     = _Scalar;
@@ -60,8 +58,9 @@ class DenseVector
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
 
-  using DataType       = DenseData<ScalarType>;
-  using IteratorType   = internal::DenseVectorIterator<ScalarType>;
+  using DataType          = DenseData<ScalarType>;
+  using IteratorType      = DenseVectorIterator<ScalarType>;
+  using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
 
  private:
 
@@ -99,17 +98,25 @@ class DenseVector
   inline index_t getIncrement() const noexcept;
   inline bool isShrunk() const noexcept;
 
-  // Gets iterator
-  inline       IteratorType begin() noexcept;
-  inline const IteratorType begin() const noexcept;
-  inline       IteratorType end() noexcept;
-  inline const IteratorType end() const noexcept;
-
   // Gets element
   inline       ScalarType& getElem( const index_t idx ) noexcept;
   inline const ScalarType& getElem( const index_t idx ) const noexcept;
   inline       ScalarType& operator()( const index_t idx ) noexcept;
   inline const ScalarType& operator()( const index_t idx ) const noexcept;
+
+  // Gets internal position
+  inline index_t getPos( const index_t idx ) const noexcept;
+
+  // Gets iterator
+  inline IteratorType      begin() noexcept;
+  inline ConstIteratorType begin() const noexcept;
+  inline ConstIteratorType cbegin() const noexcept;
+  inline IteratorType      end() noexcept;
+  inline ConstIteratorType end() const noexcept;
+  inline ConstIteratorType cend() const noexcept;
+  inline IteratorType      getIterator( const index_t idx ) noexcept;
+  inline ConstIteratorType getIterator( const index_t idx ) const noexcept;
+  inline ConstIteratorType getConstIterator( const index_t idx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;
@@ -117,11 +124,6 @@ class DenseVector
   // Gets segment
   inline       DenseVector getSegment( const IdxRange range ) noexcept;
   inline const DenseVector getSegment( const IdxRange range ) const noexcept;
-
- protected:
-
-  // Gets internal information
-  inline index_t getPos( const index_t idx ) const noexcept;
 
 };
 

@@ -62,8 +62,6 @@ class DenseCube
   : public internal::CubeBase<DenseCube<_Scalar, _layout>>,
     public internal::DenseBase<DenseCube<_Scalar, _layout>>{
 
-  friend class internal::DenseCubeIterator<_Scalar, _layout>;
-
  public:
 
   static constexpr Layout layout = _layout;
@@ -76,8 +74,9 @@ class DenseCube
   using MatrixType     = DenseMatrix<ScalarType, _layout>;
   using TransposeType  = DenseCube<ScalarType, changeLayout(_layout)>;
 
-  using DataType       = DenseData<ScalarType>;
-  using IteratorType   = internal::DenseCubeIterator<ScalarType, _layout>;
+  using DataType          = DenseData<ScalarType>;
+  using IteratorType      = DenseCubeIterator<ScalarType, _layout>;
+  using ConstIteratorType = DenseCubeConstIterator<ScalarType, _layout>;
 
  private:
 
@@ -130,17 +129,22 @@ class DenseCube
   inline std::pair<index_t, index_t> getPitches() const noexcept;
   inline bool isShrunk() const noexcept;
 
-  // Gets iterator
-  inline       IteratorType begin() noexcept;
-  inline const IteratorType begin() const noexcept;
-  inline       IteratorType end() noexcept;
-  inline const IteratorType end() const noexcept;
-
   // Gets element
   inline       ScalarType& getElem( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
   inline const ScalarType& getElem( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+
+  // Gets iterator
+  inline IteratorType      begin() noexcept;
+  inline ConstIteratorType begin() const noexcept;
+  inline ConstIteratorType cbegin() const noexcept;
+  inline IteratorType      end() noexcept;
+  inline ConstIteratorType end() const noexcept;
+  inline ConstIteratorType cend() const noexcept;
+  inline IteratorType      getIterator( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline ConstIteratorType getIterator( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  inline ConstIteratorType getConstIterator( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
   // Transpose
   inline TransposeType transpose() noexcept;

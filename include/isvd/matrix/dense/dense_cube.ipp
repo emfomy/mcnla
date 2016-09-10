@@ -238,40 +238,6 @@ bool DenseCube<_Scalar, _layout>::isShrunk() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to beginning.
-///
-template <typename _Scalar, Layout _layout>
-typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::begin() noexcept {
-  return IteratorType::begin(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  begin
-///
-template <typename _Scalar, Layout _layout>
-const typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::begin() const noexcept {
-  const IteratorType retval(this);
-  return retval.setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to end.
-///
-template <typename _Scalar, Layout _layout>
-typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::end() noexcept {
-  return IteratorType::end(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  end
-///
-template <typename _Scalar, Layout _layout>
-const typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::end() const noexcept {
-  const IteratorType retval(this);
-  return retval.setEnd();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar, Layout _layout>
@@ -320,6 +286,90 @@ const _Scalar& DenseCube<_Scalar, _layout>::operator()(
     const index_t colidx,
     const index_t pageidx
 ) const noexcept { return getElem(rowidx, colidx, pageidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to beginning.
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::begin() noexcept {
+  return IteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  begin
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::begin() const noexcept {
+  return ConstIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  begin
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::cbegin() const noexcept {
+  return ConstIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to end.
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::end() noexcept {
+  return IteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  end
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::end() const noexcept {
+  return ConstIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  end
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::cend() const noexcept {
+  return ConstIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator of given index.
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::getIterator(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) noexcept {
+  return IteratorType(this, rowidx, colidx, pageidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIterator
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::getIterator(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept {
+  return ConstIteratorType(this, rowidx, colidx, pageidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIterator
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::getConstIterator(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept {
+  return ConstIteratorType(this, rowidx, colidx, pageidx);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the transpose of the cube.

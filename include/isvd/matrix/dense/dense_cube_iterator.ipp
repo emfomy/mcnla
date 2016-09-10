@@ -23,47 +23,62 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>::DenseCubeIterator() noexcept
-  : idx1_(0),
-    idx2_(0),
-    idx3_(0),
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase() noexcept
+  : rowidx_(0),
+    colidx_(0),
+    pageidx_(0),
     cube_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given cube.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>::DenseCubeIterator(
-    DenseCube<_Scalar, _layout> *cube
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase(
+    _Cube *cube
 ) noexcept
-  : idx1_(0),
-    idx2_(0),
-    idx3_(0),
+  : rowidx_(0),
+    colidx_(0),
+    pageidx_(0),
+    cube_(cube) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given cube.
+///
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase(
+    _Cube *cube,
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) noexcept
+  : rowidx_(rowidx),
+    colidx_(colidx),
+    pageidx_(pageidx),
     cube_(cube) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>::DenseCubeIterator(
-    const DenseCubeIterator &other
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase(
+    const DenseCubeIteratorBase &other
 ) noexcept
-  : idx1_(other.idx1_),
-    idx2_(other.idx2_),
-    idx3_(other.idx3_),
+  : rowidx_(other.rowidx_),
+    colidx_(other.colidx_),
+    pageidx_(other.pageidx_),
     cube_(other.cube_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::operator=(
-    const DenseCubeIterator &other
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator=(
+    const DenseCubeIteratorBase &other
 ) noexcept {
-  idx1_ = other.idx1_;
-  idx2_ = other.idx2_;
-  idx3_ = other.idx3_;
+  rowidx_ = other.rowidx_;
+  colidx_ = other.colidx_;
+  pageidx_ = other.pageidx_;
   cube_ = other.cube_;
   return *this;
 }
@@ -71,9 +86,9 @@ DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::operat
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-template <typename _Scalar, Layout _layout>
-bool DenseCubeIterator<_Scalar, _layout>::operator==(
-    const DenseCubeIterator &other
+template <typename _Scalar, Layout _layout, class _Cube>
+bool DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator==(
+    const DenseCubeIteratorBase &other
 ) const noexcept {
   if ( this == &other ) {
     return true;
@@ -85,9 +100,9 @@ bool DenseCubeIterator<_Scalar, _layout>::operator==(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
-template <typename _Scalar, Layout _layout>
-bool DenseCubeIterator<_Scalar, _layout>::operator!=(
-    const DenseCubeIterator &other
+template <typename _Scalar, Layout _layout, class _Cube>
+bool DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator!=(
+    const DenseCubeIteratorBase &other
 ) const noexcept {
   return !(*this == other);
 }
@@ -95,8 +110,8 @@ bool DenseCubeIterator<_Scalar, _layout>::operator!=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Prefix increment operator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::operator++() noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator++() noexcept {
   assert(cube_ != nullptr);
 
   const auto size1 = cube_->getSize1();
@@ -106,8 +121,8 @@ DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::operat
     idx1_ = 0;
     if ( ++idx2_ >= size2 ) {
       idx2_ = 0;
-      if ( ++idx3_ >= size3 ) {
-        idx3_ = size3;
+      if ( ++pageidx_ >= size3 ) {
+        pageidx_ = size3;
       }
     }
   }
@@ -117,42 +132,42 @@ DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::operat
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Postfix increment operator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::operator++( int ) noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator++( int ) noexcept {
   auto retval(*this);
-  (*this)++;
+  ++(*this);
   return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-_Scalar& DenseCubeIterator<_Scalar, _layout>::operator*() noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+_Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator*() noexcept {
   return getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-const _Scalar& DenseCubeIterator<_Scalar, _layout>::operator*() const noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+const _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator*() const noexcept {
   return getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-_Scalar* DenseCubeIterator<_Scalar, _layout>::operator->() noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+_Scalar* DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator->() noexcept {
   return &getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-const _Scalar* DenseCubeIterator<_Scalar, _layout>::operator->() const noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+const _Scalar* DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator->() const noexcept {
   return &getValue();
 }
 
@@ -161,127 +176,107 @@ const _Scalar* DenseCubeIterator<_Scalar, _layout>::operator->() const noexcept 
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
-template <typename _Scalar, Layout _layout>
-_Scalar& DenseCubeIterator<_Scalar, _layout>::getValue() noexcept {
-  return (*cube_)(rowidx_, colidx_, idx3_);
+template <typename _Scalar, Layout _layout, class _Cube>
+_Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() noexcept {
+  return cube_->getValue()[getPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-const _Scalar& DenseCubeIterator<_Scalar, _layout>::getValue() const noexcept {
-  return (*cube_)(rowidx_, colidx_, idx3_);
+template <typename _Scalar, Layout _layout, class _Cube>
+const _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() const noexcept {
+  return cube_->getValue()[getPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the row index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseCubeIterator<_Scalar, _layout>::getRowIdx() const noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getRowIdx() const noexcept {
   return rowidx_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the column index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseCubeIterator<_Scalar, _layout>::getColIdx() const noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getColIdx() const noexcept {
   return colidx_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the page index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseCubeIterator<_Scalar, _layout>::getPageIdx() const noexcept {
-  return idx3_;
+template <typename _Scalar, Layout _layout, class _Cube>
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getPageIdx() const noexcept {
+  return pageidx_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseCubeIterator<_Scalar, _layout>::getIdx1() const noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx1() const noexcept {
   return idx1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseCubeIterator<_Scalar, _layout>::getIdx2() const noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx2() const noexcept {
   return idx2_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseCubeIterator<_Scalar, _layout>::getPos() const noexcept {
-  return cube_.getPos(colidx_, rowidx_, idx3_);
+template <typename _Scalar, Layout _layout, class _Cube>
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getPos() const noexcept {
+  return cube_->getPos(colidx_, rowidx_, pageidx_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to beginning.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::setBegin() noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::setBegin() noexcept {
   idx1_ = 0;
   idx2_ = 0;
-  idx3_ = 0;
+  pageidx_ = 0;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to end.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout>& DenseCubeIterator<_Scalar, _layout>::setEnd() noexcept {
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::setEnd() noexcept {
   idx1_ = 0;
   idx2_ = 0;
-  idx3_ = (cube_ != nullptr) ? cube_->getNpage() : 0;
+  pageidx_ = (cube_ != nullptr) ? cube_->getNpage() : 0;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to beginning iterator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout> DenseCubeIterator<_Scalar, _layout>::begin(
-    DenseCube<_Scalar, _layout> *cube
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getBegin(
+    _Cube *cube
 ) noexcept {
-  return DenseCubeIterator(cube).setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  begin
-///
-template <typename _Scalar, Layout _layout>
-const DenseCubeIterator<_Scalar, _layout> DenseCubeIterator<_Scalar, _layout>::begin(
-    const DenseCube<_Scalar, _layout> *cube
-) noexcept {
-  return DenseCubeIterator(const_cast<DenseCube<_Scalar, _layout>*>(cube)).setBegin();
+  return DenseCubeIteratorBase(cube).setBegin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to end iterator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseCubeIterator<_Scalar, _layout> DenseCubeIterator<_Scalar, _layout>::end(
-    DenseCube<_Scalar, _layout> *cube
+template <typename _Scalar, Layout _layout, class _Cube>
+DenseCubeIteratorBase<_Scalar, _layout, _Cube> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getEnd(
+    _Cube *cube
 ) noexcept {
-  return DenseCubeIterator(cube).setEnd();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  end
-///
-template <typename _Scalar, Layout _layout>
-const DenseCubeIterator<_Scalar, _layout> DenseCubeIterator<_Scalar, _layout>::end(
-    const DenseCube<_Scalar, _layout> *cube
-) noexcept {
-  return DenseCubeIterator(const_cast<DenseCube<_Scalar, _layout>*>(cube)).setEnd();
+  return DenseCubeIteratorBase(cube).setEnd();
 }
 
 }  // namespace internal

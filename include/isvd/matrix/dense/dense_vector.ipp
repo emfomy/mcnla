@@ -159,40 +159,6 @@ bool DenseVector<_Scalar>::isShrunk() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to beginning.
-///
-template <typename _Scalar>
-typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() noexcept {
-  return IteratorType::begin(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  begin
-///
-template <typename _Scalar>
-const typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() const noexcept {
-  const IteratorType retval(this);
-  return retval.setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to end.
-///
-template <typename _Scalar>
-typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() noexcept {
-  return IteratorType::end(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  end
-///
-template <typename _Scalar>
-const typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() const noexcept {
-  const IteratorType retval(this);
-  return retval.setEnd();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>
@@ -231,6 +197,94 @@ const _Scalar& DenseVector<_Scalar>::operator()(
 ) const noexcept { return getElem(idx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position of given index.
+///
+template <typename _Scalar>
+index_t DenseVector<_Scalar>::getPos(
+    const index_t idx
+) const noexcept {
+  return idx * increment_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to beginning.
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::begin() noexcept {
+  return IteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  begin
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::begin() const noexcept {
+  return ConstIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  begin
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::cbegin() const noexcept {
+  return ConstIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator to end.
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::end() noexcept {
+  return IteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  end
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::end() const noexcept {
+  return ConstIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  end
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::cend() const noexcept {
+  return ConstIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator of given index.
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::getIterator(
+    const index_t idx
+) noexcept {
+  return IteratorType(this, idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIterator
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::getIterator(
+    const index_t idx
+) const noexcept {
+  return ConstIteratorType(this, idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIterator
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::getConstIterator(
+    const index_t idx
+) const noexcept {
+  return ConstIteratorType(this, idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resize the vector.
 ///
 /// @attention  The new space is not initialized.
@@ -263,16 +317,6 @@ const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
 ) const noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
   return DenseVector<_Scalar>(range.getLength(), increment_, data_, getPos(range.begin) + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the internal position of given index.
-///
-template <typename _Scalar>
-index_t DenseVector<_Scalar>::getPos(
-    const index_t idx
-) const noexcept {
-  return idx * increment_;
 }
 
 }  // namespace isvd

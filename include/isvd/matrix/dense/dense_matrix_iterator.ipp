@@ -23,43 +23,56 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>::DenseMatrixIterator() noexcept
-  : idx1_(0),
-    idx2_(0),
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::DenseMatrixIteratorBase() noexcept
+  : rowidx_(0),
+    colidx_(0),
     matrix_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given matrix.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>::DenseMatrixIterator(
-    DenseMatrix<_Scalar, _layout> *matrix
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::DenseMatrixIteratorBase(
+    _Matrix *matrix
 ) noexcept
-  : idx1_(0),
-    idx2_(0),
+  : rowidx_(0),
+    colidx_(0),
+    matrix_(matrix) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given matrix.
+///
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::DenseMatrixIteratorBase(
+    _Matrix *matrix,
+    const index_t rowidx,
+    const index_t colidx
+) noexcept
+  : rowidx_(rowidx),
+    colidx_(colidx),
     matrix_(matrix) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>::DenseMatrixIterator(
-    const DenseMatrixIterator &other
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::DenseMatrixIteratorBase(
+    const DenseMatrixIteratorBase &other
 ) noexcept
-  : idx1_(other.idx1_),
-    idx2_(other.idx2_),
+  : rowidx_(other.rowidx_),
+    colidx_(other.colidx_),
     matrix_(other.matrix_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::operator=(
-    const DenseMatrixIterator &other
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator=(
+    const DenseMatrixIteratorBase &other
 ) noexcept {
-  idx1_ = other.idx1_;
-  idx2_ = other.idx2_;
+  rowidx_ = other.rowidx_;
+  colidx_ = other.colidx_;
   matrix_ = other.matrix_;
   return *this;
 }
@@ -67,9 +80,9 @@ DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::op
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-template <typename _Scalar, Layout _layout>
-bool DenseMatrixIterator<_Scalar, _layout>::operator==(
-    const DenseMatrixIterator &other
+template <typename _Scalar, Layout _layout, class _Matrix>
+bool DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator==(
+    const DenseMatrixIteratorBase &other
 ) const noexcept {
   if ( this == &other ) {
     return true;
@@ -81,9 +94,9 @@ bool DenseMatrixIterator<_Scalar, _layout>::operator==(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
-template <typename _Scalar, Layout _layout>
-bool DenseMatrixIterator<_Scalar, _layout>::operator!=(
-    const DenseMatrixIterator &other
+template <typename _Scalar, Layout _layout, class _Matrix>
+bool DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator!=(
+    const DenseMatrixIteratorBase &other
 ) const noexcept {
   return !(*this == other);
 }
@@ -91,8 +104,9 @@ bool DenseMatrixIterator<_Scalar, _layout>::operator!=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Prefix increment operator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::operator++() noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>&
+    DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator++() noexcept {
   assert(matrix_ != nullptr);
 
   const auto size1 = matrix_->getSize1();
@@ -109,42 +123,43 @@ DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::op
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Postfix increment operator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::operator++( int ) noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>
+    DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator++( int ) noexcept {
   auto retval(*this);
-  (*this)++;
+  ++(*this);
   return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-_Scalar& DenseMatrixIterator<_Scalar, _layout>::operator*() noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+_Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator*() noexcept {
   return getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-const _Scalar& DenseMatrixIterator<_Scalar, _layout>::operator*() const noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+const _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator*() const noexcept {
   return getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-_Scalar* DenseMatrixIterator<_Scalar, _layout>::operator->() noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+_Scalar* DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator->() noexcept {
   return &getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-const _Scalar* DenseMatrixIterator<_Scalar, _layout>::operator->() const noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+const _Scalar* DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator->() const noexcept {
   return &getValue();
 }
 
@@ -153,64 +168,64 @@ const _Scalar* DenseMatrixIterator<_Scalar, _layout>::operator->() const noexcep
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
-template <typename _Scalar, Layout _layout>
-_Scalar& DenseMatrixIterator<_Scalar, _layout>::getValue() noexcept {
-  return (*matrix_)(rowidx_, colidx_);
+template <typename _Scalar, Layout _layout, class _Matrix>
+_Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() noexcept {
+  return matrix_->getValue()[getPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
-template <typename _Scalar, Layout _layout>
-const _Scalar& DenseMatrixIterator<_Scalar, _layout>::getValue() const noexcept {
-  return (*matrix_)(rowidx_, colidx_);
+template <typename _Scalar, Layout _layout, class _Matrix>
+const _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const noexcept {
+  return matrix_->getValue()[getPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the row index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseMatrixIterator<_Scalar, _layout>::getRowIdx() const noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getRowIdx() const noexcept {
   return rowidx_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the column index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseMatrixIterator<_Scalar, _layout>::getColIdx() const noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getColIdx() const noexcept {
   return colidx_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseMatrixIterator<_Scalar, _layout>::getIdx1() const noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx1() const noexcept {
   return idx1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second index.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseMatrixIterator<_Scalar, _layout>::getIdx2() const noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx2() const noexcept {
   return idx2_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
-template <typename _Scalar, Layout _layout>
-index_t DenseMatrixIterator<_Scalar, _layout>::getPos() const noexcept {
-  return matrix_.getPos(colidx_, rowidx_);
+template <typename _Scalar, Layout _layout, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getPos() const noexcept {
+  return matrix_->getPos(colidx_, rowidx_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to beginning.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::setBegin() noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::setBegin() noexcept {
   idx1_ = 0;
   idx2_ = 0;
   return *this;
@@ -219,8 +234,8 @@ DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::se
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to end.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::setEnd() noexcept {
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::setEnd() noexcept {
   idx1_ = 0;
   idx2_ = (matrix_ != nullptr) ? matrix_->getSize2() : 0;
   return *this;
@@ -229,41 +244,21 @@ DenseMatrixIterator<_Scalar, _layout>& DenseMatrixIterator<_Scalar, _layout>::se
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to beginning iterator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout> DenseMatrixIterator<_Scalar, _layout>::begin(
-    DenseMatrix<_Scalar, _layout> *matrix
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix> DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getBegin(
+    _Matrix *matrix
 ) noexcept {
-  return DenseMatrixIterator(matrix).setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  begin
-///
-template <typename _Scalar, Layout _layout>
-const DenseMatrixIterator<_Scalar, _layout> DenseMatrixIterator<_Scalar, _layout>::begin(
-    const DenseMatrix<_Scalar, _layout> *matrix
-) noexcept {
-  return DenseMatrixIterator(const_cast<DenseMatrix<_Scalar, _layout>*>(matrix)).setBegin();
+  return DenseMatrixIteratorBase(matrix).setBegin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to end iterator.
 ///
-template <typename _Scalar, Layout _layout>
-DenseMatrixIterator<_Scalar, _layout> DenseMatrixIterator<_Scalar, _layout>::end(
-    DenseMatrix<_Scalar, _layout> *matrix
+template <typename _Scalar, Layout _layout, class _Matrix>
+DenseMatrixIteratorBase<_Scalar, _layout, _Matrix> DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getEnd(
+    _Matrix *matrix
 ) noexcept {
-  return DenseMatrixIterator(matrix).setEnd();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  end
-///
-template <typename _Scalar, Layout _layout>
-const DenseMatrixIterator<_Scalar, _layout> DenseMatrixIterator<_Scalar, _layout>::end(
-    const DenseMatrix<_Scalar, _layout> *matrix
-) noexcept {
-  return DenseMatrixIterator(const_cast<DenseMatrix<_Scalar, _layout>*>(matrix)).setEnd();
+  return DenseMatrixIteratorBase(matrix).setEnd();
 }
 
 }  // namespace internal

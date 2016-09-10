@@ -30,39 +30,40 @@ namespace internal {
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _layout  The storage layout.
 ///
-template <typename _Scalar, Layout _layout>
-class DenseMatrixIterator : public std::iterator<std::forward_iterator_tag, _Scalar> {
+template <typename _Scalar, Layout _layout, class _Matrix>
+class DenseMatrixIteratorBase : public std::iterator<std::forward_iterator_tag, _Scalar> {
 
  protected:
 
-  /// The leading index.
-  index_t idx1_;
-
-  /// The second index.
-  index_t idx2_;
-
   /// The row index.
-  index_t &rowidx_ = isColMajor(_layout) ? idx1_ : idx2_;
+  index_t rowidx_;
 
   /// The column index.
-  index_t &colidx_ = isColMajor(_layout) ? idx2_ : idx1_;
+  index_t colidx_;
+
+  /// The leading index.
+  index_t &idx1_ = isColMajor(_layout) ? rowidx_ : colidx_;
+
+  /// The second index.
+  index_t &idx2_ = isColMajor(_layout) ? colidx_ : rowidx_;
 
   /// The matrix.
-  DenseMatrix<_Scalar, _layout> *matrix_;
+  _Matrix *matrix_;
 
  public:
 
   // Constructors
-  DenseMatrixIterator() noexcept;
-  DenseMatrixIterator( DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
-  DenseMatrixIterator( const DenseMatrixIterator &other ) noexcept;
+  DenseMatrixIteratorBase() noexcept;
+  DenseMatrixIteratorBase( _Matrix *matrix ) noexcept;
+  DenseMatrixIteratorBase( _Matrix *matrix, const index_t rowidx, const index_t colidx ) noexcept;
+  DenseMatrixIteratorBase( const DenseMatrixIteratorBase &other ) noexcept;
 
   // Operators
-  inline DenseMatrixIterator& operator=( const DenseMatrixIterator &other ) noexcept;
-  inline bool operator==( const DenseMatrixIterator &other ) const noexcept;
-  inline bool operator!=( const DenseMatrixIterator &other ) const noexcept;
-  inline DenseMatrixIterator& operator++() noexcept;
-  inline DenseMatrixIterator& operator++( int ) noexcept;
+  inline DenseMatrixIteratorBase& operator=( const DenseMatrixIteratorBase &other ) noexcept;
+  inline bool operator==( const DenseMatrixIteratorBase &other ) const noexcept;
+  inline bool operator!=( const DenseMatrixIteratorBase &other ) const noexcept;
+  inline DenseMatrixIteratorBase& operator++() noexcept;
+  inline DenseMatrixIteratorBase  operator++( int ) noexcept;
   inline       _Scalar& operator*() noexcept;
   inline const _Scalar& operator*() const noexcept;
   inline       _Scalar* operator->() noexcept;
@@ -78,18 +79,22 @@ class DenseMatrixIterator : public std::iterator<std::forward_iterator_tag, _Sca
   inline       index_t getPos() const noexcept;
 
   // Sets to begin/end
-  inline DenseMatrixIterator& setBegin() noexcept;
-  inline DenseMatrixIterator& setEnd() noexcept;
+  inline DenseMatrixIteratorBase& setBegin() noexcept;
+  inline DenseMatrixIteratorBase& setEnd() noexcept;
 
   // Gets the begin/end iterator
-  static inline       DenseMatrixIterator begin( DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
-  static inline const DenseMatrixIterator begin( const DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
-  static inline       DenseMatrixIterator end( DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
-  static inline const DenseMatrixIterator end( const DenseMatrix<_Scalar, _layout> *matrix ) noexcept;
+  static inline DenseMatrixIteratorBase getBegin( _Matrix *matrix ) noexcept;
+  static inline DenseMatrixIteratorBase getEnd( _Matrix *matrix ) noexcept;
 
 };
 
 }  // namespace internal
+
+template <typename _Scalar, Layout _layout>
+using DenseMatrixIterator = internal::DenseMatrixIteratorBase<_Scalar, _layout, DenseMatrix<_Scalar, _layout>>;
+
+template <typename _Scalar, Layout _layout>
+using DenseMatrixConstIterator = internal::DenseMatrixIteratorBase<const _Scalar, _layout, const DenseMatrix<_Scalar, _layout>>;
 
 }  // namespace isvd
 

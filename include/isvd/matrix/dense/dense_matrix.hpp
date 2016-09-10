@@ -58,8 +58,6 @@ class DenseMatrix
   : public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
     public internal::DenseBase<DenseMatrix<_Scalar, _layout>> {
 
-  friend class internal::DenseMatrixIterator<_Scalar, _layout>;
-
  public:
 
   static constexpr Layout layout = _layout;
@@ -71,8 +69,9 @@ class DenseMatrix
   using RealVectorType = DenseVector<RealScalarType>;
   using TransposeType  = DenseMatrix<ScalarType, changeLayout(_layout)>;
 
-  using DataType       = DenseData<ScalarType>;
-  using IteratorType   = internal::DenseMatrixIterator<ScalarType, _layout>;
+  using DataType          = DenseData<ScalarType>;
+  using IteratorType      = DenseMatrixIterator<ScalarType, _layout>;
+  using ConstIteratorType = DenseMatrixConstIterator<ScalarType, _layout>;
 
  private:
 
@@ -117,17 +116,22 @@ class DenseMatrix
   inline index_t getPitch() const noexcept;
   inline bool isShrunk() const noexcept;
 
-  // Gets iterator
-  inline       IteratorType begin() noexcept;
-  inline const IteratorType begin() const noexcept;
-  inline       IteratorType end() noexcept;
-  inline const IteratorType end() const noexcept;
-
   // Gets element
   inline       ScalarType& getElem( const index_t rowidx, const index_t colidx ) noexcept;
   inline const ScalarType& getElem( const index_t rowidx, const index_t colidx ) const noexcept;
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+
+  // Gets iterator
+  inline IteratorType      begin() noexcept;
+  inline ConstIteratorType begin() const noexcept;
+  inline ConstIteratorType cbegin() const noexcept;
+  inline IteratorType      end() noexcept;
+  inline ConstIteratorType end() const noexcept;
+  inline ConstIteratorType cend() const noexcept;
+  inline IteratorType      getIterator( const index_t rowidx, const index_t colidx ) noexcept;
+  inline ConstIteratorType getIterator( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline ConstIteratorType getConstIterator( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Transpose
   inline TransposeType transpose() noexcept;
