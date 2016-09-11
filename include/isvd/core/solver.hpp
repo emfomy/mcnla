@@ -12,12 +12,9 @@
 #include <isvd/matrix.hpp>
 #include <isvd/utility.hpp>
 #include <isvd/core/parameters.hpp>
-#include <isvd/core/sketcher_base.hpp>
-#include <isvd/core/integrator_base.hpp>
-#include <isvd/core/reconstructor_base.hpp>
-#include <isvd/core/sketcher/gaussian_projection_sketcher.hpp>
-#include <isvd/core/integrator/kolmogorov_nagumo_type_integrator.hpp>
-#include <isvd/core/reconstructor/standard_reconstructor.hpp>
+#include <isvd/core/sketcher.hpp>
+#include <isvd/core/integrator.hpp>
+#include <isvd/core/reconstructor.hpp>
 #include <mpi.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

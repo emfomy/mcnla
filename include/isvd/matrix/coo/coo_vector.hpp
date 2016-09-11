@@ -9,7 +9,7 @@
 #define ISVD_MATRIX_COO_COO_VECTOR_HPP_
 
 #include <isvd/isvd.hpp>
-#include <utility>
+#include <iostream>
 #include <isvd/matrix/vector_base.hpp>
 #include <isvd/matrix/coo/coo_base.hpp>
 #include <isvd/matrix/coo/coo_vector_iterator.hpp>
@@ -19,7 +19,9 @@
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class CooVector;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
@@ -66,8 +68,8 @@ class CooVector
 
  private:
 
-  using VectorBaseType = internal::VectorBase<CooVector<ScalarType>>;
-  using CooBaseType    = internal::CooBase<CooVector<ScalarType>>;
+  using VectorBaseType = internal::VectorBase<CooVector<_Scalar>>;
+  using CooBaseType    = internal::CooBase<CooVector<_Scalar>>;
 
  protected:
 
@@ -81,6 +83,7 @@ class CooVector
   // Constructors
   CooVector() noexcept;
   CooVector( const index_t length ) noexcept;
+  CooVector( const index_t length, const index_t capability, const index_t offset = 0 ) noexcept;
   CooVector( const index_t length, const index_t nnz,
              std::shared_ptr<ScalarType> value, std::shared_ptr<index_t> idx ) noexcept;
   CooVector( const index_t length, const index_t nnz, std::shared_ptr<ScalarType> value, std::shared_ptr<index_t> idx,
@@ -122,8 +125,8 @@ class CooVector
   inline void resize( const index_t length ) noexcept;
 
   // Gets segment
-  inline       CooVector getSegment( const IdxRange range ) noexcept;
-  inline const CooVector getSegment( const IdxRange range ) const noexcept;
+  inline       VectorType getSegment( const IdxRange range ) noexcept;
+  inline const VectorType getSegment( const IdxRange range ) const noexcept;
 
 };
 

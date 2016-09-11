@@ -11,14 +11,16 @@
 #include <isvd/isvd.hpp>
 #include <isvd/blas.hpp>
 #include <isvd/lapack.hpp>
-#include <isvd/core/reconstructor_base.hpp>
+#include <isvd/core/reconstructor/reconstructor_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class StandardReconstructor;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.

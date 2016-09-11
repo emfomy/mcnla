@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/integrator_base.ipp
+/// @file    include/isvd/core/integrator/integrator_base.ipp
 /// @brief   The implementation of iSVD integrator interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
@@ -8,7 +8,7 @@
 #ifndef ISVD_CORE_INTEGRATOR_BASE_IPP_
 #define ISVD_CORE_INTEGRATOR_BASE_IPP_
 
-#include <isvd/core/integrator_base.hpp>
+#include <isvd/core/integrator/integrator_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.

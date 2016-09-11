@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/sketcher_base.ipp
+/// @file    include/isvd/core/sketcher/sketcher_base.ipp
 /// @brief   The implementation of iSVD sketcher interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
@@ -8,7 +8,7 @@
 #ifndef ISVD_CORE_SKETCHER_BASE_IPP_
 #define ISVD_CORE_SKETCHER_BASE_IPP_
 
-#include <isvd/core/sketcher_base.hpp>
+#include <isvd/core/sketcher/sketcher_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/reconstructor_base.hpp
+/// @file    include/isvd/core/reconstructor/reconstructor_base.hpp
 /// @brief   The iSVD reconstructor interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_CORE_RECONSTRUCTOR_BASE_HPP_
-#define ISVD_CORE_RECONSTRUCTOR_BASE_HPP_
+#ifndef ISVD_CORE_RECONSTRUCTOR_RECONSTRUCTOR_BASE_HPP_
+#define ISVD_CORE_RECONSTRUCTOR_RECONSTRUCTOR_BASE_HPP_
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix.hpp>
@@ -49,7 +49,7 @@ class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<
  public:
 
   // Initializes
-  void initialize() noexcept;
+  inline void initialize() noexcept;
 
   // Reconstructs
   inline void reconstruct( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
@@ -68,4 +68,4 @@ class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<
 
 }  // namespace isvd
 
-#endif  // ISVD_CORE_RECONSTRUCTOR_BASE_HPP_
+#endif  // ISVD_CORE_RECONSTRUCTOR_RECONSTRUCTOR_BASE_HPP_

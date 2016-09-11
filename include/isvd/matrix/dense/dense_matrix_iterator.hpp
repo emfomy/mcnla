@@ -17,7 +17,9 @@
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class DenseMatrix;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.

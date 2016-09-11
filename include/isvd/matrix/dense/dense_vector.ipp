@@ -40,6 +40,23 @@ DenseVector<_Scalar>::DenseVector(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+DenseVector<_Scalar>::DenseVector(
+    const index_t length,
+    const index_t increment,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : VectorBaseType(length),
+    DenseBaseType(capability, offset),
+    increment_(increment) {
+  assert(increment_ > 0);
+  assert(capability >= increment_ * (length_-1) + 1 + offset_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar>

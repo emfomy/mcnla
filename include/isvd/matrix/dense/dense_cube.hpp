@@ -9,7 +9,6 @@
 #define ISVD_MATRIX_DENSE_DENSE_CUBE_HPP_
 
 #include <isvd/isvd.hpp>
-#include <iostream>
 #include <utility>
 #include <tuple>
 #include <isvd/matrix/cube_base.hpp>
@@ -23,9 +22,11 @@
 //
 namespace isvd {
 
-template <typename _Scalar> class DenseVector;
-template <typename _Scalar, Layout _layout> class DenseMatrix;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class DenseCube;
+template <typename _Scalar, Layout _layout> class DenseMatrix;
+template <typename _Scalar> class DenseVector;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
@@ -41,12 +42,16 @@ namespace internal {
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseCube<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
-  using VectorType     = DenseVector<ScalarType>;
-  using RealVectorType = DenseVector<RealScalarType>;
-  using MatrixType     = DenseMatrix<ScalarType, _layout>;
-  using TransposeType  = DenseCube<ScalarType, changeLayout(_layout)>;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using VectorType        = DenseVector<ScalarType>;
+  using RealVectorType    = DenseVector<RealScalarType>;
+  using MatrixType        = DenseMatrix<ScalarType, _layout>;
+  using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
+  using CubeType          = DenseCube<ScalarType, _layout>;
+  using RealCubeType      = DenseCube<RealScalarType, _layout>;
+  using TransposeType     = DenseCube<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = DenseCube<RealScalarType, changeLayout(_layout)>;
 };
 
 }  // namespace internal
@@ -66,13 +71,17 @@ class DenseCube
 
   static constexpr Layout layout = _layout;
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType     = DenseVector<ScalarType>;
-  using RealVectorType = DenseVector<RealScalarType>;
-  using MatrixType     = DenseMatrix<ScalarType, _layout>;
-  using TransposeType  = DenseCube<ScalarType, changeLayout(_layout)>;
+  using VectorType        = DenseVector<ScalarType>;
+  using RealVectorType    = DenseVector<RealScalarType>;
+  using MatrixType        = DenseMatrix<ScalarType, _layout>;
+  using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
+  using CubeType          = DenseCube<ScalarType, _layout>;
+  using RealCubeType      = DenseCube<RealScalarType, _layout>;
+  using TransposeType     = DenseCube<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = DenseCube<RealScalarType, changeLayout(_layout)>;
 
   using DataType          = DenseData<ScalarType>;
   using IteratorType      = DenseCubeIterator<ScalarType, _layout>;
@@ -80,8 +89,8 @@ class DenseCube
 
  private:
 
-  using CubeBaseType  = internal::CubeBase<DenseCube<_Scalar, _layout>>;
-  using DenseBaseType = internal::DenseBase<DenseCube<_Scalar, _layout>>;
+  using CubeBaseType      = internal::CubeBase<DenseCube<_Scalar, _layout>>;
+  using DenseBaseType     = internal::DenseBase<DenseCube<_Scalar, _layout>>;
 
  protected:
 
@@ -106,9 +115,12 @@ class DenseCube
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
   DenseCube( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch1, const index_t pitch2 ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2 ) noexcept;
   DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+             const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches,
+             const index_t capability, const index_t offset = 0 ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
              const index_t pitch1, const index_t pitch2, std::shared_ptr<ScalarType> value ) noexcept;
   DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
@@ -135,6 +147,9 @@ class DenseCube
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
+  // Gets internal position
+  inline index_t getPos( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+
   // Gets iterator
   inline IteratorType      begin() noexcept;
   inline ConstIteratorType begin() const noexcept;
@@ -153,16 +168,16 @@ class DenseCube
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
 
   // Gets cube block
-  inline       DenseCube getCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) noexcept;
-  inline const DenseCube getCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) const noexcept;
-  inline       DenseCube getTubes( const IdxRange rowrange, const IdxRange colrange ) noexcept;
-  inline const DenseCube getTubes( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
-  inline       DenseCube getPages( const IdxRange pagerange ) noexcept;
-  inline const DenseCube getPages( const IdxRange pagerange ) const noexcept;
-  inline       DenseCube getColPages( const IdxRange rowrange ) noexcept;
-  inline const DenseCube getColPages( const IdxRange rowrange ) const noexcept;
-  inline       DenseCube getRowPages( const IdxRange colrange ) noexcept;
-  inline const DenseCube getRowPages( const IdxRange colrange ) const noexcept;
+  inline       CubeType getCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) noexcept;
+  inline const CubeType getCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) const noexcept;
+  inline       CubeType getTubes( const IdxRange rowrange, const IdxRange colrange ) noexcept;
+  inline const CubeType getTubes( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
+  inline       CubeType getPages( const IdxRange pagerange ) noexcept;
+  inline const CubeType getPages( const IdxRange pagerange ) const noexcept;
+  inline       CubeType getColPages( const IdxRange rowrange ) noexcept;
+  inline const CubeType getColPages( const IdxRange rowrange ) const noexcept;
+  inline       CubeType getRowPages( const IdxRange colrange ) noexcept;
+  inline const CubeType getRowPages( const IdxRange colrange ) const noexcept;
 
   // Gets matrix block
   inline       MatrixType getPage( const index_t pageidx ) noexcept;
@@ -196,8 +211,7 @@ class DenseCube
 
  protected:
 
-  // Gets internal information
-  inline index_t getPos( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  // Gets increment
   inline index_t getColInc() const noexcept;
   inline index_t getRowInc() const noexcept;
   inline index_t getTubeInc() const noexcept;

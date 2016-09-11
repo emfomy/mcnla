@@ -75,6 +75,37 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : DenseMatrix(sizes.first, sizes.second, pitch) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout>::DenseMatrix(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t pitch,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : MatrixBaseType(nrow, ncol),
+    DenseBaseType(capability, offset),
+    pitch_(pitch) {
+  assert(pitch_ >= size1_);
+  assert(pitch_ > 0);
+  assert(capability >= pitch_ * size2_ - (pitch_-size1_) + offset_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Layout _layout>
+DenseMatrix<_Scalar, _layout>::DenseMatrix(
+    const std::pair<index_t, index_t> sizes,
+    const index_t pitch,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : DenseMatrix(sizes.first, sizes.second, pitch, capability, offset) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar, Layout _layout>
@@ -244,6 +275,17 @@ const _Scalar& DenseMatrix<_Scalar, _layout>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept { return getElem(rowidx, colidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position of given index.
+///
+template <typename _Scalar, Layout _layout>
+index_t DenseMatrix<_Scalar, _layout>::getPos(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  return isColMajor(_layout) ? (rowidx + colidx * pitch_) : (colidx + rowidx * pitch_);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator to beginning.
@@ -593,17 +635,6 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noexcept {
   return DenseVector<_Scalar>(pitch_ * size2_, 1, data_, getPos(0, 0) + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the internal position of given index.
-///
-template <typename _Scalar, Layout _layout>
-index_t DenseMatrix<_Scalar, _layout>::getPos(
-    const index_t rowidx,
-    const index_t colidx
-) const noexcept {
-  return isColMajor(_layout) ? (rowidx + colidx * pitch_) : (colidx + rowidx * pitch_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

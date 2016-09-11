@@ -21,8 +21,10 @@
 //
 namespace isvd {
 
-template <typename _Scalar> class DenseVector;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class DenseMatrix;
+template <typename _Scalar> class DenseVector;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
@@ -38,11 +40,14 @@ namespace internal {
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
-  using VectorType     = DenseVector<ScalarType>;
-  using RealVectorType = DenseVector<RealScalarType>;
-  using TransposeType  = DenseMatrix<ScalarType, changeLayout(_layout)>;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using VectorType        = DenseVector<ScalarType>;
+  using RealVectorType    = DenseVector<RealScalarType>;
+  using MatrixType        = DenseMatrix<ScalarType, _layout>;
+  using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
+  using TransposeType     = DenseMatrix<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = DenseMatrix<RealScalarType, changeLayout(_layout)>;
 };
 
 }  // namespace internal
@@ -62,12 +67,15 @@ class DenseMatrix
 
   static constexpr Layout layout = _layout;
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType     = DenseVector<ScalarType>;
-  using RealVectorType = DenseVector<RealScalarType>;
-  using TransposeType  = DenseMatrix<ScalarType, changeLayout(_layout)>;
+  using VectorType        = DenseVector<ScalarType>;
+  using RealVectorType    = DenseVector<RealScalarType>;
+  using MatrixType        = DenseMatrix<ScalarType, _layout>;
+  using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
+  using TransposeType     = DenseMatrix<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = DenseMatrix<RealScalarType, changeLayout(_layout)>;
 
   using DataType          = DenseData<ScalarType>;
   using IteratorType      = DenseMatrixIterator<ScalarType, _layout>;
@@ -75,8 +83,8 @@ class DenseMatrix
 
  private:
 
-  using MatrixBaseType = internal::MatrixBase<DenseMatrix<_Scalar, _layout>>;
-  using DenseBaseType  = internal::DenseBase<DenseMatrix<_Scalar, _layout>>;
+  using MatrixBaseType    = internal::MatrixBase<DenseMatrix<_Scalar, _layout>>;
+  using DenseBaseType     = internal::DenseBase<DenseMatrix<_Scalar, _layout>>;
 
  protected:
 
@@ -98,6 +106,10 @@ class DenseMatrix
   DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
   DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
+               const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch,
+               const index_t capability, const index_t offset = 0 ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<ScalarType> value ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<ScalarType> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
@@ -122,6 +134,9 @@ class DenseMatrix
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
+  // Gets internal position
+  inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
+
   // Gets iterator
   inline IteratorType      begin() noexcept;
   inline ConstIteratorType begin() const noexcept;
@@ -140,12 +155,12 @@ class DenseMatrix
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
   // Gets matrix block
-  inline       DenseMatrix getBlock( const IdxRange rowrange, const IdxRange colrange ) noexcept;
-  inline const DenseMatrix getBlock( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
-  inline       DenseMatrix getCols( const IdxRange rowrange ) noexcept;
-  inline const DenseMatrix getCols( const IdxRange rowrange ) const noexcept;
-  inline       DenseMatrix getRows( const IdxRange colrange ) noexcept;
-  inline const DenseMatrix getRows( const IdxRange colrange ) const noexcept;
+  inline       MatrixType getBlock( const IdxRange rowrange, const IdxRange colrange ) noexcept;
+  inline const MatrixType getBlock( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
+  inline       MatrixType getCols( const IdxRange rowrange ) noexcept;
+  inline const MatrixType getCols( const IdxRange rowrange ) const noexcept;
+  inline       MatrixType getRows( const IdxRange colrange ) noexcept;
+  inline const MatrixType getRows( const IdxRange colrange ) const noexcept;
 
   // Gets vector segment
   inline       VectorType getCol( const index_t colidx ) noexcept;
@@ -163,8 +178,7 @@ class DenseMatrix
 
  protected:
 
-  // Gets internal information
-  inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
+  // Gets increment
   inline index_t getColInc() const noexcept;
   inline index_t getRowInc() const noexcept;
 

@@ -98,6 +98,40 @@ DenseCube<_Scalar, _layout>::DenseCube(
   : DenseCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), pitches.first, pitches.second) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>::DenseCube(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t npage,
+    const index_t pitch1,
+    const index_t pitch2,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : CubeBaseType(nrow, ncol, npage),
+    DenseBaseType(capability, offset),
+    pitch1_(pitch1),
+    pitch2_(pitch2) {
+  assert(pitch1_ >= size1_ && pitch2_ >= size2_);
+  assert(pitch1_ > 0 && pitch2_ > 0);
+  assert(capability >= pitch1_ * pitch2_ * npage_ - (pitch1_-size1_) + offset_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Layout _layout>
+DenseCube<_Scalar, _layout>::DenseCube(
+    const std::tuple<index_t, index_t, index_t> sizes,
+    const std::pair<index_t, index_t> pitches,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : DenseCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), pitches.first, pitches.second, capability, offset) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar, Layout _layout>
@@ -286,6 +320,19 @@ const _Scalar& DenseCube<_Scalar, _layout>::operator()(
     const index_t colidx,
     const index_t pageidx
 ) const noexcept { return getElem(rowidx, colidx, pageidx); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position of given index.
+///
+template <typename _Scalar, Layout _layout>
+index_t DenseCube<_Scalar, _layout>::getPos(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept {
+  return (isColMajor(_layout) ? (rowidx + colidx * pitch1_) : (colidx + rowidx * pitch1_))
+         + pageidx * pitch1_ * pitch2_;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator to beginning.
@@ -913,19 +960,6 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexcept {
   return DenseVector<_Scalar>(pitch1_ * pitch2_ * npage_, 1, data_, getPos(0, 0, 0) + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the internal position of given index.
-///
-template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getPos(
-    const index_t rowidx,
-    const index_t colidx,
-    const index_t pageidx
-) const noexcept {
-  return (isColMajor(_layout) ? (rowidx + colidx * pitch1_) : (colidx + rowidx * pitch1_))
-         + pageidx * pitch1_ * pitch2_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

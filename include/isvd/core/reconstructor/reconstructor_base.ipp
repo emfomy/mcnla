@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/reconstructor_base.ipp
+/// @file    include/isvd/core/reconstructor/reconstructor_base.ipp
 /// @brief   The implementation of iSVD reconstructor interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
@@ -8,7 +8,7 @@
 #ifndef ISVD_CORE_RECONSTRUCTOR_BASE_IPP_
 #define ISVD_CORE_RECONSTRUCTOR_BASE_IPP_
 
-#include <isvd/core/reconstructor_base.hpp>
+#include <isvd/core/reconstructor/reconstructor_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.

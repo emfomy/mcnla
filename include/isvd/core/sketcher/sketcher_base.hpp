@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/integrator_base.hpp
-/// @brief   The iSVD integrator interface.
+/// @file    include/isvd/core/sketcher/sketcher_base.hpp
+/// @brief   The iSVD sketcher interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_CORE_INTEGRATOR_BASE_HPP_
-#define ISVD_CORE_INTEGRATOR_BASE_HPP_
+#ifndef ISVD_CORE_SKETCHER_SKETCHER_BASE_HPP_
+#define ISVD_CORE_SKETCHER_SKETCHER_BASE_HPP_
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix.hpp>
@@ -23,43 +23,41 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of iSVD integrator.
+/// The interface of iSVD sketcher.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class IntegratorBase : public internal::CrtpBase<_Derived, IntegratorBase<_Derived>> {
+class SketcherBase : public internal::CrtpBase<_Derived, SketcherBase<_Derived>> {
 
  public:
 
-  using MatrixType     = typename Traits<_Derived>::MatrixType;
-  using ScalarType     = typename MatrixType::ScalarType;
-  using RealScalarType = typename MatrixType::RealScalarType;
+  using MatrixType = typename Traits<_Derived>::MatrixType;
+  using ScalarType = typename MatrixType::ScalarType;
 
  protected:
 
   /// The parameters.
   const internal::Parameters<ScalarType> &parameters_;
 
+  /// The random seed
+  index_t *seed_;
+
  protected:
 
   // Constructor
-  IntegratorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  SketcherBase( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  public:
 
   // Initializes
-  void initialize() noexcept;
+  inline void initialize() noexcept;
 
-  // Reconstructs
-  inline void integrate() noexcept;
+  // Random sketches
+  inline void sketch( const MatrixType &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
 
   // Gets name
   inline const char* getName() const noexcept;
-
-  // Gets matrices
-  inline DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() noexcept;
-  inline DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() noexcept;
 
 };
 
@@ -67,4 +65,4 @@ class IntegratorBase : public internal::CrtpBase<_Derived, IntegratorBase<_Deriv
 
 }  // namespace isvd
 
-#endif  // ISVD_CORE_INTEGRATOR_BASE_HPP_
+#endif  // ISVD_CORE_SKETCHER_SKETCHER_BASE_HPP_

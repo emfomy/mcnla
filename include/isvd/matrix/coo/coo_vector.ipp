@@ -9,8 +9,8 @@
 #define ISVD_MATRIX_COO_COO_VECTOR_IPP_
 
 #include <isvd/matrix/coo/coo_vector.hpp>
+#include <cmath>
 #include <iomanip>
-#include <algorithm>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -34,6 +34,18 @@ CooVector<_Scalar>::CooVector(
 ) noexcept
   : VectorBaseType(length),
     CooBaseType(length) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector(
+    const index_t length,
+    const index_t capability,
+    const index_t offset
+) noexcept
+  : VectorBaseType(length),
+    CooBaseType(capability, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -119,10 +131,11 @@ CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept 
 ///
 template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const CooVector<__Scalar> &vector ) {
-  for ( index_t i = 0; i < vector.length_; ++i ) {
-    out << std::setw(ios_width) << vector(i);
+  std::string str;
+  const index_t witdh = log10(vector.length_)+1;
+  for ( auto it = vector.cbegin(); it != vector.cend(); ++it ) {
+    out << "(" << std::setw(witdh) << it.getIdx() << ")  " << std::setw(ios_width) << *it << std::endl;
   }
-  out << std::endl;
   return out;
 }
 

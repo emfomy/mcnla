@@ -11,14 +11,16 @@
 #include <isvd/isvd.hpp>
 #include <isvd/blas.hpp>
 #include <isvd/lapack.hpp>
-#include <isvd/core/integrator_base.hpp>
+#include <isvd/core/integrator/integrator_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class KolmogorovNagumoTypeIntegrator;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.

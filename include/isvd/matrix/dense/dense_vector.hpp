@@ -9,6 +9,7 @@
 #define ISVD_MATRIX_DENSE_DENSE_VECTOR_HPP_
 
 #include <isvd/isvd.hpp>
+#include <iostream>
 #include <isvd/matrix/vector_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector_iterator.hpp>
@@ -18,7 +19,9 @@
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class DenseVector;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The internal namespace.
@@ -52,11 +55,11 @@ class DenseVector
 
  public:
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType     = DenseVector<ScalarType>;
-  using RealVectorType = DenseVector<RealScalarType>;
+  using VectorType        = DenseVector<ScalarType>;
+  using RealVectorType    = DenseVector<RealScalarType>;
 
   using DataType          = DenseData<ScalarType>;
   using IteratorType      = DenseVectorIterator<ScalarType>;
@@ -64,8 +67,8 @@ class DenseVector
 
  private:
 
-  using VectorBaseType = internal::VectorBase<DenseVector<ScalarType>>;
-  using DenseBaseType  = internal::DenseBase<DenseVector<ScalarType>>;
+  using VectorBaseType    = internal::VectorBase<DenseVector<_Scalar>>;
+  using DenseBaseType     = internal::DenseBase<DenseVector<_Scalar>>;
 
  protected:
 
@@ -81,6 +84,7 @@ class DenseVector
   // Constructors
   DenseVector() noexcept;
   DenseVector( const index_t length, const index_t increment = 1 ) noexcept;
+  DenseVector( const index_t length, const index_t increment, const index_t capability, const index_t offset = 0 ) noexcept;
   DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value ) noexcept;
   DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value,
                const index_t capability, const index_t offset = 0 ) noexcept;
@@ -122,8 +126,8 @@ class DenseVector
   inline void resize( const index_t length ) noexcept;
 
   // Gets segment
-  inline       DenseVector getSegment( const IdxRange range ) noexcept;
-  inline const DenseVector getSegment( const IdxRange range ) const noexcept;
+  inline       VectorType getSegment( const IdxRange range ) noexcept;
+  inline const VectorType getSegment( const IdxRange range ) const noexcept;
 
 };
 

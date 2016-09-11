@@ -8,6 +8,9 @@
 #ifndef ISVD_CORE_RECONSTRUCTOR_HPP_
 #define ISVD_CORE_RECONSTRUCTOR_HPP_
 
+#include <isvd/core/reconstructor/reconstructor_base.hpp>
+#include <isvd/core/reconstructor/reconstructor_base.ipp>
+
 #include <isvd/core/reconstructor/standard_reconstructor.hpp>
 #include <isvd/core/reconstructor/standard_reconstructor.ipp>
 
