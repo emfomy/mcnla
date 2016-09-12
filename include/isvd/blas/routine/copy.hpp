@@ -31,7 +31,7 @@ inline void copy(
           DenseVector<_Scalar> &y
 ) noexcept {
   assert(x.getSizes() == y.getSizes());
-  internal::copy(x.getLength(), x.getValue(), x.getIncrement(), y.getValue(), y.getIncrement());
+  internal::copy(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
 }
 
 template <typename _Scalar>

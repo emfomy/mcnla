@@ -30,7 +30,7 @@ inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
           DenseVector<_Scalar> &x
 ) noexcept {
-  internal::scal(x.getLength(), alpha, x.getValue(), x.getIncrement());
+  internal::scal(x.getLength(), alpha, x.getValue(), x.getStride());
 }
 
 template <typename _Scalar>

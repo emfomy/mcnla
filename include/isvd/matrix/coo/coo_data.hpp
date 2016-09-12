@@ -10,6 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <array>
+#include <valarray>
 #include <memory>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,23 +27,25 @@ namespace isvd {
 template <typename _Scalar, index_t _ndim>
 class CooData {
 
+ private:
+
+  using ValuePtrType = std::shared_ptr<std::valarray<_Scalar>>;
+  using IdxPtrType   = std::shared_ptr<std::valarray<index_t>>;
+
  protected:
 
-  /// The length of data array.
-  index_t capability_;
-
   /// The data array.
-  std::shared_ptr<_Scalar> value_;
+  ValuePtrType value_;
 
   /// The index array.
-  std::array<std::shared_ptr<index_t>, _ndim> idx_;
+  std::array<IdxPtrType, _ndim> idx_;
 
  public:
 
   // Constructors
   CooData() noexcept;
   CooData( const index_t capability ) noexcept;
-  CooData( const index_t capability, std::shared_ptr<_Scalar> value, std::array<std::shared_ptr<index_t>, _ndim> idx ) noexcept;
+  CooData( ValuePtrType value, std::array<IdxPtrType, _ndim> idx ) noexcept;
   CooData( const CooData &other ) noexcept;
   CooData( CooData &&other ) noexcept;
 
@@ -58,7 +61,7 @@ class CooData {
   inline        index_t getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;
-  template <index_t dim> inline index_t* getIdx() const noexcept;
+  template <index_t dim> inline const index_t* getIdx() const noexcept;
 
 };
 

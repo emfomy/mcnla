@@ -9,7 +9,6 @@
 #define ISVD_MATRIX_COO_COO_DATA_IPP_
 
 #include <isvd/matrix/coo/coo_data.hpp>
-#include <isvd/utility/memory.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -21,8 +20,7 @@ namespace isvd {
 ///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>::CooData() noexcept
-  : capability_(0),
-    value_(nullptr),
+  : value_(nullptr),
     idx_({nullptr}) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,27 +30,28 @@ template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>::CooData(
     const index_t capability
 ) noexcept
-  : capability_(capability),
-    value_(malloc<_Scalar>(capability)) {
+  : value_(new std::valarray<_Scalar>(capability)) {
   assert(capability > 0);
   for ( index_t i = 0; i < _ndim; ++i ) {
-    idx_[i] = std::shared_ptr<index_t>(malloc<index_t>(capability));
+    idx_[i] = new std::valarray<index_t>(capability);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
+/// @attention  The size of @p value and each element in @p idx should be the same.
+///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>::CooData(
-    const index_t capability,
-    std::shared_ptr<_Scalar> value,
-    std::array<std::shared_ptr<index_t>, _ndim> idx
+    ValuePtrType value,
+    std::array<IdxPtrType, _ndim> idx
 ) noexcept
-  : capability_(capability),
-    value_(value),
+  : value_(value),
     idx_(idx) {
-  assert(capability > 0);
+  for ( index_t i = 0; i < _ndim; ++i ) {
+    assert(value->size() == idx_[i]->size());
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +59,7 @@ CooData<_Scalar, _ndim>::CooData(
 ///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>::CooData( const CooData &other ) noexcept
-  : capability_(other.capability_),
-    value_(other.value_),
+  : value_(other.value_),
     idx_(other.idx_) {
 }
 
@@ -70,11 +68,8 @@ CooData<_Scalar, _ndim>::CooData( const CooData &other ) noexcept
 ///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>::CooData( CooData &&other ) noexcept
-  : capability_(other.capability_),
-    value_(std::move(other.value_)),
-    idx_(std::move(other.idx_)) {
-  other.capability_ = 0;
-}
+  : value_(std::move(other.value_)),
+    idx_(std::move(other.idx_)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -83,7 +78,7 @@ CooData<_Scalar, _ndim>::CooData( CooData &&other ) noexcept
 ///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>& CooData<_Scalar, _ndim>::operator=( const CooData &other ) noexcept {
-  capability_ = other.capability_; value_ = other.value_; idx_ = other.idx_;
+  value_ = other.value_; idx_ = other.idx_;
   return *this;
 }
 
@@ -92,7 +87,7 @@ CooData<_Scalar, _ndim>& CooData<_Scalar, _ndim>::operator=( const CooData &othe
 ///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>& CooData<_Scalar, _ndim>::operator=( CooData &&other ) noexcept {
-  capability_ = other.capability_; value_ = std::move(other.value_);  idx_ = std::move(other.idx_); other.capability_ = 0;
+  value_ = std::move(other.value_); idx_ = std::move(other.idx_);
   return *this;
 }
 
@@ -124,27 +119,27 @@ bool CooData<_Scalar, _ndim>::operator!=( const CooData& other ) const noexcept 
 /// @brief  Gets the length of data array.
 ///
 template <typename _Scalar, index_t _ndim>
-index_t CooData<_Scalar, _ndim>::getCapability() const noexcept { return capability_; }
+index_t CooData<_Scalar, _ndim>::getCapability() const noexcept { return value_.size(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value array.
 ///
 template <typename _Scalar, index_t _ndim>
-_Scalar* CooData<_Scalar, _ndim>::getValue() noexcept { return value_.get(); }
+_Scalar* CooData<_Scalar, _ndim>::getValue() noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <typename _Scalar, index_t _ndim>
-const _Scalar* CooData<_Scalar, _ndim>::getValue() const noexcept { return value_.get(); }
+const _Scalar* CooData<_Scalar, _ndim>::getValue() const noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value array.
 ///
 template <typename _Scalar, index_t _ndim> template <index_t dim>
-index_t* CooData<_Scalar, _ndim>::getIdx() const noexcept {
+const index_t* CooData<_Scalar, _ndim>::getIdx() const noexcept {
   static_assert(dim >= 0 && dim < _ndim, "Invalid dimension!");
-  return idx_[dim].get();
+  return (idx_[dim] != nullptr) ? &((*idx_[dim])[0]) : nullptr;
 }
 
 }  // namespace isvd

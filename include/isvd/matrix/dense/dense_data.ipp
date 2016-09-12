@@ -9,7 +9,6 @@
 #define ISVD_MATRIX_DENSE_DENSE_DATA_IPP_
 
 #include <isvd/matrix/dense/dense_data.hpp>
-#include <isvd/utility/memory.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -21,8 +20,7 @@ namespace isvd {
 ///
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData() noexcept
-  : capability_(0),
-    value_(nullptr) {}
+  : value_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -31,41 +29,30 @@ template <typename _Scalar>
 DenseData<_Scalar>::DenseData(
     const index_t capability
 ) noexcept
-  : capability_(capability),
-    value_(malloc<_Scalar>(capability)) {
-  assert(capability > 0);
-}
+  : value_(new std::valarray<_Scalar>(capability)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData(
-    const index_t capability,
-    std::shared_ptr<_Scalar> value
+    const ValuePtrType &value
 ) noexcept
-  : capability_(capability),
-    value_(value) {
-  assert(capability > 0);
-}
+  : value_(value) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData( const DenseData &other ) noexcept
-  : capability_(other.capability_),
-    value_(other.value_) {}
+  : value_(other.value_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData( DenseData &&other ) noexcept
-  : capability_(other.capability_),
-    value_(std::move(other.value_)) {
-  other.capability_ = 0;
-}
+  : value_(std::move(other.value_)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -74,7 +61,7 @@ DenseData<_Scalar>::DenseData( DenseData &&other ) noexcept
 ///
 template <typename _Scalar>
 DenseData<_Scalar>& DenseData<_Scalar>::operator=( const DenseData &other ) noexcept {
-  capability_ = other.capability_; value_ = other.value_;
+  value_ = other.value_;
   return *this;
 }
 
@@ -83,21 +70,9 @@ DenseData<_Scalar>& DenseData<_Scalar>::operator=( const DenseData &other ) noex
 ///
 template <typename _Scalar>
 DenseData<_Scalar>& DenseData<_Scalar>::operator=( DenseData &&other ) noexcept {
-  capability_ = other.capability_; value_ = std::move(other.value_); other.capability_ = 0;
+  value_ = std::move(other.value_);
   return *this;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::operator*() noexcept { return getValue(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::operator*() const noexcept { return getValue(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
@@ -112,22 +87,34 @@ template <typename _Scalar>
 bool DenseData<_Scalar>::operator!=( const DenseData& other ) const noexcept { return this->value_ != other.value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of data array.
+/// @copydoc  getValue
 ///
 template <typename _Scalar>
-index_t DenseData<_Scalar>::getCapability() const noexcept { return capability_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
-///
-template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::getValue() noexcept { return value_.get(); }
+_Scalar* DenseData<_Scalar>::operator*() noexcept { return getValue(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return value_.get(); }
+const _Scalar* DenseData<_Scalar>::operator*() const noexcept { return getValue(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
+///
+template <typename _Scalar>
+_Scalar* DenseData<_Scalar>::getValue() noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValue
+///
+template <typename _Scalar>
+const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the length of data array.
+///
+template <typename _Scalar>
+index_t DenseData<_Scalar>::getCapability() const noexcept { return value_->size(); }
 
 }  // namespace isvd
 

@@ -31,7 +31,7 @@ template <typename _Scalar>
 inline index_t iamax(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return internal::iamax(x.getLength(), x.getValue(), x.getIncrement());
+  return internal::iamax(x.getLength(), x.getValue(), x.getStride());
 }
 //@}
 
@@ -43,7 +43,7 @@ template <typename _Scalar>
 inline typename isvd::internal::ScalarTraits<_Scalar>::RealType amax(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  index_t idx = internal::iamax(x.getLength(), x.getValue(), x.getIncrement());
+  index_t idx = internal::iamax(x.getLength(), x.getValue(), x.getStride());
   return std::abs(x(idx));
 }
 //@}

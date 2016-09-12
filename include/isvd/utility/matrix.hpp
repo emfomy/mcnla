@@ -24,7 +24,7 @@ template <typename _Scalar>
 inline void zeroize(
   DenseVector<_Scalar> &x
 ) noexcept {
-  std::memset(x.getValue(), 0, x.getLength() * x.getIncrement() * sizeof(_Scalar));
+  std::memset(x.getValue(), 0, x.getLength() * x.getStride() * sizeof(_Scalar));
 }
 
 template <typename _Scalar>

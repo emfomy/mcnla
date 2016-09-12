@@ -13,16 +13,19 @@
 #include <boost/accumulators/statistics/variance.hpp>
 #include <isvd.hpp>
 
-void create( isvd::DenseMatrix<double> &matrix_a, isvd::DenseMatrix<double> &matrix_u_true,
+using ScalarType = double;
+
+void create( isvd::DenseMatrix<ScalarType> &matrix_a, isvd::DenseMatrix<ScalarType> &matrix_u_true,
              const isvd::index_t rank, isvd::index_t seed[4] ) noexcept;
-void check( const isvd::DenseMatrix<double> &matrix_u, const isvd::DenseMatrix<double> &matrix_u_true,
-            double &smax, double &smin ) noexcept;
+void check( const isvd::DenseMatrix<ScalarType> &matrix_u, const isvd::DenseMatrix<ScalarType> &matrix_u_true,
+            ScalarType &smax, ScalarType &smin ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
-  double start_time = 0.0, total_time = 0.0, smax, smin;
+  double start_time = 0.0, total_time = 0.0;
+  ScalarType smax, smin;
 
   // ====================================================================================================================== //
   // Initialize MPI
@@ -50,7 +53,7 @@ int main( int argc, char **argv ) {
   // Set parameters
   int argi = 0;
   isvd::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  isvd::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  isvd::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
   isvd::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
   isvd::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   isvd::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
@@ -67,11 +70,11 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize solver
-  isvd::DenseMatrix<double> matrix_a(m, n), matrix_u_true;
-  isvd::Solver<isvd::DenseMatrix<double>,
-               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<double>>,
-               isvd::KolmogorovNagumoTypeIntegrator<isvd::DenseMatrix<double>>,
-               isvd::StandardReconstructor<isvd::DenseMatrix<double>>> solver(MPI_COMM_WORLD);
+  isvd::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
+  isvd::Solver<isvd::DenseMatrix<ScalarType>,
+               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<ScalarType>>,
+               isvd::KolmogorovNagumoTypeIntegrator<isvd::DenseMatrix<ScalarType>>,
+               isvd::StandardReconstructor<isvd::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketch(Nj).setSeed(seed);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
@@ -134,17 +137,17 @@ int main( int argc, char **argv ) {
 /// Create matrix A
 ///
 void create(
-          isvd::DenseMatrix<double> &matrix_a,
-          isvd::DenseMatrix<double> &matrix_u_true,
+          isvd::DenseMatrix<ScalarType> &matrix_a,
+          isvd::DenseMatrix<ScalarType> &matrix_u_true,
     const isvd::index_t rank,
           isvd::index_t seed[4]
 ) noexcept {
-  matrix_u_true = isvd::DenseMatrix<double>(matrix_a.getNrow(), rank);
+  matrix_u_true = isvd::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
 
-  isvd::DenseMatrix<double> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
-  isvd::DenseMatrix<double> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
-  isvd::DenseMatrix<double> matrix_empty;
-  isvd::DenseVector<double> vector_s(matrix_a.getNrow());
+  isvd::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
+  isvd::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
+  isvd::DenseMatrix<ScalarType> matrix_empty;
+  isvd::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
 
   // Generate U & V using normal random
   isvd::lapack::larnv<3>(matrix_u.vectorize(), seed);
@@ -171,14 +174,14 @@ void create(
 /// Check the result
 ///
 void check(
-    const isvd::DenseMatrix<double> &matrix_u,
-    const isvd::DenseMatrix<double> &matrix_u_true,
-          double &smax,
-          double &smin
+    const isvd::DenseMatrix<ScalarType> &matrix_u,
+    const isvd::DenseMatrix<ScalarType> &matrix_u_true,
+          ScalarType &smax,
+          ScalarType &smin
 ) noexcept {
-  isvd::DenseMatrix<double> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
-  isvd::DenseVector<double> vector_s(matrix_u.getNcol());
-  isvd::DenseMatrix<double> matrix_empty;
+  isvd::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
+  isvd::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
+  isvd::DenseMatrix<ScalarType> matrix_empty;
 
   // U2 := Utrue' * U
   isvd::blas::gemm<isvd::TransOption::TRANS, isvd::TransOption::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);

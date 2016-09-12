@@ -44,21 +44,36 @@ CooBase<_Derived>::CooBase(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
+/// @brief  Construct with given size information.
 ///
 template <class _Derived>
 CooBase<_Derived>::CooBase(
-    const index_t capability,
     const index_t nnz,
-    std::shared_ptr<ScalarType> value,
-    std::array<std::shared_ptr<index_t>, ndim> idx,
+    const index_t capability,
     const index_t offset
 ) noexcept
   : SparseBaseType(nnz),
     offset_(offset),
-    data_(capability, value, idx) {
+    data_(capability) {
   assert(offset_ >= 0);
   assert(capability >= nnz_ + offset_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <class _Derived>
+CooBase<_Derived>::CooBase(
+    const index_t nnz,
+    const ValuePtrType &value,
+    std::array<IdxPtrType, ndim> idx,
+    const index_t offset
+) noexcept
+  : SparseBaseType(nnz),
+    offset_(offset),
+    data_(value, idx) {
+  assert(offset_ >= 0);
+  assert(data_.getCapability() >= nnz_ + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +82,7 @@ CooBase<_Derived>::CooBase(
 template <class _Derived>
 CooBase<_Derived>::CooBase(
     const index_t nnz,
-    const DataType& data,
+    const DataType &data,
     const index_t offset
 ) noexcept
   : SparseBaseType(nnz),

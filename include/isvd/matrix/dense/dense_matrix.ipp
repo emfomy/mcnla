@@ -113,33 +113,15 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    std::shared_ptr<_Scalar> value
-) noexcept
-  : MatrixBaseType(nrow, ncol),
-    DenseBaseType(pitch * size2_, value),
-    pitch_(pitch) {
-  assert(pitch_ >= size1_);
-  assert(pitch_ > 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>::DenseMatrix(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t pitch,
-    std::shared_ptr<_Scalar> value,
-    const index_t capability,
+    const ValuePtrType &value,
     const index_t offset
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(capability, value, offset),
+    DenseBaseType(value, offset),
     pitch_(pitch) {
   assert(pitch_ >= size1_);
   assert(pitch_ > 0);
-  assert(capability >= pitch_ * size2_ - (pitch_-size1_) + offset_);
+  assert(this->getCapability() >= pitch_ * size2_ - (pitch_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +140,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= size1_);
   assert(pitch_ > 0);
-  assert(data.getCapability() >= pitch_ * size2_ - (pitch_-size1_) + offset_);
+  assert(this->getCapability() >= pitch_ * size2_ - (pitch_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -638,7 +620,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noex
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the column increment.
+/// @brief  Gets the column stride.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::getColInc() const noexcept {
@@ -646,7 +628,7 @@ index_t DenseMatrix<_Scalar, _layout>::getColInc() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the row increment.
+/// @brief  Gets the row stride.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::getRowInc() const noexcept {

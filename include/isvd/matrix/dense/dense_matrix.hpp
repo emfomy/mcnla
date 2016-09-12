@@ -69,6 +69,7 @@ class DenseMatrix
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -110,9 +111,8 @@ class DenseMatrix
                const index_t capability, const index_t offset = 0 ) noexcept;
   DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch,
                const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<ScalarType> value ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, std::shared_ptr<ScalarType> value,
-               const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
+               const ValuePtrType &value, const index_t offset = 0 ) noexcept;
   DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                const DataType &data, const index_t offset = 0 ) noexcept;
   DenseMatrix( const DenseMatrix &other ) noexcept;
@@ -178,7 +178,7 @@ class DenseMatrix
 
  protected:
 
-  // Gets increment
+  // Gets stride
   inline index_t getColInc() const noexcept;
   inline index_t getRowInc() const noexcept;
 

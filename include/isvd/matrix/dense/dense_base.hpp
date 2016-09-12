@@ -32,8 +32,9 @@ class DenseBase {
 
  private:
 
-  using ScalarType = typename Traits<_Derived>::ScalarType;
-  using DataType   = DenseData<ScalarType>;
+  using ScalarType   = typename Traits<_Derived>::ScalarType;
+  using ValuePtrType = std::shared_ptr<std::valarray<ScalarType>>;
+  using DataType     = DenseData<ScalarType>;
 
  protected:
 
@@ -48,8 +49,8 @@ class DenseBase {
   // Constructors
   DenseBase() noexcept;
   DenseBase( const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseBase( const index_t capability, std::shared_ptr<ScalarType> value, const index_t offset = 0 ) noexcept;
-  DenseBase( const DataType& data, const index_t offset = 0 ) noexcept;
+  DenseBase( const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+  DenseBase( const DataType &data, const index_t offset = 0 ) noexcept;
   DenseBase( const DenseBase &other ) noexcept;
   DenseBase( DenseBase &&other ) noexcept;
 

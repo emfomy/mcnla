@@ -9,6 +9,7 @@
 #define ISVD_MATRIX_DENSE_DENSE_DATA_HPP_
 
 #include <isvd/isvd.hpp>
+#include <valarray>
 #include <memory>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,20 +25,21 @@ namespace isvd {
 template <typename _Scalar>
 class DenseData {
 
+ private:
+
+  using ValuePtrType = std::shared_ptr<std::valarray<_Scalar>>;
+
  protected:
 
-  /// The length of data array.
-  index_t capability_;
-
   /// The data array.
-  std::shared_ptr<_Scalar> value_;
+  ValuePtrType value_;
 
  public:
 
   // Constructors
   DenseData() noexcept;
   DenseData( const index_t capability ) noexcept;
-  DenseData( const index_t capability, std::shared_ptr<_Scalar> value ) noexcept;
+  DenseData( const ValuePtrType &value ) noexcept;
   DenseData( const DenseData &other ) noexcept;
   DenseData( DenseData &&other ) noexcept;
 
@@ -50,9 +52,9 @@ class DenseData {
   inline const _Scalar* operator*() const noexcept;
 
   // Gets data
-  inline        index_t getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;
+  inline       index_t  getCapability() const noexcept;
 
 };
 

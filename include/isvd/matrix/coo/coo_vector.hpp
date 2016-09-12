@@ -56,11 +56,13 @@ class CooVector
 
  public:
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
+  using IdxPtrType        = std::shared_ptr<std::valarray<index_t>>;
 
-  using VectorType     = CooVector<ScalarType>;
-  using RealVectorType = CooVector<RealScalarType>;
+  using VectorType        = CooVector<ScalarType>;
+  using RealVectorType    = CooVector<RealScalarType>;
 
   using DataType          = CooData<ScalarType, 1>;
   using IteratorType      = CooVectorIterator<ScalarType>;
@@ -68,8 +70,8 @@ class CooVector
 
  private:
 
-  using VectorBaseType = internal::VectorBase<CooVector<_Scalar>>;
-  using CooBaseType    = internal::CooBase<CooVector<_Scalar>>;
+  using VectorBaseType    = internal::VectorBase<CooVector<_Scalar>>;
+  using CooBaseType       = internal::CooBase<CooVector<_Scalar>>;
 
  protected:
 
@@ -85,9 +87,7 @@ class CooVector
   CooVector( const index_t length ) noexcept;
   CooVector( const index_t length, const index_t capability, const index_t offset = 0 ) noexcept;
   CooVector( const index_t length, const index_t nnz,
-             std::shared_ptr<ScalarType> value, std::shared_ptr<index_t> idx ) noexcept;
-  CooVector( const index_t length, const index_t nnz, std::shared_ptr<ScalarType> value, std::shared_ptr<index_t> idx,
-             const index_t capability, const index_t offset = 0 ) noexcept;
+             const ValuePtrType &value, const IdxPtrType &idx, const index_t offset = 0 ) noexcept;
   CooVector( const index_t length, const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;
   CooVector( const CooVector &other ) noexcept;
   CooVector( CooVector &&other ) noexcept;

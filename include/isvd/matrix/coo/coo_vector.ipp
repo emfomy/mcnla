@@ -54,26 +54,12 @@ template <typename _Scalar>
 CooVector<_Scalar>::CooVector(
     const index_t length,
     const index_t nnz,
-    std::shared_ptr<_Scalar> value,
-    std::shared_ptr<index_t> idx
-) noexcept
-  : VectorBaseType(length),
-    CooBaseType(nnz, nnz, value, {idx}) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Scalar>
-CooVector<_Scalar>::CooVector(
-    const index_t length,
-    const index_t nnz,
-    std::shared_ptr<_Scalar> value,
-    std::shared_ptr<index_t> idx,
-    const index_t capability,
+    const ValuePtrType &value,
+    const IdxPtrType &idx,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
-    CooBaseType(nnz, capability, value, {idx}, offset) {}
+    CooBaseType(nnz, value, {idx}, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.

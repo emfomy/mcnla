@@ -23,7 +23,7 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector() noexcept
   : VectorBaseType(),
     DenseBaseType(),
-    increment_(1) {}
+    stride_(1) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -31,12 +31,12 @@ DenseVector<_Scalar>::DenseVector() noexcept
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
-    const index_t increment
+    const index_t stride
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(increment * length),
-    increment_(increment) {
-  assert(increment_ > 0);
+    DenseBaseType(stride * length),
+    stride_(stride) {
+  assert(stride_ > 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,15 +45,15 @@ DenseVector<_Scalar>::DenseVector(
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
-    const index_t increment,
+    const index_t stride,
     const index_t capability,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
     DenseBaseType(capability, offset),
-    increment_(increment) {
-  assert(increment_ > 0);
-  assert(capability >= increment_ * (length_-1) + 1 + offset_);
+    stride_(stride) {
+  assert(stride_ > 0);
+  assert(capability >= stride_ * (length_-1) + 1 + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,31 +62,15 @@ DenseVector<_Scalar>::DenseVector(
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
-    const index_t increment,
-    std::shared_ptr<_Scalar> value
-) noexcept
-  : VectorBaseType(length),
-    DenseBaseType(length * increment, value),
-    increment_(increment) {
-  assert(increment_ > 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
-    const index_t length,
-    const index_t increment,
-    std::shared_ptr<_Scalar> value,
-    const index_t capability,
+    const index_t stride,
+    const ValuePtrType &value,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(capability, value, offset),
-    increment_(increment) {
-  assert(increment_ > 0);
-  assert(capability >= increment_ * (length_-1) + 1 + offset_);
+    DenseBaseType(value, offset),
+    stride_(stride) {
+  assert(stride_ > 0);
+  assert(this->getCapability() >= stride_ * (length_-1) + 1 + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,15 +79,15 @@ DenseVector<_Scalar>::DenseVector(
 template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
-    const index_t increment,
+    const index_t stride,
     const DataType &data,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
     DenseBaseType(data, offset),
-    increment_(increment) {
-  assert(increment_ > 0);
-  assert(data.getCapability() >= increment_ * (length_-1) + 1 + offset_);
+    stride_(stride) {
+  assert(stride_ > 0);
+  assert(this->getCapability() >= stride_ * (length_-1) + 1 + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,7 +99,7 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector( const DenseVector &other ) noexcept
   : VectorBaseType(other),
     DenseBaseType(other),
-    increment_(other.increment_) {}
+    stride_(other.stride_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
@@ -124,8 +108,8 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
   : VectorBaseType(std::move(other)),
     DenseBaseType(std::move(other)),
-    increment_(other.increment_) {
-  other.increment_ = 1;
+    stride_(other.stride_) {
+  other.stride_ = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +119,7 @@ DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
 ///
 template <typename _Scalar>
 DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other ) noexcept {
-  VectorBaseType::operator=(other); DenseBaseType::operator=(other); increment_ = other.increment_;
+  VectorBaseType::operator=(other); DenseBaseType::operator=(other); stride_ = other.stride_;
   return *this;
 }
 
@@ -145,7 +129,7 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other 
 template <typename _Scalar>
 DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noexcept {
   VectorBaseType::operator=(std::move(other)); DenseBaseType::operator=(std::move(other));
-  increment_ = other.increment_; other.increment_ = 1;
+  stride_ = other.stride_; other.stride_ = 1;
   return *this;
 }
 
@@ -162,17 +146,17 @@ std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vecto
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the increment.
+/// @brief  Gets the stride.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getIncrement() const noexcept { return increment_; }
+index_t DenseVector<_Scalar>::getStride() const noexcept { return stride_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the dimensions is equal to the sizes.
 ///
 template <typename _Scalar>
 bool DenseVector<_Scalar>::isShrunk() const noexcept {
-  return (increment_ == 1);
+  return (stride_ == 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +204,7 @@ template <typename _Scalar>
 index_t DenseVector<_Scalar>::getPos(
     const index_t idx
 ) const noexcept {
-  return idx * increment_;
+  return idx * stride_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -322,7 +306,7 @@ DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getPos(range.begin) + offset_);
+  return DenseVector<_Scalar>(range.getLength(), stride_, data_, getPos(range.begin) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,7 +317,7 @@ const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) const noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), increment_, data_, getPos(range.begin) + offset_);
+  return DenseVector<_Scalar>(range.getLength(), stride_, data_, getPos(range.begin) + offset_);
 }
 
 }  // namespace isvd

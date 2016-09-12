@@ -73,7 +73,7 @@ class Parameters {
   index_t max_iteration_ = 256;
 
   /// The tolerance of converge condition.
-  RealScalar tolerance_ = 1e-6;
+  RealScalar tolerance_ = 1e-4;
 
  public:
 

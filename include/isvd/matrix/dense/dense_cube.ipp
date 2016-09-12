@@ -141,37 +141,16 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t npage,
     const index_t pitch1,
     const index_t pitch2,
-    std::shared_ptr<_Scalar> value
-) noexcept
-  : CubeBaseType(nrow, ncol, npage),
-    DenseBaseType(pitch1 * pitch2 * npage_, value),
-    pitch1_(pitch1),
-    pitch2_(pitch2) {
-  assert(pitch1_ >= size1_ && pitch2_ >= size2_);
-  assert(pitch1_ > 0 && pitch2_ > 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Scalar, Layout _layout>
-DenseCube<_Scalar, _layout>::DenseCube(
-    const index_t nrow,
-    const index_t ncol,
-    const index_t npage,
-    const index_t pitch1,
-    const index_t pitch2,
-    std::shared_ptr<_Scalar> value,
-    const index_t capability,
+    const ValuePtrType &value,
     const index_t offset
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    DenseBaseType(capability, value, offset),
+    DenseBaseType(value, offset),
     pitch1_(pitch1),
     pitch2_(pitch2) {
   assert(pitch1_ >= size1_ && pitch2_ >= size2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
-  assert(capability >= pitch1_ * pitch2_ * npage_ - (pitch1_-size1_) + offset_);
+  assert(this->getCapability() >= pitch1_ * pitch2_ * npage_ - (pitch1_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +172,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch2_(pitch2) {
   assert(pitch1_ >= size1_ && pitch2_ >= size2_);
   assert(pitch1_ > 0 && pitch2_ > 0);
-  assert(data.getCapability() >= pitch1_ * pitch2_ * npage_ - (pitch1_-size1_) + offset_);
+  assert(this->getCapability() >= pitch1_ * pitch2_ * npage_ - (pitch1_-size1_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -963,7 +942,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexce
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the column increment.
+/// @brief  Gets the column stride.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getColInc() const noexcept {
@@ -971,7 +950,7 @@ index_t DenseCube<_Scalar, _layout>::getColInc() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the row increment.
+/// @brief  Gets the row stride.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getRowInc() const noexcept {
@@ -979,7 +958,7 @@ index_t DenseCube<_Scalar, _layout>::getRowInc() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the tube increment.
+/// @brief  Gets the tube stride.
 ///
 template <typename _Scalar, Layout _layout>
 index_t DenseCube<_Scalar, _layout>::getTubeInc() const noexcept {

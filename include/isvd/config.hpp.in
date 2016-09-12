@@ -20,10 +20,10 @@
 namespace isvd {
 
 /// The type of index.
-using index_t = int@ISVD_SYSTEM_INT_SIZE@_t;
+using index_t = std::int@ISVD_SYSTEM_INT_SIZE@_t;
 
 /// The type of size.
-using size_t = uint@ISVD_SYSTEM_INT_SIZE@_t;
+using size_t = std::uint@ISVD_SYSTEM_INT_SIZE@_t;
 
 /// The size of system integer.
 static constexpr index_t system_int_size = @ISVD_SYSTEM_INT_SIZE@;

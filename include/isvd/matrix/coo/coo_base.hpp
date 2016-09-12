@@ -34,8 +34,10 @@ class CooBase : public SparseBase<_Derived> {
  private:
 
   static constexpr index_t ndim = Traits<_Derived>::ndim;
-  using ScalarType = typename Traits<_Derived>::ScalarType;
-  using DataType   = CooData<ScalarType, ndim>;
+  using ScalarType   = typename Traits<_Derived>::ScalarType;
+  using ValuePtrType = std::shared_ptr<std::valarray<ScalarType>>;
+  using IdxPtrType   = std::shared_ptr<std::valarray<index_t>>;
+  using DataType     = CooData<ScalarType, ndim>;
 
   using SparseBaseType = SparseBase<_Derived>;
 
@@ -54,9 +56,9 @@ class CooBase : public SparseBase<_Derived> {
   // Constructors
   CooBase() noexcept;
   CooBase( const index_t capability, const index_t offset = 0 ) noexcept;
-  CooBase( const index_t nnz, const index_t capability, std::shared_ptr<ScalarType> value,
-           std::array<std::shared_ptr<index_t>, ndim> idx, const index_t offset = 0 ) noexcept;
-  CooBase( const index_t nnz, const DataType& data, const index_t offset = 0 ) noexcept;
+  CooBase( const index_t nnz, const index_t capability, const index_t offset = 0 ) noexcept;
+  CooBase( const index_t nnz, const ValuePtrType &value, std::array<IdxPtrType, ndim> idx, const index_t offset = 0 ) noexcept;
+  CooBase( const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;
   CooBase( const CooBase &other ) noexcept;
   CooBase( CooBase &&other ) noexcept;
 

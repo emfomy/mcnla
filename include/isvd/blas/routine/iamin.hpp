@@ -31,7 +31,7 @@ template <typename _Scalar>
 inline index_t iamin(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return internal::iamin(x.getLength(), x.getValue(), x.getIncrement());
+  return internal::iamin(x.getLength(), x.getValue(), x.getStride());
 }
 //@}
 
@@ -43,7 +43,7 @@ template <typename _Scalar>
 inline typename isvd::internal::ScalarTraits<_Scalar>::RealType amin(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  index_t idx = internal::iamin(x.getLength(), x.getValue(), x.getIncrement());
+  index_t idx = internal::iamin(x.getLength(), x.getValue(), x.getStride());
   return std::abs(x(idx));
 }
 //@}

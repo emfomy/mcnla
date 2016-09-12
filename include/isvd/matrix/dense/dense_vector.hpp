@@ -57,6 +57,7 @@ class DenseVector
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -72,8 +73,8 @@ class DenseVector
 
  protected:
 
-  /// The increment.
-  index_t increment_;
+  /// The stride.
+  index_t stride_;
 
   using VectorBaseType::length_;
   using DenseBaseType::offset_;
@@ -83,12 +84,10 @@ class DenseVector
 
   // Constructors
   DenseVector() noexcept;
-  DenseVector( const index_t length, const index_t increment = 1 ) noexcept;
-  DenseVector( const index_t length, const index_t increment, const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value ) noexcept;
-  DenseVector( const index_t length, const index_t increment, std::shared_ptr<ScalarType> value,
-               const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseVector( const index_t length, const index_t increment, const DataType &data, const index_t offset = 0 ) noexcept;
+  DenseVector( const index_t length, const index_t stride = 1 ) noexcept;
+  DenseVector( const index_t length, const index_t stride, const index_t capability, const index_t offset = 0 ) noexcept;
+  DenseVector( const index_t length, const index_t stride, const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+  DenseVector( const index_t length, const index_t stride, const DataType &data, const index_t offset = 0 ) noexcept;
   DenseVector( const DenseVector &other ) noexcept;
   DenseVector( DenseVector &&other ) noexcept;
 
@@ -99,7 +98,7 @@ class DenseVector
   friend std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
 
   // Gets information
-  inline index_t getIncrement() const noexcept;
+  inline index_t getStride() const noexcept;
   inline bool isShrunk() const noexcept;
 
   // Gets element

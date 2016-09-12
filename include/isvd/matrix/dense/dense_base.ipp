@@ -46,12 +46,11 @@ DenseBase<_Derived>::DenseBase(
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
-    const index_t capability,
-    std::shared_ptr<ScalarType> value,
+    const ValuePtrType &value,
     const index_t offset
 ) noexcept
   : offset_(offset),
-    data_(capability, value) {
+    data_(value) {
   assert(offset_ >= 0);
 }
 
@@ -60,7 +59,7 @@ DenseBase<_Derived>::DenseBase(
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
-    const DataType& data,
+    const DataType &data,
     const index_t offset
 ) noexcept
   : offset_(offset),

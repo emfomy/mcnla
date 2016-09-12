@@ -73,6 +73,7 @@ class DenseCube
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -121,13 +122,10 @@ class DenseCube
              const index_t capability, const index_t offset = 0 ) noexcept;
   DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches,
              const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch1, const index_t pitch2, std::shared_ptr<ScalarType> value ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch1, const index_t pitch2, std::shared_ptr<ScalarType> value,
-             const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-             const index_t pitch1, const index_t pitch2, const DataType &data, const index_t offset = 0 ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+             const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+             const DataType &data, const index_t offset = 0 ) noexcept;
   DenseCube( const DenseCube &other ) noexcept;
   DenseCube( DenseCube &&other ) noexcept;
 
@@ -211,7 +209,7 @@ class DenseCube
 
  protected:
 
-  // Gets increment
+  // Gets stride
   inline index_t getColInc() const noexcept;
   inline index_t getRowInc() const noexcept;
   inline index_t getTubeInc() const noexcept;
