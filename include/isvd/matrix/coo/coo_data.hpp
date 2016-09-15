@@ -49,11 +49,11 @@ class CooData {
  public:
 
   // Constructors
-  CooData() noexcept;
-  CooData( const index_t capability ) noexcept;
-  CooData( ValuePtrType value, std::array<IdxPtrType, _ndim> idx ) noexcept;
-  CooData( const CooData &other ) noexcept;
-  CooData( CooData &&other ) noexcept;
+  inline CooData() noexcept;
+  inline CooData( const index_t capability ) noexcept;
+  inline CooData( ValuePtrType value, std::array<IdxPtrType, _ndim> idx ) noexcept;
+  inline CooData( const CooData &other ) noexcept;
+  inline CooData( CooData &&other ) noexcept;
 
   // Operators
   inline CooData& operator=( const CooData &other ) noexcept;

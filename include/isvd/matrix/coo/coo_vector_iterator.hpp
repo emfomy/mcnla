@@ -45,9 +45,9 @@ class CooVectorIteratorBase : public std::iterator<std::forward_iterator_tag, _S
  public:
 
   // Constructors
-  CooVectorIteratorBase() noexcept;
-  CooVectorIteratorBase( _Vector *vector, const index_t pos = 0 ) noexcept;
-  CooVectorIteratorBase( const CooVectorIteratorBase &other ) noexcept;
+  inline CooVectorIteratorBase() noexcept;
+  inline CooVectorIteratorBase( _Vector *vector, const index_t pos = 0 ) noexcept;
+  inline CooVectorIteratorBase( const CooVectorIteratorBase &other ) noexcept;
 
   // Operators
   inline CooVectorIteratorBase& operator=( const CooVectorIteratorBase &other ) noexcept;

@@ -33,13 +33,15 @@ class SparseBase {
   /// The number of nonzero elements.
   index_t nnz_;
 
- public:
+ protected:
 
   // Constructors
-  SparseBase() noexcept;
-  SparseBase( const index_t nnz ) noexcept;
-  SparseBase( const SparseBase &other ) noexcept;
-  SparseBase( SparseBase &&other ) noexcept;
+  inline SparseBase() noexcept;
+  inline SparseBase( const index_t nnz ) noexcept;
+  inline SparseBase( const SparseBase &other ) noexcept;
+  inline SparseBase( SparseBase &&other ) noexcept;
+
+ public:
 
   // Operators
   inline SparseBase& operator=( const SparseBase &other ) noexcept;

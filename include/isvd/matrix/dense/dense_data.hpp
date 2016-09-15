@@ -40,11 +40,11 @@ class DenseData {
  public:
 
   // Constructors
-  DenseData() noexcept;
-  DenseData( const index_t capability ) noexcept;
-  DenseData( const ValuePtrType &value ) noexcept;
-  DenseData( const DenseData &other ) noexcept;
-  DenseData( DenseData &&other ) noexcept;
+  inline DenseData() noexcept;
+  inline DenseData( const index_t capability ) noexcept;
+  inline DenseData( const ValuePtrType &value ) noexcept;
+  inline DenseData( const DenseData &other ) noexcept;
+  inline DenseData( DenseData &&other ) noexcept;
 
   // Operators
   inline DenseData& operator=( const DenseData &other ) noexcept;

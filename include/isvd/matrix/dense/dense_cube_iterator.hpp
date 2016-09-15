@@ -58,10 +58,10 @@ class DenseCubeIteratorBase : public std::iterator<std::forward_iterator_tag, _S
  public:
 
   // Constructors
-  DenseCubeIteratorBase() noexcept;
-  DenseCubeIteratorBase( _Cube *cube ) noexcept;
-  DenseCubeIteratorBase( _Cube *cube, const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
-  DenseCubeIteratorBase( const DenseCubeIteratorBase &other ) noexcept;
+  inline DenseCubeIteratorBase() noexcept;
+  inline DenseCubeIteratorBase( _Cube *cube ) noexcept;
+  inline DenseCubeIteratorBase( _Cube *cube, const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline DenseCubeIteratorBase( const DenseCubeIteratorBase &other ) noexcept;
 
   // Operators
   inline DenseCubeIteratorBase& operator=( const DenseCubeIteratorBase &other ) noexcept;

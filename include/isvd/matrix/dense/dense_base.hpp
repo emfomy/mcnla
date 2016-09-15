@@ -44,15 +44,17 @@ class DenseBase {
   /// The data storage
   DataType data_;
 
- public:
+ protected:
 
   // Constructors
-  DenseBase() noexcept;
-  DenseBase( const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseBase( const ValuePtrType &value, const index_t offset = 0 ) noexcept;
-  DenseBase( const DataType &data, const index_t offset = 0 ) noexcept;
-  DenseBase( const DenseBase &other ) noexcept;
-  DenseBase( DenseBase &&other ) noexcept;
+  inline DenseBase() noexcept;
+  inline DenseBase( const index_t capability, const index_t offset = 0 ) noexcept;
+  inline DenseBase( const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+  inline DenseBase( const DataType &data, const index_t offset = 0 ) noexcept;
+  inline DenseBase( const DenseBase &other ) noexcept;
+  inline DenseBase( DenseBase &&other ) noexcept;
+
+ public:
 
   // Operators
   inline DenseBase& operator=( const DenseBase &other ) noexcept;

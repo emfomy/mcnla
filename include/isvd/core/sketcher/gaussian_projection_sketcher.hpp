@@ -84,7 +84,7 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
  public:
 
   // Constructor
-  GaussianProjectionSketcher( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline GaussianProjectionSketcher( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  protected:
 

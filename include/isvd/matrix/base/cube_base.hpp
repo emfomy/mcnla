@@ -53,14 +53,16 @@ class CubeBase : public TensorBase<_Derived> {
   /// The second size.
   index_t &size2_ = isColMajor(layout) ? ncol_ : nrow_;
 
- public:
+ protected:
 
   // Constructors
-  CubeBase() noexcept;
-  CubeBase( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
-  CubeBase( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  CubeBase( const CubeBase &other ) noexcept;
-  CubeBase( CubeBase &&other ) noexcept;
+  inline CubeBase() noexcept;
+  inline CubeBase( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
+  inline CubeBase( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
+  inline CubeBase( const CubeBase &other ) noexcept;
+  inline CubeBase( CubeBase &&other ) noexcept;
+
+ public:
 
   // Operators
   inline CubeBase& operator=( const CubeBase &other ) noexcept;

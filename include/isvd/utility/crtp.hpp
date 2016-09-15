@@ -34,7 +34,7 @@ class CrtpBase {
 
  private:
 
-  CrtpBase() {};
+  inline CrtpBase() noexcept {};
 
  protected:
 

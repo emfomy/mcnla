@@ -28,7 +28,7 @@ namespace internal {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<_Derived>> {
+class ReconstructorBase : protected CrtpBase<_Derived, ReconstructorBase<_Derived>> {
 
  public:
 
@@ -44,7 +44,7 @@ class ReconstructorBase : public internal::CrtpBase<_Derived, ReconstructorBase<
  protected:
 
   // Constructor
-  ReconstructorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline ReconstructorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
 
  public:
 

@@ -102,27 +102,27 @@ class DenseMatrix
  public:
 
   // Constructors
-  DenseMatrix() noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
-  DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
+  inline DenseMatrix() noexcept;
+  inline DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
+  inline DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
+  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch,
+  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch,
                const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                const ValuePtrType &value, const index_t offset = 0 ) noexcept;
-  DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                const DataType &data, const index_t offset = 0 ) noexcept;
-  DenseMatrix( const DenseMatrix &other ) noexcept;
-  DenseMatrix( DenseMatrix &&other ) noexcept;
+  inline DenseMatrix( const DenseMatrix &other ) noexcept;
+  inline DenseMatrix( DenseMatrix &&other ) noexcept;
 
   // Operators
   inline DenseMatrix& operator=( const DenseMatrix &other ) noexcept;
   inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
   template <typename __Scalar, Layout __layout>
-  friend std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
+  friend inline std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
 
   // Gets information
   inline index_t getPitch() const noexcept;

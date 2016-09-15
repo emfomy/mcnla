@@ -102,7 +102,7 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
  public:
 
   // Constructor
-  StandardReconstructor( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline StandardReconstructor( const internal::Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 

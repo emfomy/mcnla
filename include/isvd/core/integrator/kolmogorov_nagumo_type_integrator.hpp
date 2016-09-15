@@ -120,7 +120,7 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
  public:
 
   // Constructor
-  KolmogorovNagumoTypeIntegrator( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline KolmogorovNagumoTypeIntegrator( const internal::Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 

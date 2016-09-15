@@ -58,9 +58,9 @@ class SyevDriver {
  public:
 
   // Constructor
-  SyevDriver() noexcept;
-  SyevDriver( const index_t dim ) noexcept;
-  SyevDriver( const _Matrix &a ) noexcept;
+  inline SyevDriver() noexcept;
+  inline SyevDriver( const index_t dim ) noexcept;
+  inline SyevDriver( const _Matrix &a ) noexcept;
 
   // Operators
   template <class _TypeA, class _TypeW>

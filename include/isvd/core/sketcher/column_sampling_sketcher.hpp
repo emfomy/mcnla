@@ -88,7 +88,7 @@ class ColumnSamplingSketcher : public internal::SketcherBase<ColumnSamplingSketc
  public:
 
   // Constructor
-  ColumnSamplingSketcher( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline ColumnSamplingSketcher( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  protected:
 

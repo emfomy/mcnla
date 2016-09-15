@@ -86,19 +86,20 @@ class DenseVector
  public:
 
   // Constructors
-  DenseVector() noexcept;
-  DenseVector( const index_t length, const index_t stride = 1 ) noexcept;
-  DenseVector( const index_t length, const index_t stride, const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseVector( const index_t length, const index_t stride, const ValuePtrType &value, const index_t offset = 0 ) noexcept;
-  DenseVector( const index_t length, const index_t stride, const DataType &data, const index_t offset = 0 ) noexcept;
-  DenseVector( const DenseVector &other ) noexcept;
-  DenseVector( DenseVector &&other ) noexcept;
+  inline DenseVector() noexcept;
+  inline DenseVector( const index_t length, const index_t stride = 1 ) noexcept;
+  inline DenseVector( const index_t length, const index_t stride, const index_t capability, const index_t offset = 0 ) noexcept;
+  inline DenseVector( const index_t length, const index_t stride,
+                      const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+  inline DenseVector( const index_t length, const index_t stride, const DataType &data, const index_t offset = 0 ) noexcept;
+  inline DenseVector( const DenseVector &other ) noexcept;
+  inline DenseVector( DenseVector &&other ) noexcept;
 
   // Operators
   inline DenseVector& operator=( const DenseVector &other ) noexcept;
   inline DenseVector& operator=( DenseVector &&other ) noexcept;
   template <typename __Scalar>
-  friend std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
+  friend inline std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
 
   // Gets information
   inline index_t getStride() const noexcept;

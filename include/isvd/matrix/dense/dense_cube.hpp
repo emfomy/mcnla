@@ -112,22 +112,22 @@ class DenseCube
  public:
 
   // Constructors
-  DenseCube() noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
-  DenseCube( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2 ) noexcept;
-  DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+  inline DenseCube() noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
+  inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2 ) noexcept;
+  inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
              const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches,
+  inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches,
              const index_t capability, const index_t offset = 0 ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
              const ValuePtrType &value, const index_t offset = 0 ) noexcept;
-  DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
              const DataType &data, const index_t offset = 0 ) noexcept;
-  DenseCube( const DenseCube &other ) noexcept;
-  DenseCube( DenseCube &&other ) noexcept;
+  inline DenseCube( const DenseCube &other ) noexcept;
+  inline DenseCube( DenseCube &&other ) noexcept;
 
   // Operators
   inline DenseCube& operator=( const DenseCube &other ) noexcept;

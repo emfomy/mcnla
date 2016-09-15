@@ -66,9 +66,9 @@ class GesvdDriver {
  public:
 
   // Constructors
-  GesvdDriver() noexcept;
-  GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
-  GesvdDriver( const _Matrix &a ) noexcept;
+  inline GesvdDriver() noexcept;
+  inline GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
+  inline GesvdDriver( const _Matrix &a ) noexcept;
 
   // Operators
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>

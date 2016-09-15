@@ -55,10 +55,10 @@ class DenseMatrixIteratorBase : public std::iterator<std::forward_iterator_tag, 
  public:
 
   // Constructors
-  DenseMatrixIteratorBase() noexcept;
-  DenseMatrixIteratorBase( _Matrix *matrix ) noexcept;
-  DenseMatrixIteratorBase( _Matrix *matrix, const index_t rowidx, const index_t colidx ) noexcept;
-  DenseMatrixIteratorBase( const DenseMatrixIteratorBase &other ) noexcept;
+  inline DenseMatrixIteratorBase() noexcept;
+  inline DenseMatrixIteratorBase( _Matrix *matrix ) noexcept;
+  inline DenseMatrixIteratorBase( _Matrix *matrix, const index_t rowidx, const index_t colidx ) noexcept;
+  inline DenseMatrixIteratorBase( const DenseMatrixIteratorBase &other ) noexcept;
 
   // Operators
   inline DenseMatrixIteratorBase& operator=( const DenseMatrixIteratorBase &other ) noexcept;

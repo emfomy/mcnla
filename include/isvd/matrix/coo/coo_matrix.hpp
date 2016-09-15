@@ -99,23 +99,23 @@ class CooMatrix
  public:
 
   // Constructors
-  CooMatrix() noexcept;
-  CooMatrix( const index_t ncol, const index_t nrow ) noexcept;
-  CooMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
-  CooMatrix( const index_t ncol, const index_t nrow, const index_t capability, const index_t offset = 0 ) noexcept;
-  CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capability, const index_t offset = 0 ) noexcept;
-  CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
+  inline CooMatrix() noexcept;
+  inline CooMatrix( const index_t ncol, const index_t nrow ) noexcept;
+  inline CooMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
+  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t capability, const index_t offset = 0 ) noexcept;
+  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capability, const index_t offset = 0 ) noexcept;
+  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
              const ValuePtrType &value, IdxPtrType rowidx, IdxPtrType colidx, const index_t offset = 0 ) noexcept;
-  CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
+  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
              const DataType &data, const index_t offset = 0 ) noexcept;
-  CooMatrix( const CooMatrix &other ) noexcept;
-  CooMatrix( CooMatrix &&other ) noexcept;
+  inline CooMatrix( const CooMatrix &other ) noexcept;
+  inline CooMatrix( CooMatrix &&other ) noexcept;
 
   // Operators
   inline CooMatrix& operator=( const CooMatrix &other ) noexcept;
   inline CooMatrix& operator=( CooMatrix &&other ) noexcept;
   template <typename __Scalar, Layout __layout>
-  friend std::ostream& operator<<( std::ostream &out, const CooMatrix<__Scalar, __layout> &matrix );
+  friend inline std::ostream& operator<<( std::ostream &out, const CooMatrix<__Scalar, __layout> &matrix );
 
   // Gets index array
   inline       index_t* getRowIdx() noexcept;

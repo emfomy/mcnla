@@ -28,7 +28,7 @@ namespace internal {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class IntegratorBase : public internal::CrtpBase<_Derived, IntegratorBase<_Derived>> {
+class IntegratorBase : protected CrtpBase<_Derived, IntegratorBase<_Derived>> {
 
  public:
 
@@ -44,7 +44,7 @@ class IntegratorBase : public internal::CrtpBase<_Derived, IntegratorBase<_Deriv
  protected:
 
   // Constructor
-  IntegratorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline IntegratorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
 
  public:
 

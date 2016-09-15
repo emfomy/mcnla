@@ -92,7 +92,7 @@ class Solver {
  public:
 
   // Constructor
-  Solver( const MPI_Comm mpi_comm, const mpi_int_t mpi_root = 0 ) noexcept;
+  inline Solver( const MPI_Comm mpi_comm, const mpi_int_t mpi_root = 0 ) noexcept;
 
   // Initializes
   void initialize() noexcept;

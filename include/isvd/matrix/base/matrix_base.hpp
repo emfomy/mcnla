@@ -50,14 +50,16 @@ class MatrixBase : public TensorBase<_Derived> {
   /// The second size.
   index_t &size2_ = isColMajor(layout) ? ncol_ : nrow_;
 
- public:
+ protected:
 
   // Constructors
-  MatrixBase() noexcept;
-  MatrixBase( const index_t nrow, const index_t ncol ) noexcept;
-  MatrixBase( const std::pair<index_t, index_t> sizes ) noexcept;
-  MatrixBase( const MatrixBase &other ) noexcept;
-  MatrixBase( MatrixBase &&other ) noexcept;
+  inline MatrixBase() noexcept;
+  inline MatrixBase( const index_t nrow, const index_t ncol ) noexcept;
+  inline MatrixBase( const std::pair<index_t, index_t> sizes ) noexcept;
+  inline MatrixBase( const MatrixBase &other ) noexcept;
+  inline MatrixBase( MatrixBase &&other ) noexcept;
+
+ public:
 
   // Operators
   inline MatrixBase& operator=( const MatrixBase &other ) noexcept;

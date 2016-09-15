@@ -50,9 +50,9 @@ class DenseVectorIteratorBase : public std::iterator<std::forward_iterator_tag, 
  public:
 
   // Constructors
-  DenseVectorIteratorBase() noexcept;
-  DenseVectorIteratorBase( _Vector *vector, const index_t idx = 0 ) noexcept;
-  DenseVectorIteratorBase( const DenseVectorIteratorBase &other ) noexcept;
+  inline DenseVectorIteratorBase() noexcept;
+  inline DenseVectorIteratorBase( _Vector *vector, const index_t idx = 0 ) noexcept;
+  inline DenseVectorIteratorBase( const DenseVectorIteratorBase &other ) noexcept;
 
   // Operators
   inline DenseVectorIteratorBase& operator=( const DenseVectorIteratorBase &other ) noexcept;

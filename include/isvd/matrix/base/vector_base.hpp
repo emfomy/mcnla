@@ -36,13 +36,15 @@ class VectorBase : public TensorBase<_Derived> {
   /// The number of entries.
   index_t length_;
 
- public:
+ protected:
 
   // Constructors
-  VectorBase() noexcept;
-  VectorBase( const index_t length ) noexcept;
-  VectorBase( const VectorBase &other ) noexcept;
-  VectorBase( VectorBase &&other ) noexcept;
+  inline VectorBase() noexcept;
+  inline VectorBase( const index_t length ) noexcept;
+  inline VectorBase( const VectorBase &other ) noexcept;
+  inline VectorBase( VectorBase &&other ) noexcept;
+
+ public:
 
   // Operators
   inline VectorBase& operator=( const VectorBase &other ) noexcept;

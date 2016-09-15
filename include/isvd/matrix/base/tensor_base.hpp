@@ -27,6 +27,12 @@ namespace internal {
 ///
 template <class _Derived>
 class TensorBase {
+
+ protected:
+
+  // Constructors
+  inline TensorBase() noexcept {};
+
 };
 
 }  // namespace internal

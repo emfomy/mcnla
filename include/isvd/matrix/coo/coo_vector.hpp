@@ -83,20 +83,20 @@ class CooVector
  public:
 
   // Constructors
-  CooVector() noexcept;
-  CooVector( const index_t length ) noexcept;
-  CooVector( const index_t length, const index_t capability, const index_t offset = 0 ) noexcept;
-  CooVector( const index_t length, const index_t nnz,
+  inline CooVector() noexcept;
+  inline CooVector( const index_t length ) noexcept;
+  inline CooVector( const index_t length, const index_t capability, const index_t offset = 0 ) noexcept;
+  inline CooVector( const index_t length, const index_t nnz,
              const ValuePtrType &value, const IdxPtrType &idx, const index_t offset = 0 ) noexcept;
-  CooVector( const index_t length, const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;
-  CooVector( const CooVector &other ) noexcept;
-  CooVector( CooVector &&other ) noexcept;
+  inline CooVector( const index_t length, const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;
+  inline CooVector( const CooVector &other ) noexcept;
+  inline CooVector( CooVector &&other ) noexcept;
 
   // Operators
   inline CooVector& operator=( const CooVector &other ) noexcept;
   inline CooVector& operator=( CooVector &&other ) noexcept;
   template <typename __Scalar>
-  friend std::ostream& operator<<( std::ostream &out, const CooVector<__Scalar> &vector );
+  friend inline std::ostream& operator<<( std::ostream &out, const CooVector<__Scalar> &vector );
 
   // Gets index array
   inline       index_t* getIdx() noexcept;
