@@ -1,14 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/sparse_base.hpp
-/// @brief   The sparse interface.
+/// @file    include/isvd/matrix/base/vector_base.hpp
+/// @brief   The vector interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_SPARSE_BASE_HPP_
-#define ISVD_MATRIX_SPARSE_BASE_HPP_
+#ifndef ISVD_MATRIX_BASE_VECTOR_BASE_HPP_
+#define ISVD_MATRIX_BASE_VECTOR_BASE_HPP_
 
 #include <isvd/isvd.hpp>
+#include <isvd/utility/traits.hpp>
+#include <isvd/matrix/base/tensor_base.hpp>
+#include <isvd/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -21,32 +24,34 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of sparse type.
+/// The interface of vector.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class SparseBase {
+class VectorBase : public TensorBase<_Derived> {
 
  protected:
 
-  /// The number of nonzero elements.
-  index_t nnz_;
+  /// The number of entries.
+  index_t length_;
 
  public:
 
   // Constructors
-  SparseBase() noexcept;
-  SparseBase( const index_t nnz ) noexcept;
-  SparseBase( const SparseBase &other ) noexcept;
-  SparseBase( SparseBase &&other ) noexcept;
+  VectorBase() noexcept;
+  VectorBase( const index_t length ) noexcept;
+  VectorBase( const VectorBase &other ) noexcept;
+  VectorBase( VectorBase &&other ) noexcept;
 
   // Operators
-  inline SparseBase& operator=( const SparseBase &other ) noexcept;
-  inline SparseBase& operator=( SparseBase &&other ) noexcept;
+  inline VectorBase& operator=( const VectorBase &other ) noexcept;
+  inline VectorBase& operator=( VectorBase &&other ) noexcept;
 
   // Gets information
-  inline index_t getNnz() const noexcept;
+  inline index_t getLength() const noexcept;
+  inline index_t getNelem() const noexcept;
+  inline index_t getSizes() const noexcept;
 
 };
 
@@ -54,4 +59,4 @@ class SparseBase {
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_SPARSE_BASE_HPP_
+#endif  // ISVD_MATRIX_BASE_VECTOR_BASE_HPP_

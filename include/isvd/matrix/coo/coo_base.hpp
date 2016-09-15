@@ -10,7 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/utility/traits.hpp>
-#include <isvd/matrix/sparse_base.hpp>
+#include <isvd/matrix/base/sparse_base.hpp>
 #include <isvd/matrix/coo/coo_data.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -95,6 +95,8 @@ CooBase<_Derived>::CooBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
 template <class _Derived>
 CooBase<_Derived>::CooBase( const CooBase &other ) noexcept
   : SparseBaseType(other),

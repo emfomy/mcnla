@@ -34,6 +34,9 @@ class DenseData {
   /// The data array.
   ValuePtrType value_;
 
+  /// The empty data array
+  static const ValuePtrType kNullValue;
+
  public:
 
   // Constructors
@@ -57,6 +60,9 @@ class DenseData {
   inline       index_t  getCapability() const noexcept;
 
 };
+
+template <typename _Scalar>
+const typename DenseData<_Scalar>::ValuePtrType DenseData<_Scalar>::kNullValue = ValuePtrType(new std::valarray<_Scalar>());
 
 }  // namespace isvd
 

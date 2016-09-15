@@ -20,8 +20,8 @@ namespace isvd {
 ///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>::CooData() noexcept
-  : value_(nullptr),
-    idx_({nullptr}) {}
+  : value_(kNullValue),
+    idx_({kNullIdx}) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -56,6 +56,8 @@ CooData<_Scalar, _ndim>::CooData(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <typename _Scalar, index_t _ndim>
 CooData<_Scalar, _ndim>::CooData( const CooData &other ) noexcept
@@ -125,13 +127,13 @@ index_t CooData<_Scalar, _ndim>::getCapability() const noexcept { return value_.
 /// @brief  Gets the raw value array.
 ///
 template <typename _Scalar, index_t _ndim>
-_Scalar* CooData<_Scalar, _ndim>::getValue() noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
+_Scalar* CooData<_Scalar, _ndim>::getValue() noexcept { return &((*value_)[0]); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <typename _Scalar, index_t _ndim>
-const _Scalar* CooData<_Scalar, _ndim>::getValue() const noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
+const _Scalar* CooData<_Scalar, _ndim>::getValue() const noexcept { return &((*value_)[0]); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value array.

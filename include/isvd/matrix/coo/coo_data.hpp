@@ -40,6 +40,12 @@ class CooData {
   /// The index array.
   std::array<IdxPtrType, _ndim> idx_;
 
+  /// The empty data array
+  static const ValuePtrType kNullValue;
+
+  /// The empty data array
+  static const IdxPtrType kNullIdx;
+
  public:
 
   // Constructors
@@ -64,6 +70,14 @@ class CooData {
   template <index_t dim> inline const index_t* getIdx() const noexcept;
 
 };
+
+template <typename _Scalar, index_t _ndim>
+const typename CooData<_Scalar, _ndim>::ValuePtrType
+    CooData<_Scalar, _ndim>::kNullValue = ValuePtrType(new std::valarray<_Scalar>());
+
+template <typename _Scalar, index_t _ndim>
+const typename CooData<_Scalar, _ndim>::IdxPtrType
+    CooData<_Scalar, _ndim>::kNullIdx   = IdxPtrType(new std::valarray<index_t>());
 
 }  // namespace isvd
 

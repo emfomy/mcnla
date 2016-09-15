@@ -11,7 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <utility>
 #include <tuple>
-#include <isvd/matrix/cube_base.hpp>
+#include <isvd/matrix/base/cube_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
 #include <isvd/matrix/dense/dense_matrix.hpp>

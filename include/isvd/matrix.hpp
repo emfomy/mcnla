@@ -8,22 +8,9 @@
 #ifndef ISVD_MATRIX_HPP_
 #define ISVD_MATRIX_HPP_
 
-#include <isvd/matrix/idx_range.hpp>
-#include <isvd/matrix/idx_range.ipp>
-
-#include <isvd/matrix/tensor_base.hpp>
-
-#include <isvd/matrix/vector_base.hpp>
-#include <isvd/matrix/vector_base.ipp>
-#include <isvd/matrix/matrix_base.hpp>
-#include <isvd/matrix/matrix_base.ipp>
-#include <isvd/matrix/cube_base.hpp>
-#include <isvd/matrix/cube_base.ipp>
-
-#include <isvd/matrix/sparse_base.hpp>
-#include <isvd/matrix/sparse_base.ipp>
-
+#include <isvd/matrix/base.hpp>
 #include <isvd/matrix/dense.hpp>
 #include <isvd/matrix/coo.hpp>
+#include <isvd/matrix/kit.hpp>
 
 #endif  // ISVD_MATRIX_HPP_

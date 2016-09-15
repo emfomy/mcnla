@@ -194,6 +194,14 @@ DenseVectorIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vec
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index iterator.
+///
+template <typename _Scalar, class _Vector>
+DenseVectorIdxIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vector>::getIdxIterator() noexcept {
+  return static_cast<DenseVectorIdxIteratorBase<_Scalar, _Vector>&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to beginning iterator.
 ///
 template <typename _Scalar, class _Vector>

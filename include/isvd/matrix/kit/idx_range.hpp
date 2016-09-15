@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/idx_range.hpp
+/// @file    include/isvd/matrix/kit/idx_range.hpp
 /// @brief   The index range class.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_INDEX_RANGE_HPP_
-#define ISVD_MATRIX_INDEX_RANGE_HPP_
+#ifndef ISVD_MATRIX_KIT_INDEX_RANGE_HPP_
+#define ISVD_MATRIX_KIT_INDEX_RANGE_HPP_
 
 #include <isvd/isvd.hpp>
 
@@ -36,4 +36,4 @@ struct IdxRange {
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_INDEX_RANGE_HPP_
+#endif  // ISVD_MATRIX_KIT_INDEX_RANGE_HPP_

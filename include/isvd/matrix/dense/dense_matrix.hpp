@@ -11,7 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <iostream>
 #include <utility>
-#include <isvd/matrix/matrix_base.hpp>
+#include <isvd/matrix/base/matrix_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
 #include <isvd/matrix/dense/dense_matrix_iterator.hpp>

@@ -70,6 +70,8 @@ DenseBase<_Derived>::DenseBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase( const DenseBase &other ) noexcept
   : offset_(other.offset_),

@@ -256,6 +256,54 @@ typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::cend() co
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index iterator to beginning.
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IdxIteratorType DenseVector<_Scalar>::ibegin() noexcept {
+  return IdxIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  ibegin
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIdxIteratorType DenseVector<_Scalar>::ibegin() const noexcept {
+  return ConstIdxIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  ibegin
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIdxIteratorType DenseVector<_Scalar>::cibegin() const noexcept {
+  return ConstIdxIteratorType::getBegin(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index iterator to end.
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IdxIteratorType DenseVector<_Scalar>::iend() noexcept {
+  return IdxIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  iend
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIdxIteratorType DenseVector<_Scalar>::iend() const noexcept {
+  return ConstIdxIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  iend
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIdxIteratorType DenseVector<_Scalar>::ciend() const noexcept {
+  return ConstIdxIteratorType::getEnd(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator of given index.
 ///
 template <typename _Scalar>

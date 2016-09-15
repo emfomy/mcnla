@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/sparse_base.ipp
+/// @file    include/isvd/matrix/base/sparse_base.ipp
 /// @brief   The implementation of sparse interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_SPARSE_BASE_IPP_
-#define ISVD_MATRIX_SPARSE_BASE_IPP_
+#ifndef ISVD_MATRIX_BASE_SPARSE_BASE_IPP_
+#define ISVD_MATRIX_BASE_SPARSE_BASE_IPP_
 
-#include <isvd/matrix/sparse_base.hpp>
+#include <isvd/matrix/base/sparse_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -40,6 +40,8 @@ SparseBase<_Derived>::SparseBase(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <class _Derived>
 SparseBase<_Derived>::SparseBase( const SparseBase &other ) noexcept
@@ -84,4 +86,4 @@ index_t SparseBase<_Derived>::getNnz() const noexcept { return nnz_; }
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_SPARSE_BASE_IPP_
+#endif  // ISVD_MATRIX_BASE_SPARSE_BASE_IPP_

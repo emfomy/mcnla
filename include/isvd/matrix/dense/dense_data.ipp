@@ -20,7 +20,7 @@ namespace isvd {
 ///
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData() noexcept
-  : value_(nullptr) {}
+  : value_(kNullValue) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -42,6 +42,8 @@ DenseData<_Scalar>::DenseData(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData( const DenseData &other ) noexcept
@@ -102,13 +104,13 @@ const _Scalar* DenseData<_Scalar>::operator*() const noexcept { return getValue(
 /// @brief  Gets the raw value array.
 ///
 template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::getValue() noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
+_Scalar* DenseData<_Scalar>::getValue() noexcept { return &((*value_)[0]); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return (value_ != nullptr) ? &((*value_)[0]) : nullptr; }
+const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return &((*value_)[0]); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of data array.

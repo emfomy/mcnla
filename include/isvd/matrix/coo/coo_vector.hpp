@@ -10,7 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <iostream>
-#include <isvd/matrix/vector_base.hpp>
+#include <isvd/matrix/base/vector_base.hpp>
 #include <isvd/matrix/coo/coo_base.hpp>
 #include <isvd/matrix/coo/coo_vector_iterator.hpp>
 

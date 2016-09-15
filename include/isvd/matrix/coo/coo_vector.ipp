@@ -117,7 +117,6 @@ CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept 
 ///
 template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const CooVector<__Scalar> &vector ) {
-  std::string str;
   const index_t witdh = log10(vector.length_)+1;
   for ( auto it = vector.cbegin(); it != vector.cend(); ++it ) {
     out << "(" << std::setw(witdh) << it.getIdx() << ")  " << std::setw(ios_width) << *it << std::endl;

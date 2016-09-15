@@ -10,7 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <iostream>
-#include <isvd/matrix/vector_base.hpp>
+#include <isvd/matrix/base/vector_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector_iterator.hpp>
 
@@ -55,21 +55,24 @@ class DenseVector
 
  public:
 
-  using ScalarType        = _Scalar;
-  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
-  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
+  using ScalarType           = _Scalar;
+  using RealScalarType       = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ValuePtrType         = std::shared_ptr<std::valarray<ScalarType>>;
 
-  using VectorType        = DenseVector<ScalarType>;
-  using RealVectorType    = DenseVector<RealScalarType>;
+  using VectorType           = DenseVector<ScalarType>;
+  using RealVectorType       = DenseVector<RealScalarType>;
 
-  using DataType          = DenseData<ScalarType>;
-  using IteratorType      = DenseVectorIterator<ScalarType>;
-  using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
+  using DataType             = DenseData<ScalarType>;
+
+  using IteratorType         = DenseVectorIterator<ScalarType>;
+  using ConstIteratorType    = DenseVectorConstIterator<ScalarType>;
+  using IdxIteratorType      = DenseVectorIdxIterator<ScalarType>;
+  using ConstIdxIteratorType = DenseVectorConstIdxIterator<ScalarType>;
 
  private:
 
-  using VectorBaseType    = internal::VectorBase<DenseVector<_Scalar>>;
-  using DenseBaseType     = internal::DenseBase<DenseVector<_Scalar>>;
+  using VectorBaseType       = internal::VectorBase<DenseVector<_Scalar>>;
+  using DenseBaseType        = internal::DenseBase<DenseVector<_Scalar>>;
 
  protected:
 
@@ -111,15 +114,21 @@ class DenseVector
   inline index_t getPos( const index_t idx ) const noexcept;
 
   // Gets iterator
-  inline IteratorType      begin() noexcept;
-  inline ConstIteratorType begin() const noexcept;
-  inline ConstIteratorType cbegin() const noexcept;
-  inline IteratorType      end() noexcept;
-  inline ConstIteratorType end() const noexcept;
-  inline ConstIteratorType cend() const noexcept;
-  inline IteratorType      getIterator( const index_t idx ) noexcept;
-  inline ConstIteratorType getIterator( const index_t idx ) const noexcept;
-  inline ConstIteratorType getConstIterator( const index_t idx ) const noexcept;
+  inline IteratorType         begin() noexcept;
+  inline ConstIteratorType    begin() const noexcept;
+  inline ConstIteratorType    cbegin() const noexcept;
+  inline IteratorType         end() noexcept;
+  inline ConstIteratorType    end() const noexcept;
+  inline ConstIteratorType    cend() const noexcept;
+  inline IdxIteratorType      ibegin() noexcept;
+  inline ConstIdxIteratorType ibegin() const noexcept;
+  inline ConstIdxIteratorType cibegin() const noexcept;
+  inline IdxIteratorType      iend() noexcept;
+  inline ConstIdxIteratorType iend() const noexcept;
+  inline ConstIdxIteratorType ciend() const noexcept;
+  inline IteratorType         getIterator( const index_t idx ) noexcept;
+  inline ConstIteratorType    getIterator( const index_t idx ) const noexcept;
+  inline ConstIteratorType    getConstIterator( const index_t idx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;

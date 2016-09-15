@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/matrix_base.ipp
-/// @brief   The implementation of matrix interface.
+/// @file    include/isvd/matrix/base/cube_base.ipp
+/// @brief   The implementation of cube interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_MATRIX_BASE_IPP_
-#define ISVD_MATRIX_MATRIX_BASE_IPP_
+#ifndef ISVD_MATRIX_BASE_CUBE_BASE_IPP_
+#define ISVD_MATRIX_BASE_CUBE_BASE_IPP_
 
-#include <isvd/matrix/matrix_base.hpp>
+#include <isvd/matrix/base/cube_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -24,49 +24,57 @@ namespace internal {
 /// @brief  Default constructor.
 ///
 template <class _Derived>
-MatrixBase<_Derived>::MatrixBase() noexcept
+CubeBase<_Derived>::CubeBase() noexcept
   : nrow_(0),
-    ncol_(0) {}
+    ncol_(0),
+    npage_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Derived>
-MatrixBase<_Derived>::MatrixBase(
+CubeBase<_Derived>::CubeBase(
     const index_t nrow,
-    const index_t ncol
+    const index_t ncol,
+    const index_t npage
 ) noexcept
   : nrow_(nrow),
-    ncol_(ncol) {
-  assert(nrow_ >= 0 && ncol_ >= 0);
+    ncol_(ncol),
+    npage_(npage) {
+  assert(nrow_ >= 0 && ncol_ >= 0 && npage >= 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Derived>
-MatrixBase<_Derived>::MatrixBase(
-    const std::pair<index_t, index_t> sizes
+CubeBase<_Derived>::CubeBase(
+    const std::tuple<index_t, index_t, index_t> sizes
 ) noexcept
-  : MatrixBase(sizes.first, sizes.second) {}
+  : CubeBase(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
+/// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
+///
 template <class _Derived>
-MatrixBase<_Derived>::MatrixBase( const MatrixBase &other ) noexcept
+CubeBase<_Derived>::CubeBase( const CubeBase &other ) noexcept
   : nrow_(other.nrow_),
-    ncol_(other.ncol_) {}
+    ncol_(other.ncol_),
+    npage_(other.npage_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <class _Derived>
-MatrixBase<_Derived>::MatrixBase( MatrixBase &&other ) noexcept
+CubeBase<_Derived>::CubeBase( CubeBase &&other ) noexcept
   : nrow_(other.nrow_),
-    ncol_(other.ncol_) {
+    ncol_(other.ncol_),
+    npage_(other.npage_) {
   other.nrow_ = 0;
   other.ncol_ = 0;
+  other.npage_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +83,8 @@ MatrixBase<_Derived>::MatrixBase( MatrixBase &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <class _Derived>
-MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( const MatrixBase &other ) noexcept {
-  nrow_ = other.nrow_; ncol_ = other.ncol_;
+CubeBase<_Derived>& CubeBase<_Derived>::operator=( const CubeBase &other ) noexcept {
+  nrow_ = other.nrow_; ncol_ = other.ncol_; npage_ = other.npage_;
   return *this;
 }
 
@@ -84,9 +92,9 @@ MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( const MatrixBase &other )
 /// @brief  Move assignment operator.
 ///
 template <class _Derived>
-MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( MatrixBase &&other ) noexcept {
-  nrow_ = other.nrow_; ncol_ = other.ncol_;
-  other.nrow_ = 0;     other.ncol_ = 0;
+CubeBase<_Derived>& CubeBase<_Derived>::operator=( CubeBase &&other ) noexcept {
+  nrow_ = other.nrow_; ncol_ = other.ncol_; npage_ = other.npage_;
+  other.nrow_ = 0;     other.ncol_ = 0;     other.npage_ = 0;
   return *this;
 }
 
@@ -94,40 +102,52 @@ MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( MatrixBase &&other ) noex
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived> template <TransOption _trans>
-index_t MatrixBase<_Derived>::getNrow() const noexcept { return !isTranspose(_trans) ? nrow_ : ncol_; }
+index_t CubeBase<_Derived>::getNrow() const noexcept {
+  return !isTranspose(_trans) ? nrow_ : ncol_;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of columns.
 ///
 template <class _Derived> template <TransOption _trans>
-index_t MatrixBase<_Derived>::getNcol() const noexcept { return !isTranspose(_trans) ? ncol_ : nrow_; }
+index_t CubeBase<_Derived>::getNcol() const noexcept {
+  return !isTranspose(_trans) ? ncol_ : nrow_;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading size.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getSize1() const noexcept { return size1_; }
+index_t CubeBase<_Derived>::getSize1() const noexcept { return size1_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second size.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getSize2() const noexcept { return size2_; }
+index_t CubeBase<_Derived>::getSize2() const noexcept { return size2_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of pages.
+///
+template <class _Derived>
+index_t CubeBase<_Derived>::getNpage() const noexcept { return npage_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of elements.
 ///
 template <class _Derived>
-index_t MatrixBase<_Derived>::getNelem() const noexcept { return nrow_ * ncol_; }
+index_t CubeBase<_Derived>::getNelem() const noexcept { return nrow_ * ncol_ * npage_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Derived>
-std::pair<index_t, index_t> MatrixBase<_Derived>::getSizes() const noexcept { return std::make_pair(nrow_, ncol_); }
+std::tuple<index_t, index_t, index_t> CubeBase<_Derived>::getSizes() const noexcept {
+  return std::make_tuple(nrow_, ncol_, npage_);
+}
 
 }  // namespace internal
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_MATRIX_BASE_IPP_
+#endif  // ISVD_MATRIX_BASE_CUBE_BASE_IPP_

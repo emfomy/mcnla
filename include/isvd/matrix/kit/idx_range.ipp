@@ -1,14 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/idx_range.ipp
+/// @file    include/isvd/matrix/kit/idx_range.ipp
 /// @brief   The implementation of index range.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_INDEX_RANGE_IPP_
-#define ISVD_MATRIX_INDEX_RANGE_IPP_
+#ifndef ISVD_MATRIX_KIT_INDEX_RANGE_IPP_
+#define ISVD_MATRIX_KIT_INDEX_RANGE_IPP_
 
 #include <isvd/isvd.hpp>
+#include <isvd/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -32,4 +33,4 @@ index_t IdxRange::getLength() const noexcept { return (end-begin); }
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_INDEX_RANGE_IPP_
+#endif  // ISVD_MATRIX_KIT_INDEX_RANGE_IPP_

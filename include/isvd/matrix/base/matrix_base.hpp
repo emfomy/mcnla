@@ -1,18 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/cube_base.hpp
-/// @brief   The cube interface.
+/// @file    include/isvd/matrix/base/matrix_base.hpp
+/// @brief   The matrix interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_CUBE_BASE_HPP_
-#define ISVD_MATRIX_CUBE_BASE_HPP_
+#ifndef ISVD_MATRIX_BASE_MATRIX_BASE_HPP_
+#define ISVD_MATRIX_BASE_MATRIX_BASE_HPP_
 
 #include <isvd/isvd.hpp>
-#include <tuple>
+#include <utility>
 #include <isvd/utility/traits.hpp>
-#include <isvd/matrix/tensor_base.hpp>
-#include <isvd/matrix/idx_range.hpp>
+#include <isvd/matrix/base/tensor_base.hpp>
+#include <isvd/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -25,12 +25,12 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of cube.
+/// The interface of matrix.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class CubeBase : public TensorBase<_Derived> {
+class MatrixBase : public TensorBase<_Derived> {
 
  private:
 
@@ -44,9 +44,6 @@ class CubeBase : public TensorBase<_Derived> {
   /// The number of columns.
   index_t ncol_;
 
-  /// The number of pages.
-  index_t npage_;
-
   /// The leading size.
   index_t &size1_ = isColMajor(layout) ? nrow_ : ncol_;
 
@@ -56,31 +53,23 @@ class CubeBase : public TensorBase<_Derived> {
  public:
 
   // Constructors
-  CubeBase() noexcept;
-  CubeBase( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
-  CubeBase( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  CubeBase( const CubeBase &other ) noexcept;
-  CubeBase( CubeBase &&other ) noexcept;
+  MatrixBase() noexcept;
+  MatrixBase( const index_t nrow, const index_t ncol ) noexcept;
+  MatrixBase( const std::pair<index_t, index_t> sizes ) noexcept;
+  MatrixBase( const MatrixBase &other ) noexcept;
+  MatrixBase( MatrixBase &&other ) noexcept;
 
   // Operators
-  inline CubeBase& operator=( const CubeBase &other ) noexcept;
-  inline CubeBase& operator=( CubeBase &&other ) noexcept;
+  inline MatrixBase& operator=( const MatrixBase &other ) noexcept;
+  inline MatrixBase& operator=( MatrixBase &&other ) noexcept;
 
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
   inline index_t getSize1() const noexcept;
   inline index_t getSize2() const noexcept;
-  inline index_t getNpage() const noexcept;
   inline index_t getNelem() const noexcept;
-  inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;
-
- protected:
-
-  // Converts range
-  inline IdxRange convertRowRange( const IdxRange range ) const noexcept;
-  inline IdxRange convertColRange( const IdxRange range ) const noexcept;
-  inline IdxRange convertPageRange( const IdxRange range ) const noexcept;
+  inline std::pair<index_t, index_t> getSizes() const noexcept;
 
 };
 
@@ -88,4 +77,4 @@ class CubeBase : public TensorBase<_Derived> {
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_CUBE_BASE_HPP_
+#endif  // ISVD_MATRIX_BASE_MATRIX_BASE_HPP_

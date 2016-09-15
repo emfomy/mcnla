@@ -11,7 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <iostream>
 #include <utility>
-#include <isvd/matrix/matrix_base.hpp>
+#include <isvd/matrix/base/matrix_base.hpp>
 #include <isvd/matrix/coo/coo_base.hpp>
 #include <isvd/matrix/coo/coo_vector.hpp>
 // #include <isvd/matrix/coo/coo_matrix_iterator.hpp>
@@ -105,10 +105,7 @@ class CooMatrix
   CooMatrix( const index_t ncol, const index_t nrow, const index_t capability, const index_t offset = 0 ) noexcept;
   CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capability, const index_t offset = 0 ) noexcept;
   CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
-             const ValuePtrType &value, IdxPtrType rowidx, IdxPtrType colidx ) noexcept;
-  CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
-             const ValuePtrType &value, IdxPtrType rowidx, IdxPtrType colidx,
-             const index_t capability, const index_t offset = 0 ) noexcept;
+             const ValuePtrType &value, IdxPtrType rowidx, IdxPtrType colidx, const index_t offset = 0 ) noexcept;
   CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
              const DataType &data, const index_t offset = 0 ) noexcept;
   CooMatrix( const CooMatrix &other ) noexcept;
@@ -131,7 +128,7 @@ class CooMatrix
   inline ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Gets the internal position
-  inline index_t getPos( const index_t idx ) const noexcept;
+  inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
   inline void getPosNnz( const IdxRange rowrange, const IdxRange colrange, index_t &pos, index_t &nnz ) const noexcept;
 
   // Gets iterator

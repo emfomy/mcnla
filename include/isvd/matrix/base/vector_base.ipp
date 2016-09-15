@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/vector_base.ipp
+/// @file    include/isvd/matrix/base/vector_base.ipp
 /// @brief   The implementation of vector interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_VECTOR_BASE_IPP_
-#define ISVD_MATRIX_VECTOR_BASE_IPP_
+#ifndef ISVD_MATRIX_BASE_VECTOR_BASE_IPP_
+#define ISVD_MATRIX_BASE_VECTOR_BASE_IPP_
 
-#include <isvd/matrix/vector_base.hpp>
+#include <isvd/matrix/base/vector_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -96,4 +96,4 @@ index_t VectorBase<_Derived>::getSizes() const noexcept { return length_; }
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_VECTOR_BASE_IPP_
+#endif  // ISVD_MATRIX_BASE_VECTOR_BASE_IPP_

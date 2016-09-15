@@ -11,6 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <iterator>
 #include <isvd/matrix/dense/dense_vector.hpp>
+#include <isvd/matrix/dense/dense_vector_idx_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -25,6 +26,10 @@ template <typename _Scalar> class DenseVector;
 //  The internal namespace.
 //
 namespace internal {
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar, class _Vector> class DenseVectorIdxIteratorBase;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator.
@@ -69,6 +74,9 @@ class DenseVectorIteratorBase : public std::iterator<std::forward_iterator_tag, 
   // Sets to begin/end
   inline DenseVectorIteratorBase& setBegin() noexcept;
   inline DenseVectorIteratorBase& setEnd() noexcept;
+
+  // Gets the index iterator
+  inline DenseVectorIdxIteratorBase<_Scalar, _Vector>& getIdxIterator() noexcept;
 
   // Gets the begin/end iterator
   static inline DenseVectorIteratorBase getBegin( _Vector *vector ) noexcept;
