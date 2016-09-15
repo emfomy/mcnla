@@ -57,7 +57,7 @@ const typename ValueIteratorBase<_Derived>::ScalarType* ValueIteratorBase<_Deriv
 ///
 template <class _Derived>
 typename ValueIteratorBase<_Derived>::IdxIteratorType&
-    ValueIteratorBase<_Derived>::getIdxIterator() noexcept {
+    ValueIteratorBase<_Derived>::toIdxIterator() noexcept {
   return static_cast<IdxIteratorType&>(static_cast<BaseIteratorType&>(this->derived()));
 }
 
@@ -67,7 +67,7 @@ typename ValueIteratorBase<_Derived>::IdxIteratorType&
 template <class _Derived>
 typename ValueIteratorBase<_Derived>::ValueIteratorType
     ValueIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
-  ValueIteratorBase retval(container); retval.setBegin(); return retval;
+  ValueIteratorType retval(container); retval.setBegin(); return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ typename ValueIteratorBase<_Derived>::ValueIteratorType
 template <class _Derived>
 typename ValueIteratorBase<_Derived>::ValueIteratorType
     ValueIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
-  ValueIteratorBase retval(container); retval.setEnd(); return retval;
+  ValueIteratorType retval(container); retval.setEnd(); return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ typename IdxIteratorBase<_Derived>::IdxTupleType IdxIteratorBase<_Derived>::oper
 ///
 template <class _Derived>
 typename IdxIteratorBase<_Derived>::ValueIteratorType&
-    IdxIteratorBase<_Derived>::getValueIterator() noexcept {
+    IdxIteratorBase<_Derived>::toValueIterator() noexcept {
   return static_cast<ValueIteratorType&>(static_cast<BaseIteratorType&>(this->derived()));
 }
 

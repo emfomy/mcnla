@@ -14,7 +14,7 @@
 int main( int argc, char **argv ) {
 
   isvd::DenseVector<double> vec(3, 5);
-  auto it = std::lower_bound(vec.ibegin(), vec.iend(), isvd::IdxTuple<double, 1>({3}));
+  auto it = std::lower_bound(vec.cibegin().toValueIterator().toIdxIterator(), vec.cend().toIdxIterator(), isvd::IdxTuple<double, 1>({3}));
   std::cout << it.getIdx() << std::endl;
 
 }

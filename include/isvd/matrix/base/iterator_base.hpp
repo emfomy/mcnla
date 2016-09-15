@@ -27,7 +27,7 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of value iterator.
 ///
-/// @tparam  _Derived  The implementation type.
+/// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
 class ValueIteratorBase
@@ -56,7 +56,7 @@ class ValueIteratorBase
   inline const ScalarType* operator->() const noexcept;
 
   // Gets the index iterator
-  inline IdxIteratorType& getIdxIterator() noexcept;
+  inline IdxIteratorType& toIdxIterator() noexcept;
 
   // Gets the begin/end iterator
   static inline ValueIteratorType getBegin( ContainerType *container ) noexcept;
@@ -67,7 +67,7 @@ class ValueIteratorBase
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of index iterator.
 ///
-/// @tparam  _Derived  The implementation type.
+/// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
 class IdxIteratorBase
@@ -93,7 +93,7 @@ class IdxIteratorBase
   inline IdxTupleType operator*() const noexcept;
 
   // Gets the value iterator
-  inline ValueIteratorType& getValueIterator() noexcept;
+  inline ValueIteratorType& toValueIterator() noexcept;
 
   // Gets the begin/end iterator
   static inline IdxIteratorType getBegin( ContainerType *container ) noexcept;

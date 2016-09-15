@@ -9,7 +9,7 @@
 #define ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 
 #include <isvd/isvd.hpp>
-#include <iterator>
+#include <isvd/matrix/base/iterator_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

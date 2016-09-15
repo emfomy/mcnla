@@ -8,6 +8,11 @@
 #ifndef ISVD_MATRIX_BASE_HPP_
 #define ISVD_MATRIX_BASE_HPP_
 
+#include <isvd/matrix/base/container_base.hpp>
+#include <isvd/matrix/base/container_base.ipp>
+#include <isvd/matrix/base/iterator_base.hpp>
+#include <isvd/matrix/base/iterator_base.ipp>
+
 #include <isvd/matrix/base/tensor_base.hpp>
 
 #include <isvd/matrix/base/vector_base.hpp>
@@ -19,8 +24,5 @@
 
 #include <isvd/matrix/base/sparse_base.hpp>
 #include <isvd/matrix/base/sparse_base.ipp>
-
-#include <isvd/matrix/base/iterator_base.hpp>
-#include <isvd/matrix/base/iterator_base.ipp>
 
 #endif  // ISVD_MATRIX_BASE_HPP_
