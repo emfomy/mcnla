@@ -67,7 +67,7 @@ typename ValueIteratorBase<_Derived>::IdxIteratorType&
 template <class _Derived>
 typename ValueIteratorBase<_Derived>::ValueIteratorType
     ValueIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
-  return ValueIteratorType(container).setBegin();
+  ValueIteratorBase retval(container); retval.setBegin(); return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ typename ValueIteratorBase<_Derived>::ValueIteratorType
 template <class _Derived>
 typename ValueIteratorBase<_Derived>::ValueIteratorType
     ValueIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
-  return ValueIteratorType(container).setEnd();
+  ValueIteratorBase retval(container); retval.setEnd(); return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ typename IdxIteratorBase<_Derived>::ValueIteratorType&
 template <class _Derived>
 typename IdxIteratorBase<_Derived>::IdxIteratorType
     IdxIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
-  return IdxIteratorType(container).setBegin();
+  IdxIteratorType retval(container); retval.setBegin(); return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ typename IdxIteratorBase<_Derived>::IdxIteratorType
 template <class _Derived>
 typename IdxIteratorBase<_Derived>::IdxIteratorType
     IdxIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
-  return IdxIteratorType(container).setEnd();
+  IdxIteratorType retval(container); retval.setEnd(); return retval;
 }
 
 }  // namespace internal

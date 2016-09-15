@@ -30,9 +30,9 @@ namespace internal {
 /// @tparam  _Derived  The implementation type.
 ///
 template <class _Derived>
-class ValueIteratorBase :
-    protected CrtpBase<_Derived, ValueIteratorBase<_Derived>>,
-    public std::iterator<std::random_access_iterator_tag, typename Traits<_Derived>::ScalarType> {
+class ValueIteratorBase
+  : protected CrtpBase<_Derived, ValueIteratorBase<_Derived>>,
+    public std::iterator<std::forward_iterator_tag, typename Traits<_Derived>::ScalarType> {
 
  private:
 
@@ -40,7 +40,7 @@ class ValueIteratorBase :
   using ContainerType     = typename Traits<_Derived>::ContainerType;
   using ValueIteratorType = _Derived;
   using BaseIteratorType  = typename Traits<_Derived>::BaseType;
-  using IdxIteratorType   = typename Traits<_Derived>::BaseType::IdxIteratorType;
+  using IdxIteratorType   = typename Traits<_Derived>::IdxIteratorType;
 
  protected:
 
@@ -70,9 +70,9 @@ class ValueIteratorBase :
 /// @tparam  _Derived  The implementation type.
 ///
 template <class _Derived>
-class IdxIteratorBase :
-    protected CrtpBase<_Derived, IdxIteratorBase<_Derived>>,
-    public std::iterator<std::random_access_iterator_tag, typename Traits<_Derived>::IdxTupleType> {
+class IdxIteratorBase
+  : protected CrtpBase<_Derived, IdxIteratorBase<_Derived>>,
+    public std::iterator<std::forward_iterator_tag, typename Traits<_Derived>::IdxTupleType> {
 
  private:
 
@@ -80,7 +80,7 @@ class IdxIteratorBase :
   using ContainerType     = typename Traits<_Derived>::ContainerType;
   using IdxIteratorType   = _Derived;
   using BaseIteratorType  = typename Traits<_Derived>::BaseType;
-  using ValueIteratorType = typename Traits<_Derived>::BaseType::ValueIteratorType;
+  using ValueIteratorType = typename Traits<_Derived>::ValueIteratorType;
 
  protected:
 

@@ -110,44 +110,13 @@ DenseVectorIteratorBase<_Scalar, _Vector> DenseVectorIteratorBase<_Scalar, _Vect
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, class _Vector>
-_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::operator*() noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, class _Vector>
-const _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::operator*() const noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, class _Vector>
-_Scalar* DenseVectorIteratorBase<_Scalar, _Vector>::operator->() noexcept {
-  return &getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, class _Vector>
-const _Scalar* DenseVectorIteratorBase<_Scalar, _Vector>::operator->() const noexcept {
-  return &getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, class _Vector>
-_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() noexcept {
+typename DenseVectorIteratorBase<_Scalar, _Vector>::ScalarType&
+    DenseVectorIteratorBase<_Scalar, _Vector>::getValue() noexcept {
   return vector_->getValue()[getPos()];
 }
 
@@ -155,8 +124,18 @@ _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() noexcept {
 /// @copydoc  getValue
 ///
 template <typename _Scalar, class _Vector>
-const _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
+const typename DenseVectorIteratorBase<_Scalar, _Vector>::ScalarType&
+    DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
   return vector_->getValue()[getPos()];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index tuple.
+///
+template <typename _Scalar, class _Vector>
+typename DenseVectorIteratorBase<_Scalar, _Vector>::IdxTupleType
+    DenseVectorIteratorBase<_Scalar, _Vector>::getIdxs() const noexcept {
+  return IdxTupleType({idx_});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,30 +170,6 @@ template <typename _Scalar, class _Vector>
 DenseVectorIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vector>::setEnd() noexcept {
   idx_ = (vector_ != nullptr) ? vector_->getLength() : 0;
   return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index iterator.
-///
-template <typename _Scalar, class _Vector>
-DenseVectorIdxIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vector>::getIdxIterator() noexcept {
-  return static_cast<DenseVectorIdxIteratorBase<_Scalar, _Vector>&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to beginning iterator.
-///
-template <typename _Scalar, class _Vector>
-DenseVectorIteratorBase<_Scalar, _Vector> DenseVectorIteratorBase<_Scalar, _Vector>::getBegin( _Vector *vector ) noexcept {
-  return DenseVectorIteratorBase(vector).setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to end iterator.
-///
-template <typename _Scalar, class _Vector>
-DenseVectorIteratorBase<_Scalar, _Vector> DenseVectorIteratorBase<_Scalar, _Vector>::getEnd( _Vector *vector ) noexcept {
-  return DenseVectorIteratorBase(vector).setEnd();
 }
 
 }  // namespace internal
