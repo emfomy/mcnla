@@ -10,7 +10,8 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/base/iterator_base.hpp>
-#include <isvd/matrix/dense/dense_iterator_base.hpp>
+#include <isvd/matrix/base/value_iterator_base.hpp>
+#include <isvd/matrix/base/idx_iterator_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +41,9 @@ template <typename _Scalar, class _Vector> class DenseVectorIdxIteratorBase;
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<DenseIteratorBase<_Scalar, 1, _Vector>> {
+struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<IteratorBase<_Vector>> {
+  using ScalarType        = _Scalar;
+  using IdxTupleType      = IdxTuple<1>;
   using BaseType          = DenseVectorIteratorBase<_Scalar, _Vector>;
   using ValueIteratorType = DenseVectorValueIteratorBase<_Scalar, _Vector>;
   using IdxIteratorType   = DenseVectorIdxIteratorBase<_Scalar, _Vector>;
@@ -71,27 +74,27 @@ struct Traits<DenseVectorIdxIteratorBase<_Scalar, _Vector>> : Traits<DenseVector
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-class DenseVectorIteratorBase : public DenseIteratorBase<_Scalar, 1, _Vector> {
+class DenseVectorIteratorBase : public IteratorBase<_Vector> {
 
  protected:
 
-  using DenseIteratorBase<_Scalar, 1, _Vector>::itidx_;
-  using DenseIteratorBase<_Scalar, 1, _Vector>::container_;
+  using IteratorBase<_Vector>::itidx_;
+  using IteratorBase<_Vector>::container_;
 
  public:
 
-  using DenseIteratorBase<_Scalar, 1, _Vector>::DenseIteratorBase;
+  using IteratorBase<_Vector>::IteratorBase;
 
   // Operators
   template <typename __Scalar, class __Vector>
   friend inline std::ostream& operator<<( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
 
   // Gets value
-  inline       _Scalar& getValue() noexcept;
-  inline const _Scalar& getValue() const noexcept;
+  inline       _Scalar&    getValue() noexcept;
+  inline const _Scalar&    getValue() const noexcept;
   inline       IdxTuple<1> getIdxs() const noexcept;
-  inline       index_t getIdx() const noexcept;
-  inline       index_t getPos() const noexcept;
+  inline       index_t     getIdx() const noexcept;
+  inline       index_t     getPos() const noexcept;
 
 };
 

@@ -10,7 +10,8 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/base/iterator_base.hpp>
-#include <isvd/matrix/dense/dense_iterator_base.hpp>
+#include <isvd/matrix/base/value_iterator_base.hpp>
+#include <isvd/matrix/base/idx_iterator_base.hpp>
 #include <isvd/matrix/dense/dense_matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +42,9 @@ template <typename _Scalar, Layout _layout, class _Matrix> class DenseMatrixIdxI
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> : Traits<DenseIteratorBase<_Scalar, 2, _Matrix>> {
+struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> : Traits<IteratorBase<_Matrix>> {
+  using ScalarType        = _Scalar;
+  using IdxTupleType      = IdxTuple<2>;
   using BaseType          = DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>;
   using ValueIteratorType = DenseMatrixValueIteratorBase<_Scalar, _layout, _Matrix>;
   using IdxIteratorType   = DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>;
@@ -77,16 +80,16 @@ struct Traits<DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>>
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-class DenseMatrixIteratorBase : public DenseIteratorBase<_Scalar, 2, _Matrix> {
+class DenseMatrixIteratorBase : public IteratorBase<_Matrix> {
 
  protected:
 
-  using DenseIteratorBase<_Scalar, 2, _Matrix>::itidx_;
-  using DenseIteratorBase<_Scalar, 2, _Matrix>::container_;
+  using IteratorBase<_Matrix>::itidx_;
+  using IteratorBase<_Matrix>::container_;
 
  public:
 
-  using DenseIteratorBase<_Scalar, 2, _Matrix>::DenseIteratorBase;
+  using IteratorBase<_Matrix>::IteratorBase;
 
   // Operators
   template <typename __Scalar, Layout __layout, class __Matrix>
@@ -94,14 +97,14 @@ class DenseMatrixIteratorBase : public DenseIteratorBase<_Scalar, 2, _Matrix> {
                                           const DenseMatrixIteratorBase<__Scalar, __layout, __Matrix> &iterator );
 
   // Gets value
-  inline       _Scalar& getValue() noexcept;
-  inline const _Scalar& getValue() const noexcept;
+  inline       _Scalar&    getValue() noexcept;
+  inline const _Scalar&    getValue() const noexcept;
   inline       IdxTuple<2> getIdxs() const noexcept;
-  inline       index_t getRowIdx() const noexcept;
-  inline       index_t getColIdx() const noexcept;
-  inline       index_t getIdx1() const noexcept;
-  inline       index_t getIdx2() const noexcept;
-  inline       index_t getPos() const noexcept;
+  inline       index_t     getRowIdx() const noexcept;
+  inline       index_t     getColIdx() const noexcept;
+  inline       index_t     getIdx1() const noexcept;
+  inline       index_t     getIdx2() const noexcept;
+  inline       index_t     getPos() const noexcept;
 
 };
 

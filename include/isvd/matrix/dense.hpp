@@ -12,8 +12,6 @@
 #include <isvd/matrix/dense/dense_base.ipp>
 #include <isvd/matrix/dense/dense_data.hpp>
 #include <isvd/matrix/dense/dense_data.ipp>
-#include <isvd/matrix/dense/dense_iterator_base.hpp>
-#include <isvd/matrix/dense/dense_iterator_base.ipp>
 
 #include <isvd/matrix/dense/dense_vector.hpp>
 #include <isvd/matrix/dense/dense_vector.ipp>

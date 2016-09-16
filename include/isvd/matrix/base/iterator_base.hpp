@@ -5,14 +5,11 @@
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_ITERATOR_BASE_HPP_
-#define ISVD_MATRIX_ITERATOR_BASE_HPP_
+#ifndef ISVD_MATRIX_BASE_ITERATOR_BASE_HPP_
+#define ISVD_MATRIX_BASE_ITERATOR_BASE_HPP_
 
 #include <isvd/isvd.hpp>
 #include <iterator>
-#include <isvd/utility/crtp.hpp>
-#include <isvd/utility/traits.hpp>
-#include <isvd/matrix/kit/idx_tuple.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -24,85 +21,72 @@ namespace isvd {
 //
 namespace internal {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Container> class IteratorBase;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of value iterator.
+/// The dense container iterator interface traits.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Container  The container type.
 ///
-template <class _Derived>
-class ValueIteratorBase
-  : protected CrtpBase<_Derived, ValueIteratorBase<_Derived>>,
-    public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::ScalarType> {
-
- private:
-
-  using ScalarType        = typename Traits<_Derived>::ScalarType;
-  using ContainerType     = typename Traits<_Derived>::ContainerType;
-  using ValueIteratorType = _Derived;
-  using BaseIteratorType  = typename Traits<_Derived>::BaseType;
-  using IdxIteratorType   = typename Traits<_Derived>::IdxIteratorType;
-
- protected:
-
-  // Constructors
-  inline ValueIteratorBase() noexcept {};
-
- public:
-
-  // Operators
-  inline       ScalarType& operator*() noexcept;
-  inline const ScalarType& operator*() const noexcept;
-  inline       ScalarType* operator->() noexcept;
-  inline const ScalarType* operator->() const noexcept;
-
-  // Gets the index iterator
-  inline IdxIteratorType& toIdxIterator() noexcept;
-
-  // Gets the begin/end iterator
-  static inline ValueIteratorType getBegin( ContainerType *container ) noexcept;
-  static inline ValueIteratorType getEnd( ContainerType *container ) noexcept;
-
+template <class _Container>
+struct Traits<IteratorBase<_Container>> {
+  using IteratorTag       = std::random_access_iterator_tag;
+  using ContainerType     = _Container;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The interface of index iterator.
+/// The dense container iterator interface.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Container  The container type.
 ///
-template <class _Derived>
-class IdxIteratorBase
-  : protected CrtpBase<_Derived, IdxIteratorBase<_Derived>>,
-    public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::IdxTupleType> {
-
- private:
-
-  using IdxTupleType      = typename Traits<_Derived>::IdxTupleType;
-  using ContainerType     = typename Traits<_Derived>::ContainerType;
-  using IdxIteratorType   = _Derived;
-  using BaseIteratorType  = typename Traits<_Derived>::BaseType;
-  using ValueIteratorType = typename Traits<_Derived>::ValueIteratorType;
+template <class _Container>
+class IteratorBase {
 
  protected:
 
-  // Constructors
-  IdxIteratorBase() noexcept {};
+  /// The iterator index.
+  index_t itidx_;
+
+  _Container *container_;
 
  public:
 
-  // Operators
-  inline IdxTupleType operator*() const noexcept;
+  // Constructors
+  inline IteratorBase() noexcept;
+  inline IteratorBase( _Container *matrix ) noexcept;
+  inline IteratorBase( const IteratorBase &other ) noexcept;
 
-  // Gets the value iterator
-  inline ValueIteratorType& toValueIterator() noexcept;
+  // Assignment operators
+  inline IteratorBase& operator=( const IteratorBase &other ) noexcept;
 
-  // Gets the begin/end iterator
-  static inline IdxIteratorType getBegin( ContainerType *container ) noexcept;
-  static inline IdxIteratorType getEnd( ContainerType *container ) noexcept;
+  // Comparison operators
 
- private:
+  inline bool operator==( const IteratorBase &other ) const noexcept;
+  inline bool operator!=( const IteratorBase &other ) const noexcept;
+  inline bool operator>( const IteratorBase &other ) const noexcept;
+  inline bool operator<( const IteratorBase &other ) const noexcept;
+  inline bool operator>=( const IteratorBase &other ) const noexcept;
+  inline bool operator<=( const IteratorBase &other ) const noexcept;
 
-  // Operators
-  inline void operator->() const noexcept;
+  // Arithmetic operators
+  inline IteratorBase& operator++() noexcept;
+  inline IteratorBase& operator--() noexcept;
+  inline IteratorBase  operator++( int ) noexcept;
+  inline IteratorBase  operator--( int ) noexcept;
+  inline IteratorBase& operator+=( const index_t num ) noexcept;
+  inline IteratorBase& operator-=( const index_t num ) noexcept;
+  inline IteratorBase  operator+( const index_t num ) const noexcept;
+  inline IteratorBase  operator-( const index_t num ) const noexcept;
+
+  inline index_t operator-( const IteratorBase &other ) const noexcept;
+  template <class __Container>
+  friend inline IteratorBase operator+( const index_t num, const IteratorBase<__Container> iterator ) noexcept;
+
+  // Sets to begin/end
+  inline IteratorBase& setBegin() noexcept;
+  inline IteratorBase& setEnd() noexcept;
 
 };
 
@@ -110,4 +94,4 @@ class IdxIteratorBase
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_ITERATOR_BASE_HPP_
+#endif  // ISVD_MATRIX_BASE_ITERATOR_BASE_HPP_
