@@ -132,38 +132,6 @@ DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-_Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator*() noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-const _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator*() const noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-_Scalar* DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator->() noexcept {
-  return &getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-const _Scalar* DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::operator->() const noexcept {
-  return &getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
 /// @attention  Never call this when the iterator is at the end.
@@ -179,6 +147,15 @@ _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() noexcept
 template <typename _Scalar, Layout _layout, class _Matrix>
 const _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const noexcept {
   return matrix_->getValue()[getPos()];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index tuple.
+///
+template <typename _Scalar, Layout _layout, class _Matrix>
+typename DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::IdxTupleType
+    DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdxs() const noexcept {
+  return makeIdxTuple(idx1_, idx2_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,26 +216,6 @@ DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>& DenseMatrixIteratorBase<_Sca
   idx1_ = 0;
   idx2_ = (matrix_ != nullptr) ? matrix_->getSize2() : 0;
   return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to beginning iterator.
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-DenseMatrixIteratorBase<_Scalar, _layout, _Matrix> DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getBegin(
-    _Matrix *matrix
-) noexcept {
-  return DenseMatrixIteratorBase(matrix).setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to end iterator.
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-DenseMatrixIteratorBase<_Scalar, _layout, _Matrix> DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getEnd(
-    _Matrix *matrix
-) noexcept {
-  return DenseMatrixIteratorBase(matrix).setEnd();
 }
 
 }  // namespace internal

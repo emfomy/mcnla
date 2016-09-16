@@ -41,7 +41,7 @@ template <typename _Scalar, class _Vector> class DenseVectorIdxIteratorBase;
 template <typename _Scalar, class _Vector>
 struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
   using ScalarType        = _Scalar;
-  using IdxTupleType      = IdxTuple<typename std::remove_const<_Scalar>::type, 1>;
+  using IdxTupleType      = IdxTuple<1>;
   using ContainerType     = _Vector;
   using BaseType          = DenseVectorIteratorBase<_Scalar, _Vector>;
   using ValueIteratorType = DenseVectorValueIteratorBase<_Scalar, _Vector>;
@@ -49,7 +49,7 @@ struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
+/// The dense vector value iterator traits.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _Vector  The vector type.
@@ -59,7 +59,7 @@ struct Traits<DenseVectorValueIteratorBase<_Scalar, _Vector>> : Traits<DenseVect
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
+/// The dense vector index iterator traits.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _Vector  The vector type.
@@ -85,7 +85,7 @@ class DenseVectorIteratorBase {
  private:
 
   using ScalarType    = _Scalar;
-  using IdxTupleType  = IdxTuple<typename std::remove_const<_Scalar>::type, 1>;
+  using IdxTupleType  = IdxTuple<1>;
   using ContainerType = _Vector;
 
  protected:

@@ -19,10 +19,9 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The index tuple.
 ///
-/// @tparam  _Scalar  The scalar type.
 /// @tparam  _ndim    The dimension.
 ///
-template <typename _Scalar, index_t _ndim>
+template <index_t _ndim>
 class IdxTuple : protected std::array<index_t, _ndim> {
 
  private:
@@ -38,6 +37,8 @@ class IdxTuple : protected std::array<index_t, _ndim> {
   IdxTuple( IdxTuple &&other ) noexcept;
   IdxTuple( BaseType &&other ) noexcept;
 
+ public:
+
   // Operators
   inline IdxTuple& operator=( const IdxTuple &other ) noexcept;
   inline IdxTuple& operator=( IdxTuple &&other ) noexcept;
@@ -47,6 +48,10 @@ class IdxTuple : protected std::array<index_t, _ndim> {
   inline bool operator>=( const IdxTuple &other ) const noexcept;
 
 };
+
+// Makes a index tuple
+template <typename... Args>
+inline IdxTuple<sizeof...(Args)> makeIdxTuple( const Args... args );
 
 }  // namespace isvd
 

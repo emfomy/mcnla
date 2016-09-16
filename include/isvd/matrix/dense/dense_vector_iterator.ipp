@@ -135,7 +135,7 @@ const typename DenseVectorIteratorBase<_Scalar, _Vector>::ScalarType&
 template <typename _Scalar, class _Vector>
 typename DenseVectorIteratorBase<_Scalar, _Vector>::IdxTupleType
     DenseVectorIteratorBase<_Scalar, _Vector>::getIdxs() const noexcept {
-  return IdxTupleType({idx_});
+  return makeIdxTuple(idx_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

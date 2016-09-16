@@ -53,8 +53,7 @@ void ColumnSamplingSketcher<_Matrix>::sketchImpl(
 ) noexcept {
   assert(parameters_.isInitialized());
   assert(matrix_a.getSizes() == std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
-  assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
-                                                                       parameters_.getNumSketchEach()));
+  assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(), parameters_.getNumSketchEach()));
 
   for ( index_t i = 0; i < parameters_.getNumSketchEach(); ++i ) {
     for ( index_t j = 0; j < parameters_.getDimSketch(); ++j ) {

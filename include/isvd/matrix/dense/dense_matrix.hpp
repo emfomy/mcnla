@@ -11,6 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <iostream>
 #include <utility>
+#include <isvd/matrix/base/container_base.hpp>
 #include <isvd/matrix/base/matrix_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
@@ -42,12 +43,18 @@ struct Traits<DenseMatrix<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
   using ScalarType        = _Scalar;
   using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
   using MatrixType        = DenseMatrix<ScalarType, _layout>;
   using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
   using TransposeType     = DenseMatrix<ScalarType, changeLayout(_layout)>;
   using RealTransposeType = DenseMatrix<RealScalarType, changeLayout(_layout)>;
+
+  using IteratorType         = DenseMatrixIterator<ScalarType, _layout>;
+  using ConstIteratorType    = DenseMatrixConstIterator<ScalarType, _layout>;
+  using IdxIteratorType      = DenseMatrixIdxIterator<ScalarType, _layout>;
+  using ConstIdxIteratorType = DenseMatrixConstIdxIterator<ScalarType, _layout>;
 };
 
 }  // namespace internal
@@ -60,7 +67,8 @@ struct Traits<DenseMatrix<_Scalar, _layout>> {
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseMatrix
-  : public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
+  : public internal::ContainerBase<DenseMatrix<_Scalar, _layout>>,
+    public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
     public internal::DenseBase<DenseMatrix<_Scalar, _layout>> {
 
  public:
@@ -136,17 +144,6 @@ class DenseMatrix
 
   // Gets internal position
   inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
-
-  // Gets iterator
-  inline IteratorType      begin() noexcept;
-  inline ConstIteratorType begin() const noexcept;
-  inline ConstIteratorType cbegin() const noexcept;
-  inline IteratorType      end() noexcept;
-  inline ConstIteratorType end() const noexcept;
-  inline ConstIteratorType cend() const noexcept;
-  inline IteratorType      getIterator( const index_t rowidx, const index_t colidx ) noexcept;
-  inline ConstIteratorType getIterator( const index_t rowidx, const index_t colidx ) const noexcept;
-  inline ConstIteratorType getConstIterator( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Transpose
   inline TransposeType transpose() noexcept;

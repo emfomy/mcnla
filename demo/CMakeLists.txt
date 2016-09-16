@@ -1,7 +1,7 @@
 # The CMake setting of 'demo/'
 
 # Set target
-add_executable(demo demo.cpp)
+add_executable(demo test.cpp)
 include_directories("${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
 include_directories(SYSTEM ${INCS})
 add_definitions(${DEFS})
