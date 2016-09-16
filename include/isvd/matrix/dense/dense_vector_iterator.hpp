@@ -53,8 +53,7 @@ struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<DenseIteratorB
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorValueIteratorBase<_Scalar, _Vector>> : Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
-};
+struct Traits<DenseVectorValueIteratorBase<_Scalar, _Vector>> : Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector index iterator traits.
@@ -63,8 +62,7 @@ struct Traits<DenseVectorValueIteratorBase<_Scalar, _Vector>> : Traits<DenseVect
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorIdxIteratorBase<_Scalar, _Vector>> : Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
-};
+struct Traits<DenseVectorIdxIteratorBase<_Scalar, _Vector>> : Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator.
@@ -83,6 +81,10 @@ class DenseVectorIteratorBase : public DenseIteratorBase<_Scalar, 1, _Vector> {
  public:
 
   using DenseIteratorBase<_Scalar, 1, _Vector>::DenseIteratorBase;
+
+  // Operators
+  template <typename __Scalar, class __Vector>
+  friend inline std::ostream& operator<<( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
 
   // Gets value
   inline       _Scalar& getValue() noexcept;

@@ -21,6 +21,16 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Print to stream.
+///
+template <typename __Scalar, class __Vector>
+std::ostream& operator<< ( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator ) {
+  const index_t witdh = log10(iterator.container_->getLength())+1;
+  return out << "(" << std::setw(witdh) << iterator.getIdx() << ")  "
+                    << std::setw(ios_width) << iterator.getValue();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
 /// @attention  Never call this when the iterator is at the end.

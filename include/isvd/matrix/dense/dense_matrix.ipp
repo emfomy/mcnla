@@ -192,10 +192,7 @@ DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( DenseMa
 template <typename __Scalar, Layout __layout>
 std::ostream& operator<< ( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix ) {
   for ( index_t i = 0; i < matrix.nrow_; ++i ) {
-    for ( index_t j = 0; j < matrix.ncol_; ++j ) {
-      out << std::setw(ios_width) << matrix(i, j);
-    }
-    out << std::endl;
+    out << matrix.getRow(i);
   }
   return out;
 }

@@ -223,6 +223,17 @@ DenseCube<_Scalar, _layout>& DenseCube<_Scalar, _layout>::operator=( DenseCube &
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Print to stream.
+///
+template <typename __Scalar, Layout __layout>
+std::ostream& operator<< ( std::ostream &out, const DenseCube<__Scalar, __layout> &cube ) {
+  for ( index_t i = 0; i < cube.npage_; ++i ) {
+    out << cube.getPage(i) << std::endl;
+  }
+  return out;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading dimension.
 ///
 template <typename _Scalar, Layout _layout>

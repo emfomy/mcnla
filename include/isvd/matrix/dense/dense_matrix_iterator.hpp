@@ -10,6 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/base/iterator_base.hpp>
+#include <isvd/matrix/dense/dense_iterator_base.hpp>
 #include <isvd/matrix/dense/dense_matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,11 +41,7 @@ template <typename _Scalar, Layout _layout, class _Matrix> class DenseMatrixIdxI
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
-  using IteratorTag       = std::forward_iterator_tag;
-  using ScalarType        = _Scalar;
-  using IdxTupleType      = IdxTuple<2>;
-  using ContainerType     = _Matrix;
+struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> : Traits<DenseIteratorBase<_Scalar, 2, _Matrix>> {
   using BaseType          = DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>;
   using ValueIteratorType = DenseMatrixValueIteratorBase<_Scalar, _layout, _Matrix>;
   using IdxIteratorType   = DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>;
@@ -59,8 +56,7 @@ struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 struct Traits<DenseMatrixValueIteratorBase<_Scalar, _layout, _Matrix>>
-  : Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
-};
+  : Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix index iterator traits.
@@ -71,8 +67,7 @@ struct Traits<DenseMatrixValueIteratorBase<_Scalar, _layout, _Matrix>>
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 struct Traits<DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>>
-  : Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
-};
+  : Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix iterator.
@@ -82,39 +77,21 @@ struct Traits<DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>>
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-class DenseMatrixIteratorBase {
+class DenseMatrixIteratorBase : public DenseIteratorBase<_Scalar, 2, _Matrix> {
 
  protected:
 
-  /// The row index.
-  index_t rowidx_;
-
-  /// The column index.
-  index_t colidx_;
-
-  /// The leading index.
-  index_t &idx1_ = isColMajor(_layout) ? rowidx_ : colidx_;
-
-  /// The second index.
-  index_t &idx2_ = isColMajor(_layout) ? colidx_ : rowidx_;
-
-  /// The matrix.
-  _Matrix *container_;
+  using DenseIteratorBase<_Scalar, 2, _Matrix>::itidx_;
+  using DenseIteratorBase<_Scalar, 2, _Matrix>::container_;
 
  public:
 
-  // Constructors
-  inline DenseMatrixIteratorBase() noexcept;
-  inline DenseMatrixIteratorBase( _Matrix *matrix ) noexcept;
-  inline DenseMatrixIteratorBase( _Matrix *matrix, const index_t rowidx, const index_t colidx ) noexcept;
-  inline DenseMatrixIteratorBase( const DenseMatrixIteratorBase &other ) noexcept;
+  using DenseIteratorBase<_Scalar, 2, _Matrix>::DenseIteratorBase;
 
   // Operators
-  inline DenseMatrixIteratorBase& operator=( const DenseMatrixIteratorBase &other ) noexcept;
-  inline bool operator==( const DenseMatrixIteratorBase &other ) const noexcept;
-  inline bool operator!=( const DenseMatrixIteratorBase &other ) const noexcept;
-  inline DenseMatrixIteratorBase& operator++() noexcept;
-  inline DenseMatrixIteratorBase  operator++( int ) noexcept;
+  template <typename __Scalar, Layout __layout, class __Matrix>
+  friend inline std::ostream& operator<<( std::ostream &out,
+                                          const DenseMatrixIteratorBase<__Scalar, __layout, __Matrix> &iterator );
 
   // Gets value
   inline       _Scalar& getValue() noexcept;
@@ -125,10 +102,6 @@ class DenseMatrixIteratorBase {
   inline       index_t getIdx1() const noexcept;
   inline       index_t getIdx2() const noexcept;
   inline       index_t getPos() const noexcept;
-
-  // Sets to begin/end
-  inline DenseMatrixIteratorBase& setBegin() noexcept;
-  inline DenseMatrixIteratorBase& setEnd() noexcept;
 
 };
 

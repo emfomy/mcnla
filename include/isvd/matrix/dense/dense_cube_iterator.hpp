@@ -10,6 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/base/iterator_base.hpp>
+#include <isvd/matrix/dense/dense_iterator_base.hpp>
 #include <isvd/matrix/dense/dense_cube.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,11 +41,7 @@ template <typename _Scalar, Layout _layout, class _Cube> class DenseCubeIdxItera
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
-  using IteratorTag       = std::forward_iterator_tag;
-  using ScalarType        = _Scalar;
-  using IdxTupleType      = IdxTuple<3>;
-  using ContainerType     = _Cube;
+struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> : Traits<DenseIteratorBase<_Scalar, 3, _Cube>> {
   using BaseType          = DenseCubeIteratorBase<_Scalar, _layout, _Cube>;
   using ValueIteratorType = DenseCubeValueIteratorBase<_Scalar, _layout, _Cube>;
   using IdxIteratorType   = DenseCubeIdxIteratorBase<_Scalar, _layout, _Cube>;
@@ -58,9 +55,7 @@ struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-struct Traits<DenseCubeValueIteratorBase<_Scalar, _layout, _Cube>>
-  : Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
-};
+struct Traits<DenseCubeValueIteratorBase<_Scalar, _layout, _Cube>> : Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix index iterator traits.
@@ -70,9 +65,7 @@ struct Traits<DenseCubeValueIteratorBase<_Scalar, _layout, _Cube>>
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-struct Traits<DenseCubeIdxIteratorBase<_Scalar, _layout, _Cube>>
-  : Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
-};
+struct Traits<DenseCubeIdxIteratorBase<_Scalar, _layout, _Cube>> : Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense cube iterator.
@@ -82,45 +75,21 @@ struct Traits<DenseCubeIdxIteratorBase<_Scalar, _layout, _Cube>>
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-class DenseCubeIteratorBase {
+class DenseCubeIteratorBase : public DenseIteratorBase<_Scalar, 3, _Cube> {
 
  protected:
 
-  /// The row index.
-  index_t rowidx_;
-
-  /// The column index.
-  index_t colidx_;
-
-  /// The page index.
-  index_t pageidx_;
-
-  /// The leading index.
-  index_t &idx1_ = isColMajor(_layout) ? rowidx_ : colidx_;
-
-  /// The second index.
-  index_t &idx2_ = isColMajor(_layout) ? colidx_ : rowidx_;
-
-  /// The third index.
-  index_t &idx3_ = pageidx_;
-
-  /// The cube.
-  _Cube *container_;
+  using DenseIteratorBase<_Scalar, 3, _Cube>::itidx_;
+  using DenseIteratorBase<_Scalar, 3, _Cube>::container_;
 
  public:
 
-  // Constructors
-  inline DenseCubeIteratorBase() noexcept;
-  inline DenseCubeIteratorBase( _Cube *cube ) noexcept;
-  inline DenseCubeIteratorBase( _Cube *cube, const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
-  inline DenseCubeIteratorBase( const DenseCubeIteratorBase &other ) noexcept;
+  using DenseIteratorBase<_Scalar, 3, _Cube>::DenseIteratorBase;
 
   // Operators
-  inline DenseCubeIteratorBase& operator=( const DenseCubeIteratorBase &other ) noexcept;
-  inline bool operator==( const DenseCubeIteratorBase &other ) const noexcept;
-  inline bool operator!=( const DenseCubeIteratorBase &other ) const noexcept;
-  inline DenseCubeIteratorBase& operator++() noexcept;
-  inline DenseCubeIteratorBase  operator++( int ) noexcept;
+  template <typename __Scalar, Layout __layout, class __Cube>
+  friend inline std::ostream& operator<<( std::ostream &out,
+                                          const DenseCubeIteratorBase<__Scalar, __layout, __Cube> &iterator );
 
   // Gets value
   inline       _Scalar& getValue() noexcept;
@@ -133,10 +102,6 @@ class DenseCubeIteratorBase {
   inline       index_t getIdx2() const noexcept;
   inline       index_t getIdx3() const noexcept;
   inline       index_t getPos() const noexcept;
-
-  // Sets to begin/end
-  inline DenseCubeIteratorBase& setBegin() noexcept;
-  inline DenseCubeIteratorBase& setEnd() noexcept;
 
 };
 

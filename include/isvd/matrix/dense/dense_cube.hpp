@@ -9,6 +9,7 @@
 #define ISVD_MATRIX_DENSE_DENSE_CUBE_HPP_
 
 #include <isvd/isvd.hpp>
+#include <iostream>
 #include <utility>
 #include <tuple>
 #include <isvd/matrix/base/container_base.hpp>
@@ -140,6 +141,8 @@ class DenseCube
   // Operators
   inline DenseCube& operator=( const DenseCube &other ) noexcept;
   inline DenseCube& operator=( DenseCube &&other ) noexcept;
+  template <typename __Scalar, Layout __layout>
+  friend inline std::ostream& operator<<( std::ostream &out, const DenseCube<__Scalar, __layout> &cube );
 
   // Gets information
   inline index_t getPitch1() const noexcept;

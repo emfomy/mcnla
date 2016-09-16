@@ -119,7 +119,7 @@ template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const CooVector<__Scalar> &vector ) {
   const index_t witdh = log10(vector.length_)+1;
   for ( auto it = vector.cbegin(); it != vector.cend(); ++it ) {
-    out << "(" << std::setw(witdh) << it.getIdx() << ")  " << std::setw(ios_width) << *it << std::endl;
+    out << "(" << std::setw(witdh) << it.getIdx() << ")  " << std::setw(ios_width) << it.getValue() << std::endl;
   }
   return out;
 }
@@ -149,7 +149,7 @@ _Scalar CooVector<_Scalar>::getElem(
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
   auto it = getIterator(idx);
-  return (it != end()) ? *it : 0;
+  return (it != end()) ? it.getValue() : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
