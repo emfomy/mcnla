@@ -335,7 +335,7 @@ DenseCube<_Scalar, changeLayout(_layout)> DenseCube<_Scalar, _layout>::transpose
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the cube.
+/// @brief  Resizes the cube.
 ///
 /// @attention  The new space is not initialized.
 ///

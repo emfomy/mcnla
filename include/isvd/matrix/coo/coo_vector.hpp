@@ -10,6 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <iostream>
+#include <isvd/matrix/base/container_base.hpp>
 #include <isvd/matrix/base/vector_base.hpp>
 #include <isvd/matrix/coo/coo_base.hpp>
 #include <isvd/matrix/coo/coo_vector_iterator.hpp>
@@ -38,8 +39,14 @@ struct Traits<CooVector<_Scalar>> {
   static constexpr index_t ndim = 1;
   using ScalarType     = _Scalar;
   using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+
   using VectorType     = CooVector<ScalarType>;
   using RealVectorType = CooVector<RealScalarType>;
+
+  using IteratorType         = CooVectorIterator<ScalarType>;
+  using ConstIteratorType    = CooVectorConstIterator<ScalarType>;
+  using IdxIteratorType      = CooVectorIdxIterator<ScalarType>;
+  using ConstIdxIteratorType = CooVectorConstIdxIterator<ScalarType>;
 };
 
 }  // namespace internal
@@ -51,7 +58,8 @@ struct Traits<CooVector<_Scalar>> {
 ///
 template <typename _Scalar>
 class CooVector
-  : public internal::VectorBase<CooVector<_Scalar>>,
+  : public internal::ContainerBase<CooVector<_Scalar>>,
+    public internal::VectorBase<CooVector<_Scalar>>,
     public internal::CooBase<CooVector<_Scalar>> {
 
  public:
@@ -65,6 +73,7 @@ class CooVector
   using RealVectorType    = CooVector<RealScalarType>;
 
   using DataType          = CooData<ScalarType, 1>;
+
   using IteratorType      = CooVectorIterator<ScalarType>;
   using ConstIteratorType = CooVectorConstIterator<ScalarType>;
 
@@ -87,7 +96,7 @@ class CooVector
   inline CooVector( const index_t length ) noexcept;
   inline CooVector( const index_t length, const index_t capability, const index_t offset = 0 ) noexcept;
   inline CooVector( const index_t length, const index_t nnz,
-             const ValuePtrType &value, const IdxPtrType &idx, const index_t offset = 0 ) noexcept;
+                    const ValuePtrType &value, const IdxPtrType &idx, const index_t offset = 0 ) noexcept;
   inline CooVector( const index_t length, const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;
   inline CooVector( const CooVector &other ) noexcept;
   inline CooVector( CooVector &&other ) noexcept;
@@ -110,16 +119,13 @@ class CooVector
   inline index_t getPos( const index_t idx ) const noexcept;
   inline void getPosNnz( const IdxRange range, index_t &pos, index_t &nnz ) const noexcept;
 
-  // Gets iterator
-  inline IteratorType      begin() noexcept;
-  inline ConstIteratorType begin() const noexcept;
-  inline ConstIteratorType cbegin() const noexcept;
-  inline IteratorType      end() noexcept;
-  inline ConstIteratorType end() const noexcept;
-  inline ConstIteratorType cend() const noexcept;
-  inline IteratorType      getIterator( const index_t idx ) noexcept;
-  inline ConstIteratorType getIterator( const index_t idx ) const noexcept;
-  inline ConstIteratorType getConstIterator( const index_t idx ) const noexcept;
+  // Finds the iterator
+  inline IteratorType      find( const index_t idx ) noexcept;
+  inline ConstIteratorType find( const index_t idx ) const noexcept;
+
+  // Sorts
+  inline void sort() noexcept;
+  inline bool isSorted() const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;

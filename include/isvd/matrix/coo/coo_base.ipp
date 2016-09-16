@@ -44,22 +44,6 @@ CooBase<_Derived>::CooBase(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given size information.
-///
-template <class _Derived>
-CooBase<_Derived>::CooBase(
-    const index_t nnz,
-    const index_t capability,
-    const index_t offset
-) noexcept
-  : SparseBaseType(nnz),
-    offset_(offset),
-    data_(capability) {
-  assert(offset_ >= 0);
-  assert(capability >= nnz_ + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <class _Derived>

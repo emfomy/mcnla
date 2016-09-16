@@ -67,17 +67,18 @@ class CooData {
   inline        index_t getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;
+  template <index_t dim> inline       index_t* getIdx() noexcept;
   template <index_t dim> inline const index_t* getIdx() const noexcept;
 
 };
 
 template <typename _Scalar, index_t _ndim>
 const typename CooData<_Scalar, _ndim>::ValuePtrType
-    CooData<_Scalar, _ndim>::kNullValue = ValuePtrType(new std::valarray<_Scalar>());
+    CooData<_Scalar, _ndim>::kNullValue = std::make_shared<std::valarray<_Scalar>>();
 
 template <typename _Scalar, index_t _ndim>
 const typename CooData<_Scalar, _ndim>::IdxPtrType
-    CooData<_Scalar, _ndim>::kNullIdx   = IdxPtrType(new std::valarray<index_t>());
+    CooData<_Scalar, _ndim>::kNullIdx   = std::make_shared<std::valarray<index_t>>();
 
 }  // namespace isvd
 

@@ -33,7 +33,7 @@ CooData<_Scalar, _ndim>::CooData(
   : value_(new std::valarray<_Scalar>(capability)) {
   assert(capability > 0);
   for ( index_t i = 0; i < _ndim; ++i ) {
-    idx_[i] = new std::valarray<index_t>(capability);
+    idx_[i] = std::make_shared<std::valarray<index_t>>(capability);
   }
 }
 
@@ -137,6 +137,15 @@ const _Scalar* CooData<_Scalar, _ndim>::getValue() const noexcept { return &((*v
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value array.
+///
+template <typename _Scalar, index_t _ndim> template <index_t dim>
+index_t* CooData<_Scalar, _ndim>::getIdx() noexcept {
+  static_assert(dim >= 0 && dim < _ndim, "Invalid dimension!");
+  return (idx_[dim] != nullptr) ? &((*idx_[dim])[0]) : nullptr;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdx
 ///
 template <typename _Scalar, index_t _ndim> template <index_t dim>
 const index_t* CooData<_Scalar, _ndim>::getIdx() const noexcept {

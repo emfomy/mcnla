@@ -33,9 +33,10 @@ IteratorBase<_Container>::IteratorBase() noexcept
 ///
 template <class _Container>
 IteratorBase<_Container>::IteratorBase(
-    _Container *container
+    _Container *container,
+    const index_t itidx
 ) noexcept
-  : itidx_(0),
+  : itidx_(itidx),
     container_(container) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -62,7 +62,7 @@ class DenseData {
 };
 
 template <typename _Scalar>
-const typename DenseData<_Scalar>::ValuePtrType DenseData<_Scalar>::kNullValue = ValuePtrType(new std::valarray<_Scalar>());
+const typename DenseData<_Scalar>::ValuePtrType DenseData<_Scalar>::kNullValue = std::make_shared<std::valarray<_Scalar>>();
 
 }  // namespace isvd
 

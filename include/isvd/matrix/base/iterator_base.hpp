@@ -55,7 +55,7 @@ class IteratorBase {
 
   // Constructors
   inline IteratorBase() noexcept;
-  inline IteratorBase( _Container *matrix ) noexcept;
+  inline IteratorBase( _Container *container, const index_t itidx_ = 0 ) noexcept;
   inline IteratorBase( const IteratorBase &other ) noexcept;
 
   // Assignment operators

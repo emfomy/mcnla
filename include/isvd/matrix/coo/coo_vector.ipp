@@ -11,6 +11,7 @@
 #include <isvd/matrix/coo/coo_vector.hpp>
 #include <cmath>
 #include <iomanip>
+#include <algorithm>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -148,8 +149,8 @@ _Scalar CooVector<_Scalar>::getElem(
     const index_t idx
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
-  auto it = getIterator(idx);
-  return (it != end()) ? it.getValue() : 0;
+  auto it = find(idx);
+  return (it != this->iend()) ? it.getValue() : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,12 +170,8 @@ template <typename _Scalar>
 index_t CooVector<_Scalar>::getPos(
     const index_t idx
 ) const noexcept {
-  for ( auto it = begin() ; it != end(); ++it ) {
-    if ( it.getIdx() == idx ) {
-      return it.getPos();
-    }
-  }
-  return -1;
+  auto it = find(idx);
+  return (it != this->iend()) ? it.getPos() : -1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,120 +183,41 @@ void CooVector<_Scalar>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
-  auto it = begin();
-  for ( ; it != end(); ++it ) {
-    if ( it.getIdx() >= range.begin ) {
-      break;
-    }
-  }
-  pos = it.getPos();
-
-  for ( ; it != end(); ++it ) {
-    if ( it.getIdx() >= range.end ) {
-      break;
-    }
-  }
-  nnz = it.getPos() - pos;
+  assert(isSorted());
+  auto it0 = std::lower_bound(this->cibegin(), this->ciend(), isvd::makeIdxTuple(range.begin));
+  auto it1 = std::lower_bound(it0, this->ciend(), isvd::makeIdxTuple(range.end));
+  pos = it0.getPos();
+  nnz = it1.getPos() - pos;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to beginning.
+/// @brief  Finds the iterator to element
 ///
 template <typename _Scalar>
-typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::begin() noexcept {
-  return IteratorType::getBegin(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  begin
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::begin() const noexcept {
-  return ConstIteratorType::getBegin(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  begin
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::cbegin() const noexcept {
-  return ConstIteratorType::getBegin(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator to end.
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::end() noexcept {
-  return IteratorType::getEnd(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  end
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::end() const noexcept {
-  return ConstIteratorType::getEnd(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  end
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::cend() const noexcept {
-  return ConstIteratorType::getEnd(this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator of given index.
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::getIterator(
+typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::find(
     const index_t idx
 ) noexcept {
-  auto it = begin();
-  for ( ; it != end(); ++it ) {
-    if ( it.getIdx() == idx ) {
-      break;
-    }
-  }
-  return it;
+  assert(idx >= 0 && idx < length_);
+  assert(isSorted());
+  auto it = std::lower_bound(this->ibegin(), this->iend(), makeIdxTuple(idx));
+  return (it.getIdx() == idx) ? it.toValueIterator() : this->end();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIterator
+/// @copydoc  find
 ///
 template <typename _Scalar>
-typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::getIterator(
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::find(
     const index_t idx
 ) const noexcept {
-  auto it = begin();
-  for ( ; it != end(); ++it ) {
-    if ( it.getIdx() == idx ) {
-      break;
-    }
-  }
-  return it;
+  assert(idx >= 0 && idx < length_);
+  assert(isSorted());
+  auto it = std::lower_bound(this->ibegin(), this->iend(), makeIdxTuple(idx));
+  return (it.getIdx() == idx) ? it.toValueIterator() : this->end();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIterator
-///
-template <typename _Scalar>
-typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::getConstIterator(
-    const index_t idx
-) const noexcept {
-  auto it = begin();
-  for ( ; it != end(); ++it ) {
-    if ( it.getIdx() == idx ) {
-      break;
-    }
-  }
-  return it;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the vector.
+/// @brief  Resizes the vector.
 ///
 /// @attention  The new space is not initialized.
 ///
@@ -309,6 +227,22 @@ void CooVector<_Scalar>::resize(
 ) noexcept {
   assert(length > 0 && length >= nnz_);
   length_ = length;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sorts the vector.
+///
+template <typename _Scalar>
+void CooVector<_Scalar>::sort() noexcept {
+  std::sort(this->ibegin(), this->iend());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Check if the vector is sorted.
+///
+template <typename _Scalar>
+bool CooVector<_Scalar>::isSorted() const noexcept {
+  return std::is_sorted(this->ibegin(), this->iend());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

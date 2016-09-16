@@ -21,120 +21,13 @@ namespace isvd {
 namespace internal {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor.
+/// @brief  Print to stream.
 ///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>::CooVectorIteratorBase() noexcept
-  : itidx_(0),
-    container_(nullptr) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given vector.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>::CooVectorIteratorBase(
-    _Vector *vector,
-    const index_t pos
-) noexcept
-  : itidx_(pos),
-    container_(vector) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy constructor.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>::CooVectorIteratorBase(
-    const CooVectorIteratorBase &other
-) noexcept
-  : itidx_(other.itidx_),
-    container_(other.container_) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy assignment operator.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>& CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator=(
-    const CooVectorIteratorBase &other
-) noexcept {
-  itidx_ = other.itidx_;
-  container_ = other.container_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Equal-to operator.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-bool CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator==(
-    const CooVectorIteratorBase &other
-) const noexcept {
-  return (container_ == other.container_) && (itidx_ == other.itidx_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Not-equal-to operator.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-bool CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator!=(
-    const CooVectorIteratorBase &other
-) const noexcept {
-  return !(*this == other);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Prefix increment operator.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>& CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator++() noexcept {
-  assert(container_ != nullptr);
-
-  const auto nnz = container_->getNnz();
-  if ( ++itidx_ >= nnz ) {
-    itidx_ = nnz;
-  }
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Postfix increment operator.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector> CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator++( int ) noexcept {
-  auto retval(*this);
-  ++(*this);
-  return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, typename _Index, class _Vector>
-_Scalar& CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator*() noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, typename _Index, class _Vector>
-const _Scalar& CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator*() const noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, typename _Index, class _Vector>
-_Scalar* CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator->() noexcept {
-  return &getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, typename _Index, class _Vector>
-const _Scalar* CooVectorIteratorBase<_Scalar, _Index, _Vector>::operator->() const noexcept {
-  return &getValue();
+template <typename __Scalar, typename __Index, class __Vector>
+std::ostream& operator<< ( std::ostream &out, const CooVectorIteratorBase<__Scalar, __Index, __Vector> &iterator ) {
+  const index_t witdh = log10(iterator.container_->getLength())+1;
+  return out << "(" << std::setw(witdh) << iterator.getIdx() << ")  "
+                    << std::setw(ios_width) << iterator.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,6 +48,14 @@ _Scalar& CooVectorIteratorBase<_Scalar, _Index, _Vector>::getValue() noexcept {
 template <typename _Scalar, typename _Index, class _Vector>
 const _Scalar& CooVectorIteratorBase<_Scalar, _Index, _Vector>::getValue() const noexcept {
   return container_->getValue()[itidx_];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index tuple.
+///
+template <typename _Scalar, typename _Index, class _Vector>
+IdxTuple<1> CooVectorIteratorBase<_Scalar, _Index, _Vector>::getIdxs() const noexcept {
+  return makeIdxTuple(getIdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,42 +80,6 @@ const _Index& CooVectorIteratorBase<_Scalar, _Index, _Vector>::getIdx() const no
 template <typename _Scalar, typename _Index, class _Vector>
 index_t CooVectorIteratorBase<_Scalar, _Index, _Vector>::getPos() const noexcept {
   return itidx_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the iterator to beginning.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>& CooVectorIteratorBase<_Scalar, _Index, _Vector>::setBegin() noexcept {
-  itidx_ = 0;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the iterator to end.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>& CooVectorIteratorBase<_Scalar, _Index, _Vector>::setEnd() noexcept {
-  itidx_ = (container_ != nullptr) ? container_->getNnz() : 0;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to beginning iterator.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>
-  CooVectorIteratorBase<_Scalar, _Index, _Vector>::getBegin( _Vector *vector ) noexcept {
-  return CooVectorIteratorBase(vector).setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to end iterator.
-///
-template <typename _Scalar, typename _Index, class _Vector>
-CooVectorIteratorBase<_Scalar, _Index, _Vector>
-  CooVectorIteratorBase<_Scalar, _Index, _Vector>::getEnd( _Vector *vector ) noexcept {
-  return CooVectorIteratorBase(vector).setEnd();
 }
 
 }  // namespace internal

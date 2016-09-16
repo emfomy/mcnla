@@ -277,7 +277,7 @@ DenseMatrix<_Scalar, changeLayout(_layout)> DenseMatrix<_Scalar, _layout>::trans
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the matrix.
+/// @brief  Resizes the matrix.
 ///
 /// @attention  The new space is not initialized.
 ///

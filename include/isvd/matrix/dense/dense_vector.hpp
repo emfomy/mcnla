@@ -63,19 +63,22 @@ class DenseVector
 
  public:
 
-  using ScalarType           = _Scalar;
-  using RealScalarType       = typename internal::ScalarTraits<_Scalar>::RealType;
-  using ValuePtrType         = std::shared_ptr<std::valarray<ScalarType>>;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
-  using VectorType           = DenseVector<ScalarType>;
-  using RealVectorType       = DenseVector<RealScalarType>;
+  using VectorType        = DenseVector<ScalarType>;
+  using RealVectorType    = DenseVector<RealScalarType>;
 
-  using DataType             = DenseData<ScalarType>;
+  using DataType          = DenseData<ScalarType>;
+
+  using IteratorType      = DenseVectorIterator<ScalarType>;
+  using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
 
  private:
 
-  using VectorBaseType       = internal::VectorBase<DenseVector<_Scalar>>;
-  using DenseBaseType        = internal::DenseBase<DenseVector<_Scalar>>;
+  using VectorBaseType    = internal::VectorBase<DenseVector<_Scalar>>;
+  using DenseBaseType     = internal::DenseBase<DenseVector<_Scalar>>;
 
  protected:
 

@@ -71,7 +71,7 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::computeValues( _TypeA &&a, _TypeS &&s 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resize the driver
+/// @brief  Resizes the driver
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::resize(

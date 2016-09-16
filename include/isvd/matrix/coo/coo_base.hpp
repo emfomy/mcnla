@@ -56,8 +56,8 @@ class CooBase : public SparseBase<_Derived> {
   // Constructors
   inline CooBase() noexcept;
   inline CooBase( const index_t capability, const index_t offset = 0 ) noexcept;
-  inline CooBase( const index_t nnz, const index_t capability, const index_t offset = 0 ) noexcept;
-  inline CooBase( const index_t nnz, const ValuePtrType &value, std::array<IdxPtrType, ndim> idx, const index_t offset = 0 ) noexcept;
+  inline CooBase( const index_t nnz, const ValuePtrType &value,
+                  std::array<IdxPtrType, ndim> idx, const index_t offset = 0 ) noexcept;
   inline CooBase( const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;
   inline CooBase( const CooBase &other ) noexcept;
   inline CooBase( CooBase &&other ) noexcept;

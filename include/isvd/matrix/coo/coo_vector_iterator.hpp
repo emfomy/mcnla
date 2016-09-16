@@ -9,7 +9,9 @@
 #define ISVD_MATRIX_COO_COO_VECTOR_ITERATOR_HPP_
 
 #include <isvd/isvd.hpp>
-#include <iterator>
+#include <isvd/matrix/base/iterator_base.hpp>
+#include <isvd/matrix/base/value_iterator_base.hpp>
+#include <isvd/matrix/base/idx_iterator_base.hpp>
 #include <isvd/matrix/coo/coo_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,64 +28,133 @@ template <typename _Scalar> class CooVector;
 //
 namespace internal {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar, typename _Index, class _Vector> class CooVectorIteratorBase;
+template <typename _Scalar, typename _Index, class _Vector> class CooVectorValueIteratorBase;
+template <typename _Scalar, typename _Index, class _Vector> class CooVectorIdxIteratorBase;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The coordinate list (COO) vector iterator traits.
+///
+/// @tparam  _Scalar  The scalar type.
+  /// @tparam  _Index   The index type.
+/// @tparam  _Vector  The vector type.
+///
+template <typename _Scalar, typename _Index, class _Vector>
+struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> : Traits<IteratorBase<_Vector>> {
+  using ScalarType        = _Scalar;
+  using IdxTupleType      = IdxTuple<1>;
+  using BaseType          = CooVectorIteratorBase<_Scalar, _Index, _Vector>;
+  using ValueIteratorType = CooVectorValueIteratorBase<_Scalar, _Index, _Vector>;
+  using IdxIteratorType   = CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The coordinate list (COO) vector value iterator traits.
+///
+/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Index   The index type.
+/// @tparam  _Vector  The vector type.
+///
+template <typename _Scalar, typename _Index, class _Vector>
+struct Traits<CooVectorValueIteratorBase<_Scalar, _Index, _Vector>>
+  : Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The coordinate list (COO) vector index iterator traits.
+///
+/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Index   The index type.
+/// @tparam  _Vector  The vector type.
+///
+template <typename _Scalar, typename _Index, class _Vector>
+struct Traits<CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>>
+  : Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
+/// @tparam  _Index   The index type.
+/// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, typename _Index, class _Vector>
-class CooVectorIteratorBase : public std::iterator<std::forward_iterator_tag, _Scalar> {
+class CooVectorIteratorBase : public IteratorBase<_Vector> {
 
  protected:
 
-  /// The iterator index.
-  index_t itidx_;
-
-  /// The vector.
-  _Vector *container_;
+  using IteratorBase<_Vector>::itidx_;
+  using IteratorBase<_Vector>::container_;
 
  public:
 
-  // Constructors
-  inline CooVectorIteratorBase() noexcept;
-  inline CooVectorIteratorBase( _Vector *vector, const index_t pos = 0 ) noexcept;
-  inline CooVectorIteratorBase( const CooVectorIteratorBase &other ) noexcept;
+  using IteratorBase<_Vector>::IteratorBase;
 
   // Operators
-  inline CooVectorIteratorBase& operator=( const CooVectorIteratorBase &other ) noexcept;
-  inline bool operator==( const CooVectorIteratorBase &other ) const noexcept;
-  inline bool operator!=( const CooVectorIteratorBase &other ) const noexcept;
-  inline CooVectorIteratorBase& operator++() noexcept;
-  inline CooVectorIteratorBase  operator++( int ) noexcept;
-  inline       _Scalar& operator*() noexcept;
-  inline const _Scalar& operator*() const noexcept;
-  inline       _Scalar* operator->() noexcept;
-  inline const _Scalar* operator->() const noexcept;
+  template <typename __Scalar, typename __Matrix, class __Vector>
+  friend inline std::ostream& operator<<( std::ostream &out,
+                                          const CooVectorIteratorBase<__Scalar, __Matrix, __Vector> &iterator );
 
   // Gets value
-  inline       _Scalar& getValue() noexcept;
-  inline const _Scalar& getValue() const noexcept;
-  inline       _Index& getIdx() noexcept;
-  inline const _Index& getIdx() const noexcept;
-  inline       index_t getPos() const noexcept;
+  inline       _Scalar&    getValue() noexcept;
+  inline const _Scalar&    getValue() const noexcept;
+  inline       IdxTuple<1> getIdxs() const noexcept;
+  inline       _Index&     getIdx() noexcept;
+  inline const _Index&     getIdx() const noexcept;
+  inline       index_t     getPos() const noexcept;
 
-  // Sets to begin/end
-  inline CooVectorIteratorBase& setBegin() noexcept;
-  inline CooVectorIteratorBase& setEnd() noexcept;
+};
 
-  // Gets the begin/end iterator
-  static inline CooVectorIteratorBase getBegin( _Vector *vector ) noexcept;
-  static inline CooVectorIteratorBase getEnd( _Vector *vector ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The coordinate list (COO) vector value iterator.
+///
+/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Index   The index type.
+/// @tparam  _Vector  The vector type.
+///
+template <typename _Scalar, typename _Index, class _Vector>
+class CooVectorValueIteratorBase
+  : public CooVectorIteratorBase<_Scalar, _Index, _Vector>,
+    public ValueIteratorBase<CooVectorValueIteratorBase<_Scalar, _Index, _Vector>> {
+
+ public:
+
+  using CooVectorIteratorBase<_Scalar, _Index, _Vector>::CooVectorIteratorBase;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The coordinate list (COO) vector value iterator.
+///
+/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Index   The index type.
+/// @tparam  _Vector  The vector type.
+///
+template <typename _Scalar, typename _Index, class _Vector>
+class CooVectorIdxIteratorBase
+  : public CooVectorIteratorBase<_Scalar, _Index, _Vector>,
+    public IdxIteratorBase<CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>> {
+
+ public:
+
+  using CooVectorIteratorBase<_Scalar, _Index, _Vector>::CooVectorIteratorBase;
 
 };
 
 }  // namespace internal
 
 template <typename _Scalar>
-using CooVectorIterator = internal::CooVectorIteratorBase<_Scalar, index_t, CooVector<_Scalar>>;
+using CooVectorIterator = internal::CooVectorValueIteratorBase<_Scalar, index_t, CooVector<_Scalar>>;
 
 template <typename _Scalar>
-using CooVectorConstIterator = internal::CooVectorIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
+using CooVectorConstIterator = internal::CooVectorValueIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
+
+template <typename _Scalar>
+using CooVectorIdxIterator = internal::CooVectorIdxIteratorBase<_Scalar, index_t, CooVector<_Scalar>>;
+
+template <typename _Scalar>
+using CooVectorConstIdxIterator = internal::CooVectorIdxIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
 
 }  // namespace isvd
 
