@@ -41,6 +41,7 @@ template <typename _Scalar, Layout _layout, class _Matrix> class DenseMatrixIdxI
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
+  using IteratorTag       = std::forward_iterator_tag;
   using ScalarType        = _Scalar;
   using IdxTupleType      = IdxTuple<2>;
   using ContainerType     = _Matrix;
@@ -82,11 +83,6 @@ struct Traits<DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>>
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 class DenseMatrixIteratorBase {
-
- public:
-
-  using ValueIteratorType = DenseMatrixValueIteratorBase<_Scalar, _layout, _Matrix>;
-  using IdxIteratorType   = DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>;
 
  protected:
 

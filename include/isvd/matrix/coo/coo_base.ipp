@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/matrix/coo/coo_base.ipp
-/// @brief   The implementation of COO interface.
+/// @brief   The implementation of COO container interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///

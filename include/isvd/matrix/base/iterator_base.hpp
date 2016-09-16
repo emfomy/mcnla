@@ -32,7 +32,7 @@ namespace internal {
 template <class _Derived>
 class ValueIteratorBase
   : protected CrtpBase<_Derived, ValueIteratorBase<_Derived>>,
-    public std::iterator<std::forward_iterator_tag, typename Traits<_Derived>::ScalarType> {
+    public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::ScalarType> {
 
  private:
 
@@ -72,7 +72,7 @@ class ValueIteratorBase
 template <class _Derived>
 class IdxIteratorBase
   : protected CrtpBase<_Derived, IdxIteratorBase<_Derived>>,
-    public std::iterator<std::forward_iterator_tag, typename Traits<_Derived>::IdxTupleType> {
+    public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::IdxTupleType> {
 
  private:
 

@@ -36,8 +36,8 @@ class CooVectorIteratorBase : public std::iterator<std::forward_iterator_tag, _S
 
  protected:
 
-  /// The internal position.
-  index_t pos_;
+  /// The iterator index.
+  index_t itidx_;
 
   /// The vector.
   _Vector *container_;

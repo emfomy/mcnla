@@ -10,6 +10,7 @@
 
 #include <isvd/isvd.hpp>
 #include <isvd/matrix/base/iterator_base.hpp>
+#include <isvd/matrix/dense/dense_iterator_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,10 +40,7 @@ template <typename _Scalar, class _Vector> class DenseVectorIdxIteratorBase;
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
-  using ScalarType        = _Scalar;
-  using IdxTupleType      = IdxTuple<1>;
-  using ContainerType     = _Vector;
+struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<DenseIteratorBase<_Scalar, 1, _Vector>> {
   using BaseType          = DenseVectorIteratorBase<_Scalar, _Vector>;
   using ValueIteratorType = DenseVectorValueIteratorBase<_Scalar, _Vector>;
   using IdxIteratorType   = DenseVectorIdxIteratorBase<_Scalar, _Vector>;
@@ -75,34 +73,16 @@ struct Traits<DenseVectorIdxIteratorBase<_Scalar, _Vector>> : Traits<DenseVector
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-class DenseVectorIteratorBase {
-
- public:
-
-  using ValueIteratorType = DenseVectorValueIteratorBase<_Scalar, _Vector>;
-  using IdxIteratorType   = DenseVectorIdxIteratorBase<_Scalar, _Vector>;
+class DenseVectorIteratorBase : public DenseIteratorBase<_Scalar, 1, _Vector> {
 
  protected:
 
-  /// The index.
-  index_t idx_;
-
-  /// The vector.
-  _Vector *container_;
+  using DenseIteratorBase<_Scalar, 1, _Vector>::itidx_;
+  using DenseIteratorBase<_Scalar, 1, _Vector>::container_;
 
  public:
 
-  // Constructors
-  inline DenseVectorIteratorBase() noexcept;
-  inline DenseVectorIteratorBase( _Vector *vector, const index_t idx = 0 ) noexcept;
-  inline DenseVectorIteratorBase( const DenseVectorIteratorBase &other ) noexcept;
-
-  // Operators
-  inline DenseVectorIteratorBase& operator=( const DenseVectorIteratorBase &other ) noexcept;
-  inline bool operator==( const DenseVectorIteratorBase &other ) const noexcept;
-  inline bool operator!=( const DenseVectorIteratorBase &other ) const noexcept;
-  inline DenseVectorIteratorBase& operator++() noexcept;
-  inline DenseVectorIteratorBase  operator++( int ) noexcept;
+  using DenseIteratorBase<_Scalar, 1, _Vector>::DenseIteratorBase;
 
   // Gets value
   inline       _Scalar& getValue() noexcept;
@@ -110,10 +90,6 @@ class DenseVectorIteratorBase {
   inline       IdxTuple<1> getIdxs() const noexcept;
   inline       index_t getIdx() const noexcept;
   inline       index_t getPos() const noexcept;
-
-  // Sets to begin/end
-  inline DenseVectorIteratorBase& setBegin() noexcept;
-  inline DenseVectorIteratorBase& setEnd() noexcept;
 
 };
 

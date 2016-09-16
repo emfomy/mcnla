@@ -19,7 +19,7 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The index tuple.
 ///
-/// @tparam  _ndim    The dimension.
+/// @tparam  _ndim  The dimension.
 ///
 template <index_t _ndim>
 class IdxTuple : protected std::array<index_t, _ndim> {

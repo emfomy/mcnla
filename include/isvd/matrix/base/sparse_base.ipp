@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/matrix/base/sparse_base.ipp
-/// @brief   The implementation of sparse interface.
+/// @brief   The implementation of sparse container interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///

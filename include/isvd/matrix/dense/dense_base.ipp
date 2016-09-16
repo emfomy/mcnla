@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/isvd/matrix/dense/dense_base.ipp
-/// @brief   The implementation of dense interface.
+/// @brief   The implementation of dense container interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///

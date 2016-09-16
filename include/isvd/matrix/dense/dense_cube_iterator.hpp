@@ -41,6 +41,7 @@ template <typename _Scalar, Layout _layout, class _Cube> class DenseCubeIdxItera
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
+  using IteratorTag       = std::forward_iterator_tag;
   using ScalarType        = _Scalar;
   using IdxTupleType      = IdxTuple<3>;
   using ContainerType     = _Cube;
@@ -82,11 +83,6 @@ struct Traits<DenseCubeIdxIteratorBase<_Scalar, _layout, _Cube>>
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 class DenseCubeIteratorBase {
-
- private:
-
-  using ScalarType    = _Scalar;
-  using IdxTupleType  = IdxTuple<3>;
 
  protected:
 
