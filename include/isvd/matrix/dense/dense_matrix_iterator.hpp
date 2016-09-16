@@ -88,12 +88,6 @@ class DenseMatrixIteratorBase {
   using ValueIteratorType = DenseMatrixValueIteratorBase<_Scalar, _layout, _Matrix>;
   using IdxIteratorType   = DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>;
 
- private:
-
-  using ScalarType    = _Scalar;
-  using IdxTupleType  = IdxTuple<2>;
-  using ContainerType = _Matrix;
-
  protected:
 
   /// The row index.
@@ -109,7 +103,7 @@ class DenseMatrixIteratorBase {
   index_t &idx2_ = isColMajor(_layout) ? colidx_ : rowidx_;
 
   /// The matrix.
-  _Matrix *matrix_;
+  _Matrix *container_;
 
  public:
 
@@ -129,7 +123,7 @@ class DenseMatrixIteratorBase {
   // Gets value
   inline       _Scalar& getValue() noexcept;
   inline const _Scalar& getValue() const noexcept;
-  inline       IdxTupleType getIdxs() const noexcept;
+  inline       IdxTuple<2> getIdxs() const noexcept;
   inline       index_t getRowIdx() const noexcept;
   inline       index_t getColIdx() const noexcept;
   inline       index_t getIdx1() const noexcept;

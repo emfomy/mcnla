@@ -13,8 +13,8 @@
 ///
 int main( int argc, char **argv ) {
 
-  isvd::DenseMatrix<double> mat(3, 5);
-  auto it = std::lower_bound(mat.cibegin().toValueIterator().toIdxIterator(), mat.cend().toIdxIterator(), isvd::makeIdxTuple(2, 4));
-  std::cout << it.getRowIdx() << it.getColIdx() << std::endl;
+  isvd::DenseCube<double> mat(3, 5, 7);
+  auto it = std::lower_bound(mat.cibegin(), mat.ciend(), isvd::makeIdxTuple(1, 3, 5));
+  std::cout << it.getRowIdx() << it.getColIdx() << it.getPageIdx() << std::endl;
 
 }

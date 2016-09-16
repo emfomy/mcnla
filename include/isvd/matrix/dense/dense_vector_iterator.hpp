@@ -82,25 +82,19 @@ class DenseVectorIteratorBase {
   using ValueIteratorType = DenseVectorValueIteratorBase<_Scalar, _Vector>;
   using IdxIteratorType   = DenseVectorIdxIteratorBase<_Scalar, _Vector>;
 
- private:
-
-  using ScalarType    = _Scalar;
-  using IdxTupleType  = IdxTuple<1>;
-  using ContainerType = _Vector;
-
  protected:
 
   /// The index.
   index_t idx_;
 
   /// The vector.
-  _Vector *vector_;
+  _Vector *container_;
 
  public:
 
   // Constructors
   inline DenseVectorIteratorBase() noexcept;
-  inline DenseVectorIteratorBase( ContainerType *vector, const index_t idx = 0 ) noexcept;
+  inline DenseVectorIteratorBase( _Vector *vector, const index_t idx = 0 ) noexcept;
   inline DenseVectorIteratorBase( const DenseVectorIteratorBase &other ) noexcept;
 
   // Operators
@@ -111,9 +105,9 @@ class DenseVectorIteratorBase {
   inline DenseVectorIteratorBase  operator++( int ) noexcept;
 
   // Gets value
-  inline       ScalarType& getValue() noexcept;
-  inline const ScalarType& getValue() const noexcept;
-  inline       IdxTupleType getIdxs() const noexcept;
+  inline       _Scalar& getValue() noexcept;
+  inline const _Scalar& getValue() const noexcept;
+  inline       IdxTuple<1> getIdxs() const noexcept;
   inline       index_t getIdx() const noexcept;
   inline       index_t getPos() const noexcept;
 

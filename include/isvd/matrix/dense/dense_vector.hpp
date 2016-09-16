@@ -72,11 +72,6 @@ class DenseVector
 
   using DataType             = DenseData<ScalarType>;
 
-  using IteratorType         = DenseVectorIterator<ScalarType>;
-  using ConstIteratorType    = DenseVectorConstIterator<ScalarType>;
-  using IdxIteratorType      = DenseVectorIdxIterator<ScalarType>;
-  using ConstIdxIteratorType = DenseVectorConstIdxIterator<ScalarType>;
-
  private:
 
   using VectorBaseType       = internal::VectorBase<DenseVector<_Scalar>>;

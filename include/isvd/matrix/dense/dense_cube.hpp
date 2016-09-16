@@ -11,6 +11,7 @@
 #include <isvd/isvd.hpp>
 #include <utility>
 #include <tuple>
+#include <isvd/matrix/base/container_base.hpp>
 #include <isvd/matrix/base/cube_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
@@ -44,6 +45,7 @@ struct Traits<DenseCube<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
   using ScalarType        = _Scalar;
   using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
   using MatrixType        = DenseMatrix<ScalarType, _layout>;
@@ -52,6 +54,11 @@ struct Traits<DenseCube<_Scalar, _layout>> {
   using RealCubeType      = DenseCube<RealScalarType, _layout>;
   using TransposeType     = DenseCube<ScalarType, changeLayout(_layout)>;
   using RealTransposeType = DenseCube<RealScalarType, changeLayout(_layout)>;
+
+  using IteratorType         = DenseCubeIterator<ScalarType, _layout>;
+  using ConstIteratorType    = DenseCubeConstIterator<ScalarType, _layout>;
+  using IdxIteratorType      = DenseCubeIdxIterator<ScalarType, _layout>;
+  using ConstIdxIteratorType = DenseCubeConstIdxIterator<ScalarType, _layout>;
 };
 
 }  // namespace internal
@@ -64,7 +71,8 @@ struct Traits<DenseCube<_Scalar, _layout>> {
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseCube
-  : public internal::CubeBase<DenseCube<_Scalar, _layout>>,
+  : public internal::ContainerBase<DenseCube<_Scalar, _layout>>,
+    public internal::CubeBase<DenseCube<_Scalar, _layout>>,
     public internal::DenseBase<DenseCube<_Scalar, _layout>>{
 
  public:
@@ -85,8 +93,6 @@ class DenseCube
   using RealTransposeType = DenseCube<RealScalarType, changeLayout(_layout)>;
 
   using DataType          = DenseData<ScalarType>;
-  using IteratorType      = DenseCubeIterator<ScalarType, _layout>;
-  using ConstIteratorType = DenseCubeConstIterator<ScalarType, _layout>;
 
  private:
 
@@ -106,6 +112,7 @@ class DenseCube
   using CubeBaseType::npage_;
   using CubeBaseType::size1_;
   using CubeBaseType::size2_;
+  using CubeBaseType::size3_;
   using DenseBaseType::offset_;
   using DenseBaseType::data_;
 
@@ -116,7 +123,8 @@ class DenseCube
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2 ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+                    const index_t pitch1, const index_t pitch2 ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
              const index_t capability, const index_t offset = 0 ) noexcept;
@@ -147,17 +155,6 @@ class DenseCube
 
   // Gets internal position
   inline index_t getPos( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
-
-  // Gets iterator
-  inline IteratorType      begin() noexcept;
-  inline ConstIteratorType begin() const noexcept;
-  inline ConstIteratorType cbegin() const noexcept;
-  inline IteratorType      end() noexcept;
-  inline ConstIteratorType end() const noexcept;
-  inline ConstIteratorType cend() const noexcept;
-  inline IteratorType      getIterator( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
-  inline ConstIteratorType getIterator( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
-  inline ConstIteratorType getConstIterator( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
   // Transpose
   inline TransposeType transpose() noexcept;

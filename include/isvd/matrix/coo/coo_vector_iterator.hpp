@@ -40,7 +40,7 @@ class CooVectorIteratorBase : public std::iterator<std::forward_iterator_tag, _S
   index_t pos_;
 
   /// The vector.
-  _Vector *vector_;
+  _Vector *container_;
 
  public:
 

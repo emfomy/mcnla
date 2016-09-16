@@ -28,7 +28,7 @@ DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase() noexcept
   : rowidx_(0),
     colidx_(0),
     pageidx_(0),
-    cube_(nullptr) {}
+    container_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given cube.
@@ -40,7 +40,7 @@ DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase(
   : rowidx_(0),
     colidx_(0),
     pageidx_(0),
-    cube_(cube) {}
+    container_(cube) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given cube.
@@ -55,7 +55,7 @@ DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase(
   : rowidx_(rowidx),
     colidx_(colidx),
     pageidx_(pageidx),
-    cube_(cube) {}
+    container_(cube) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -67,7 +67,7 @@ DenseCubeIteratorBase<_Scalar, _layout, _Cube>::DenseCubeIteratorBase(
   : rowidx_(other.rowidx_),
     colidx_(other.colidx_),
     pageidx_(other.pageidx_),
-    cube_(other.cube_) {}
+    container_(other.container_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -79,7 +79,7 @@ DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _
   rowidx_ = other.rowidx_;
   colidx_ = other.colidx_;
   pageidx_ = other.pageidx_;
-  cube_ = other.cube_;
+  container_ = other.container_;
   return *this;
 }
 
@@ -90,11 +90,7 @@ template <typename _Scalar, Layout _layout, class _Cube>
 bool DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator==(
     const DenseCubeIteratorBase &other
 ) const noexcept {
-  if ( this == &other ) {
-    return true;
-  } else {
-    return &(getValue()) == &(other.getValue());
-  }
+  return (container_ == other.container_) && (idx1_ == other.idx1_) && (idx2_ == other.idx2_) && (idx3_ == other.idx3_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,17 +108,17 @@ bool DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator!=(
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator++() noexcept {
-  assert(cube_ != nullptr);
+  assert(container_ != nullptr);
 
-  const auto size1 = cube_->getSize1();
-  const auto size2 = cube_->getSize2();
-  const auto size3 = cube_->getNpage();
+  const auto size1 = container_->getSize1();
+  const auto size2 = container_->getSize2();
+  const auto size3 = container_->getSize3();
   if ( ++idx1_ >= size1 ) {
     idx1_ = 0;
     if ( ++idx2_ >= size2 ) {
       idx2_ = 0;
-      if ( ++pageidx_ >= size3 ) {
-        pageidx_ = size3;
+      if ( ++idx3_ >= size3 ) {
+        idx3_ = size3;
       }
     }
   }
@@ -140,45 +136,13 @@ DenseCubeIteratorBase<_Scalar, _layout, _Cube> DenseCubeIteratorBase<_Scalar, _l
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-_Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator*() noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-const _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator*() const noexcept {
-  return getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-_Scalar* DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator->() noexcept {
-  return &getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-const _Scalar* DenseCubeIteratorBase<_Scalar, _layout, _Cube>::operator->() const noexcept {
-  return &getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() noexcept {
-  return cube_->getValue()[getPos()];
+  return container_->getValue()[getPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,7 +150,15 @@ _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() noexcept {
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 const _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() const noexcept {
-  return cube_->getValue()[getPos()];
+  return container_->getValue()[getPos()];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index tuple.
+///
+template <typename _Scalar, Layout _layout, class _Cube>
+IdxTuple<3> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdxs() const noexcept {
+  return makeIdxTuple(idx1_, idx2_, idx3_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,11 +202,19 @@ index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx2() const noexcept
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the third index.
+///
+template <typename _Scalar, Layout _layout, class _Cube>
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx3() const noexcept {
+  return idx3_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getPos() const noexcept {
-  return cube_->getPos(colidx_, rowidx_, pageidx_);
+  return container_->getPos(colidx_, rowidx_, pageidx_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,7 +224,7 @@ template <typename _Scalar, Layout _layout, class _Cube>
 DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::setBegin() noexcept {
   idx1_ = 0;
   idx2_ = 0;
-  pageidx_ = 0;
+  idx3_ = 0;
   return *this;
 }
 
@@ -255,28 +235,8 @@ template <typename _Scalar, Layout _layout, class _Cube>
 DenseCubeIteratorBase<_Scalar, _layout, _Cube>& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::setEnd() noexcept {
   idx1_ = 0;
   idx2_ = 0;
-  pageidx_ = (cube_ != nullptr) ? cube_->getNpage() : 0;
+  idx3_ = (container_ != nullptr) ? container_->getNpage() : 0;
   return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to beginning iterator.
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-DenseCubeIteratorBase<_Scalar, _layout, _Cube> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getBegin(
-    _Cube *cube
-) noexcept {
-  return DenseCubeIteratorBase(cube).setBegin();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to end iterator.
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-DenseCubeIteratorBase<_Scalar, _layout, _Cube> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getEnd(
-    _Cube *cube
-) noexcept {
-  return DenseCubeIteratorBase(cube).setEnd();
 }
 
 }  // namespace internal

@@ -26,7 +26,7 @@ namespace internal {
 template <typename _Scalar, class _Vector>
 DenseVectorIteratorBase<_Scalar, _Vector>::DenseVectorIteratorBase() noexcept
   : idx_(0),
-    vector_(nullptr) {}
+    container_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given vector.
@@ -37,7 +37,7 @@ DenseVectorIteratorBase<_Scalar, _Vector>::DenseVectorIteratorBase(
     const index_t idx
 ) noexcept
   : idx_(idx),
-    vector_(vector) {}
+    container_(vector) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -47,7 +47,7 @@ DenseVectorIteratorBase<_Scalar, _Vector>::DenseVectorIteratorBase(
     const DenseVectorIteratorBase &other
 ) noexcept
   : idx_(other.idx_),
-    vector_(other.vector_) {}
+    container_(other.container_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -57,7 +57,7 @@ DenseVectorIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vec
     const DenseVectorIteratorBase &other
 ) noexcept {
   idx_ = other.idx_;
-  vector_ = other.vector_;
+  container_ = other.container_;
   return *this;
 }
 
@@ -68,11 +68,7 @@ template <typename _Scalar, class _Vector>
 bool DenseVectorIteratorBase<_Scalar, _Vector>::operator==(
     const DenseVectorIteratorBase &other
 ) const noexcept {
-  if ( this == &other ) {
-    return true;
-  } else {
-    return &(getValue()) == &(other.getValue());
-  }
+  return (container_ == other.container_) && (idx_ == other.idx_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,9 +86,9 @@ bool DenseVectorIteratorBase<_Scalar, _Vector>::operator!=(
 ///
 template <typename _Scalar, class _Vector>
 DenseVectorIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vector>::operator++() noexcept {
-  assert(vector_ != nullptr);
+  assert(container_ != nullptr);
 
-  const auto length = vector_->getLength();
+  const auto length = container_->getLength();
   if ( ++idx_ >= length ) {
     idx_ = length;
   }
@@ -115,26 +111,23 @@ DenseVectorIteratorBase<_Scalar, _Vector> DenseVectorIteratorBase<_Scalar, _Vect
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, class _Vector>
-typename DenseVectorIteratorBase<_Scalar, _Vector>::ScalarType&
-    DenseVectorIteratorBase<_Scalar, _Vector>::getValue() noexcept {
-  return vector_->getValue()[getPos()];
+_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() noexcept {
+  return container_->getValue()[getPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <typename _Scalar, class _Vector>
-const typename DenseVectorIteratorBase<_Scalar, _Vector>::ScalarType&
-    DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
-  return vector_->getValue()[getPos()];
+const _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
+  return container_->getValue()[getPos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the index tuple.
 ///
 template <typename _Scalar, class _Vector>
-typename DenseVectorIteratorBase<_Scalar, _Vector>::IdxTupleType
-    DenseVectorIteratorBase<_Scalar, _Vector>::getIdxs() const noexcept {
+IdxTuple<1> DenseVectorIteratorBase<_Scalar, _Vector>::getIdxs() const noexcept {
   return makeIdxTuple(idx_);
 }
 
@@ -151,7 +144,7 @@ index_t DenseVectorIteratorBase<_Scalar, _Vector>::getIdx() const noexcept {
 ///
 template <typename _Scalar, class _Vector>
 index_t DenseVectorIteratorBase<_Scalar, _Vector>::getPos() const noexcept {
-  return vector_->getPos(idx_);
+  return container_->getPos(idx_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +161,7 @@ DenseVectorIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vec
 ///
 template <typename _Scalar, class _Vector>
 DenseVectorIteratorBase<_Scalar, _Vector>& DenseVectorIteratorBase<_Scalar, _Vector>::setEnd() noexcept {
-  idx_ = (vector_ != nullptr) ? vector_->getLength() : 0;
+  idx_ = (container_ != nullptr) ? container_->getLength() : 0;
   return *this;
 }
 

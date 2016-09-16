@@ -53,6 +53,9 @@ class CubeBase : public TensorBase<_Derived> {
   /// The second size.
   index_t &size2_ = isColMajor(layout) ? ncol_ : nrow_;
 
+  /// The third size.
+  index_t &size3_ = npage_;
+
  protected:
 
   // Constructors
@@ -71,9 +74,10 @@ class CubeBase : public TensorBase<_Derived> {
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
+  inline index_t getNpage() const noexcept;
   inline index_t getSize1() const noexcept;
   inline index_t getSize2() const noexcept;
-  inline index_t getNpage() const noexcept;
+  inline index_t getSize3() const noexcept;
   inline index_t getNelem() const noexcept;
   inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;
 

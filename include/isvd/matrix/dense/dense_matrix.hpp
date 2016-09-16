@@ -87,8 +87,6 @@ class DenseMatrix
   using RealTransposeType = DenseMatrix<RealScalarType, changeLayout(_layout)>;
 
   using DataType          = DenseData<ScalarType>;
-  using IteratorType      = DenseMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType = DenseMatrixConstIterator<ScalarType, _layout>;
 
  private:
 
@@ -116,13 +114,13 @@ class DenseMatrix
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
   inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-               const index_t capability, const index_t offset = 0 ) noexcept;
+                      const index_t capability, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch,
-               const index_t capability, const index_t offset = 0 ) noexcept;
+                      const index_t capability, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-               const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+                      const ValuePtrType &value, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-               const DataType &data, const index_t offset = 0 ) noexcept;
+                      const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const DenseMatrix &other ) noexcept;
   inline DenseMatrix( DenseMatrix &&other ) noexcept;
 

@@ -74,7 +74,7 @@ IdxTuple<_ndim>& IdxTuple<_ndim>::operator=( IdxTuple &&other ) noexcept {
 ///
 template <index_t _ndim>
 bool IdxTuple<_ndim>::operator<( const IdxTuple& other ) const noexcept {
-  for ( index_t dim = 0; dim < _ndim; ++dim ) {
+  for ( index_t dim = _ndim-1; dim >= 0; --dim ) {
     if ( (*this)[dim] != other[dim] ) {
       return ((*this)[dim] < other[dim]);
     }
@@ -87,7 +87,7 @@ bool IdxTuple<_ndim>::operator<( const IdxTuple& other ) const noexcept {
 ///
 template <index_t _ndim>
 bool IdxTuple<_ndim>::operator>( const IdxTuple& other ) const noexcept {
-  for ( index_t dim = 0; dim < _ndim; ++dim ) {
+  for ( index_t dim = _ndim-1; dim >= 0; --dim ) {
     if ( (*this)[dim] != other[dim] ) {
       return ((*this)[dim] > other[dim]);
     }
