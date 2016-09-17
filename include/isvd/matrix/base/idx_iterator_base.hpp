@@ -10,7 +10,6 @@
 
 #include <isvd/isvd.hpp>
 #include <iterator>
-#include <isvd/utility/crtp.hpp>
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix/kit/idx_tuple.hpp>
 
@@ -31,15 +30,11 @@ namespace internal {
 ///
 template <class _Derived>
 class IdxIteratorBase
-  : protected CrtpBase<_Derived, IdxIteratorBase<_Derived>>,
-    public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::IdxTupleType> {
+  : public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::IdxTupleType> {
 
  private:
 
   using IdxTupleType      = typename Traits<_Derived>::IdxTupleType;
-  using ContainerType     = typename Traits<_Derived>::ContainerType;
-  using IdxIteratorType   = _Derived;
-  using BaseIteratorType  = typename Traits<_Derived>::BaseType;
   using ValueIteratorType = typename Traits<_Derived>::ValueIteratorType;
 
  protected:
@@ -53,11 +48,14 @@ class IdxIteratorBase
   inline IdxTupleType operator*() const noexcept;
 
   // Gets the value iterator
-  inline ValueIteratorType& toValueIterator() noexcept;
+  inline       ValueIteratorType toValueIterator() noexcept;
+  inline const ValueIteratorType toValueIterator() const noexcept;
 
-  // Gets the begin/end iterator
-  static inline IdxIteratorType getBegin( ContainerType *container ) noexcept;
-  static inline IdxIteratorType getEnd( ContainerType *container ) noexcept;
+ protected:
+
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
 
  private:
 

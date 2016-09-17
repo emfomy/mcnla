@@ -25,7 +25,7 @@ namespace internal {
 ///
 template <class _Derived>
 typename ValueIteratorBase<_Derived>::ScalarType& ValueIteratorBase<_Derived>::operator*() noexcept {
-  return this->derived().getValue();
+  return static_cast<_Derived&>(*this).getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ typename ValueIteratorBase<_Derived>::ScalarType& ValueIteratorBase<_Derived>::o
 ///
 template <class _Derived>
 const typename ValueIteratorBase<_Derived>::ScalarType& ValueIteratorBase<_Derived>::operator*() const noexcept {
-  return this->derived().getValue();
+  return static_cast<const _Derived&>(*this).getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ const typename ValueIteratorBase<_Derived>::ScalarType& ValueIteratorBase<_Deriv
 ///
 template <class _Derived>
 typename ValueIteratorBase<_Derived>::ScalarType* ValueIteratorBase<_Derived>::operator->() noexcept {
-  return &(this->derived().getValue());
+  return &(static_cast<_Derived&>(*this).getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,34 +49,41 @@ typename ValueIteratorBase<_Derived>::ScalarType* ValueIteratorBase<_Derived>::o
 ///
 template <class _Derived>
 const typename ValueIteratorBase<_Derived>::ScalarType* ValueIteratorBase<_Derived>::operator->() const noexcept {
-  return &(this->derived().getValue());
+  return &(static_cast<const _Derived&>(*this).getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index iterator.
+/// @brief  Gets the value iterator.
 ///
 template <class _Derived>
-typename ValueIteratorBase<_Derived>::IdxIteratorType&
+typename ValueIteratorBase<_Derived>::IdxIteratorType
     ValueIteratorBase<_Derived>::toIdxIterator() noexcept {
-  return static_cast<IdxIteratorType&>(static_cast<BaseIteratorType&>(this->derived()));
+  return IdxIteratorType(derived().getContainer(), derived().getItIdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to beginning iterator.
+/// @brief  Gets the value iterator.
 ///
 template <class _Derived>
-typename ValueIteratorBase<_Derived>::ValueIteratorType
-    ValueIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
-  ValueIteratorType retval(container); retval.setBegin(); return retval;
+const typename ValueIteratorBase<_Derived>::IdxIteratorType
+    ValueIteratorBase<_Derived>::toIdxIterator() const noexcept {
+  return IdxIteratorType(derived().getContainer(), derived().getItIdx());
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to end iterator.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
 ///
 template <class _Derived>
-typename ValueIteratorBase<_Derived>::ValueIteratorType
-    ValueIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
-  ValueIteratorType retval(container); retval.setEnd(); return retval;
+_Derived& ValueIteratorBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& ValueIteratorBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
 }
 
 }  // namespace internal

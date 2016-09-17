@@ -25,34 +25,41 @@ namespace internal {
 ///
 template <class _Derived>
 typename IdxIteratorBase<_Derived>::IdxTupleType IdxIteratorBase<_Derived>::operator*() const noexcept {
-  return this->derived().getIdxs();
+  return static_cast<const _Derived&>(*this).getIdxs();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value iterator.
 ///
 template <class _Derived>
-typename IdxIteratorBase<_Derived>::ValueIteratorType&
+typename IdxIteratorBase<_Derived>::ValueIteratorType
     IdxIteratorBase<_Derived>::toValueIterator() noexcept {
-  return static_cast<ValueIteratorType&>(static_cast<BaseIteratorType&>(this->derived()));
+  return ValueIteratorType(derived().getContainer(), derived().getItIdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to beginning iterator.
+/// @brief  Gets the value iterator.
 ///
 template <class _Derived>
-typename IdxIteratorBase<_Derived>::IdxIteratorType
-    IdxIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
-  IdxIteratorType retval(container); retval.setBegin(); return retval;
+const typename IdxIteratorBase<_Derived>::ValueIteratorType
+    IdxIteratorBase<_Derived>::toValueIterator() const noexcept {
+  return ValueIteratorType(derived().getContainer(), derived().getItIdx());
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the to end iterator.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
 ///
 template <class _Derived>
-typename IdxIteratorBase<_Derived>::IdxIteratorType
-    IdxIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
-  IdxIteratorType retval(container); retval.setEnd(); return retval;
+_Derived& IdxIteratorBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& IdxIteratorBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
 }
 
 }  // namespace internal

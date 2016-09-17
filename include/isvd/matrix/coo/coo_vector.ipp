@@ -150,7 +150,7 @@ _Scalar CooVector<_Scalar>::getElem(
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
   auto it = find(idx);
-  return (it != this->iend()) ? it.getValue() : 0;
+  return (it != this->end()) ? it.getValue() : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +171,7 @@ index_t CooVector<_Scalar>::getPos(
     const index_t idx
 ) const noexcept {
   auto it = find(idx);
-  return (it != this->iend()) ? it.getPos() : -1;
+  return (it != this->end()) ? it.getPos() : -1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

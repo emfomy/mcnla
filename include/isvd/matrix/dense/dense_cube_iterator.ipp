@@ -57,7 +57,7 @@ const _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() const 
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 IdxTuple<3> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdxs() const noexcept {
-  return makeIdxTuple(getIdx1(), getIdx2(), getIdx3());
+  return makeIdxTuple(&getIdx1(), &getIdx2(), &getIdx3());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

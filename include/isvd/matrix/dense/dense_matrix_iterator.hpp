@@ -42,9 +42,11 @@ template <typename _Scalar, Layout _layout, class _Matrix> class DenseMatrixIdxI
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> : Traits<IteratorBase<_Matrix>> {
+struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>>
+  : Traits<IteratorBase<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>>> {
   using ScalarType        = _Scalar;
   using IdxTupleType      = IdxTuple<2>;
+  using ContainerType     = _Matrix;
   using BaseType          = DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>;
   using ValueIteratorType = DenseMatrixValueIteratorBase<_Scalar, _layout, _Matrix>;
   using IdxIteratorType   = DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>;
@@ -80,16 +82,16 @@ struct Traits<DenseMatrixIdxIteratorBase<_Scalar, _layout, _Matrix>>
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-class DenseMatrixIteratorBase : public IteratorBase<_Matrix> {
+class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
 
  protected:
 
-  using IteratorBase<_Matrix>::itidx_;
-  using IteratorBase<_Matrix>::container_;
+  using IteratorBase<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>>::itidx_;
+  using IteratorBase<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>>::container_;
 
  public:
 
-  using IteratorBase<_Matrix>::IteratorBase;
+  using IteratorBase<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>>::IteratorBase;
 
   // Operators
   template <typename __Scalar, Layout __layout, class __Matrix>

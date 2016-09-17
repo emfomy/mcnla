@@ -55,7 +55,7 @@ const _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() co
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 IdxTuple<2> DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdxs() const noexcept {
-  return makeIdxTuple(getIdx1(), getIdx2());
+  return makeIdxTuple(&getIdx1(), &getIdx2());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -21,51 +21,63 @@ namespace isvd {
 ///
 template <index_t _ndim>
 IdxTuple<_ndim>::IdxTuple() noexcept
-  : BaseType() {}
+  : BaseType(),
+    idx_() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given index pointers.
+///
+template <index_t _ndim>
+IdxTuple<_ndim>::IdxTuple( const std::array<index_t*, _ndim> &idxptr ) noexcept
+  : BaseType(idxptr),
+    idx_() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given index pointers.
+///
+template <index_t _ndim>
+IdxTuple<_ndim>::IdxTuple( std::array<index_t*, _ndim> &&idxptr ) noexcept
+  : BaseType(idxptr),
+    idx_() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given indices.
+///
+template <index_t _ndim>
+IdxTuple<_ndim>::IdxTuple( const std::array<index_t, _ndim> &idx ) noexcept
+  : BaseType(),
+    idx_(idx) {
+  for ( index_t i = 0; i < _ndim; ++i ) {
+    BaseType::operator[](i) = &(idx_[i]);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given indices.
+///
+template <index_t _ndim>
+IdxTuple<_ndim>::IdxTuple( std::array<index_t, _ndim> &&idx ) noexcept
+  : BaseType(),
+    idx_(idx) {
+  for ( index_t i = 0; i < _ndim; ++i ) {
+    BaseType::operator[](i) = &(idx_[i]);
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 template <index_t _ndim>
 IdxTuple<_ndim>::IdxTuple( const IdxTuple &other ) noexcept
-  : BaseType(other) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy constructor.
-///
-template <index_t _ndim>
-IdxTuple<_ndim>::IdxTuple( const BaseType &other ) noexcept
-  : BaseType(other) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <index_t _ndim>
-IdxTuple<_ndim>::IdxTuple( IdxTuple &&other ) noexcept
-  : BaseType(std::move(other)) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <index_t _ndim>
-IdxTuple<_ndim>::IdxTuple( BaseType &&other ) noexcept
-  : BaseType(std::move(other)) {}
+  : BaseType(other),
+    idx_(other.idx_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 template <index_t _ndim>
 IdxTuple<_ndim>& IdxTuple<_ndim>::operator=( const IdxTuple &other ) noexcept {
-  BaseType::operator=(other);
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <index_t _ndim>
-IdxTuple<_ndim>& IdxTuple<_ndim>::operator=( IdxTuple &&other ) noexcept {
-  BaseType::operator=(std::move(other));
+  BaseType::operator=(other); idx_ = other.idx_;
   return *this;
 }
 
@@ -109,6 +121,22 @@ bool IdxTuple<_ndim>::operator<=( const IdxTuple& other ) const noexcept {
 template <index_t _ndim>
 bool IdxTuple<_ndim>::operator>=( const IdxTuple& other ) const noexcept {
   return !(*this < other);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Subscript operator operator.
+///
+template <index_t _ndim>
+index_t& IdxTuple<_ndim>::operator[]( const index_t dim ) noexcept {
+  return *(BaseType::operator[](dim));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Subscript operator operator.
+///
+template <index_t _ndim>
+const index_t& IdxTuple<_ndim>::operator[]( const index_t dim ) const noexcept {
+  return *(BaseType::operator[](dim));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

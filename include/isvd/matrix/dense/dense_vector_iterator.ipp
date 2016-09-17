@@ -53,7 +53,7 @@ const _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexc
 ///
 template <typename _Scalar, class _Vector>
 IdxTuple<1> DenseVectorIteratorBase<_Scalar, _Vector>::getIdxs() const noexcept {
-  return makeIdxTuple(getIdx());
+  return makeIdxTuple(&getIdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

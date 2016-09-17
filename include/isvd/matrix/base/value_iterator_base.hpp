@@ -10,7 +10,6 @@
 
 #include <isvd/isvd.hpp>
 #include <iterator>
-#include <isvd/utility/crtp.hpp>
 #include <isvd/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,15 +29,11 @@ namespace internal {
 ///
 template <class _Derived>
 class ValueIteratorBase
-  : protected CrtpBase<_Derived, ValueIteratorBase<_Derived>>,
-    public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::ScalarType> {
+  : public std::iterator<typename Traits<_Derived>::IteratorTag, typename Traits<_Derived>::ScalarType> {
 
  private:
 
   using ScalarType        = typename Traits<_Derived>::ScalarType;
-  using ContainerType     = typename Traits<_Derived>::ContainerType;
-  using ValueIteratorType = _Derived;
-  using BaseIteratorType  = typename Traits<_Derived>::BaseType;
   using IdxIteratorType   = typename Traits<_Derived>::IdxIteratorType;
 
  protected:
@@ -55,11 +50,14 @@ class ValueIteratorBase
   inline const ScalarType* operator->() const noexcept;
 
   // Gets the index iterator
-  inline IdxIteratorType& toIdxIterator() noexcept;
+  inline       IdxIteratorType toIdxIterator() noexcept;
+  inline const IdxIteratorType toIdxIterator() const noexcept;
 
-  // Gets the begin/end iterator
-  static inline ValueIteratorType getBegin( ContainerType *container ) noexcept;
-  static inline ValueIteratorType getEnd( ContainerType *container ) noexcept;
+ protected:
+
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
 
 };
 

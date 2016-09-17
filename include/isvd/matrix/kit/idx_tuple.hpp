@@ -22,30 +22,36 @@ namespace isvd {
 /// @tparam  _ndim  The dimension.
 ///
 template <index_t _ndim>
-class IdxTuple : protected std::array<index_t, _ndim> {
+class IdxTuple : protected std::array<index_t*, _ndim> {
 
  private:
 
-  using BaseType = std::array<index_t, _ndim>;
+  using BaseType = std::array<index_t*, _ndim>;
+
+ protected:
+
+  std::array<index_t, _ndim> idx_;
 
  public:
 
   // Constructors
   IdxTuple() noexcept;
+  IdxTuple( const std::array<index_t*, _ndim> &idxptr ) noexcept;
+  IdxTuple( std::array<index_t*, _ndim> &&idxptr ) noexcept;
+  IdxTuple( const std::array<index_t, _ndim> &idx ) noexcept;
+  IdxTuple( std::array<index_t, _ndim> &&idx ) noexcept;
   IdxTuple( const IdxTuple &other ) noexcept;
-  IdxTuple( const BaseType &other ) noexcept;
-  IdxTuple( IdxTuple &&other ) noexcept;
-  IdxTuple( BaseType &&other ) noexcept;
 
  public:
 
   // Operators
   inline IdxTuple& operator=( const IdxTuple &other ) noexcept;
-  inline IdxTuple& operator=( IdxTuple &&other ) noexcept;
   inline bool operator<( const IdxTuple &other ) const noexcept;
   inline bool operator>( const IdxTuple &other ) const noexcept;
   inline bool operator<=( const IdxTuple &other ) const noexcept;
   inline bool operator>=( const IdxTuple &other ) const noexcept;
+  inline       index_t& operator[]( const index_t dim ) noexcept;
+  inline const index_t& operator[]( const index_t dim ) const noexcept;
 
 };
 

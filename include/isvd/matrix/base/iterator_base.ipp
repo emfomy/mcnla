@@ -23,17 +23,17 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Container>
-IteratorBase<_Container>::IteratorBase() noexcept
+template <class _Derived>
+IteratorBase<_Derived>::IteratorBase() noexcept
   : itidx_(0),
     container_(nullptr) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given container.
 ///
-template <class _Container>
-IteratorBase<_Container>::IteratorBase(
-    _Container *container,
+template <class _Derived>
+IteratorBase<_Derived>::IteratorBase(
+    ContainerType *container,
     const index_t itidx
 ) noexcept
   : itidx_(itidx),
@@ -42,8 +42,8 @@ IteratorBase<_Container>::IteratorBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-template <class _Container>
-IteratorBase<_Container>::IteratorBase(
+template <class _Derived>
+IteratorBase<_Derived>::IteratorBase(
     const IteratorBase &other
 ) noexcept
   : itidx_(other.itidx_),
@@ -52,19 +52,19 @@ IteratorBase<_Container>::IteratorBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-template <class _Container>
-IteratorBase<_Container>& IteratorBase<_Container>::operator=(
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::operator=(
     const IteratorBase &other
 ) noexcept {
   itidx_ = other.itidx_; container_ = other.container_;
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-template <class _Container>
-bool IteratorBase<_Container>::operator==(
+template <class _Derived>
+bool IteratorBase<_Derived>::operator==(
     const IteratorBase &other
 ) const noexcept {
   assert(container_ == other.container_);
@@ -74,8 +74,8 @@ bool IteratorBase<_Container>::operator==(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
-template <class _Container>
-bool IteratorBase<_Container>::operator!=(
+template <class _Derived>
+bool IteratorBase<_Derived>::operator!=(
     const IteratorBase &other
 ) const noexcept {
   return !(*this == other);
@@ -84,8 +84,8 @@ bool IteratorBase<_Container>::operator!=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Greater-than operator.
 ///
-template <class _Container>
-bool IteratorBase<_Container>::operator>(
+template <class _Derived>
+bool IteratorBase<_Derived>::operator>(
     const IteratorBase &other
 ) const noexcept {
   assert(container_ == other.container_);
@@ -95,8 +95,8 @@ bool IteratorBase<_Container>::operator>(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Less-than operator.
 ///
-template <class _Container>
-bool IteratorBase<_Container>::operator<(
+template <class _Derived>
+bool IteratorBase<_Derived>::operator<(
     const IteratorBase &other
 ) const noexcept {
   assert(container_ == other.container_);
@@ -106,8 +106,8 @@ bool IteratorBase<_Container>::operator<(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Less-than or equal-to operator.
 ///
-template <class _Container>
-bool IteratorBase<_Container>::operator<=(
+template <class _Derived>
+bool IteratorBase<_Derived>::operator<=(
     const IteratorBase &other
 ) const noexcept {
   return !(*this > other);
@@ -116,8 +116,8 @@ bool IteratorBase<_Container>::operator<=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Greater-than or equal-to operator.
 ///
-template <class _Container>
-bool IteratorBase<_Container>::operator>=(
+template <class _Derived>
+bool IteratorBase<_Derived>::operator>=(
     const IteratorBase &other
 ) const noexcept {
   return !(*this < other);
@@ -126,36 +126,37 @@ bool IteratorBase<_Container>::operator>=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Prefix increment operator.
 ///
-template <class _Container>
-IteratorBase<_Container>& IteratorBase<_Container>::operator++() noexcept {
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::operator++() noexcept {
   assert(container_ != nullptr);
 
   const auto nelem = container_->getNelem();
   if ( ++itidx_ >= nelem ) {
     itidx_ = nelem;
   }
-  return *this;
+  return static_cast<_Derived&>(static_cast<typename Traits<_Derived>::BaseType&>(*this));
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Prefix decrement operator.
 ///
-template <class _Container>
-IteratorBase<_Container>& IteratorBase<_Container>::operator--() noexcept {
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::operator--() noexcept {
   assert(container_ != nullptr);
 
   const auto nelem = container_->getNelem();
   if ( --itidx_ >= nelem ) {
     itidx_ = nelem;
   }
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Postfix increment operator.
 ///
-template <class _Container>
-IteratorBase<_Container> IteratorBase<_Container>::operator++( int ) noexcept {
+template <class _Derived>
+_Derived IteratorBase<_Derived>::operator++( int ) noexcept {
   auto retval(*this);
   ++(*this);
   return retval;
@@ -164,8 +165,8 @@ IteratorBase<_Container> IteratorBase<_Container>::operator++( int ) noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Postfix decrement operator.
 ///
-template <class _Container>
-IteratorBase<_Container> IteratorBase<_Container>::operator--( int ) noexcept {
+template <class _Derived>
+_Derived IteratorBase<_Derived>::operator--( int ) noexcept {
   auto retval(*this);
   --(*this);
   return retval;
@@ -174,36 +175,36 @@ IteratorBase<_Container> IteratorBase<_Container>::operator--( int ) noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition operator.
 ///
-template <class _Container>
-IteratorBase<_Container>& IteratorBase<_Container>::operator+=( const index_t num ) noexcept {
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
   assert(container_ != nullptr);
 
   const auto nelem = container_->getNelem();
   if ( (itidx_+=num) >= nelem ) {
     itidx_ = nelem;
   }
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction operator.
 ///
-template <class _Container>
-IteratorBase<_Container>& IteratorBase<_Container>::operator-=( const index_t num ) noexcept {
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
   assert(container_ != nullptr);
 
   const auto nelem = container_->getNelem();
   if ( (itidx_-=num) >= nelem ) {
     itidx_ = nelem;
   }
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition assignment operator.
 ///
-template <class _Container>
-IteratorBase<_Container> IteratorBase<_Container>::operator+( const index_t num ) const noexcept {
+template <class _Derived>
+_Derived IteratorBase<_Derived>::operator+( const index_t num ) const noexcept {
   auto retval(*this);
   return (retval += num);
 }
@@ -211,8 +212,8 @@ IteratorBase<_Container> IteratorBase<_Container>::operator+( const index_t num 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction assignment operator.
 ///
-template <class _Container>
-IteratorBase<_Container> IteratorBase<_Container>::operator-( const index_t num ) const noexcept {
+template <class _Derived>
+_Derived IteratorBase<_Derived>::operator-( const index_t num ) const noexcept {
   auto retval(*this);
   return (retval -= num);
 }
@@ -220,8 +221,8 @@ IteratorBase<_Container> IteratorBase<_Container>::operator-( const index_t num 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction assignment operator.
 ///
-template <class _Container>
-index_t IteratorBase<_Container>::operator-( const IteratorBase &other ) const noexcept {
+template <class _Derived>
+index_t IteratorBase<_Derived>::operator-( const IteratorBase &other ) const noexcept {
   assert(container_ != nullptr);
   return (this->itidx_ - other.itidx_);
 }
@@ -229,30 +230,78 @@ index_t IteratorBase<_Container>::operator-( const IteratorBase &other ) const n
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition assignment operator.
 ///
-template <class __Container>
-IteratorBase<__Container> operator+(
+template <class __Derived>
+__Derived operator+(
     const index_t num,
-    const IteratorBase<__Container> &iterator
+    const IteratorBase<__Derived> &iterator
 ) noexcept {
   return iterator + num;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator index.
+///
+template <class _Derived>
+index_t IteratorBase<_Derived>::getItIdx() const noexcept {
+  return itidx_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the container.
+///
+template <class _Derived>
+typename IteratorBase<_Derived>::ContainerType* IteratorBase<_Derived>::getContainer() const noexcept {
+  return container_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to beginning.
 ///
-template <class _Container>
-IteratorBase<_Container>& IteratorBase<_Container>::setBegin() noexcept {
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::setBegin() noexcept {
   itidx_ = 0;
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to end.
 ///
-template <class _Container>
-IteratorBase<_Container>& IteratorBase<_Container>::setEnd() noexcept {
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::setEnd() noexcept {
   itidx_ = (container_ != nullptr) ? container_->getNelem() : 0;
-  return *this;
+  return derived();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the to beginning iterator.
+///
+template <class _Derived>
+_Derived IteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
+  _Derived retval(container); retval.setBegin(); return retval;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the to end iterator.
+///
+template <class _Derived>
+_Derived IteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
+  _Derived retval(container); retval.setEnd(); return retval;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
+///
+template <class _Derived>
+_Derived& IteratorBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(static_cast<BaseIteratorType&>(*this));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& IteratorBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(static_cast<const BaseIteratorType&>(*this));
 }
 
 }  // namespace internal

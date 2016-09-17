@@ -41,12 +41,12 @@ class CrtpBase {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /// @brief  Change to derived class.
   ///
-  inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); };
+  inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /// @copydoc  derived
   ///
-  inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); };
+  inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); }
 
 };
 

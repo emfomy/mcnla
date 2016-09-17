@@ -41,9 +41,10 @@ template <typename _Scalar, class _Vector> class DenseVectorIdxIteratorBase;
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<IteratorBase<_Vector>> {
+struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>> {
   using ScalarType        = _Scalar;
   using IdxTupleType      = IdxTuple<1>;
+  using ContainerType     = _Vector;
   using BaseType          = DenseVectorIteratorBase<_Scalar, _Vector>;
   using ValueIteratorType = DenseVectorValueIteratorBase<_Scalar, _Vector>;
   using IdxIteratorType   = DenseVectorIdxIteratorBase<_Scalar, _Vector>;
@@ -74,16 +75,16 @@ struct Traits<DenseVectorIdxIteratorBase<_Scalar, _Vector>> : Traits<DenseVector
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-class DenseVectorIteratorBase : public IteratorBase<_Vector> {
+class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>> {
 
  protected:
 
-  using IteratorBase<_Vector>::itidx_;
-  using IteratorBase<_Vector>::container_;
+  using IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>::itidx_;
+  using IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>::container_;
 
  public:
 
-  using IteratorBase<_Vector>::IteratorBase;
+  using IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>::IteratorBase;
 
   // Operators
   template <typename __Scalar, class __Vector>

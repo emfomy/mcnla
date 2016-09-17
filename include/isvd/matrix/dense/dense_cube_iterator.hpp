@@ -42,9 +42,11 @@ template <typename _Scalar, Layout _layout, class _Cube> class DenseCubeIdxItera
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> : Traits<IteratorBase<_Cube>> {
+struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>>
+  : Traits<IteratorBase<DenseCubeIteratorBase<_Scalar, _layout, _Cube>>> {
   using ScalarType        = _Scalar;
   using IdxTupleType      = IdxTuple<3>;
+  using ContainerType     = _Cube;
   using BaseType          = DenseCubeIteratorBase<_Scalar, _layout, _Cube>;
   using ValueIteratorType = DenseCubeValueIteratorBase<_Scalar, _layout, _Cube>;
   using IdxIteratorType   = DenseCubeIdxIteratorBase<_Scalar, _layout, _Cube>;
@@ -78,16 +80,16 @@ struct Traits<DenseCubeIdxIteratorBase<_Scalar, _layout, _Cube>> : Traits<DenseC
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-class DenseCubeIteratorBase : public IteratorBase<_Cube> {
+class DenseCubeIteratorBase : public IteratorBase<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
 
  protected:
 
-  using IteratorBase<_Cube>::itidx_;
-  using IteratorBase<_Cube>::container_;
+  using IteratorBase<DenseCubeIteratorBase<_Scalar, _layout, _Cube>>::itidx_;
+  using IteratorBase<DenseCubeIteratorBase<_Scalar, _layout, _Cube>>::container_;
 
  public:
 
-  using IteratorBase<_Cube>::IteratorBase;
+  using IteratorBase<DenseCubeIteratorBase<_Scalar, _layout, _Cube>>::IteratorBase;
 
   // Operators
   template <typename __Scalar, Layout __layout, class __Cube>
