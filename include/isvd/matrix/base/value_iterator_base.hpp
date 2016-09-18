@@ -33,8 +33,8 @@ class ValueIteratorBase
 
  private:
 
-  using ScalarType        = typename Traits<_Derived>::ScalarType;
-  using IdxIteratorType   = typename Traits<_Derived>::IdxIteratorType;
+  using ScalarType      = typename Traits<_Derived>::ScalarType;
+  using IdxIteratorType = typename Traits<_Derived>::IdxIteratorType;
 
  protected:
 
@@ -44,10 +44,8 @@ class ValueIteratorBase
  public:
 
   // Operators
-  inline       ScalarType& operator*() noexcept;
-  inline const ScalarType& operator*() const noexcept;
-  inline       ScalarType* operator->() noexcept;
-  inline const ScalarType* operator->() const noexcept;
+  inline ScalarType& operator*() const noexcept;
+  inline ScalarType* operator->() const noexcept;
 
   // Gets the index iterator
   inline       IdxIteratorType toIdxIterator() noexcept;

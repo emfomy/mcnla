@@ -31,10 +31,10 @@ class DenseData {
 
  protected:
 
-  /// The data array.
+  /// The value array.
   ValuePtrType value_;
 
-  /// The empty data array
+  /// The empty value array
   static const ValuePtrType kNullValue;
 
  public:

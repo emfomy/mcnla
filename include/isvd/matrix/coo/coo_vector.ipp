@@ -42,11 +42,23 @@ CooVector<_Scalar>::CooVector(
 template <typename _Scalar>
 CooVector<_Scalar>::CooVector(
     const index_t length,
+    const index_t capability
+) noexcept
+  : VectorBaseType(length),
+    CooBaseType(capability) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector(
+    const index_t length,
+    const index_t nnz,
     const index_t capability,
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
-    CooBaseType(capability, offset) {}
+    CooBaseType(nnz, capability, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.

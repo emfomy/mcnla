@@ -113,7 +113,7 @@ template <typename _Scalar>
 const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return &((*value_)[0]); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of data array.
+/// @brief  Gets the length of value array.
 ///
 template <typename _Scalar>
 index_t DenseData<_Scalar>::getCapability() const noexcept { return value_->size(); }

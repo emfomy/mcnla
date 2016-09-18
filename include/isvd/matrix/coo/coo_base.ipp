@@ -34,10 +34,24 @@ CooBase<_Derived>::CooBase() noexcept
 ///
 template <class _Derived>
 CooBase<_Derived>::CooBase(
+    const index_t capability
+) noexcept
+  : SparseBaseType(),
+    offset_(0),
+    data_(capability) {
+  assert(offset_ >= 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Derived>
+CooBase<_Derived>::CooBase(
+    const index_t nnz,
     const index_t capability,
     const index_t offset
 ) noexcept
-  : SparseBaseType(),
+  : SparseBaseType(nnz),
     offset_(offset),
     data_(capability) {
   assert(offset_ >= 0);
@@ -119,7 +133,7 @@ CooBase<_Derived>& CooBase<_Derived>::operator=( CooBase &&other ) noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of data array.
+/// @brief  Gets the length of value array.
 ///
 template <class _Derived>
 index_t CooBase<_Derived>::getCapability() const noexcept { return getData().getCapability(); }

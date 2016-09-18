@@ -118,10 +118,10 @@ template <typename _Scalar, index_t _ndim>
 bool CooData<_Scalar, _ndim>::operator!=( const CooData& other ) const noexcept { return this->value_ != other.value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of data array.
+/// @brief  Gets the length of value array.
 ///
 template <typename _Scalar, index_t _ndim>
-index_t CooData<_Scalar, _ndim>::getCapability() const noexcept { return value_.size(); }
+index_t CooData<_Scalar, _ndim>::getCapability() const noexcept { return value_->size(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value array.

@@ -25,7 +25,7 @@ namespace internal {
 ///
 template <class _Derived>
 typename IdxIteratorBase<_Derived>::IdxTupleType IdxIteratorBase<_Derived>::operator*() const noexcept {
-  return static_cast<const _Derived&>(*this).getIdxs();
+  return derived().getIdxs();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ typename IdxIteratorBase<_Derived>::ValueIteratorType
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value iterator.
+/// @copydoc  toValueIterator
 ///
 template <class _Derived>
 const typename IdxIteratorBase<_Derived>::ValueIteratorType

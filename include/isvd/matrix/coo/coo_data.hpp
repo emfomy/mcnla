@@ -27,6 +27,8 @@ namespace isvd {
 template <typename _Scalar, index_t _ndim>
 class CooData {
 
+  static_assert(_ndim >= 0, "Invalid dimension!");
+
  private:
 
   using ValuePtrType = std::shared_ptr<std::valarray<_Scalar>>;
@@ -34,16 +36,16 @@ class CooData {
 
  protected:
 
-  /// The data array.
+  /// The value array.
   ValuePtrType value_;
 
   /// The index array.
   std::array<IdxPtrType, _ndim> idx_;
 
-  /// The empty data array
+  /// The empty value array
   static const ValuePtrType kNullValue;
 
-  /// The empty data array
+  /// The empty value array
   static const IdxPtrType kNullIdx;
 
  public:

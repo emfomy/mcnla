@@ -93,10 +93,6 @@ class IteratorBase {
   inline index_t        getItIdx() const noexcept;
   inline ContainerType* getContainer() const noexcept;
 
-  // Sets to begin/end
-  inline _Derived& setBegin() noexcept;
-  inline _Derived& setEnd() noexcept;
-
   // Gets the begin/end iterator
   static inline _Derived getBegin( ContainerType *container ) noexcept;
   static inline _Derived getEnd( ContainerType *container ) noexcept;

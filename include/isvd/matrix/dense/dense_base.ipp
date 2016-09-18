@@ -108,7 +108,7 @@ DenseBase<_Derived>& DenseBase<_Derived>::operator=( DenseBase &&other ) noexcep
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of data array.
+/// @brief  Gets the length of value array.
 ///
 template <class _Derived>
 index_t DenseBase<_Derived>::getCapability() const noexcept { return getData().getCapability(); }
@@ -132,7 +132,7 @@ template <class _Derived>
 const typename DenseBase<_Derived>::DataType& DenseBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data array.
+/// @brief  Gets the value array.
 ///
 template <class _Derived>
 typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexcept {

@@ -46,7 +46,7 @@ struct Traits<CooVectorValueIteratorBase<_Scalar, _Index, _Vector>>
   : Traits<IteratorBase<CooVectorValueIteratorBase<_Scalar, _Index, _Vector>>> {
   using ScalarType        = _Scalar;
   using IndexType         = _Index;
-  using IdxTupleType      = IdxTuple<1>;
+  using IdxTupleType      = IdxTuple<1, _Index>;
   using ContainerType     = _Vector;
   using BaseType          = CooVectorIteratorBase<CooVectorValueIteratorBase<_Scalar, _Index, _Vector>>;
   using IdxIteratorType   = CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>;
@@ -65,7 +65,7 @@ struct Traits<CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>>
   : Traits<IteratorBase<CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>>> {
   using ScalarType        = _Scalar;
   using IndexType         = _Index;
-  using IdxTupleType      = IdxTuple<1>;
+  using IdxTupleType      = IdxTuple<1, _Index>;
   using ContainerType     = _Vector;
   using BaseType          = CooVectorIteratorBase<CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>>;
   using IdxIteratorType   = CooVectorIdxIteratorBase<_Scalar, _Index, _Vector>;
@@ -82,10 +82,11 @@ class CooVectorIteratorBase : public IteratorBase<_Derived> {
 
  private:
 
-  using ScalarType    = typename Traits<_Derived>::ScalarType;
-  using IndexType     = typename Traits<_Derived>::IndexType;
-  using IdxTupleType  = typename Traits<_Derived>::IdxTupleType;
-  using ContainerType = typename Traits<_Derived>::ContainerType;
+  using ScalarType        = typename Traits<_Derived>::ScalarType;
+  using IndexType         = typename Traits<_Derived>::IndexType;
+  using IdxTupleType      = typename Traits<_Derived>::IdxTupleType;
+  using ConstIdxTupleType = typename Traits<_Derived>::ConstIdxTupleType;
+  using ContainerType     = typename Traits<_Derived>::ContainerType;
 
  protected:
 
@@ -103,10 +104,15 @@ class CooVectorIteratorBase : public IteratorBase<_Derived> {
   // Gets value
   inline       ScalarType&  getValue() noexcept;
   inline const ScalarType&  getValue() const noexcept;
-  inline       IdxTupleType getIdxs() const noexcept;
   inline       IndexType&   getIdx() noexcept;
   inline const IndexType&   getIdx() const noexcept;
   inline       index_t      getPos() const noexcept;
+  inline       IdxTupleType      getIdxs() noexcept;
+  inline       ConstIdxTupleType getIdxs() const noexcept;
+
+  // Sets to begin/end
+  inline _Derived& setBegin() noexcept;
+  inline _Derived& setEnd() noexcept;
 
 };
 

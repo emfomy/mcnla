@@ -68,7 +68,7 @@ class DenseBase {
   inline DataType& getData() noexcept;
   inline const DataType& getData() const noexcept;
 
-  // Gets data array
+  // Gets value array
   inline ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
 

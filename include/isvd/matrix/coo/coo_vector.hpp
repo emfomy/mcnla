@@ -94,7 +94,8 @@ class CooVector
   // Constructors
   inline CooVector() noexcept;
   inline CooVector( const index_t length ) noexcept;
-  inline CooVector( const index_t length, const index_t capability, const index_t offset = 0 ) noexcept;
+  inline CooVector( const index_t length, const index_t capability ) noexcept;
+  inline CooVector( const index_t length, const index_t nnz, const index_t capability, const index_t offset ) noexcept;
   inline CooVector( const index_t length, const index_t nnz,
                     const ValuePtrType &value, const IdxPtrType &idx, const index_t offset = 0 ) noexcept;
   inline CooVector( const index_t length, const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;

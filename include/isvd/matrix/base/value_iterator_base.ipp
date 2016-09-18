@@ -24,32 +24,16 @@ namespace internal {
 /// @brief  Gets the value.
 ///
 template <class _Derived>
-typename ValueIteratorBase<_Derived>::ScalarType& ValueIteratorBase<_Derived>::operator*() noexcept {
-  return static_cast<_Derived&>(*this).getValue();
+typename ValueIteratorBase<_Derived>::ScalarType& ValueIteratorBase<_Derived>::operator*() const noexcept {
+  return derived().getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value.
+/// @copydoc operator*()
 ///
 template <class _Derived>
-const typename ValueIteratorBase<_Derived>::ScalarType& ValueIteratorBase<_Derived>::operator*() const noexcept {
-  return static_cast<const _Derived&>(*this).getValue();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value.
-///
-template <class _Derived>
-typename ValueIteratorBase<_Derived>::ScalarType* ValueIteratorBase<_Derived>::operator->() noexcept {
-  return &(static_cast<_Derived&>(*this).getValue());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value.
-///
-template <class _Derived>
-const typename ValueIteratorBase<_Derived>::ScalarType* ValueIteratorBase<_Derived>::operator->() const noexcept {
-  return &(static_cast<const _Derived&>(*this).getValue());
+typename ValueIteratorBase<_Derived>::ScalarType* ValueIteratorBase<_Derived>::operator->() const noexcept {
+  return &(derived().getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +46,7 @@ typename ValueIteratorBase<_Derived>::IdxIteratorType
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value iterator.
+/// @copydoc  toIdxIterator
 ///
 template <class _Derived>
 const typename ValueIteratorBase<_Derived>::IdxIteratorType

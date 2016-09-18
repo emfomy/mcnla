@@ -41,21 +41,11 @@ typename CooVectorIteratorBase<_Derived>::ScalarType& CooVectorIteratorBase<_Der
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value.
-///
-/// @attention  Never call this when the iterator is at the end.
+/// @copydoc  getValue
 ///
 template <class _Derived>
 const typename CooVectorIteratorBase<_Derived>::ScalarType& CooVectorIteratorBase<_Derived>::getValue() const noexcept {
   return container_->getValue()[itidx_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index tuple.
-///
-template <class _Derived>
-typename CooVectorIteratorBase<_Derived>::IdxTupleType CooVectorIteratorBase<_Derived>::getIdxs() const noexcept {
-  return makeIdxTuple(&getIdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +70,40 @@ const typename CooVectorIteratorBase<_Derived>::IndexType& CooVectorIteratorBase
 template <class _Derived>
 index_t CooVectorIteratorBase<_Derived>::getPos() const noexcept {
   return itidx_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the iterator to beginning.
+///
+template <class _Derived>
+_Derived& CooVectorIteratorBase<_Derived>::setBegin() noexcept {
+  itidx_ = 0;
+  return this->derived();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the iterator to end.
+///
+template <class _Derived>
+_Derived& CooVectorIteratorBase<_Derived>::setEnd() noexcept {
+  itidx_ = (container_ != nullptr) ? container_->getNnz() : 0;
+  return this->derived();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index tuple.
+///
+template <class _Derived>
+typename CooVectorIteratorBase<_Derived>::IdxTupleType CooVectorIteratorBase<_Derived>::getIdxs() noexcept {
+  return makeIdxTuple(&getIdx());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdxs
+///
+template <class _Derived>
+typename CooVectorIteratorBase<_Derived>::ConstIdxTupleType CooVectorIteratorBase<_Derived>::getIdxs() const noexcept {
+  return makeIdxTuple(&getIdx());
 }
 
 }  // namespace internal
