@@ -13,7 +13,7 @@
 #include <isvd/matrix/base/container_base.hpp>
 #include <isvd/matrix/base/vector_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
-#include <isvd/matrix/dense/dense_vector_iterator.hpp>
+// #include <isvd/matrix/dense/dense_vector_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -42,10 +42,8 @@ struct Traits<DenseVector<_Scalar>> {
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
 
-  using IteratorType         = DenseVectorIterator<ScalarType>;
-  using ConstIteratorType    = DenseVectorConstIterator<ScalarType>;
-  using IdxIteratorType      = DenseVectorIdxIterator<ScalarType>;
-  using ConstIdxIteratorType = DenseVectorConstIdxIterator<ScalarType>;
+  // using IteratorType      = DenseVectorIterator<ScalarType>;
+  // using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
 };
 
 }  // namespace internal
@@ -57,8 +55,8 @@ struct Traits<DenseVector<_Scalar>> {
 ///
 template <typename _Scalar>
 class DenseVector
-  : public internal::ContainerBase<DenseVector<_Scalar>>,
-    public internal::VectorBase<DenseVector<_Scalar>>,
+  // : public internal::ContainerBase<DenseVector<_Scalar>>,
+  : public internal::VectorBase<DenseVector<_Scalar>>,
     public internal::DenseBase<DenseVector<_Scalar>> {
 
  public:
@@ -72,8 +70,8 @@ class DenseVector
 
   using DataType          = DenseData<ScalarType>;
 
-  using IteratorType      = DenseVectorIterator<ScalarType>;
-  using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
+  // using IteratorType      = DenseVectorIterator<ScalarType>;
+  // using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
 
  private:
 

@@ -133,7 +133,7 @@ CooBase<_Derived>& CooBase<_Derived>::operator=( CooBase &&other ) noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of value array.
+/// @copydoc  isvd::CooData::getCapability
 ///
 template <class _Derived>
 index_t CooBase<_Derived>::getCapability() const noexcept { return getData().getCapability(); }
@@ -145,7 +145,7 @@ template <class _Derived>
 index_t CooBase<_Derived>::getOffset() const noexcept { return offset_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset of starting position.
+/// @brief  Gets the number of nonzero elements.
 ///
 template <class _Derived>
 void CooBase<_Derived>::setNnz( const index_t nnz ) noexcept { nnz_ = nnz; }
@@ -163,7 +163,7 @@ template <class _Derived>
 const typename CooBase<_Derived>::DataType& CooBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value array.
+/// @copydoc  isvd::CooData::getValue
 ///
 template <class _Derived>
 typename CooBase<_Derived>::ScalarType* CooBase<_Derived>::getValue() noexcept {
@@ -179,19 +179,35 @@ const typename CooBase<_Derived>::ScalarType* CooBase<_Derived>::getValue() cons
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index array.
+/// @copydoc  isvd::CooData::getIdx
 ///
-template <class _Derived> template <index_t dim>
+template <class _Derived> template <index_t _dim>
 index_t* CooBase<_Derived>::getIdx() noexcept {
-  return getData().getIdx<dim>() + getOffset();
+  return getData().getIdx<_dim>() + getOffset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getIdx
 ///
-template <class _Derived> template <index_t dim>
+template <class _Derived> template <index_t _dim>
 const index_t* CooBase<_Derived>::getIdx() const noexcept {
-  return getData().getIdx<dim>() + getOffset();
+  return getData().getIdx<_dim>() + getOffset();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::CooData::getTuple
+///
+template <class _Derived>
+typename CooBase<_Derived>::TupleType CooBase<_Derived>::getTuple( const index_t pos ) noexcept {
+  return getData().getTuple(pos);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getTuple
+///
+template <class _Derived>
+typename CooBase<_Derived>::ConstTupleType CooBase<_Derived>::getTuple( const index_t pos ) const noexcept {
+  return getData().getTuple(pos);
 }
 
 }  // namespace internal

@@ -9,9 +9,6 @@
 #define ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 
 #include <isvd/isvd.hpp>
-#include <isvd/matrix/base/iterator_base.hpp>
-#include <isvd/matrix/base/value_iterator_base.hpp>
-#include <isvd/matrix/base/idx_iterator_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +48,7 @@ struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<IteratorBase<D
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector value iterator traits.
+/// The dense vector iterator traits.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _Vector  The vector type.
@@ -100,7 +97,7 @@ class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Sca
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector value iterator.
+/// The dense vector iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _Vector  The vector type.
@@ -117,7 +114,7 @@ class DenseVectorValueIteratorBase
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector value iterator.
+/// The dense vector iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _Vector  The vector type.

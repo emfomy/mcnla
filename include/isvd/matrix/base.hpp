@@ -10,12 +10,6 @@
 
 #include <isvd/matrix/base/container_base.hpp>
 #include <isvd/matrix/base/container_base.ipp>
-#include <isvd/matrix/base/iterator_base.hpp>
-#include <isvd/matrix/base/iterator_base.ipp>
-#include <isvd/matrix/base/value_iterator_base.hpp>
-#include <isvd/matrix/base/value_iterator_base.ipp>
-#include <isvd/matrix/base/idx_iterator_base.hpp>
-#include <isvd/matrix/base/idx_iterator_base.ipp>
 
 #include <isvd/matrix/base/tensor_base.hpp>
 

@@ -9,7 +9,6 @@
 #define ISVD_MATRIX_CONTAINER_BASE_HPP_
 
 #include <isvd/isvd.hpp>
-#include <isvd/utility/crtp.hpp>
 #include <isvd/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,14 +27,12 @@ namespace internal {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class ContainerBase : protected CrtpBase<_Derived, ContainerBase<_Derived>> {
+class ContainerBase {
 
  private:
 
-  using IteratorType         = typename Traits<_Derived>::IteratorType;
-  using ConstIteratorType    = typename Traits<_Derived>::ConstIteratorType;
-  using IdxIteratorType      = typename Traits<_Derived>::IdxIteratorType;
-  using ConstIdxIteratorType = typename Traits<_Derived>::ConstIdxIteratorType;
+  using IteratorType      = typename Traits<_Derived>::IteratorType;
+  using ConstIteratorType = typename Traits<_Derived>::ConstIteratorType;
 
  protected:
 
@@ -45,18 +42,18 @@ class ContainerBase : protected CrtpBase<_Derived, ContainerBase<_Derived>> {
  public:
 
   // Gets iterator
-  inline IteratorType         begin() noexcept;
-  inline ConstIteratorType    begin() const noexcept;
-  inline ConstIteratorType    cbegin() const noexcept;
-  inline IteratorType         end() noexcept;
-  inline ConstIteratorType    end() const noexcept;
-  inline ConstIteratorType    cend() const noexcept;
-  inline IdxIteratorType      ibegin() noexcept;
-  inline ConstIdxIteratorType ibegin() const noexcept;
-  inline ConstIdxIteratorType cibegin() const noexcept;
-  inline IdxIteratorType      iend() noexcept;
-  inline ConstIdxIteratorType iend() const noexcept;
-  inline ConstIdxIteratorType ciend() const noexcept;
+  inline IteratorType      begin() noexcept;
+  inline ConstIteratorType begin() const noexcept;
+  inline ConstIteratorType cbegin() const noexcept;
+  inline IteratorType      end() noexcept;
+  inline ConstIteratorType end() const noexcept;
+  inline ConstIteratorType cend() const noexcept;
+
+ protected:
+
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
 
 };
 

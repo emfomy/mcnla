@@ -12,6 +12,7 @@
 #include <isvd/utility/traits.hpp>
 #include <isvd/matrix/base/sparse_base.hpp>
 #include <isvd/matrix/coo/coo_data.hpp>
+#include <isvd/matrix/coo/coo_tuple.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -34,10 +35,14 @@ class CooBase : public SparseBase<_Derived> {
  private:
 
   static constexpr index_t ndim = Traits<_Derived>::ndim;
-  using ScalarType   = typename Traits<_Derived>::ScalarType;
-  using ValuePtrType = std::shared_ptr<std::valarray<ScalarType>>;
-  using IdxPtrType   = std::shared_ptr<std::valarray<index_t>>;
-  using DataType     = CooData<ScalarType, ndim>;
+
+  using ScalarType     = typename Traits<_Derived>::ScalarType;
+  using ValuePtrType   = std::shared_ptr<std::valarray<ScalarType>>;
+  using IdxPtrType     = std::shared_ptr<std::valarray<index_t>>;
+  using TupleType      = CooTuple<ndim, ScalarType, index_t>;
+  using ConstTupleType = CooTuple<ndim, const ScalarType, const index_t>;
+
+  using DataType       = CooData<ndim, ScalarType>;
 
   using SparseBaseType = SparseBase<_Derived>;
 
@@ -63,11 +68,11 @@ class CooBase : public SparseBase<_Derived> {
   inline CooBase( const CooBase &other ) noexcept;
   inline CooBase( CooBase &&other ) noexcept;
 
- public:
-
   // Operators
   inline CooBase& operator=( const CooBase &other ) noexcept;
   inline CooBase& operator=( CooBase &&other ) noexcept;
+
+ public:
 
   // Gets information
   inline index_t getCapability() const noexcept;
@@ -84,11 +89,13 @@ class CooBase : public SparseBase<_Derived> {
   inline       ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
 
- protected:
-
   // Gets index array
-  template <index_t dim> inline       index_t* getIdx() noexcept;
-  template <index_t dim> inline const index_t* getIdx() const noexcept;
+  inline       index_t* getIdx( const index_t dim ) noexcept;
+  inline const index_t* getIdx( const index_t dim ) const noexcept;
+  template <index_t _dim> inline       index_t* getIdx() noexcept;
+  template <index_t _dim> inline const index_t* getIdx() const noexcept;
+  inline TupleType      getTuple( const index_t pos ) noexcept;
+  inline ConstTupleType getTuple( const index_t pos ) const noexcept;
 
 };
 

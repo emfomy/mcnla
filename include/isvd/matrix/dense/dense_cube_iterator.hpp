@@ -9,9 +9,6 @@
 #define ISVD_MATRIX_DENSE_DENSE_CUBE_ITERATOR_HPP_
 
 #include <isvd/isvd.hpp>
-#include <isvd/matrix/base/iterator_base.hpp>
-#include <isvd/matrix/base/value_iterator_base.hpp>
-#include <isvd/matrix/base/idx_iterator_base.hpp>
 #include <isvd/matrix/dense/dense_cube.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +50,7 @@ struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>>
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix value iterator traits.
+/// The dense matrix iterator traits.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _layout  The storage layout.
@@ -111,7 +108,7 @@ class DenseCubeIteratorBase : public IteratorBase<DenseCubeIteratorBase<_Scalar,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense cube value iterator.
+/// The dense cube iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _layout  The storage layout.
@@ -129,7 +126,7 @@ class DenseCubeValueIteratorBase
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense cube value iterator.
+/// The dense cube iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _layout  The storage layout.

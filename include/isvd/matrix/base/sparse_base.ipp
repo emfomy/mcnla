@@ -23,14 +23,14 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Derived>
+template <typename _Derived>
 SparseBase<_Derived>::SparseBase() noexcept
   : nnz_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Derived>
+template <typename _Derived>
 SparseBase<_Derived>::SparseBase(
     const index_t nnz
 ) noexcept
@@ -43,14 +43,14 @@ SparseBase<_Derived>::SparseBase(
 ///
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
-template <class _Derived>
+template <typename _Derived>
 SparseBase<_Derived>::SparseBase( const SparseBase &other ) noexcept
   : nnz_(other.nnz_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <class _Derived>
+template <typename _Derived>
 SparseBase<_Derived>::SparseBase( SparseBase &&other ) noexcept
   : nnz_(other.nnz_) {
   other.nnz_ = 0;
@@ -61,7 +61,7 @@ SparseBase<_Derived>::SparseBase( SparseBase &&other ) noexcept
 ///
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
-template <class _Derived>
+template <typename _Derived>
 SparseBase<_Derived>& SparseBase<_Derived>::operator=( const SparseBase &other ) noexcept {
   nnz_ = other.nnz_;
   return *this;
@@ -70,7 +70,7 @@ SparseBase<_Derived>& SparseBase<_Derived>::operator=( const SparseBase &other )
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <class _Derived>
+template <typename _Derived>
 SparseBase<_Derived>& SparseBase<_Derived>::operator=( SparseBase &&other ) noexcept {
   nnz_ = other.nnz_; other.nnz_ = 0;
   return *this;
@@ -79,7 +79,7 @@ SparseBase<_Derived>& SparseBase<_Derived>::operator=( SparseBase &&other ) noex
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <class _Derived>
+template <typename _Derived>
 index_t SparseBase<_Derived>::getNnz() const noexcept { return nnz_; }
 
 }  // namespace internal

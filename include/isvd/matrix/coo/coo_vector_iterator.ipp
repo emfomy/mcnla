@@ -23,87 +23,28 @@ namespace internal {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
-template <class __Derived>
-std::ostream& operator<< ( std::ostream &out, const CooVectorIteratorBase<__Derived> &iterator ) {
+template <typename __Scalar, typename __Index, class __Vector>
+std::ostream& operator<< ( std::ostream &out, const CooVectorIteratorBase<__Scalar, __Index, __Vector> &iterator ) {
   const index_t witdh = log10(iterator.container_->getLength())+1;
   return out << "(" << std::setw(witdh) << iterator.getIdx() << ")  "
                     << std::setw(ios_width) << iterator.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value.
-///
-/// @attention  Never call this when the iterator is at the end.
-///
-template <class _Derived>
-typename CooVectorIteratorBase<_Derived>::ScalarType& CooVectorIteratorBase<_Derived>::getValue() noexcept {
-  return container_->getValue()[itidx_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <class _Derived>
-const typename CooVectorIteratorBase<_Derived>::ScalarType& CooVectorIteratorBase<_Derived>::getValue() const noexcept {
-  return container_->getValue()[itidx_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the index.
 ///
-template <class _Derived>
-typename CooVectorIteratorBase<_Derived>::IndexType& CooVectorIteratorBase<_Derived>::getIdx() noexcept {
-  return container_->getIdx()[itidx_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index.
-///
-template <class _Derived>
-const typename CooVectorIteratorBase<_Derived>::IndexType& CooVectorIteratorBase<_Derived>::getIdx() const noexcept {
-  return container_->getIdx()[itidx_];
+template <typename _Scalar, typename _Index, class _Vector> template <index_t _dim>
+typename CooVectorIteratorBase<_Scalar, _Index, _Vector>::IndexType&
+    CooVectorIteratorBase<_Scalar, _Index, _Vector>::getIdx() const noexcept {
+  return BaseType::template getIdx<_dim>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
-template <class _Derived>
-index_t CooVectorIteratorBase<_Derived>::getPos() const noexcept {
-  return itidx_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the iterator to beginning.
-///
-template <class _Derived>
-_Derived& CooVectorIteratorBase<_Derived>::setBegin() noexcept {
-  itidx_ = 0;
-  return this->derived();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the iterator to end.
-///
-template <class _Derived>
-_Derived& CooVectorIteratorBase<_Derived>::setEnd() noexcept {
-  itidx_ = (container_ != nullptr) ? container_->getNnz() : 0;
-  return this->derived();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index tuple.
-///
-template <class _Derived>
-typename CooVectorIteratorBase<_Derived>::IdxTupleType CooVectorIteratorBase<_Derived>::getIdxs() noexcept {
-  return makeIdxTuple(&getIdx());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdxs
-///
-template <class _Derived>
-typename CooVectorIteratorBase<_Derived>::ConstIdxTupleType CooVectorIteratorBase<_Derived>::getIdxs() const noexcept {
-  return makeIdxTuple(&getIdx());
+template <typename _Scalar, typename _Index, class _Vector>
+index_t CooVectorIteratorBase<_Scalar, _Index, _Vector>::getPos() const noexcept {
+  return this->getItIdx();
 }
 
 }  // namespace internal

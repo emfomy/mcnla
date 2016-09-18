@@ -25,7 +25,7 @@ namespace internal {
 ///
 /// @tparam  _Derived  The derived type.
 ///
-template <class _Derived>
+template <typename _Derived>
 class SparseBase {
 
  protected:
@@ -41,11 +41,11 @@ class SparseBase {
   inline SparseBase( const SparseBase &other ) noexcept;
   inline SparseBase( SparseBase &&other ) noexcept;
 
- public:
-
   // Operators
   inline SparseBase& operator=( const SparseBase &other ) noexcept;
   inline SparseBase& operator=( SparseBase &&other ) noexcept;
+
+ public:
 
   // Gets information
   inline index_t getNnz() const noexcept;

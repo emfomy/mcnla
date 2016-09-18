@@ -12,27 +12,77 @@
 #include <array>
 #include <valarray>
 #include <memory>
+#include <isvd/matrix/coo/coo_tuple.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <index_t _ndim, typename _Scalar> class CooData;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The internal namespace.
+//
+namespace internal {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The COO data helper.
+///
+template <index_t _ndim, typename _Scalar, index_t _dim = _ndim-1>
+struct CooDataHelper {
+  static_assert(_dim > 0 && _dim < _ndim, "Invalid dimension!");
+
+  using DataType       = CooData<_ndim, _Scalar>;
+  using TupleType      = CooTuple<_ndim, _Scalar, index_t>;
+  using ConstTupleType = CooTuple<_ndim, const _Scalar, const index_t>;
+
+  template <typename... _Args>
+  static inline TupleType getTuple( DataType &data, const index_t pos, _Args&... args ) noexcept;
+
+  template <typename... _Args>
+  static inline ConstTupleType getConstTuple( const DataType &data, const index_t pos, _Args&... args ) noexcept;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The COO data helper.
+///
+template <index_t _ndim, typename _Scalar>
+struct CooDataHelper<_ndim, _Scalar, 0> {
+
+  using DataType       = CooData<_ndim, _Scalar>;
+  using TupleType      = CooTuple<_ndim, _Scalar, index_t>;
+  using ConstTupleType = CooTuple<_ndim, const _Scalar, const index_t>;
+
+  template <typename... _Args>
+  static inline TupleType getTuple( DataType &data, const index_t pos, _Args&... args ) noexcept;
+
+  template <typename... _Args>
+  static inline ConstTupleType getConstTuple( const DataType &data, const index_t pos, _Args&... args ) noexcept;
+
+};
+
+}  // namespace internal
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) data storage.
 ///
-/// @tparam  _Scalar  The scalar type.
 /// @tparam  _ndim    The dimension.
+/// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar, index_t _ndim>
+template <index_t _ndim, typename _Scalar>
 class CooData {
 
   static_assert(_ndim >= 0, "Invalid dimension!");
 
  private:
 
-  using ValuePtrType = std::shared_ptr<std::valarray<_Scalar>>;
-  using IdxPtrType   = std::shared_ptr<std::valarray<index_t>>;
+  using ValuePtrType   = std::shared_ptr<std::valarray<_Scalar>>;
+  using IdxPtrType     = std::shared_ptr<std::valarray<index_t>>;
+  using TupleType      = CooTuple<_ndim, _Scalar, index_t>;
+  using ConstTupleType = CooTuple<_ndim, const _Scalar, const index_t>;
 
  protected:
 
@@ -69,18 +119,22 @@ class CooData {
   inline        index_t getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;
-  template <index_t dim> inline       index_t* getIdx() noexcept;
-  template <index_t dim> inline const index_t* getIdx() const noexcept;
+  inline       index_t* getIdx( const index_t dim ) noexcept;
+  inline const index_t* getIdx( const index_t dim ) const noexcept;
+  template <index_t _dim> inline       index_t* getIdx() noexcept;
+  template <index_t _dim> inline const index_t* getIdx() const noexcept;
+  inline TupleType      getTuple( const index_t pos ) noexcept;
+  inline ConstTupleType getTuple( const index_t pos ) const noexcept;
 
 };
 
-template <typename _Scalar, index_t _ndim>
-const typename CooData<_Scalar, _ndim>::ValuePtrType
-    CooData<_Scalar, _ndim>::kNullValue = std::make_shared<std::valarray<_Scalar>>();
+template <index_t _ndim, typename _Scalar>
+const typename CooData<_ndim, _Scalar>::ValuePtrType
+    CooData<_ndim, _Scalar>::kNullValue = std::make_shared<std::valarray<_Scalar>>();
 
-template <typename _Scalar, index_t _ndim>
-const typename CooData<_Scalar, _ndim>::IdxPtrType
-    CooData<_Scalar, _ndim>::kNullIdx   = std::make_shared<std::valarray<index_t>>();
+template <index_t _ndim, typename _Scalar>
+const typename CooData<_ndim, _Scalar>::IdxPtrType
+    CooData<_ndim, _Scalar>::kNullIdx   = std::make_shared<std::valarray<index_t>>();
 
 }  // namespace isvd
 

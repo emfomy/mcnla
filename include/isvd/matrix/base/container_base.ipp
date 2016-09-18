@@ -68,52 +68,20 @@ typename ContainerBase<_Derived>::ConstIteratorType ContainerBase<_Derived>::cen
   return ConstIteratorType::getEnd(&(this->derived()));
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index iterator to beginning.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
 ///
 template <class _Derived>
-typename ContainerBase<_Derived>::IdxIteratorType ContainerBase<_Derived>::ibegin() noexcept {
-  return IdxIteratorType::getBegin(&(this->derived()));
+_Derived& ContainerBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  ibegin
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
 ///
 template <class _Derived>
-typename ContainerBase<_Derived>::ConstIdxIteratorType ContainerBase<_Derived>::ibegin() const noexcept {
-  return ConstIdxIteratorType::getBegin(&(this->derived()));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  ibegin
-///
-template <class _Derived>
-typename ContainerBase<_Derived>::ConstIdxIteratorType ContainerBase<_Derived>::cibegin() const noexcept {
-  return ConstIdxIteratorType::getBegin(&(this->derived()));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index iterator to end.
-///
-template <class _Derived>
-typename ContainerBase<_Derived>::IdxIteratorType ContainerBase<_Derived>::iend() noexcept {
-  return IdxIteratorType::getEnd(&(this->derived()));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  iend
-///
-template <class _Derived>
-typename ContainerBase<_Derived>::ConstIdxIteratorType ContainerBase<_Derived>::iend() const noexcept {
-  return ConstIdxIteratorType::getEnd(&(this->derived()));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  iend
-///
-template <class _Derived>
-typename ContainerBase<_Derived>::ConstIdxIteratorType ContainerBase<_Derived>::ciend() const noexcept {
-  return ConstIdxIteratorType::getEnd(&(this->derived()));
+const _Derived& ContainerBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
 }
 
 }  // namespace internal

@@ -25,18 +25,18 @@ namespace internal {
 /// @brief  Equal-to operator.
 ///
 template <index_t _ndim, index_t _dim> template <typename _Indexa, typename _Scalara, typename _Indexb, typename _Scalarb>
-bool CooTupleProxy<_ndim, _dim>::equalTo(
+bool CooTupleHelper<_ndim, _dim>::equalTo(
     const CooTuple<_ndim, _Indexa, _Scalara> &a,
     const CooTuple<_ndim, _Indexb, _Scalarb> &b
 ) noexcept {
-  return (std::get<_dim>(a) == std::get<_dim>(b)) ? CooTupleProxy<_ndim, _dim-1>::equalTo(a, b) : false;
+  return (std::get<_dim>(a) == std::get<_dim>(b)) ? CooTupleHelper<_ndim, _dim-1>::equalTo(a, b) : false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
 template <index_t _ndim> template <typename _Indexa, typename _Scalara, typename _Indexb, typename _Scalarb>
-bool CooTupleProxy<_ndim, 0>::equalTo(
+bool CooTupleHelper<_ndim, 0>::equalTo(
     const CooTuple<_ndim, _Indexa, _Scalara> &a,
     const CooTuple<_ndim, _Indexb, _Scalarb> &b
 ) noexcept {
@@ -47,11 +47,11 @@ bool CooTupleProxy<_ndim, 0>::equalTo(
 /// @brief  Less-than operator.
 ///
 template <index_t _ndim, index_t _dim> template <typename _Indexa, typename _Scalara, typename _Indexb, typename _Scalarb>
-bool CooTupleProxy<_ndim, _dim>::lessThan(
+bool CooTupleHelper<_ndim, _dim>::lessThan(
     const CooTuple<_ndim, _Indexa, _Scalara> &a,
     const CooTuple<_ndim, _Indexb, _Scalarb> &b
 ) noexcept {
-  return (std::get<_dim>(a) == std::get<_dim>(b)) ? CooTupleProxy<_ndim, _dim-1>::lessThan(a, b)
+  return (std::get<_dim>(a) == std::get<_dim>(b)) ? CooTupleHelper<_ndim, _dim-1>::lessThan(a, b)
                                                   : (std::get<_dim>(a) < std::get<_dim>(b));
 }
 
@@ -59,7 +59,7 @@ bool CooTupleProxy<_ndim, _dim>::lessThan(
 /// @brief  Less-than operator.
 ///
 template <index_t _ndim> template <typename _Indexa, typename _Scalara, typename _Indexb, typename _Scalarb>
-bool CooTupleProxy<_ndim, 0>::lessThan(
+bool CooTupleHelper<_ndim, 0>::lessThan(
     const CooTuple<_ndim, _Indexa, _Scalara> &a,
     const CooTuple<_ndim, _Indexb, _Scalarb> &b
 ) noexcept {
@@ -70,11 +70,11 @@ bool CooTupleProxy<_ndim, 0>::lessThan(
 /// @brief  Greater-than operator.
 ///
 template <index_t _ndim, index_t _dim> template <typename _Indexa, typename _Scalara, typename _Indexb, typename _Scalarb>
-bool CooTupleProxy<_ndim, _dim>::greaterThan(
+bool CooTupleHelper<_ndim, _dim>::greaterThan(
     const CooTuple<_ndim, _Indexa, _Scalara> &a,
     const CooTuple<_ndim, _Indexb, _Scalarb> &b
 ) noexcept {
-  return (std::get<_dim>(a) == std::get<_dim>(b)) ? CooTupleProxy<_ndim, _dim-1>::greaterThan(a, b)
+  return (std::get<_dim>(a) == std::get<_dim>(b)) ? CooTupleHelper<_ndim, _dim-1>::greaterThan(a, b)
                                                   : (std::get<_dim>(a) > std::get<_dim>(b));
 }
 
@@ -82,7 +82,7 @@ bool CooTupleProxy<_ndim, _dim>::greaterThan(
 /// @brief  Greater-than operator.
 ///
 template <index_t _ndim> template <typename _Indexa, typename _Scalara, typename _Indexb, typename _Scalarb>
-bool CooTupleProxy<_ndim, 0>::greaterThan(
+bool CooTupleHelper<_ndim, 0>::greaterThan(
     const CooTuple<_ndim, _Indexa, _Scalara> &a,
     const CooTuple<_ndim, _Indexb, _Scalarb> &b
 ) noexcept {
@@ -92,21 +92,47 @@ bool CooTupleProxy<_ndim, 0>::greaterThan(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc isvd::CooTuple::swap
 ///
-template <index_t _ndim, index_t _dim> template <typename _Index, typename _Scalar>
-void CooTupleProxy<_ndim, _dim>::swap( CooTuple<_ndim, _Index, _Scalar> a, CooTuple<_ndim, _Index, _Scalar> b ) noexcept {
-  static_assert(!std::is_void<_Scalar>::value, "'CooTuple<n, void>' could not swap!");
+template <index_t _ndim, index_t _dim> template <typename _Scalar, typename _Index>
+void CooTupleHelper<_ndim, _dim>::swap(
+    CooTuple<_ndim, _Scalar, _Index> a,
+    CooTuple<_ndim, _Scalar, _Index> b
+) noexcept {
   std::swap(std::get<_dim>(a), std::get<_dim>(b));
-  CooTupleProxy<_ndim, _dim-1>::swap(a, b);
+  CooTupleHelper<_ndim, _dim-1>::swap(a, b);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc isvd::CooTuple::swap
 ///
-template <index_t _ndim> template <typename _Index, typename _Scalar>
-void CooTupleProxy<_ndim, 0>::swap( CooTuple<_ndim, _Index, _Scalar> a, CooTuple<_ndim, _Index, _Scalar> b ) noexcept {
-  static_assert(!std::is_void<_Scalar>::value, "'CooTuple<n, void>' could not swap!");
+template <index_t _ndim> template <typename _Scalar, typename _Index>
+void CooTupleHelper<_ndim, 0>::swap(
+    CooTuple<_ndim, _Scalar, _Index> a,
+    CooTuple<_ndim, _Scalar, _Index> b
+) noexcept {
   std::swap(std::get<0>(a), std::get<0>(b));
   std::swap(std::get<_ndim>(a), std::get<_ndim>(b));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Makes a reference tuple of given tuple
+///
+template <index_t _ndim, index_t _dim> template <typename... _Args, typename... __Args>
+std::tuple<_Args&...> CooTupleHelper<_ndim, _dim>::makeRefTuple(
+    std::tuple<_Args...> &tuple,
+    __Args&... args
+) noexcept {
+  return CooTupleHelper<_ndim, _dim-1>::makeRefTuple(tuple, std::get<_dim>(tuple), args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  makeRefTuple
+///
+template <index_t _ndim> template <typename... _Args, typename... __Args>
+std::tuple<_Args&...> CooTupleHelper<_ndim, 0>::makeRefTuple(
+    std::tuple<_Args...> &tuple,
+    __Args&... args
+) noexcept {
+  return std::tie(std::get<0>(tuple), args..., std::get<_ndim>(tuple));
 }
 
 }  // namespace internal
@@ -114,90 +140,119 @@ void CooTupleProxy<_ndim, 0>::swap( CooTuple<_ndim, _Index, _Scalar> a, CooTuple
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given indices.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar>
-CooTuple<_ndim, _Index, _Scalar>::CooTuple( const BaseType base ) noexcept
-  : BaseType(base) {}
+template <index_t _ndim, typename _Scalar, typename _Index>
+CooTuple<_ndim, _Scalar, _Index>::CooTuple( const BaseType base ) noexcept
+  : BaseType(base),
+    tuple_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar>
-CooTuple<_ndim, _Index, _Scalar>::CooTuple( const CooTuple &other ) noexcept
-  : BaseType(other) {}
+template <index_t _ndim, typename _Scalar, typename _Index>
+CooTuple<_ndim, _Scalar, _Index>::CooTuple( const CooTuple &other ) noexcept
+  : BaseType(other),
+    tuple_() {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <index_t _ndim, typename _Scalar, typename _Index>
+CooTuple<_ndim, _Scalar, _Index>::CooTuple( CooTuple &&other ) noexcept
+  : BaseType(internal::CooTupleHelper<_ndim>::makeRefTuple(tuple_)),
+    tuple_(other) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy from tuple.
+///
+template <index_t _ndim, typename _Scalar, typename _Index>
+CooTuple<_ndim, _Scalar, _Index>& CooTuple<_ndim, _Scalar, _Index>::operator=( const BaseType base ) noexcept {
+  BaseType::operator=(base); return *this;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar>
-CooTuple<_ndim, _Index, _Scalar>& CooTuple<_ndim, _Index, _Scalar>::operator=( const CooTuple &other ) noexcept {
+template <index_t _ndim, typename _Scalar, typename _Index>
+CooTuple<_ndim, _Scalar, _Index>& CooTuple<_ndim, _Scalar, _Index>::operator=( const CooTuple &other ) noexcept {
   BaseType::operator=(other); return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar> template <typename __Index, typename __Scalar>
-bool CooTuple<_ndim, _Index, _Scalar>::operator==( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
-  return internal::CooTupleProxy<_ndim>::equalTo(*this, other);
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename __Index>
+bool CooTuple<_ndim, _Scalar, _Index>::operator==( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
+  return internal::CooTupleHelper<_ndim>::equalTo(*this, other);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-qual-to operator.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar> template <typename __Index, typename __Scalar>
-bool CooTuple<_ndim, _Index, _Scalar>::operator!=( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename __Index>
+bool CooTuple<_ndim, _Scalar, _Index>::operator!=( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
   return !(*this == other);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Less-than operator.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar> template <typename __Index, typename __Scalar>
-bool CooTuple<_ndim, _Index, _Scalar>::operator<( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
-  return internal::CooTupleProxy<_ndim>::lessThan(*this, other);
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename __Index>
+bool CooTuple<_ndim, _Scalar, _Index>::operator<( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
+  return internal::CooTupleHelper<_ndim>::lessThan(*this, other);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Greater-than operator.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar> template <typename __Index, typename __Scalar>
-bool CooTuple<_ndim, _Index, _Scalar>::operator>( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
-  return internal::CooTupleProxy<_ndim>::greaterThan(*this, other);
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename __Index>
+bool CooTuple<_ndim, _Scalar, _Index>::operator>( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
+  return internal::CooTupleHelper<_ndim>::greaterThan(*this, other);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Less-than or equal-to operator.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar> template <typename __Index, typename __Scalar>
-bool CooTuple<_ndim, _Index, _Scalar>::operator<=( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename __Index>
+bool CooTuple<_ndim, _Scalar, _Index>::operator<=( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
   return !(*this > other);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Greater-than or equal-to operator.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar> template <typename __Index, typename __Scalar>
-bool CooTuple<_ndim, _Index, _Scalar>::operator>=( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename __Index>
+bool CooTuple<_ndim, _Scalar, _Index>::operator>=( const CooTuple<_ndim, __Index, __Scalar>& other ) const noexcept {
   return !(*this < other);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Assigns values.
+///
+/// @attention  This routine is only available if `_Scalar != void`.
+///
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename... _Args>
+void CooTuple<_ndim, _Scalar, _Index>::operator()( const __Scalar value, const _Args... args ) noexcept {
+  BaseType::operator=(std::make_tuple(args..., value));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Swaps COO tuples.
 ///
-template <index_t _ndim, typename _Index, typename _Scalar>
-void CooTuple<_ndim, _Index, _Scalar>::swap( CooTuple a, CooTuple b ) noexcept {
-  internal::CooTupleProxy<_ndim>::swap(a, b);
+/// @attention  This routine is only available if `_Scalar != void`.
+///
+template <index_t _ndim, typename _Scalar, typename _Index>
+void CooTuple<_ndim, _Scalar, _Index>::swap( CooTuple a, CooTuple b ) noexcept {
+  internal::CooTupleHelper<_ndim>::swap(a, b);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Makes a COO tuple
 ///
 /// @param  args  The indices in storage order (idx1, idx2, ...).
-/// @param  idx
 ///
 template <typename _Index, typename... _Args>
-CooTuple<sizeof...(_Args)+1, _Index> makeCooTuple( _Index idx, _Args... args ) {
-  return CooTuple<sizeof...(_Args)+1, _Index>(std::make_tuple(idx, args...));
+CooTuple<sizeof...(_Args)+1, void*, _Index> makeCooTuple( const _Index idx, const _Args... args ) {
+  return CooTuple<sizeof...(_Args)+1, void*, _Index>(std::make_tuple(idx, args..., nullptr));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,11 +260,10 @@ CooTuple<sizeof...(_Args)+1, _Index> makeCooTuple( _Index idx, _Args... args ) {
 ///
 /// @param  value  The value.
 /// @param  args   The indices in storage order (idx1, idx2, ...).
-/// @param  idx
 ///
 template <typename _Scalar, typename _Index, typename... _Args>
-CooTuple<sizeof...(_Args)+1, _Index, _Scalar> makeRefCooTuple( _Scalar &value, _Index &idx, _Args&... args ) {
-  return CooTuple<sizeof...(_Args)+1, _Index, _Scalar>(std::tie(idx, args..., value));
+CooTuple<sizeof...(_Args)+1, _Scalar, _Index> makeCooRefTuple( _Scalar &value, _Index &idx, _Args&... args ) {
+  return CooTuple<sizeof...(_Args)+1, _Scalar, _Index>(std::tie(idx, args..., value));
 }
 
 }  // namespace isvd
@@ -217,9 +271,9 @@ CooTuple<sizeof...(_Args)+1, _Index, _Scalar> makeRefCooTuple( _Scalar &value, _
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc isvd::CooTuple::swap
 ///
-template <isvd::index_t _ndim, typename _Index, typename _Scalar>
-void std::swap( isvd::CooTuple<_ndim, _Index, _Scalar> a, isvd::CooTuple<_ndim, _Index, _Scalar> b ) noexcept {
-  isvd::CooTuple<_ndim, _Index, _Scalar>::swap(a, b);
+template <isvd::index_t _ndim, typename _Scalar, typename _Index>
+void std::swap( isvd::CooTuple<_ndim, _Scalar, _Index> a, isvd::CooTuple<_ndim, _Scalar, _Index> b ) noexcept {
+  isvd::CooTuple<_ndim, _Scalar, _Index>::swap(a, b);
 }
 
 #endif  // ISVD_MATRIX_COO_COO_TUPLE_IPP_

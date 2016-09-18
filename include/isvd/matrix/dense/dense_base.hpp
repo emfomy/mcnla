@@ -54,11 +54,11 @@ class DenseBase {
   inline DenseBase( const DenseBase &other ) noexcept;
   inline DenseBase( DenseBase &&other ) noexcept;
 
- public:
-
   // Operators
   inline DenseBase& operator=( const DenseBase &other ) noexcept;
   inline DenseBase& operator=( DenseBase &&other ) noexcept;
+
+ public:
 
   // Gets information
   inline index_t getCapability() const noexcept;

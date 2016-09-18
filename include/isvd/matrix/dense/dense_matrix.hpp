@@ -15,7 +15,7 @@
 #include <isvd/matrix/base/matrix_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
-#include <isvd/matrix/dense/dense_matrix_iterator.hpp>
+// #include <isvd/matrix/dense/dense_matrix_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -51,10 +51,8 @@ struct Traits<DenseMatrix<_Scalar, _layout>> {
   using TransposeType     = DenseMatrix<ScalarType, changeLayout(_layout)>;
   using RealTransposeType = DenseMatrix<RealScalarType, changeLayout(_layout)>;
 
-  using IteratorType         = DenseMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType    = DenseMatrixConstIterator<ScalarType, _layout>;
-  using IdxIteratorType      = DenseMatrixIdxIterator<ScalarType, _layout>;
-  using ConstIdxIteratorType = DenseMatrixConstIdxIterator<ScalarType, _layout>;
+  // using IteratorType      = DenseMatrixIterator<ScalarType, _layout>;
+  // using ConstIteratorType = DenseMatrixConstIterator<ScalarType, _layout>;
 };
 
 }  // namespace internal
@@ -67,8 +65,8 @@ struct Traits<DenseMatrix<_Scalar, _layout>> {
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseMatrix
-  : public internal::ContainerBase<DenseMatrix<_Scalar, _layout>>,
-    public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
+  // : public internal::ContainerBase<DenseMatrix<_Scalar, _layout>>,
+  : public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
     public internal::DenseBase<DenseMatrix<_Scalar, _layout>> {
 
  public:
