@@ -21,9 +21,9 @@ template <typename _Scalar, Layout _layout> class DenseMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout, class _Matrix> class DenseMatrixIteratorBase;
@@ -143,23 +143,23 @@ class DenseMatrixIdxIteratorBase
 
 };
 
-}  // namespace internal
+}  // namespace detail
 
 template <typename _Scalar, Layout _layout>
 using DenseMatrixIterator =
-    internal::DenseMatrixValueIteratorBase<_Scalar, _layout, DenseMatrix<_Scalar, _layout>>;
+    detail::DenseMatrixValueIteratorBase<_Scalar, _layout, DenseMatrix<_Scalar, _layout>>;
 
 template <typename _Scalar, Layout _layout>
 using DenseMatrixConstIterator =
-    internal::DenseMatrixValueIteratorBase<const _Scalar, _layout, const DenseMatrix<_Scalar, _layout>>;
+    detail::DenseMatrixValueIteratorBase<const _Scalar, _layout, const DenseMatrix<_Scalar, _layout>>;
 
 template <typename _Scalar, Layout _layout>
 using DenseMatrixIdxIterator =
-    internal::DenseMatrixIdxIteratorBase<_Scalar, _layout, DenseMatrix<_Scalar, _layout>>;
+    detail::DenseMatrixIdxIteratorBase<_Scalar, _layout, DenseMatrix<_Scalar, _layout>>;
 
 template <typename _Scalar, Layout _layout>
 using DenseMatrixConstIdxIterator =
-    internal::DenseMatrixIdxIteratorBase<const _Scalar, _layout, const DenseMatrix<_Scalar, _layout>>;
+    detail::DenseMatrixIdxIteratorBase<const _Scalar, _layout, const DenseMatrix<_Scalar, _layout>>;
 
 }  // namespace isvd
 

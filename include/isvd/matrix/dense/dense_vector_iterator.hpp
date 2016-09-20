@@ -21,9 +21,9 @@ template <typename _Scalar> class DenseVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, class _Vector> class DenseVectorIteratorBase;
@@ -130,19 +130,19 @@ class DenseVectorIdxIteratorBase
 
 };
 
-}  // namespace internal
+}  // namespace detail
 
 template <typename _Scalar>
-using DenseVectorIterator = internal::DenseVectorValueIteratorBase<_Scalar, DenseVector<_Scalar>>;
+using DenseVectorIterator = detail::DenseVectorValueIteratorBase<_Scalar, DenseVector<_Scalar>>;
 
 template <typename _Scalar>
-using DenseVectorConstIterator = internal::DenseVectorValueIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+using DenseVectorConstIterator = detail::DenseVectorValueIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
 
 template <typename _Scalar>
-using DenseVectorIdxIterator = internal::DenseVectorIdxIteratorBase<_Scalar, DenseVector<_Scalar>>;
+using DenseVectorIdxIterator = detail::DenseVectorIdxIteratorBase<_Scalar, DenseVector<_Scalar>>;
 
 template <typename _Scalar>
-using DenseVectorConstIdxIterator = internal::DenseVectorIdxIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+using DenseVectorConstIdxIterator = detail::DenseVectorIdxIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
 
 }  // namespace isvd
 

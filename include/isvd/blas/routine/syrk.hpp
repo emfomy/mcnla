@@ -22,7 +22,7 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::syrk
+/// @copydoc  isvd::blas::detail::syrk
 ///
 //@{
 template <TransOption _trans = TransOption::NORMAL,
@@ -38,7 +38,7 @@ inline void syrk(
   assert(c.getNrow() == c.getNcol());
   assert(c.getNrow() == a.template getNrow<_trans>());
 
-  internal::syrk(UploChar<_uplo, _layout>::value, TransChar<trans, _Scalar>::value,
+  detail::syrk(UploChar<_uplo, _layout>::value, TransChar<trans, _Scalar>::value,
                  c.getNrow(), a.template getNcol<trans>(),
                  alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
 }

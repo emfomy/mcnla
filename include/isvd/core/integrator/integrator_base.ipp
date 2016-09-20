@@ -16,16 +16,11 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
 IntegratorBase<_Derived>::IntegratorBase(
-    const internal::Parameters<ScalarType> &parameters
+    const Parameters<ScalarType> &parameters
 ) noexcept : parameters_(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +58,6 @@ template <class _Derived>
 DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>& IntegratorBase<_Derived>::getMatrixQc() noexcept {
   return this->derived().getMatrixQcImpl();
 }
-
-}  // namespace internal
 
 }  // namespace isvd
 

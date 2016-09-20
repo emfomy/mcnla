@@ -168,11 +168,11 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   }
 
   if ( isColMajor(layout) ) {
-    assert(internal::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
+    assert(detail::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
                            s.getValue(), u.getValue(), u.getPitch(), vt.getValue(), vt.getPitch(),
                            work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
   } else {
-    assert(internal::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
+    assert(detail::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
                            s.getValue(), vt.getValue(), vt.getPitch(), u.getValue(), u.getPitch(),
                            work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
   }
@@ -187,10 +187,10 @@ index_t GesvdDriver<_Matrix, _jobu, _jobvt>::query(
 ) const noexcept {
   ScalarType lwork;
   if ( isColMajor(layout) ) {
-    assert(internal::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
+    assert(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
                            nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr) == 0);
   } else {
-    assert(internal::gesvd(_jobvt, _jobu, ncol, nrow, nullptr, ncol, nullptr,
+    assert(detail::gesvd(_jobvt, _jobu, ncol, nrow, nullptr, ncol, nullptr,
                            nullptr, ncol, nullptr, nrow, &lwork, -1, nullptr) == 0);
   }
   return lwork;

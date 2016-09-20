@@ -16,9 +16,9 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 template <index_t _ndim, typename _Scalar, index_t _dim> template <typename... _Args>
 typename CooDataHelper<_ndim, _Scalar, _dim>::TupleType CooDataHelper<_ndim, _Scalar, _dim>::getTuple(
@@ -48,7 +48,7 @@ typename CooDataHelper<_ndim, _Scalar, 0>::ConstTupleType CooDataHelper<_ndim, _
   return makeCooRefTuple(data.getValue()[pos], data.template getIdx<0>()[pos], args...);
 }
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
@@ -211,7 +211,7 @@ const index_t* CooData<_ndim, _Scalar>::getIdx() const noexcept {
 ///
 template <index_t _ndim, typename _Scalar>
 typename CooData<_ndim, _Scalar>::TupleType CooData<_ndim, _Scalar>::getTuple( const index_t pos ) noexcept {
-  return internal::CooDataHelper<_ndim, _Scalar>::getTuple(*this, pos);
+  return detail::CooDataHelper<_ndim, _Scalar>::getTuple(*this, pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +219,7 @@ typename CooData<_ndim, _Scalar>::TupleType CooData<_ndim, _Scalar>::getTuple( c
 ///
 template <index_t _ndim, typename _Scalar>
 typename CooData<_ndim, _Scalar>::ConstTupleType CooData<_ndim, _Scalar>::getTuple( const index_t pos ) const noexcept {
-  return internal::CooDataHelper<_ndim, _Scalar>::getConstTuple(*this, pos);
+  return detail::CooDataHelper<_ndim, _Scalar>::getConstTuple(*this, pos);
 }
 
 }  // namespace isvd

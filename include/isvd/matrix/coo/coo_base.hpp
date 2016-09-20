@@ -20,11 +20,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of coordinate list (COO) container.
 ///
 /// @tparam  _Derived  The derived type.
@@ -34,9 +29,9 @@ class CooBase : public SparseBase<_Derived> {
 
  private:
 
-  static constexpr index_t ndim = Traits<_Derived>::ndim;
+  static constexpr index_t ndim = detail::Traits<_Derived>::ndim;
 
-  using ScalarType     = typename Traits<_Derived>::ScalarType;
+  using ScalarType     = typename detail::Traits<_Derived>::ScalarType;
   using ValuePtrType   = std::shared_ptr<std::valarray<ScalarType>>;
   using IdxPtrType     = std::shared_ptr<std::valarray<index_t>>;
   using TupleType      = CooTuple<ndim, ScalarType, index_t>;
@@ -98,8 +93,6 @@ class CooBase : public SparseBase<_Derived> {
   inline ConstTupleType getTuple( const index_t pos ) const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

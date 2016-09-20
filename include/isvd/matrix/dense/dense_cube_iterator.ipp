@@ -16,9 +16,9 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
@@ -116,7 +116,7 @@ index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getPos() const noexcept 
   return container_->getPos(getRowIdx(), getColIdx(), getPageIdx());
 }
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace isvd
 

@@ -30,7 +30,7 @@ namespace lapack {
 template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Layout _layout>
 inline void gesvd(
     DenseMatrix<_Scalar, _layout> &a,
-    DenseVector<typename isvd::internal::ScalarTraits<_Scalar>::RealType> &s,
+    DenseVector<typename isvd::detail::ScalarTraits<_Scalar>::RealType> &s,
     DenseMatrix<_Scalar, _layout> &u,
     DenseMatrix<_Scalar, _layout> &vt
 ) noexcept {

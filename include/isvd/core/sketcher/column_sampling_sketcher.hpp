@@ -24,9 +24,9 @@ template <class _Matrix> class ColumnSamplingSketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The column sampling sketcher traits.
@@ -38,7 +38,7 @@ struct Traits<ColumnSamplingSketcher<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The column sampling sketcher.
@@ -46,13 +46,13 @@ struct Traits<ColumnSamplingSketcher<_Matrix>> {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class ColumnSamplingSketcher : public internal::SketcherBase<ColumnSamplingSketcher<_Matrix>> {
+class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matrix>> {
 
-  friend internal::SketcherBase<ColumnSamplingSketcher<_Matrix>>;
+  friend SketcherBase<ColumnSamplingSketcher<_Matrix>>;
 
  private:
 
-  using BaseType = internal::SketcherBase<ColumnSamplingSketcher<_Matrix>>;
+  using BaseType = SketcherBase<ColumnSamplingSketcher<_Matrix>>;
 
  public:
 
@@ -60,12 +60,12 @@ class ColumnSamplingSketcher : public internal::SketcherBase<ColumnSamplingSketc
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
   const char *name_ = "Column Sampling Sketcher";
@@ -88,7 +88,7 @@ class ColumnSamplingSketcher : public internal::SketcherBase<ColumnSamplingSketc
  public:
 
   // Constructor
-  inline ColumnSamplingSketcher( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline ColumnSamplingSketcher( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  protected:
 

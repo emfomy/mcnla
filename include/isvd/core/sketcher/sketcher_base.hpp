@@ -18,11 +18,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of iSVD sketcher.
 ///
 /// @tparam  _Derived  The derived type.
@@ -32,13 +27,13 @@ class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
 
  public:
 
-  using MatrixType = typename Traits<_Derived>::MatrixType;
+  using MatrixType = typename detail::Traits<_Derived>::MatrixType;
   using ScalarType = typename MatrixType::ScalarType;
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_;
+  const Parameters<ScalarType> &parameters_;
 
   /// The random seed
   index_t *seed_;
@@ -46,7 +41,7 @@ class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
  protected:
 
   // Constructor
-  inline SketcherBase( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline SketcherBase( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  public:
 
@@ -60,8 +55,6 @@ class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
   inline const char* getName() const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

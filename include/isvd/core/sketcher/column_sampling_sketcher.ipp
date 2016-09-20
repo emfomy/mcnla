@@ -16,15 +16,15 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::SketcherBase
+/// @copydoc  isvd::SketcherBase::SketcherBase
 ///
 template <class _Matrix>
 ColumnSamplingSketcher<_Matrix>::ColumnSamplingSketcher(
-    const internal::Parameters<ScalarType> &parameters, index_t *seed
+    const Parameters<ScalarType> &parameters, index_t *seed
 ) noexcept : BaseType(parameters, seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::initialize
+/// @copydoc  isvd::SketcherBase::initialize
 ///
 template <class _Matrix>
 void ColumnSamplingSketcher<_Matrix>::initializeImpl() noexcept {
@@ -44,7 +44,7 @@ void ColumnSamplingSketcher<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::sketch
+/// @copydoc  isvd::SketcherBase::sketch
 ///
 template <class _Matrix>
 void ColumnSamplingSketcher<_Matrix>::sketchImpl(
@@ -64,7 +64,7 @@ void ColumnSamplingSketcher<_Matrix>::sketchImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::getName
+/// @copydoc  isvd::SketcherBase::getName
 ///
 template <class _Matrix>
 const char* ColumnSamplingSketcher<_Matrix>::getNameImpl() const noexcept {

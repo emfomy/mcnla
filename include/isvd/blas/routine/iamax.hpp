@@ -24,14 +24,14 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::iamax
+/// @copydoc  isvd::blas::detail::iamax
 ///
 //@{
 template <typename _Scalar>
 inline index_t iamax(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return internal::iamax(x.getLength(), x.getValue(), x.getStride());
+  return detail::iamax(x.getLength(), x.getValue(), x.getStride());
 }
 //@}
 
@@ -40,10 +40,10 @@ inline index_t iamax(
 ///
 //@{
 template <typename _Scalar>
-inline typename isvd::internal::ScalarTraits<_Scalar>::RealType amax(
+inline typename isvd::detail::ScalarTraits<_Scalar>::RealType amax(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  index_t idx = internal::iamax(x.getLength(), x.getValue(), x.getStride());
+  index_t idx = detail::iamax(x.getLength(), x.getValue(), x.getStride());
   return std::abs(x(idx));
 }
 //@}

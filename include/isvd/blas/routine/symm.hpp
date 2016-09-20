@@ -22,7 +22,7 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::symm
+/// @copydoc  isvd::blas::detail::symm
 ///
 //@{
 template <SideOption _side,
@@ -44,7 +44,7 @@ inline void symm(
       assert(b.getNcol()  == c.getNcol());
       assert(a.getSizes() == c.getSizes());
     }
-    internal::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNrow(), c.getNcol(),
+    detail::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNrow(), c.getNcol(),
                    alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(),
                    beta, c.getValue(), c.getPitch());
   } else {
@@ -57,7 +57,7 @@ inline void symm(
       assert(a.getNrow()  == c.getNrow());
       assert(b.getSizes() == c.getSizes());
     }
-    internal::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNcol(), c.getNrow(),
+    detail::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNcol(), c.getNrow(),
                    alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(),
                    beta, c.getValue(), c.getPitch());
   }

@@ -16,15 +16,15 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::ReconstructorBase::ReconstructorBase
+/// @copydoc  isvd::ReconstructorBase::ReconstructorBase
 ///
 template <class _Matrix>
 StandardReconstructor<_Matrix>::StandardReconstructor(
-    const internal::Parameters<ScalarType> &parameters
+    const Parameters<ScalarType> &parameters
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::ReconstructorBase::initialize
+/// @copydoc  isvd::ReconstructorBase::initialize
 ///
 template <class _Matrix>
 void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
@@ -60,7 +60,7 @@ void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::ReconstructorBase::reconstruct
+/// @copydoc  isvd::ReconstructorBase::reconstruct
 ///
 template <class _Matrix>
 void StandardReconstructor<_Matrix>::reconstructImpl(
@@ -91,7 +91,7 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::ReconstructorBase::getName
+/// @copydoc  isvd::ReconstructorBase::getName
 ///
 template <class _Matrix>
 const char* StandardReconstructor<_Matrix>::getNameImpl() const noexcept {
@@ -99,7 +99,7 @@ const char* StandardReconstructor<_Matrix>::getNameImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::ReconstructorBase::getSingularValues
+/// @copydoc  isvd::ReconstructorBase::getSingularValues
 ///
 template <class _Matrix>
 const DenseVector<typename StandardReconstructor<_Matrix>::RealScalarType>&
@@ -109,7 +109,7 @@ const DenseVector<typename StandardReconstructor<_Matrix>::RealScalarType>&
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::ReconstructorBase::getLeftSingularVectors
+/// @copydoc  isvd::ReconstructorBase::getLeftSingularVectors
 ///
 template <class _Matrix>
 const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&
@@ -119,7 +119,7 @@ const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::C
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::ReconstructorBase::getRightSingularVectors
+/// @copydoc  isvd::ReconstructorBase::getRightSingularVectors
 ///
 template <class _Matrix>
 const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&

@@ -22,7 +22,7 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::copy
+/// @copydoc  isvd::blas::detail::copy
 ///
 //@{
 template <typename _Scalar>
@@ -31,7 +31,7 @@ inline void copy(
           DenseVector<_Scalar> &y
 ) noexcept {
   assert(x.getSizes() == y.getSizes());
-  internal::copy(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
+  detail::copy(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
 }
 
 template <typename _Scalar>

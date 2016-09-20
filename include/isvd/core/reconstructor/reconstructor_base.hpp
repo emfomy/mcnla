@@ -18,11 +18,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of iSVD reconstructor.
 ///
 /// @tparam  _Derived  The derived type.
@@ -32,19 +27,19 @@ class ReconstructorBase : protected CrtpBase<_Derived, ReconstructorBase<_Derive
 
  public:
 
-  using MatrixType     = typename Traits<_Derived>::MatrixType;
+  using MatrixType     = typename detail::Traits<_Derived>::MatrixType;
   using ScalarType     = typename MatrixType::ScalarType;
   using RealScalarType = typename MatrixType::RealScalarType;
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_;
+  const Parameters<ScalarType> &parameters_;
 
  protected:
 
   // Constructor
-  inline ReconstructorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline ReconstructorBase( const Parameters<ScalarType> &parameters ) noexcept;
 
  public:
 
@@ -63,8 +58,6 @@ class ReconstructorBase : protected CrtpBase<_Derived, ReconstructorBase<_Derive
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectors() const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

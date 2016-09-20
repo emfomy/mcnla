@@ -21,9 +21,9 @@ template <typename _Scalar, Layout _layout> class DenseCube;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout, class _Cube> class DenseCubeIteratorBase;
@@ -143,19 +143,19 @@ class DenseCubeIdxIteratorBase
 
 };
 
-}  // namespace internal
+}  // namespace detail
 
 template <typename _Scalar, Layout _layout>
-using DenseCubeIterator = internal::DenseCubeValueIteratorBase<_Scalar, _layout, DenseCube<_Scalar, _layout>>;
+using DenseCubeIterator = detail::DenseCubeValueIteratorBase<_Scalar, _layout, DenseCube<_Scalar, _layout>>;
 
 template <typename _Scalar, Layout _layout>
-using DenseCubeConstIterator = internal::DenseCubeValueIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
+using DenseCubeConstIterator = detail::DenseCubeValueIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
 
 template <typename _Scalar, Layout _layout>
-using DenseCubeIdxIterator = internal::DenseCubeIdxIteratorBase<_Scalar, _layout, DenseCube<_Scalar, _layout>>;
+using DenseCubeIdxIterator = detail::DenseCubeIdxIteratorBase<_Scalar, _layout, DenseCube<_Scalar, _layout>>;
 
 template <typename _Scalar, Layout _layout>
-using DenseCubeConstIdxIterator = internal::DenseCubeIdxIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
+using DenseCubeConstIdxIterator = detail::DenseCubeIdxIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
 
 }  // namespace isvd
 

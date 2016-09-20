@@ -35,9 +35,9 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Returns a vector of random numbers from a uniform or normal distribution.
@@ -57,7 +57,7 @@ static inline void larnv(
 ) noexcept { zlarnv_(&idist, iseed, &n, x); }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace lapack
 

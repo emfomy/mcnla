@@ -30,7 +30,7 @@ namespace lapack {
 template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syev(
     DenseMatrix<_Scalar, _layout> &a,
-    DenseVector<typename isvd::internal::ScalarTraits<_Scalar>::RealType> &w
+    DenseVector<typename isvd::detail::ScalarTraits<_Scalar>::RealType> &w
 ) noexcept {
   SyevDriver<DenseMatrix<_Scalar, _layout>, _jobz, _uplo> driver(a);
   driver(a, w);

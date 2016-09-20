@@ -28,9 +28,9 @@ template <typename _Scalar> class DenseVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix traits.
@@ -42,7 +42,7 @@ template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -55,7 +55,7 @@ struct Traits<DenseMatrix<_Scalar, _layout>> {
   // using ConstIteratorType = DenseMatrixConstIterator<ScalarType, _layout>;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix class.
@@ -65,16 +65,16 @@ struct Traits<DenseMatrix<_Scalar, _layout>> {
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseMatrix
-  // : public internal::ContainerBase<DenseMatrix<_Scalar, _layout>>,
-  : public internal::MatrixBase<DenseMatrix<_Scalar, _layout>>,
-    public internal::DenseBase<DenseMatrix<_Scalar, _layout>> {
+  // : public ContainerBase<DenseMatrix<_Scalar, _layout>>,
+  : public MatrixBase<DenseMatrix<_Scalar, _layout>>,
+    public DenseBase<DenseMatrix<_Scalar, _layout>> {
 
  public:
 
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
@@ -88,8 +88,8 @@ class DenseMatrix
 
  private:
 
-  using MatrixBaseType    = internal::MatrixBase<DenseMatrix<_Scalar, _layout>>;
-  using DenseBaseType     = internal::DenseBase<DenseMatrix<_Scalar, _layout>>;
+  using MatrixBaseType    = MatrixBase<DenseMatrix<_Scalar, _layout>>;
+  using DenseBaseType     = DenseBase<DenseMatrix<_Scalar, _layout>>;
 
  protected:
 

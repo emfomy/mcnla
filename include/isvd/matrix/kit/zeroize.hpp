@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/utility/matrix.hpp
-/// @brief   The matrix utilities.
+/// @file    include/isvd/matrix/kit/zeroize.hpp
+/// @brief   The zeroize routines.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_UTILITY_MATRIX_HPP_
-#define ISVD_UTILITY_MATRIX_HPP_
+#ifndef ISVD_MATRIX_KIT_ZEROIZE_HPP_
+#define ISVD_MATRIX_KIT_ZEROIZE_HPP_
 
 #include <cstring>
-#include <isvd/matrix.hpp>
+#include <isvd/matrix/dense.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -79,4 +79,4 @@ inline void zeroize(
 
 }  // namespace isvd
 
-#endif  // ISVD_UTILITY_MATRIX_HPP_
+#endif  // ISVD_MATRIX_KIT_ZEROIZE_HPP_

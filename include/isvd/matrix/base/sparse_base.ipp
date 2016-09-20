@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <typename _Derived>
@@ -81,8 +76,6 @@ SparseBase<_Derived>& SparseBase<_Derived>::operator=( SparseBase &&other ) noex
 ///
 template <typename _Derived>
 index_t SparseBase<_Derived>::getNnz() const noexcept { return nnz_; }
-
-}  // namespace internal
 
 }  // namespace isvd
 

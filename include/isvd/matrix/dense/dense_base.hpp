@@ -18,11 +18,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of dense container.
 ///
 /// @tparam  _Derived  The derived type.
@@ -32,7 +27,7 @@ class DenseBase {
 
  private:
 
-  using ScalarType   = typename Traits<_Derived>::ScalarType;
+  using ScalarType   = typename detail::Traits<_Derived>::ScalarType;
   using ValuePtrType = std::shared_ptr<std::valarray<ScalarType>>;
   using DataType     = DenseData<ScalarType>;
 
@@ -73,8 +68,6 @@ class DenseBase {
   inline const ScalarType* getValue() const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

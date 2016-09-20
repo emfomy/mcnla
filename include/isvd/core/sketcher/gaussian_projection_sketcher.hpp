@@ -23,9 +23,9 @@ template <class _Matrix> class GaussianProjectionSketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The Gaussian projection sketcher traits.
@@ -37,7 +37,7 @@ struct Traits<GaussianProjectionSketcher<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The Gaussian projection sketcher.
@@ -45,13 +45,13 @@ struct Traits<GaussianProjectionSketcher<_Matrix>> {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProjectionSketcher<_Matrix>> {
+class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketcher<_Matrix>> {
 
-  friend internal::SketcherBase<GaussianProjectionSketcher<_Matrix>>;
+  friend SketcherBase<GaussianProjectionSketcher<_Matrix>>;
 
  private:
 
-  using BaseType = internal::SketcherBase<GaussianProjectionSketcher<_Matrix>>;
+  using BaseType = SketcherBase<GaussianProjectionSketcher<_Matrix>>;
 
  public:
 
@@ -59,12 +59,12 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
   const char *name_ = "Gaussian Projection Sketcher";
@@ -84,7 +84,7 @@ class GaussianProjectionSketcher : public internal::SketcherBase<GaussianProject
  public:
 
   // Constructor
-  inline GaussianProjectionSketcher( const internal::Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline GaussianProjectionSketcher( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
 
  protected:
 

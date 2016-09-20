@@ -16,15 +16,15 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::SketcherBase
+/// @copydoc  isvd::SketcherBase::SketcherBase
 ///
 template <class _Matrix>
 GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
-    const internal::Parameters<ScalarType> &parameters, index_t *seed
+    const Parameters<ScalarType> &parameters, index_t *seed
 ) noexcept : BaseType(parameters, seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::initialize
+/// @copydoc  isvd::SketcherBase::initialize
 ///
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
@@ -47,7 +47,7 @@ void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::sketch
+/// @copydoc  isvd::SketcherBase::sketch
 ///
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::sketchImpl(
@@ -66,7 +66,7 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::getName
+/// @copydoc  isvd::SketcherBase::getName
 ///
 template <class _Matrix>
 const char* GaussianProjectionSketcher<_Matrix>::getNameImpl() const noexcept {

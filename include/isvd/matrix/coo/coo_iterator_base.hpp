@@ -19,27 +19,23 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The The coordinate list (COO) iterator interface.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
 class CooIteratorBase
-  : public std::iterator<std::random_access_iterator_tag,
-               CooTuple<Traits<_Derived>::ndim, typename Traits<_Derived>::ScalarType, typename Traits<_Derived>::IndexType>> {
+  : public std::iterator<std::random_access_iterator_tag, CooTuple<detail::Traits<_Derived>::ndim,
+                                                                   typename detail::Traits<_Derived>::ScalarType,
+                                                                   typename detail::Traits<_Derived>::IndexType>> {
 
  private:
 
-  static constexpr index_t ndim =   Traits<_Derived>::ndim;
-  using ScalarType       = typename Traits<_Derived>::ScalarType;
-  using IndexType        = typename Traits<_Derived>::IndexType;
+  static constexpr index_t ndim =   detail::Traits<_Derived>::ndim;
+  using ScalarType       = typename detail::Traits<_Derived>::ScalarType;
+  using IndexType        = typename detail::Traits<_Derived>::IndexType;
   using TupleType        = CooTuple<ndim, ScalarType, IndexType>;
-  using ContainerType    = typename Traits<_Derived>::ContainerType;
+  using ContainerType    = typename detail::Traits<_Derived>::ContainerType;
 
  protected:
 
@@ -107,8 +103,6 @@ class CooIteratorBase
   inline const _Derived& derived() const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

@@ -10,7 +10,6 @@
 
 #include <isvd/utility/crtp.hpp>
 #include <isvd/utility/mpi.hpp>
-#include <isvd/utility/matrix.hpp>
 #include <isvd/utility/memory.hpp>
 #include <isvd/utility/traits.hpp>
 

@@ -35,7 +35,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexcept {
-  MPI_Bcast(&parameters_, sizeof(internal::Parameters<ScalarType>), MPI_BYTE, mpi_root_, mpi_comm_);
+  MPI_Bcast(&parameters_, sizeof(Parameters<ScalarType>), MPI_BYTE, mpi_root_, mpi_comm_);
 
   assert(parameters_.getNcol() >= parameters_.getNrow() && parameters_.getNrow() > 0);
   assert(parameters_.getNrow() >= parameters_.getDimSketch());

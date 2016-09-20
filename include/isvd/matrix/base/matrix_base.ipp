@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <class _Derived>
@@ -127,8 +122,6 @@ index_t MatrixBase<_Derived>::getNelem() const noexcept { return nrow_ * ncol_; 
 ///
 template <class _Derived>
 std::pair<index_t, index_t> MatrixBase<_Derived>::getSizes() const noexcept { return std::make_pair(nrow_, ncol_); }
-
-}  // namespace internal
 
 }  // namespace isvd
 

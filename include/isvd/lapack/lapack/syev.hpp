@@ -45,9 +45,9 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes all eigenvalues and, optionally, eigenvectors of a symmetric or Hermitian matrix.
@@ -71,7 +71,7 @@ static inline index_t syev(
 ) noexcept { index_t info; zheev_(&jobz, &uplo, &n, a, &lda, w, work, &lwork, rwork, &info); return info; }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace lapack
 

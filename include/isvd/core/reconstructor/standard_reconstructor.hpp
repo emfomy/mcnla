@@ -23,9 +23,9 @@ template <class _Matrix> class StandardReconstructor;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The standard reconstructor traits.
@@ -37,7 +37,7 @@ struct Traits<StandardReconstructor<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The standard reconstructor.
@@ -45,13 +45,13 @@ struct Traits<StandardReconstructor<_Matrix>> {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class StandardReconstructor : public internal::ReconstructorBase<StandardReconstructor<_Matrix>> {
+class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Matrix>> {
 
-  friend internal::ReconstructorBase<StandardReconstructor<_Matrix>>;
+  friend ReconstructorBase<StandardReconstructor<_Matrix>>;
 
  private:
 
-  using BaseType = internal::ReconstructorBase<StandardReconstructor<_Matrix>>;
+  using BaseType = ReconstructorBase<StandardReconstructor<_Matrix>>;
 
  public:
 
@@ -59,12 +59,12 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
   const char *name_ = "Standard Reconstructor";
@@ -102,7 +102,7 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
  public:
 
   // Constructor
-  inline StandardReconstructor( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline StandardReconstructor( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 

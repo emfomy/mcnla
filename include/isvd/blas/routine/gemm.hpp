@@ -22,12 +22,12 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::gemm
+/// @copydoc  isvd::blas::detail::gemm
 ///
 //@{
 template <TransOption _transa = TransOption::NORMAL,
@@ -75,10 +75,10 @@ inline void gemm(
 }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::gemm
+/// @copydoc  isvd::blas::detail::gemm
 ///
 //@{
 template <TransOption _transa = isvd::TransOption::NORMAL,
@@ -91,7 +91,7 @@ inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
           DenseMatrix<_Scalar, _layoutc> &c
 ) noexcept {
-  internal::gemm<_transa, _transb>(alpha, a, b, beta, c);
+  detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 
 template <TransOption _transa = isvd::TransOption::NORMAL,
@@ -104,7 +104,7 @@ inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
           DenseMatrix<_Scalar, _layoutc> &&c
 ) noexcept {
-  internal::gemm<_transa, _transb>(alpha, a, b, beta, c);
+  detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 //@}
 

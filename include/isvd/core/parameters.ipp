@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
 ///
 template <typename _Scalar>
@@ -94,8 +89,6 @@ index_t Parameters<_Scalar>::getMaxIteration() const noexcept { return max_itera
 ///
 template <typename _Scalar>
 typename Parameters<_Scalar>::RealScalar Parameters<_Scalar>::getTolerance() const noexcept { return tolerance_; }
-
-}  // namespace internal
 
 }  // namespace isvd
 

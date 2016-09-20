@@ -47,9 +47,9 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes a matrix-matrix product with general matrices.
@@ -79,7 +79,7 @@ static inline void gemm(
 ) noexcept { zgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc); }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace blas
 

@@ -20,11 +20,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of matrix.
 ///
 /// @tparam  _Derived  The derived type.
@@ -34,7 +29,7 @@ class MatrixBase : public TensorBase<_Derived> {
 
  private:
 
-  static constexpr Layout layout = Traits<_Derived>::layout;
+  static constexpr Layout layout = detail::Traits<_Derived>::layout;
 
  protected:
 
@@ -74,8 +69,6 @@ class MatrixBase : public TensorBase<_Derived> {
   inline std::pair<index_t, index_t> getSizes() const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

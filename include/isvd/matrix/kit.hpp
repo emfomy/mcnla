@@ -14,4 +14,6 @@
 #include <isvd/matrix/kit/idx_tuple.hpp>
 #include <isvd/matrix/kit/idx_tuple.ipp>
 
+#include <isvd/matrix/kit/zeroize.hpp>
+
 #endif  // ISVD_MATRIX_KIT_HPP_

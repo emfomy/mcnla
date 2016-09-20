@@ -23,12 +23,12 @@ template <class _Matrix> class KolmogorovNagumoTypeIntegrator;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block integrator traits.
+/// The Kolmogorov-Nagumo-type integrator traits.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
@@ -37,21 +37,21 @@ struct Traits<KolmogorovNagumoTypeIntegrator<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block integrator.
+/// The Kolmogorov-Nagumo-type integrator.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>> {
+class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>> {
 
-  friend internal::IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
+  friend IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
 
  private:
 
-  using BaseType = internal::IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
+  using BaseType = IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
 
  public:
 
@@ -59,12 +59,12 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
   const char *name_ = "Kolmogorov-Nagumo-Type Integrator";
@@ -120,7 +120,7 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
  public:
 
   // Constructor
-  inline KolmogorovNagumoTypeIntegrator( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline KolmogorovNagumoTypeIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 

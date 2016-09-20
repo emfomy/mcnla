@@ -18,11 +18,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of iSVD integrator.
 ///
 /// @tparam  _Derived  The derived type.
@@ -32,19 +27,19 @@ class IntegratorBase : protected CrtpBase<_Derived, IntegratorBase<_Derived>> {
 
  public:
 
-  using MatrixType     = typename Traits<_Derived>::MatrixType;
+  using MatrixType     = typename detail::Traits<_Derived>::MatrixType;
   using ScalarType     = typename MatrixType::ScalarType;
   using RealScalarType = typename MatrixType::RealScalarType;
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_;
+  const Parameters<ScalarType> &parameters_;
 
  protected:
 
   // Constructor
-  inline IntegratorBase( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline IntegratorBase( const Parameters<ScalarType> &parameters ) noexcept;
 
  public:
 
@@ -62,8 +57,6 @@ class IntegratorBase : protected CrtpBase<_Derived, IntegratorBase<_Derived>> {
   inline DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

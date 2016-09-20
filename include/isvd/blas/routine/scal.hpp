@@ -22,7 +22,7 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::scal
+/// @copydoc  isvd::blas::detail::scal
 ///
 //@{
 template <typename _Scalar>
@@ -30,7 +30,7 @@ inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
           DenseVector<_Scalar> &x
 ) noexcept {
-  internal::scal(x.getLength(), alpha, x.getValue(), x.getStride());
+  detail::scal(x.getLength(), alpha, x.getValue(), x.getStride());
 }
 
 template <typename _Scalar>

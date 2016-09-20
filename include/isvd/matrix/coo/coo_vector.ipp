@@ -182,6 +182,7 @@ template <typename _Scalar>
 index_t CooVector<_Scalar>::getPos(
     const index_t idx
 ) const noexcept {
+  assert(idx >= 0 && idx < length_);
   auto it = find(idx);
   return (it != this->end()) ? it.getPos() : -1;
 }
@@ -195,9 +196,10 @@ void CooVector<_Scalar>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
+  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
   assert(isSorted());
-  auto it0 = std::lower_bound(this->cbegin(), this->cend(), isvd::makeCooTuple(range.begin));
-  auto it1 = std::lower_bound(it0, this->cend(), isvd::makeCooTuple(range.end));
+  auto it0 = std::lower_bound(this->begin(), this->end(), isvd::makeCooTuple(range.begin));
+  auto it1 = std::lower_bound(it0, this->end(), isvd::makeCooTuple(range.end));
   pos = it0.getPos();
   nnz = it1.getPos() - pos;
 }

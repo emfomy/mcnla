@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, typename __Index, class __Vector>
@@ -46,8 +41,6 @@ template <typename _Scalar, typename _Index, class _Vector>
 index_t CooVectorIteratorBase<_Scalar, _Index, _Vector>::getPos() const noexcept {
   return this->getItIdx();
 }
-
-}  // namespace internal
 
 }  // namespace isvd
 

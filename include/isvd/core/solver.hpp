@@ -36,42 +36,42 @@ template <class _Matrix,
           class _Reconstructor = StandardReconstructor<_Matrix>>
 class Solver {
 
-  static_assert(std::is_base_of<internal::MatrixBase<_Matrix>, _Matrix>::value,
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value,
                 "'_Matrix' is not a matrix!");
-  static_assert(std::is_base_of<internal::SketcherBase<_Sketcher>, _Sketcher>::value,
+  static_assert(std::is_base_of<SketcherBase<_Sketcher>, _Sketcher>::value,
                 "'_Sketcher' is not a sketcher!");
-  static_assert(std::is_base_of<internal::IntegratorBase<_Integrator>, _Integrator>::value,
+  static_assert(std::is_base_of<IntegratorBase<_Integrator>, _Integrator>::value,
                 "'_Integrator' is not a integrator!");
-  static_assert(std::is_base_of<internal::ReconstructorBase<_Reconstructor>, _Reconstructor>::value,
+  static_assert(std::is_base_of<ReconstructorBase<_Reconstructor>, _Reconstructor>::value,
                 "'_Reconstructor' is not a reconstructor!");
 
-  static_assert(std::is_same<_Matrix, typename internal::SketcherBase<_Sketcher>::MatrixType>::value,
+  static_assert(std::is_same<_Matrix, typename SketcherBase<_Sketcher>::MatrixType>::value,
                 "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, typename internal::IntegratorBase<_Sketcher>::MatrixType>::value,
+  static_assert(std::is_same<_Matrix, typename IntegratorBase<_Sketcher>::MatrixType>::value,
                 "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, typename internal::ReconstructorBase<_Sketcher>::MatrixType>::value,
+  static_assert(std::is_same<_Matrix, typename ReconstructorBase<_Sketcher>::MatrixType>::value,
                 "The matrix type does not fit!");
 
 
  public:
 
-  using ScalarType      = typename _Matrix::ScalarType;
-  using RealScalarType  = typename _Matrix::RealScalarType;
   using MatrixType      = _Matrix;
-  using ParametersType  = internal::Parameters<ScalarType>;
+  using ScalarType      = typename MatrixType::ScalarType;
+  using RealScalarType  = typename MatrixType::RealScalarType;
+  using ParametersType  = Parameters<ScalarType>;
 
  protected:
 
   /// The parameters.
   ParametersType parameters_;
 
-  /// @copydoc  isvd::internal::Parameters::mpi_comm
+  /// @copydoc  isvd::Parameters::mpi_comm
   const MPI_Comm &mpi_comm_ = parameters_.mpi_comm;
 
-  /// @copydoc  isvd::internal::Parameters::mpi_size
+  /// @copydoc  isvd::Parameters::mpi_size
   const mpi_int_t &mpi_size_ = parameters_.mpi_size;
 
-  /// @copydoc  isvd::internal::Parameters::mpi_root
+  /// @copydoc  isvd::Parameters::mpi_root
   const mpi_int_t &mpi_root_ = parameters_.mpi_root;
 
   /// The MPI rank.

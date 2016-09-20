@@ -22,9 +22,9 @@ template <index_t _ndim, typename _Scalar, typename _Index> class CooTuple;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO tuple generator.
@@ -101,7 +101,7 @@ struct CooTupleHelper<_ndim, 0> {
   static inline std::tuple<_Args&...> makeRefTuple( std::tuple<_Args...> &tuple, __Args&... args ) noexcept;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) tuple.
@@ -110,18 +110,16 @@ struct CooTupleHelper<_ndim, 0> {
 /// @tparam  _Index   The index type.
 /// @tparam  _Scalar  The scalar type.
 ///
-/// @todo  Rewrite Non-reference tuple
-///
 template <index_t _ndim, typename _Scalar, typename _Index>
-class CooTuple : public internal::CooTupleBase<_ndim, _Scalar&, _Index&> {
+class CooTuple : public detail::CooTupleBase<_ndim, _Scalar&, _Index&> {
 
   static_assert(_ndim >= 0, "Invalid dimension!");
   static_assert(std::is_integral<_Index>::value, "'_Index' is not a integer!");
 
  protected:
 
-  using BaseType  = internal::CooTupleBase<_ndim, _Scalar&, _Index&>;
-  using TupleType = internal::CooTupleBase<_ndim, _Scalar, _Index>;
+  using BaseType  = detail::CooTupleBase<_ndim, _Scalar&, _Index&>;
+  using TupleType = detail::CooTupleBase<_ndim, _Scalar, _Index>;
 
  protected:
 

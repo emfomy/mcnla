@@ -23,9 +23,9 @@ namespace isvd {
 namespace mpi {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The internal namespace.
+/// The MPI detail namespace.
 ///
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The MPI data type
@@ -121,7 +121,7 @@ inline void bcast(
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  MPI_Bcast(buffer.getValue(), buffer.getNelem(), internal::MpiScalarTraits<_Scalar>::data_type, root, comm);
+  MPI_Bcast(buffer.getValue(), buffer.getNelem(), detail::MpiScalarTraits<_Scalar>::data_type, root, comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,8 +141,8 @@ inline void gather(
   assert(isCommRoot(root, comm) ? send.getSize1()                     == recv.getSize1() : true);
   assert(isCommRoot(root, comm) ? send.getSize2() * getCommSize(comm) == recv.getSize2() : true);
   mpi_int_t size = send.getNelem();
-  MPI_Gather(send.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type,
-             recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, root, comm);
+  MPI_Gather(send.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type,
+             recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, root, comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ inline void allreduce(
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
   mpi_int_t size = send.getNelem();
-  MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  MPI_Allreduce(send.getValue(), recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -176,7 +176,7 @@ inline void allreduce(
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
   mpi_int_t size = send.getNelem();
-  MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  MPI_Allreduce(send.getValue(), recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -190,7 +190,7 @@ inline void allreduce(
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
   mpi_int_t size = send.getNelem();
-  MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  MPI_Allreduce(send.getValue(), recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 //@}
 
@@ -208,7 +208,7 @@ inline void allreduce(
 ) noexcept {
   assert(buffer.isShrunk());
   mpi_int_t size = buffer.getNelem();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -219,7 +219,7 @@ inline void allreduce(
 ) noexcept {
   assert(buffer.isShrunk());
   mpi_int_t size = buffer.getNelem();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -230,7 +230,7 @@ inline void allreduce(
 ) noexcept {
   assert(buffer.isShrunk());
   mpi_int_t size = buffer.getNelem();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 //@}
 
@@ -252,8 +252,8 @@ inline void alltoall(
   assert(send.getSize2()  == recv.getSize2() * recv.getNpage());
   assert(recv.getNpage() == getCommSize(comm));
   mpi_int_t size = recv.getSize1() * recv.getSize2();
-  MPI_Alltoall(send.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type,
-               recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, comm);
+  MPI_Alltoall(send.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type,
+               recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,8 +269,8 @@ inline void alltoall(
   assert(buffer.isShrunk());
   assert(buffer.getNpage() == getCommSize(comm));
   mpi_int_t size = buffer.getSize1() * buffer.getSize2();
-  MPI_Alltoall(MPI_IN_PLACE, size, internal::MpiScalarTraits<_Scalar>::data_type,
-               buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, comm);
+  MPI_Alltoall(MPI_IN_PLACE, size, detail::MpiScalarTraits<_Scalar>::data_type,
+               buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, comm);
 }
 
 }  // namespace mpi

@@ -45,9 +45,9 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Performs a symmetric/Hermitian rank-k update.
@@ -75,7 +75,7 @@ static inline void syrk(
 ) noexcept { zherk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc); }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace blas
 

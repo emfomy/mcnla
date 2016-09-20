@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <class _Derived>
@@ -91,8 +86,6 @@ index_t VectorBase<_Derived>::getNelem() const noexcept { return length_; }
 ///
 template <class _Derived>
 index_t VectorBase<_Derived>::getSizes() const noexcept { return length_; }
-
-}  // namespace internal
 
 }  // namespace isvd
 

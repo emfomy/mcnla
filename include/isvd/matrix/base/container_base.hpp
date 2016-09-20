@@ -17,11 +17,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of container.
 ///
 /// @tparam  _Derived  The derived type.
@@ -31,8 +26,8 @@ class ContainerBase {
 
  private:
 
-  using IteratorType      = typename Traits<_Derived>::IteratorType;
-  using ConstIteratorType = typename Traits<_Derived>::ConstIteratorType;
+  using IteratorType      = typename detail::Traits<_Derived>::IteratorType;
+  using ConstIteratorType = typename detail::Traits<_Derived>::ConstIteratorType;
 
  protected:
 
@@ -56,8 +51,6 @@ class ContainerBase {
   inline const _Derived& derived() const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

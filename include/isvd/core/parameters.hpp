@@ -17,11 +17,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The parameters of iSVD solver.
 ///
 /// @tparam  _Scalar  The scalar type type.
@@ -33,7 +28,7 @@ class Parameters {
 
  private:
 
-  using RealScalar = typename ScalarTraits<_Scalar>::RealType;
+  using RealScalar = typename detail::ScalarTraits<_Scalar>::RealType;
 
  public:
 
@@ -93,8 +88,6 @@ class Parameters {
   inline index_t getMaxIteration() const noexcept;
   inline RealScalar getTolerance() const noexcept;
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

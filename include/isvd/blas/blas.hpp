@@ -21,9 +21,9 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The internal namespace.
+/// The BLAS detail namespace.
 ///
-namespace internal {}
+namespace detail {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
@@ -31,8 +31,8 @@ namespace internal {}
 template <TransOption _trans, typename _Scalar>
 struct TransChar {
   static constexpr char value = !isTranspose(_trans)
-      ? ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
-      : ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+      ? ((!!isConjugate(_trans) && isvd::detail::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
+      : ((!!isConjugate(_trans) && isvd::detail::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
   static_assert(value != '?', "Conjugate no-transpose is nor supported!");
 };
 

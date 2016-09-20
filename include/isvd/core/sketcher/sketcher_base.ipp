@@ -16,16 +16,11 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
 SketcherBase<_Derived>::SketcherBase(
-    const internal::Parameters<ScalarType> &parameters, index_t *seed
+    const Parameters<ScalarType> &parameters, index_t *seed
 ) noexcept : parameters_(parameters), seed_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,8 +45,6 @@ template <class _Derived>
 const char* SketcherBase<_Derived>::getName() const noexcept {
   return this->derived().getNameImpl();
 }
-
-}  // namespace internal
 
 }  // namespace isvd
 

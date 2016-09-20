@@ -31,9 +31,9 @@ template <typename _Scalar> class DenseVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense cube traits.
@@ -45,7 +45,7 @@ template <typename _Scalar, Layout _layout>
 struct Traits<DenseCube<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -60,7 +60,7 @@ struct Traits<DenseCube<_Scalar, _layout>> {
   // using ConstIteratorType = DenseCubeConstIterator<ScalarType, _layout>;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense cube class.
@@ -70,16 +70,16 @@ struct Traits<DenseCube<_Scalar, _layout>> {
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseCube
-  // : public internal::ContainerBase<DenseCube<_Scalar, _layout>>,
-  : public internal::CubeBase<DenseCube<_Scalar, _layout>>,
-    public internal::DenseBase<DenseCube<_Scalar, _layout>>{
+  // : public ContainerBase<DenseCube<_Scalar, _layout>>,
+  : public CubeBase<DenseCube<_Scalar, _layout>>,
+    public DenseBase<DenseCube<_Scalar, _layout>>{
 
  public:
 
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
@@ -95,8 +95,8 @@ class DenseCube
 
  private:
 
-  using CubeBaseType      = internal::CubeBase<DenseCube<_Scalar, _layout>>;
-  using DenseBaseType     = internal::DenseBase<DenseCube<_Scalar, _layout>>;
+  using CubeBaseType      = CubeBase<DenseCube<_Scalar, _layout>>;
+  using DenseBaseType     = DenseBase<DenseCube<_Scalar, _layout>>;
 
  protected:
 

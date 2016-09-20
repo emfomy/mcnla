@@ -17,15 +17,15 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::IntegratorBase::IntegratorBase
+/// @copydoc  isvd::IntegratorBase::IntegratorBase
 ///
 template <class _Matrix>
 KolmogorovNagumoTypeIntegrator<_Matrix>::KolmogorovNagumoTypeIntegrator(
-    const internal::Parameters<ScalarType> &parameters
+    const Parameters<ScalarType> &parameters
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::IntegratorBase::initialize
+/// @copydoc  isvd::IntegratorBase::initialize
 ///
 template <class _Matrix>
 void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
@@ -86,7 +86,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::IntegratorBase::integrate
+/// @copydoc  isvd::IntegratorBase::integrate
 ///
 template <class _Matrix>
 void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
@@ -210,7 +210,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::IntegratorBase::getName
+/// @copydoc  isvd::IntegratorBase::getName
 ///
 template <class _Matrix>
 const char* KolmogorovNagumoTypeIntegrator<_Matrix>::getNameImpl() const noexcept {
@@ -218,7 +218,7 @@ const char* KolmogorovNagumoTypeIntegrator<_Matrix>::getNameImpl() const noexcep
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::IntegratorBase::getCubeQ
+/// @copydoc  isvd::IntegratorBase::getCubeQ
 ///
 template <class _Matrix>
 DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
@@ -228,7 +228,7 @@ DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::IntegratorBase::integrate
+/// @copydoc  isvd::IntegratorBase::integrate
 ///
 template <class _Matrix>
 DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&

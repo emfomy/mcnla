@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <class _Derived>
@@ -209,8 +204,6 @@ template <class _Derived>
 typename CooBase<_Derived>::ConstTupleType CooBase<_Derived>::getTuple( const index_t pos ) const noexcept {
   return getData().getTuple(pos);
 }
-
-}  // namespace internal
 
 }  // namespace isvd
 

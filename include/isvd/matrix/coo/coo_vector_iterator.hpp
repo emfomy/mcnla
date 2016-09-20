@@ -20,16 +20,13 @@ namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class CooVector;
+template <typename _Scalar, typename _Index, class _Vector> class CooVectorIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, typename _Index, class _Vector> class CooVectorIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector iterator traits.
@@ -46,6 +43,8 @@ struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>>
   using IndexType     = _Index;
   using ContainerType = _Vector;
 };
+
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector iterator.
@@ -81,17 +80,15 @@ class CooVectorIteratorBase : public CooIteratorBase<CooVectorIteratorBase<_Scal
 
   // Gets value
   template <index_t _dim = 0> inline IndexType& getIdx() const noexcept;
-  inline index_t    getPos() const noexcept;
+  inline index_t getPos() const noexcept;
 
 };
 
-}  // namespace internal
+template <typename _Scalar>
+using CooVectorIterator = CooVectorIteratorBase<_Scalar, index_t, CooVector<_Scalar>>;
 
 template <typename _Scalar>
-using CooVectorIterator = internal::CooVectorIteratorBase<_Scalar, index_t, CooVector<_Scalar>>;
-
-template <typename _Scalar>
-using CooVectorConstIterator = internal::CooVectorIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
+using CooVectorConstIterator = CooVectorIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
 
 }  // namespace isvd
 

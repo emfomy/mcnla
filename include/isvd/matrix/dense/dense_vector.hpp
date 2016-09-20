@@ -25,9 +25,9 @@ template <typename _Scalar> class DenseVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector traits.
@@ -37,7 +37,7 @@ namespace internal {
 template <typename _Scalar>
 struct Traits<DenseVector<_Scalar>> {
   using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename detail::ScalarTraits<_Scalar>::RealType;
 
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
@@ -46,7 +46,7 @@ struct Traits<DenseVector<_Scalar>> {
   // using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector class.
@@ -55,14 +55,14 @@ struct Traits<DenseVector<_Scalar>> {
 ///
 template <typename _Scalar>
 class DenseVector
-  // : public internal::ContainerBase<DenseVector<_Scalar>>,
-  : public internal::VectorBase<DenseVector<_Scalar>>,
-    public internal::DenseBase<DenseVector<_Scalar>> {
+  // : public ContainerBase<DenseVector<_Scalar>>,
+  : public VectorBase<DenseVector<_Scalar>>,
+    public DenseBase<DenseVector<_Scalar>> {
 
  public:
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
@@ -75,8 +75,8 @@ class DenseVector
 
  private:
 
-  using VectorBaseType    = internal::VectorBase<DenseVector<_Scalar>>;
-  using DenseBaseType     = internal::DenseBase<DenseVector<_Scalar>>;
+  using VectorBaseType    = VectorBase<DenseVector<_Scalar>>;
+  using DenseBaseType     = DenseBase<DenseVector<_Scalar>>;
 
  protected:
 

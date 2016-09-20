@@ -20,11 +20,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of cube.
 ///
 /// @tparam  _Derived  The derived type.
@@ -34,7 +29,7 @@ class CubeBase : public TensorBase<_Derived> {
 
  private:
 
-  static constexpr Layout layout = Traits<_Derived>::layout;
+  static constexpr Layout layout = detail::Traits<_Derived>::layout;
 
  protected:
 
@@ -89,8 +84,6 @@ class CubeBase : public TensorBase<_Derived> {
   inline IdxRange convertPageRange( const IdxRange range ) const noexcept;
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

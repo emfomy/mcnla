@@ -25,9 +25,9 @@ template <typename _Scalar> class CooVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector traits.
@@ -38,7 +38,7 @@ template <typename _Scalar>
 struct Traits<CooVector<_Scalar>> {
   static constexpr index_t ndim = 1;
   using ScalarType     = _Scalar;
-  using RealScalarType = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType = typename detail::ScalarTraits<_Scalar>::RealType;
 
   using VectorType     = CooVector<ScalarType>;
   using RealVectorType = CooVector<RealScalarType>;
@@ -47,7 +47,7 @@ struct Traits<CooVector<_Scalar>> {
   using ConstIteratorType    = CooVectorConstIterator<ScalarType>;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector class.
@@ -56,14 +56,14 @@ struct Traits<CooVector<_Scalar>> {
 ///
 template <typename _Scalar>
 class CooVector
-  : public internal::ContainerBase<CooVector<_Scalar>>,
-    public internal::VectorBase<CooVector<_Scalar>>,
-    public internal::CooBase<CooVector<_Scalar>> {
+  : public ContainerBase<CooVector<_Scalar>>,
+    public VectorBase<CooVector<_Scalar>>,
+    public CooBase<CooVector<_Scalar>> {
 
  public:
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
   using IdxPtrType        = std::shared_ptr<std::valarray<index_t>>;
 
@@ -77,8 +77,8 @@ class CooVector
 
  private:
 
-  using VectorBaseType    = internal::VectorBase<CooVector<_Scalar>>;
-  using CooBaseType       = internal::CooBase<CooVector<_Scalar>>;
+  using VectorBaseType    = VectorBase<CooVector<_Scalar>>;
+  using CooBaseType       = CooBase<CooVector<_Scalar>>;
 
  protected:
 

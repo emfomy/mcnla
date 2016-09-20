@@ -26,10 +26,9 @@
 // #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// //  The internal namespace.
+// //  The detail namespace.
 // //
-// /// @cond INTERNAL
-namespace internal {
+// namespace detail {
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // /// The coordinate list (COO) matrix traits.
@@ -41,7 +40,7 @@ namespace internal {
 // struct Traits<CooMatrix<_Scalar, _layout>> {
 //   static constexpr index_t ndim = 2;
 //   using ScalarType        = _Scalar;
-//   using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+//   using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
 //   using VectorType        = CooVector<ScalarType>;
 //   using RealVectorType    = CooVector<RealScalarType>;
 //   using MatrixType        = CooMatrix<ScalarType, _layout>;
@@ -50,7 +49,7 @@ namespace internal {
 //   using RealTransposeType = CooMatrix<RealScalarType, changeLayout(_layout)>;
 // };
 
-// }  // namespace internal
+// }  // namespace detail
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // /// The coordinate list (COO) matrix class.
@@ -60,13 +59,13 @@ namespace internal {
 // ///
 // template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 // class CooMatrix
-//   : public internal::MatrixBase<CooMatrix<_Scalar, _layout>>,
-//     public internal::CooBase<CooMatrix<_Scalar, _layout>> {
+//   : public MatrixBase<CooMatrix<_Scalar, _layout>>,
+//     public CooBase<CooMatrix<_Scalar, _layout>> {
 
 //  public:
 
 //   using ScalarType        = _Scalar;
-//   using RealScalarType    = typename internal::ScalarTraits<_Scalar>::RealType;
+//   using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
 
 //   using VectorType        = CooVector<ScalarType>;
 //   using RealVectorType    = CooVector<RealScalarType>;
@@ -81,8 +80,8 @@ namespace internal {
 
 //  private:
 
-//   using MatrixBaseType    = internal::MatrixBase<CooMatrix<_Scalar, _layout>>;
-//   using CooBaseType       = internal::CooBase<CooMatrix<_Scalar, _layout>>;
+//   using MatrixBaseType    = MatrixBase<CooMatrix<_Scalar, _layout>>;
+//   using CooBaseType       = detail::CooBase<CooMatrix<_Scalar, _layout>>;
 
 //   template <class _Type> using EnableIfColMajor = typename std::enable_if<isColMajor(_layout), _Type>::type;
 //   template <class _Type> using EnableIfRowMajor = typename std::enable_if<isRowMajor(_layout), _Type>::type;

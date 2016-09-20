@@ -16,16 +16,11 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
 ReconstructorBase<_Derived>::ReconstructorBase(
-    const internal::Parameters<ScalarType> &parameters
+    const Parameters<ScalarType> &parameters
 ) noexcept : parameters_(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,8 +72,6 @@ const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLM
     ReconstructorBase<_Derived>::getRightSingularVectors() const noexcept {
   return this->derived().getRightSingularVectorsImpl();
 }
-
-}  // namespace internal
 
 }  // namespace isvd
 

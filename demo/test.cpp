@@ -25,6 +25,7 @@ int main( int argc, char **argv ) {
   std::cout << mat << std::endl;
   mat.sort();
   std::cout << mat << std::endl;
-  std::cout << mat(3) << std::endl;
+  std::cout << mat(3) << std::endl << std::endl;
+  std::cout << mat.getSegment({2, 7}) << std::endl;
 
 }
