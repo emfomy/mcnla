@@ -125,7 +125,7 @@ std::tuple<_Args&...> CooTupleHelper<_ndim, _dim>::makeRefTuple(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  makeRefTuple
+/// @brief  Makes a reference tuple of given tuple
 ///
 template <index_t _ndim> template <typename... _Args, typename... __Args>
 std::tuple<_Args&...> CooTupleHelper<_ndim, 0>::makeRefTuple(
@@ -146,6 +146,14 @@ CooTuple<_ndim, _Scalar, _Index>::CooTuple( const BaseType base ) noexcept
     tuple_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given indices.
+///
+template <index_t _ndim, typename _Scalar, typename _Index>
+CooTuple<_ndim, _Scalar, _Index>::CooTuple( const TupleType tuple ) noexcept
+  : BaseType(internal::CooTupleHelper<_ndim>::makeRefTuple(tuple_)),
+    tuple_(tuple) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 template <index_t _ndim, typename _Scalar, typename _Index>
@@ -160,14 +168,6 @@ template <index_t _ndim, typename _Scalar, typename _Index>
 CooTuple<_ndim, _Scalar, _Index>::CooTuple( CooTuple &&other ) noexcept
   : BaseType(internal::CooTupleHelper<_ndim>::makeRefTuple(tuple_)),
     tuple_(other) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy from tuple.
-///
-template <index_t _ndim, typename _Scalar, typename _Index>
-CooTuple<_ndim, _Scalar, _Index>& CooTuple<_ndim, _Scalar, _Index>::operator=( const BaseType base ) noexcept {
-  BaseType::operator=(base); return *this;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -228,21 +228,9 @@ bool CooTuple<_ndim, _Scalar, _Index>::operator>=( const CooTuple<_ndim, __Index
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Assigns values.
 ///
-/// @attention  This routine is only available if `_Scalar != void`.
-///
 template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename... _Args>
 void CooTuple<_ndim, _Scalar, _Index>::operator()( const __Scalar value, const _Args... args ) noexcept {
   BaseType::operator=(std::make_tuple(args..., value));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Swaps COO tuples.
-///
-/// @attention  This routine is only available if `_Scalar != void`.
-///
-template <index_t _ndim, typename _Scalar, typename _Index>
-void CooTuple<_ndim, _Scalar, _Index>::swap( CooTuple a, CooTuple b ) noexcept {
-  internal::CooTupleHelper<_ndim>::swap(a, b);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +261,7 @@ CooTuple<sizeof...(_Args)+1, _Scalar, _Index> makeCooRefTuple( _Scalar &value, _
 ///
 template <isvd::index_t _ndim, typename _Scalar, typename _Index>
 void std::swap( isvd::CooTuple<_ndim, _Scalar, _Index> a, isvd::CooTuple<_ndim, _Scalar, _Index> b ) noexcept {
-  isvd::CooTuple<_ndim, _Scalar, _Index>::swap(a, b);
+  isvd::internal::CooTupleHelper<_ndim>::swap(a, b);
 }
 
 #endif  // ISVD_MATRIX_COO_COO_TUPLE_IPP_

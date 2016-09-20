@@ -75,7 +75,7 @@ CooData<_ndim, _Scalar>::CooData(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-/// @attention  The size of @p value and each element in @p idx should be the same.
+/// @attention  The size of @a value and each element in @a idx should be the same.
 ///
 template <index_t _ndim, typename _Scalar>
 CooData<_ndim, _Scalar>::CooData(

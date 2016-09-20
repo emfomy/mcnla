@@ -52,7 +52,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the iSVD decomposition.
 ///
-/// @attention  @p matrix_a should be the same in each MPI node.
+/// @attention  @a matrix_a should be the same in each MPI node.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Matrix &matrix_a ) noexcept {

@@ -82,7 +82,7 @@ struct MpiScalarTraits<std::complex<double>> {
 ///
 /// @param  comm  The communicator.
 ///
-/// @return       The number of processes in the group of @p comm.
+/// @return       The number of processes in the group of @a comm.
 ///
 static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
   mpi_int_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
@@ -93,7 +93,7 @@ static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
 ///
 /// @param  comm  The communicator.
 ///
-/// @return       The rank of the calling process in group of @p comm.
+/// @return       The rank of the calling process in group of @a comm.
 ///
 static inline mpi_int_t getCommRank( const MPI_Comm comm ) noexcept {
   mpi_int_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
@@ -112,7 +112,7 @@ static inline bool isCommRoot( const mpi_int_t root, const MPI_Comm comm ) noexc
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Broadcasts a message from the process with rank root to all other processes of the group.
 ///
-/// @attention  The size of @p buffer should be the same for all MPI nodes.
+/// @attention  The size of @a buffer should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void bcast(
@@ -127,7 +127,7 @@ inline void bcast(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gathers values from a group of processes.
 ///
-/// @attention  The size of @p send should be the same for all MPI nodes.
+/// @attention  The size of @a send should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void gather(
@@ -148,7 +148,7 @@ inline void gather(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Combines values from all processes and distributes the result back to all processes.
 ///
-/// @attention  The size of @p send and @p recv should be the same for all MPI nodes.
+/// @attention  The size of @a send and @a recv should be the same for all MPI nodes.
 ///
 //@{
 template <typename _Scalar>
@@ -197,7 +197,7 @@ inline void allreduce(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Combines values from all processes and distributes the result back to all processes. (in-place version)
 ///
-/// @attention  The size of @p buffer should be the same for all MPI nodes.
+/// @attention  The size of @a buffer should be the same for all MPI nodes.
 ///
 //@{
 template <typename _Scalar>
@@ -237,8 +237,8 @@ inline void allreduce(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  All processes send data to all.
 ///
-/// @attention  The size of @p send should be the same for all MPI nodes.
-/// @attention  The size of @p recv should be the same for all MPI nodes.
+/// @attention  The size of @a send should be the same for all MPI nodes.
+/// @attention  The size of @a recv should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void alltoall(
@@ -259,7 +259,7 @@ inline void alltoall(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  All processes send data to all. (in-place version)
 ///
-/// @attention  The size of @p buffer should be the same for all MPI nodes.
+/// @attention  The size of @a buffer should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void alltoall(

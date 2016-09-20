@@ -176,7 +176,7 @@ _Scalar CooVector<_Scalar>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
 //
-/// @attention  Returns @c -1 if the index does not exist!
+/// @attention  Returns `-1` if the index does not exist!
 ///
 template <typename _Scalar>
 index_t CooVector<_Scalar>::getPos(

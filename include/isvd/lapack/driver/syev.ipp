@@ -137,7 +137,7 @@ const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Ma
 /// @brief  Computes the eigenvalue decomposition.
 ///
 /// @attention  The eigenvectors are Stored in columnwise for column-major storage, in rowwise for row-major storage.
-/// @attention  Matrix @p a will be destroyed!
+/// @attention  Matrix @a a will be destroyed!
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo> template <JobOption __jobz>
 void SyevDriver<_Matrix, _jobz, _uplo>::compute(

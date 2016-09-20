@@ -143,7 +143,7 @@ const typename GesvdDriver<_Matrix, _jobu, _jobvt>::RealVectorType&
 ///
 /// @attention  The left singular vectors are stored in columnwise for column-major storage, in rowwise for row-major storage.
 /// @attention  The right singular vectors are stored in rowwise for column-major storage, in columnwise for row-major storage.
-/// @attention  Matrix @p a will be destroyed!
+/// @attention  Matrix @a a will be destroyed!
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <JobOption __jobu, JobOption __jobvt>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
