@@ -75,7 +75,7 @@ struct MpiScalarTraits<std::complex<double>> {
   static constexpr const MPI_Datatype &data_type = MPI_DOUBLE_COMPLEX;
 };
 
-}  // internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Returns the size of the group associated with a communicator.

@@ -110,6 +110,8 @@ struct CooTupleHelper<_ndim, 0> {
 /// @tparam  _Index   The index type.
 /// @tparam  _Scalar  The scalar type.
 ///
+/// @see  makeCooTuple, makeCooRefTuple
+///
 template <index_t _ndim, typename _Scalar, typename _Index>
 class CooTuple : public detail::CooTupleBase<_ndim, _Scalar&, _Index&> {
 
@@ -160,18 +162,20 @@ class CooTuple : public detail::CooTupleBase<_ndim, _Scalar&, _Index&> {
   inline void operator()( const __Scalar value, const _Args... args ) noexcept;
 
   // Makes
-  template <typename __Index, typename... _Args>
-  friend inline CooTuple<sizeof...(_Args)+1, void*,    __Index> makeCooTuple( const __Index, const _Args... );
-  template <typename __Scalar, typename __Index, typename... _Args>
-  friend inline CooTuple<sizeof...(_Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar&, __Index&, _Args&... );
+  template <typename __Index, typename... __Args>
+  friend inline CooTuple<sizeof...(__Args)+1, void*,    __Index>
+      makeCooTuple( const __Index idx, const __Args... args );
+  template <typename __Scalar, typename __Index, typename... __Args>
+  friend inline CooTuple<sizeof...(__Args)+1, __Scalar, __Index>
+      makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args );
 
 };
 
 // Makes a tuple
-template <typename _Index, typename... _Args>
-inline CooTuple<sizeof...(_Args)+1, void*,   _Index> makeCooTuple( const _Index idx, const _Args... args );
-template <typename _Scalar, typename _Index, typename... _Args>
-inline CooTuple<sizeof...(_Args)+1, _Scalar, _Index> makeCooRefTuple( _Scalar &value, _Index &idx, _Args&... args );
+template <typename __Index, typename... __Args>
+inline CooTuple<sizeof...(__Args)+1, void*,   __Index> makeCooTuple( const __Index idx, const __Args... args );
+template <typename __Scalar, typename __Index, typename... __Args>
+inline CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args );
 
 }  // namespace isvd
 
