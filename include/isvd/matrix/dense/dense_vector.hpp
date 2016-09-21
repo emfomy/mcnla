@@ -13,7 +13,7 @@
 #include <isvd/matrix/base/container_base.hpp>
 #include <isvd/matrix/base/vector_base.hpp>
 #include <isvd/matrix/dense/dense_base.hpp>
-// #include <isvd/matrix/dense/dense_vector_iterator.hpp>
+#include <isvd/matrix/dense/dense_vector_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -42,8 +42,8 @@ struct Traits<DenseVector<_Scalar>> {
   using VectorType     = DenseVector<ScalarType>;
   using RealVectorType = DenseVector<RealScalarType>;
 
-  // using IteratorType      = DenseVectorIterator<ScalarType>;
-  // using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
+  using IteratorType      = DenseVectorIterator<ScalarType>;
+  using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
 };
 
 }  // namespace detail
@@ -55,8 +55,8 @@ struct Traits<DenseVector<_Scalar>> {
 ///
 template <typename _Scalar>
 class DenseVector
-  // : public ContainerBase<DenseVector<_Scalar>>,
-  : public VectorBase<DenseVector<_Scalar>>,
+  : public ContainerBase<DenseVector<_Scalar>>,
+    public VectorBase<DenseVector<_Scalar>>,
     public DenseBase<DenseVector<_Scalar>> {
 
  public:
@@ -70,8 +70,8 @@ class DenseVector
 
   using DataType          = DenseData<ScalarType>;
 
-  // using IteratorType      = DenseVectorIterator<ScalarType>;
-  // using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
+  using IteratorType      = DenseVectorIterator<ScalarType>;
+  using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
 
  private:
 
@@ -117,6 +117,10 @@ class DenseVector
 
   // Gets internal position
   inline index_t getPos( const index_t idx ) const noexcept;
+
+  // Finds the iterator
+  inline IteratorType      find( const index_t idx ) noexcept;
+  inline ConstIteratorType find( const index_t idx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;

@@ -208,6 +208,28 @@ index_t DenseVector<_Scalar>::getPos(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Finds the iterator to element
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::find(
+    const index_t idx
+) noexcept {
+  assert(idx >= 0 && idx < length_);
+  return IteratorType(this, idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::find(
+    const index_t idx
+) const noexcept {
+  assert(idx >= 0 && idx < length_);
+  return ConstIteratorType(this, idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the vector.
 ///
 /// @attention  The new space is not initialized.

@@ -18,6 +18,7 @@ namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class DenseVector;
+template <typename _Scalar, class _Vector> class DenseVectorIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,12 +26,6 @@ template <typename _Scalar> class DenseVector;
 //
 namespace detail {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, class _Vector> class DenseVectorIteratorBase;
-template <typename _Scalar, class _Vector> class DenseVectorValueIteratorBase;
-template <typename _Scalar, class _Vector> class DenseVectorIdxIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator traits.
 ///
@@ -38,32 +33,13 @@ template <typename _Scalar, class _Vector> class DenseVectorIdxIteratorBase;
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> : Traits<IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>> {
-  using ScalarType        = _Scalar;
-  using IdxTupleType      = IdxTuple<1>;
-  using ContainerType     = _Vector;
-  using BaseType          = DenseVectorIteratorBase<_Scalar, _Vector>;
-  using ValueIteratorType = DenseVectorValueIteratorBase<_Scalar, _Vector>;
-  using IdxIteratorType   = DenseVectorIdxIteratorBase<_Scalar, _Vector>;
+struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
+  static constexpr index_t ndim = 1;
+  using ScalarType    = _Scalar;
+  using ContainerType = _Vector;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
-///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Vector  The vector type.
-///
-template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorValueIteratorBase<_Scalar, _Vector>> : Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector index iterator traits.
-///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Vector  The vector type.
-///
-template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorIdxIteratorBase<_Scalar, _Vector>> : Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {};
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator.
@@ -72,77 +48,42 @@ struct Traits<DenseVectorIdxIteratorBase<_Scalar, _Vector>> : Traits<DenseVector
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>> {
+class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>> {
+
+ private:
+
+  static constexpr index_t ndim = 1;
+  using ScalarType    = _Scalar;
+  using ContainerType = _Vector;
+
+  using BaseType      = DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>;
 
  protected:
 
-  using IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>::itidx_;
-  using IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>::container_;
+  using BaseType::itidx_;
+  using BaseType::container_;
 
  public:
 
-  using IteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>::IteratorBase;
+  using BaseType::DenseIteratorBase;
+  using BaseType::operator=;
 
   // Operators
   template <typename __Scalar, class __Vector>
   friend inline std::ostream& operator<<( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
 
   // Gets value
-  inline       _Scalar&    getValue() noexcept;
-  inline const _Scalar&    getValue() const noexcept;
-  inline       IdxTuple<1> getIdxs() const noexcept;
-  inline       index_t     getIdx() const noexcept;
-  inline       index_t     getPos() const noexcept;
+  inline ScalarType& getValue() const noexcept;
+  inline index_t     getIdx() const noexcept;
+  inline index_t     getPos() const noexcept;
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator.
-///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Vector  The vector type.
-///
-template <typename _Scalar, class _Vector>
-class DenseVectorValueIteratorBase
-  : public DenseVectorIteratorBase<_Scalar, _Vector>,
-    public ValueIteratorBase<DenseVectorValueIteratorBase<_Scalar, _Vector>> {
-
- public:
-
-  using DenseVectorIteratorBase<_Scalar, _Vector>::DenseVectorIteratorBase;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator.
-///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Vector  The vector type.
-///
-template <typename _Scalar, class _Vector>
-class DenseVectorIdxIteratorBase
-  : public DenseVectorIteratorBase<_Scalar, _Vector>,
-    public IdxIteratorBase<DenseVectorIdxIteratorBase<_Scalar, _Vector>> {
-
- public:
-
-  using DenseVectorIteratorBase<_Scalar, _Vector>::DenseVectorIteratorBase;
-
-};
-
-}  // namespace detail
+template <typename _Scalar>
+using DenseVectorIterator = DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
 
 template <typename _Scalar>
-using DenseVectorIterator = detail::DenseVectorValueIteratorBase<_Scalar, DenseVector<_Scalar>>;
-
-template <typename _Scalar>
-using DenseVectorConstIterator = detail::DenseVectorValueIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
-
-template <typename _Scalar>
-using DenseVectorIdxIterator = detail::DenseVectorIdxIteratorBase<_Scalar, DenseVector<_Scalar>>;
-
-template <typename _Scalar>
-using DenseVectorConstIdxIterator = detail::DenseVectorIdxIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+using DenseVectorConstIterator = DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
 
 }  // namespace isvd
 

@@ -335,6 +335,38 @@ DenseCube<_Scalar, changeLayout(_layout)> DenseCube<_Scalar, _layout>::transpose
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Finds the iterator to element
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::IteratorType DenseCube<_Scalar, _layout>::find(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) noexcept {
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
+  auto itidx = (isColMajor(_layout) ? (rowidx + colidx * size1_) : (colidx + rowidx * size1_)) + pageidx * size1_ * size2_;
+  return IteratorType(this, itidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::find(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept {
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
+  auto itidx = (isColMajor(_layout) ? (rowidx + colidx * size1_) : (colidx + rowidx * size1_)) + pageidx * size1_ * size2_;
+  return ConstIteratorType(this, itidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the cube.
 ///
 /// @attention  The new space is not initialized.

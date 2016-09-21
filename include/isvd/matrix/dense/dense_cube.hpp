@@ -17,7 +17,7 @@
 #include <isvd/matrix/dense/dense_base.hpp>
 #include <isvd/matrix/dense/dense_vector.hpp>
 #include <isvd/matrix/dense/dense_matrix.hpp>
-// #include <isvd/matrix/dense/dense_cube_iterator.hpp>
+#include <isvd/matrix/dense/dense_cube_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -56,8 +56,8 @@ struct Traits<DenseCube<_Scalar, _layout>> {
   using TransposeType     = DenseCube<ScalarType, changeLayout(_layout)>;
   using RealTransposeType = DenseCube<RealScalarType, changeLayout(_layout)>;
 
-  // using IteratorType      = DenseCubeIterator<ScalarType, _layout>;
-  // using ConstIteratorType = DenseCubeConstIterator<ScalarType, _layout>;
+  using IteratorType      = DenseCubeIterator<ScalarType, _layout>;
+  using ConstIteratorType = DenseCubeConstIterator<ScalarType, _layout>;
 };
 
 }  // namespace detail
@@ -70,8 +70,8 @@ struct Traits<DenseCube<_Scalar, _layout>> {
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
 class DenseCube
-  // : public ContainerBase<DenseCube<_Scalar, _layout>>,
-  : public CubeBase<DenseCube<_Scalar, _layout>>,
+  : public ContainerBase<DenseCube<_Scalar, _layout>>,
+    public CubeBase<DenseCube<_Scalar, _layout>>,
     public DenseBase<DenseCube<_Scalar, _layout>>{
 
  public:
@@ -92,6 +92,9 @@ class DenseCube
   using RealTransposeType = DenseCube<RealScalarType, changeLayout(_layout)>;
 
   using DataType          = DenseData<ScalarType>;
+
+  using IteratorType      = DenseCubeIterator<ScalarType, _layout>;
+  using ConstIteratorType = DenseCubeConstIterator<ScalarType, _layout>;
 
  private:
 
@@ -159,6 +162,10 @@ class DenseCube
 
   // Transpose
   inline TransposeType transpose() noexcept;
+
+  // Finds the iterator
+  inline IteratorType      find( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
+  inline ConstIteratorType find( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;

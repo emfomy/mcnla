@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace.
-//
-namespace detail {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, class __Vector>
@@ -36,24 +31,9 @@ std::ostream& operator<< ( std::ostream &out, const DenseVectorIteratorBase<__Sc
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, class _Vector>
-_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() noexcept {
+_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
+  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
   return container_->getValue()[getPos()];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, class _Vector>
-const _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
-  return container_->getValue()[getPos()];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index tuple.
-///
-template <typename _Scalar, class _Vector>
-IdxTuple<1> DenseVectorIteratorBase<_Scalar, _Vector>::getIdxs() const noexcept {
-  return makeIdxTuple(&getIdx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,12 +47,12 @@ index_t DenseVectorIteratorBase<_Scalar, _Vector>::getIdx() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
+/// @attention  Never call this when the iterator is at the end.
+///
 template <typename _Scalar, class _Vector>
 index_t DenseVectorIteratorBase<_Scalar, _Vector>::getPos() const noexcept {
-  return container_->getPos(getIdx());
+  return container_->getPos(itidx_);
 }
-
-}  // namespace detail
 
 }  // namespace isvd
 

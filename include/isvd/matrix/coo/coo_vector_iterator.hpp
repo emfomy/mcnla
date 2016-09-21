@@ -36,8 +36,7 @@ namespace detail {
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, typename _Index, class _Vector>
-struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>>
-  : Traits<CooIteratorBase<CooVectorIteratorBase<_Scalar, _Index, _Vector>>> {
+struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {
   static constexpr index_t ndim = 1;
   using ScalarType    = _Scalar;
   using IndexType     = _Index;

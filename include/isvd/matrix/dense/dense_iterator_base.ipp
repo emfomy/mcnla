@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/coo/coo_iterator_base.ipp
-/// @brief   The implementation of COO iterator interface.
+/// @file    include/isvd/matrix/dense/dense_iterator_base.ipp
+/// @brief   The implementation of dense iterator interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_COO_COO_ITERATOR_BASE_IPP_
-#define ISVD_MATRIX_COO_COO_ITERATOR_BASE_IPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_ITERATOR_BASE_IPP_
+#define ISVD_MATRIX_DENSE_DENSE_ITERATOR_BASE_IPP_
 
-#include <isvd/matrix/coo/coo_iterator_base.hpp>
+#include <isvd/matrix/dense/dense_iterator_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -19,7 +19,7 @@ namespace isvd {
 /// @brief  Default constructor.
 ///
 template <class _Derived>
-CooIteratorBase<_Derived>::CooIteratorBase() noexcept
+DenseIteratorBase<_Derived>::DenseIteratorBase() noexcept
   : container_(nullptr),
     itidx_(0) {}
 
@@ -27,7 +27,7 @@ CooIteratorBase<_Derived>::CooIteratorBase() noexcept
 /// @brief  Construct with given container.
 ///
 template <class _Derived>
-CooIteratorBase<_Derived>::CooIteratorBase(
+DenseIteratorBase<_Derived>::DenseIteratorBase(
     ContainerType *container,
     const index_t itidx
 ) noexcept
@@ -38,8 +38,8 @@ CooIteratorBase<_Derived>::CooIteratorBase(
 /// @brief  Copy constructor.
 ///
 template <class _Derived>
-CooIteratorBase<_Derived>::CooIteratorBase(
-    const CooIteratorBase &other
+DenseIteratorBase<_Derived>::DenseIteratorBase(
+    const DenseIteratorBase &other
 ) noexcept
   : container_(other.container_),
     itidx_(other.itidx_) {}
@@ -48,8 +48,8 @@ CooIteratorBase<_Derived>::CooIteratorBase(
 /// @brief  Copy assignment operator.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::operator=(
-    const CooIteratorBase &other
+_Derived& DenseIteratorBase<_Derived>::operator=(
+    const DenseIteratorBase &other
 ) noexcept {
   container_ = other.container_; itidx_ = other.itidx_;
   return derived();
@@ -61,16 +61,28 @@ _Derived& CooIteratorBase<_Derived>::operator=(
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <class _Derived>
-typename CooIteratorBase<_Derived>::TupleType CooIteratorBase<_Derived>::operator*() const noexcept {
-  return getTuple();
+typename DenseIteratorBase<_Derived>::ScalarType& DenseIteratorBase<_Derived>::operator*() const noexcept {
+  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
+  return derived().getValue();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Indirection operator
+///
+/// @attention  Never call this when the iterator is at the end.
+///
+template <class _Derived>
+typename DenseIteratorBase<_Derived>::ScalarType* DenseIteratorBase<_Derived>::operator->() const noexcept {
+  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
+  return &(derived().getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
 template <class _Derived>
-bool CooIteratorBase<_Derived>::operator==(
-    const CooIteratorBase &other
+bool DenseIteratorBase<_Derived>::operator==(
+    const DenseIteratorBase &other
 ) const noexcept {
   assert(container_ == other.container_);
   return (itidx_ == other.itidx_);
@@ -80,8 +92,8 @@ bool CooIteratorBase<_Derived>::operator==(
 /// @brief  Not-equal-to operator.
 ///
 template <class _Derived>
-bool CooIteratorBase<_Derived>::operator!=(
-    const CooIteratorBase &other
+bool DenseIteratorBase<_Derived>::operator!=(
+    const DenseIteratorBase &other
 ) const noexcept {
   return !(*this == other);
 }
@@ -90,8 +102,8 @@ bool CooIteratorBase<_Derived>::operator!=(
 /// @brief  Greater-than operator.
 ///
 template <class _Derived>
-bool CooIteratorBase<_Derived>::operator>(
-    const CooIteratorBase &other
+bool DenseIteratorBase<_Derived>::operator>(
+    const DenseIteratorBase &other
 ) const noexcept {
   assert(container_ == other.container_);
   return (itidx_ > other.itidx_);
@@ -101,8 +113,8 @@ bool CooIteratorBase<_Derived>::operator>(
 /// @brief  Less-than operator.
 ///
 template <class _Derived>
-bool CooIteratorBase<_Derived>::operator<(
-    const CooIteratorBase &other
+bool DenseIteratorBase<_Derived>::operator<(
+    const DenseIteratorBase &other
 ) const noexcept {
   assert(container_ == other.container_);
   return (itidx_ < other.itidx_);
@@ -112,8 +124,8 @@ bool CooIteratorBase<_Derived>::operator<(
 /// @brief  Less-than or equal-to operator.
 ///
 template <class _Derived>
-bool CooIteratorBase<_Derived>::operator<=(
-    const CooIteratorBase &other
+bool DenseIteratorBase<_Derived>::operator<=(
+    const DenseIteratorBase &other
 ) const noexcept {
   return !(*this > other);
 }
@@ -122,8 +134,8 @@ bool CooIteratorBase<_Derived>::operator<=(
 /// @brief  Greater-than or equal-to operator.
 ///
 template <class _Derived>
-bool CooIteratorBase<_Derived>::operator>=(
-    const CooIteratorBase &other
+bool DenseIteratorBase<_Derived>::operator>=(
+    const DenseIteratorBase &other
 ) const noexcept {
   return !(*this < other);
 }
@@ -132,12 +144,12 @@ bool CooIteratorBase<_Derived>::operator>=(
 /// @brief  Prefix increment operator.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::operator++() noexcept {
+_Derived& DenseIteratorBase<_Derived>::operator++() noexcept {
   assert(container_ != nullptr);
 
-  const auto nnz = container_->getNnz();
-  if ( ++itidx_ >= nnz ) {
-    itidx_ = nnz;
+  const auto nelem = container_->getNelem();
+  if ( ++itidx_ >= nelem ) {
+    itidx_ = nelem;
   }
   return derived();
 }
@@ -146,12 +158,12 @@ _Derived& CooIteratorBase<_Derived>::operator++() noexcept {
 /// @brief  Prefix decrement operator.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::operator--() noexcept {
+_Derived& DenseIteratorBase<_Derived>::operator--() noexcept {
   assert(container_ != nullptr);
 
-  const auto nnz = container_->getNnz();
-  if ( --itidx_ >= nnz ) {
-    itidx_ = nnz;
+  const auto nelem = container_->getNelem();
+  if ( --itidx_ >= nelem ) {
+    itidx_ = nelem;
   }
   return derived();
 }
@@ -160,7 +172,7 @@ _Derived& CooIteratorBase<_Derived>::operator--() noexcept {
 /// @brief  Postfix increment operator.
 ///
 template <class _Derived>
-_Derived CooIteratorBase<_Derived>::operator++( int ) noexcept {
+_Derived DenseIteratorBase<_Derived>::operator++( int ) noexcept {
   auto retval(*this);
   ++(*this);
   return retval;
@@ -170,7 +182,7 @@ _Derived CooIteratorBase<_Derived>::operator++( int ) noexcept {
 /// @brief  Postfix decrement operator.
 ///
 template <class _Derived>
-_Derived CooIteratorBase<_Derived>::operator--( int ) noexcept {
+_Derived DenseIteratorBase<_Derived>::operator--( int ) noexcept {
   auto retval(*this);
   --(*this);
   return retval;
@@ -180,12 +192,12 @@ _Derived CooIteratorBase<_Derived>::operator--( int ) noexcept {
 /// @brief  Addition operator.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
+_Derived& DenseIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
   assert(container_ != nullptr);
 
-  const auto nnz = container_->getNnz();
-  if ( (itidx_+=num) >= nnz ) {
-    itidx_ = nnz;
+  const auto nelem = container_->getNelem();
+  if ( (itidx_+=num) >= nelem ) {
+    itidx_ = nelem;
   }
   return derived();
 }
@@ -194,12 +206,12 @@ _Derived& CooIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
 /// @brief  Subtraction operator.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
+_Derived& DenseIteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
   assert(container_ != nullptr);
 
-  const auto nnz = container_->getNnz();
-  if ( (itidx_-=num) >= nnz ) {
-    itidx_ = nnz;
+  const auto nelem = container_->getNelem();
+  if ( (itidx_-=num) >= nelem ) {
+    itidx_ = nelem;
   }
   return derived();
 }
@@ -208,7 +220,7 @@ _Derived& CooIteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
 /// @brief  Addition assignment operator.
 ///
 template <class _Derived>
-_Derived CooIteratorBase<_Derived>::operator+( const index_t num ) const noexcept {
+_Derived DenseIteratorBase<_Derived>::operator+( const index_t num ) const noexcept {
   auto retval(*this);
   return (retval += num);
 }
@@ -217,7 +229,7 @@ _Derived CooIteratorBase<_Derived>::operator+( const index_t num ) const noexcep
 /// @brief  Subtraction assignment operator.
 ///
 template <class _Derived>
-_Derived CooIteratorBase<_Derived>::operator-( const index_t num ) const noexcept {
+_Derived DenseIteratorBase<_Derived>::operator-( const index_t num ) const noexcept {
   auto retval(*this);
   return (retval -= num);
 }
@@ -226,7 +238,7 @@ _Derived CooIteratorBase<_Derived>::operator-( const index_t num ) const noexcep
 /// @brief  Subtraction assignment operator.
 ///
 template <class _Derived>
-index_t CooIteratorBase<_Derived>::operator-( const CooIteratorBase &other ) const noexcept {
+index_t DenseIteratorBase<_Derived>::operator-( const DenseIteratorBase &other ) const noexcept {
   assert(container_ != nullptr);
   return (this->itidx_ - other.itidx_);
 }
@@ -237,7 +249,7 @@ index_t CooIteratorBase<_Derived>::operator-( const CooIteratorBase &other ) con
 template <class __Derived>
 __Derived operator+(
     const index_t num,
-    const CooIteratorBase<__Derived> &iterator
+    const DenseIteratorBase<__Derived> &iterator
 ) noexcept {
   return iterator + num;
 }
@@ -246,48 +258,15 @@ __Derived operator+(
 /// @brief  Gets the iterator index.
 ///
 template <class _Derived>
-index_t CooIteratorBase<_Derived>::getItIdx() const noexcept {
+index_t DenseIteratorBase<_Derived>::getItIdx() const noexcept {
   return itidx_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value.
-///
-/// @attention  Never call this when the iterator is at the end.
-///
-template <class _Derived>
-typename CooIteratorBase<_Derived>::ScalarType& CooIteratorBase<_Derived>::getValue() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNnz());
-  return container_->getValue()[itidx_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index.
-///
-/// @attention  Never call this when the iterator is at the end.
-///
-template <class _Derived> template <index_t _dim>
-typename CooIteratorBase<_Derived>::IndexType& CooIteratorBase<_Derived>::getIdx() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNnz());
-  return container_->getIdx<_dim>()[itidx_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the tuple.
-///
-/// @attention  Never call this when the iterator is at the end.
-///
-template <class _Derived>
-typename CooIteratorBase<_Derived>::TupleType CooIteratorBase<_Derived>::getTuple() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNnz());
-  return container_->getTuple(itidx_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the container.
 ///
 template <class _Derived>
-typename CooIteratorBase<_Derived>::ContainerType* CooIteratorBase<_Derived>::getContainer() const noexcept {
+typename DenseIteratorBase<_Derived>::ContainerType* DenseIteratorBase<_Derived>::getContainer() const noexcept {
   return container_;
 }
 
@@ -295,7 +274,7 @@ typename CooIteratorBase<_Derived>::ContainerType* CooIteratorBase<_Derived>::ge
 /// @brief  Sets the iterator to beginning.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::setBegin() noexcept {
+_Derived& DenseIteratorBase<_Derived>::setBegin() noexcept {
   itidx_ = 0;
   return derived();
 }
@@ -304,8 +283,8 @@ _Derived& CooIteratorBase<_Derived>::setBegin() noexcept {
 /// @brief  Sets the iterator to end.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::setEnd() noexcept {
-  itidx_ = (container_ != nullptr) ? container_->getNnz() : 0;
+_Derived& DenseIteratorBase<_Derived>::setEnd() noexcept {
+  itidx_ = (container_ != nullptr) ? container_->getNelem() : 0;
   return derived();
 }
 
@@ -313,7 +292,7 @@ _Derived& CooIteratorBase<_Derived>::setEnd() noexcept {
 /// @brief  Gets the to beginning iterator.
 ///
 template <class _Derived>
-_Derived CooIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
+_Derived DenseIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcept {
   _Derived retval(container); retval.setBegin(); return retval;
 }
 
@@ -321,7 +300,7 @@ _Derived CooIteratorBase<_Derived>::getBegin( ContainerType *container ) noexcep
 /// @brief  Gets the to end iterator.
 ///
 template <class _Derived>
-_Derived CooIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
+_Derived DenseIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept {
   _Derived retval(container); retval.setEnd(); return retval;
 }
 
@@ -329,7 +308,7 @@ _Derived CooIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept 
 /// @brief  Change to derived class.
 ///
 template <class _Derived>
-_Derived& CooIteratorBase<_Derived>::derived() noexcept {
+_Derived& DenseIteratorBase<_Derived>::derived() noexcept {
   return static_cast<_Derived&>(*this);
 }
 
@@ -337,10 +316,10 @@ _Derived& CooIteratorBase<_Derived>::derived() noexcept {
 /// @copydoc  derived
 ///
 template <class _Derived>
-const _Derived& CooIteratorBase<_Derived>::derived() const noexcept {
+const _Derived& DenseIteratorBase<_Derived>::derived() const noexcept {
   return static_cast<const _Derived&>(*this);
 }
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_COO_COO_ITERATOR_BASE_IPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_ITERATOR_BASE_IPP_

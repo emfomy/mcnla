@@ -1,17 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/coo/coo_iterator_base.hpp
-/// @brief   The COO iterator interface.
+/// @file    include/isvd/matrix/dense/dense_iterator_base.hpp
+/// @brief   The dense iterator interface.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_COO_COO_ITERATOR_BASE_HPP_
-#define ISVD_MATRIX_COO_COO_ITERATOR_BASE_HPP_
+#ifndef ISVD_MATRIX_DENSE_DENSE_ITERATOR_BASE_HPP_
+#define ISVD_MATRIX_DENSE_DENSE_ITERATOR_BASE_HPP_
 
 #include <isvd/isvd.hpp>
 #include <iterator>
 #include <isvd/utility/traits.hpp>
-#include <isvd/matrix/coo/coo_tuple.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -19,22 +18,18 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The coordinate list (COO) iterator interface.
+/// The dense iterator interface.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class CooIteratorBase
-  : public std::iterator<std::random_access_iterator_tag, CooTuple<detail::Traits<_Derived>::ndim,
-                                                                   typename detail::Traits<_Derived>::ScalarType,
-                                                                   typename detail::Traits<_Derived>::IndexType>> {
+class DenseIteratorBase
+  : public std::iterator<std::random_access_iterator_tag, typename detail::Traits<_Derived>::ScalarType> {
 
  private:
 
   static constexpr index_t ndim = detail::Traits<_Derived>::ndim;
   using ScalarType    = typename detail::Traits<_Derived>::ScalarType;
-  using IndexType     = typename detail::Traits<_Derived>::IndexType;
-  using TupleType     = CooTuple<ndim, ScalarType, IndexType>;
   using ContainerType = typename detail::Traits<_Derived>::ContainerType;
 
  protected:
@@ -48,24 +43,24 @@ class CooIteratorBase
  public:
 
   // Constructors
-  inline CooIteratorBase() noexcept;
-  inline CooIteratorBase( ContainerType *container, const index_t itidx = 0 ) noexcept;
-  inline CooIteratorBase( const CooIteratorBase &other ) noexcept;
+  inline DenseIteratorBase() noexcept;
+  inline DenseIteratorBase( ContainerType *container, const index_t itidx = 0 ) noexcept;
+  inline DenseIteratorBase( const DenseIteratorBase &other ) noexcept;
 
   // Assignment operators
-  inline _Derived& operator=( const CooIteratorBase &other ) noexcept;
+  inline _Derived& operator=( const DenseIteratorBase &other ) noexcept;
 
   // Member access operators
-  inline TupleType  operator*() const noexcept;
-  inline TupleType* operator->() = delete;
+  inline ScalarType& operator*() const noexcept;
+  inline ScalarType* operator->() const noexcept;
 
   // Comparison operators
-  inline bool operator==( const CooIteratorBase &other ) const noexcept;
-  inline bool operator!=( const CooIteratorBase &other ) const noexcept;
-  inline bool operator>(  const CooIteratorBase &other ) const noexcept;
-  inline bool operator<(  const CooIteratorBase &other ) const noexcept;
-  inline bool operator>=( const CooIteratorBase &other ) const noexcept;
-  inline bool operator<=( const CooIteratorBase &other ) const noexcept;
+  inline bool operator==( const DenseIteratorBase &other ) const noexcept;
+  inline bool operator!=( const DenseIteratorBase &other ) const noexcept;
+  inline bool operator>(  const DenseIteratorBase &other ) const noexcept;
+  inline bool operator<(  const DenseIteratorBase &other ) const noexcept;
+  inline bool operator>=( const DenseIteratorBase &other ) const noexcept;
+  inline bool operator<=( const DenseIteratorBase &other ) const noexcept;
 
   // Arithmetic operators
   inline _Derived& operator++() noexcept;
@@ -77,16 +72,13 @@ class CooIteratorBase
   inline _Derived  operator+(  const index_t num ) const noexcept;
   inline _Derived  operator-(  const index_t num ) const noexcept;
 
-  inline index_t operator-( const CooIteratorBase &other ) const noexcept;
+  inline index_t operator-( const DenseIteratorBase &other ) const noexcept;
   template <class __Derived>
-  friend inline __Derived operator+( const index_t num, const CooIteratorBase<__Derived> iterator ) noexcept;
+  friend inline __Derived operator+( const index_t num, const DenseIteratorBase<__Derived> iterator ) noexcept;
 
   // Gets data
   inline ContainerType* getContainer() const noexcept;
   inline index_t        getItIdx() const noexcept;
-  inline ScalarType&    getValue() const noexcept;
-  template <index_t _dim> inline IndexType& getIdx() const noexcept;
-  inline TupleType      getTuple() const noexcept;
 
   // Sets to begin/end
   inline _Derived& setBegin() noexcept;
@@ -106,4 +98,4 @@ class CooIteratorBase
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_COO_COO_ITERATOR_BASE_HPP_
+#endif  // ISVD_MATRIX_DENSE_DENSE_ITERATOR_BASE_HPP_

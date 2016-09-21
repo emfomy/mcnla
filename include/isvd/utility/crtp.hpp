@@ -16,7 +16,7 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The CRTP interface.
+/// The curiously recurring template pattern (CRTP) interface.
 ///
 /// @tparam  _Derived  The derived type.
 /// @tparam  _Base     The interface class type.

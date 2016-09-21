@@ -277,6 +277,34 @@ DenseMatrix<_Scalar, changeLayout(_layout)> DenseMatrix<_Scalar, _layout>::trans
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Finds the iterator to element
+///
+template <typename _Scalar, Layout _layout>
+typename DenseMatrix<_Scalar, _layout>::IteratorType DenseMatrix<_Scalar, _layout>::find(
+    const index_t rowidx,
+    const index_t colidx
+) noexcept {
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  auto itidx = isColMajor(_layout) ? (rowidx + colidx * size1_) : (colidx + rowidx * size1_);
+  return IteratorType(this, itidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar, Layout _layout>
+typename DenseMatrix<_Scalar, _layout>::ConstIteratorType DenseMatrix<_Scalar, _layout>::find(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  assert(rowidx >= 0 && rowidx < nrow_);
+  assert(colidx >= 0 && colidx < ncol_);
+  auto itidx = isColMajor(_layout) ? (rowidx + colidx * size1_) : (colidx + rowidx * size1_);
+  return ConstIteratorType(this, itidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the matrix.
 ///
 /// @attention  The new space is not initialized.

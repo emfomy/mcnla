@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace.
-//
-namespace detail {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, Layout __layout, class __Cube>
@@ -40,24 +35,9 @@ std::ostream& operator<< ( std::ostream &out, const DenseCubeIteratorBase<__Scal
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-_Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() noexcept {
+_Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() const noexcept {
+  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
   return container_->getValue()[getPos()];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-const _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() const noexcept {
-  return container_->getValue()[getPos()];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index tuple.
-///
-template <typename _Scalar, Layout _layout, class _Cube>
-IdxTuple<3> DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdxs() const noexcept {
-  return makeIdxTuple(&getIdx1(), &getIdx2(), &getIdx3());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,8 +95,6 @@ template <typename _Scalar, Layout _layout, class _Cube>
 index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getPos() const noexcept {
   return container_->getPos(getRowIdx(), getColIdx(), getPageIdx());
 }
-
-}  // namespace detail
 
 }  // namespace isvd
 

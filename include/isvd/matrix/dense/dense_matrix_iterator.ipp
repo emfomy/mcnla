@@ -16,11 +16,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace.
-//
-namespace detail {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, Layout __layout, class __Matrix>
@@ -38,24 +33,9 @@ std::ostream& operator<< ( std::ostream &out, const DenseMatrixIteratorBase<__Sc
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-_Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() noexcept {
+_Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const noexcept {
+  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
   return container_->getValue()[getPos()];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-const _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const noexcept {
-  return container_->getValue()[getPos()];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index tuple.
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-IdxTuple<2> DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdxs() const noexcept {
-  return makeIdxTuple(&getIdx1(), &getIdx2());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,12 +73,12 @@ index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx2() const noex
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
+/// @attention  Never call this when the iterator is at the end.
+///
 template <typename _Scalar, Layout _layout, class _Matrix>
 index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getPos() const noexcept {
   return container_->getPos(getRowIdx(), getColIdx());
 }
-
-}  // namespace detail
 
 }  // namespace isvd
 

@@ -13,19 +13,15 @@
 ///
 int main( int argc, char **argv ) {
 
-  isvd::CooVector<double> mat(10, 3, 5);
-
-  std::cout << mat << std::endl;
+  isvd::DenseCube<double> mat(5, 6, 7);
 
   int i = 0;
-  for ( auto tuple : mat ) {
-    ++i;
-    tuple(i, 7-i*2);
+  for ( auto &value : mat ) {
+    value = ++i;
   }
   std::cout << mat << std::endl;
-  mat.sort();
-  std::cout << mat << std::endl;
-  std::cout << mat(3) << std::endl << std::endl;
-  std::cout << mat.getSegment({2, 7}) << std::endl;
+  std::cout << mat(3, 4, 5) << std::endl << std::endl;
+  std::cout << mat.find(3, 4, 5) << std::endl << std::endl;
+  std::cout << mat.getCube({1, 3}, {2, 4}, {3, 5}) << std::endl;
 
 }
