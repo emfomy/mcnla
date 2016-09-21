@@ -20,9 +20,8 @@ namespace isvd {
 ///
 template <typename __Scalar, class __Vector>
 std::ostream& operator<< ( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator ) {
-  const index_t witdh = log10(iterator.container_->getLength())+1;
-  return out << "(" << std::setw(witdh) << iterator.getIdx() << ")  "
-                    << std::setw(ios_width) << iterator.getValue();
+  const index_t width = log10(iterator.container_->getLength())+1;
+  return out << "(" << std::setw(width) << iterator.getIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

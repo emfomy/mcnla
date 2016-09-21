@@ -150,6 +150,7 @@ class DenseMatrix
   // Finds the iterator
   inline IteratorType      find( const index_t rowidx, const index_t colidx ) noexcept;
   inline ConstIteratorType find( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline ConstIteratorType cfind( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;

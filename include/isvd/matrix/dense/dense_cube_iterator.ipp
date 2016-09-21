@@ -20,13 +20,12 @@ namespace isvd {
 ///
 template <typename __Scalar, Layout __layout, class __Cube>
 std::ostream& operator<< ( std::ostream &out, const DenseCubeIteratorBase<__Scalar, __layout, __Cube> &iterator ) {
-  const index_t witdh_r = log10(iterator.container_->getNrow())+1;
-  const index_t witdh_c = log10(iterator.container_->getNcol())+1;
-  const index_t witdh_p = log10(iterator.container_->getNpage())+1;
-  return out << "(" << std::setw(witdh_r) << iterator.getRowIdx() << ", "
-                    << std::setw(witdh_c) << iterator.getColIdx() << ", "
-                    << std::setw(witdh_p) << iterator.getPageIdx() << ")  "
-                    << std::setw(ios_width) << iterator.getValue();
+  const index_t width_r = log10(iterator.container_->getNrow())+1;
+  const index_t width_c = log10(iterator.container_->getNcol())+1;
+  const index_t width_p = log10(iterator.container_->getNpage())+1;
+  return out << "(" << std::setw(width_r) << iterator.getRowIdx() << ", "
+                    << std::setw(width_c) << iterator.getColIdx() << ", "
+                    << std::setw(width_p) << iterator.getPageIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

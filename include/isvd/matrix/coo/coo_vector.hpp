@@ -43,8 +43,8 @@ struct Traits<CooVector<_Scalar>> {
   using VectorType     = CooVector<ScalarType>;
   using RealVectorType = CooVector<RealScalarType>;
 
-  using IteratorType         = CooVectorIterator<ScalarType>;
-  using ConstIteratorType    = CooVectorConstIterator<ScalarType>;
+  using IteratorType      = CooVectorIterator<ScalarType>;
+  using ConstIteratorType = CooVectorConstIterator<ScalarType>;
 };
 
 }  // namespace detail
@@ -54,6 +54,8 @@ struct Traits<CooVector<_Scalar>> {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
+/// @todo  Add sorting attention to routines.
+///
 template <typename _Scalar>
 class CooVector
   : public ContainerBase<CooVector<_Scalar>>,
@@ -61,6 +63,8 @@ class CooVector
     public CooBase<CooVector<_Scalar>> {
 
  public:
+
+  static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
@@ -70,7 +74,7 @@ class CooVector
   using VectorType        = CooVector<ScalarType>;
   using RealVectorType    = CooVector<RealScalarType>;
 
-  using DataType          = CooData<1, ScalarType>;
+  using DataType          = CooData<ndim, ScalarType>;
 
   using IteratorType      = CooVectorIterator<ScalarType>;
   using ConstIteratorType = CooVectorConstIterator<ScalarType>;
@@ -107,8 +111,9 @@ class CooVector
   friend inline std::ostream& operator<<( std::ostream &out, const CooVector<__Scalar> &vector );
 
   // Gets index array
-  template <index_t _dim = 0> inline       index_t* getIdx() noexcept;
-  template <index_t _dim = 0> inline const index_t* getIdx() const noexcept;
+  using CooBaseType::getIdx;
+  inline       index_t* getIdx() noexcept;
+  inline const index_t* getIdx() const noexcept;
 
   // Gets element
   inline ScalarType getElem( const index_t idx ) const noexcept;
@@ -121,6 +126,7 @@ class CooVector
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;
   inline ConstIteratorType find( const index_t idx ) const noexcept;
+  inline ConstIteratorType cfind( const index_t idx ) const noexcept;
 
   // Sorts
   inline void sort() noexcept;

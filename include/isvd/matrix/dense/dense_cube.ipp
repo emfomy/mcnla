@@ -367,6 +367,18 @@ typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layo
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar, Layout _layout>
+typename DenseCube<_Scalar, _layout>::ConstIteratorType DenseCube<_Scalar, _layout>::cfind(
+    const index_t rowidx,
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept {
+  return find(rowidx, colidx, pageidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the cube.
 ///
 /// @attention  The new space is not initialized.

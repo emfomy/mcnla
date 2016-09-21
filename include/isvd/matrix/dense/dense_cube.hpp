@@ -166,6 +166,7 @@ class DenseCube
   // Finds the iterator
   inline IteratorType      find( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
   inline ConstIteratorType find( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+  inline ConstIteratorType cfind( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;

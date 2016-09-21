@@ -130,9 +130,8 @@ CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept 
 ///
 template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const CooVector<__Scalar> &vector ) {
-  const index_t witdh = log10(vector.length_)+1;
-  for ( auto it = vector.cbegin(); it != vector.cend(); ++it ) {
-    out << "(" << std::setw(witdh) << it.getIdx() << ")  " << std::setw(ios_width) << it.getValue() << std::endl;
+  for ( auto it = vector.begin(); it != vector.end(); ++it ) {
+    out << it << std::endl;
   }
   return out;
 }
@@ -140,17 +139,17 @@ std::ostream& operator<< ( std::ostream &out, const CooVector<__Scalar> &vector 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the index array.
 ///
-template <typename _Scalar> template <index_t _dim>
+template <typename _Scalar>
 index_t* CooVector<_Scalar>::getIdx() noexcept {
-  return CooBaseType::template getIdx<_dim>();
+  return CooBaseType::template getIdx<0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getIdx
 ///
-template <typename _Scalar> template <index_t _dim>
+template <typename _Scalar>
 const index_t* CooVector<_Scalar>::getIdx() const noexcept {
-  return CooBaseType::template getIdx<_dim>();
+  return CooBaseType::template getIdx<0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,16 +230,13 @@ typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::find(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resizes the vector.
-///
-/// @attention  The new space is not initialized.
+/// @copydoc  find
 ///
 template <typename _Scalar>
-void CooVector<_Scalar>::resize(
-    const index_t length
-) noexcept {
-  assert(length > 0 && length >= nnz_);
-  length_ = length;
+typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::cfind(
+    const index_t idx
+) const noexcept {
+  return cfind(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,6 +253,19 @@ void CooVector<_Scalar>::sort() noexcept {
 template <typename _Scalar>
 bool CooVector<_Scalar>::isSorted() const noexcept {
   return std::is_sorted(this->begin(), this->end());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resizes the vector.
+///
+/// @attention  The new space is not initialized.
+///
+template <typename _Scalar>
+void CooVector<_Scalar>::resize(
+    const index_t length
+) noexcept {
+  assert(length >= 0);
+  length_ = length;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

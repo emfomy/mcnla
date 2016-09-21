@@ -24,14 +24,14 @@ template <index_t _ndim, typename _Scalar, index_t _dim> template <typename... _
 typename CooDataHelper<_ndim, _Scalar, _dim>::TupleType CooDataHelper<_ndim, _Scalar, _dim>::getTuple(
     DataType &data, const index_t pos, _Args&... args
 ) noexcept {
-  return CooTupleHelper<_ndim, _dim-1>::getTuple(data, pos, data.template getIdx<_dim>()[pos], args...);
+  return CooDataHelper<_ndim, _Scalar, _dim-1>::getTuple(data, pos, data.template getIdx<_dim>()[pos], args...);
 }
 
 template <index_t _ndim, typename _Scalar, index_t _dim> template <typename... _Args>
 typename CooDataHelper<_ndim, _Scalar, _dim>::ConstTupleType CooDataHelper<_ndim, _Scalar, _dim>::getConstTuple(
     const DataType &data, const index_t pos, _Args&... args
 ) noexcept {
-  return CooTupleHelper<_ndim, _dim-1>::getConstTuple(data, pos, data.template getIdx<_dim>()[pos], args...);
+  return CooDataHelper<_ndim, _Scalar, _dim-1>::getConstTuple(data, pos, data.template getIdx<_dim>()[pos], args...);
 }
 
 template <index_t _ndim, typename _Scalar> template <typename... _Args>

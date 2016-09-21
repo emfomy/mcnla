@@ -121,6 +121,7 @@ class DenseVector
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;
   inline ConstIteratorType find( const index_t idx ) const noexcept;
+  inline ConstIteratorType cfind( const index_t idx ) const noexcept;
 
   // Resizes
   inline void resize( const index_t length ) noexcept;

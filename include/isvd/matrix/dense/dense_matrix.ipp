@@ -305,6 +305,17 @@ typename DenseMatrix<_Scalar, _layout>::ConstIteratorType DenseMatrix<_Scalar, _
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar, Layout _layout>
+typename DenseMatrix<_Scalar, _layout>::ConstIteratorType DenseMatrix<_Scalar, _layout>::cfind(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  return find(rowidx, colidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the matrix.
 ///
 /// @attention  The new space is not initialized.

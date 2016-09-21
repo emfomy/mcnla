@@ -78,8 +78,9 @@ class CooVectorIteratorBase : public CooIteratorBase<CooVectorIteratorBase<_Scal
                                           const CooVectorIteratorBase<__Scalar, __Index, __Vector> &iterator );
 
   // Gets value
-  template <index_t _dim = 0> inline IndexType& getIdx() const noexcept;
-  inline index_t getPos() const noexcept;
+  using BaseType::getIdx;
+  inline IndexType& getIdx() const noexcept;
+  inline index_t    getPos() const noexcept;
 
 };
 

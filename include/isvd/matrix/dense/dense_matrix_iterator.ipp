@@ -20,11 +20,10 @@ namespace isvd {
 ///
 template <typename __Scalar, Layout __layout, class __Matrix>
 std::ostream& operator<< ( std::ostream &out, const DenseMatrixIteratorBase<__Scalar, __layout, __Matrix> &iterator ) {
-  const index_t witdh_r = log10(iterator.container_->getNrow())+1;
-  const index_t witdh_c = log10(iterator.container_->getNcol())+1;
-  return out << "(" << std::setw(witdh_r) << iterator.getRowIdx() << ", "
-                    << std::setw(witdh_c) << iterator.getColIdx() << ")  "
-                    << std::setw(ios_width) << iterator.getValue();
+  const index_t width_r = log10(iterator.container_->getNrow())+1;
+  const index_t width_c = log10(iterator.container_->getNcol())+1;
+  return out << "(" << std::setw(width_r) << iterator.getRowIdx() << ", "
+                    << std::setw(width_c) << iterator.getColIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -178,6 +178,7 @@ const typename CooBase<_Derived>::ScalarType* CooBase<_Derived>::getValue() cons
 ///
 template <class _Derived> template <index_t _dim>
 index_t* CooBase<_Derived>::getIdx() noexcept {
+  static_assert(_dim >= 0 && _dim < ndim, "Invalid dimension!");
   return getData().getIdx<_dim>() + getOffset();
 }
 
@@ -186,6 +187,7 @@ index_t* CooBase<_Derived>::getIdx() noexcept {
 ///
 template <class _Derived> template <index_t _dim>
 const index_t* CooBase<_Derived>::getIdx() const noexcept {
+  static_assert(_dim >= 0 && _dim < ndim, "Invalid dimension!");
   return getData().getIdx<_dim>() + getOffset();
 }
 
