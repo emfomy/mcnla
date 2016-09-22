@@ -39,8 +39,11 @@ struct CooDataHelper {
   using ReducedType    = CooData<__ndim, _Scalar>;
   using IdxsType       = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
 
-  static inline ReducedType getData( DataType &data, IdxsType &idxs ) noexcept;
-  static inline ReducedType getConstData( const DataType &data, IdxsType &idxs ) noexcept;
+  template <typename... _Args>
+  static inline       ReducedType getData( DataType &data, _Args&... args ) noexcept;
+
+  template <typename... _Args>
+  static inline const ReducedType getConstData( const DataType &data, _Args&... args ) noexcept;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,8 +57,11 @@ struct CooDataHelper<_ndim, _Scalar, __ndim, __dim> {
   using ReducedType    = CooData<__ndim, _Scalar>;
   using IdxsType       = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
 
-  static inline ReducedType getData( DataType &data, IdxsType &idxs ) noexcept;
-  static inline ReducedType getConstData( const DataType &data, IdxsType &idxs ) noexcept;
+  template <typename... _Args>
+  static inline       ReducedType getData( DataType &data, _Args&... args ) noexcept;
+
+  template <typename... _Args>
+  static inline const ReducedType getConstData( const DataType &data, _Args&... args ) noexcept;
 
 };
 

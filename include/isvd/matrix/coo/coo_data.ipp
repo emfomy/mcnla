@@ -20,36 +20,32 @@ namespace isvd {
 //
 namespace detail {
 
-template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_t... __dims>
+template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_t... __dims> template <typename... _Args>
 CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim, __dims...>::getData(
-    DataType &data, IdxsType &idxs
+    DataType &data, _Args&... args
 ) noexcept {
-  idxs[__ndim-sizeof...(__dims)-1] = data.template getIdxPtr<__dim>();
-  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getData(data, idxs);
+  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getData(data, args..., data.template getIdxPtr<__dim>());
 }
 
-template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim>
+template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim> template <typename... _Args>
 CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim>::getData(
-    DataType &data, IdxsType &idxs
+    DataType &data, _Args&... args
 ) noexcept {
-  idxs[__ndim-1] = data.template getIdxPtr<__dim>();
-  return ReducedType(data.getValuePtr(), idxs);
+  return ReducedType(data.getValuePtr(), {args..., data.template getIdxPtr<__dim>()});
 }
 
-template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_t... __dims>
-CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim, __dims...>::getConstData(
-    const DataType &data, IdxsType &idxs
+template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_t... __dims> template <typename... _Args>
+const CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim, __dims...>::getConstData(
+    const DataType &data, _Args&... args
 ) noexcept {
-  idxs[__ndim-sizeof...(__dims)-1] = data.template getIdxPtr<__dim>();
-  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getConstData(data, idxs);
+  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getConstData(data, args..., data.template getIdxPtr<__dim>());
 }
 
-template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim>
-CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim>::getConstData(
-    const DataType &data, IdxsType &idxs
+template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim> template <typename... _Args>
+const CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim>::getConstData(
+    const DataType &data, _Args&... args
 ) noexcept {
-  idxs[__ndim-1] = data.template getIdxPtr<__dim>();
-  return ReducedType(data.getValuePtr(), idxs);
+  return ReducedType(data.getValuePtr(), {args..., data.template getIdxPtr<__dim>()});
 }
 
 template <index_t _ndim, typename _Scalar, index_t _dim> template <typename... _Args>
@@ -133,8 +129,7 @@ CooData<_ndim, _Scalar>::CooData(
 template <index_t _ndim, typename _Scalar>
 CooData<_ndim, _Scalar>::CooData( const CooData &other ) noexcept
   : value_(other.value_),
-    idxs_(other.idxs_) {
-}
+    idxs_(other.idxs_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
@@ -311,8 +306,7 @@ const std::shared_ptr<std::valarray<index_t>>& CooData<_ndim, _Scalar>::getIdxPt
 ///
 template <index_t _ndim, typename _Scalar> template <index_t... _dims>
 CooData<sizeof...(_dims), _Scalar> CooData<_ndim, _Scalar>::getReduced() noexcept {
-  std::array<IdxPtrType, sizeof...(_dims)> idxs;
-  return detail::CooDataHelper<_ndim, _Scalar, sizeof...(_dims), _dims...>::getData(*this, idxs);
+  return detail::CooDataHelper<_ndim, _Scalar, sizeof...(_dims), _dims...>::getData(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,8 +314,7 @@ CooData<sizeof...(_dims), _Scalar> CooData<_ndim, _Scalar>::getReduced() noexcep
 ///
 template <index_t _ndim, typename _Scalar> template <index_t... _dims>
 const CooData<sizeof...(_dims), _Scalar> CooData<_ndim, _Scalar>::getReduced() const noexcept {
-  std::array<IdxPtrType, sizeof...(_dims)> idxs;
-  return detail::CooDataHelper<_ndim, _Scalar, sizeof...(_dims), _dims...>::getConstData(*this, idxs);
+  return detail::CooDataHelper<_ndim, _Scalar, sizeof...(_dims), _dims...>::getConstData(*this);
 }
 
 }  // namespace isvd
