@@ -270,30 +270,6 @@ void CooVector<_Scalar>::resize(
   length_ = length;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the vector segment.
-///
-template <typename _Scalar>
-CooVector<_Scalar> CooVector<_Scalar>::getSegment(
-    const IdxRange range
-) noexcept {
-  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(range, pos, nnz);
-  return CooVector<_Scalar>(range.getLength(), nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getSegment
-///
-template <typename _Scalar>
-const CooVector<_Scalar> CooVector<_Scalar>::getSegment(
-    const IdxRange range
-) const noexcept {
-  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(range, pos, nnz);
-  return CooVector<_Scalar>(range.getLength(), nnz, data_, pos + offset_);
-}
-
 }  // namespace isvd
 
 #endif  // ISVD_MATRIX_COO_COO_VECTOR_IPP_

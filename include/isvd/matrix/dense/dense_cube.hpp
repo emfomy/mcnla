@@ -101,6 +101,7 @@ class DenseCube
 
  private:
 
+  using ContainerBaseType = ContainerBase<DenseCube<_Scalar, _layout>>;
   using CubeBaseType      = CubeBase<DenseCube<_Scalar, _layout>>;
   using DenseBaseType     = DenseBase<DenseCube<_Scalar, _layout>>;
 

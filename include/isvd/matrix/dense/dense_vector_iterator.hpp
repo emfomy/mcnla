@@ -47,6 +47,8 @@ struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
 /// @tparam  _Scalar  The scalar type.
 /// @tparam  _Vector  The vector type.
 ///
+/// @see  DenseVectorIterator, DenseVectorConstIterator
+///
 template <typename _Scalar, class _Vector>
 class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>> {
 

@@ -102,6 +102,7 @@ class CooCube
 
  private:
 
+  using ContainerBaseType = ContainerBase<CooCube<_Scalar, _layout>>;
   using CubeBaseType      = CubeBase<CooCube<_Scalar, _layout>>;
   using CooBaseType       = CooBase<CooCube<_Scalar, _layout>>;
 
@@ -175,25 +176,15 @@ class CooCube
   // Resizes
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
 
-  // Gets cube block
-  inline       CubeType getPages( const IdxRange pagerange ) noexcept;
-  inline const CubeType getPages( const IdxRange pagerange ) const noexcept;
-
   // Gets matrix block
-  inline       MatrixType getCols( const index_t pageidx, const IdxRange rowrange ) noexcept;
-  inline const MatrixType getCols( const index_t pageidx, const IdxRange rowrange ) const noexcept;
-  inline       MatrixType getRows( const index_t pageidx, const IdxRange colrange ) noexcept;
-  inline const MatrixType getRows( const index_t pageidx, const IdxRange colrange ) const noexcept;
+  inline       MatrixType getPage( const index_t pageidx ) noexcept;
+  inline const MatrixType getPage( const index_t pageidx ) const noexcept;
 
   // Gets vector segment
   inline       VectorType getCol( const index_t colidx, const index_t pageidx ) noexcept;
   inline const VectorType getCol( const index_t colidx, const index_t pageidx ) const noexcept;
-  inline       VectorType getColSegment( const index_t colidx, const index_t pageidx, const IdxRange rowrange ) noexcept;
-  inline const VectorType getColSegment( const index_t colidx, const index_t pageidx, const IdxRange rowrange ) const noexcept;
   inline       VectorType getRow( const index_t rowidx, const index_t pageidx ) noexcept;
   inline const VectorType getRow( const index_t rowidx, const index_t pageidx ) const noexcept;
-  inline       VectorType getRowSegment( const index_t rowidx, const index_t pageidx, const IdxRange colrange ) noexcept;
-  inline const VectorType getRowSegment( const index_t rowidx, const index_t pageidx, const IdxRange colrange ) const noexcept;
 
 };
 

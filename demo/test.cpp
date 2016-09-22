@@ -31,20 +31,20 @@ int main( int argc, char **argv ) {
   //           << cdata01.getIdxPtr<0>() << std::endl
   //           << cdata01.getIdxPtr<1>() << std::endl;
 
-  // isvd::CooCube<double, isvd::Layout::COLMAJOR> mat(10, 20, 6, 3, 5);
+  isvd::CooCube<double, isvd::Layout::COLMAJOR> mat(10, 20, 6, 3, 5);
 
-  // int i = 0;
-  // for ( auto tuple : mat ) {
-  //   ++i;
-  //   tuple(i, i+2, i*i, 7-i*2);
-  // }
+  int i = 0;
+  for ( auto tuple : mat ) {
+    ++i;
+    tuple(i, i+2, i*i, 7-i*2);
+  }
 
-  // std::cout << mat << std::endl;
-  // mat.sort();
-  // std::cout << mat << std::endl;
-  // std::cout << mat(4, 4, 4) << std::endl;
-  // std::cout << mat(4, 4, 3) << std::endl << std::endl;
-  // std::cout << mat.getCols(3, {0, 5}) << std::endl;
-  // std::cout << mat.getColSegment(1, 5, {0, 5}) << std::endl;
+  std::cout << mat << std::endl;
+  mat.sort();
+  std::cout << mat << std::endl;
+  std::cout << mat(4, 4, 4) << std::endl;
+  std::cout << mat(4, 4, 3) << std::endl << std::endl;
+  std::cout << mat.getPage(3) << std::endl;
+  std::cout << mat.getCol(1, 5) << std::endl;
 
 }

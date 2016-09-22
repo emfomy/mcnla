@@ -81,6 +81,7 @@ class CooVector
 
  private:
 
+  using ContainerBaseType = ContainerBase<CooVector<_Scalar>>;
   using VectorBaseType    = VectorBase<CooVector<_Scalar>>;
   using CooBaseType       = CooBase<CooVector<_Scalar>>;
 
@@ -134,10 +135,6 @@ class CooVector
 
   // Resizes
   inline void resize( const index_t length ) noexcept;
-
-  // Gets segment
-  inline       VectorType getSegment( const IdxRange range ) noexcept;
-  inline const VectorType getSegment( const IdxRange range ) const noexcept;
 
 };
 

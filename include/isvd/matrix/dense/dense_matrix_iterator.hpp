@@ -49,6 +49,8 @@ struct Traits<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
 /// @tparam  _layout  The storage layout.
 /// @tparam  _Matrix  The matrix type.
 ///
+/// @see  DenseMatrixIterator, DenseMatrixConstIterator
+///
 template <typename _Scalar, Layout _layout, class _Matrix>
 class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>> {
 

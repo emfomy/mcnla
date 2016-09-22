@@ -386,93 +386,27 @@ void CooCube<_Scalar, _layout>::resize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a cube block.
-///
-/// @attention  This routine is only available in column-major matrices.
-///
-template <typename _Scalar, Layout _layout>
-CooCube<_Scalar, _layout> CooCube<_Scalar, _layout>::getPages(
-    const IdxRange pagerange
-) noexcept {
-  assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, pagerange, pos, nnz);
-  return CooCube<_Scalar, _layout>(nrow_, ncol_, pagerange.getLength(), nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getPages
-///
-template <typename _Scalar, Layout _layout>
-const CooCube<_Scalar, _layout> CooCube<_Scalar, _layout>::getPages(
-    const IdxRange pagerange
-) const noexcept {
-  assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, pagerange, pos, nnz);
-  return CooCube<_Scalar, _layout>(nrow_, ncol_, pagerange.getLength(), nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a matrix block.
 ///
-/// @attention  This routine is only available in column-major matrices.
-///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getCols(
-    const index_t pageidx,
-    const IdxRange colrange
+CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getPage(
+    const index_t pageidx
 ) noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(pageidx >= 0 && pageidx < npage_);
-  assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, {pageidx, pageidx}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_.template getReduced<0, 1>(), pos + offset_);
+  index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
+  return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getCols
+/// @copydoc  getPage
 ///
 template <typename _Scalar, Layout _layout>
-const CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getCols(
-    const index_t pageidx,
-    const IdxRange colrange
+const CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getPage(
+    const index_t pageidx
 ) const noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(pageidx >= 0 && pageidx < npage_);
-  assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, {pageidx, pageidx}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_.template getReduced<0, 1>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a matrix block.
-///
-/// @attention  This routine is only available in row-major matrices.
-///
-template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getRows(
-    const index_t pageidx,
-    const IdxRange rowrange
-) noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(pageidx >= 0 && pageidx < npage_);
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getRows
-///
-template <typename _Scalar, Layout _layout>
-const CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getRows(
-    const index_t pageidx,
-    const IdxRange rowrange
-) const noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(pageidx >= 0 && pageidx < npage_);
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
+  index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
+  return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -508,40 +442,6 @@ const CooVector<_Scalar> CooCube<_Scalar, _layout>::getCol(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getCol
-///
-template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooCube<_Scalar, _layout>::getColSegment(
-    const index_t colidx,
-    const index_t pageidx,
-    const IdxRange rowrange
-) noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(rowrange.getLength(), nnz, data_.template getReduced<0>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getColSegment
-///
-template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooCube<_Scalar, _layout>::getColSegment(
-    const index_t colidx,
-    const index_t pageidx,
-    const IdxRange rowrange
-) const noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(rowrange.getLength(), nnz, data_.template getReduced<0>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector segment.
 ///
 /// @attention  This routine is only available in row-major matrices.
@@ -571,38 +471,6 @@ const CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
   assert(pageidx >= 0 && pageidx < npage_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getRow
-///
-template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooCube<_Scalar, _layout>::getRowSegment(
-    const index_t rowidx,
-    const index_t pageidx,
-    const IdxRange colrange
-) noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(pageidx >= 0 && pageidx < npage_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx}, colrange, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(colrange.getLength(), nnz, data_.template getReduced<1>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getRowSegment
-///
-template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooCube<_Scalar, _layout>::getRowSegment(
-    const index_t rowidx,
-    const index_t pageidx,
-    const IdxRange colrange
-) const noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(pageidx >= 0 && pageidx < npage_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx}, colrange, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(colrange.getLength(), nnz, data_.template getReduced<1>(), pos + offset_);
 }
 
 }  // namespace isvd

@@ -49,6 +49,8 @@ struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
 /// @tparam  _layout  The storage layout.
 /// @tparam  _Cube    The cube type.
 ///
+/// @see  DenseCubeIterator, DenseCubeConstIterator
+///
 template <typename _Scalar, Layout _layout, class _Cube>
 class DenseCubeIteratorBase : public DenseIteratorBase<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
 

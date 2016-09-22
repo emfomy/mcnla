@@ -79,6 +79,7 @@ class DenseVector
 
  private:
 
+  using ContainerBaseType = ContainerBase<DenseVector<_Scalar>>;
   using VectorBaseType    = VectorBase<DenseVector<_Scalar>>;
   using DenseBaseType     = DenseBase<DenseVector<_Scalar>>;
 

@@ -94,6 +94,7 @@ class DenseMatrix
 
  private:
 
+  using ContainerBaseType = ContainerBase<DenseMatrix<_Scalar, _layout>>;
   using MatrixBaseType    = MatrixBase<DenseMatrix<_Scalar, _layout>>;
   using DenseBaseType     = DenseBase<DenseMatrix<_Scalar, _layout>>;
 

@@ -350,62 +350,6 @@ void CooMatrix<_Scalar, _layout>::resize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a matrix block.
-///
-/// @attention  This routine is only available in column-major matrices.
-///
-template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getCols(
-    const IdxRange colrange
-) noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getCols
-///
-template <typename _Scalar, Layout _layout>
-const CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getCols(
-    const IdxRange colrange
-) const noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a matrix block.
-///
-/// @attention  This routine is only available in row-major matrices.
-///
-template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getRows(
-    const IdxRange rowrange
-) noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getRows
-///
-template <typename _Scalar, Layout _layout>
-const CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getRows(
-    const IdxRange rowrange
-) const noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_, pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector segment.
 ///
 /// @attention  This routine is only available in column-major matrices.
@@ -434,36 +378,6 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getCol
-///
-template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getColSegment(
-    const index_t colidx,
-    const IdxRange rowrange
-) noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, pos, nnz);
-  return CooVector<_Scalar>(rowrange.getLength(), nnz, data_.template getReduced<0>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getColSegment
-///
-template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getColSegment(
-    const index_t colidx,
-    const IdxRange rowrange
-) const noexcept {
-  static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, pos, nnz);
-  return CooVector<_Scalar>(rowrange.getLength(), nnz, data_.template getReduced<0>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector segment.
 ///
 /// @attention  This routine is only available in row-major matrices.
@@ -489,34 +403,6 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
   assert(rowidx >= 0 && rowidx < nrow_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, {0, ncol_}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getRow
-///
-template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRowSegment(
-    const index_t rowidx,
-    const IdxRange colrange
-) noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, colrange, pos, nnz);
-  return CooVector<_Scalar>(colrange.getLength(), nnz, data_.template getReduced<1>(), pos + offset_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getRowSegment
-///
-template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRowSegment(
-    const index_t rowidx,
-    const IdxRange colrange
-) const noexcept {
-  static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, colrange, pos, nnz);
-  return CooVector<_Scalar>(colrange.getLength(), nnz, data_.template getReduced<1>(), pos + offset_);
 }
 
 }  // namespace isvd

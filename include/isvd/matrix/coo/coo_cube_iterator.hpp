@@ -52,6 +52,8 @@ struct Traits<CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>> {
 /// @tparam  _Index   The index type.
 /// @tparam  _Cube    The cube type.
 ///
+/// @see  CooCubeIterator, CooCubeConstIterator
+///
 template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
 class CooCubeIteratorBase : public CooIteratorBase<CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>> {
 

@@ -96,6 +96,7 @@ class CooMatrix
 
  private:
 
+  using ContainerBaseType = ContainerBase<CooMatrix<_Scalar, _layout>>;
   using MatrixBaseType    = MatrixBase<CooMatrix<_Scalar, _layout>>;
   using CooBaseType       = CooBase<CooMatrix<_Scalar, _layout>>;
 
@@ -163,21 +164,11 @@ class CooMatrix
   // Resizes
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
-  // Gets matrix block
-  inline       MatrixType getCols( const IdxRange rowrange ) noexcept;
-  inline const MatrixType getCols( const IdxRange rowrange ) const noexcept;
-  inline       MatrixType getRows( const IdxRange colrange ) noexcept;
-  inline const MatrixType getRows( const IdxRange colrange ) const noexcept;
-
   // Gets vector segment
   inline       VectorType getCol( const index_t colidx ) noexcept;
   inline const VectorType getCol( const index_t colidx ) const noexcept;
-  inline       VectorType getColSegment( const index_t colidx, const IdxRange rowrange ) noexcept;
-  inline const VectorType getColSegment( const index_t colidx, const IdxRange rowrange ) const noexcept;
   inline       VectorType getRow( const index_t rowidx ) noexcept;
   inline const VectorType getRow( const index_t rowidx ) const noexcept;
-  inline       VectorType getRowSegment( const index_t rowidx, const IdxRange colrange ) noexcept;
-  inline const VectorType getRowSegment( const index_t rowidx, const IdxRange colrange ) const noexcept;
 
 };
 

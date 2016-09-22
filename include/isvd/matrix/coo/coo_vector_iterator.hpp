@@ -52,6 +52,8 @@ struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {
 /// @tparam  _Index   The index type.
 /// @tparam  _Vector  The vector type.
 ///
+/// @see  CooVectorIterator, CooVectorConstIterator
+///
 template <typename _Scalar, typename _Index, class _Vector>
 class CooVectorIteratorBase : public CooIteratorBase<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {
 

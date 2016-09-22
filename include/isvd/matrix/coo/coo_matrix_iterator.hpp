@@ -52,6 +52,8 @@ struct Traits<CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>> {
 /// @tparam  _Index   The index type.
 /// @tparam  _Matrix  The matrix type.
 ///
+/// @see  CooMatrixIterator, CooMatrixConstIterator
+///
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
 class CooMatrixIteratorBase : public CooIteratorBase<CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>> {
 

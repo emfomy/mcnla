@@ -54,7 +54,7 @@ class CscMatrixData {
 
   // Constructors
   inline CscMatrixData() noexcept;
-  inline CscMatrixData( const index_t size1, const index_t capability ) noexcept;
+  inline CscMatrixData( const index_t maxsize1, const index_t capability ) noexcept;
   inline CscMatrixData( ValuePtrType value, IdxPtrType idx0, IdxPtrType ptr1 ) noexcept;
   inline CscMatrixData( const CscMatrixData &other ) noexcept;
   inline CscMatrixData( CscMatrixData &&other ) noexcept;
@@ -68,7 +68,7 @@ class CscMatrixData {
   inline const _Scalar* operator*() const noexcept;
 
   // Gets data
-  inline        index_t getSize1() const noexcept;
+  inline        index_t getMaxSize1() const noexcept;
   inline        index_t getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;

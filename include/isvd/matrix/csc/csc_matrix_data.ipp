@@ -29,12 +29,12 @@ CscMatrixData<_Scalar>::CscMatrixData() noexcept
 ///
 template <typename _Scalar>
 CscMatrixData<_Scalar>::CscMatrixData(
-    const index_t size0,
+    const index_t maxsize1,
     const index_t capability
 ) noexcept
   : value_(new std::valarray<_Scalar>(capability)),
-    idx0_(new std::valarray<index_t>(size0)),
-    ptr1_(new std::valarray<index_t>(capability)) {
+    idx0_(new std::valarray<index_t>(capability)),
+    ptr1_(new std::valarray<index_t>(maxsize1)) {
   assert(capability > 0);
 }
 
@@ -52,7 +52,7 @@ CscMatrixData<_Scalar>::CscMatrixData(
   : value_(value),
     idx0_(idx0),
     ptr1_(ptr1) {
-  assert(value->size() == ptr1_->size());
+  assert(value->size() == idx0_->size());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ bool CscMatrixData<_Scalar>::operator!=( const CscMatrixData& other ) const noex
 /// @brief  Gets the leading size.
 ///
 template <typename _Scalar>
-index_t CscMatrixData<_Scalar>::getSize1() const noexcept { return ptr1_->size(); }
+index_t CscMatrixData<_Scalar>::getMaxSize1() const noexcept { return ptr1_->size(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of value array.
