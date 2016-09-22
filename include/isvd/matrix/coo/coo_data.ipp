@@ -50,30 +50,30 @@ const CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim>::get
 
 template <index_t _ndim, typename _Scalar, index_t _dim> template <typename... _Args>
 CooTuple<_ndim, _Scalar, index_t> CooDataTupleHelper<_ndim, _Scalar, _dim>::getTuple(
-    DataType &data, const index_t pos, _Args&... args
+    DataType &data, const index_t itidx, _Args&... args
 ) noexcept {
-  return CooDataTupleHelper<_ndim, _Scalar, _dim-1>::getTuple(data, pos, data.template getIdx<_dim>()[pos], args...);
+  return CooDataTupleHelper<_ndim, _Scalar, _dim-1>::getTuple(data, itidx, data.template getIdx<_dim>()[itidx], args...);
 }
 
 template <index_t _ndim, typename _Scalar> template <typename... _Args>
 CooTuple<_ndim, _Scalar, index_t> CooDataTupleHelper<_ndim, _Scalar, 0>::getTuple(
-    DataType &data, const index_t pos, _Args&... args
+    DataType &data, const index_t itidx, _Args&... args
 ) noexcept {
-  return makeCooRefTuple(data.getValue()[pos], data.template getIdx<0>()[pos], args...);
+  return makeCooRefTuple(data.getValue()[itidx], data.template getIdx<0>()[itidx], args...);
 }
 
 template <index_t _ndim, typename _Scalar, index_t _dim> template <typename... _Args>
 CooTuple<_ndim, const _Scalar, const index_t> CooDataTupleHelper<_ndim, _Scalar, _dim>::getConstTuple(
-    const DataType &data, const index_t pos, _Args&... args
+    const DataType &data, const index_t itidx, _Args&... args
 ) noexcept {
-  return CooDataTupleHelper<_ndim, _Scalar, _dim-1>::getConstTuple(data, pos, data.template getIdx<_dim>()[pos], args...);
+  return CooDataTupleHelper<_ndim, _Scalar, _dim-1>::getConstTuple(data, itidx, data.template getIdx<_dim>()[itidx], args...);
 }
 
 template <index_t _ndim, typename _Scalar> template <typename... _Args>
 CooTuple<_ndim, const _Scalar, const index_t> CooDataTupleHelper<_ndim, _Scalar, 0>::getConstTuple(
-    const DataType &data, const index_t pos, _Args&... args
+    const DataType &data, const index_t itidx, _Args&... args
 ) noexcept {
-  return makeCooRefTuple(data.getValue()[pos], data.template getIdx<0>()[pos], args...);
+  return makeCooRefTuple(data.getValue()[itidx], data.template getIdx<0>()[itidx], args...);
 }
 
 }  // namespace detail
@@ -175,13 +175,17 @@ const _Scalar* CooData<_ndim, _Scalar>::operator*() const noexcept { return getV
 /// @brief  Equal-to operator.
 ///
 template <index_t _ndim, typename _Scalar>
-bool CooData<_ndim, _Scalar>::operator==( const CooData& other ) const noexcept { return this->value_ == other.value_; }
+bool CooData<_ndim, _Scalar>::operator==( const CooData& other ) const noexcept {
+  return this->value_ == other.value_ && this->idxs_ == other.idxs_;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
 template <index_t _ndim, typename _Scalar>
-bool CooData<_ndim, _Scalar>::operator!=( const CooData& other ) const noexcept { return this->value_ != other.value_; }
+bool CooData<_ndim, _Scalar>::operator!=( const CooData& other ) const noexcept {
+  return !(*this == other);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of value array.
@@ -207,7 +211,7 @@ const _Scalar* CooData<_ndim, _Scalar>::getValue() const noexcept { return &((*v
 template <index_t _ndim, typename _Scalar>
 index_t* CooData<_ndim, _Scalar>::getIdx( const index_t dim ) noexcept {
   assert(dim >= 0 && dim < _ndim);
-  return (idxs_[dim] != nullptr) ? &((*idxs_[dim])[0]) : nullptr;
+  return &((*idxs_[dim])[0]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +220,7 @@ index_t* CooData<_ndim, _Scalar>::getIdx( const index_t dim ) noexcept {
 template <index_t _ndim, typename _Scalar>
 const index_t* CooData<_ndim, _Scalar>::getIdx( const index_t dim ) const noexcept {
   assert(dim >= 0 && dim < _ndim);
-  return (idxs_[dim] != nullptr) ? &((*idxs_[dim])[0]) : nullptr;
+  return &((*idxs_[dim])[0]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +229,7 @@ const index_t* CooData<_ndim, _Scalar>::getIdx( const index_t dim ) const noexce
 template <index_t _ndim, typename _Scalar> template <index_t _dim>
 index_t* CooData<_ndim, _Scalar>::getIdx() noexcept {
   static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
-  return (idxs_[_dim] != nullptr) ? &((*idxs_[_dim])[0]) : nullptr;
+  return &((*idxs_[_dim])[0]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,23 +238,23 @@ index_t* CooData<_ndim, _Scalar>::getIdx() noexcept {
 template <index_t _ndim, typename _Scalar> template <index_t _dim>
 const index_t* CooData<_ndim, _Scalar>::getIdx() const noexcept {
   static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
-  return (idxs_[_dim] != nullptr) ? &((*idxs_[_dim])[0]) : nullptr;
+  return &((*idxs_[_dim])[0]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the tuple of given position.
+/// @brief  Gets the tuple of given iterator index.
 ///
 template <index_t _ndim, typename _Scalar>
-CooTuple<_ndim, _Scalar, index_t> CooData<_ndim, _Scalar>::getTuple( const index_t pos ) noexcept {
-  return detail::CooDataTupleHelper<_ndim, _Scalar>::getTuple(*this, pos);
+CooTuple<_ndim, _Scalar, index_t> CooData<_ndim, _Scalar>::getTuple( const index_t itidx ) noexcept {
+  return detail::CooDataTupleHelper<_ndim, _Scalar>::getTuple(*this, itidx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getTuple
 ///
 template <index_t _ndim, typename _Scalar>
-CooTuple<_ndim, const _Scalar, const index_t> CooData<_ndim, _Scalar>::getTuple( const index_t pos ) const noexcept {
-  return detail::CooDataTupleHelper<_ndim, _Scalar>::getConstTuple(*this, pos);
+CooTuple<_ndim, const _Scalar, const index_t> CooData<_ndim, _Scalar>::getTuple( const index_t itidx ) const noexcept {
+  return detail::CooDataTupleHelper<_ndim, _Scalar>::getConstTuple(*this, itidx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -35,9 +35,9 @@ template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_
 struct CooDataHelper {
   static_assert(sizeof...(__dims) < __ndim && __ndim <= _ndim, "Invalid dimension!");
 
-  using DataType       = CooData<_ndim, _Scalar>;
-  using ReducedType    = CooData<__ndim, _Scalar>;
-  using IdxsType       = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
+  using DataType    = CooData<_ndim, _Scalar>;
+  using ReducedType = CooData<__ndim, _Scalar>;
+  using IdxsType    = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
 
   template <typename... _Args>
   static inline       ReducedType getData( DataType &data, _Args&... args ) noexcept;
@@ -53,9 +53,9 @@ template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim>
 struct CooDataHelper<_ndim, _Scalar, __ndim, __dim> {
   static_assert(__ndim <= _ndim, "Invalid dimension!");
 
-  using DataType       = CooData<_ndim, _Scalar>;
-  using ReducedType    = CooData<__ndim, _Scalar>;
-  using IdxsType       = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
+  using DataType    = CooData<_ndim, _Scalar>;
+  using ReducedType = CooData<__ndim, _Scalar>;
+  using IdxsType    = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
 
   template <typename... _Args>
   static inline       ReducedType getData( DataType &data, _Args&... args ) noexcept;
@@ -77,10 +77,10 @@ struct CooDataTupleHelper {
   using ConstTupleType = CooTuple<_ndim, const _Scalar, const index_t>;
 
   template <typename... _Args>
-  static inline TupleType getTuple( DataType &data, const index_t pos, _Args&... args ) noexcept;
+  static inline TupleType getTuple( DataType &data, const index_t itidx, _Args&... args ) noexcept;
 
   template <typename... _Args>
-  static inline ConstTupleType getConstTuple( const DataType &data, const index_t pos, _Args&... args ) noexcept;
+  static inline ConstTupleType getConstTuple( const DataType &data, const index_t itidx, _Args&... args ) noexcept;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,10 +94,10 @@ struct CooDataTupleHelper<_ndim, _Scalar, 0> {
   using ConstTupleType = CooTuple<_ndim, const _Scalar, const index_t>;
 
   template <typename... _Args>
-  static inline TupleType getTuple( DataType &data, const index_t pos, _Args&... args ) noexcept;
+  static inline TupleType getTuple( DataType &data, const index_t itidx, _Args&... args ) noexcept;
 
   template <typename... _Args>
-  static inline ConstTupleType getConstTuple( const DataType &data, const index_t pos, _Args&... args ) noexcept;
+  static inline ConstTupleType getConstTuple( const DataType &data, const index_t itidx, _Args&... args ) noexcept;
 
 };
 
@@ -160,8 +160,8 @@ class CooData {
   inline const index_t* getIdx( const index_t dim ) const noexcept;
   template <index_t _dim> inline       index_t* getIdx() noexcept;
   template <index_t _dim> inline const index_t* getIdx() const noexcept;
-  inline TupleType      getTuple( const index_t pos ) noexcept;
-  inline ConstTupleType getTuple( const index_t pos ) const noexcept;
+  inline TupleType      getTuple( const index_t itidx ) noexcept;
+  inline ConstTupleType getTuple( const index_t itidx ) const noexcept;
 
   // Gets data pointer
   inline       ValuePtrType& getValuePtr() noexcept;

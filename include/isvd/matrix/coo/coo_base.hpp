@@ -89,8 +89,8 @@ class CooBase : public SparseBase<_Derived> {
   inline const index_t* getIdx( const index_t dim ) const noexcept;
   template <index_t _dim> inline       index_t* getIdx() noexcept;
   template <index_t _dim> inline const index_t* getIdx() const noexcept;
-  inline TupleType      getTuple( const index_t pos ) noexcept;
-  inline ConstTupleType getTuple( const index_t pos ) const noexcept;
+  inline TupleType      getTuple( const index_t itidx ) noexcept;
+  inline ConstTupleType getTuple( const index_t itidx ) const noexcept;
 
 };
 

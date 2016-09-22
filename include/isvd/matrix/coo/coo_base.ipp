@@ -195,16 +195,16 @@ const index_t* CooBase<_Derived>::getIdx() const noexcept {
 /// @copydoc  isvd::CooData::getTuple
 ///
 template <class _Derived>
-typename CooBase<_Derived>::TupleType CooBase<_Derived>::getTuple( const index_t pos ) noexcept {
-  return getData().getTuple(pos);
+typename CooBase<_Derived>::TupleType CooBase<_Derived>::getTuple( const index_t itidx ) noexcept {
+  return getData().getTuple(itidx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getTuple
 ///
 template <class _Derived>
-typename CooBase<_Derived>::ConstTupleType CooBase<_Derived>::getTuple( const index_t pos ) const noexcept {
-  return getData().getTuple(pos);
+typename CooBase<_Derived>::ConstTupleType CooBase<_Derived>::getTuple( const index_t itidx ) const noexcept {
+  return getData().getTuple(itidx);
 }
 
 }  // namespace isvd
