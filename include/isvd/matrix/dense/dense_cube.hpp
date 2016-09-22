@@ -43,7 +43,9 @@ namespace detail {
 ///
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseCube<_Scalar, _layout>> {
+  static constexpr index_t ndim = 3;
   static constexpr Layout layout = _layout;
+
   using ScalarType        = _Scalar;
   using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
 
@@ -76,6 +78,7 @@ class DenseCube
 
  public:
 
+  static constexpr index_t ndim = 3;
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
@@ -129,13 +132,13 @@ class DenseCube
                     const index_t pitch1, const index_t pitch2 ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
-             const index_t capability, const index_t offset = 0 ) noexcept;
+                    const index_t capability, const index_t offset = 0 ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches,
-             const index_t capability, const index_t offset = 0 ) noexcept;
+                    const index_t capability, const index_t offset = 0 ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
-             const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+                    const ValuePtrType &value, const index_t offset = 0 ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
-             const DataType &data, const index_t offset = 0 ) noexcept;
+                    const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseCube( const DenseCube &other ) noexcept;
   inline DenseCube( DenseCube &&other ) noexcept;
 

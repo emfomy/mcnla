@@ -101,6 +101,12 @@ template <typename _Scalar>
 const _Scalar* DenseData<_Scalar>::operator*() const noexcept { return getValue(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the length of value array.
+///
+template <typename _Scalar>
+index_t DenseData<_Scalar>::getCapability() const noexcept { return value_->size(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value array.
 ///
 template <typename _Scalar>
@@ -113,10 +119,16 @@ template <typename _Scalar>
 const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return &((*value_)[0]); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of value array.
+/// @brief  Gets the value array pointer.
 ///
 template <typename _Scalar>
-index_t DenseData<_Scalar>::getCapability() const noexcept { return value_->size(); }
+std::shared_ptr<std::valarray<_Scalar>>& DenseData<_Scalar>::getValuePtr() noexcept { return value_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValuePtr
+///
+template <typename _Scalar>
+const std::shared_ptr<std::valarray<_Scalar>>& DenseData<_Scalar>::getValuePtr() const noexcept { return value_; }
 
 }  // namespace isvd
 

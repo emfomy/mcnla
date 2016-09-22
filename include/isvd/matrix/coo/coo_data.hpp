@@ -31,8 +31,39 @@ namespace detail {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO data helper.
 ///
-template <index_t _ndim, typename _Scalar, index_t _dim = _ndim-1>
+template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_t... __dims>
 struct CooDataHelper {
+  static_assert(sizeof...(__dims) < __ndim && __ndim <= _ndim, "Invalid dimension!");
+
+  using DataType       = CooData<_ndim, _Scalar>;
+  using ReducedType    = CooData<__ndim, _Scalar>;
+  using IdxsType       = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
+
+  static inline ReducedType getData( DataType &data, IdxsType &idxs ) noexcept;
+  static inline ReducedType getConstData( const DataType &data, IdxsType &idxs ) noexcept;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The COO data helper.
+///
+template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim>
+struct CooDataHelper<_ndim, _Scalar, __ndim, __dim> {
+  static_assert(__ndim <= _ndim, "Invalid dimension!");
+
+  using DataType       = CooData<_ndim, _Scalar>;
+  using ReducedType    = CooData<__ndim, _Scalar>;
+  using IdxsType       = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
+
+  static inline ReducedType getData( DataType &data, IdxsType &idxs ) noexcept;
+  static inline ReducedType getConstData( const DataType &data, IdxsType &idxs ) noexcept;
+
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The COO data tuple helper.
+///
+template <index_t _ndim, typename _Scalar, index_t _dim = _ndim-1>
+struct CooDataTupleHelper {
   static_assert(_dim > 0 && _dim < _ndim, "Invalid dimension!");
 
   using DataType       = CooData<_ndim, _Scalar>;
@@ -47,10 +78,10 @@ struct CooDataHelper {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO data helper.
+/// The COO data tuple helper.
 ///
 template <index_t _ndim, typename _Scalar>
-struct CooDataHelper<_ndim, _Scalar, 0> {
+struct CooDataTupleHelper<_ndim, _Scalar, 0> {
 
   using DataType       = CooData<_ndim, _Scalar>;
   using TupleType      = CooTuple<_ndim, _Scalar, index_t>;
@@ -90,7 +121,7 @@ class CooData {
   ValuePtrType value_;
 
   /// The index array.
-  std::array<IdxPtrType, _ndim> idx_;
+  std::array<IdxPtrType, _ndim> idxs_;
 
   /// The empty value array
   static const ValuePtrType kNullValue;
@@ -103,7 +134,7 @@ class CooData {
   // Constructors
   inline CooData() noexcept;
   inline CooData( const index_t capability ) noexcept;
-  inline CooData( ValuePtrType value, std::array<IdxPtrType, _ndim> idx ) noexcept;
+  inline CooData( ValuePtrType value, std::array<IdxPtrType, _ndim> idxs ) noexcept;
   inline CooData( const CooData &other ) noexcept;
   inline CooData( CooData &&other ) noexcept;
 
@@ -125,6 +156,18 @@ class CooData {
   template <index_t _dim> inline const index_t* getIdx() const noexcept;
   inline TupleType      getTuple( const index_t pos ) noexcept;
   inline ConstTupleType getTuple( const index_t pos ) const noexcept;
+
+  // Gets data pointer
+  inline       ValuePtrType& getValuePtr() noexcept;
+  inline const ValuePtrType& getValuePtr() const noexcept;
+  inline       IdxPtrType&   getIdxPtr( const index_t dim ) noexcept;
+  inline const IdxPtrType&   getIdxPtr( const index_t dim ) const noexcept;
+  template <index_t _dim> inline       IdxPtrType& getIdxPtr() noexcept;
+  template <index_t _dim> inline const IdxPtrType& getIdxPtr() const noexcept;
+
+  // Reduces dimension
+  template <index_t... _dims> inline       CooData<sizeof...(_dims), _Scalar> getReduced() noexcept;
+  template <index_t... _dims> inline const CooData<sizeof...(_dims), _Scalar> getReduced() const noexcept;
 
 };
 

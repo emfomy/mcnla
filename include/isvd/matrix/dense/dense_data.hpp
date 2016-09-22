@@ -55,9 +55,13 @@ class DenseData {
   inline const _Scalar* operator*() const noexcept;
 
   // Gets data
+  inline       index_t  getCapability() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;
-  inline       index_t  getCapability() const noexcept;
+
+  // Gets data pointer
+  inline       ValuePtrType& getValuePtr() noexcept;
+  inline const ValuePtrType& getValuePtr() const noexcept;
 
 };
 

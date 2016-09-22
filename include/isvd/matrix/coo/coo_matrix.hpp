@@ -23,6 +23,7 @@ namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class CooMatrix;
+template <typename _Scalar> class CooVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,12 +41,12 @@ template <typename _Scalar, Layout _layout>
 struct Traits<CooMatrix<_Scalar, _layout>> {
   static constexpr index_t ndim = 2;
   static constexpr Layout layout = _layout;
+
   using ScalarType        = _Scalar;
   using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
 
   using VectorType        = CooVector<ScalarType>;
   using RealVectorType    = CooVector<RealScalarType>;
-
   using MatrixType        = CooMatrix<ScalarType, _layout>;
   using RealMatrixType    = CooMatrix<RealScalarType, _layout>;
   using TransposeType     = CooMatrix<ScalarType, changeLayout(_layout)>;

@@ -36,11 +36,13 @@ namespace detail {
 ///
 template <typename _Scalar>
 struct Traits<DenseVector<_Scalar>> {
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename detail::ScalarTraits<_Scalar>::RealType;
+  static constexpr index_t ndim = 1;
 
-  using VectorType     = DenseVector<ScalarType>;
-  using RealVectorType = DenseVector<RealScalarType>;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
+
+  using VectorType        = DenseVector<ScalarType>;
+  using RealVectorType    = DenseVector<RealScalarType>;
 
   using IteratorType      = DenseVectorIterator<ScalarType>;
   using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
@@ -60,6 +62,8 @@ class DenseVector
     public DenseBase<DenseVector<_Scalar>> {
 
  public:
+
+  static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;

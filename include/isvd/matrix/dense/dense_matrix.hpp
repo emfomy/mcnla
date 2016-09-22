@@ -40,7 +40,9 @@ namespace detail {
 ///
 template <typename _Scalar, Layout _layout>
 struct Traits<DenseMatrix<_Scalar, _layout>> {
+  static constexpr index_t ndim = 2;
   static constexpr Layout layout = _layout;
+
   using ScalarType        = _Scalar;
   using RealScalarType    = typename detail::ScalarTraits<_Scalar>::RealType;
 
@@ -71,6 +73,7 @@ class DenseMatrix
 
  public:
 
+  static constexpr index_t ndim = 2;
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
