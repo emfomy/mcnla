@@ -83,9 +83,6 @@ class CooCubeIteratorBase : public CooIteratorBase<CooCubeIteratorBase<_Scalar, 
   inline IndexType& getRowIdx() const noexcept;
   inline IndexType& getColIdx() const noexcept;
   inline IndexType& getPageIdx() const noexcept;
-  inline IndexType& getIdx0() const noexcept;
-  inline IndexType& getIdx1() const noexcept;
-  inline IndexType& getIdx2() const noexcept;
   inline index_t    getPos() const noexcept;
 
 };

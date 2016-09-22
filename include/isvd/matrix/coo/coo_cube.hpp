@@ -150,12 +150,6 @@ class CooCube
   inline const index_t* getColIdx() const noexcept;
   inline       index_t* getPageIdx() noexcept;
   inline const index_t* getPageIdx() const noexcept;
-  inline       index_t* getIdx0() noexcept;
-  inline const index_t* getIdx0() const noexcept;
-  inline       index_t* getIdx1() noexcept;
-  inline const index_t* getIdx1() const noexcept;
-  inline       index_t* getIdx2() noexcept;
-  inline const index_t* getIdx2() const noexcept;
 
   // Gets element
   inline ScalarType getElem( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;

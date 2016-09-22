@@ -139,10 +139,6 @@ class CooMatrix
   inline const index_t* getRowIdx() const noexcept;
   inline       index_t* getColIdx() noexcept;
   inline const index_t* getColIdx() const noexcept;
-  inline       index_t* getIdx0() noexcept;
-  inline const index_t* getIdx0() const noexcept;
-  inline       index_t* getIdx1() noexcept;
-  inline const index_t* getIdx1() const noexcept;
 
   // Gets element
   inline ScalarType getElem( const index_t rowidx, const index_t colidx ) const noexcept;

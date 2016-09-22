@@ -69,13 +69,10 @@ class CubeBase : public TensorBase<_Derived> {
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
+  template <index_t _dim> inline index_t getSize() const noexcept;
   inline index_t getNpage() const noexcept;
-  inline index_t getSize0() const noexcept;
-  inline index_t getSize1() const noexcept;
-  inline index_t getSize2() const noexcept;
   inline index_t getNelem() const noexcept;
   inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;
-  template <index_t _dim> inline index_t getSize() const noexcept;
 
  protected:
 

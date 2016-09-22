@@ -76,6 +76,15 @@ template <class _Derived>
 index_t VectorBase<_Derived>::getLength() const noexcept { return length_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the size.
+///
+template <class _Derived> template <index_t _dim>
+index_t VectorBase<_Derived>::getSize() const noexcept {
+  static_assert(_dim == 0, "Invalid dimension!");
+  return length_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of elements.
 ///
 template <class _Derived>
@@ -86,15 +95,6 @@ index_t VectorBase<_Derived>::getNelem() const noexcept { return length_; }
 ///
 template <class _Derived>
 index_t VectorBase<_Derived>::getSizes() const noexcept { return length_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size.
-///
-template <class _Derived> template <index_t _dim>
-index_t VectorBase<_Derived>::getSize() const noexcept {
-  static_assert(_dim == 0, "Invalid dimension!");
-  return length_;
-}
 
 }  // namespace isvd
 

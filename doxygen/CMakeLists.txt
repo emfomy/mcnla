@@ -10,11 +10,19 @@ configure_file(
 )
 
 # Add rule
-add_custom_target(
-  doc
-  COMMAND doxygen "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-  COMMENT "Generating documentation with Doxygen"
-)
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
+  add_custom_target(
+    doc
+    COMMAND doxygen "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+    COMMENT "Generating documentation with Doxygen"
+  )
+else()
+  add_custom_target(
+    doc ALL
+    COMMAND doxygen "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+    COMMENT "Generating documentation with Doxygen"
+  )
+endif()
 
 # Add to clean rule
 set_directory_properties(

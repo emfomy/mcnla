@@ -100,30 +100,6 @@ template <class _Derived> template <TransOption _trans>
 index_t MatrixBase<_Derived>::getNcol() const noexcept { return !isTranspose(_trans) ? ncol_ : nrow_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the leading size.
-///
-template <class _Derived>
-index_t MatrixBase<_Derived>::getSize0() const noexcept { return size0_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the second size.
-///
-template <class _Derived>
-index_t MatrixBase<_Derived>::getSize1() const noexcept { return size1_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of elements.
-///
-template <class _Derived>
-index_t MatrixBase<_Derived>::getNelem() const noexcept { return nrow_ * ncol_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the sizes.
-///
-template <class _Derived>
-std::pair<index_t, index_t> MatrixBase<_Derived>::getSizes() const noexcept { return std::make_pair(nrow_, ncol_); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
 template <class _Derived> template <index_t _dim>
@@ -131,6 +107,18 @@ index_t MatrixBase<_Derived>::getSize() const noexcept {
   static_assert(_dim >= 0 && _dim < 2, "Invalid dimension!");
   return (_dim == 0) ? size0_ : size1_;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of elements.
+///
+template <class _Derived>
+index_t MatrixBase<_Derived>::getNelem() const noexcept { return size0_ * size1_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::pair<index_t, index_t> MatrixBase<_Derived>::getSizes() const noexcept { return std::make_pair(nrow_, ncol_); }
 
 }  // namespace isvd
 

@@ -82,8 +82,6 @@ class CooMatrixIteratorBase : public CooIteratorBase<CooMatrixIteratorBase<_Scal
   // Gets value
   inline IndexType& getRowIdx() const noexcept;
   inline IndexType& getColIdx() const noexcept;
-  inline IndexType& getIdx0() const noexcept;
-  inline IndexType& getIdx1() const noexcept;
   inline index_t    getPos() const noexcept;
 
 };

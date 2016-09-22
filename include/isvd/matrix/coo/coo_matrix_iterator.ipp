@@ -34,7 +34,7 @@ std::ostream& operator<< ( std::ostream &out, const CooMatrixIteratorBase<__Scal
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
 typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
     CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx0() : getIdx1();
+  return BaseType::template getIdx<isColMajor(_layout) ? 0 : 1>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,25 +43,7 @@ typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
 typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
     CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx0();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the first index.
-///
-template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
-typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
-    CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getIdx0() const noexcept {
-  return BaseType::template getIdx<0>();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the second index.
-///
-template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
-typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
-    CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getIdx1() const noexcept {
-  return BaseType::template getIdx<1>();
+  return BaseType::template getIdx<isColMajor(_layout) ? 1 : 0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

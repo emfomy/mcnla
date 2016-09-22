@@ -63,8 +63,6 @@ class MatrixBase : public TensorBase<_Derived> {
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNcol() const noexcept;
-  inline index_t getSize0() const noexcept;
-  inline index_t getSize1() const noexcept;
   inline index_t getNelem() const noexcept;
   inline std::pair<index_t, index_t> getSizes() const noexcept;
   template <index_t _dim> inline index_t getSize() const noexcept;

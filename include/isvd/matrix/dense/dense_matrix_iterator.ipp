@@ -44,7 +44,8 @@ _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const no
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx0() : getIdx1();
+  return isColMajor(_layout) ? itidx_ % container_->template getSize<0>()
+                             : itidx_ / container_->template getSize<0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,23 +53,8 @@ index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getRowIdx() const no
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx0();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the leading index.
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx0() const noexcept {
-  return itidx_ % container_->getSize0();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the second index.
-///
-template <typename _Scalar, Layout _layout, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx1() const noexcept {
-  return itidx_ / container_->getSize0();
+  return isColMajor(_layout) ? itidx_ / container_->template getSize<0>()
+                             : itidx_ % container_->template getSize<0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

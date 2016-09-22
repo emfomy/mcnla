@@ -176,7 +176,7 @@ std::ostream& operator<< ( std::ostream &out, const CooMatrix<__Scalar, __layout
 ///
 template <typename _Scalar, Layout _layout>
 index_t* CooMatrix<_Scalar, _layout>::getRowIdx() noexcept {
-  return isColMajor(_layout) ? getIdx0() : getIdx1();
+  return CooBaseType::template getIdx<isColMajor(_layout) ? 0 : 1>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +184,7 @@ index_t* CooMatrix<_Scalar, _layout>::getRowIdx() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const index_t* CooMatrix<_Scalar, _layout>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx0() : getIdx1();
+  return CooBaseType::template getIdx<isColMajor(_layout) ? 0 : 1>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ const index_t* CooMatrix<_Scalar, _layout>::getRowIdx() const noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 index_t* CooMatrix<_Scalar, _layout>::getColIdx() noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx0();
+  return CooBaseType::template getIdx<isColMajor(_layout) ? 1 : 0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,39 +200,7 @@ index_t* CooMatrix<_Scalar, _layout>::getColIdx() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const index_t* CooMatrix<_Scalar, _layout>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx0();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the first index array.
-///
-template <typename _Scalar, Layout _layout>
-index_t* CooMatrix<_Scalar, _layout>::getIdx0() noexcept {
-  return CooBaseType::template getIdx<0>();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdx0
-///
-template <typename _Scalar, Layout _layout>
-const index_t* CooMatrix<_Scalar, _layout>::getIdx0() const noexcept {
-  return CooBaseType::template getIdx<0>();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the second index array.
-///
-template <typename _Scalar, Layout _layout>
-index_t* CooMatrix<_Scalar, _layout>::getIdx1() noexcept {
-  return CooBaseType::template getIdx<1>();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdx1
-///
-template <typename _Scalar, Layout _layout>
-const index_t* CooMatrix<_Scalar, _layout>::getIdx1() const noexcept {
-  return CooBaseType::template getIdx<1>();
+  return CooBaseType::template getIdx<isColMajor(_layout) ? 1 : 0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

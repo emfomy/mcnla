@@ -36,7 +36,7 @@ std::ostream& operator<< ( std::ostream &out, const CooCubeIteratorBase<__Scalar
 template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
 typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
     CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx0() : getIdx1();
+  return BaseType::template getIdx<isColMajor(_layout) ? 0 : 1>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
 template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
 typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
     CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx0();
+  return BaseType::template getIdx<isColMajor(_layout) ? 1 : 0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,33 +54,6 @@ typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
 template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
 typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
     CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::getPageIdx() const noexcept {
-  return getIdx2();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the first index.
-///
-template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
-typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
-    CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::getIdx0() const noexcept {
-  return BaseType::template getIdx<0>();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the second index.
-///
-template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
-typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
-    CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::getIdx1() const noexcept {
-  return BaseType::template getIdx<1>();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the third index.
-///
-template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
-typename CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::IndexType&
-    CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::getIdx2() const noexcept {
   return BaseType::template getIdx<2>();
 }
 
