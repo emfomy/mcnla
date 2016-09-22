@@ -141,8 +141,7 @@ std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vecto
   for ( index_t i = 0; i < vector.length_; ++i ) {
     out << std::setw(ios_width) << vector(i);
   }
-  out << std::endl;
-  return out;
+  return out << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

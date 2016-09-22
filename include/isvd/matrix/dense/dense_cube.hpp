@@ -107,17 +107,17 @@ class DenseCube
  protected:
 
   /// The leading dimension.
-  index_t pitch1_;
+  index_t pitch0_;
 
   /// The second dimension.
-  index_t pitch2_;
+  index_t pitch1_;
 
   using CubeBaseType::nrow_;
   using CubeBaseType::ncol_;
   using CubeBaseType::npage_;
+  using CubeBaseType::size0_;
   using CubeBaseType::size1_;
   using CubeBaseType::size2_;
-  using CubeBaseType::size3_;
   using DenseBaseType::offset_;
   using DenseBaseType::data_;
 
@@ -127,17 +127,17 @@ class DenseCube
   inline DenseCube() noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1 ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch0 ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-                    const index_t pitch1, const index_t pitch2 ) noexcept;
+                    const index_t pitch0, const index_t pitch1 ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch0, const index_t pitch1,
                     const index_t capability, const index_t offset = 0 ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches,
                     const index_t capability, const index_t offset = 0 ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch0, const index_t pitch1,
                     const ValuePtrType &value, const index_t offset = 0 ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch1, const index_t pitch2,
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch0, const index_t pitch1,
                     const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseCube( const DenseCube &other ) noexcept;
   inline DenseCube( DenseCube &&other ) noexcept;
@@ -149,8 +149,8 @@ class DenseCube
   friend inline std::ostream& operator<<( std::ostream &out, const DenseCube<__Scalar, __layout> &cube );
 
   // Gets information
+  inline index_t getPitch0() const noexcept;
   inline index_t getPitch1() const noexcept;
-  inline index_t getPitch2() const noexcept;
   inline std::pair<index_t, index_t> getPitches() const noexcept;
   inline bool isShrunk() const noexcept;
 
@@ -175,8 +175,8 @@ class DenseCube
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
 
   // Gets cube block
-  inline       CubeType getCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) noexcept;
-  inline const CubeType getCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) const noexcept;
+  inline       CubeType getSubCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) noexcept;
+  inline const CubeType getSubCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) const noexcept;
   inline       CubeType getTubes( const IdxRange rowrange, const IdxRange colrange ) noexcept;
   inline const CubeType getTubes( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
   inline       CubeType getPages( const IdxRange pagerange ) noexcept;

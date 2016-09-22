@@ -49,6 +49,7 @@ class VectorBase : public TensorBase<_Derived> {
   inline index_t getLength() const noexcept;
   inline index_t getNelem() const noexcept;
   inline index_t getSizes() const noexcept;
+  template <index_t _dim> inline index_t getSize() const noexcept;
 
 };
 

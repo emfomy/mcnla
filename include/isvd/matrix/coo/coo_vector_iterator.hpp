@@ -48,7 +48,9 @@ struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector iterator.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Index   The index type.
+/// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, typename _Index, class _Vector>
 class CooVectorIteratorBase : public CooIteratorBase<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {

@@ -23,9 +23,11 @@ std::ostream& operator<< ( std::ostream &out, const DenseCubeIteratorBase<__Scal
   const index_t width_r = log10(iterator.container_->getNrow())+1;
   const index_t width_c = log10(iterator.container_->getNcol())+1;
   const index_t width_p = log10(iterator.container_->getNpage())+1;
-  return out << "(" << std::setw(width_r) << iterator.getRowIdx() << ", "
-                    << std::setw(width_c) << iterator.getColIdx() << ", "
-                    << std::setw(width_p) << iterator.getPageIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
+  const index_t width   = std::max(std::max(width_r, width_c), width_p);
+  return out << "(" << std::setw(width) << iterator.getRowIdx() << ", "
+                    << std::setw(width) << iterator.getColIdx() << ", "
+                    << std::setw(width) << iterator.getPageIdx() << ")  "
+                    << std::setw(ios_width) << iterator.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +46,7 @@ _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() const noexce
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx2();
+  return isColMajor(_layout) ? getIdx0() : getIdx1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +54,7 @@ index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getRowIdx() const noexce
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx2() : getIdx3();
+  return isColMajor(_layout) ? getIdx1() : getIdx2();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,31 +62,31 @@ index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getColIdx() const noexce
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getPageIdx() const noexcept {
-  return getIdx3();
+  return getIdx2();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading index.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx1() const noexcept {
-  return itidx_ % container_->getSize1();
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx0() const noexcept {
+  return itidx_ % container_->getSize0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second index.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx2() const noexcept {
-  return (itidx_ / container_->getSize1()) % container_->getSize2();
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx1() const noexcept {
+  return (itidx_ / container_->getSize0()) % container_->getSize1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the third index.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx3() const noexcept {
-  return (itidx_ / container_->getSize1()) / container_->getSize2();
+index_t DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getIdx2() const noexcept {
+  return (itidx_ / container_->getSize0()) / container_->getSize1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

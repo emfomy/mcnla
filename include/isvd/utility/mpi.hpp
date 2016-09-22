@@ -138,8 +138,8 @@ inline void gather(
 ) noexcept {
   assert(send.isShrunk());
   assert(recv.isShrunk());
-  assert(isCommRoot(root, comm) ? send.getSize1()                     == recv.getSize1() : true);
-  assert(isCommRoot(root, comm) ? send.getSize2() * getCommSize(comm) == recv.getSize2() : true);
+  assert(isCommRoot(root, comm) ? send.getSize0()                     == recv.getSize0() : true);
+  assert(isCommRoot(root, comm) ? send.getSize1() * getCommSize(comm) == recv.getSize1() : true);
   mpi_int_t size = send.getNelem();
   MPI_Gather(send.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type,
              recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, root, comm);
@@ -248,10 +248,10 @@ inline void alltoall(
 ) noexcept {
   assert(send.isShrunk());
   assert(recv.isShrunk());
-  assert(send.getSize1()  == recv.getSize1());
-  assert(send.getSize2()  == recv.getSize2() * recv.getNpage());
+  assert(send.getSize0()  == recv.getSize0());
+  assert(send.getSize1()  == recv.getSize1() * recv.getNpage());
   assert(recv.getNpage() == getCommSize(comm));
-  mpi_int_t size = recv.getSize1() * recv.getSize2();
+  mpi_int_t size = recv.getSize0() * recv.getSize1();
   MPI_Alltoall(send.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type,
                recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, comm);
 }
@@ -268,7 +268,7 @@ inline void alltoall(
 ) noexcept {
   assert(buffer.isShrunk());
   assert(buffer.getNpage() == getCommSize(comm));
-  mpi_int_t size = buffer.getSize1() * buffer.getSize2();
+  mpi_int_t size = buffer.getSize0() * buffer.getSize1();
   MPI_Alltoall(MPI_IN_PLACE, size, detail::MpiScalarTraits<_Scalar>::data_type,
                buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, comm);
 }

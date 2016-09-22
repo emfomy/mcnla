@@ -79,8 +79,8 @@ class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase
   inline ScalarType& getValue() const noexcept;
   inline index_t     getRowIdx() const noexcept;
   inline index_t     getColIdx() const noexcept;
+  inline index_t     getIdx0() const noexcept;
   inline index_t     getIdx1() const noexcept;
-  inline index_t     getIdx2() const noexcept;
   inline index_t     getPos() const noexcept;
 
 };

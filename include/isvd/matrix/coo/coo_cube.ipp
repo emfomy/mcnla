@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/matrix/coo/coo_matrix.ipp
-/// @brief   The implementation of COO matrix.
+/// @file    include/isvd/matrix/coo/coo_cube.ipp
+/// @brief   The implementation of COO cube.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_MATRIX_COO_COO_MATRIX_IPP_
-#define ISVD_MATRIX_COO_COO_MATRIX_IPP_
+#ifndef ISVD_MATRIX_COO_COO_CUBE_IPP_
+#define ISVD_MATRIX_COO_COO_CUBE_IPP_
 
-#include <isvd/matrix/coo/coo_matrix.hpp>
+#include <isvd/matrix/coo/coo_cube.hpp>
 #include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,106 +20,112 @@ namespace isvd {
 /// @brief  Default constructor.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix() noexcept
-  : MatrixBaseType(),
+CooCube<_Scalar, _layout>::CooCube() noexcept
+  : CubeBaseType(),
     CooBaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
-    const index_t nrow,
-    const index_t ncol
-) noexcept
-  : MatrixBaseType(nrow, ncol),
-    CooBaseType(size0_ * size1_) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given size information.
-///
-template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
-    const std::pair<index_t, index_t> sizes
-) noexcept
-  : CooMatrix(sizes.first, sizes.second) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given size information.
-///
-template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
+CooCube<_Scalar, _layout>::CooCube(
     const index_t nrow,
     const index_t ncol,
+    const index_t npage
+) noexcept
+  : CubeBaseType(nrow, ncol, npage),
+    CooBaseType(size0_ * size1_ * size2_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Layout _layout>
+CooCube<_Scalar, _layout>::CooCube(
+    const std::tuple<index_t, index_t, index_t> sizes
+) noexcept
+  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Layout _layout>
+CooCube<_Scalar, _layout>::CooCube(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t npage,
     const index_t capability
 ) noexcept
-  : MatrixBaseType(nrow, ncol),
+  : CubeBaseType(nrow, ncol, npage),
     CooBaseType(capability) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
-    const std::pair<index_t, index_t> sizes,
+CooCube<_Scalar, _layout>::CooCube(
+    const std::tuple<index_t, index_t, index_t> sizes,
     const index_t capability
 ) noexcept
-  : CooMatrix(sizes.first, sizes.second, capability) {}
+  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), capability) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
+CooCube<_Scalar, _layout>::CooCube(
     const index_t nrow,
     const index_t ncol,
+    const index_t npage,
     const index_t nnz,
     const index_t capability,
     const index_t offset
 ) noexcept
-  : MatrixBaseType(nrow, ncol),
+  : CubeBaseType(nrow, ncol, npage),
     CooBaseType(nnz, capability, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
-    const std::pair<index_t, index_t> sizes,
+CooCube<_Scalar, _layout>::CooCube(
+    const std::tuple<index_t, index_t, index_t> sizes,
     const index_t nnz,
     const index_t capability,
     const index_t offset
 ) noexcept
-  : CooMatrix(sizes.first, sizes.second, nnz, capability, offset) {}
+  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), nnz, capability, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
+CooCube<_Scalar, _layout>::CooCube(
     const index_t nrow,
     const index_t ncol,
+    const index_t npage,
     const index_t nnz,
     const ValuePtrType &value,
     const IdxPtrType &rowidx,
     const IdxPtrType &colidx,
+    const IdxPtrType &pageidx,
     const index_t offset
 ) noexcept
-  : MatrixBaseType(nrow, ncol),
-    CooBaseType(nnz, value, {isColMajor(_layout) ? rowidx : colidx, isColMajor(_layout) ? colidx : rowidx}, offset) {}
+  : CubeBaseType(nrow, ncol, npage),
+    CooBaseType(nnz, value, {isColMajor(_layout) ? rowidx : colidx, isColMajor(_layout) ? colidx : rowidx, pageidx}, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix(
+CooCube<_Scalar, _layout>::CooCube(
     const index_t nrow,
     const index_t ncol,
+    const index_t npage,
     const index_t nnz,
     const DataType &data,
     const index_t offset
 ) noexcept
-  : MatrixBaseType(nrow, ncol),
+  : CubeBaseType(nrow, ncol, npage),
     CooBaseType(nnz, data, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,16 +134,16 @@ CooMatrix<_Scalar, _layout>::CooMatrix(
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix( const CooMatrix &other ) noexcept
-  : MatrixBaseType(other),
+CooCube<_Scalar, _layout>::CooCube( const CooCube &other ) noexcept
+  : CubeBaseType(other),
     CooBaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>::CooMatrix( CooMatrix &&other ) noexcept
-  : MatrixBaseType(std::move(other)),
+CooCube<_Scalar, _layout>::CooCube( CooCube &&other ) noexcept
+  : CubeBaseType(std::move(other)),
     CooBaseType(std::move(other)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,8 +152,8 @@ CooMatrix<_Scalar, _layout>::CooMatrix( CooMatrix &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses isvd::blas::copy.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>& CooMatrix<_Scalar, _layout>::operator=( const CooMatrix &other ) noexcept {
-  MatrixBaseType::operator=(other); CooBaseType::operator=(other);
+CooCube<_Scalar, _layout>& CooCube<_Scalar, _layout>::operator=( const CooCube &other ) noexcept {
+  CubeBaseType::operator=(other); CooBaseType::operator=(other);
   return *this;
 }
 
@@ -155,8 +161,8 @@ CooMatrix<_Scalar, _layout>& CooMatrix<_Scalar, _layout>::operator=( const CooMa
 /// @brief  Move assignment operator.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout>& CooMatrix<_Scalar, _layout>::operator=( CooMatrix &&other ) noexcept {
-  MatrixBaseType::operator=(std::move(other)); CooBaseType::operator=(std::move(other));
+CooCube<_Scalar, _layout>& CooCube<_Scalar, _layout>::operator=( CooCube &&other ) noexcept {
+  CubeBaseType::operator=(std::move(other)); CooBaseType::operator=(std::move(other));
   return *this;
 }
 
@@ -164,8 +170,8 @@ CooMatrix<_Scalar, _layout>& CooMatrix<_Scalar, _layout>::operator=( CooMatrix &
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, Layout __layout>
-std::ostream& operator<< ( std::ostream &out, const CooMatrix<__Scalar, __layout> &matrix ) {
-  for ( auto it = matrix.begin(); it != matrix.end(); ++it ) {
+std::ostream& operator<< ( std::ostream &out, const CooCube<__Scalar, __layout> &cube ) {
+  for ( auto it = cube.begin(); it != cube.end(); ++it ) {
     out << it;
   }
   return out;
@@ -175,7 +181,7 @@ std::ostream& operator<< ( std::ostream &out, const CooMatrix<__Scalar, __layout
 /// @brief  Gets the row index array.
 ///
 template <typename _Scalar, Layout _layout>
-index_t* CooMatrix<_Scalar, _layout>::getRowIdx() noexcept {
+index_t* CooCube<_Scalar, _layout>::getRowIdx() noexcept {
   return isColMajor(_layout) ? getIdx0() : getIdx1();
 }
 
@@ -183,7 +189,7 @@ index_t* CooMatrix<_Scalar, _layout>::getRowIdx() noexcept {
 /// @copydoc  getRowIdx
 ///
 template <typename _Scalar, Layout _layout>
-const index_t* CooMatrix<_Scalar, _layout>::getRowIdx() const noexcept {
+const index_t* CooCube<_Scalar, _layout>::getRowIdx() const noexcept {
   return isColMajor(_layout) ? getIdx0() : getIdx1();
 }
 
@@ -191,7 +197,7 @@ const index_t* CooMatrix<_Scalar, _layout>::getRowIdx() const noexcept {
 /// @brief  Gets the column index array.
 ///
 template <typename _Scalar, Layout _layout>
-index_t* CooMatrix<_Scalar, _layout>::getColIdx() noexcept {
+index_t* CooCube<_Scalar, _layout>::getColIdx() noexcept {
   return isColMajor(_layout) ? getIdx1() : getIdx0();
 }
 
@@ -199,15 +205,31 @@ index_t* CooMatrix<_Scalar, _layout>::getColIdx() noexcept {
 /// @copydoc  getColIdx
 ///
 template <typename _Scalar, Layout _layout>
-const index_t* CooMatrix<_Scalar, _layout>::getColIdx() const noexcept {
+const index_t* CooCube<_Scalar, _layout>::getColIdx() const noexcept {
   return isColMajor(_layout) ? getIdx1() : getIdx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the page index array.
+///
+template <typename _Scalar, Layout _layout>
+index_t* CooCube<_Scalar, _layout>::getPageIdx() noexcept {
+  return getIdx2();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getPageIdx
+///
+template <typename _Scalar, Layout _layout>
+const index_t* CooCube<_Scalar, _layout>::getPageIdx() const noexcept {
+  return getIdx2();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the first index array.
 ///
 template <typename _Scalar, Layout _layout>
-index_t* CooMatrix<_Scalar, _layout>::getIdx0() noexcept {
+index_t* CooCube<_Scalar, _layout>::getIdx0() noexcept {
   return CooBaseType::template getIdx<0>();
 }
 
@@ -215,7 +237,7 @@ index_t* CooMatrix<_Scalar, _layout>::getIdx0() noexcept {
 /// @copydoc  getIdx0
 ///
 template <typename _Scalar, Layout _layout>
-const index_t* CooMatrix<_Scalar, _layout>::getIdx0() const noexcept {
+const index_t* CooCube<_Scalar, _layout>::getIdx0() const noexcept {
   return CooBaseType::template getIdx<0>();
 }
 
@@ -223,7 +245,7 @@ const index_t* CooMatrix<_Scalar, _layout>::getIdx0() const noexcept {
 /// @brief  Gets the second index array.
 ///
 template <typename _Scalar, Layout _layout>
-index_t* CooMatrix<_Scalar, _layout>::getIdx1() noexcept {
+index_t* CooCube<_Scalar, _layout>::getIdx1() noexcept {
   return CooBaseType::template getIdx<1>();
 }
 
@@ -231,21 +253,39 @@ index_t* CooMatrix<_Scalar, _layout>::getIdx1() noexcept {
 /// @copydoc  getIdx1
 ///
 template <typename _Scalar, Layout _layout>
-const index_t* CooMatrix<_Scalar, _layout>::getIdx1() const noexcept {
+const index_t* CooCube<_Scalar, _layout>::getIdx1() const noexcept {
   return CooBaseType::template getIdx<1>();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the third index array.
+///
+template <typename _Scalar, Layout _layout>
+index_t* CooCube<_Scalar, _layout>::getIdx2() noexcept {
+  return CooBaseType::template getIdx<2>();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdx1
+///
+template <typename _Scalar, Layout _layout>
+const index_t* CooCube<_Scalar, _layout>::getIdx2() const noexcept {
+  return CooBaseType::template getIdx<2>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar, Layout _layout>
-_Scalar CooMatrix<_Scalar, _layout>::getElem(
+_Scalar CooCube<_Scalar, _layout>::getElem(
     const index_t rowidx,
-    const index_t colidx
+    const index_t colidx,
+    const index_t pageidx
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
-  auto it = find(rowidx, colidx);
+  assert(pageidx >= 0 && pageidx < npage_);
+  auto it = find(rowidx, colidx, pageidx);
   return (it != this->end()) ? it.getValue() : 0;
 }
 
@@ -253,10 +293,11 @@ _Scalar CooMatrix<_Scalar, _layout>::getElem(
 /// @copydoc  getElem
 ///
 template <typename _Scalar, Layout _layout>
-_Scalar CooMatrix<_Scalar, _layout>::operator()(
+_Scalar CooCube<_Scalar, _layout>::operator()(
     const index_t rowidx,
-    const index_t colidx
-) const noexcept { return getElem(rowidx, colidx); }
+    const index_t colidx,
+    const index_t pageidx
+) const noexcept { return getElem(rowidx, colidx, pageidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
@@ -264,13 +305,15 @@ _Scalar CooMatrix<_Scalar, _layout>::operator()(
 /// @attention  Returns `-1` if the index does not exist!
 ///
 template <typename _Scalar, Layout _layout>
-index_t CooMatrix<_Scalar, _layout>::getPos(
+index_t CooCube<_Scalar, _layout>::getPos(
     const index_t rowidx,
-    const index_t colidx
+    const index_t colidx,
+    const index_t pageidx
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
-  auto it = find(rowidx, colidx);
+  assert(pageidx >= 0 && pageidx < npage_);
+  auto it = find(rowidx, colidx, pageidx);
   return (it != this->end()) ? it.getPos() : -1;
 }
 
@@ -278,19 +321,21 @@ index_t CooMatrix<_Scalar, _layout>::getPos(
 /// @brief  Gets the internal position and nonzero elements of given index range.
 ///
 template <typename _Scalar, Layout _layout>
-void CooMatrix<_Scalar, _layout>::getPosNnz(
+void CooCube<_Scalar, _layout>::getPosNnz(
     const IdxRange rowrange,
     const IdxRange colrange,
+    const IdxRange pagerange,
           index_t &pos,
           index_t &nnz
 ) const noexcept {
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
+  assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
   assert(isSorted());
-  auto begintuple = isColMajor(_layout) ? isvd::makeCooTuple(rowrange.begin, colrange.begin)
-                                        : isvd::makeCooTuple(colrange.begin, rowrange.begin);
-  auto endtuple   = isColMajor(_layout) ? isvd::makeCooTuple(rowrange.end, colrange.end)
-                                        : isvd::makeCooTuple(colrange.end, rowrange.end);
+  auto begintuple = isColMajor(_layout) ? isvd::makeCooTuple(rowrange.begin, colrange.begin, pagerange.begin)
+                                        : isvd::makeCooTuple(colrange.begin, rowrange.begin, pagerange.begin);
+  auto endtuple   = isColMajor(_layout) ? isvd::makeCooTuple(rowrange.end, colrange.end, pagerange.end)
+                                        : isvd::makeCooTuple(colrange.end, rowrange.end, pagerange.end);
   auto it0 = std::lower_bound(this->begin(), this->end(), begintuple);
   auto it1 = std::lower_bound(it0, this->end(), endtuple);
   pos = it0.getPos();
@@ -301,14 +346,16 @@ void CooMatrix<_Scalar, _layout>::getPosNnz(
 /// @brief  Finds the iterator to element
 ///
 template <typename _Scalar, Layout _layout>
-typename CooMatrix<_Scalar, _layout>::IteratorType CooMatrix<_Scalar, _layout>::find(
+typename CooCube<_Scalar, _layout>::IteratorType CooCube<_Scalar, _layout>::find(
     const index_t rowidx,
-    const index_t colidx
+    const index_t colidx,
+    const index_t pageidx
 ) noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(isSorted());
-  auto tuple = isColMajor(_layout) ? isvd::makeCooTuple(rowidx, colidx) : isvd::makeCooTuple(colidx, rowidx);
+  auto tuple = isColMajor(_layout) ? isvd::makeCooTuple(rowidx, colidx, pageidx) : isvd::makeCooTuple(colidx, rowidx, pageidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
 }
@@ -317,14 +364,16 @@ typename CooMatrix<_Scalar, _layout>::IteratorType CooMatrix<_Scalar, _layout>::
 /// @copydoc  find
 ///
 template <typename _Scalar, Layout _layout>
-typename CooMatrix<_Scalar, _layout>::ConstIteratorType CooMatrix<_Scalar, _layout>::find(
+typename CooCube<_Scalar, _layout>::ConstIteratorType CooCube<_Scalar, _layout>::find(
     const index_t rowidx,
-    const index_t colidx
+    const index_t colidx,
+    const index_t pageidx
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(isSorted());
-  auto tuple = isColMajor(_layout) ? isvd::makeCooTuple(rowidx, colidx) : isvd::makeCooTuple(colidx, rowidx);
+  auto tuple = isColMajor(_layout) ? isvd::makeCooTuple(rowidx, colidx, pageidx) : isvd::makeCooTuple(colidx, rowidx, pageidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
 }
@@ -333,52 +382,81 @@ typename CooMatrix<_Scalar, _layout>::ConstIteratorType CooMatrix<_Scalar, _layo
 /// @copydoc  find
 ///
 template <typename _Scalar, Layout _layout>
-typename CooMatrix<_Scalar, _layout>::ConstIteratorType CooMatrix<_Scalar, _layout>::cfind(
+typename CooCube<_Scalar, _layout>::ConstIteratorType CooCube<_Scalar, _layout>::cfind(
     const index_t rowidx,
-    const index_t colidx
+    const index_t colidx,
+    const index_t pageidx
 ) const noexcept {
-  return find(rowidx, colidx);
+  return find(rowidx, colidx, pageidx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sorts the matrix.
+/// @brief  Sorts the cube.
 ///
 template <typename _Scalar, Layout _layout>
-void CooMatrix<_Scalar, _layout>::sort() noexcept {
+void CooCube<_Scalar, _layout>::sort() noexcept {
   std::sort(this->begin(), this->end());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Check if the matrix is sorted.
+/// @brief  Check if the cube is sorted.
 ///
 template <typename _Scalar, Layout _layout>
-bool CooMatrix<_Scalar, _layout>::isSorted() const noexcept {
+bool CooCube<_Scalar, _layout>::isSorted() const noexcept {
   return std::is_sorted(this->begin(), this->end());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the transpose of the matrix.
+/// @brief  Gets the transpose of the cube.
 ///
 /// @attention  The storage layout is also changed.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, changeLayout(_layout)> CooMatrix<_Scalar, _layout>::transpose() noexcept {
-  return CooMatrix<_Scalar, changeLayout(_layout)>(ncol_, nrow_, nnz_, data_, offset_);
+CooCube<_Scalar, changeLayout(_layout)> CooCube<_Scalar, _layout>::transpose() noexcept {
+  return CooCube<_Scalar, changeLayout(_layout)>(ncol_, nrow_, npage_, nnz_, data_, offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resizes the matrix.
+/// @brief  Resizes the cube.
 ///
 /// @attention  The new space is not initialized.
 ///
 template <typename _Scalar, Layout _layout>
-void CooMatrix<_Scalar, _layout>::resize(
+void CooCube<_Scalar, _layout>::resize(
     const index_t nrow,
-    const index_t ncol
+    const index_t ncol,
+    const index_t npage
 ) noexcept {
-  assert(nrow >= 0 && ncol >= 0);
+  assert(nrow >= 0 && ncol >= 0 && npage >= 0);
   nrow_ = nrow;
   ncol_ = ncol;
+  npage_ = npage;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a cube block.
+///
+/// @attention  This routine is only available in column-major matrices.
+///
+template <typename _Scalar, Layout _layout>
+CooCube<_Scalar, _layout> CooCube<_Scalar, _layout>::getPages(
+    const IdxRange pagerange
+) noexcept {
+  assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
+  index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, pagerange, pos, nnz);
+  return CooCube<_Scalar, _layout>(nrow_, ncol_, pagerange.getLength(), nnz, data_, pos + offset_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getPages
+///
+template <typename _Scalar, Layout _layout>
+const CooCube<_Scalar, _layout> CooCube<_Scalar, _layout>::getPages(
+    const IdxRange pagerange
+) const noexcept {
+  assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
+  index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, pagerange, pos, nnz);
+  return CooCube<_Scalar, _layout>(nrow_, ncol_, pagerange.getLength(), nnz, data_, pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,26 +465,30 @@ void CooMatrix<_Scalar, _layout>::resize(
 /// @attention  This routine is only available in column-major matrices.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getCols(
+CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getCols(
+    const index_t pageidx,
     const IdxRange colrange
 ) noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_, pos + offset_);
+  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, {pageidx, pageidx}, pos, nnz);
+  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_.template getReduced<0, 1>(), pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getCols
 ///
 template <typename _Scalar, Layout _layout>
-const CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getCols(
+const CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getCols(
+    const index_t pageidx,
     const IdxRange colrange
 ) const noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_, pos + offset_);
+  index_t pos, nnz; getPosNnz({0, nrow_}, colrange, {pageidx, pageidx}, pos, nnz);
+  return CooMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), nnz, data_.template getReduced<0, 1>(), pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,26 +497,30 @@ const CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getCols(
 /// @attention  This routine is only available in row-major matrices.
 ///
 template <typename _Scalar, Layout _layout>
-CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getRows(
+CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getRows(
+    const index_t pageidx,
     const IdxRange rowrange
 ) noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_, pos + offset_);
+  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
+  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getRows
 ///
 template <typename _Scalar, Layout _layout>
-const CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getRows(
+const CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getRows(
+    const index_t pageidx,
     const IdxRange rowrange
 ) const noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_, pos + offset_);
+  index_t pos, nnz; getPosNnz(rowrange, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
+  return CooMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -443,12 +529,14 @@ const CooMatrix<_Scalar, _layout> CooMatrix<_Scalar, _layout>::getRows(
 /// @attention  This routine is only available in column-major matrices.
 ///
 template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
-    const index_t colidx
+CooVector<_Scalar> CooCube<_Scalar, _layout>::getCol(
+    const index_t colidx,
+    const index_t pageidx
 ) noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(colidx >= 0 && colidx < ncol_);
-  index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, pos, nnz);
+  assert(pageidx >= 0 && pageidx < npage_);
+  index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos + offset_);
 }
 
@@ -456,12 +544,14 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
 /// @copydoc  getCol
 ///
 template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
-    const index_t colidx
+const CooVector<_Scalar> CooCube<_Scalar, _layout>::getCol(
+    const index_t colidx,
+    const index_t pageidx
 ) const noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(colidx >= 0 && colidx < ncol_);
-  index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, pos, nnz);
+  assert(pageidx >= 0 && pageidx < npage_);
+  index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos + offset_);
 }
 
@@ -469,14 +559,16 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
 /// @copydoc  getCol
 ///
 template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getColSegment(
+CooVector<_Scalar> CooCube<_Scalar, _layout>::getColSegment(
     const index_t colidx,
+    const index_t pageidx,
     const IdxRange rowrange
 ) noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, pos, nnz);
+  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(rowrange.getLength(), nnz, data_.template getReduced<0>(), pos + offset_);
 }
 
@@ -484,14 +576,16 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getColSegment(
 /// @copydoc  getColSegment
 ///
 template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getColSegment(
+const CooVector<_Scalar> CooCube<_Scalar, _layout>::getColSegment(
     const index_t colidx,
+    const index_t pageidx,
     const IdxRange rowrange
 ) const noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(colidx >= 0 && colidx < ncol_);
+  assert(pageidx >= 0 && pageidx < npage_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, pos, nnz);
+  index_t pos, nnz; getPosNnz(rowrange, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(rowrange.getLength(), nnz, data_.template getReduced<0>(), pos + offset_);
 }
 
@@ -501,12 +595,14 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getColSegment(
 /// @attention  This routine is only available in row-major matrices.
 ///
 template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
-    const index_t rowidx
+CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
+    const index_t rowidx,
+    const index_t pageidx
 ) noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
   assert(rowidx >= 0 && rowidx < nrow_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, {0, ncol_}, pos, nnz);
+  assert(pageidx >= 0 && pageidx < npage_);
+  index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
 }
 
@@ -514,12 +610,14 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
 /// @copydoc  getRow
 ///
 template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
-    const index_t rowidx
+const CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
+    const index_t rowidx,
+    const index_t pageidx
 ) const noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
   assert(rowidx >= 0 && rowidx < nrow_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, {0, ncol_}, pos, nnz);
+  assert(pageidx >= 0 && pageidx < npage_);
+  index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
 }
 
@@ -527,13 +625,15 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
 /// @copydoc  getRow
 ///
 template <typename _Scalar, Layout _layout>
-CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRowSegment(
+CooVector<_Scalar> CooCube<_Scalar, _layout>::getRowSegment(
     const index_t rowidx,
+    const index_t pageidx,
     const IdxRange colrange
 ) noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
   assert(rowidx >= 0 && rowidx < nrow_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, colrange, pos, nnz);
+  assert(pageidx >= 0 && pageidx < npage_);
+  index_t pos, nnz; getPosNnz({rowidx, rowidx}, colrange, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(colrange.getLength(), nnz, data_.template getReduced<1>(), pos + offset_);
 }
 
@@ -541,16 +641,18 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRowSegment(
 /// @copydoc  getRowSegment
 ///
 template <typename _Scalar, Layout _layout>
-const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRowSegment(
+const CooVector<_Scalar> CooCube<_Scalar, _layout>::getRowSegment(
     const index_t rowidx,
+    const index_t pageidx,
     const IdxRange colrange
 ) const noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
   assert(rowidx >= 0 && rowidx < nrow_);
-  index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, colrange, pos, nnz);
+  assert(pageidx >= 0 && pageidx < npage_);
+  index_t pos, nnz; getPosNnz({rowidx, rowidx}, colrange, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(colrange.getLength(), nnz, data_.template getReduced<1>(), pos + offset_);
 }
 
 }  // namespace isvd
 
-#endif  // ISVD_MATRIX_COO_COO_MATRIX_IPP_
+#endif  // ISVD_MATRIX_COO_COO_CUBE_IPP_

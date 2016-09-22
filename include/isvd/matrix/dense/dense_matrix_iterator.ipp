@@ -22,8 +22,10 @@ template <typename __Scalar, Layout __layout, class __Matrix>
 std::ostream& operator<< ( std::ostream &out, const DenseMatrixIteratorBase<__Scalar, __layout, __Matrix> &iterator ) {
   const index_t width_r = log10(iterator.container_->getNrow())+1;
   const index_t width_c = log10(iterator.container_->getNcol())+1;
-  return out << "(" << std::setw(width_r) << iterator.getRowIdx() << ", "
-                    << std::setw(width_c) << iterator.getColIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
+  const index_t width   = std::max(width_r, width_c);
+  return out << "(" << std::setw(width) << iterator.getRowIdx() << ", "
+                    << std::setw(width) << iterator.getColIdx() << ")  "
+                    << std::setw(ios_width) << iterator.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +44,7 @@ _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const no
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx2();
+  return isColMajor(_layout) ? getIdx0() : getIdx1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,23 +52,23 @@ index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getRowIdx() const no
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
 index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx2() : getIdx1();
+  return isColMajor(_layout) ? getIdx1() : getIdx0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the leading index.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx1() const noexcept {
-  return itidx_ % container_->getSize1();
+index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx0() const noexcept {
+  return itidx_ % container_->getSize0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second index.
 ///
 template <typename _Scalar, Layout _layout, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx2() const noexcept {
-  return itidx_ / container_->getSize1();
+index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getIdx1() const noexcept {
+  return itidx_ / container_->getSize0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

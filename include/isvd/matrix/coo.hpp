@@ -28,4 +28,9 @@
 #include <isvd/matrix/coo/coo_matrix_iterator.hpp>
 #include <isvd/matrix/coo/coo_matrix_iterator.ipp>
 
+#include <isvd/matrix/coo/coo_cube.hpp>
+#include <isvd/matrix/coo/coo_cube.ipp>
+#include <isvd/matrix/coo/coo_cube_iterator.hpp>
+#include <isvd/matrix/coo/coo_cube_iterator.ipp>
+
 #endif  // ISVD_MATRIX_COO_HPP_

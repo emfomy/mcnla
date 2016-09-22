@@ -131,7 +131,7 @@ CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept 
 template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const CooVector<__Scalar> &vector ) {
   for ( auto it = vector.begin(); it != vector.end(); ++it ) {
-    out << it << std::endl;
+    out << it;
   }
   return out;
 }
@@ -212,8 +212,9 @@ typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::find(
 ) noexcept {
   assert(idx >= 0 && idx < length_);
   assert(isSorted());
-  auto it = std::lower_bound(this->begin(), this->end(), makeCooTuple(idx));
-  return (it.getIdx() == idx) ? it : this->end();
+  auto tuple = makeCooTuple(idx);
+  auto it = std::lower_bound(this->begin(), this->end(), tuple);
+  return (it == this->end() || *it == tuple) ? it : this->end();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,8 +226,9 @@ typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::find(
 ) const noexcept {
   assert(idx >= 0 && idx < length_);
   assert(isSorted());
-  auto it = std::lower_bound(this->begin(), this->end(), makeCooTuple(idx));
-  return (it.getIdx() == idx) ? it : this->end();
+  auto tuple = makeCooTuple(idx);
+  auto it = std::lower_bound(this->begin(), this->end(), tuple);
+  return (it == this->end() || *it == tuple) ? it : this->end();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

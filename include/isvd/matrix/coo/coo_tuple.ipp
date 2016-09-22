@@ -236,8 +236,8 @@ void CooTuple<_ndim, _Scalar, _Index>::operator()( const __Scalar value, const _
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Makes a COO tuple
 ///
-/// @param  idx    The first index (idx1).
-/// @param  args   The rest of indices in storage order (idx2, idx3, ...).
+/// @param  idx    The first index (idx0).
+/// @param  args   The rest of indices in storage order (idx1, idx2, ...).
 ///
 template <typename __Index, typename... __Args>
 CooTuple<sizeof...(__Args)+1, void*, __Index> makeCooTuple( const __Index idx, const __Args... args ) {
@@ -248,8 +248,8 @@ CooTuple<sizeof...(__Args)+1, void*, __Index> makeCooTuple( const __Index idx, c
 /// @brief  Makes a reference COO tuple
 ///
 /// @param  value  The value.
-/// @param  idx    The first index (idx1).
-/// @param  args   The rest of indices in storage order (idx2, idx3, ...).
+/// @param  idx    The first index (idx0).
+/// @param  args   The rest of indices in storage order (idx1, idx2, ...).
 ///
 template <typename __Scalar, typename __Index, typename... __Args>
 CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args ) {

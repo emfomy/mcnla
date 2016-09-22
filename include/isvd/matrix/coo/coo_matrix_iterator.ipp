@@ -22,8 +22,9 @@ template <typename __Scalar, typename __Index, Layout __layout, class __Matrix>
 std::ostream& operator<< ( std::ostream &out, const CooMatrixIteratorBase<__Scalar, __Index, __layout, __Matrix> &iterator ) {
   const index_t width_r = log10(iterator.container_->getNrow())+1;
   const index_t width_c = log10(iterator.container_->getNcol())+1;
-  return out << "(" << std::setw(width_r) << iterator.getRowIdx() << ", "
-                    << std::setw(width_c) << iterator.getColIdx() << ")  "
+  const index_t width   = std::max(width_r, width_c);
+  return out << "(" << std::setw(width) << iterator.getRowIdx() << ", "
+                    << std::setw(width) << iterator.getColIdx() << ")  "
                     << std::setw(ios_width) << iterator.getValue() << std::endl;
 }
 
@@ -33,7 +34,7 @@ std::ostream& operator<< ( std::ostream &out, const CooMatrixIteratorBase<__Scal
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
 typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
     CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx1() : getIdx2();
+  return isColMajor(_layout) ? getIdx0() : getIdx1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
 typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
     CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? getIdx2() : getIdx1();
+  return isColMajor(_layout) ? getIdx1() : getIdx0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +51,7 @@ typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
 ///
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
 typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
-    CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getIdx1() const noexcept {
+    CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getIdx0() const noexcept {
   return BaseType::template getIdx<0>();
 }
 
@@ -59,7 +60,7 @@ typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
 ///
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
 typename CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::IndexType&
-    CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getIdx2() const noexcept {
+    CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>::getIdx1() const noexcept {
   return BaseType::template getIdx<1>();
 }
 

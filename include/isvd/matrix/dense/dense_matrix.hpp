@@ -104,8 +104,8 @@ class DenseMatrix
 
   using MatrixBaseType::nrow_;
   using MatrixBaseType::ncol_;
+  using MatrixBaseType::size0_;
   using MatrixBaseType::size1_;
-  using MatrixBaseType::size2_;
   using DenseBaseType::offset_;
   using DenseBaseType::data_;
 

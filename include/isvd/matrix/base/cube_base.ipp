@@ -119,19 +119,19 @@ index_t CubeBase<_Derived>::getNpage() const noexcept { return npage_; }
 /// @brief  Gets the leading size.
 ///
 template <class _Derived>
-index_t CubeBase<_Derived>::getSize1() const noexcept { return size1_; }
+index_t CubeBase<_Derived>::getSize0() const noexcept { return size0_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second size.
 ///
 template <class _Derived>
-index_t CubeBase<_Derived>::getSize2() const noexcept { return size2_; }
+index_t CubeBase<_Derived>::getSize1() const noexcept { return size1_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the third size.
 ///
 template <class _Derived>
-index_t CubeBase<_Derived>::getSize3() const noexcept { return size3_; }
+index_t CubeBase<_Derived>::getSize2() const noexcept { return size2_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of elements.
@@ -145,6 +145,16 @@ index_t CubeBase<_Derived>::getNelem() const noexcept { return nrow_ * ncol_ * n
 template <class _Derived>
 std::tuple<index_t, index_t, index_t> CubeBase<_Derived>::getSizes() const noexcept {
   return std::make_tuple(nrow_, ncol_, npage_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the size.
+///
+template <class _Derived> template <index_t _dim>
+index_t CubeBase<_Derived>::getSize() const noexcept {
+  static_assert(_dim >= 0 && _dim < 3, "Invalid dimension!");
+  return (_dim == 0) ? size0_ :
+        ((_dim == 1) ? size1_ : size2_);
 }
 
 }  // namespace isvd

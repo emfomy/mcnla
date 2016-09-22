@@ -103,8 +103,8 @@ class CooMatrix
 
   using MatrixBaseType::nrow_;
   using MatrixBaseType::ncol_;
+  using MatrixBaseType::size0_;
   using MatrixBaseType::size1_;
-  using MatrixBaseType::size2_;
   using CooBaseType::nnz_;
   using CooBaseType::offset_;
   using CooBaseType::data_;
@@ -115,8 +115,12 @@ class CooMatrix
   inline CooMatrix() noexcept;
   inline CooMatrix( const index_t ncol, const index_t nrow ) noexcept;
   inline CooMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
-  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t capability, const index_t offset = 0 ) noexcept;
-  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capability, const index_t offset = 0 ) noexcept;
+  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t capability ) noexcept;
+  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capability ) noexcept;
+  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
+                    const index_t capability, const index_t offset = 0 ) noexcept;
+  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t nnz,
+                    const index_t capability, const index_t offset = 0 ) noexcept;
   inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz, const ValuePtrType &value,
                     const IdxPtrType &rowidx, const IdxPtrType &colidx, const index_t offset = 0 ) noexcept;
   inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
@@ -135,10 +139,10 @@ class CooMatrix
   inline const index_t* getRowIdx() const noexcept;
   inline       index_t* getColIdx() noexcept;
   inline const index_t* getColIdx() const noexcept;
+  inline       index_t* getIdx0() noexcept;
+  inline const index_t* getIdx0() const noexcept;
   inline       index_t* getIdx1() noexcept;
   inline const index_t* getIdx1() const noexcept;
-  inline       index_t* getIdx2() noexcept;
-  inline const index_t* getIdx2() const noexcept;
 
   // Gets element
   inline ScalarType getElem( const index_t rowidx, const index_t colidx ) const noexcept;

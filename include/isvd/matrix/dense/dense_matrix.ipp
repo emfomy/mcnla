@@ -34,8 +34,8 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t ncol
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(size1_ * size2_),
-    pitch_(size1_) {
+    DenseBaseType(size0_ * size1_),
+    pitch_(size0_) {
   assert(pitch_ > 0);
 }
 
@@ -58,9 +58,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t pitch
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(pitch * size2_),
+    DenseBaseType(pitch * size1_),
     pitch_(pitch) {
-  assert(pitch_ >= size1_);
+  assert(pitch_ >= size0_);
   assert(pitch_ > 0);
 }
 
@@ -88,9 +88,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(capability, offset),
     pitch_(pitch) {
-  assert(pitch_ >= size1_);
+  assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(capability >= pitch_ * size2_ - (pitch_-size1_) + offset_);
+  assert(capability >= pitch_ * size1_ - (pitch_-size0_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,9 +119,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(value, offset),
     pitch_(pitch) {
-  assert(pitch_ >= size1_);
+  assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapability() >= pitch_ * size2_ - (pitch_-size1_) + offset_);
+  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,9 +138,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(data, offset),
     pitch_(pitch) {
-  assert(pitch_ >= size1_);
+  assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapability() >= pitch_ * size2_ - (pitch_-size1_) + offset_);
+  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +208,7 @@ index_t DenseMatrix<_Scalar, _layout>::getPitch() const noexcept { return pitch_
 ///
 template <typename _Scalar, Layout _layout>
 bool DenseMatrix<_Scalar, _layout>::isShrunk() const noexcept {
-  return (size1_ == pitch_);
+  return (size0_ == pitch_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,7 +286,7 @@ typename DenseMatrix<_Scalar, _layout>::IteratorType DenseMatrix<_Scalar, _layou
 ) noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
-  auto itidx = isColMajor(_layout) ? (rowidx + colidx * size1_) : (colidx + rowidx * size1_);
+  auto itidx = isColMajor(_layout) ? (rowidx + colidx * size0_) : (colidx + rowidx * size0_);
   return IteratorType(this, itidx);
 }
 
@@ -300,7 +300,7 @@ typename DenseMatrix<_Scalar, _layout>::ConstIteratorType DenseMatrix<_Scalar, _
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colidx >= 0 && colidx < ncol_);
-  auto itidx = isColMajor(_layout) ? (rowidx + colidx * size1_) : (colidx + rowidx * size1_);
+  auto itidx = isColMajor(_layout) ? (rowidx + colidx * size0_) : (colidx + rowidx * size0_);
   return ConstIteratorType(this, itidx);
 }
 
@@ -563,7 +563,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
-  return DenseVector<_Scalar>(pitch_ * size2_, 1, data_, getPos(0, 0) + offset_);
+  return DenseVector<_Scalar>(pitch_ * size1_, 1, data_, getPos(0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -571,7 +571,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noexcept {
-  return DenseVector<_Scalar>(pitch_ * size2_, 1, data_, getPos(0, 0) + offset_);
+  return DenseVector<_Scalar>(pitch_ * size1_, 1, data_, getPos(0, 0) + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
