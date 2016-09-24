@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall -Wextra -Wpedantic" PARENT_SCOPE)
 # MKL
 set(ISVD_USE_MKL false CACHE PATH "Uses MKL as BLAS and LAPACK.")
 if(ISVD_USE_MKL)
-  set(DEFS ${DEFS} "-DISVD_USE_MKL")
+  set(DEFS ${DEFS} "ISVD_USE_MKL")
 
   if(NOT DEFINED MKLROOT)
     set(MKLROOT "$ENV{MKLROOT}")

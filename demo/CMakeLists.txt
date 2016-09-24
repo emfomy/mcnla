@@ -4,10 +4,10 @@
 add_executable(demo demo.cpp)
 include_directories("${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
 include_directories(SYSTEM ${INCS})
-add_definitions(${DEFS})
 target_link_libraries(demo ${LIBS})
-set_target_properties(demo PROPERTIES COMPILE_FLAGS ${COMFLGS})
-set_target_properties(demo PROPERTIES LINK_FLAGS    ${LNKFLGS})
+set_target_properties(demo PROPERTIES COMPILE_DEFINITIONS ${DEFS})
+set_target_properties(demo PROPERTIES COMPILE_FLAGS       ${COMFLGS})
+set_target_properties(demo PROPERTIES LINK_FLAGS          ${LNKFLGS})
 
 # Add rule 'run'
 add_custom_target(

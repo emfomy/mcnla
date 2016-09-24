@@ -24,9 +24,7 @@ else()
 endif()
 
 # Add subdirectories
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
-  add_subdirectory(cmake)
-endif()
+add_subdirectory(cmake)
 add_subdirectory(include)
 add_subdirectory(doxygen)
 if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
