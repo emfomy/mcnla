@@ -234,6 +234,36 @@ void CooTuple<_ndim, _Scalar, _Index>::operator()( const __Scalar value, const _
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
+///
+template <index_t _ndim, typename _Scalar, typename _Index>
+_Scalar& CooTuple<_ndim, _Scalar, _Index>::getValue() noexcept { return std::get<_ndim>(*this); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValue
+///
+template <index_t _ndim, typename _Scalar, typename _Index>
+const _Scalar& CooTuple<_ndim, _Scalar, _Index>::getValue() const noexcept { return std::get<_ndim>(*this); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw index array.
+///
+template <index_t _ndim, typename _Scalar, typename _Index> template <index_t _dim>
+_Index& CooTuple<_ndim, _Scalar, _Index>::getIdx() noexcept {
+  static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
+  return std::get<_dim>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdx
+///
+template <index_t _ndim, typename _Scalar, typename _Index> template <index_t _dim>
+const _Index& CooTuple<_ndim, _Scalar, _Index>::getIdx() const noexcept {
+  static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
+  return std::get<_dim>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Makes a COO tuple
 ///
 /// @param  idx    The first index (idx0).

@@ -21,7 +21,8 @@ namespace isvd {
 template <typename __Scalar, typename __Index, class __Vector>
 std::ostream& operator<< ( std::ostream &out, const CooVectorIteratorBase<__Scalar, __Index, __Vector> &iterator ) {
   const index_t width = log10(iterator.container_->getLength())+1;
-  return out << "(" << std::setw(width) << iterator.getIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
+  return out << "(" << std::setw(width)     << iterator.getIdx()   << ")  "
+                    << std::setw(ios_width) << iterator.getValue() << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

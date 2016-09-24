@@ -27,7 +27,7 @@ namespace blas {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::detail::gemm
+/// @copydoc  isvd::blas::gemm
 ///
 //@{
 template <TransOption _transa = TransOption::NORMAL,
@@ -78,7 +78,7 @@ inline void gemm(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::detail::gemm
+/// @brief  Computes a matrix-matrix product with general matrices.
 ///
 //@{
 template <TransOption _transa = isvd::TransOption::NORMAL,

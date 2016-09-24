@@ -161,6 +161,12 @@ class CooTuple : public detail::CooTupleBase<_ndim, _Scalar&, _Index&> {
   template <typename __Scalar, typename... _Args>
   inline void operator()( const __Scalar value, const _Args... args ) noexcept;
 
+  // Gets data
+  inline       _Scalar& getValue() noexcept;
+  inline const _Scalar& getValue() const noexcept;
+  template <index_t _dim> inline       _Index& getIdx() noexcept;
+  template <index_t _dim> inline const _Index& getIdx() const noexcept;
+
   // Makes
   template <typename __Index, typename... __Args>
   friend inline CooTuple<sizeof...(__Args)+1, void*,    __Index>

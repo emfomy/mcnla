@@ -9,6 +9,7 @@
 #define ISVD_BLAS_ROUTINE_HPP_
 
 #include <isvd/blas/routine/copy.hpp>
+#include <isvd/blas/routine/copy_coo.hpp>
 #include <isvd/blas/routine/scal.hpp>
 #include <isvd/blas/routine/iamax.hpp>
 #include <isvd/blas/routine/iamin.hpp>

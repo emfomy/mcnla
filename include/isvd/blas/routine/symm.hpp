@@ -22,7 +22,7 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::detail::symm
+/// @brief  Computes a matrix-matrix product where one input matrix is symmetric/Hermitian.
 ///
 //@{
 template <SideOption _side,

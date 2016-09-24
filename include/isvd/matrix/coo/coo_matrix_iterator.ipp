@@ -23,9 +23,9 @@ std::ostream& operator<< ( std::ostream &out, const CooMatrixIteratorBase<__Scal
   const index_t width_r = log10(iterator.container_->getNrow())+1;
   const index_t width_c = log10(iterator.container_->getNcol())+1;
   const index_t width   = std::max(width_r, width_c);
-  return out << "(" << std::setw(width) << iterator.getRowIdx() << ", "
-                    << std::setw(width) << iterator.getColIdx() << ")  "
-                    << std::setw(ios_width) << iterator.getValue() << std::endl;
+  return out << "(" << std::setw(width)     << iterator.getRowIdx() << ", "
+                    << std::setw(width)     << iterator.getColIdx() << ")  "
+                    << std::setw(ios_width) << iterator.getValue()  << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

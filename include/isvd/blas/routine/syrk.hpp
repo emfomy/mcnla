@@ -22,7 +22,7 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::detail::syrk
+/// @brief  Performs a symmetric/Hermitian rank-k update.
 ///
 //@{
 template <TransOption _trans = TransOption::NORMAL,
