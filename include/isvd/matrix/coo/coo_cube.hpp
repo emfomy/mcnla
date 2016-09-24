@@ -145,10 +145,10 @@ class CooCube
   friend inline std::ostream& operator<<( std::ostream &out, const CooCube<__Scalar, __layout> &cube );
 
   // Gets index array
-  inline       index_t* getRowIdx() noexcept;
-  inline const index_t* getRowIdx() const noexcept;
-  inline       index_t* getColIdx() noexcept;
-  inline const index_t* getColIdx() const noexcept;
+  template <TransOption _trans = TransOption::NORMAL> inline       index_t* getRowIdx() noexcept;
+  template <TransOption _trans = TransOption::NORMAL> inline const index_t* getRowIdx() const noexcept;
+  template <TransOption _trans = TransOption::NORMAL> inline       index_t* getColIdx() noexcept;
+  template <TransOption _trans = TransOption::NORMAL> inline const index_t* getColIdx() const noexcept;
   inline       index_t* getPageIdx() noexcept;
   inline const index_t* getPageIdx() const noexcept;
 

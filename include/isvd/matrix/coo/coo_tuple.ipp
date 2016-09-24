@@ -226,10 +226,18 @@ bool CooTuple<_ndim, _Scalar, _Index>::operator>=( const CooTuple<_ndim, __Index
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  setTuple
+///
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename... _Args>
+void CooTuple<_ndim, _Scalar, _Index>::operator()( const _Scalar value, const _Args... args ) noexcept {
+   setTuple(value, args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Assigns values.
 ///
-template <index_t _ndim, typename _Scalar, typename _Index> template <typename __Scalar, typename... _Args>
-void CooTuple<_ndim, _Scalar, _Index>::operator()( const __Scalar value, const _Args... args ) noexcept {
+template <index_t _ndim, typename _Scalar, typename _Index> template <typename... _Args>
+void CooTuple<_ndim, _Scalar, _Index>::setTuple( const _Scalar value, const _Args... args ) noexcept {
   BaseType::operator=(std::make_tuple(args..., value));
 }
 

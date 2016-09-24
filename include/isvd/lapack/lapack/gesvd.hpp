@@ -15,22 +15,22 @@
 #include <isvd/plugin/lapack_plugin_begin.h>
 
 // Computes the singular value decomposition of a general rectangular matrix.
-extern void sgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                     FORTRAN_REAL4 a, const FORTRAN_INT8 lda, FORTRAN_REAL4 s, FORTRAN_REAL4 u, const FORTRAN_INT8 ldu,
-                     FORTRAN_REAL4 vt, const FORTRAN_INT8 ldvt, FORTRAN_REAL4 work, const FORTRAN_INT8 lwork,
-                                          FORTRAN_INT8 info );
-extern void dgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                     FORTRAN_REAL8 a, const FORTRAN_INT8 lda, FORTRAN_REAL8 s, FORTRAN_REAL8 u, const FORTRAN_INT8 ldu,
-                     FORTRAN_REAL8 vt, const FORTRAN_INT8 ldvt, FORTRAN_REAL8 work, const FORTRAN_INT8 lwork,
-                                          FORTRAN_INT8 info );
-extern void cgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                     FORTRAN_COMP4 a, const FORTRAN_INT8 lda, FORTRAN_REAL4 s, FORTRAN_COMP4 u, const FORTRAN_INT8 ldu,
-                     FORTRAN_COMP4 vt, const FORTRAN_INT8 ldvt, FORTRAN_COMP4 work, const FORTRAN_INT8 lwork,
-                     FORTRAN_REAL4 rwork, FORTRAN_INT8 info );
-extern void zgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                     FORTRAN_COMP8 a, const FORTRAN_INT8 lda, FORTRAN_REAL8 s, FORTRAN_COMP8 u, const FORTRAN_INT8 ldu,
-                     FORTRAN_COMP8 vt, const FORTRAN_INT8 ldvt, FORTRAN_COMP8 work, const FORTRAN_INT8 lwork,
-                     FORTRAN_REAL8 rwork, FORTRAN_INT8 info );
+extern void sgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT m, const FORTRAN_INT n,
+                     FORTRAN_REAL4 a, const FORTRAN_INT lda, FORTRAN_REAL4 s, FORTRAN_REAL4 u, const FORTRAN_INT ldu,
+                     FORTRAN_REAL4 vt, const FORTRAN_INT ldvt, FORTRAN_REAL4 work, const FORTRAN_INT lwork,
+                                          FORTRAN_INT info );
+extern void dgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT m, const FORTRAN_INT n,
+                     FORTRAN_REAL8 a, const FORTRAN_INT lda, FORTRAN_REAL8 s, FORTRAN_REAL8 u, const FORTRAN_INT ldu,
+                     FORTRAN_REAL8 vt, const FORTRAN_INT ldvt, FORTRAN_REAL8 work, const FORTRAN_INT lwork,
+                                          FORTRAN_INT info );
+extern void cgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT m, const FORTRAN_INT n,
+                     FORTRAN_COMP4 a, const FORTRAN_INT lda, FORTRAN_REAL4 s, FORTRAN_COMP4 u, const FORTRAN_INT ldu,
+                     FORTRAN_COMP4 vt, const FORTRAN_INT ldvt, FORTRAN_COMP4 work, const FORTRAN_INT lwork,
+                     FORTRAN_REAL4 rwork, FORTRAN_INT info );
+extern void zgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT m, const FORTRAN_INT n,
+                     FORTRAN_COMP8 a, const FORTRAN_INT lda, FORTRAN_REAL8 s, FORTRAN_COMP8 u, const FORTRAN_INT ldu,
+                     FORTRAN_COMP8 vt, const FORTRAN_INT ldvt, FORTRAN_COMP8 work, const FORTRAN_INT lwork,
+                     FORTRAN_REAL8 rwork, FORTRAN_INT info );
 
 #include <isvd/plugin/lapack_plugin_end.h>
 

@@ -27,7 +27,7 @@ namespace blas {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::gemm
+/// @brief  Computes a matrix-matrix product with general matrices.
 ///
 //@{
 template <TransOption _transa = TransOption::NORMAL,
@@ -40,8 +40,8 @@ inline void gemm(
     const _Scalar beta,
           DenseMatrix<_Scalar, Layout::COLMAJOR> &c
 ) noexcept {
-  const TransOption transa = isColMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
-  const TransOption transb = isColMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
+  constexpr TransOption transa = isColMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
+  constexpr TransOption transb = isColMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
 
   assert(c.getNrow()                   == a.template getNrow<_transa>());
   assert(c.getNcol()                   == b.template getNcol<_transb>());
@@ -62,8 +62,8 @@ inline void gemm(
     const _Scalar beta,
           DenseMatrix<_Scalar, Layout::ROWMAJOR> &c
 ) noexcept {
-  const TransOption transa = isRowMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
-  const TransOption transb = isRowMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
+  constexpr TransOption transa = isRowMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
+  constexpr TransOption transb = isRowMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
 
   assert(c.getNrow()                   == a.template getNrow<_transa>());
   assert(c.getNcol()                   == b.template getNcol<_transb>());

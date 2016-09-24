@@ -15,20 +15,20 @@
 #include <isvd/plugin/blas_plugin_begin.h>
 
 // Performs a symmetric rank-k update.
-extern void ssyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT8 lda, const FORTRAN_REAL4 beta,
-                    FORTRAN_REAL4 c, const FORTRAN_INT8 ldc );
-extern void dsyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT8 lda, const FORTRAN_REAL8 beta,
-                    FORTRAN_REAL8 c, const FORTRAN_INT8 ldc );
+extern void ssyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT lda, const FORTRAN_REAL4 beta,
+                    FORTRAN_REAL4 c, const FORTRAN_INT ldc );
+extern void dsyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT lda, const FORTRAN_REAL8 beta,
+                    FORTRAN_REAL8 c, const FORTRAN_INT ldc );
 
 // Performs a Hermitian rank-k update.
-extern void cherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT8 lda, const FORTRAN_COMP4 beta,
-                    FORTRAN_COMP4 c, const FORTRAN_INT8 ldc );
-extern void zherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT8 lda, const FORTRAN_COMP8 beta,
-                    FORTRAN_COMP8 c, const FORTRAN_INT8 ldc );
+extern void cherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT lda, const FORTRAN_COMP4 beta,
+                    FORTRAN_COMP4 c, const FORTRAN_INT ldc );
+extern void zherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT lda, const FORTRAN_COMP8 beta,
+                    FORTRAN_COMP8 c, const FORTRAN_INT ldc );
 
 #include <isvd/plugin/blas_plugin_end.h>
 

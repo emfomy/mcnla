@@ -148,7 +148,7 @@ _Derived& DenseIteratorBase<_Derived>::operator++() noexcept {
   assert(container_ != nullptr);
 
   const auto nelem = container_->getNelem();
-  if ( ++itidx_ >= nelem ) {
+  if ( ++itidx_ > nelem ) {
     itidx_ = nelem;
   }
   return derived();
@@ -161,9 +161,8 @@ template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator--() noexcept {
   assert(container_ != nullptr);
 
-  const auto nelem = container_->getNelem();
-  if ( --itidx_ >= nelem ) {
-    itidx_ = nelem;
+  if ( --itidx_ < 0 ) {
+    itidx_ = 0;
   }
   return derived();
 }
@@ -194,9 +193,10 @@ _Derived DenseIteratorBase<_Derived>::operator--( int ) noexcept {
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
   assert(container_ != nullptr);
+  assert(num >= 0);
 
   const auto nelem = container_->getNelem();
-  if ( (itidx_+=num) >= nelem ) {
+  if ( (itidx_+=num) > nelem ) {
     itidx_ = nelem;
   }
   return derived();
@@ -208,10 +208,10 @@ _Derived& DenseIteratorBase<_Derived>::operator+=( const index_t num ) noexcept 
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
   assert(container_ != nullptr);
+  assert(num >= 0);
 
-  const auto nelem = container_->getNelem();
-  if ( (itidx_-=num) >= nelem ) {
-    itidx_ = nelem;
+  if ( (itidx_-=num) < 0 ) {
+    itidx_ = 0;
   }
   return derived();
 }

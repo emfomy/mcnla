@@ -17,10 +17,10 @@
 #include <isvd/plugin/blas_plugin_begin.h>
 
 // Finds the index of the element with minimum absolute value.
-extern CPP_INT8 isamin_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 idamin_( const FORTRAN_INT8 n, const FORTRAN_REAL8 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 icamin_( const FORTRAN_INT8 n, const FORTRAN_COMP4 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 izamin_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_INT8 incx );
+extern CPP_INT isamin_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
+extern CPP_INT idamin_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
+extern CPP_INT icamin_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
+extern CPP_INT izamin_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRAN_INT incx );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -53,6 +53,7 @@ namespace detail {
 ///
 //@{
 #ifdef ISVD_USE_MKL
+
 static inline index_t iamin(
     const index_t n, const float* x, const index_t incx
 ) noexcept { return isamin_(&n, x, &incx) - 1; }
@@ -65,7 +66,9 @@ static inline index_t iamin(
 static inline index_t iamin(
     const index_t n, const std::complex<double>* x, const index_t incx
 ) noexcept { return izamin_(&n, x, &incx) - 1; }
+
 #else  // ISVD_USE_MKL
+
 template <typename _Scalar>
 inline index_t iamin(
     const index_t n, const _Scalar* x, const index_t incx
@@ -79,6 +82,7 @@ inline index_t iamin(
   }
   return idamin;
 }
+
 #endif  // ISVD_USE_MKL
 //@}
 

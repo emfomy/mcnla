@@ -136,7 +136,7 @@ _Derived& CooIteratorBase<_Derived>::operator++() noexcept {
   assert(container_ != nullptr);
 
   const auto nnz = container_->getNnz();
-  if ( ++itidx_ >= nnz ) {
+  if ( ++itidx_ > nnz ) {
     itidx_ = nnz;
   }
   return derived();
@@ -149,9 +149,8 @@ template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::operator--() noexcept {
   assert(container_ != nullptr);
 
-  const auto nnz = container_->getNnz();
-  if ( --itidx_ >= nnz ) {
-    itidx_ = nnz;
+  if ( --itidx_ < 0 ) {
+    itidx_ = 0;
   }
   return derived();
 }
@@ -182,9 +181,10 @@ _Derived CooIteratorBase<_Derived>::operator--( int ) noexcept {
 template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
   assert(container_ != nullptr);
+  assert(num >= 0);
 
   const auto nnz = container_->getNnz();
-  if ( (itidx_+=num) >= nnz ) {
+  if ( (itidx_+=num) > nnz ) {
     itidx_ = nnz;
   }
   return derived();
@@ -196,10 +196,10 @@ _Derived& CooIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
 template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
   assert(container_ != nullptr);
+  assert(num >= 0);
 
-  const auto nnz = container_->getNnz();
-  if ( (itidx_-=num) >= nnz ) {
-    itidx_ = nnz;
+  if ( (itidx_-=num) < 0 ) {
+    itidx_ = 0;
   }
   return derived();
 }

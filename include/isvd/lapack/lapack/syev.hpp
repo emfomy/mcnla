@@ -15,20 +15,20 @@
 #include <isvd/plugin/lapack_plugin_begin.h>
 
 // Computes all eigenvalues and, optionally, eigenvectors of a symmetric matrix.
-extern void ssyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_REAL4 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL4 w, FORTRAN_REAL4 work, const FORTRAN_INT8 lwork,
-                    FORTRAN_INT8 info );
-extern void dsyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_REAL8 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL8 w, FORTRAN_REAL8 work, const FORTRAN_INT8 lwork,
-                    FORTRAN_INT8 info );
+extern void ssyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_REAL4 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL4 w, FORTRAN_REAL4 work, const FORTRAN_INT lwork,
+                    FORTRAN_INT info );
+extern void dsyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_REAL8 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL8 w, FORTRAN_REAL8 work, const FORTRAN_INT lwork,
+                    FORTRAN_INT info );
 
 // Computes all eigenvalues and, optionally, eigenvectors of a Hermitian matrix.
-extern void cheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_COMP4 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL4 w, FORTRAN_COMP4 work, const FORTRAN_INT8 lwork, FORTRAN_REAL4 rwork,
-                    FORTRAN_INT8 info );
-extern void zheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_COMP8 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL8 w, FORTRAN_COMP8 work, const FORTRAN_INT8 lwork, FORTRAN_REAL8 rwork,
-                    FORTRAN_INT8 info );
+extern void cheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_COMP4 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL4 w, FORTRAN_COMP4 work, const FORTRAN_INT lwork, FORTRAN_REAL4 rwork,
+                    FORTRAN_INT info );
+extern void zheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_COMP8 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL8 w, FORTRAN_COMP8 work, const FORTRAN_INT lwork, FORTRAN_REAL8 rwork,
+                    FORTRAN_INT info );
 
 #include <isvd/plugin/lapack_plugin_end.h>
 

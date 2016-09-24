@@ -174,33 +174,33 @@ std::ostream& operator<< ( std::ostream &out, const CooMatrix<__Scalar, __layout
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the row index array.
 ///
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Layout _layout> template <TransOption _trans>
 index_t* CooMatrix<_Scalar, _layout>::getRowIdx() noexcept {
-  return CooBaseType::template getIdx<isColMajor(_layout) ? 0 : 1>();
+  return CooBaseType::template getIdx<(isColMajor(_layout) ^ !isTranspose(_trans)) ? 0 : 1>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getRowIdx
 ///
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Layout _layout> template <TransOption _trans>
 const index_t* CooMatrix<_Scalar, _layout>::getRowIdx() const noexcept {
-  return CooBaseType::template getIdx<isColMajor(_layout) ? 0 : 1>();
+  return CooBaseType::template getIdx<(isColMajor(_layout) ^ !isTranspose(_trans)) ? 0 : 1>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the column index array.
 ///
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Layout _layout> template <TransOption _trans>
 index_t* CooMatrix<_Scalar, _layout>::getColIdx() noexcept {
-  return CooBaseType::template getIdx<isColMajor(_layout) ? 1 : 0>();
+  return CooBaseType::template getIdx<(isColMajor(_layout) ^ !isTranspose(_trans)) ? 1 : 0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getColIdx
 ///
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Layout _layout> template <TransOption _trans>
 const index_t* CooMatrix<_Scalar, _layout>::getColIdx() const noexcept {
-  return CooBaseType::template getIdx<isColMajor(_layout) ? 1 : 0>();
+  return CooBaseType::template getIdx<(isColMajor(_layout) ^ !isTranspose(_trans)) ? 1 : 0>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

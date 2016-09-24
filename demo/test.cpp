@@ -13,28 +13,23 @@
 ///
 int main( int argc, char **argv ) {
 
-  isvd::CooVector<double> coovec(10, 3, 5);
-  std::cout << coovec << std::endl;
+  isvd::index_t iseed[] = {0, 0, 0, 1};
 
+  isvd::CooMatrix<double> matA(3, 3, 24, 50);
+  isvd::DenseMatrix<double> matB(3, 4), matC(3, 4);
+
+  matA.setNnz(std::min(matA.getNrow(), matA.getNcol()));
   int i = 0;
-  for ( auto tuple : coovec ) {
+  for ( auto tuple : matA ) {
+    tuple(i, i, i);
     ++i;
-    tuple(i, 7-i*2);
   }
-  std::cout << coovec << std::endl;
+  std::cout << matA << std::endl;
 
-  coovec.sort();
-  std::cout << coovec << std::endl;
+  isvd::lapack::larnv<3>(matB.vectorize(), iseed);
+  std::cout << matB << std::endl;
 
-  isvd::DenseVector<double> denvec(10);
-  std::cout << denvec << std::endl;
-
-  for ( auto &value : denvec ) {
-    value = ++i;
-  }
-  std::cout << denvec << std::endl;
-
-  isvd::blas::copy(coovec, denvec);
-  std::cout << denvec << std::endl;
+  isvd::blas::gemm<isvd::TransOption::TRANS>(1.0, matA, matB, 0.0, matC);
+  std::cout << matC << std::endl;
 
 }

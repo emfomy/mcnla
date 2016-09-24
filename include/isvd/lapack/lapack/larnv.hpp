@@ -15,10 +15,10 @@
 #include <isvd/plugin/lapack_plugin_begin.h>
 
 // Returns a vector of random numbers from a uniform or normal distribution.
-extern void slarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_REAL4 x );
-extern void dlarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_REAL8 x );
-extern void clarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_COMP4 x );
-extern void zlarnv_( const FORTRAN_INT8 idist, FORTRAN_INT8 iseed, const FORTRAN_INT8 n, FORTRAN_COMP8 x );
+extern void slarnv_( const FORTRAN_INT idist, FORTRAN_INT iseed, const FORTRAN_INT n, FORTRAN_REAL4 x );
+extern void dlarnv_( const FORTRAN_INT idist, FORTRAN_INT iseed, const FORTRAN_INT n, FORTRAN_REAL8 x );
+extern void clarnv_( const FORTRAN_INT idist, FORTRAN_INT iseed, const FORTRAN_INT n, FORTRAN_COMP4 x );
+extern void zlarnv_( const FORTRAN_INT idist, FORTRAN_INT iseed, const FORTRAN_INT n, FORTRAN_COMP8 x );
 
 #include <isvd/plugin/lapack_plugin_end.h>
 

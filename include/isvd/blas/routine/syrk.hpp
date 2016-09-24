@@ -33,7 +33,7 @@ inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
-  const TransOption trans = isColMajor(_layout) ? _trans : _trans ^ TransOption::TRANS;
+  constexpr TransOption trans = isColMajor(_layout) ? _trans : _trans ^ TransOption::TRANS;
 
   assert(c.getNrow() == c.getNcol());
   assert(c.getNrow() == a.template getNrow<_trans>());

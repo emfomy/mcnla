@@ -158,8 +158,10 @@ class CooTuple : public detail::CooTupleBase<_ndim, _Scalar&, _Index&> {
   inline bool operator>=( const CooTuple<_ndim, __Index, __Scalar> &other ) const noexcept;
 
   // Assigns value
-  template <typename __Scalar, typename... _Args>
-  inline void operator()( const __Scalar value, const _Args... args ) noexcept;
+  template <typename... _Args>
+  inline void operator()( const _Scalar value, const _Args... args ) noexcept;
+  template <typename... _Args>
+  inline void setTuple( const _Scalar value, const _Args... args ) noexcept;
 
   // Gets data
   inline       _Scalar& getValue() noexcept;
