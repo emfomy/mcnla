@@ -42,7 +42,7 @@ void SketcherBase<_Derived>::sketch(
 /// @copydoc  isvd::Solver::getSketcherName
 ///
 template <class _Derived>
-const char* SketcherBase<_Derived>::getName() const noexcept {
+constexpr const char* SketcherBase<_Derived>::getName() const noexcept {
   return this->derived().getNameImpl();
 }
 

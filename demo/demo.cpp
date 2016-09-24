@@ -17,7 +17,8 @@ using ScalarType = double;
 
 void create( isvd::DenseMatrix<ScalarType> &matrix_a, isvd::DenseMatrix<ScalarType> &matrix_u_true,
              const isvd::index_t rank, isvd::index_t seed[4] ) noexcept;
-void check( const isvd::DenseMatrix<ScalarType> &matrix_u, const isvd::DenseMatrix<ScalarType> &matrix_u_true,
+template <isvd::Layout _layout>
+void check( const isvd::DenseMatrix<ScalarType, _layout> &matrix_u, const isvd::DenseMatrix<ScalarType> &matrix_u_true,
             ScalarType &smax, ScalarType &smin ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,8 +174,9 @@ void create(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Check the result
 ///
+template <isvd::Layout _layout>
 void check(
-    const isvd::DenseMatrix<ScalarType> &matrix_u,
+    const isvd::DenseMatrix<ScalarType, _layout> &matrix_u,
     const isvd::DenseMatrix<ScalarType> &matrix_u_true,
           ScalarType &smax,
           ScalarType &smin

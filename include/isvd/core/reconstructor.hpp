@@ -13,5 +13,7 @@
 
 #include <isvd/core/reconstructor/standard_reconstructor.hpp>
 #include <isvd/core/reconstructor/standard_reconstructor.ipp>
+#include <isvd/core/reconstructor/dummy_reconstructor.hpp>
+#include <isvd/core/reconstructor/dummy_reconstructor.ipp>
 
 #endif  // ISVD_CORE_RECONSTRUCTOR_HPP_

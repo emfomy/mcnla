@@ -50,11 +50,13 @@ class IntegratorBase : protected CrtpBase<_Derived, IntegratorBase<_Derived>> {
   inline void integrate() noexcept;
 
   // Gets name
-  inline const char* getName() const noexcept;
+  inline constexpr const char* getName() const noexcept;
 
   // Gets matrices
-  inline DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() noexcept;
-  inline DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() noexcept;
+  inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() noexcept;
+  inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() const noexcept;
+  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() noexcept;
+  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() const noexcept;
 
 };
 

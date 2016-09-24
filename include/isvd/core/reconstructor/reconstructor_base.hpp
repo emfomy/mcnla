@@ -50,12 +50,12 @@ class ReconstructorBase : protected CrtpBase<_Derived, ReconstructorBase<_Derive
   inline void reconstruct( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
-  inline const char* getName() const noexcept;
+  inline constexpr const char* getName() const noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectors() const noexcept;
+  inline const DenseVector<RealScalarType>& getVectorS() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixU() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVt() const noexcept;
 
 };
 

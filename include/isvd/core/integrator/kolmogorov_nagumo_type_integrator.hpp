@@ -67,7 +67,7 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
-  const char *name_ = "Kolmogorov-Nagumo-Type Integrator";
+  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
 
   /// The number of rows of the matrix per MPI node.
   index_t nrow_each_;
@@ -131,11 +131,13 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
   void integrateImpl() noexcept;
 
   // Gets name
-  inline const char* getNameImpl() const noexcept;
+  inline constexpr const char* getNameImpl() const noexcept;
 
   // Gets matrices
-  inline DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
-  inline DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() noexcept;
+  inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
+  inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() const noexcept;
+  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() noexcept;
+  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() const noexcept;
 
 };
 

@@ -1,18 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/core/sketcher/column_sampling_sketcher.hpp
-/// @brief   The column sampling sketcher.
+/// @file    include/isvd/core/reconstructor/dummy_reconstructor.hpp
+/// @brief   The dummy reconstructor.
 ///
 /// @author  Mu Yang <emfomy@gmail.com>
 ///
 
-#ifndef ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
-#define ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
+#ifndef ISVD_CORE_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_HPP_
+#define ISVD_CORE_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_HPP_
 
 #include <isvd/isvd.hpp>
-#include <random>
-#include <isvd/blas.hpp>
-#include <isvd/lapack.hpp>
-#include <isvd/core/sketcher/sketcher_base.hpp>
+#include <isvd/core/reconstructor/reconstructor_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
@@ -20,7 +17,7 @@
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class ColumnSamplingSketcher;
+template <class _Matrix> class DummyReconstructor;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,30 +26,30 @@ template <class _Matrix> class ColumnSamplingSketcher;
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The column sampling sketcher traits.
+/// The dummy reconstructor traits.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<ColumnSamplingSketcher<_Matrix>> {
+struct Traits<DummyReconstructor<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The column sampling sketcher.
+/// The dummy reconstructor.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matrix>> {
+class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>> {
 
-  friend SketcherBase<ColumnSamplingSketcher<_Matrix>>;
+  friend ReconstructorBase<DummyReconstructor<_Matrix>>;
 
  private:
 
-  using BaseType = SketcherBase<ColumnSamplingSketcher<_Matrix>>;
+  using BaseType = ReconstructorBase<DummyReconstructor<_Matrix>>;
 
  public:
 
@@ -68,41 +65,31 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
-  static constexpr const char* name_= "Column Sampling Sketcher";
-
-  /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
-
-  /// The empty matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
-
-  /// The GESVD driver
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
-
-  /// The random generator
-  std::default_random_engine random_generator_;
-
-  /// The uniform integer distribution
-  std::uniform_int_distribution<index_t> random_distribution_;
+  static constexpr const char* name_= "Dummy Reconstructor";
 
  public:
 
   // Constructor
-  inline ColumnSamplingSketcher( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline DummyReconstructor( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 
   // Initializes
   void initializeImpl() noexcept;
 
-  // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
+  // Reconstructs
+  void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
   inline constexpr const char* getNameImpl() const noexcept;
+
+  // Gets matrices
+  inline const DenseVector<RealScalarType>& getVectorSImpl() const noexcept = delete;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixUImpl() const noexcept = delete;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept = delete;
 
 };
 
 }  // namespace isvd
 
-#endif  // ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
+#endif  // ISVD_CORE_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_HPP_

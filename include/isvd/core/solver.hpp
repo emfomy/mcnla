@@ -101,14 +101,15 @@ class Solver {
   void compute( const _Matrix &matrix ) noexcept;
 
   // Gets name
-  inline const char* getSketcherName() const noexcept;
-  inline const char* getIntegratorName() const noexcept;
-  inline const char* getReconstructorName() const noexcept;
+  inline constexpr const char* getSketcherName() const noexcept;
+  inline constexpr const char* getIntegratorName() const noexcept;
+  inline constexpr const char* getReconstructorName() const noexcept;
 
   // Gets matrices
   inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
-  inline const DenseMatrix<ScalarType>& getLeftSingularVectors() const noexcept;
-  inline const DenseMatrix<ScalarType>& getRightSingularVectors() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectors() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getIntegratedOrthonormalBasis() const noexcept;
 
   // Sets value
   inline Solver& setSize( const index_t nrow, const index_t ncol ) noexcept;

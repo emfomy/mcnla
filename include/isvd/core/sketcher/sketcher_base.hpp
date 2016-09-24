@@ -52,7 +52,7 @@ class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
   inline void sketch( const MatrixType &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
 
   // Gets name
-  inline const char* getName() const noexcept;
+  inline constexpr const char* getName() const noexcept;
 
 };
 

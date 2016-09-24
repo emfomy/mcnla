@@ -213,7 +213,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 /// @copydoc  isvd::IntegratorBase::getName
 ///
 template <class _Matrix>
-const char* KolmogorovNagumoTypeIntegrator<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* KolmogorovNagumoTypeIntegrator<_Matrix>::getNameImpl() const noexcept {
   return name_;
 }
 
@@ -228,11 +228,31 @@ DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::IntegratorBase::integrate
+/// @copydoc  isvd::IntegratorBase::getCubeQ
+///
+template <class _Matrix>
+const DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
+    KolmogorovNagumoTypeIntegrator<_Matrix>::getCubeQImpl() const noexcept {
+  assert(parameters_.isInitialized());
+  return cube_q_cut_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::IntegratorBase::getMatrixQc
 ///
 template <class _Matrix>
 DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
     KolmogorovNagumoTypeIntegrator<_Matrix>::getMatrixQcImpl() noexcept {
+  assert(parameters_.isInitialized());
+  return matrix_qc_cut_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::IntegratorBase::getMatrixQc
+///
+template <class _Matrix>
+const DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
+    KolmogorovNagumoTypeIntegrator<_Matrix>::getMatrixQcImpl() const noexcept {
   assert(parameters_.isInitialized());
   return matrix_qc_cut_;
 }

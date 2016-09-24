@@ -67,7 +67,7 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
-  const char *name_ = "Gaussian Projection Sketcher";
+  static constexpr const char* name_= "Gaussian Projection Sketcher";
 
   /// The matrix Omega.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_omega_;
@@ -95,7 +95,7 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   void sketchImpl( const _Matrix &matrix_a, DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q ) noexcept;
 
   // Gets name
-  inline const char* getNameImpl() const noexcept;
+  inline constexpr const char* getNameImpl() const noexcept;
 
 };
 

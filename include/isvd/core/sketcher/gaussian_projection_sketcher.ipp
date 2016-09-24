@@ -56,7 +56,8 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 ) noexcept {
   assert(parameters_.isInitialized());
   assert(matrix_a.getSizes() == std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
-  assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(), parameters_.getNumSketchEach()));
+  assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
+                                                                       parameters_.getNumSketchEach()));
 
   for ( index_t i = 0; i < parameters_.getNumSketchEach(); ++i ) {
     lapack::larnv<3>(matrix_omega_.vectorize(), this->seed_);
@@ -69,7 +70,7 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 /// @copydoc  isvd::SketcherBase::getName
 ///
 template <class _Matrix>
-const char* GaussianProjectionSketcher<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* GaussianProjectionSketcher<_Matrix>::getNameImpl() const noexcept {
   return name_;
 }
 

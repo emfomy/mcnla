@@ -39,7 +39,7 @@ void IntegratorBase<_Derived>::integrate() noexcept { this->derived().integrateI
 /// @copydoc  isvd::Solver::getIntegratorName
 ///
 template <class _Derived>
-const char* IntegratorBase<_Derived>::getName() const noexcept {
+constexpr const char* IntegratorBase<_Derived>::getName() const noexcept {
   return this->derived().getNameImpl();
 }
 
@@ -47,15 +47,35 @@ const char* IntegratorBase<_Derived>::getName() const noexcept {
 /// @brief  Gets the cube Q.
 ///
 template <class _Derived>
-DenseCube<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>& IntegratorBase<_Derived>::getCubeQ() noexcept {
+DenseCube<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::getCubeQ() noexcept {
   return this->derived().getCubeQImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the cube Qc.
+/// @copydoc  getCubeQ
 ///
 template <class _Derived>
-DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>& IntegratorBase<_Derived>::getMatrixQc() noexcept {
+const DenseCube<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::getCubeQ() const noexcept {
+  return this->derived().getCubeQImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the matrix Qc.
+///
+template <class _Derived>
+DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::getMatrixQc() noexcept {
+  return this->derived().getMatrixQcImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getMatrixQc
+///
+template <class _Derived>
+const DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::getMatrixQc() const noexcept {
   return this->derived().getMatrixQcImpl();
 }
 

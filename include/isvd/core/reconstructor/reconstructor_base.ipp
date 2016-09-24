@@ -42,35 +42,35 @@ void ReconstructorBase<_Derived>::reconstruct(
 /// @copydoc  isvd::Solver::getReconstructorName
 ///
 template <class _Derived>
-const char* ReconstructorBase<_Derived>::getName() const noexcept {
+constexpr const char* ReconstructorBase<_Derived>::getName() const noexcept {
   return this->derived().getNameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::Solver::getSingularValues
+/// @brief  Gets the vector S.
 ///
 template <class _Derived>
 const DenseVector<typename ReconstructorBase<_Derived>::RealScalarType>&
-    ReconstructorBase<_Derived>::getSingularValues() const noexcept {
-  return this->derived().getSingularValuesImpl();
+    ReconstructorBase<_Derived>::getVectorS() const noexcept {
+  return this->derived().getVectorSImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::Solver::getLeftSingularVectors
+/// @brief  Gets the matrix U.
 ///
 template <class _Derived>
 const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLMAJOR>&
-    ReconstructorBase<_Derived>::getLeftSingularVectors() const noexcept {
-  return this->derived().getLeftSingularVectorsImpl();
+    ReconstructorBase<_Derived>::getMatrixU() const noexcept {
+  return this->derived().getMatrixUImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::Solver::getRightSingularVectors
+/// @brief  Gets the transpose of the matrix V.
 ///
 template <class _Derived>
 const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLMAJOR>&
-    ReconstructorBase<_Derived>::getRightSingularVectors() const noexcept {
-  return this->derived().getRightSingularVectorsImpl();
+    ReconstructorBase<_Derived>::getMatrixVt() const noexcept {
+  return this->derived().getMatrixVtImpl();
 }
 
 }  // namespace isvd

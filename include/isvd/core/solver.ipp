@@ -70,7 +70,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
 /// @brief  Gets the name of the sketcher.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherName() const noexcept {
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherName() const noexcept {
   return sketcher_.getName();
 }
 
@@ -78,7 +78,7 @@ const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcher
 /// @brief  Gets the name of the integrator.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorName() const noexcept {
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorName() const noexcept {
   return integrator_.getName();
 }
 
@@ -86,35 +86,44 @@ const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegrat
 /// @brief  Gets the name of the reconstructor.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorName() const noexcept {
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorName() const noexcept {
   return reconstructor_.getName();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the singular values.
+/// @brief  Gets the approximate singular values.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::RealScalarType>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSingularValues() const noexcept {
-  return reconstructor_.getSingularValues();
+  return reconstructor_.getVectorS();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the left singular vectors.
+/// @brief  Gets the approximate left singular vectors.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType>&
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getLeftSingularVectors() const noexcept {
-  return reconstructor_.getLeftSingularVectors();
+  return reconstructor_.getMatrixU();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the right singular vectors.
+/// @brief  Gets the approximate right singular vectors.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType>&
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getRightSingularVectors() const noexcept {
-  return reconstructor_.getRightSingularVectors();
+  return reconstructor_.getMatrixVt();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the integrated orthonormal basis of the sketched subspace.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::ROWMAJOR>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
+  return integrator_.getMatrixQc();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

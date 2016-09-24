@@ -67,7 +67,7 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The name.
-  const char *name_ = "Standard Reconstructor";
+  static constexpr const char* name_= "Standard Reconstructor";
 
   /// The matrix W.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;
@@ -75,20 +75,20 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   /// The vector S.
   DenseVector<RealScalarType> vector_s_;
 
-  /// The vector Sl.
-  DenseVector<RealScalarType> vector_sl_;
+  /// The cut vector S.
+  DenseVector<RealScalarType> vector_s_cut_;
 
   /// The matrix U.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_;
 
-  /// The matrix Ul.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_ul_;
+  /// The cut matrix U.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_cut_;
 
   /// The matrix Vt.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_;
 
-  /// The matrix Vlt.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vlt_;
+  /// The cut matrix Vt.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_cut_;
 
   /// The empty vector.
   DenseVector<RealScalarType> vector_real_empty_;
@@ -113,12 +113,12 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
-  inline const char* getNameImpl() const noexcept;
+  inline constexpr const char* getNameImpl() const noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealScalarType>& getSingularValuesImpl() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectorsImpl() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectorsImpl() const noexcept;
+  inline const DenseVector<RealScalarType>& getVectorSImpl() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixUImpl() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept;
 
 };
 
