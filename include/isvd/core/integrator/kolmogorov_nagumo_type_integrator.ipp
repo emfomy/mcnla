@@ -95,7 +95,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto mpi_comm = parameters_.mpi_comm;
   const auto mpi_size = parameters_.mpi_size;
   const auto mpi_root = parameters_.mpi_root;
-  const auto dim_sketch     = parameters_.getDimSketch();
+  const auto dim_sketch    = parameters_.getDimSketch();
   const auto max_iteration = parameters_.getMaxIteration();
   const auto tolerance     = parameters_.getTolerance();
 

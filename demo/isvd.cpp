@@ -23,19 +23,22 @@ using namespace isvd;
 int mpi_size;
 int mpi_rank;
 
+double tolorance = 1e-4;
+
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int seed[4] );
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
-             const double *matrix_a, double *matrices_qit, int seed[4] );
+             const double *matrix_a, double *matrices_qjt, int seed[4] );
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt );
 void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
-void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u, double &smax, double &smin );
+void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
+            double &smax, double &smin, double &smean );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
-  double start_time = 0.0, total_time = 0.0, smax, smin;
+  double start_time = 0.0, total_time = 0.0, smax, smin, smean;
 
   // ====================================================================================================================== //
   // Initialize MPI
@@ -47,7 +50,7 @@ int main( int argc, char **argv ) {
     cout << "iSVD "
          << ISVD_VERSION_MAJOR << "."
          << ISVD_VERSION_MINOR << "."
-         << ISVD_VERSION_PATCH << " test" << endl << endl;
+         << ISVD_VERSION_PATCH << " old demo" << endl << endl;
   }
 
   int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
@@ -81,9 +84,8 @@ int main( int argc, char **argv ) {
   auto matrix_vt     = malloc<double>(k  * n);
   auto vector_s      = malloc<double>(k);
   auto matrix_qjt    = malloc<double>(k * mj);
-  auto matrices_qit  = malloc<double>(k * mj * N);
   auto matrices_qjt  = malloc<double>(k * mj * N);
-  accumulator_set<double, stats<tag::variance>> acc;
+  accumulator_set<double, stats<tag::variance>> acc_max, acc_min, acc_mean;
 
   // ====================================================================================================================== //
   // Generate matrix
@@ -109,10 +111,10 @@ int main( int argc, char **argv ) {
     // ================================================================================================================== //
     // Random sketch
     if ( verbose && mpi_rank == 0 ) { cout << "Sketching ...................... " << flush; }
-    fill(matrices_qit, matrices_qit+k*mj*N, 0.0);
-    sketch(Nj, m, m0, n, k, matrix_a, matrices_qit, seed);
+    fill(matrices_qjt, matrices_qjt+k*mj*N, 0.0);
+    sketch(Nj, m, m0, n, k, matrix_a, matrices_qjt, seed);
     for ( auto i = 0; i < Nj; ++i ) {
-      MPI_Alltoall(matrices_qit+i*k*m, k*mj, MPI_DOUBLE, matrices_qjt+i*k*m, k*mj, MPI_DOUBLE, MPI_COMM_WORLD);
+      MPI_Alltoall(MPI_IN_PLACE, k*mj, MPI_DOUBLE, matrices_qjt+i*k*m, k*mj, MPI_DOUBLE, MPI_COMM_WORLD);
     }
     if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
 
@@ -141,21 +143,24 @@ int main( int argc, char **argv ) {
     // ================================================================================================================== //
     // Check result
     if ( mpi_rank == 0 ) {
-      check(m0, k, matrix_u_true, matrix_u, smax, smin);
+      check(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
     }
     if ( verbose && mpi_rank == 0 ) {
       printf("\nS: "); for ( auto xx = 0; xx < k; ++xx ) { printf("%12.6f", vector_s[xx]); } printf("\n");
-      printf("svd(U_true' * U): max = %.4f,\t min = %.4f\n", smax, smin); fflush(stdout);
+      printf("svd(U_true' * U): max = %.4f, min = %.4f, mean = %.4f\n", smax, smin, smean); fflush(stdout);
     }
-    if ( mpi_rank == 0 ) { printf("%4d: %.4f\n", t, smin); }
-    if ( mpi_rank == 0 ) { acc(smin); }
+    if ( mpi_rank == 0 ) { printf("%4d: max = %.4f, min = %.4f, mean = %.4f\n", t, smax, smin, smean); }
+    if ( mpi_rank == 0 ) { acc_min(smin); acc_max(smax); acc_mean(smean); }
   }
 
   if ( mpi_rank == 0 ) {
     cout << "Used " << total_time / num_test << " seconds averagely." << endl;
-    cout << "mean(min(svd(U_true' * U))) = " << mean(acc) << endl;
-    cout << "sd(min(svd(U_true' * U)))   = " << sqrt(variance(acc)) << endl;
-
+    cout << "mean(max(svd(U_true' * U)))  = " << mean(acc_max) << endl;
+    cout << "mean(min(svd(U_true' * U)))  = " << mean(acc_min) << endl;
+    cout << "mean(mean(svd(U_true' * U))) = " << mean(acc_mean) << endl;
+    cout << "sd(max(svd(U_true' * U)))    = " << sqrt(variance(acc_max)) << endl;
+    cout << "sd(min(svd(U_true' * U)))    = " << sqrt(variance(acc_min)) << endl;
+    cout << "sd(mean(svd(U_true' * U)))   = " << sqrt(variance(acc_mean)) << endl;
   }
 
   // ====================================================================================================================== //
@@ -168,7 +173,6 @@ int main( int argc, char **argv ) {
   free(vector_s);
   free(matrix_qjt);
   free(matrices_qjt);
-  free(matrices_qit);
 
   // Finalize MPI
   MPI_Finalize();
@@ -279,8 +283,8 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // B := I/4 - sum( Xj'*Xj )
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, -1.0, matrix_xjt, k, 0.0, matrix_d, k);
-    MPI_Allreduce(matrix_d, matrix_b, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, -1.0, matrix_xjt, k, 0.0, matrix_b, k);
+    MPI_Allreduce(MPI_IN_PLACE, matrix_b, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
     for ( auto i = 0; i < k; ++i ) {
       matrix_b[i+i*k] += 0.25;
     }
@@ -315,7 +319,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
       cblas_dscal(k, pow(vector_e[i], -0.25), matrix_b+i*k, 1);
     }
 
-    // C *= D*D'
+    // C *= D * D'
     cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, k, 1.0, matrix_d, k, 0.0, matrix_c, k);
 
     // ================================================================================================================== //
@@ -331,7 +335,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
         matrix_c[i+i*k] -= 1.0;
       }
       LAPACKE_dsyev(LAPACK_COL_MAJOR, 'N', 'L', k, matrix_c, k, vector_e);
-      is_converged = !(abs(vector_e[cblas_idamax(k, vector_e, 1)]) > 1e-6);
+      is_converged = !(abs(vector_e[cblas_idamax(k, vector_e, 1)]) > tolorance);
     }
     MPI_Bcast(&is_converged, 1, MPI_CHAR, 0, MPI_COMM_WORLD);
 
@@ -370,7 +374,8 @@ void reconstruct( const int m0, const int n, const int k,
   free(vector_tmp);
 }
 
-void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u, double &smax, double &smin ) {
+void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
+            double &smax, double &smin, double &smean ) {
   auto matrix_tmp  = malloc<double>(k * k);
   auto vector_tmp1 = malloc<double>(k);
   auto vector_tmp2 = malloc<double>(k);
@@ -382,6 +387,7 @@ void check( const int m0, const int k, const double *matrix_u_true, const double
   LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'N', 'N', k, k, matrix_tmp, k, vector_tmp1, nullptr, 1, nullptr, 1, vector_tmp2);
   smax = abs(vector_tmp1[cblas_idamax(k, vector_tmp1, 1)]);
   smin = abs(vector_tmp1[cblas_idamin(k, vector_tmp1, 1)]);
+  smean = cblas_dasum(k, vector_tmp1, 1) / k;
 
   // Free memory
   free(matrix_tmp);

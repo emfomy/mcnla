@@ -19,14 +19,14 @@ void create( isvd::DenseMatrix<ScalarType> &matrix_a, isvd::DenseMatrix<ScalarTy
              const isvd::index_t rank, isvd::index_t seed[4] ) noexcept;
 template <isvd::Layout _layout>
 void check( const isvd::DenseMatrix<ScalarType, _layout> &matrix_u, const isvd::DenseMatrix<ScalarType> &matrix_u_true,
-            ScalarType &smax, ScalarType &smin ) noexcept;
+            ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
   double start_time = 0.0, total_time = 0.0;
-  ScalarType smax, smin;
+  ScalarType smax, smin, smean;
 
   // ====================================================================================================================== //
   // Initialize MPI
@@ -93,7 +93,9 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Create statistics collector
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc;
+  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_max;
+  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_min;
+  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_mean;
 
   // ====================================================================================================================== //
   // Run iSVD
@@ -118,17 +120,22 @@ int main( int argc, char **argv ) {
 
     // Check result
     if ( mpi_rank == mpi_root ) {
-      check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin);
-      std::cout << std::setw(4) << t << ": " << std::fixed << std::setprecision(4) << smin << std::endl;
-      acc(smin);
+      check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
+      std::cout << std::setw(4) << t << ": "
+                << std::fixed << std::setprecision(4) << smax << " / " << smin << " / " << smean << std::endl;
+      acc_min(smin); acc_max(smax); acc_mean(smean);
     }
   }
 
   // Display statistics results
   if ( mpi_rank == mpi_root ) {
     std::cout << "Used " << total_time / num_test << " seconds averagely." << std::endl;
-    std::cout << "mean(min(svd(U_true' * U))) = " << boost::accumulators::mean(acc) << std::endl;
-    std::cout << "sd(min(svd(U_true' * U)))   = " << std::sqrt(boost::accumulators::variance(acc)) << std::endl;
+    std::cout << "mean(max(svd(U_true' * U)))  = " << boost::accumulators::mean(acc_max) << std::endl;
+    std::cout << "mean(min(svd(U_true' * U)))  = " << boost::accumulators::mean(acc_min) << std::endl;
+    std::cout << "mean(mean(svd(U_true' * U))) = " << boost::accumulators::mean(acc_mean) << std::endl;
+    std::cout << "sd(max(svd(U_true' * U)))    = " << std::sqrt(boost::accumulators::variance(acc_max)) << std::endl;
+    std::cout << "sd(min(svd(U_true' * U)))    = " << std::sqrt(boost::accumulators::variance(acc_min)) << std::endl;
+    std::cout << "sd(mean(svd(U_true' * U)))   = " << std::sqrt(boost::accumulators::variance(acc_mean)) << std::endl;
   }
 
   MPI_Finalize();
@@ -179,7 +186,8 @@ void check(
     const isvd::DenseMatrix<ScalarType, _layout> &matrix_u,
     const isvd::DenseMatrix<ScalarType> &matrix_u_true,
           ScalarType &smax,
-          ScalarType &smin
+          ScalarType &smin,
+          ScalarType &smean
 ) noexcept {
   isvd::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
   isvd::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
@@ -190,6 +198,7 @@ void check(
 
   // Compute the SVD of U2
   isvd::lapack::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
-  smax = isvd::blas::amax(vector_s);
-  smin = isvd::blas::amin(vector_s);
+  smax  = isvd::blas::amax(vector_s);
+  smin  = isvd::blas::amin(vector_s);
+  smean = isvd::blas::asum(vector_s) / vector_s.getLength();
 }

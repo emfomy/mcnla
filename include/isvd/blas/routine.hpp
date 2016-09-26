@@ -13,6 +13,7 @@
 #include <isvd/blas/routine/scal.hpp>
 #include <isvd/blas/routine/axpy.hpp>
 #include <isvd/blas/routine/axpby.hpp>
+#include <isvd/blas/routine/asum.hpp>
 #include <isvd/blas/routine/iamax.hpp>
 #include <isvd/blas/routine/iamin.hpp>
 
