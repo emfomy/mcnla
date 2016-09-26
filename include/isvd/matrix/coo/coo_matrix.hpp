@@ -136,10 +136,10 @@ class CooMatrix
   friend inline std::ostream& operator<<( std::ostream &out, const CooMatrix<__Scalar, __layout> &matrix );
 
   // Gets index array
-  template <TransOption _trans = TransOption::NORMAL> inline       index_t* getRowIdx() noexcept;
-  template <TransOption _trans = TransOption::NORMAL> inline const index_t* getRowIdx() const noexcept;
-  template <TransOption _trans = TransOption::NORMAL> inline       index_t* getColIdx() noexcept;
-  template <TransOption _trans = TransOption::NORMAL> inline const index_t* getColIdx() const noexcept;
+  inline       index_t* getRowIdx() noexcept;
+  inline const index_t* getRowIdx() const noexcept;
+  inline       index_t* getColIdx() noexcept;
+  inline const index_t* getColIdx() const noexcept;
 
   // Gets element
   inline ScalarType getElem( const index_t rowidx, const index_t colidx ) const noexcept;

@@ -140,7 +140,7 @@ class CooData {
   // Constructors
   inline CooData() noexcept;
   inline CooData( const index_t capability ) noexcept;
-  inline CooData( ValuePtrType value, std::array<IdxPtrType, _ndim> idxs ) noexcept;
+  inline CooData( const ValuePtrType &value, const std::array<IdxPtrType, _ndim> &idxs ) noexcept;
   inline CooData( const CooData &other ) noexcept;
   inline CooData( CooData &&other ) noexcept;
 

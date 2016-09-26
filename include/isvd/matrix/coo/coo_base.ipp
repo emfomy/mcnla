@@ -59,12 +59,12 @@ template <class _Derived>
 CooBase<_Derived>::CooBase(
     const index_t nnz,
     const ValuePtrType &value,
-    std::array<IdxPtrType, ndim> idx,
+    const std::array<IdxPtrType, ndim> &idxs,
     const index_t offset
 ) noexcept
   : SparseBaseType(nnz),
     offset_(offset),
-    data_(value, idx) {
+    data_(value, idxs) {
   assert(offset_ >= 0);
   assert(data_.getCapability() >= nnz_ + offset_);
 }

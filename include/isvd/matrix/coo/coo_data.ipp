@@ -111,8 +111,8 @@ CooData<_ndim, _Scalar>::CooData(
 ///
 template <index_t _ndim, typename _Scalar>
 CooData<_ndim, _Scalar>::CooData(
-    ValuePtrType value,
-    std::array<IdxPtrType, _ndim> idxs
+    const ValuePtrType &value,
+    const std::array<IdxPtrType, _ndim> &idxs
 ) noexcept
   : value_(value),
     idxs_(idxs) {

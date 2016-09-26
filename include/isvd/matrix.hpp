@@ -11,7 +11,6 @@
 #include <isvd/matrix/base.hpp>
 #include <isvd/matrix/dense.hpp>
 #include <isvd/matrix/coo.hpp>
-#include <isvd/matrix/csc.hpp>
 #include <isvd/matrix/kit.hpp>
 
 #endif  // ISVD_MATRIX_HPP_
