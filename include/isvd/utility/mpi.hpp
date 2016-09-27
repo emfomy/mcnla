@@ -269,7 +269,7 @@ inline void alltoall(
   assert(buffer.isShrunk());
   assert(buffer.getNpage() == getCommSize(comm));
   mpi_int_t size = buffer.template getSize<0>() * buffer.template getSize<1>();
-  MPI_Alltoall(MPI_IN_PLACE, size, detail::MpiScalarTraits<_Scalar>::data_type,
+  MPI_Alltoall(MPI_IN_PLACE,      size, detail::MpiScalarTraits<_Scalar>::data_type,
                buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, comm);
 }
 

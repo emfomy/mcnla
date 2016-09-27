@@ -30,8 +30,8 @@ extern void zaxpby_( const FORTRAN_INT n, const FORTRAN_COMP8 alpha, const FORTR
 
 #else  // ISVD_USE_MKL
 
-#include <issd/blas/blas/axpy.hpp>
-#include <issd/blas/blas/scal.hpp>
+#include <isvd/blas/blas/axpy.hpp>
+#include <isvd/blas/blas/scal.hpp>
 
 #endif  // ISVD_USE_MKL
 

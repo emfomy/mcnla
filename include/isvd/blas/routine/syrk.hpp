@@ -25,8 +25,7 @@ namespace blas {
 /// @brief  Performs a symmetric/Hermitian rank-k update.
 ///
 //@{
-template <TransOption _trans = TransOption::NORMAL,
-          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <TransOption _trans = TransOption::NORMAL, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
@@ -38,13 +37,11 @@ inline void syrk(
   assert(c.getNrow() == c.getNcol());
   assert(c.getNrow() == a.template getNrow<_trans>());
 
-  detail::syrk(UploChar<_uplo, _layout>::value, TransChar<trans, _Scalar>::value,
-                 c.getNrow(), a.template getNcol<trans>(),
-                 alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
+  detail::syrk(UploChar<_uplo, _layout>::value, TransChar<trans, _Scalar>::value, c.getNrow(), a.template getNcol<_trans>(),
+               alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
 }
 
-template <TransOption _trans = TransOption::NORMAL,
-          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <TransOption _trans = TransOption::NORMAL, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,

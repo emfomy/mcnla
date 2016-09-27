@@ -25,8 +25,7 @@ namespace blas {
 /// @brief  Computes a matrix-matrix product where one input matrix is general COO matrix.
 ///
 //@{
-template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL,
+template <TransOption _transa = isvd::TransOption::NORMAL, TransOption _transb = isvd::TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
@@ -56,8 +55,7 @@ inline void gemm(
   }
 }
 
-template <TransOption _transb = isvd::TransOption::NORMAL,
-          TransOption _transa = isvd::TransOption::NORMAL,
+template <TransOption _transb = isvd::TransOption::NORMAL, TransOption _transa = isvd::TransOption::NORMAL,
           typename _Scalar, Layout _layoutb, Layout _layouta, Layout _layoutc>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
@@ -99,8 +97,7 @@ inline void gemm(
   detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 
-template <TransOption _transb = isvd::TransOption::NORMAL,
-          TransOption _transa = isvd::TransOption::NORMAL,
+template <TransOption _transb = isvd::TransOption::NORMAL, TransOption _transa = isvd::TransOption::NORMAL,
           typename _Scalar, Layout _layoutb, Layout _layouta, Layout _layoutc>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,

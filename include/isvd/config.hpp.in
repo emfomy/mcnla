@@ -29,7 +29,7 @@ using size_t = std::uint@ISVD_SYSTEM_INT_SIZE@_t;
 static constexpr index_t system_int_size = @ISVD_SYSTEM_INT_SIZE@;
 
 /// The format width
-static constexpr size_t ios_width = 12;
+static constexpr size_t ios_width = 14;
 
 }  // namespace isvd
 

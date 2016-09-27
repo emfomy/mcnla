@@ -155,12 +155,12 @@ int main( int argc, char **argv ) {
 
   if ( mpi_rank == 0 ) {
     cout << "Used " << total_time / num_test << " seconds averagely." << endl;
-    cout << "mean(max(svd(U_true' * U)))  = " << mean(acc_max) << endl;
-    cout << "mean(min(svd(U_true' * U)))  = " << mean(acc_min) << endl;
-    cout << "mean(mean(svd(U_true' * U))) = " << mean(acc_mean) << endl;
-    cout << "sd(max(svd(U_true' * U)))    = " << sqrt(variance(acc_max)) << endl;
-    cout << "sd(min(svd(U_true' * U)))    = " << sqrt(variance(acc_min)) << endl;
-    cout << "sd(mean(svd(U_true' * U)))   = " << sqrt(variance(acc_mean)) << endl;
+    cout << "mean(op(svd(U_true' * U))): max = " << mean(acc_max)
+                                   << ", min = " << mean(acc_min)
+                                  << ", mean = " << mean(acc_mean) << endl;
+    cout << "sd(op(svd(U_true' * U))):   max = " << sqrt(variance(acc_max))
+                                   << ", min = " << sqrt(variance(acc_min))
+                                  << ", mean = " << sqrt(variance(acc_mean)) << endl;
   }
 
   // ====================================================================================================================== //
@@ -283,8 +283,8 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // B := I/4 - sum( Xj'*Xj )
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, -1.0, matrix_xjt, k, 0.0, matrix_b, k);
-    MPI_Allreduce(MPI_IN_PLACE, matrix_b, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, -1.0, matrix_xjt, k, 0.0, matrix_d, k);
+    MPI_Allreduce(matrix_d, matrix_b, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
     for ( auto i = 0; i < k; ++i ) {
       matrix_b[i+i*k] += 0.25;
     }
@@ -322,6 +322,9 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // C *= D * D'
     cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, k, 1.0, matrix_d, k, 0.0, matrix_c, k);
 
+    // inv(C) := B * B'
+    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, k, 1.0, matrix_b, k, 0.0, matrix_d, k);
+
     // ================================================================================================================== //
     // Q := Q * C + X * inv(C)
 
@@ -329,6 +332,10 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     cblas_dsymm(CblasColMajor, CblasLeft, CblasLower, k, mj, 1.0, matrix_c, k, matrix_qjt, k, 0.0, matrix_tmp, k);
     cblas_dcopy(k*mj, matrix_tmp, 1, matrix_qjt, 1);
 
+    // Qj' += inv(C) * Xj'
+    cblas_dsymm(CblasColMajor, CblasLeft, CblasLower, k, mj, 1.0, matrix_d, k, matrix_xjt, k, 1.0, matrix_qjt, k);
+
+    // ================================================================================================================== //
     // Check convergence
     if ( mpi_rank == 0 ) {
       for ( auto i = 0; i < k; ++i ) {
@@ -338,12 +345,6 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
       is_converged = !(abs(vector_e[cblas_idamax(k, vector_e, 1)]) > tolorance);
     }
     MPI_Bcast(&is_converged, 1, MPI_CHAR, 0, MPI_COMM_WORLD);
-
-    // inv(C) := B*B'
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, k, 1.0, matrix_b, k, 0.0, matrix_c, k);
-
-    // Qj' += inv(C) * Xj'
-    cblas_dsymm(CblasColMajor, CblasLeft, CblasLower, k, mj, 1.0, matrix_c, k, matrix_xjt, k, 1.0, matrix_qjt, k);
   }
 
   // Free memory

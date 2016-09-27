@@ -13,23 +13,31 @@
 ///
 int main( int argc, char **argv ) {
 
-  isvd::index_t iseed[] = {0, 0, 0, 1};
-
-  isvd::CooMatrix<double> matA(3, 3, 24, 50);
-  isvd::DenseMatrix<double> matB(3, 4), matC(3, 4);
-
-  matA.setNnz(std::min(matA.getNrow(), matA.getNcol()));
-  int i = 0;
-  for ( auto tuple : matA ) {
-    tuple(i, i, i);
-    ++i;
+  const std::valarray<int> a(10);
+  for ( auto i = 0; i < 10; ++i ) {
+    const_cast<int&>(a[i]) = i;
   }
-  std::cout << matA << std::endl;
+  std::valarray<int>    b = a[std::slice(0, 5, 2)];
+  std::_Expr<std::_SClos<std::_ValArray, int>, int> &&c = a[std::slice(0, 5, 2)];
 
-  isvd::lapack::larnv<3>(matB.vectorize(), iseed);
-  std::cout << matB << std::endl;
+  const int *a1 = &a[0];
+  int *b1 = &b[0];
 
-  isvd::blas::gemm<isvd::TransOption::TRANS>(1.0, matA, matB, 0.0, matC);
-  std::cout << matC << std::endl;
+  for ( auto i = 0; i < 10; ++i ) {
+    std::cout << a[i] << '\t';
+  }
+  std::cout << std::endl;
+  for ( auto i = 0; i < 10; ++i ) {
+    std::cout << a1[i] << '\t';
+  }
+  std::cout << std::endl;
+  for ( auto i = 0; i < 10; ++i ) {
+    std::cout << b[i] << '\t';
+  }
+  std::cout << std::endl;
+  for ( auto i = 0; i < 10; ++i ) {
+    std::cout << b1[i] << '\t';
+  }
+  std::cout << std::endl;
 
 }

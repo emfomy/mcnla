@@ -30,8 +30,7 @@ namespace detail {
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
 //@{
-template <TransOption _transa = TransOption::NORMAL,
-          TransOption _transb = TransOption::NORMAL,
+template <TransOption _transa = TransOption::NORMAL, TransOption _transb = TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb>
 inline void gemm(
     const _Scalar alpha,
@@ -81,8 +80,7 @@ inline void gemm(
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
 //@{
-template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL,
+template <TransOption _transa = isvd::TransOption::NORMAL, TransOption _transb = isvd::TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
@@ -94,8 +92,7 @@ inline void gemm(
   detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 
-template <TransOption _transa = isvd::TransOption::NORMAL,
-          TransOption _transb = isvd::TransOption::NORMAL,
+template <TransOption _transa = isvd::TransOption::NORMAL, TransOption _transb = isvd::TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,

@@ -101,6 +101,7 @@ int main( int argc, char **argv ) {
   // Run iSVD
   if ( mpi_rank == mpi_root ) {
     std::cout << "Start iSVD." << std::endl;
+    std::cout << std::fixed << std::setprecision(4);
   }
 
   for ( isvd::index_t t = 0; t < num_test; ++t ) {
@@ -121,8 +122,7 @@ int main( int argc, char **argv ) {
     // Check result
     if ( mpi_rank == mpi_root ) {
       check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
-      std::cout << std::setw(4) << t << ": "
-                << std::fixed << std::setprecision(4) << smax << " / " << smin << " / " << smean << std::endl;
+      std::cout << std::setw(4) << t << ": max = " << smax << ", min = " << smin << ", mean = " << smean << std::endl;
       acc_min(smin); acc_max(smax); acc_mean(smean);
     }
   }
@@ -130,12 +130,12 @@ int main( int argc, char **argv ) {
   // Display statistics results
   if ( mpi_rank == mpi_root ) {
     std::cout << "Used " << total_time / num_test << " seconds averagely." << std::endl;
-    std::cout << "mean(max(svd(U_true' * U)))  = " << boost::accumulators::mean(acc_max) << std::endl;
-    std::cout << "mean(min(svd(U_true' * U)))  = " << boost::accumulators::mean(acc_min) << std::endl;
-    std::cout << "mean(mean(svd(U_true' * U))) = " << boost::accumulators::mean(acc_mean) << std::endl;
-    std::cout << "sd(max(svd(U_true' * U)))    = " << std::sqrt(boost::accumulators::variance(acc_max)) << std::endl;
-    std::cout << "sd(min(svd(U_true' * U)))    = " << std::sqrt(boost::accumulators::variance(acc_min)) << std::endl;
-    std::cout << "sd(mean(svd(U_true' * U)))   = " << std::sqrt(boost::accumulators::variance(acc_mean)) << std::endl;
+    std::cout << "mean(op(svd(U_true' * U))): max = " << boost::accumulators::mean(acc_max)
+                                        << ", min = " << boost::accumulators::mean(acc_min)
+                                       << ", mean = " << boost::accumulators::mean(acc_mean) << std::endl;
+    std::cout << "sd(op(svd(U_true' * U))):   max = " << std::sqrt(boost::accumulators::variance(acc_max))
+                                        << ", min = " << std::sqrt(boost::accumulators::variance(acc_min))
+                                       << ", mean = " << std::sqrt(boost::accumulators::variance(acc_mean)) << std::endl;
   }
 
   MPI_Finalize();

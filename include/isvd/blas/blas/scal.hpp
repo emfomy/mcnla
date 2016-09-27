@@ -15,10 +15,12 @@
 #include <isvd/plugin/blas_plugin_begin.h>
 
 // Computes the product of a vector by a scalar.
-extern void sscal_( const FORTRAN_INT n, const FORTRAN_REAL4 alpha, FORTRAN_REAL4 x, const FORTRAN_INT incx );
-extern void dscal_( const FORTRAN_INT n, const FORTRAN_REAL8 alpha, FORTRAN_REAL8 x, const FORTRAN_INT incx );
-extern void cscal_( const FORTRAN_INT n, const FORTRAN_COMP4 alpha, FORTRAN_COMP4 x, const FORTRAN_INT incx );
-extern void zscal_( const FORTRAN_INT n, const FORTRAN_COMP8 alpha, FORTRAN_COMP8 x, const FORTRAN_INT incx );
+extern void sscal_(  const FORTRAN_INT n, const FORTRAN_REAL4 alpha, FORTRAN_REAL4 x, const FORTRAN_INT incx );
+extern void dscal_(  const FORTRAN_INT n, const FORTRAN_REAL8 alpha, FORTRAN_REAL8 x, const FORTRAN_INT incx );
+extern void cscal_(  const FORTRAN_INT n, const FORTRAN_COMP4 alpha, FORTRAN_COMP4 x, const FORTRAN_INT incx );
+extern void zscal_(  const FORTRAN_INT n, const FORTRAN_COMP8 alpha, FORTRAN_COMP8 x, const FORTRAN_INT incx );
+extern void csscal_( const FORTRAN_INT n, const FORTRAN_REAL4 alpha, FORTRAN_COMP4 x, const FORTRAN_INT incx );
+extern void zdscal_( const FORTRAN_INT n, const FORTRAN_REAL8 alpha, FORTRAN_COMP8 x, const FORTRAN_INT incx );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -55,6 +57,12 @@ static inline void scal(
 static inline void scal(
     const index_t n, const std::complex<double> alpha, std::complex<double>* x, const index_t incx
 ) noexcept { zscal_(&n, &alpha, x, &incx); }
+static inline void scal(
+    const index_t n, const float alpha, std::complex<float>* x, const index_t incx
+) noexcept { csscal_(&n, &alpha, x, &incx); }
+static inline void scal(
+    const index_t n, const double alpha, std::complex<double>* x, const index_t incx
+) noexcept { zdscal_(&n, &alpha, x, &incx); }
 //@}
 
 }  // namespace detail

@@ -95,13 +95,14 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto mpi_comm = parameters_.mpi_comm;
   const auto mpi_size = parameters_.mpi_size;
   const auto mpi_root = parameters_.mpi_root;
+  const auto num_sketch    = parameters_.getNumSketch();
   const auto dim_sketch    = parameters_.getDimSketch();
   const auto max_iteration = parameters_.getMaxIteration();
   const auto tolerance     = parameters_.getTolerance();
 
   // Exchange Q
   for ( index_t i = 0; i < cube_q_.getNpage(); ++i ) {
-    cube_q_.getPage(i).getRows({parameters_.getNrow(), nrow_all_});
+    zeroize(cube_q_.getPage(i).getRows({parameters_.getNrow(), nrow_all_}));
     mpi::alltoall(cube_q_.getPage(i), cube_qj_.getPages({i*mpi_size, (i+1)*mpi_size}), mpi_comm);
   }
 
@@ -115,16 +116,16 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
     // Bi := sum( Qij' * Qcj )
-    for ( index_t i = 0; i < mpi_size; ++i ) {
+    for ( index_t i = 0; i < num_sketch; ++i ) {
       blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), matrix_qcj_, 0.0, cube_b_.getPage(i));
     }
     mpi::allreduce(cube_b_, MPI_SUM, mpi_comm);
 
-    // Xj' := 0, D := 0
+    // Xj := 0; D := 0
     zeroize(matrix_xj_);
     zeroize(matrix_d_);
 
-    for ( index_t i = 0; i < mpi_size; ++i ) {
+    for ( index_t i = 0; i < num_sketch; ++i ) {
       // D += Bi' * Bi
       blas::syrk<TransOption::TRANS>(1.0, cube_b_.getPage(i), 1.0, matrix_d_);
 
@@ -133,17 +134,17 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     }
 
     // Xj -= Qcj * D
-    blas::symm<SideOption::RIGHT>(-1.0, matrix_qcj_, matrix_d_, 1.0, matrix_xj_);
+    blas::symm<SideOption::RIGHT>(-1.0, matrix_d_, matrix_qcj_, 1.0, matrix_xj_);
 
-    // Xj' /= N
-    blas::scal(1.0/mpi_size, matrix_xj_.vectorize());
+    // Xj /= N
+    blas::scal(1.0/num_sketch, matrix_xj_.vectorize());
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // B := I/4 - sum(Xj' * Xj)
-    blas::syrk<TransOption::TRANS>(-1.0, matrix_xj_, 0.0, matrix_d_);
-    mpi::allreduce(matrix_d_, matrix_b_, MPI_SUM, mpi_comm);
+    blas::syrk<TransOption::TRANS>(-1.0, matrix_xj_, 0.0, matrix_b_);
+    mpi::allreduce(matrix_b_, MPI_SUM, mpi_comm);
     for ( index_t i = 0; i < dim_sketch; ++i ) {
       matrix_b_(i, i) += 0.25;
     }
@@ -153,7 +154,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // B := E^(1/4) * B
     for ( index_t i = 0; i < dim_sketch; ++i ) {
-      blas::scal(pow(vector_e_(i), 0.25), matrix_b_.getCol(i));
+      blas::scal(pow(vector_e_(i), 0.25), matrix_b_.getRow(i));
     }
 
     // D := I/2 + B' * B
@@ -168,26 +169,29 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     // B := D
     blas::copy(matrix_d_, matrix_b_);
 
-    // D := E^(1/4) * D
+    // D := E^(1/4) * D; B := E^(-1/4) * B
     for ( index_t i = 0; i < dim_sketch; ++i ) {
-      blas::scal(pow(vector_e_(i), 0.25), matrix_d_.getCol(i));
-    }
-
-    // B := E^(1/4) \ B
-    for ( index_t i = 0; i < dim_sketch; ++i ) {
-      blas::scal(pow(vector_e_(i), -0.25), matrix_b_.getCol(i));
+      blas::scal(pow(vector_e_(i),  0.25), matrix_d_.getRow(i));
+      blas::scal(pow(vector_e_(i), -0.25), matrix_b_.getRow(i));
     }
 
     // C := D' * D
     blas::syrk<TransOption::TRANS>(1.0, matrix_d_, 0.0, matrix_c_);
+
+    // inv(C) := B' * B
+    blas::syrk<TransOption::TRANS>(1.0, matrix_b_, 0.0, matrix_d_);
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
 
     // Qcj := Qcj * C
     blas::copy(matrix_qcj_, matrix_tmp_);
-    blas::symm<SideOption::RIGHT>(1.0, matrix_tmp_, matrix_c_, 0.0, matrix_qcj_);
+    blas::symm<SideOption::RIGHT>(1.0, matrix_c_, matrix_tmp_, 0.0, matrix_qcj_);
 
+    // Qcj += Xj * inv(C)
+    blas::symm<SideOption::RIGHT>(1.0, matrix_d_, matrix_xj_, 1.0, matrix_qcj_);
+
+    // ================================================================================================================== //
     // Check convergence
     if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
       for ( index_t i = 0; i < dim_sketch; ++i ) {
@@ -197,12 +201,6 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
       is_converged = !(blas::amax(vector_e_) > tolerance);
     }
     MPI_Bcast(&is_converged, 1, MPI_BYTE, mpi_root, mpi_comm);
-
-    // inv(C) := B' * B
-    blas::syrk<TransOption::TRANS>(1.0, matrix_b_, 0.0, matrix_c_);
-
-    // Qcj += Xj * inv(C)
-    blas::symm<SideOption::RIGHT>(1.0, matrix_xj_, matrix_c_, 1.0, matrix_qcj_);
   }
 
   // Gather Qc
