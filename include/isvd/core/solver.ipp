@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/solver.ipp
 /// @brief   The implementation of iSVD solver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SOLVER_IPP_
@@ -21,7 +21,7 @@ namespace isvd {
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
     const MPI_Comm mpi_comm,
-    const index_t mpi_root
+    const mpi_int_t mpi_root
 ) noexcept
   : parameters_(mpi_comm, mpi_root),
     mpi_rank_(mpi::getCommRank(mpi_comm)),
@@ -35,7 +35,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexcept {
-  MPI_Bcast(&parameters_, sizeof(internal::Parameters<ScalarType>), MPI_BYTE, mpi_root_, mpi_comm_);
+  MPI_Bcast(&parameters_, sizeof(Parameters<ScalarType>), MPI_BYTE, mpi_root_, mpi_comm_);
 
   assert(parameters_.getNcol() >= parameters_.getNrow() && parameters_.getNrow() > 0);
   assert(parameters_.getNrow() >= parameters_.getDimSketch());
@@ -52,7 +52,8 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the iSVD decomposition.
 ///
-/// @attention  @p matrix_a should be the same in each MPI node.
+/// @attention  The solver should have be initialized.
+/// @attention  @a matrix_a should be the same in each MPI node.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Matrix &matrix_a ) noexcept {
@@ -67,39 +68,75 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the singular values.
+/// @brief  Gets the name of the sketcher.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherName() const noexcept {
+  return sketcher_.getName();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the name of the integrator.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorName() const noexcept {
+  return integrator_.getName();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the name of the reconstructor.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorName() const noexcept {
+  return reconstructor_.getName();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the approximate singular values.
+///
+/// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::RealScalarType>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSingularValues() const noexcept {
-  return reconstructor_.getSingularValues();
+  assert(parameters_.isComputed());
+  return reconstructor_.getVectorS();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the left singular vectors.
+/// @brief  Gets the approximate left singular vectors.
+///
+/// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getLeftSingularVectors() const noexcept {
-  return reconstructor_.getLeftSingularVectors();
+  assert(parameters_.isComputed());
+  return reconstructor_.getMatrixU();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the right singular vectors.
+/// @brief  Gets the approximate right singular vectors.
+///
+/// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getRightSingularVectors() const noexcept {
-  return reconstructor_.getRightSingularVectors();
+  assert(parameters_.isComputed());
+  return reconstructor_.getMatrixVt();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the parameters.
+/// @brief  Gets the integrated orthonormal basis of the sketched subspace.
+///
+/// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ParametersType&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getParameters() const noexcept {
-  return parameters_;
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::ROWMAJOR>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
+  assert(parameters_.isComputed());
+  return integrator_.getMatrixQc();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +233,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSeed( const index_t seed[4] ) noexcept {
-  for ( auto i = 0; i < 4; ++i ) {
+  for ( index_t i = 0; i < 4; ++i ) {
     seed_[i] = seed[i];
   }
   return *this;

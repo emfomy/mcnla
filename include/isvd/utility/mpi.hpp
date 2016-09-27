@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/mpi.hpp
 /// @brief   The MPI utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_MPI_HPP_
@@ -23,12 +23,12 @@ namespace isvd {
 namespace mpi {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The internal namespace.
+/// The MPI detail namespace.
 ///
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The MPI data type
+/// The MPI data type traits
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
@@ -36,56 +36,56 @@ template <typename _Scalar>
 struct MpiScalarTraits {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The float MPI data type
+/// The float MPI data type traits
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <>
 struct MpiScalarTraits<float> {
-  constexpr static const MPI_Datatype &data_type = MPI_FLOAT;
+  static constexpr const MPI_Datatype &data_type = MPI_FLOAT;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The double MPI data type
+/// The double MPI data type traits
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <>
 struct MpiScalarTraits<double> {
-  constexpr static const MPI_Datatype &data_type = MPI_DOUBLE;
+  static constexpr const MPI_Datatype &data_type = MPI_DOUBLE;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The complex float MPI data type
+/// The complex float MPI data type traits
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <>
 struct MpiScalarTraits<std::complex<float>> {
-  constexpr static const MPI_Datatype &data_type = MPI_COMPLEX;
+  static constexpr const MPI_Datatype &data_type = MPI_COMPLEX;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The complex double MPI data type
+/// The complex double MPI data type traits
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <>
 struct MpiScalarTraits<std::complex<double>> {
-  constexpr static const MPI_Datatype &data_type = MPI_DOUBLE_COMPLEX;
+  static constexpr const MPI_Datatype &data_type = MPI_DOUBLE_COMPLEX;
 };
 
-}  // internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Returns the size of the group associated with a communicator.
 ///
 /// @param  comm  The communicator.
 ///
-/// @return       The number of processes in the group of @p comm.
+/// @return       The number of processes in the group of @a comm.
 ///
-static inline index_t getCommSize( const MPI_Comm comm ) noexcept {
-  index_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
+static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
+  mpi_int_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,10 +93,10 @@ static inline index_t getCommSize( const MPI_Comm comm ) noexcept {
 ///
 /// @param  comm  The communicator.
 ///
-/// @return       The rank of the calling process in group of @p comm.
+/// @return       The rank of the calling process in group of @a comm.
 ///
-static inline index_t getCommRank( const MPI_Comm comm ) noexcept {
-  index_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
+static inline mpi_int_t getCommRank( const MPI_Comm comm ) noexcept {
+  mpi_int_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,50 +105,50 @@ static inline index_t getCommRank( const MPI_Comm comm ) noexcept {
 /// @param  root  The root rank.
 /// @param  comm  The communicator.
 ///
-static inline bool isCommRoot( const index_t root, const MPI_Comm comm ) noexcept {
+static inline bool isCommRoot( const mpi_int_t root, const MPI_Comm comm ) noexcept {
   return (getCommRank(comm) == root);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Broadcasts a message from the process with rank root to all other processes of the group.
 ///
-/// @attention  The size of @p buffer should be the same for all MPI nodes.
+/// @attention  The size of @a buffer should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void bcast(
           DenseMatrix<_Scalar, _layout> buffer,
-    const index_t root,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  MPI_Bcast(buffer.getValue(), buffer.getSize(), internal::MpiScalarTraits<_Scalar>::data_type, root, comm);
+  MPI_Bcast(buffer.getValue(), buffer.getNelem(), detail::MpiScalarTraits<_Scalar>::data_type, root, comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gathers values from a group of processes.
 ///
-/// @attention  The size of @p send should be the same for all MPI nodes.
+/// @attention  The size of @a send should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void gather(
     const DenseMatrix<_Scalar, _layout> send,
           DenseMatrix<_Scalar, _layout> recv,
-    const index_t root,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   assert(send.isShrunk());
   assert(recv.isShrunk());
-  assert(isCommRoot(root, comm) ? send.getDim1()                     == recv.getDim1() : true);
-  assert(isCommRoot(root, comm) ? send.getDim2() * getCommSize(comm) == recv.getDim2() : true);
-  index_t size = send.getSize();
-  MPI_Gather(send.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type,
-             recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, root, comm);
+  assert(isCommRoot(root, comm) ? send.template getSize<0>()                     == recv.template getSize<0>() : true);
+  assert(isCommRoot(root, comm) ? send.template getSize<1>() * getCommSize(comm) == recv.template getSize<1>() : true);
+  mpi_int_t size = send.getNelem();
+  MPI_Gather(send.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type,
+             recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, root, comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Combines values from all processes and distributes the result back to all processes.
 ///
-/// @attention  The size of @p send and @p recv should be the same for all MPI nodes.
+/// @attention  The size of @a send and @a recv should be the same for all MPI nodes.
 ///
 //@{
 template <typename _Scalar>
@@ -161,8 +161,8 @@ inline void allreduce(
   assert(send.isShrunk());
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
-  index_t size = send.getSize();
-  MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  mpi_int_t size = send.getNelem();
+  MPI_Allreduce(send.getValue(), recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -175,8 +175,8 @@ inline void allreduce(
   assert(send.isShrunk());
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
-  index_t size = send.getSize();
-  MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  mpi_int_t size = send.getNelem();
+  MPI_Allreduce(send.getValue(), recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -189,15 +189,15 @@ inline void allreduce(
   assert(send.isShrunk());
   assert(recv.isShrunk());
   assert(send.getSizes() == recv.getSizes());
-  index_t size = send.getSize();
-  MPI_Allreduce(send.getValue(), recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  mpi_int_t size = send.getNelem();
+  MPI_Allreduce(send.getValue(), recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 //@}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Combines values from all processes and distributes the result back to all processes. (in-place version)
 ///
-/// @attention  The size of @p buffer should be the same for all MPI nodes.
+/// @attention  The size of @a buffer should be the same for all MPI nodes.
 ///
 //@{
 template <typename _Scalar>
@@ -207,8 +207,8 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  index_t size = buffer.getSize();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  mpi_int_t size = buffer.getNelem();
+  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -218,8 +218,8 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  index_t size = buffer.getSize();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  mpi_int_t size = buffer.getNelem();
+  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 
 template <typename _Scalar, Layout _layout>
@@ -229,16 +229,16 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   assert(buffer.isShrunk());
-  index_t size = buffer.getSize();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, op, comm);
+  mpi_int_t size = buffer.getNelem();
+  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, op, comm);
 }
 //@}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  All processes send data to all.
 ///
-/// @attention  The size of @p send should be the same for all MPI nodes.
-/// @attention  The size of @p recv should be the same for all MPI nodes.
+/// @attention  The size of @a send should be the same for all MPI nodes.
+/// @attention  The size of @a recv should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void alltoall(
@@ -248,18 +248,18 @@ inline void alltoall(
 ) noexcept {
   assert(send.isShrunk());
   assert(recv.isShrunk());
-  assert(send.getDim1()  == recv.getDim1());
-  assert(send.getDim2()  == recv.getDim2() * recv.getNpage());
-  assert(recv.getNpage() == getCommSize(comm));
-  index_t size = recv.getDim1() * recv.getDim2();
-  MPI_Alltoall(send.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type,
-               recv.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, comm);
+  assert(send.template getSize<0>() == recv.template getSize<0>());
+  assert(send.template getSize<1>() == recv.template getSize<1>() * recv.getNpage());
+  assert(recv.getNpage()            == getCommSize(comm));
+  mpi_int_t size = recv.template getSize<0>() * recv.template getSize<1>();
+  MPI_Alltoall(send.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type,
+               recv.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  All processes send data to all. (in-place version)
 ///
-/// @attention  The size of @p buffer should be the same for all MPI nodes.
+/// @attention  The size of @a buffer should be the same for all MPI nodes.
 ///
 template <typename _Scalar, Layout _layout>
 inline void alltoall(
@@ -268,9 +268,9 @@ inline void alltoall(
 ) noexcept {
   assert(buffer.isShrunk());
   assert(buffer.getNpage() == getCommSize(comm));
-  index_t size = buffer.getDim1() * buffer.getDim2();
-  MPI_Alltoall(MPI_IN_PLACE, size, internal::MpiScalarTraits<_Scalar>::data_type,
-               buffer.getValue(), size, internal::MpiScalarTraits<_Scalar>::data_type, comm);
+  mpi_int_t size = buffer.template getSize<0>() * buffer.template getSize<1>();
+  MPI_Alltoall(MPI_IN_PLACE,      size, detail::MpiScalarTraits<_Scalar>::data_type,
+               buffer.getValue(), size, detail::MpiScalarTraits<_Scalar>::data_type, comm);
 }
 
 }  // namespace mpi

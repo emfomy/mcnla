@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/crtp.hpp
 /// @brief   The curiously recurring template pattern utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_CRTP_HPP_
@@ -16,12 +16,7 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The CRTP interface.
+/// The curiously recurring template pattern (CRTP) interface.
 ///
 /// @tparam  _Derived  The derived type.
 /// @tparam  _Base     The interface class type.
@@ -34,23 +29,21 @@ class CrtpBase {
 
  private:
 
-  CrtpBase() {};
+  inline CrtpBase() noexcept {};
 
  protected:
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief  Gets the derived.
+  /// @brief  Change to derived class.
   ///
-  inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); };
+  inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief  Gets the constant derived.
+  /// @copydoc  derived
   ///
-  inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); };
+  inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); }
 
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 

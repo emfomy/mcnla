@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/driver/syev.ipp
 /// @brief   The implementation of LAPACK SYEV driver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_DRIVER_SYEV_IPP_
@@ -137,7 +137,7 @@ const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Ma
 /// @brief  Computes the eigenvalue decomposition.
 ///
 /// @attention  The eigenvectors are Stored in columnwise for column-major storage, in rowwise for row-major storage.
-/// @attention  Matrix @p a will be destroyed!
+/// @attention  Matrix @a a will be destroyed!
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo> template <JobOption __jobz>
 void SyevDriver<_Matrix, _jobz, _uplo>::compute(
@@ -147,7 +147,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
   assert(dim_ > 0);
   assert(a.getSizes() == std::make_pair(dim_, dim_));
   assert(w.getLength() == a.getNrow());
-  assert(internal::syev(__jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),
+  assert(detail::syev(__jobz, UploChar<_uplo, layout>::value, a.getNrow(), a.getValue(), a.getPitch(),
                         w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
 }
 
@@ -159,7 +159,7 @@ index_t SyevDriver<_Matrix, _jobz, _uplo>::query(
     const index_t dim
 ) const noexcept {
   ScalarType lwork;
-  assert(internal::syev(_jobz, UploChar<_uplo, layout>::value, dim, nullptr, dim, nullptr, &lwork, -1, nullptr) == 0);
+  assert(detail::syev(_jobz, UploChar<_uplo, layout>::value, dim, nullptr, dim, nullptr, &lwork, -1, nullptr) == 0);
   return lwork;
 }
 

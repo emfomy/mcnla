@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/memory.hpp
 /// @brief   The memory utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_MEMORY_HPP_
@@ -60,7 +60,7 @@ inline _Type* realloc( _Type *&ptr, const index_t num ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  The deallocator.
-/// Deallocates @a ptr and set it to @c nullptr.
+/// Deallocates @a ptr and set it to `nullptr`!
 ///
 /// @tparam  _Type  The type of the array.
 /// @param   ptr    The pointer to the array.

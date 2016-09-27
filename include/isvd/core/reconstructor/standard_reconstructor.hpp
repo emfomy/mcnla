@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/reconstructor/standard_reconstructor.hpp
 /// @brief   The standard reconstructor.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
@@ -11,19 +11,21 @@
 #include <isvd/isvd.hpp>
 #include <isvd/blas.hpp>
 #include <isvd/lapack.hpp>
-#include <isvd/core/reconstructor_base.hpp>
+#include <isvd/core/reconstructor/reconstructor_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class StandardReconstructor;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The standard reconstructor traits.
@@ -35,7 +37,7 @@ struct Traits<StandardReconstructor<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The standard reconstructor.
@@ -43,27 +45,29 @@ struct Traits<StandardReconstructor<_Matrix>> {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class StandardReconstructor : public internal::ReconstructorBase<StandardReconstructor<_Matrix>> {
+class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Matrix>> {
 
-  friend internal::ReconstructorBase<StandardReconstructor<_Matrix>>;
+  friend ReconstructorBase<StandardReconstructor<_Matrix>>;
 
  private:
 
-  using BaseType = internal::ReconstructorBase<StandardReconstructor<_Matrix>>;
+  using BaseType = ReconstructorBase<StandardReconstructor<_Matrix>>;
 
  public:
 
-  static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+
+  /// The name.
+  static constexpr const char* name_= "Standard Reconstructor";
 
   /// The matrix W.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;
@@ -71,20 +75,20 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
   /// The vector S.
   DenseVector<RealScalarType> vector_s_;
 
-  /// The vector Sl.
-  DenseVector<RealScalarType> vector_sl_;
+  /// The cut vector S.
+  DenseVector<RealScalarType> vector_s_cut_;
 
   /// The matrix U.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_;
 
-  /// The matrix Ul.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_ul_;
+  /// The cut matrix U.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_cut_;
 
   /// The matrix Vt.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_;
 
-  /// The matrix Vlt.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vlt_;
+  /// The cut matrix Vt.
+  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_cut_;
 
   /// The empty vector.
   DenseVector<RealScalarType> vector_real_empty_;
@@ -98,7 +102,7 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
  public:
 
   // Constructor
-  StandardReconstructor( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline StandardReconstructor( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 
@@ -108,10 +112,13 @@ class StandardReconstructor : public internal::ReconstructorBase<StandardReconst
   // Reconstructs
   void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
+  // Gets name
+  inline constexpr const char* getNameImpl() const noexcept;
+
   // Gets matrices
-  inline const DenseVector<RealScalarType>& getSingularValuesImpl() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectorsImpl() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectorsImpl() const noexcept;
+  inline const DenseVector<RealScalarType>& getVectorSImpl() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixUImpl() const noexcept;
+  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept;
 
 };
 

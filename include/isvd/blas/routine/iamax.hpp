@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/iamax.hpp
 /// @brief   The BLAS IAMAX routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_IAMAX_HPP_
@@ -24,14 +24,14 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::iamax
+/// @brief  Finds the index of the element with maximum absolute value.
 ///
 //@{
 template <typename _Scalar>
 inline index_t iamax(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return internal::iamax(x.getLength(), x.getValue(), x.getIncrement());
+  return detail::iamax(x.getLength(), x.getValue(), x.getStride());
 }
 //@}
 
@@ -40,10 +40,10 @@ inline index_t iamax(
 ///
 //@{
 template <typename _Scalar>
-inline _Scalar amax(
+inline typename isvd::detail::ScalarTraits<_Scalar>::RealType amax(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  index_t idx = internal::iamax(x.getLength(), x.getValue(), x.getIncrement());
+  index_t idx = detail::iamax(x.getLength(), x.getValue(), x.getStride());
   return std::abs(x(idx));
 }
 //@}

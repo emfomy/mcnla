@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/driver/gesvd.hpp
 /// @brief   The LAPACK GESVD driver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_DRIVER_GESVD_DRIVER_HPP_
@@ -25,7 +25,7 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::lapack::internal::gesvd
+/// @copydoc  isvd::lapack::detail::gesvd
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
@@ -38,11 +38,11 @@ class GesvdDriver {
 
  private:
 
-  static const Layout layout = _Matrix::layout;
+  static constexpr Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using VectorType     = typename _Matrix::VectorType;
   using RealVectorType = typename _Matrix::RealVectorType;
-  static const bool is_real = isvd::internal::ScalarTraits<ScalarType>::is_real;
+  static constexpr bool is_real = isvd::detail::ScalarTraits<ScalarType>::is_real;
 
   static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
@@ -66,9 +66,9 @@ class GesvdDriver {
  public:
 
   // Constructors
-  GesvdDriver() noexcept;
-  GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
-  GesvdDriver( const _Matrix &a ) noexcept;
+  inline GesvdDriver() noexcept;
+  inline GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
+  inline GesvdDriver( const _Matrix &a ) noexcept;
 
   // Operators
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>

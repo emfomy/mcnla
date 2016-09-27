@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/integrator/kolmogorov_nagumo_type_integrator.hpp
 /// @brief   The Kolmogorov-Nagumo-type integrator.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_HPP_
@@ -11,22 +11,24 @@
 #include <isvd/isvd.hpp>
 #include <isvd/blas.hpp>
 #include <isvd/lapack.hpp>
-#include <isvd/core/integrator_base.hpp>
+#include <isvd/core/integrator/integrator_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace.
 //
 namespace isvd {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class KolmogorovNagumoTypeIntegrator;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block integrator traits.
+/// The Kolmogorov-Nagumo-type integrator traits.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
@@ -35,35 +37,37 @@ struct Traits<KolmogorovNagumoTypeIntegrator<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block integrator.
+/// The Kolmogorov-Nagumo-type integrator.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>> {
+class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>> {
 
-  friend internal::IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
+  friend IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
 
  private:
 
-  using BaseType = internal::IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
+  using BaseType = IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
 
  public:
 
-  static const Layout layout = _Matrix::layout;
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
   /// The parameters.
-  const internal::Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+
+  /// The name.
+  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
 
   /// The number of rows of the matrix per MPI node.
   index_t nrow_each_;
@@ -116,7 +120,7 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
  public:
 
   // Constructor
-  KolmogorovNagumoTypeIntegrator( const internal::Parameters<ScalarType> &parameters ) noexcept;
+  inline KolmogorovNagumoTypeIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 
@@ -126,9 +130,14 @@ class KolmogorovNagumoTypeIntegrator : public internal::IntegratorBase<Kolmogoro
   // Integrates
   void integrateImpl() noexcept;
 
+  // Gets name
+  inline constexpr const char* getNameImpl() const noexcept;
+
   // Gets matrices
-  inline DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
-  inline DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() noexcept;
+  inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
+  inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() const noexcept;
+  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() noexcept;
+  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() const noexcept;
 
 };
 

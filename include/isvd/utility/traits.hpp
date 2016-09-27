@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/traits.hpp
 /// @brief   The traits utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_TRAITS_HPP_
@@ -16,9 +16,9 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
+//  The detail namespace.
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The traits interface.
@@ -37,8 +37,8 @@ struct ScalarTraits {
   static_assert(std::is_floating_point<_Scalar>::value, "'_Scalar' must be a floating point type!");
   using RealType = _Scalar;
   using ComplexType = std::complex<_Scalar>;
-  static const bool is_real = true;
-  static const bool is_complex = false;
+  static constexpr bool is_real = true;
+  static constexpr bool is_complex = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,11 +51,11 @@ struct ScalarTraits<std::complex<_Scalar>> {
   static_assert(std::is_floating_point<_Scalar>::value, "'_Scalar' must be a floating point type!");
   using RealType = _Scalar;
   using ComplexType = std::complex<_Scalar>;
-  static const bool is_real = false;
-  static const bool is_complex = true;
+  static constexpr bool is_real = false;
+  static constexpr bool is_complex = true;
 };
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace isvd
 

@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/gemm.hpp
 /// @brief   The BLAS GEMM.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_GEMM_HPP_
@@ -12,25 +12,25 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Computes a matrix-matrix product with general matrices.
-extern void sgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                    const FORTRAN_INT8 k, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT8 lda,
-                    const FORTRAN_REAL4 b, const FORTRAN_INT8 ldb, const FORTRAN_REAL4 beta, FORTRAN_REAL4 c,
-                    const FORTRAN_INT8 ldc );
-extern void dgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                    const FORTRAN_INT8 k, const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT8 lda,
-                    const FORTRAN_REAL8 b, const FORTRAN_INT8 ldb, const FORTRAN_REAL8 beta, FORTRAN_REAL8 c,
-                    const FORTRAN_INT8 ldc );
-extern void cgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                    const FORTRAN_INT8 k, const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT8 lda,
-                    const FORTRAN_COMP4 b, const FORTRAN_INT8 ldb, const FORTRAN_COMP4 beta, FORTRAN_COMP4 c,
-                    const FORTRAN_INT8 ldc );
-extern void zgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT8 m, const FORTRAN_INT8 n,
-                    const FORTRAN_INT8 k, const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT8 lda,
-                    const FORTRAN_COMP8 b, const FORTRAN_INT8 ldb, const FORTRAN_COMP8 beta, FORTRAN_COMP8 c,
-                    const FORTRAN_INT8 ldc );
+extern void sgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT m, const FORTRAN_INT n,
+                    const FORTRAN_INT k, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT lda,
+                    const FORTRAN_REAL4 b, const FORTRAN_INT ldb, const FORTRAN_REAL4 beta, FORTRAN_REAL4 c,
+                    const FORTRAN_INT ldc );
+extern void dgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT m, const FORTRAN_INT n,
+                    const FORTRAN_INT k, const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT lda,
+                    const FORTRAN_REAL8 b, const FORTRAN_INT ldb, const FORTRAN_REAL8 beta, FORTRAN_REAL8 c,
+                    const FORTRAN_INT ldc );
+extern void cgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT m, const FORTRAN_INT n,
+                    const FORTRAN_INT k, const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT lda,
+                    const FORTRAN_COMP4 b, const FORTRAN_INT ldb, const FORTRAN_COMP4 beta, FORTRAN_COMP4 c,
+                    const FORTRAN_INT ldc );
+extern void zgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT m, const FORTRAN_INT n,
+                    const FORTRAN_INT k, const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT lda,
+                    const FORTRAN_COMP8 b, const FORTRAN_INT ldb, const FORTRAN_COMP8 beta, FORTRAN_COMP8 c,
+                    const FORTRAN_INT ldc );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -47,9 +47,9 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes a matrix-matrix product with general matrices.
@@ -79,7 +79,7 @@ static inline void gemm(
 ) noexcept { zgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc); }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace blas
 

@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/copy.hpp
 /// @brief   The BLAS COPY routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_COPY_HPP_
@@ -22,7 +22,7 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::copy
+/// @brief  Copies vector to another vector.
 ///
 //@{
 template <typename _Scalar>
@@ -31,7 +31,7 @@ inline void copy(
           DenseVector<_Scalar> &y
 ) noexcept {
   assert(x.getSizes() == y.getSizes());
-  internal::copy(x.getLength(), x.getValue(), x.getIncrement(), y.getValue(), y.getIncrement());
+  detail::copy(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
 }
 
 template <typename _Scalar>

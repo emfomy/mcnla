@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/syrk.hpp
 /// @brief   The BLAS SYRK.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_SYRK_HPP_
@@ -12,23 +12,23 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Performs a symmetric rank-k update.
-extern void ssyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT8 lda, const FORTRAN_REAL4 beta,
-                    FORTRAN_REAL4 c, const FORTRAN_INT8 ldc );
-extern void dsyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT8 lda, const FORTRAN_REAL8 beta,
-                    FORTRAN_REAL8 c, const FORTRAN_INT8 ldc );
+extern void ssyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT lda, const FORTRAN_REAL4 beta,
+                    FORTRAN_REAL4 c, const FORTRAN_INT ldc );
+extern void dsyrk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT lda, const FORTRAN_REAL8 beta,
+                    FORTRAN_REAL8 c, const FORTRAN_INT ldc );
 
 // Performs a Hermitian rank-k update.
-extern void cherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT8 lda, const FORTRAN_COMP4 beta,
-                    FORTRAN_COMP4 c, const FORTRAN_INT8 ldc );
-extern void zherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT8 n, const FORTRAN_INT8 k,
-                    const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT8 lda, const FORTRAN_COMP8 beta,
-                    FORTRAN_COMP8 c, const FORTRAN_INT8 ldc );
+extern void cherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT lda, const FORTRAN_COMP4 beta,
+                    FORTRAN_COMP4 c, const FORTRAN_INT ldc );
+extern void zherk_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 trans, const FORTRAN_INT n, const FORTRAN_INT k,
+                    const FORTRAN_COMP8 alpha, const FORTRAN_COMP8 a, const FORTRAN_INT lda, const FORTRAN_COMP8 beta,
+                    FORTRAN_COMP8 c, const FORTRAN_INT ldc );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -45,9 +45,9 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Performs a symmetric/Hermitian rank-k update.
@@ -75,7 +75,7 @@ static inline void syrk(
 ) noexcept { zherk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc); }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace blas
 

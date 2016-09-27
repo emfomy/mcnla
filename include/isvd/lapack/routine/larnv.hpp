@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/routine/larnv.hpp
 /// @brief   The LAPACK LARNV routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_ROUTINE_LARNV_HPP_
@@ -24,7 +24,7 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc isvd::lapack::internal::larnv
+/// @brief  Returns a vector of random numbers from a uniform or normal distribution.
 ///
 //@{
 template <index_t idist, typename _Scalar>
@@ -32,9 +32,9 @@ inline void larnv(
     DenseVector<_Scalar> &x,
     index_t iseed[4]
 ) noexcept {
-  static_assert(isvd::internal::ScalarTraits<_Scalar>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
+  static_assert(isvd::detail::ScalarTraits<_Scalar>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
                 "The value of 'idist' is invalid!");
-  internal::larnv(idist, iseed, x.getLength(), x.getValue());
+  detail::larnv(idist, iseed, x.getLength(), x.getValue());
 }
 
 template <index_t idist, typename _Scalar>

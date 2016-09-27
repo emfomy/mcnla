@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/copy.hpp
 /// @brief   The BLAS COPY.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_COPY_HPP_
@@ -12,17 +12,17 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Copies vector to another vector.
-extern void scopy_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx, FORTRAN_REAL4 y,
-                    const FORTRAN_INT8 incy );
-extern void dcopy_( const FORTRAN_INT8 n, const FORTRAN_REAL8 x, const FORTRAN_INT8 incx, FORTRAN_REAL8 y,
-                    const FORTRAN_INT8 incy );
-extern void ccopy_( const FORTRAN_INT8 n, const FORTRAN_COMP4 x, const FORTRAN_INT8 incx, FORTRAN_COMP4 y,
-                    const FORTRAN_INT8 incy );
-extern void zcopy_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_INT8 incx, FORTRAN_COMP8 y,
-                    const FORTRAN_INT8 incy );
+extern void scopy_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx, FORTRAN_REAL4 y,
+                    const FORTRAN_INT incy );
+extern void dcopy_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx, FORTRAN_REAL8 y,
+                    const FORTRAN_INT incy );
+extern void ccopy_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx, FORTRAN_COMP4 y,
+                    const FORTRAN_INT incy );
+extern void zcopy_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRAN_INT incx, FORTRAN_COMP8 y,
+                    const FORTRAN_INT incy );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -39,9 +39,9 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies vector to another vector.
@@ -61,7 +61,7 @@ static inline void copy(
 ) noexcept { zcopy_(&n, x, &incx, y, &incy); }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace blas
 

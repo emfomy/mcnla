@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/sketcher/gaussian_projection_sketcher.ipp
 /// @brief   The implementation of Gaussian projection sketcher.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_
@@ -16,15 +16,15 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::SketcherBase
+/// @copydoc  isvd::SketcherBase::SketcherBase
 ///
 template <class _Matrix>
 GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
-    const internal::Parameters<ScalarType> &parameters, index_t *seed
+    const Parameters<ScalarType> &parameters, index_t *seed
 ) noexcept : BaseType(parameters, seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::initialize
+/// @copydoc  isvd::SketcherBase::initialize
 ///
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
@@ -47,7 +47,7 @@ void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::internal::SketcherBase::sketch
+/// @copydoc  isvd::SketcherBase::sketch
 ///
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::sketchImpl(
@@ -59,11 +59,19 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
   assert(cube_q.getSizes()   == std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
                                                                        parameters_.getNumSketchEach()));
 
-  for ( auto i = 0; i < parameters_.getNumSketchEach(); ++i ) {
+  for ( index_t i = 0; i < parameters_.getNumSketchEach(); ++i ) {
     lapack::larnv<3>(matrix_omega_.vectorize(), this->seed_);
     blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, cube_q.getPage(i));
     gesvd_driver_(cube_q.getPage(i), vector_s_, matrix_empty_, matrix_empty_);
   }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  isvd::SketcherBase::getName
+///
+template <class _Matrix>
+constexpr const char* GaussianProjectionSketcher<_Matrix>::getNameImpl() const noexcept {
+  return name_;
 }
 
 }  // namespace isvd

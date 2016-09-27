@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/iamax.hpp
 /// @brief   The BLAS IAMAX.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_IAMAX_HPP_
@@ -12,13 +12,13 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/blas_plugin_start.h>
+#include <isvd/plugin/blas_plugin_begin.h>
 
 // Finds the index of the element with maximum absolute value.
-extern CPP_INT8 isamax_( const FORTRAN_INT8 n, const FORTRAN_REAL4 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 idamax_( const FORTRAN_INT8 n, const FORTRAN_REAL8 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 icamax_( const FORTRAN_INT8 n, const FORTRAN_COMP4 x, const FORTRAN_INT8 incx );
-extern CPP_INT8 izamax_( const FORTRAN_INT8 n, const FORTRAN_COMP8 x, const FORTRAN_INT8 incx );
+extern CPP_INT isamax_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
+extern CPP_INT idamax_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
+extern CPP_INT icamax_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
+extern CPP_INT izamax_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRAN_INT incx );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -35,9 +35,9 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Finds the index of the element with maximum absolute value.
@@ -57,7 +57,7 @@ static inline index_t iamax(
 ) noexcept { return izamax_(&n, x, &incx) - 1; }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace blas
 

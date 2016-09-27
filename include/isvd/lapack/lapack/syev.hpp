@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/lapack/syev.hpp
 /// @brief   The LAPACK SYEV.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_LAPACK_SYEV_HPP_
@@ -12,23 +12,23 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#include <isvd/plugin/lapack_plugin_start.h>
+#include <isvd/plugin/lapack_plugin_begin.h>
 
 // Computes all eigenvalues and, optionally, eigenvectors of a symmetric matrix.
-extern void ssyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_REAL4 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL4 w, FORTRAN_REAL4 work, const FORTRAN_INT8 lwork,
-                    FORTRAN_INT8 info );
-extern void dsyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_REAL8 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL8 w, FORTRAN_REAL8 work, const FORTRAN_INT8 lwork,
-                    FORTRAN_INT8 info );
+extern void ssyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_REAL4 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL4 w, FORTRAN_REAL4 work, const FORTRAN_INT lwork,
+                    FORTRAN_INT info );
+extern void dsyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_REAL8 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL8 w, FORTRAN_REAL8 work, const FORTRAN_INT lwork,
+                    FORTRAN_INT info );
 
 // Computes all eigenvalues and, optionally, eigenvectors of a Hermitian matrix.
-extern void cheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_COMP4 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL4 w, FORTRAN_COMP4 work, const FORTRAN_INT8 lwork, FORTRAN_REAL4 rwork,
-                    FORTRAN_INT8 info );
-extern void zheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT8 n, FORTRAN_COMP8 a,
-                    const FORTRAN_INT8 lda, FORTRAN_REAL8 w, FORTRAN_COMP8 work, const FORTRAN_INT8 lwork, FORTRAN_REAL8 rwork,
-                    FORTRAN_INT8 info );
+extern void cheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_COMP4 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL4 w, FORTRAN_COMP4 work, const FORTRAN_INT lwork, FORTRAN_REAL4 rwork,
+                    FORTRAN_INT info );
+extern void zheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_COMP8 a,
+                    const FORTRAN_INT lda, FORTRAN_REAL8 w, FORTRAN_COMP8 work, const FORTRAN_INT lwork, FORTRAN_REAL8 rwork,
+                    FORTRAN_INT info );
 
 #include <isvd/plugin/lapack_plugin_end.h>
 
@@ -45,9 +45,9 @@ namespace isvd {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace
+//  The detail namespace
 //
-namespace internal {
+namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes all eigenvalues and, optionally, eigenvectors of a symmetric or Hermitian matrix.
@@ -71,7 +71,7 @@ static inline index_t syev(
 ) noexcept { index_t info; zheev_(&jobz, &uplo, &n, a, &lda, w, work, &lwork, rwork, &info); return info; }
 //@}
 
-}  // namespace internal
+}  // namespace detail
 
 }  // namespace lapack
 

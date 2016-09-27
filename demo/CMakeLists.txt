@@ -4,8 +4,8 @@
 add_executable(demo demo.cpp)
 include_directories("${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
 include_directories(SYSTEM ${INCS})
-add_definitions(${DEFS})
 target_link_libraries(demo ${LIBS})
+target_compile_definitions(demo PUBLIC ${DEFS})
 set_target_properties(demo PROPERTIES COMPILE_FLAGS ${COMFLGS})
 set_target_properties(demo PROPERTIES LINK_FLAGS    ${LNKFLGS})
 

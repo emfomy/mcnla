@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas.hpp
 /// @brief   The BLAS definitions.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_HPP_
@@ -16,18 +16,24 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The BLAS namespace
-//
+/// The BLAS namespace
+///
 namespace blas {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The BLAS detail namespace.
+///
+namespace detail {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
 ///
 template <TransOption _trans, typename _Scalar>
 struct TransChar {
-  static_assert(!!isTranspose(_trans) || !isConjugate(_trans), "Conjugate no-transpose is nor supported!");
-  static const char value =
-      !isTranspose(_trans) ? 'N' : ((!!isConjugate(_trans) && isvd::internal::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+  static constexpr char value = !isTranspose(_trans)
+      ? ((!!isConjugate(_trans) && isvd::detail::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
+      : ((!!isConjugate(_trans) && isvd::detail::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+  static_assert(value != '?', "Conjugate no-transpose is nor supported!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +41,7 @@ struct TransChar {
 ///
 template <UploOption _uplo, Layout _layout>
 struct UploChar {
-  static const char value = (isLower(_uplo) ^ isRowMajor(_layout)) ? 'L' : 'U';
+  static constexpr char value = (isLower(_uplo) ^ isRowMajor(_layout)) ? 'L' : 'U';
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +49,7 @@ struct UploChar {
 ///
 template <UploOption _uplo>
 struct DiagChar {
-  static const char value = !isUnitDiag(_uplo) ? 'N' : 'U';
+  static constexpr char value = !isUnitDiag(_uplo) ? 'N' : 'U';
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +57,7 @@ struct DiagChar {
 ///
 template <SideOption _side, Layout _layout>
 struct SideChar {
-  static const char value = (isLeftSide(_side) ^ isRowMajor(_layout)) ? 'L' : 'R';
+  static constexpr char value = (isLeftSide(_side) ^ isRowMajor(_layout)) ? 'L' : 'R';
 };
 
 }  // namespace blas

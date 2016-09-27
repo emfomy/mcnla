@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/iamin.hpp
 /// @brief   The BLAS IAMIN routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_IAMIN_HPP_
@@ -24,14 +24,14 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  isvd::blas::internal::iamin
+/// @brief  Finds the index of the element with minimum absolute value.
 ///
 //@{
 template <typename _Scalar>
 inline index_t iamin(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return internal::iamin(x.getLength(), x.getValue(), x.getIncrement());
+  return detail::iamin(x.getLength(), x.getValue(), x.getStride());
 }
 //@}
 
@@ -40,10 +40,10 @@ inline index_t iamin(
 ///
 //@{
 template <typename _Scalar>
-inline _Scalar amin(
+inline typename isvd::detail::ScalarTraits<_Scalar>::RealType amin(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  index_t idx = internal::iamin(x.getLength(), x.getValue(), x.getIncrement());
+  index_t idx = detail::iamin(x.getLength(), x.getValue(), x.getStride());
   return std::abs(x(idx));
 }
 //@}

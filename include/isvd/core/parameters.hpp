@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/parameters.hpp
 /// @brief   The parameter structure of iSVD solver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_PARAMETERS_HPP_
@@ -17,11 +17,6 @@
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The internal namespace.
-//
-namespace internal {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The parameters of iSVD solver.
 ///
 /// @tparam  _Scalar  The scalar type type.
@@ -33,7 +28,7 @@ class Parameters {
 
  private:
 
-  using RealScalar = typename ScalarTraits<_Scalar>::RealType;
+  using RealScalar = typename detail::ScalarTraits<_Scalar>::RealType;
 
  public:
 
@@ -41,10 +36,10 @@ class Parameters {
   const MPI_Comm mpi_comm;
 
   /// The MPI size.
-  const index_t mpi_size;
+  const mpi_int_t mpi_size;
 
   /// The MPI root.
-  const index_t mpi_root;
+  const mpi_int_t mpi_root;
 
  protected:
 
@@ -73,12 +68,12 @@ class Parameters {
   index_t max_iteration_ = 256;
 
   /// The tolerance of converge condition.
-  RealScalar tolerance_ = 1e-6;
+  RealScalar tolerance_ = 1e-4;
 
  public:
 
   // Constructors
-  Parameters( const MPI_Comm comm, const index_t root = 0 ) noexcept;
+  Parameters( const MPI_Comm comm, const mpi_int_t root = 0 ) noexcept;
 
   // Gets parameter
   inline bool isInitialized() const noexcept;
@@ -93,8 +88,6 @@ class Parameters {
   inline index_t getMaxIteration() const noexcept;
   inline RealScalar getTolerance() const noexcept;
 };
-
-}  // namespace internal
 
 }  // namespace isvd
 
