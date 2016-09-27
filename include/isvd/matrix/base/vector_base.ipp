@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base/vector_base.ipp
 /// @brief   The implementation of vector interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_BASE_VECTOR_BASE_IPP_

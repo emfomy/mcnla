@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_cube.ipp
 /// @brief   The implementation of dense cube.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_CUBE_IPP_

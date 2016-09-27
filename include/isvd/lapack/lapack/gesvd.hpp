@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/lapack/gesvd.hpp
 /// @brief   The LAPACK GESVD.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_LAPACK_GESVD_HPP_

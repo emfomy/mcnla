@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_data.ipp
 /// @brief   The implementation of dense data storage.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_DATA_IPP_

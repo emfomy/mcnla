@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack.hpp
 /// @brief   The LAPACK header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_HPP_

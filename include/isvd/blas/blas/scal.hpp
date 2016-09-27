@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/scal.hpp
 /// @brief   The BLAS SCAL.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_SCAL_HPP_

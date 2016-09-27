@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/driver/syev.ipp
 /// @brief   The implementation of LAPACK SYEV driver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_DRIVER_SYEV_IPP_

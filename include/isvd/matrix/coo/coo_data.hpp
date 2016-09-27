@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_data.hpp
 /// @brief   The COO data storage.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_DATA_HPP_

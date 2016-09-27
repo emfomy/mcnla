@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/syrk.hpp
 /// @brief   The BLAS SYRK routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_SYRK_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_data.hpp
 /// @brief   The dense data storage.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_DATA_HPP_

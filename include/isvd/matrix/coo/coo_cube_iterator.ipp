@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_cube_iterator.ipp
 /// @brief   The implementation of COO cube iterator.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_CUBE_ITERATOR_IPP_

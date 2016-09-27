@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base/matrix_base.hpp
 /// @brief   The matrix interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_BASE_MATRIX_BASE_HPP_

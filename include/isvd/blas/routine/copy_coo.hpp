@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/copy_coo.hpp
 /// @brief   The BLAS COPY routine for COO types.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_COPY_COO_HPP_

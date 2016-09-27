@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/axpby.hpp
 /// @brief   The BLAS AXPBY.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_AXPBY_HPP_

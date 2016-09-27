@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/axpy.hpp
 /// @brief   The BLAS AXPY routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_AXPY_HPP_

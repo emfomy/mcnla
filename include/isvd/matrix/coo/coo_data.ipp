@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_data.ipp
 /// @brief   The implementation of COO data storage.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_DATA_IPP_

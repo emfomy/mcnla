@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/asum.hpp
 /// @brief   The BLAS ASUM routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_ASUM_HPP_

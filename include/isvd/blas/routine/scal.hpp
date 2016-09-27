@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/scal.hpp
 /// @brief   The BLAS SCAL routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_SCAL_HPP_

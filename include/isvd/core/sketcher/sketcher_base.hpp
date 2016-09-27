@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/sketcher/sketcher_base.hpp
 /// @brief   The iSVD sketcher interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SKETCHER_SKETCHER_BASE_HPP_

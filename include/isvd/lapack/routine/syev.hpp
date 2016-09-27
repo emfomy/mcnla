@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/routine/syev.hpp
 /// @brief   The LAPACK SYEV routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_ROUTINE_SYEV_HPP_

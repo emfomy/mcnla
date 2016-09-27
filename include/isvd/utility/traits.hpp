@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/traits.hpp
 /// @brief   The traits utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_TRAITS_HPP_

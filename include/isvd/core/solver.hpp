@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/solver.hpp
 /// @brief   The iSVD solver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SOLVER_HPP_
@@ -29,6 +29,9 @@ namespace isvd {
 /// @tparam  _Sketcher       The sketcher type.
 /// @tparam  _Integrator     The integrator type.
 /// @tparam  _Reconstructor  The reconstructor type.
+///
+/// @attention  The solver should have been #initialize&zwnj;d before calling #compute.
+/// @attention  The solver should be re-#initialize&zwnj;d after changing parameters.
 ///
 template <class _Matrix,
           class _Sketcher = GaussianProjectionSketcher<_Matrix>,

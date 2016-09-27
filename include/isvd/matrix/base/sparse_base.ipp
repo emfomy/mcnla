@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base/sparse_base.ipp
 /// @brief   The implementation of sparse container interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_BASE_SPARSE_BASE_IPP_

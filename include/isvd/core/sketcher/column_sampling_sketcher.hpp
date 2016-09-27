@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/sketcher/column_sampling_sketcher.hpp
 /// @brief   The column sampling sketcher.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_

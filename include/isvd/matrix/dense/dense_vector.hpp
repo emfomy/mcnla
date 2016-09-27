@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_vector.hpp
 /// @brief   The dense vector class.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_HPP_

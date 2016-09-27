@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/integrator/kolmogorov_nagumo_type_integrator.ipp
 /// @brief   The implementation of Kolmogorov-Nagumo-type integrator.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_IPP_

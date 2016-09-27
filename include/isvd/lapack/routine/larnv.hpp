@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/routine/larnv.hpp
 /// @brief   The LAPACK LARNV routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_ROUTINE_LARNV_HPP_

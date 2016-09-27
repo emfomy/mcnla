@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/axpy.hpp
 /// @brief   The BLAS AXPY.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_AXPY_HPP_

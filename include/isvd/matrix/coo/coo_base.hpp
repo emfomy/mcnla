@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_base.hpp
 /// @brief   The COO container interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_BASE_HPP_

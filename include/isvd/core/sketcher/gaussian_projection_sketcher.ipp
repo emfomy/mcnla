@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/sketcher/gaussian_projection_sketcher.ipp
 /// @brief   The implementation of Gaussian projection sketcher.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_

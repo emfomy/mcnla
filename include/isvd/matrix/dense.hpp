@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense.hpp
 /// @brief   The dense header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_HPP_

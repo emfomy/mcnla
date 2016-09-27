@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/reconstructor/reconstructor_base.hpp
 /// @brief   The iSVD reconstructor interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_RECONSTRUCTOR_RECONSTRUCTOR_BASE_HPP_

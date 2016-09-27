@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/driver/gesvd.hpp
 /// @brief   The LAPACK GESVD driver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_DRIVER_GESVD_DRIVER_HPP_

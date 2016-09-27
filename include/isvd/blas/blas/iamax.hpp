@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/iamax.hpp
 /// @brief   The BLAS IAMAX.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_IAMAX_HPP_

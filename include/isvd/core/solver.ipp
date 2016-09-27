@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/solver.ipp
 /// @brief   The implementation of iSVD solver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SOLVER_IPP_
@@ -52,6 +52,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the iSVD decomposition.
 ///
+/// @attention  The solver should have be initialized.
 /// @attention  @a matrix_a should be the same in each MPI node.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
@@ -93,36 +94,48 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::g
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate singular values.
 ///
+/// @attention  The solver should have be computed.
+///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::RealScalarType>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSingularValues() const noexcept {
+  assert(parameters_.isComputed());
   return reconstructor_.getVectorS();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate left singular vectors.
 ///
+/// @attention  The solver should have be computed.
+///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getLeftSingularVectors() const noexcept {
+  assert(parameters_.isComputed());
   return reconstructor_.getMatrixU();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate right singular vectors.
 ///
+/// @attention  The solver should have be computed.
+///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getRightSingularVectors() const noexcept {
+  assert(parameters_.isComputed());
   return reconstructor_.getMatrixVt();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the integrated orthonormal basis of the sketched subspace.
 ///
+/// @attention  The solver should have be computed.
+///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::ROWMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
+  assert(parameters_.isComputed());
   return integrator_.getMatrixQc();
 }
 

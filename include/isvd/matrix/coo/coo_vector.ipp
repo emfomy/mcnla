@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_vector.ipp
 /// @brief   The implementation of COO vector.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_VECTOR_IPP_

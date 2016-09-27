@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/symm.hpp
 /// @brief   The BLAS SYMM routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_SYMM_HPP_

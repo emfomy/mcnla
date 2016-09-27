@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_matrix_iterator.ipp
 /// @brief   The implementation of COO matrix iterator.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_MATRIX_ITERATOR_IPP_

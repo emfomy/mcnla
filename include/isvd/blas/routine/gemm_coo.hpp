@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/gemm_coo.hpp
 /// @brief   The BLAS GEMM routine for COO types.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_GEMM_COO_HPP_

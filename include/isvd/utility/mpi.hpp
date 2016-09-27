@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/mpi.hpp
 /// @brief   The MPI utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_MPI_HPP_

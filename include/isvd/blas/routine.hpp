@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine.hpp
 /// @brief   The BLAS routines header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_HPP_

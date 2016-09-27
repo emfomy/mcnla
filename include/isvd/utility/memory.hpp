@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/memory.hpp
 /// @brief   The memory utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_MEMORY_HPP_

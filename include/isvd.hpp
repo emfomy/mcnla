@@ -2,7 +2,7 @@
 /// @file    include/isvd.hpp
 /// @brief   The iSVD header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/kit.hpp
 /// @brief   The matrix kits.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_KIT_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo.hpp
 /// @brief   The COO header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_HPP_

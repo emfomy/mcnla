@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base.hpp
 /// @brief   The matrix bases.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_BASE_HPP_

@@ -2,7 +2,7 @@
 /// @file    demo/isvd.cpp
 /// @brief   The iSVD algorithm
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #include <cmath>

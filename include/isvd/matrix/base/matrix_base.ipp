@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base/matrix_base.ipp
 /// @brief   The implementation of matrix interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_BASE_MATRIX_BASE_IPP_

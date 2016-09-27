@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/asum.hpp
 /// @brief   The BLAS ASUM.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_ASUM_HPP_

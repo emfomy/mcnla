@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix.hpp
 /// @brief   The matrix header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_HPP_

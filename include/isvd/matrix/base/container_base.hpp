@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base/container_base.hpp
 /// @brief   The container interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_CONTAINER_BASE_HPP_

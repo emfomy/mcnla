@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/routine/gesvd.hpp
 /// @brief   The LAPACK GESVD routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_ROUTINE_GESVD_HPP_

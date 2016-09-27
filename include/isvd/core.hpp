@@ -2,7 +2,7 @@
 /// @file    include/isvd/core.hpp
 /// @brief   The core header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_HPP_

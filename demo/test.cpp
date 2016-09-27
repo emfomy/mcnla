@@ -2,7 +2,7 @@
 /// @file    demo/test.cpp
 /// @brief   The test code
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #include <iostream>

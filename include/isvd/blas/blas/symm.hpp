@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/symm.hpp
 /// @brief   The BLAS SYMM.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_SYMM_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/copy.hpp
 /// @brief   The BLAS COPY routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_COPY_HPP_

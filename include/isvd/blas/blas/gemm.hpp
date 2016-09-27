@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/gemm.hpp
 /// @brief   The BLAS GEMM.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_GEMM_HPP_

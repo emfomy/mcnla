@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/reconstructor/dummy_reconstructor.hpp
 /// @brief   The dummy reconstructor.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/isvd.hpp
 /// @brief   The definitions.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_ISVD_HPP_
