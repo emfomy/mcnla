@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/driver.hpp
 /// @brief   The LAPACK drivers header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_DRIVER_HPP_

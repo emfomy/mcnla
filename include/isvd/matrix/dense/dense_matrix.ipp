@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_matrix.ipp
 /// @brief   The implementation of dense matrix.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_MATRIX_IPP_

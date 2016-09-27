@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_tuple.hpp
 /// @brief   The COO tuple.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_TUPLE_HPP_

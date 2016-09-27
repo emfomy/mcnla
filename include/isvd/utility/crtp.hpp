@@ -2,7 +2,7 @@
 /// @file    include/isvd/utility/crtp.hpp
 /// @brief   The curiously recurring template pattern utilities.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_UTILITY_CRTP_HPP_

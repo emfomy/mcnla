@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/kit/zeroize.hpp
 /// @brief   The zeroize routines.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_KIT_ZEROIZE_HPP_

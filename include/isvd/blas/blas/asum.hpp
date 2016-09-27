@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/blas/iamax.hpp
-/// @brief   The BLAS IAMAX.
+/// @file    include/isvd/blas/blas/asum.hpp
+/// @brief   The BLAS ASUM.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef ISVD_BLAS_BLAS_IAMAX_HPP_
-#define ISVD_BLAS_BLAS_IAMAX_HPP_
+#ifndef ISVD_BLAS_BLAS_ASUM_HPP_
+#define ISVD_BLAS_BLAS_ASUM_HPP_
 
 #include <isvd/isvd.hpp>
 
@@ -14,11 +14,11 @@
 
 #include <isvd/plugin/blas_plugin_begin.h>
 
-// Finds the index of the element with maximum absolute value.
-extern CPP_INT isamax_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
-extern CPP_INT idamax_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
-extern CPP_INT icamax_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
-extern CPP_INT izamax_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRAN_INT incx );
+// Computes the sum of magnitudes of the vector elements.
+extern CPP_REAL4 sasum_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
+extern CPP_REAL8 dasum_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
+extern CPP_COMP4 casum_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
+extern CPP_COMP8 zasum_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRAN_INT incx );
 
 #include <isvd/plugin/blas_plugin_end.h>
 
@@ -40,21 +40,21 @@ namespace blas {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Finds the index of the element with maximum absolute value.
+/// @brief  Computes the sum of magnitudes of the vector elements.
 ///
 //@{
-static inline index_t iamax(
+static inline float asum(
     const index_t n, const float* x, const index_t incx
-) noexcept { return isamax_(&n, x, &incx) - 1; }
-static inline index_t iamax(
+) noexcept { return sasum_(&n, x, &incx); }
+static inline double asum(
     const index_t n, const double* x, const index_t incx
-) noexcept { return idamax_(&n, x, &incx) - 1; }
-static inline index_t iamax(
+) noexcept { return dasum_(&n, x, &incx); }
+static inline std::complex<float> asum(
     const index_t n, const std::complex<float>* x, const index_t incx
-) noexcept { return icamax_(&n, x, &incx) - 1; }
-static inline index_t iamax(
+) noexcept { return casum_(&n, x, &incx); }
+static inline const std::complex<double> asum(
     const index_t n, const std::complex<double>* x, const index_t incx
-) noexcept { return izamax_(&n, x, &incx) - 1; }
+) noexcept { return zasum_(&n, x, &incx); }
 //@}
 
 }  // namespace detail
@@ -63,4 +63,4 @@ static inline index_t iamax(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_BLAS_IAMAX_HPP_
+#endif  // ISVD_BLAS_BLAS_ASUM_HPP_

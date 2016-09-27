@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_vector.ipp
 /// @brief   The implementation of dense vector.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_IPP_
@@ -139,7 +139,7 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noe
 template <typename __Scalar>
 std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vector ) {
   for ( index_t i = 0; i < vector.length_; ++i ) {
-    out << std::setw(ios_width) << vector(i);
+    out << std::setw(ios_width) << vector(i) << "  ";
   }
   return out << std::endl;
 }

@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_iterator_base.hpp
 /// @brief   The dense iterator interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_ITERATOR_BASE_HPP_

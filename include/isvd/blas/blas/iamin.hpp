@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/iamin.hpp
 /// @brief   The BLAS IAMIN.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_IAMIN_HPP_

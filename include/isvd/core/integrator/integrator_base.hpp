@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/integrator/integrator_base.hpp
 /// @brief   The iSVD integrator interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_INTEGRATOR_INTEGRATOR_BASE_HPP_

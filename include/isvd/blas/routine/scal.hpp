@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/scal.hpp
 /// @brief   The BLAS SCAL routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_SCAL_HPP_
@@ -35,8 +35,24 @@ inline void scal(
 
 template <typename _Scalar>
 inline void scal(
+    const typename DenseVector<std::complex<_Scalar>>::RealScalarType alpha,
+          DenseVector<std::complex<_Scalar>> &x
+) noexcept {
+  detail::scal(x.getLength(), alpha, x.getValue(), x.getStride());
+}
+
+template <typename _Scalar>
+inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
           DenseVector<_Scalar> &&x
+) noexcept {
+  scal(alpha, x);
+}
+
+template <typename _Scalar>
+inline void scal(
+    const typename DenseVector<std::complex<_Scalar>>::RealScalarType alpha,
+          DenseVector<std::complex<_Scalar>> &&x
 ) noexcept {
   scal(alpha, x);
 }

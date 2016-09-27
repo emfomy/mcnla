@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/copy.hpp
 /// @brief   The BLAS COPY.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_COPY_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base/cube_base.hpp
 /// @brief   The cube interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_BASE_CUBE_BASE_HPP_

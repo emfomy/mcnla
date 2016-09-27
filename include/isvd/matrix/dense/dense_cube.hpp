@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_cube.hpp
 /// @brief   The dense cube class.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_CUBE_HPP_

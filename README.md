@@ -8,7 +8,7 @@ Integrated Singular Value Decomposition
 * http://emfomy.github.io/isvd
 
 ### Author
-* Mu Yang <emfomy@gmail.com>
+* Mu Yang <<emfomy@gmail.com>>
 
 ### Makefile
 
@@ -17,3 +17,6 @@ Integrated Singular Value Decomposition
 | `make all`         | compile all binaries  |
 | `make doc`         | compile documentation |
 | `make run`         | run code              |
+
+### Reference
+* [Ting-Li Chen, Dawei D. Chang, Su-Yun Huang, Hung Chen, Chienyao Lin, Weichung Wang, “Integrating Multiple Random Sketches for Singular Value Decomposition”](https://arxiv.org/abs/1608.08285)

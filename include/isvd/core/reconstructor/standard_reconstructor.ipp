@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/reconstructor/standard_reconstructor.ipp
 /// @brief   The implementation of standard reconstructor.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_IPP_

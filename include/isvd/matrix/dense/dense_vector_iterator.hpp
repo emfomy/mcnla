@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_vector_iterator.hpp
 /// @brief   The dense vector iterator class.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_

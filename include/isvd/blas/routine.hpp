@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine.hpp
 /// @brief   The BLAS routines header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_HPP_
@@ -13,6 +13,7 @@
 #include <isvd/blas/routine/scal.hpp>
 #include <isvd/blas/routine/axpy.hpp>
 #include <isvd/blas/routine/axpby.hpp>
+#include <isvd/blas/routine/asum.hpp>
 #include <isvd/blas/routine/iamax.hpp>
 #include <isvd/blas/routine/iamin.hpp>
 

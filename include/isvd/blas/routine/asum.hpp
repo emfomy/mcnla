@@ -1,14 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/isvd/blas/routine/copy_coo.hpp
-/// @brief   The BLAS COPY routine for COO types.
+/// @file    include/isvd/blas/routine/asum.hpp
+/// @brief   The BLAS ASUM routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef ISVD_BLAS_ROUTINE_COPY_COO_HPP_
-#define ISVD_BLAS_ROUTINE_COPY_COO_HPP_
+#ifndef ISVD_BLAS_ROUTINE_ASUM_HPP_
+#define ISVD_BLAS_ROUTINE_ASUM_HPP_
 
+#include <cmath>
+#include <complex>
 #include <isvd/matrix.hpp>
+#include <isvd/blas/blas/asum.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The iSVD namespace
@@ -21,27 +24,14 @@ namespace isvd {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copies COO vector to dense vector.
+/// @brief  Computes the sum of magnitudes of the vector elements.
 ///
 //@{
 template <typename _Scalar>
-inline void copy(
-    const CooVector<_Scalar> &x,
-          DenseVector<_Scalar> &y
+inline _Scalar asum(
+    const DenseVector<_Scalar> &x
 ) noexcept {
-  assert(x.getSizes() == y.getSizes());
-  zeroize(y);
-  for ( auto tuple : x ) {
-    y(tuple.template getIdx<0>()) = tuple.getValue();
-  }
-}
-
-template <typename _Scalar>
-inline void copy(
-    const CooVector<_Scalar> &x,
-          DenseVector<_Scalar> &&y
-) noexcept {
-  copy(x, y);
+  return detail::asum(x.getLength(), x.getValue(), x.getStride());
 }
 //@}
 
@@ -49,4 +39,4 @@ inline void copy(
 
 }  // namespace isvd
 
-#endif  // ISVD_BLAS_ROUTINE_COPY_COO_HPP_
+#endif  // ISVD_BLAS_ROUTINE_ASUM_HPP_

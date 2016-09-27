@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/coo/coo_vector.hpp
 /// @brief   The COO vector class.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_COO_COO_VECTOR_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/lapack/lapack/larnv.hpp
 /// @brief   The LAPACK LARNV.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_LAPACK_LAPACK_LARNV_HPP_

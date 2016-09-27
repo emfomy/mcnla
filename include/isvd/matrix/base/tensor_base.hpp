@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/base/tensor_base.hpp
 /// @brief   The tensor interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_BASE_TENSOR_BASE_HPP_

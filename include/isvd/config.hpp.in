@@ -2,7 +2,7 @@
 /// @file    include/isvd/config.hpp
 /// @brief   The configured options and settings.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CONFIG_HPP_
@@ -29,7 +29,7 @@ using size_t = std::uint@ISVD_SYSTEM_INT_SIZE@_t;
 static constexpr index_t system_int_size = @ISVD_SYSTEM_INT_SIZE@;
 
 /// The format width
-static constexpr size_t ios_width = 12;
+static constexpr size_t ios_width = 14;
 
 }  // namespace isvd
 

@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/reconstructor.hpp
 /// @brief   The reconstructor header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_RECONSTRUCTOR_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/symm.hpp
 /// @brief   The BLAS SYMM routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_SYMM_HPP_
@@ -25,8 +25,7 @@ namespace blas {
 /// @brief  Computes a matrix-matrix product where one input matrix is symmetric/Hermitian.
 ///
 //@{
-template <SideOption _side,
-          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <SideOption _side, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
@@ -34,37 +33,20 @@ inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
-  if ( isColMajor(_layout) ) {
-    if ( isLeftSide(_side) ) {
-      assert(a.getNrow()  == a.getNcol());
-      assert(a.getNrow()  == c.getNrow());
-      assert(b.getSizes() == c.getSizes());
-    } else {
-      assert(b.getNrow()  == b.getNcol());
-      assert(b.getNcol()  == c.getNcol());
-      assert(a.getSizes() == c.getSizes());
-    }
-    detail::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNrow(), c.getNcol(),
-                   alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(),
-                   beta, c.getValue(), c.getPitch());
+  assert(a.getNrow()  == a.getNcol());
+  assert(b.getSizes() == c.getSizes());
+  if ( isLeftSide(_side) ) {
+    assert(a.getNrow()  == c.getNrow());
   } else {
-    if ( isRightSide(_side) ) {
-      assert(b.getNcol()  == b.getNrow());
-      assert(b.getNcol()  == c.getNcol());
-      assert(a.getSizes() == c.getSizes());
-    } else {
-      assert(a.getNcol()  == a.getNrow());
-      assert(a.getNrow()  == c.getNrow());
-      assert(b.getSizes() == c.getSizes());
-    }
-    detail::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value, c.getNcol(), c.getNrow(),
-                   alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(),
-                   beta, c.getValue(), c.getPitch());
+    assert(a.getNcol()  == c.getNcol());
   }
+
+  detail::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value,
+               c.template getSize<0>(), c.template getSize<1>(),
+               alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(), beta, c.getValue(), c.getPitch());
 }
 
-template <SideOption _side,
-          UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <SideOption _side, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,

@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas.hpp
 /// @brief   The BLAS header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_HPP_

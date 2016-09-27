@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/blas/syrk.hpp
 /// @brief   The BLAS SYRK.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_BLAS_SYRK_HPP_

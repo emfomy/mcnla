@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/dense/dense_base.ipp
 /// @brief   The implementation of dense container interface.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_DENSE_DENSE_BASE_IPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/parameters.hpp
 /// @brief   The parameter structure of iSVD solver.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_PARAMETERS_HPP_

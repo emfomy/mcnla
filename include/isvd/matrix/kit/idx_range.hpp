@@ -2,7 +2,7 @@
 /// @file    include/isvd/matrix/kit/idx_range.hpp
 /// @brief   The index range class.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_MATRIX_KIT_INDEX_RANGE_HPP_

@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/sketcher.hpp
 /// @brief   The sketcher header.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SKETCHER_HPP_

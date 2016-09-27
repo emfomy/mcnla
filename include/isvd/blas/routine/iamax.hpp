@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/iamax.hpp
 /// @brief   The BLAS IAMAX routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_IAMAX_HPP_

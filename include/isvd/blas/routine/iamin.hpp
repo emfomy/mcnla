@@ -2,7 +2,7 @@
 /// @file    include/isvd/blas/routine/iamin.hpp
 /// @brief   The BLAS IAMIN routine.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_BLAS_ROUTINE_IAMIN_HPP_

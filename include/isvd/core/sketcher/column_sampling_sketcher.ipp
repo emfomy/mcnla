@@ -2,7 +2,7 @@
 /// @file    include/isvd/core/sketcher/column_sampling_sketcher.ipp
 /// @brief   The implementation of column sampling sketcher.
 ///
-/// @author  Mu Yang <emfomy@gmail.com>
+/// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef ISVD_CORE_SKETCHER_COLUMN_SAMPLING_SKETCHER_IPP_
