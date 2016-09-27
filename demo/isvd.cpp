@@ -105,7 +105,7 @@ int main( int argc, char **argv ) {
   for ( auto t = 0; t < num_test; ++t ) {
     MPI_Barrier(MPI_COMM_WORLD);
     if ( mpi_rank == 0 ) {
-      start_time = dsecnd();
+      start_time = MPI_Wtime();
     }
 
     // ================================================================================================================== //
@@ -137,7 +137,7 @@ int main( int argc, char **argv ) {
     // Check time
     MPI_Barrier(MPI_COMM_WORLD);
     if ( mpi_rank == 0 ) {
-      total_time += dsecnd() - start_time;
+      total_time += MPI_Wtime() - start_time;
     }
 
     // ================================================================================================================== //
@@ -147,20 +147,17 @@ int main( int argc, char **argv ) {
     }
     if ( verbose && mpi_rank == 0 ) {
       printf("\nS: "); for ( auto xx = 0; xx < k; ++xx ) { printf("%12.6f", vector_s[xx]); } printf("\n");
-      printf("svd(U_true' * U): max = %.4f, min = %.4f, mean = %.4f\n", smax, smin, smean); fflush(stdout);
+      printf("svd(U_true' * U): max = %.6f, min = %.6f, mean = %.6f\n", smax, smin, smean); fflush(stdout);
     }
-    if ( mpi_rank == 0 ) { printf("%4d: max = %.4f, min = %.4f, mean = %.4f\n", t, smax, smin, smean); }
+    if ( mpi_rank == 0 ) { printf("%*d: max = %.6f, min = %.6f, mean = %.6f\n", int(log10(num_test)+1), t, smax, smin, smean); }
     if ( mpi_rank == 0 ) { acc_min(smin); acc_max(smax); acc_mean(smean); }
   }
 
   if ( mpi_rank == 0 ) {
-    cout << "Used " << total_time / num_test << " seconds averagely." << endl;
-    cout << "mean(op(svd(U_true' * U))): max = " << mean(acc_max)
-                                   << ", min = " << mean(acc_min)
-                                  << ", mean = " << mean(acc_mean) << endl;
-    cout << "sd(op(svd(U_true' * U))):   max = " << sqrt(variance(acc_max))
-                                   << ", min = " << sqrt(variance(acc_min))
-                                  << ", mean = " << sqrt(variance(acc_mean)) << endl;
+    printf("Used %.6f seconds averagely.\n", total_time / num_test);
+    printf("mean(op(svd(U_true' * U)): max = %.6f, min = %.6f, mean = %.6f\n", mean(acc_max), mean(acc_min), mean(acc_mean));
+    printf("sd(op(svd(U_true' * U)):   max = %.6f, min = %.6f, mean = %.6f\n",
+           sqrt(variance(acc_max)), sqrt(variance(acc_min)), sqrt(variance(acc_mean)));
   }
 
   // ====================================================================================================================== //

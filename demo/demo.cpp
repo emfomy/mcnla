@@ -101,7 +101,7 @@ int main( int argc, char **argv ) {
   // Run iSVD
   if ( mpi_rank == mpi_root ) {
     std::cout << "Start iSVD." << std::endl;
-    std::cout << std::fixed << std::setprecision(4);
+    std::cout << std::fixed << std::setprecision(6);
   }
 
   for ( isvd::index_t t = 0; t < num_test; ++t ) {
@@ -122,7 +122,8 @@ int main( int argc, char **argv ) {
     // Check result
     if ( mpi_rank == mpi_root ) {
       check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
-      std::cout << std::setw(4) << t << ": max = " << smax << ", min = " << smin << ", mean = " << smean << std::endl;
+      std::cout << std::setw(log10(num_test)+1) << t
+                << ": max = " << smax << ", min = " << smin << ", mean = " << smean << std::endl;
       acc_min(smin); acc_max(smax); acc_mean(smean);
     }
   }
