@@ -3,6 +3,9 @@
 # DOxygen
 find_package(Doxygen REQUIRED)
 
+# Set documentation directory
+set(MCNLA_DOCS_DIR "${CMAKE_BINARY_DIR}/docs")
+
 # Create configure files
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
@@ -28,5 +31,5 @@ endif()
 set_directory_properties(
   PROPERTIES
   ADDITIONAL_MAKE_CLEAN_FILES
-  "${CMAKE_BINARY_DIR}/documentation"
+  "${MCNLA_DOCS_DIR}"
 )

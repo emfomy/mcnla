@@ -1,11 +1,11 @@
-# iSVD
-Integrated Singular Value Decomposition
+# MCNLA
+Monte Carlo Numerical Linear Algebra Package
 
 ### Git
-* https://github.com/emfomy/isvd
+* https://github.com/wlab-pro/mcnla
 
 ### Documentation
-* http://emfomy.github.io/isvd
+* http://wlab-pro.github.io/mcnla
 
 ### Author
 * Mu Yang <<emfomy@gmail.com>>

@@ -1,0 +1,51 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/mcnla/isvd/sketcher/sketcher_base.ipp
+/// @brief   The implementation of MCNLA sketcher interface.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_ISVD_SKETCHER_BASE_IPP_
+#define MCNLA_ISVD_SKETCHER_BASE_IPP_
+
+#include <mcnla/isvd/sketcher/sketcher_base.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The MCNLA namespace.
+//
+namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given parameters.
+///
+template <class _Derived>
+SketcherBase<_Derived>::SketcherBase(
+    const Parameters<ScalarType> &parameters, index_t *seed
+) noexcept : parameters_(parameters), seed_(seed) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Initializes.
+///
+template <class _Derived>
+void SketcherBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Random sketches.
+///
+template <class _Derived>
+void SketcherBase<_Derived>::sketch(
+    const MatrixType &matrix_a,
+          DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q
+) noexcept { this->derived().sketchImpl(matrix_a, cube_q); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::Solver::getSketcherName
+///
+template <class _Derived>
+constexpr const char* SketcherBase<_Derived>::getName() const noexcept {
+  return this->derived().getNameImpl();
+}
+
+}  // namespace mcnla
+
+#endif  // MCNLA_ISVD_SKETCHER_BASE_IPP_

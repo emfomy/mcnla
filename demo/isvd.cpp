@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/isvd.cpp
-/// @brief   The iSVD algorithm
+/// @file    demo/mcnla.cpp
+/// @brief   The MCNLA algorithm
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -12,13 +12,13 @@
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-#include <isvd/utility.hpp>
+#include <mcnla/utility.hpp>
 #include <mpi.h>
 #include <mkl.h>
 
 using namespace std;
 using namespace boost::accumulators;
-using namespace isvd;
+using namespace mcnla;
 
 int mpi_size;
 int mpi_rank;
@@ -47,10 +47,10 @@ int main( int argc, char **argv ) {
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
   if ( mpi_rank == 0 ) {
-    cout << "iSVD "
-         << ISVD_VERSION_MAJOR << "."
-         << ISVD_VERSION_MINOR << "."
-         << ISVD_VERSION_PATCH << " old demo" << endl << endl;
+    cout << "MCNLA "
+         << MCNLA_VERSION_MAJOR << "."
+         << MCNLA_VERSION_MINOR << "."
+         << MCNLA_VERSION_PATCH << " old demo" << endl << endl;
   }
 
   int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
@@ -97,9 +97,9 @@ int main( int argc, char **argv ) {
   if ( verbose && mpi_rank == 0 ) { cout << "done" << endl << endl; }
 
   // ====================================================================================================================== //
-  // Run iSVD
+  // Run MCNLA
   if ( mpi_rank == 0 ) {
-    cout << "Start iSVD." << endl;
+    cout << "Start MCNLA." << endl;
   }
 
   for ( auto t = 0; t < num_test; ++t ) {

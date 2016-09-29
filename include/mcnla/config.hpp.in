@@ -1,0 +1,36 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/mcnla/config.hpp
+/// @brief   The configured options and settings.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_CONFIG_HPP_
+#define MCNLA_CONFIG_HPP_
+
+#define MCNLA_VERSION_MAJOR @MCNLA_VERSION_MAJOR@ ///< The major version of MCNLA.
+#define MCNLA_VERSION_MINOR @MCNLA_VERSION_MINOR@ ///< The minor version of MCNLA.
+#define MCNLA_VERSION_PATCH @MCNLA_VERSION_PATCH@ ///< The patch version of MCNLA.
+
+#include <cstdint>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The MCNLA namespace
+//
+namespace mcnla {
+
+/// The type of index.
+using index_t = std::int@MCNLA_SYSTEM_INT_SIZE@_t;
+
+/// The type of size.
+using size_t = std::uint@MCNLA_SYSTEM_INT_SIZE@_t;
+
+/// The size of system integer.
+static constexpr index_t system_int_size = @MCNLA_SYSTEM_INT_SIZE@;
+
+/// The format width
+static constexpr size_t ios_width = 14;
+
+}  // namespace mcnla
+
+#endif  // MCNLA_CONFIG_HPP_

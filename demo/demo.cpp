@@ -11,14 +11,14 @@
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-#include <isvd.hpp>
+#include <mcnla.hpp>
 
 using ScalarType = double;
 
-void create( isvd::DenseMatrix<ScalarType> &matrix_a, isvd::DenseMatrix<ScalarType> &matrix_u_true,
-             const isvd::index_t rank, isvd::index_t seed[4] ) noexcept;
-template <isvd::Layout _layout>
-void check( const isvd::DenseMatrix<ScalarType, _layout> &matrix_u, const isvd::DenseMatrix<ScalarType> &matrix_u_true,
+void create( mcnla::DenseMatrix<ScalarType> &matrix_a, mcnla::DenseMatrix<ScalarType> &matrix_u_true,
+             const mcnla::index_t rank, mcnla::index_t seed[4] ) noexcept;
+template <mcnla::Layout _layout>
+void check( const mcnla::DenseMatrix<ScalarType, _layout> &matrix_u, const mcnla::DenseMatrix<ScalarType> &matrix_u_true,
             ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,34 +31,34 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize MPI
   MPI_Init(&argc, &argv);
-  isvd::mpi_int_t mpi_root = 0;
-  isvd::mpi_int_t mpi_size = isvd::mpi::getCommSize(MPI_COMM_WORLD);
-  isvd::mpi_int_t mpi_rank = isvd::mpi::getCommRank(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_root = 0;
+  mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Display program information
   if ( mpi_rank == mpi_root ) {
-    std::cout << "iSVD "
-              << ISVD_VERSION_MAJOR << "."
-              << ISVD_VERSION_MINOR << "."
-              << ISVD_VERSION_PATCH << " demo" << std::endl << std::endl;
+    std::cout << "MCNLA "
+              << MCNLA_VERSION_MAJOR << "."
+              << MCNLA_VERSION_MINOR << "."
+              << MCNLA_VERSION_PATCH << " demo" << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
   // Initialize random seed
   srand(time(NULL) ^ mpi_rank);
   srand(rand());
-  isvd::index_t seed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
+  mcnla::index_t seed[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
 
   // ====================================================================================================================== //
   // Set parameters
   int argi = 0;
-  isvd::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  isvd::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  isvd::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  isvd::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  isvd::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
-  isvd::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  mcnla::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  mcnla::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
+  mcnla::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
+  mcnla::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  mcnla::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
+  mcnla::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
@@ -71,11 +71,11 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize solver
-  isvd::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
-  isvd::Solver<isvd::DenseMatrix<ScalarType>,
-               isvd::GaussianProjectionSketcher<isvd::DenseMatrix<ScalarType>>,
-               isvd::KolmogorovNagumoTypeIntegrator<isvd::DenseMatrix<ScalarType>>,
-               isvd::StandardReconstructor<isvd::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
+  mcnla::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
+  mcnla::Solver<mcnla::DenseMatrix<ScalarType>,
+               mcnla::GaussianProjectionSketcher<mcnla::DenseMatrix<ScalarType>>,
+               mcnla::KolmogorovNagumoTypeIntegrator<mcnla::DenseMatrix<ScalarType>>,
+               mcnla::StandardReconstructor<mcnla::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketch(Nj).setSeed(seed);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
@@ -89,7 +89,7 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     create(matrix_a, matrix_u_true, k, seed);
   }
-  isvd::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
+  mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Create statistics collector
@@ -98,13 +98,13 @@ int main( int argc, char **argv ) {
   boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_mean;
 
   // ====================================================================================================================== //
-  // Run iSVD
+  // Run MCNLA
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Start iSVD." << std::endl;
+    std::cout << "Start MCNLA." << std::endl;
     std::cout << std::fixed << std::setprecision(6);
   }
 
-  for ( isvd::index_t t = 0; t < num_test; ++t ) {
+  for ( mcnla::index_t t = 0; t < num_test; ++t ) {
     MPI_Barrier(MPI_COMM_WORLD);
     if ( mpi_rank == mpi_root ) {
       start_time = MPI_Wtime();
@@ -146,60 +146,60 @@ int main( int argc, char **argv ) {
 /// Create matrix A
 ///
 void create(
-          isvd::DenseMatrix<ScalarType> &matrix_a,
-          isvd::DenseMatrix<ScalarType> &matrix_u_true,
-    const isvd::index_t rank,
-          isvd::index_t seed[4]
+          mcnla::DenseMatrix<ScalarType> &matrix_a,
+          mcnla::DenseMatrix<ScalarType> &matrix_u_true,
+    const mcnla::index_t rank,
+          mcnla::index_t seed[4]
 ) noexcept {
-  matrix_u_true = isvd::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
+  matrix_u_true = mcnla::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
 
-  isvd::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
-  isvd::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
-  isvd::DenseMatrix<ScalarType> matrix_empty;
-  isvd::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
+  mcnla::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
+  mcnla::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
+  mcnla::DenseMatrix<ScalarType> matrix_empty;
+  mcnla::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
 
   // Generate U & V using normal random
-  isvd::lapack::larnv<3>(matrix_u.vectorize(), seed);
-  isvd::lapack::larnv<3>(matrix_v.vectorize(), seed);
+  mcnla::lapack::larnv<3>(matrix_u.vectorize(), seed);
+  mcnla::lapack::larnv<3>(matrix_v.vectorize(), seed);
 
   // Orthogonalize U & V
-  isvd::lapack::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
-  isvd::lapack::gesvd<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
+  mcnla::lapack::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
+  mcnla::lapack::gesvd<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
 
   // Copy U
-  isvd::blas::copy(matrix_u.getCols({0, rank}), matrix_u_true);
+  mcnla::blas::copy(matrix_u.getCols({0, rank}), matrix_u_true);
 
   // A := U * S * V'
-  for ( isvd::index_t i = 0; i < rank; ++i ) {
-    isvd::blas::scal(1.0/(i+1), matrix_u.getCol(i));
+  for ( mcnla::index_t i = 0; i < rank; ++i ) {
+    mcnla::blas::scal(1.0/(i+1), matrix_u.getCol(i));
   }
-  for ( isvd::index_t i = rank; i < matrix_a.getNrow(); ++i ) {
-    isvd::blas::scal(1e-2/(i-rank+1), matrix_u.getCol(i));
+  for ( mcnla::index_t i = rank; i < matrix_a.getNrow(); ++i ) {
+    mcnla::blas::scal(1e-2/(i-rank+1), matrix_u.getCol(i));
   }
-  isvd::blas::gemm<isvd::TransOption::NORMAL, isvd::TransOption::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
+  mcnla::blas::gemm<mcnla::TransOption::NORMAL, mcnla::TransOption::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Check the result
 ///
-template <isvd::Layout _layout>
+template <mcnla::Layout _layout>
 void check(
-    const isvd::DenseMatrix<ScalarType, _layout> &matrix_u,
-    const isvd::DenseMatrix<ScalarType> &matrix_u_true,
+    const mcnla::DenseMatrix<ScalarType, _layout> &matrix_u,
+    const mcnla::DenseMatrix<ScalarType> &matrix_u_true,
           ScalarType &smax,
           ScalarType &smin,
           ScalarType &smean
 ) noexcept {
-  isvd::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
-  isvd::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
-  isvd::DenseMatrix<ScalarType> matrix_empty;
+  mcnla::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
+  mcnla::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
+  mcnla::DenseMatrix<ScalarType> matrix_empty;
 
   // U2 := Utrue' * U
-  isvd::blas::gemm<isvd::TransOption::TRANS, isvd::TransOption::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);
+  mcnla::blas::gemm<mcnla::TransOption::TRANS, mcnla::TransOption::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);
 
   // Compute the SVD of U2
-  isvd::lapack::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
-  smax  = isvd::blas::amax(vector_s);
-  smin  = isvd::blas::amin(vector_s);
-  smean = isvd::blas::asum(vector_s) / vector_s.getLength();
+  mcnla::lapack::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
+  smax  = mcnla::blas::amax(vector_s);
+  smin  = mcnla::blas::amin(vector_s);
+  smean = mcnla::blas::asum(vector_s) / vector_s.getLength();
 }
