@@ -24,14 +24,9 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class KolmogorovNagumoTypeIntegrator;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-//@}  isvd_module
 
 }  // namespace isvd
 
@@ -57,10 +52,9 @@ struct Traits<isvd::KolmogorovNagumoTypeIntegrator<_Matrix>> {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_module
+///
 /// The Kolmogorov-Nagumo-type integrator.
 ///
 /// @tparam  _Matrix  The matrix type.
@@ -161,8 +155,6 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() const noexcept;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

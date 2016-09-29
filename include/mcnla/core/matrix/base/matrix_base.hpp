@@ -55,11 +55,11 @@ class MatrixBase : public TensorBase<_Derived> {
   inline MatrixBase( const MatrixBase &other ) noexcept;
   inline MatrixBase( MatrixBase &&other ) noexcept;
 
- public:
-
   // Operators
   inline MatrixBase& operator=( const MatrixBase &other ) noexcept;
   inline MatrixBase& operator=( MatrixBase &&other ) noexcept;
+
+ public:
 
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
@@ -67,6 +67,10 @@ class MatrixBase : public TensorBase<_Derived> {
   inline index_t getNelem() const noexcept;
   inline std::pair<index_t, index_t> getSizes() const noexcept;
   template <index_t _dim> inline index_t getSize() const noexcept;
+
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
 
 };
 

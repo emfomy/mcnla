@@ -22,14 +22,9 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class DummyReconstructor;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-//@}  isvd_module
 
 }  // namespace isvd
 
@@ -55,10 +50,9 @@ struct Traits<isvd::DummyReconstructor<_Matrix>> {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_module
+///
 /// The dummy reconstructor.
 ///
 /// @tparam  _Matrix  The matrix type.
@@ -110,8 +104,6 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept = delete;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

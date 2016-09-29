@@ -45,8 +45,6 @@ class ContainerBase {
   inline ConstIteratorType end() const noexcept;
   inline ConstIteratorType cend() const noexcept;
 
- protected:
-
   // Gets derived class
   inline       _Derived& derived() noexcept;
   inline const _Derived& derived() const noexcept;

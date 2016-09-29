@@ -77,6 +77,22 @@ SparseBase<_Derived>& SparseBase<_Derived>::operator=( SparseBase &&other ) noex
 template <typename _Derived>
 index_t SparseBase<_Derived>::getNnz() const noexcept { return nnz_; }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
+///
+template <class _Derived>
+_Derived& SparseBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& SparseBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_MATRIX_BASE_SPARSE_BASE_IPP_

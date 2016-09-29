@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_BLAS_HPP_
 #define MCNLA_CORE_BLAS_HPP_
 
-#include <mcnla/core/blas/blas.hpp>
+#include <mcnla/core/blas/def.hpp>
 #include <mcnla/core/blas/routine.hpp>
 #include <mcnla/core/blas/driver.hpp>
 

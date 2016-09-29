@@ -120,6 +120,22 @@ index_t MatrixBase<_Derived>::getNelem() const noexcept { return size0_ * size1_
 template <class _Derived>
 std::pair<index_t, index_t> MatrixBase<_Derived>::getSizes() const noexcept { return std::make_pair(nrow_, ncol_); }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
+///
+template <class _Derived>
+_Derived& MatrixBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& MatrixBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_MATRIX_BASE_MATRIX_BASE_IPP_

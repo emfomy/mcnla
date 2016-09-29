@@ -95,6 +95,10 @@ class CooBase : public SparseBase<_Derived> {
   inline TupleType      getTuple( const index_t itidx ) noexcept;
   inline ConstTupleType getTuple( const index_t itidx ) const noexcept;
 
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
+
 };
 
 }  // namespace mcnla

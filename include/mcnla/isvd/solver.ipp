@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/solver.ipp
-/// @brief   The implementation of MCNLA solver.
+/// @brief   The implementation of iSVD solver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -19,8 +19,6 @@ namespace mcnla {
 //  The iSVD namespace.
 //
 namespace isvd {
-
-}  // namespace isvd
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
@@ -57,7 +55,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the MCNLA decomposition.
+/// @brief  Computes the iSVD decomposition.
 ///
 /// @attention  The solver should have be initialized.
 /// @attention  @a matrix_a should be the same in each MPI node.
@@ -196,13 +194,27 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the number of total random sketches
+///
+/// @attention  @a num_sketch must be a multiple of #mpi_rank_.
+/// @attention  Only affects on root rank.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketch( const index_t num_sketch ) noexcept {
+  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  parameters_.num_sketch_each_ = num_sketch / parameters_.mpi_rank_;
+  parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of random sketches per MPI node.
 ///
 /// @attention  Only affects on root rank.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketch( const index_t num_sketch_each ) noexcept {
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketchEach( const index_t num_sketch_each ) noexcept {
   if ( mpi_rank_ != mpi_root_ ) { return *this; }
   parameters_.num_sketch_each_ = num_sketch_each;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;

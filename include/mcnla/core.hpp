@@ -12,6 +12,7 @@
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/blas.hpp>
 #include <mcnla/core/lapack.hpp>
+#include <mcnla/core/mpi.hpp>
 #include <mcnla/core/utility.hpp>
 
 #endif  // MCNLA_CORE_HPP_

@@ -19,30 +19,31 @@ namespace mcnla {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The curiously recurring template pattern (CRTP) interface.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Derived  The derived types.
 /// @tparam  _Base     The interface class type.
 ///
 template <class _Derived, class _Base = void>
 class CrtpBase {
 
-  friend _Derived;
-  friend _Base;
-
- private:
+ protected:
 
   inline CrtpBase() noexcept {};
 
- protected:
+ public:
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief  Change to derived class.
+  /// @brief  Cast to derived class.
   ///
-  inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); }
+  inline _Derived& derived() noexcept {
+    return static_cast<_Derived&>(*this);
+  }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /// @copydoc  derived
   ///
-  inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); }
+  inline const _Derived& derived() const noexcept {
+    return static_cast<const _Derived&>(*this);
+  }
 
 };
 

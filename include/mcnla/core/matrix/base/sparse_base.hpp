@@ -46,6 +46,10 @@ class SparseBase {
   // Gets information
   inline index_t getNnz() const noexcept;
 
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
+
 };
 
 }  // namespace mcnla

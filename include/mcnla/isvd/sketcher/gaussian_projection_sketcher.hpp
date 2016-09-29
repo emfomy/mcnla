@@ -24,14 +24,9 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class GaussianProjectionSketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-//@}  isvd_module
 
 }  // namespace isvd
 
@@ -57,10 +52,9 @@ struct Traits<isvd::GaussianProjectionSketcher<_Matrix>> {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_module
+///
 /// The Gaussian projection sketcher.
 ///
 /// @tparam  _Matrix  The matrix type.
@@ -119,8 +113,6 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   inline constexpr const char* getNameImpl() const noexcept;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

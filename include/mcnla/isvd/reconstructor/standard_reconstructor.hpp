@@ -24,14 +24,9 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class StandardReconstructor;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-//@}  isvd_module
 
 }  // namespace isvd
 
@@ -57,10 +52,9 @@ struct Traits<isvd::StandardReconstructor<_Matrix>> {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_module
+///
 /// The standard reconstructor.
 ///
 /// @tparam  _Matrix  The matrix type.
@@ -142,8 +136,6 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

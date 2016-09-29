@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/parameters.hpp
-/// @brief   The parameter structure of MCNLA solver.
+/// @brief   The parameter structure of iSVD solver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -22,11 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The parameters of MCNLA solver.
+/// @ingroup  isvd_module
+///
+/// The parameters of iSVD solver.
 ///
 /// @tparam  _Scalar  The scalar type type.
 ///
@@ -97,8 +96,6 @@ class Parameters {
   inline index_t getMaxIteration() const noexcept;
   inline RealScalar getTolerance() const noexcept;
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

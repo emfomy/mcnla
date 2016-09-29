@@ -23,16 +23,15 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_module
+///
 /// The interface of MCNLA sketcher.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
+class SketcherBase : public CrtpBase<_Derived, SketcherBase<_Derived>> {
 
  public:
 
@@ -64,8 +63,6 @@ class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
   inline constexpr const char* getName() const noexcept;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

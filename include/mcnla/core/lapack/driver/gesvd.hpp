@@ -10,9 +10,9 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
+#include <mcnla/core/lapack/def.hpp>
 #include <mcnla/core/utility/traits.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <mcnla/core/lapack/lapack.hpp>
 #include <mcnla/core/lapack/lapack/gesvd.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

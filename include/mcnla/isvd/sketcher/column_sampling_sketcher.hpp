@@ -25,14 +25,9 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class ColumnSamplingSketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-//@}  isvd_module
 
 }  // namespace isvd
 
@@ -58,10 +53,9 @@ struct Traits<isvd::ColumnSamplingSketcher<_Matrix>> {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_module
+///
 /// The column sampling sketcher.
 ///
 /// @tparam  _Matrix  The matrix type.
@@ -123,8 +117,6 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
   inline constexpr const char* getNameImpl() const noexcept;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

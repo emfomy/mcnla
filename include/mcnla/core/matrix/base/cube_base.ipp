@@ -139,6 +139,22 @@ std::tuple<index_t, index_t, index_t> CubeBase<_Derived>::getSizes() const noexc
   return std::make_tuple(nrow_, ncol_, npage_);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
+///
+template <class _Derived>
+_Derived& CubeBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& CubeBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_MATRIX_BASE_CUBE_BASE_IPP_

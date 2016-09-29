@@ -23,16 +23,15 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_module
+///
 /// The interface of MCNLA integrator.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class IntegratorBase : protected CrtpBase<_Derived, IntegratorBase<_Derived>> {
+class IntegratorBase : public CrtpBase<_Derived, IntegratorBase<_Derived>> {
 
  public:
 
@@ -68,8 +67,6 @@ class IntegratorBase : protected CrtpBase<_Derived, IntegratorBase<_Derived>> {
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQc() const noexcept;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

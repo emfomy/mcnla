@@ -207,6 +207,22 @@ typename CooBase<_Derived>::ConstTupleType CooBase<_Derived>::getTuple( const in
   return getData().getTuple(itidx);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
+///
+template <class _Derived>
+_Derived& CooBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& CooBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_MATRIX_COO_COO_BASE_IPP_

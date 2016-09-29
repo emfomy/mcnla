@@ -1,16 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/lapack/lapack.hpp
+/// @file    include/mcnla/core/lapack/def.hpp
 /// @brief   The LAPACK definitions.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LAPACK_LAPACK_HPP_
-#define MCNLA_CORE_LAPACK_LAPACK_HPP_
+#ifndef MCNLA_CORE_LAPACK_DEF_HPP_
+#define MCNLA_CORE_LAPACK_DEF_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
-#include <mcnla/core/blas/blas.hpp>
+#include <mcnla/core/blas/def.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  lapack_module  LAPACK Module
+/// @ingroup   core_module
+/// @brief     The LAPACK Module
+///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -18,6 +24,7 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  lapack_module
 /// The LAPACK namespace
 ///
 namespace lapack {
@@ -60,4 +67,4 @@ using SideChar = mcnla::blas::SideChar<_side, _layout>;
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LAPACK_LAPACK_HPP_
+#endif  // MCNLA_CORE_LAPACK_DEF_HPP_

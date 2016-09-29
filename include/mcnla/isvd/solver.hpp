@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/solver.hpp
-/// @brief   The MCNLA solver.
+/// @brief   The iSVD solver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -28,11 +28,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-/// @addtogroup  isvd_module
-//@{
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The MCNLA solver.
+/// @ingroup  isvd_module
+///
+/// The iSVD solver.
 ///
 /// @tparam  _Matrix         The matrix type.
 /// @tparam  _Sketcher       The sketcher type.
@@ -128,14 +127,13 @@ class Solver {
   inline Solver& setSize( const _Matrix &matrix ) noexcept;
   inline Solver& setRank( const index_t rank ) noexcept;
   inline Solver& setOverRank( const index_t over_rank ) noexcept;
-  inline Solver& setNumSketch( const index_t num_sketch_each_each ) noexcept;
+  inline Solver& setNumSketch( const index_t num_sketch ) noexcept;
+  inline Solver& setNumSketchEach( const index_t num_sketch_each ) noexcept;
   inline Solver& setMaxIteration( const index_t max_iteration ) noexcept;
   inline Solver& setTolerance( const RealScalarType tolerance ) noexcept;
   inline Solver& setSeed( const index_t seed[4] ) noexcept;
 
 };
-
-//@}  isvd_module
 
 }  // namespace isvd
 

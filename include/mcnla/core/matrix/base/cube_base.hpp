@@ -61,11 +61,11 @@ class CubeBase : public TensorBase<_Derived> {
   inline CubeBase( const CubeBase &other ) noexcept;
   inline CubeBase( CubeBase &&other ) noexcept;
 
- public:
-
   // Operators
   inline CubeBase& operator=( const CubeBase &other ) noexcept;
   inline CubeBase& operator=( CubeBase &&other ) noexcept;
+
+ public:
 
   // Gets information
   template <TransOption _trans = TransOption::NORMAL> inline index_t getNrow() const noexcept;
@@ -75,12 +75,9 @@ class CubeBase : public TensorBase<_Derived> {
   inline index_t getNelem() const noexcept;
   inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;
 
- protected:
-
-  // Converts range
-  inline IdxRange convertRowRange( const IdxRange range ) const noexcept;
-  inline IdxRange convertColRange( const IdxRange range ) const noexcept;
-  inline IdxRange convertPageRange( const IdxRange range ) const noexcept;
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
 
 };
 

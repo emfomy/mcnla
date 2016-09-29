@@ -142,6 +142,22 @@ const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() 
   return getData().getValue() + getOffset();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
+///
+template <class _Derived>
+_Derived& DenseBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& DenseBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_BASE_IPP_

@@ -68,6 +68,10 @@ class DenseBase {
   inline ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
 
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
+
 };
 
 }  // namespace mcnla

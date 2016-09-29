@@ -40,17 +40,21 @@ class VectorBase : public TensorBase<_Derived> {
   inline VectorBase( const VectorBase &other ) noexcept;
   inline VectorBase( VectorBase &&other ) noexcept;
 
- public:
-
   // Operators
   inline VectorBase& operator=( const VectorBase &other ) noexcept;
   inline VectorBase& operator=( VectorBase &&other ) noexcept;
+
+ public:
 
   // Gets information
   inline index_t getLength() const noexcept;
   template <index_t _dim> inline index_t getSize() const noexcept;
   inline index_t getNelem() const noexcept;
   inline index_t getSizes() const noexcept;
+
+  // Gets derived class
+  inline       _Derived& derived() noexcept;
+  inline const _Derived& derived() const noexcept;
 
 };
 

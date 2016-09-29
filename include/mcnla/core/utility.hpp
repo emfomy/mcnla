@@ -9,7 +9,6 @@
 #define MCNLA_CORE_UTILITY_HPP_
 
 #include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/mpi.hpp>
 #include <mcnla/core/utility/memory.hpp>
 #include <mcnla/core/utility/traits.hpp>
 

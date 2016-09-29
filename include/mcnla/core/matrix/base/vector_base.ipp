@@ -96,6 +96,22 @@ index_t VectorBase<_Derived>::getNelem() const noexcept { return length_; }
 template <class _Derived>
 index_t VectorBase<_Derived>::getSizes() const noexcept { return length_; }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Change to derived class.
+///
+template <class _Derived>
+_Derived& VectorBase<_Derived>::derived() noexcept {
+  return static_cast<_Derived&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <class _Derived>
+const _Derived& VectorBase<_Derived>::derived() const noexcept {
+  return static_cast<const _Derived&>(*this);
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_MATRIX_BASE_VECTOR_BASE_IPP_

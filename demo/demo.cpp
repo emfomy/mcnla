@@ -76,7 +76,7 @@ int main( int argc, char **argv ) {
                       mcnla::isvd::GaussianProjectionSketcher<mcnla::DenseMatrix<ScalarType>>,
                       mcnla::isvd::KolmogorovNagumoTypeIntegrator<mcnla::DenseMatrix<ScalarType>>,
                       mcnla::isvd::StandardReconstructor<mcnla::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
-  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketch(Nj).setSeed(seed);
+  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeed(seed);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << solver.getSketcherName() << "." << std::endl;
