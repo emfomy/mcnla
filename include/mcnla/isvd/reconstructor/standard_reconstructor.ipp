@@ -16,7 +16,14 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::ReconstructorBase
+//  The iSVD namespace.
+//
+namespace isvd {
+
+}  // namespace isvd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::ReconstructorBase::ReconstructorBase
 ///
 template <class _Matrix>
 StandardReconstructor<_Matrix>::StandardReconstructor(
@@ -24,7 +31,7 @@ StandardReconstructor<_Matrix>::StandardReconstructor(
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::initialize
+/// @copydoc  mcnla::isvd::ReconstructorBase::initialize
 ///
 template <class _Matrix>
 void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
@@ -60,7 +67,7 @@ void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::reconstruct
+/// @copydoc  mcnla::isvd::ReconstructorBase::reconstruct
 ///
 template <class _Matrix>
 void StandardReconstructor<_Matrix>::reconstructImpl(
@@ -86,7 +93,7 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::getName
+/// @copydoc  mcnla::isvd::ReconstructorBase::getName
 ///
 template <class _Matrix>
 constexpr const char* StandardReconstructor<_Matrix>::getNameImpl() const noexcept {
@@ -94,7 +101,7 @@ constexpr const char* StandardReconstructor<_Matrix>::getNameImpl() const noexce
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::getVectorS
+/// @copydoc  mcnla::isvd::ReconstructorBase::getVectorS
 ///
 template <class _Matrix>
 const DenseVector<typename StandardReconstructor<_Matrix>::RealScalarType>&
@@ -104,7 +111,7 @@ const DenseVector<typename StandardReconstructor<_Matrix>::RealScalarType>&
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::getMatrixU
+/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixU
 ///
 template <class _Matrix>
 const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&
@@ -114,7 +121,7 @@ const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::C
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::getMatrixVt
+/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixVt
 ///
 template <class _Matrix>
 const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&
@@ -122,6 +129,8 @@ const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::C
   assert(parameters_.isComputed());
   return matrix_vt_cut_;
 }
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

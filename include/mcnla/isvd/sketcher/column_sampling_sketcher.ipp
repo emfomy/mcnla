@@ -16,7 +16,14 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::SketcherBase::SketcherBase
+//  The iSVD namespace.
+//
+namespace isvd {
+
+}  // namespace isvd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::SketcherBase::SketcherBase
 ///
 template <class _Matrix>
 ColumnSamplingSketcher<_Matrix>::ColumnSamplingSketcher(
@@ -24,7 +31,7 @@ ColumnSamplingSketcher<_Matrix>::ColumnSamplingSketcher(
 ) noexcept : BaseType(parameters, seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::SketcherBase::initialize
+/// @copydoc  mcnla::isvd::SketcherBase::initialize
 ///
 template <class _Matrix>
 void ColumnSamplingSketcher<_Matrix>::initializeImpl() noexcept {
@@ -44,7 +51,7 @@ void ColumnSamplingSketcher<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::SketcherBase::sketch
+/// @copydoc  mcnla::isvd::SketcherBase::sketch
 ///
 template <class _Matrix>
 void ColumnSamplingSketcher<_Matrix>::sketchImpl(
@@ -65,12 +72,14 @@ void ColumnSamplingSketcher<_Matrix>::sketchImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::SketcherBase::getName
+/// @copydoc  mcnla::isvd::SketcherBase::getName
 ///
 template <class _Matrix>
 constexpr const char* ColumnSamplingSketcher<_Matrix>::getNameImpl() const noexcept {
   return name_;
 }
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

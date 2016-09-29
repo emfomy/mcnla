@@ -72,10 +72,10 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize solver
   mcnla::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
-  mcnla::Solver<mcnla::DenseMatrix<ScalarType>,
-               mcnla::GaussianProjectionSketcher<mcnla::DenseMatrix<ScalarType>>,
-               mcnla::KolmogorovNagumoTypeIntegrator<mcnla::DenseMatrix<ScalarType>>,
-               mcnla::StandardReconstructor<mcnla::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
+  mcnla::isvd::Solver<mcnla::DenseMatrix<ScalarType>,
+                      mcnla::isvd::GaussianProjectionSketcher<mcnla::DenseMatrix<ScalarType>>,
+                      mcnla::isvd::KolmogorovNagumoTypeIntegrator<mcnla::DenseMatrix<ScalarType>>,
+                      mcnla::isvd::StandardReconstructor<mcnla::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketch(Nj).setSeed(seed);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {

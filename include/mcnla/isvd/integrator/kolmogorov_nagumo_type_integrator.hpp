@@ -8,9 +8,10 @@
 #ifndef MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_HPP_
 #define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_HPP_
 
-#include <mcnla/mcnla.hpp>
-#include <mcnla/blas.hpp>
-#include <mcnla/lapack.hpp>
+#include <mcnla/def.hpp>
+#include <mcnla/isvd/def.hpp>
+#include <mcnla/core/blas.hpp>
+#include <mcnla/core/lapack.hpp>
 #include <mcnla/isvd/integrator/integrator_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,14 +19,26 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class KolmogorovNagumoTypeIntegrator;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
+//@}  isvd_module
+
+}  // namespace isvd
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace.
+//  The traits namespace.
 //
-namespace detail {
+namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The Kolmogorov-Nagumo-type integrator traits.
@@ -33,11 +46,19 @@ namespace detail {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<KolmogorovNagumoTypeIntegrator<_Matrix>> {
+struct Traits<isvd::KolmogorovNagumoTypeIntegrator<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace detail
+}  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The Kolmogorov-Nagumo-type integrator.
@@ -140,6 +161,10 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() const noexcept;
 
 };
+
+//@}  isvd_module
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

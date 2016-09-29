@@ -16,6 +16,13 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+}  // namespace isvd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
@@ -39,7 +46,7 @@ void ReconstructorBase<_Derived>::reconstruct(
 ) noexcept { this->derived().reconstructImpl(matrix_a, matrix_qc); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::Solver::getReconstructorName
+/// @copydoc  mcnla::isvd::Solver::getReconstructorName
 ///
 template <class _Derived>
 constexpr const char* ReconstructorBase<_Derived>::getName() const noexcept {
@@ -72,6 +79,8 @@ const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLM
     ReconstructorBase<_Derived>::getMatrixVt() const noexcept {
   return this->derived().getMatrixVtImpl();
 }
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

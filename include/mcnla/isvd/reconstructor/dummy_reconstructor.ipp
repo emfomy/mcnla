@@ -16,7 +16,14 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::ReconstructorBase
+//  The iSVD namespace.
+//
+namespace isvd {
+
+}  // namespace isvd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::ReconstructorBase::ReconstructorBase
 ///
 template <class _Matrix>
 DummyReconstructor<_Matrix>::DummyReconstructor(
@@ -24,13 +31,13 @@ DummyReconstructor<_Matrix>::DummyReconstructor(
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::initialize
+/// @copydoc  mcnla::isvd::ReconstructorBase::initialize
 ///
 template <class _Matrix>
 void DummyReconstructor<_Matrix>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::reconstruct
+/// @copydoc  mcnla::isvd::ReconstructorBase::reconstruct
 ///
 template <class _Matrix>
 void DummyReconstructor<_Matrix>::reconstructImpl(
@@ -39,7 +46,7 @@ void DummyReconstructor<_Matrix>::reconstructImpl(
 ) noexcept { static_cast<void>(matrix_a); static_cast<void>(matrix_qc); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::ReconstructorBase::getName
+/// @copydoc  mcnla::isvd::ReconstructorBase::getName
 ///
 template <class _Matrix>
 constexpr const char* DummyReconstructor<_Matrix>::getNameImpl() const noexcept {
@@ -48,24 +55,26 @@ constexpr const char* DummyReconstructor<_Matrix>::getNameImpl() const noexcept 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @fn  DummyReconstructor::getVectorSImpl
-/// @copydoc  mcnla::ReconstructorBase::getVectorS
+/// @copydoc  mcnla::isvd::ReconstructorBase::getVectorS
 ///
 /// @attention  This routine is not available.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @fn  DummyReconstructor::getMatrixUImpl
-/// @copydoc  mcnla::ReconstructorBase::getMatrixU
+/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixU
 ///
 /// @attention  This routine is not available.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @fn  DummyReconstructor::getMatrixVtImpl
-/// @copydoc  mcnla::ReconstructorBase::getMatrixVt
+/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixVt
 ///
 /// @attention  This routine is not available.
 ///
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

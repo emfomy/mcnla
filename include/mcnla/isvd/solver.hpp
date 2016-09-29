@@ -8,9 +8,10 @@
 #ifndef MCNLA_ISVD_SOLVER_HPP_
 #define MCNLA_ISVD_SOLVER_HPP_
 
-#include <mcnla/mcnla.hpp>
-#include <mcnla/matrix.hpp>
-#include <mcnla/utility.hpp>
+#include <mcnla/def.hpp>
+#include <mcnla/isvd/def.hpp>
+#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/utility.hpp>
 #include <mcnla/isvd/parameters.hpp>
 #include <mcnla/isvd/sketcher.hpp>
 #include <mcnla/isvd/integrator.hpp>
@@ -21,6 +22,14 @@
 //  The MCNLA namespace.
 //
 namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The MCNLA solver.
@@ -68,13 +77,13 @@ class Solver {
   /// The parameters.
   ParametersType parameters_;
 
-  /// @copydoc  mcnla::Parameters::mpi_comm
+  /// @copydoc  mcnla::isvd::Parameters::mpi_comm
   const MPI_Comm &mpi_comm_ = parameters_.mpi_comm;
 
-  /// @copydoc  mcnla::Parameters::mpi_size
+  /// @copydoc  mcnla::isvd::Parameters::mpi_size
   const mpi_int_t &mpi_size_ = parameters_.mpi_size;
 
-  /// @copydoc  mcnla::Parameters::mpi_root
+  /// @copydoc  mcnla::isvd::Parameters::mpi_root
   const mpi_int_t &mpi_root_ = parameters_.mpi_root;
 
   /// The MPI rank.
@@ -125,6 +134,10 @@ class Solver {
   inline Solver& setSeed( const index_t seed[4] ) noexcept;
 
 };
+
+//@}  isvd_module
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

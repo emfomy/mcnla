@@ -16,6 +16,13 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+}  // namespace isvd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
@@ -36,7 +43,7 @@ template <class _Derived>
 void IntegratorBase<_Derived>::integrate() noexcept { this->derived().integrateImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::Solver::getIntegratorName
+/// @copydoc  mcnla::isvd::Solver::getIntegratorName
 ///
 template <class _Derived>
 constexpr const char* IntegratorBase<_Derived>::getName() const noexcept {
@@ -78,6 +85,8 @@ const DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJO
     IntegratorBase<_Derived>::getMatrixQc() const noexcept {
   return this->derived().getMatrixQcImpl();
 }
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

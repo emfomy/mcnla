@@ -8,14 +8,23 @@
 #ifndef MCNLA_ISVD_SKETCHER_SKETCHER_BASE_HPP_
 #define MCNLA_ISVD_SKETCHER_SKETCHER_BASE_HPP_
 
-#include <mcnla/mcnla.hpp>
-#include <mcnla/matrix.hpp>
-#include <mcnla/utility.hpp>
+#include <mcnla/def.hpp>
+#include <mcnla/isvd/def.hpp>
+#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/utility.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
 namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of MCNLA sketcher.
@@ -27,7 +36,7 @@ class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
 
  public:
 
-  using MatrixType = typename detail::Traits<_Derived>::MatrixType;
+  using MatrixType = typename traits::Traits<_Derived>::MatrixType;
   using ScalarType = typename MatrixType::ScalarType;
 
  protected:
@@ -55,6 +64,10 @@ class SketcherBase : protected CrtpBase<_Derived, SketcherBase<_Derived>> {
   inline constexpr const char* getName() const noexcept;
 
 };
+
+//@}  isvd_module
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

@@ -8,9 +8,10 @@
 #ifndef MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
 #define MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
 
-#include <mcnla/mcnla.hpp>
-#include <mcnla/blas.hpp>
-#include <mcnla/lapack.hpp>
+#include <mcnla/def.hpp>
+#include <mcnla/isvd/def.hpp>
+#include <mcnla/core/blas.hpp>
+#include <mcnla/core/lapack.hpp>
 #include <mcnla/isvd/reconstructor/reconstructor_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,14 +19,26 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class StandardReconstructor;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
+//@}  isvd_module
+
+}  // namespace isvd
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace.
+//  The traits namespace.
 //
-namespace detail {
+namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The standard reconstructor traits.
@@ -33,11 +46,19 @@ namespace detail {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<StandardReconstructor<_Matrix>> {
+struct Traits<isvd::StandardReconstructor<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace detail
+}  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The standard reconstructor.
@@ -121,6 +142,10 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept;
 
 };
+
+//@}  isvd_module
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

@@ -8,13 +8,22 @@
 #ifndef MCNLA_ISVD_PARAMETERS_HPP_
 #define MCNLA_ISVD_PARAMETERS_HPP_
 
-#include <mcnla/mcnla.hpp>
+#include <mcnla/def.hpp>
+#include <mcnla/isvd/def.hpp>
 #include <mpi.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
 namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The parameters of MCNLA solver.
@@ -28,7 +37,7 @@ class Parameters {
 
  private:
 
-  using RealScalar = typename detail::ScalarTraits<_Scalar>::RealType;
+  using RealScalar = typename traits::ScalarTraits<_Scalar>::RealType;
 
  public:
 
@@ -88,6 +97,10 @@ class Parameters {
   inline index_t getMaxIteration() const noexcept;
   inline RealScalar getTolerance() const noexcept;
 };
+
+//@}  isvd_module
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

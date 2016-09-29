@@ -17,7 +17,14 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::IntegratorBase
+//  The iSVD namespace.
+//
+namespace isvd {
+
+}  // namespace isvd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::IntegratorBase
 ///
 template <class _Matrix>
 KolmogorovNagumoTypeIntegrator<_Matrix>::KolmogorovNagumoTypeIntegrator(
@@ -25,7 +32,7 @@ KolmogorovNagumoTypeIntegrator<_Matrix>::KolmogorovNagumoTypeIntegrator(
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::initialize
+/// @copydoc  mcnla::isvd::IntegratorBase::initialize
 ///
 template <class _Matrix>
 void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
@@ -86,7 +93,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::integrate
+/// @copydoc  mcnla::isvd::IntegratorBase::integrate
 ///
 template <class _Matrix>
 void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
@@ -208,7 +215,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::getName
+/// @copydoc  mcnla::isvd::IntegratorBase::getName
 ///
 template <class _Matrix>
 constexpr const char* KolmogorovNagumoTypeIntegrator<_Matrix>::getNameImpl() const noexcept {
@@ -216,7 +223,7 @@ constexpr const char* KolmogorovNagumoTypeIntegrator<_Matrix>::getNameImpl() con
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::getCubeQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
 ///
 template <class _Matrix>
 DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
@@ -226,7 +233,7 @@ DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::getCubeQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
 ///
 template <class _Matrix>
 const DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
@@ -236,7 +243,7 @@ const DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, La
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::getMatrixQc
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQc
 ///
 template <class _Matrix>
 DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
@@ -246,7 +253,7 @@ DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::IntegratorBase::getMatrixQc
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQc
 ///
 template <class _Matrix>
 const DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
@@ -254,6 +261,8 @@ const DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, 
   assert(parameters_.isInitialized());
   return matrix_qc_cut_;
 }
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

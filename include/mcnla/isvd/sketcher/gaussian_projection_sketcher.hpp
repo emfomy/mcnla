@@ -8,9 +8,10 @@
 #ifndef MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
 #define MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
 
-#include <mcnla/mcnla.hpp>
-#include <mcnla/blas.hpp>
-#include <mcnla/lapack.hpp>
+#include <mcnla/def.hpp>
+#include <mcnla/isvd/def.hpp>
+#include <mcnla/core/blas.hpp>
+#include <mcnla/core/lapack.hpp>
 #include <mcnla/isvd/sketcher/sketcher_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,14 +19,26 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class GaussianProjectionSketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
+//@}  isvd_module
+
+}  // namespace isvd
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace.
+//  The traits namespace.
 //
-namespace detail {
+namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The Gaussian projection sketcher traits.
@@ -33,11 +46,19 @@ namespace detail {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<GaussianProjectionSketcher<_Matrix>> {
+struct Traits<isvd::GaussianProjectionSketcher<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace detail
+}  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The Gaussian projection sketcher.
@@ -98,6 +119,10 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   inline constexpr const char* getNameImpl() const noexcept;
 
 };
+
+//@}  isvd_module
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

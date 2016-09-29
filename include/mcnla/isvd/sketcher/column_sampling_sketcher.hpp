@@ -8,10 +8,11 @@
 #ifndef MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
 #define MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
 
-#include <mcnla/mcnla.hpp>
+#include <mcnla/def.hpp>
+#include <mcnla/isvd/def.hpp>
 #include <random>
-#include <mcnla/blas.hpp>
-#include <mcnla/lapack.hpp>
+#include <mcnla/core/blas.hpp>
+#include <mcnla/core/lapack.hpp>
 #include <mcnla/isvd/sketcher/sketcher_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,14 +20,26 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Matrix> class ColumnSamplingSketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
+//@}  isvd_module
+
+}  // namespace isvd
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace.
+//  The traits namespace.
 //
-namespace detail {
+namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The column sampling sketcher traits.
@@ -34,11 +47,19 @@ namespace detail {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<ColumnSamplingSketcher<_Matrix>> {
+struct Traits<isvd::ColumnSamplingSketcher<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
-}  // namespace detail
+}  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+/// @addtogroup  isvd_module
+//@{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The column sampling sketcher.
@@ -102,6 +123,10 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
   inline constexpr const char* getNameImpl() const noexcept;
 
 };
+
+//@}  isvd_module
+
+}  // namespace isvd
 
 }  // namespace mcnla
 

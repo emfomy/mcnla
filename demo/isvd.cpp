@@ -12,7 +12,7 @@
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
 #include <boost/accumulators/statistics/variance.hpp>
-#include <mcnla/utility.hpp>
+#include <mcnla/core/utility.hpp>
 #include <mpi.h>
 #include <mkl.h>
 
