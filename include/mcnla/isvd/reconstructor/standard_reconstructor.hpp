@@ -78,11 +78,11 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
 
  protected:
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The name.
   static constexpr const char* name_= "Standard Reconstructor";
+
+  /// The parameters.
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The matrix W.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;

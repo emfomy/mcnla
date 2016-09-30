@@ -79,11 +79,11 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
 
  protected:
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The name.
   static constexpr const char* name_= "Column Sampling Sketcher";
+
+  /// The parameters.
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The vector S.
   DenseVector<RealScalarType> vector_s_;

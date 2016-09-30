@@ -76,11 +76,11 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
 
  protected:
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The name.
   static constexpr const char* name_= "Dummy Reconstructor";
+
+  /// The parameters.
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
  public:
 

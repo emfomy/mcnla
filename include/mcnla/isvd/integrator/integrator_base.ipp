@@ -32,13 +32,17 @@ IntegratorBase<_Derived>::IntegratorBase(
 /// @brief  Initializes.
 ///
 template <class _Derived>
-void IntegratorBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
+void IntegratorBase<_Derived>::initialize() noexcept {
+  this->derived().initializeImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Integrates.
 ///
 template <class _Derived>
-void IntegratorBase<_Derived>::integrate() noexcept { this->derived().integrateImpl(); }
+void IntegratorBase<_Derived>::integrate() noexcept {
+  this->derived().integrateImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::Solver::getIntegratorName
@@ -46,6 +50,14 @@ void IntegratorBase<_Derived>::integrate() noexcept { this->derived().integrateI
 template <class _Derived>
 constexpr const char* IntegratorBase<_Derived>::getName() const noexcept {
   return this->derived().getNameImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getIntegratorIter
+///
+template <class _Derived>
+index_t IntegratorBase<_Derived>::getIter() const noexcept {
+  return this->derived().getIterImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

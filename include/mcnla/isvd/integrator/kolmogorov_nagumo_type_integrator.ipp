@@ -34,8 +34,10 @@ KolmogorovNagumoTypeIntegrator<_Matrix>::KolmogorovNagumoTypeIntegrator(
 ///
 template <class _Matrix>
 void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
+
   nrow_each_ = (parameters_.getNrow()-1) / parameters_.mpi_size + 1;
   nrow_all_  = nrow_each_ * parameters_.mpi_size;
+  iter_      = -1;
 
   const auto cube_q_sizes = std::make_tuple(nrow_all_, parameters_.getDimSketch(), parameters_.getNumSketchEach());
   if ( cube_q_.getSizes() != cube_q_sizes || !cube_q_.isShrunk() ) {
@@ -115,7 +117,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
   blas::copy(cube_qj_.getPage(0), matrix_qcj_);
 
   bool is_converged = false;
-  for ( index_t iter = 0; iter < max_iteration && !is_converged; ++iter ) {
+  for ( iter_ = 0; iter_ < max_iteration && !is_converged; ++iter_ ) {
 
     // ================================================================================================================== //
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
@@ -198,12 +200,12 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // ================================================================================================================== //
     // Check convergence
+    ///@todo
     if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
       for ( index_t i = 0; i < dim_sketch; ++i ) {
-        matrix_c_(i, i) -= 1.0;
+        vector_e_(i) -= 1.0;
       }
-      syev_driver_.computeValues(matrix_c_, vector_e_);
-      is_converged = !(blas::amax(vector_e_) > tolerance);
+      is_converged = !(blas::nrm2(vector_e_) / dim_sketch > tolerance);
     }
     MPI_Bcast(&is_converged, 1, MPI_BYTE, mpi_root, mpi_comm);
   }
@@ -218,6 +220,14 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 template <class _Matrix>
 constexpr const char* KolmogorovNagumoTypeIntegrator<_Matrix>::getNameImpl() const noexcept {
   return name_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getIter
+///
+template <class _Matrix>
+index_t KolmogorovNagumoTypeIntegrator<_Matrix>::getIterImpl() const noexcept {
+  return iter_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

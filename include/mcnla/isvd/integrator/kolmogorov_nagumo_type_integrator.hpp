@@ -78,17 +78,20 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
 
  protected:
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The name.
   static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
+
+  /// The parameters.
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The number of rows of the matrix per MPI node.
   index_t nrow_each_;
 
   /// The number of rows of the matrix of all MPI nodes.
   index_t nrow_all_;
+
+  /// The vector E.
+  index_t iter_;
 
   /// The cube Q.
   DenseCube<ScalarType, Layout::ROWMAJOR> cube_q_;
@@ -147,6 +150,9 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
 
   // Gets name
   inline constexpr const char* getNameImpl() const noexcept;
+
+  // Gets name
+  inline index_t getIterImpl() const noexcept;
 
   // Gets matrices
   inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;

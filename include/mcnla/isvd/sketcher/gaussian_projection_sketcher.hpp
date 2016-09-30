@@ -78,11 +78,11 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
 
  protected:
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The name.
   static constexpr const char* name_= "Gaussian Projection Sketcher";
+
+  /// The parameters.
+  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The matrix Omega.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_omega_;

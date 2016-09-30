@@ -100,6 +100,15 @@ class Solver {
   /// The reconstructor.
   _Reconstructor reconstructor_;
 
+  /// The time of running sketcher
+  double sketcher_time_;
+
+  /// The time of running integrator
+  double integrator_time_;
+
+  /// The time of running reconstructor
+  double reconstructor_time_;
+
  public:
 
   // Constructor
@@ -116,13 +125,24 @@ class Solver {
   inline constexpr const char* getIntegratorName() const noexcept;
   inline constexpr const char* getReconstructorName() const noexcept;
 
+  // Gets compute time
+  inline double getSketcherTime() const noexcept;
+  inline double getIntegratorTime() const noexcept;
+  inline double getReconstructorTime() const noexcept;
+
+  // Gets iterator number
+  inline index_t getIntegratorIter() const noexcept;
+
   // Gets matrices
   inline const DenseVector<RealScalarType>& getSingularValues() const noexcept;
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getLeftSingularVectors() const noexcept;
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getRightSingularVectors() const noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getIntegratedOrthonormalBasis() const noexcept;
 
-  // Sets value
+  // Gets parameters
+  const ParametersType& getParameters() const noexcept;
+
+  // Sets parameters
   inline Solver& setSize( const index_t nrow, const index_t ncol ) noexcept;
   inline Solver& setSize( const _Matrix &matrix ) noexcept;
   inline Solver& setRank( const index_t rank ) noexcept;

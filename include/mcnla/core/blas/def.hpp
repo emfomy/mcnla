@@ -36,37 +36,32 @@ namespace detail {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
 ///
-template <TransOption _trans, typename _Scalar>
-struct TransChar {
-  static constexpr char value = !isTranspose(_trans)
-      ? ((!!isConjugate(_trans) && traits::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
-      : ((!!isConjugate(_trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
-  static_assert(value != '?', "Conjugate no-transpose is nor supported!");
-};
+template<typename _Scalar>
+static constexpr char toTransChar( const TransOption trans ) {
+  return !isTranspose(trans) ? ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
+                             : ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert upper/lower option to char.
 ///
-template <UploOption _uplo, Layout _layout>
-struct UploChar {
-  static constexpr char value = (isLower(_uplo) ^ isRowMajor(_layout)) ? 'L' : 'U';
-};
+static constexpr char toUploChar( UploOption uplo, Layout layout ) {
+  return (isLower(uplo) ^ isRowMajor(layout)) ? 'L' : 'U';
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert diagonal option to char.
 ///
-template <UploOption _uplo>
-struct DiagChar {
-  static constexpr char value = !isUnitDiag(_uplo) ? 'N' : 'U';
-};
+static constexpr char toDiagChar( UploOption uplo ) {
+  return !isUnitDiag(uplo) ? 'N' : 'U';
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert side option to char.
 ///
-template <SideOption _side, Layout _layout>
-struct SideChar {
-  static constexpr char value = (isLeftSide(_side) ^ isRowMajor(_layout)) ? 'L' : 'R';
-};
+static constexpr char toSideChar( SideOption side, Layout layout ) {
+  return (isLeftSide(side) ^ isRowMajor(layout)) ? 'L' : 'R';
+}
 
 }  // namespace blas
 

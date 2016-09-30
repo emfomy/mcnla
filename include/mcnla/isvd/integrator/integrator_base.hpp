@@ -60,6 +60,9 @@ class IntegratorBase : public CrtpBase<_Derived, IntegratorBase<_Derived>> {
   // Gets name
   inline constexpr const char* getName() const noexcept;
 
+  // Gets iterator number
+  inline index_t getIter() const noexcept;
+
   // Gets matrices
   inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() noexcept;
   inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() const noexcept;

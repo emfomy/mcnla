@@ -65,9 +65,17 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
   assert(parameters_.isInitialized());
   assert(matrix_a.getSizes() == std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
 
+  double start_time = MPI_Wtime();
   sketcher_.sketch(matrix_a, integrator_.getCubeQ());
+  sketcher_time_ = MPI_Wtime() - start_time;
+
+  start_time = MPI_Wtime();
   integrator_.integrate();
+  integrator_time_ = MPI_Wtime() - start_time;
+
+  start_time = MPI_Wtime();
   reconstructor_.reconstruct(matrix_a, integrator_.getMatrixQc());
+  reconstructor_time_ = MPI_Wtime() - start_time;
 
   parameters_.computed_ = true;
 }
@@ -94,6 +102,43 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::g
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorName() const noexcept {
   return reconstructor_.getName();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the time of running sketcher.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTime() const noexcept {
+  assert(parameters_.isComputed());
+  return sketcher_time_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the time of running integrator.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTime() const noexcept {
+  assert(parameters_.isComputed());
+  return integrator_time_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the time of running reconstructor.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorTime() const noexcept {
+  assert(parameters_.isComputed());
+  return reconstructor_time_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of iterator in integrator.
+///
+/// @attention  The solver should have be computed.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+index_t Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorIter() const noexcept {
+  return integrator_.getIter();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,6 +187,18 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
   assert(parameters_.isComputed());
   return integrator_.getMatrixQc();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the parameters.
+///
+/// @attention  Only affects on root rank.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ParametersType&
+    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getParameters() const noexcept {
+  assert( mpi_rank_ == mpi_root_ );
+  return parameters_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

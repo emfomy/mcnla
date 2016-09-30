@@ -46,7 +46,7 @@ inline void gemm(
   assert(c.getNcol()                   == b.template getNcol<_transb>());
   assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
 
-  gemm(TransChar<transa, _Scalar>::value, TransChar<transb, _Scalar>::value,
+  gemm(toTransChar<_Scalar>(transa), toTransChar<_Scalar>(transb),
        c.getNrow(), c.getNcol(), a.template getNcol<_transa>(),
        alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(), beta, c.getValue(), c.getPitch());
 }
@@ -68,7 +68,7 @@ inline void gemm(
   assert(c.getNcol()                   == b.template getNcol<_transb>());
   assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
 
-  gemm(TransChar<transb, _Scalar>::value, TransChar<transa, _Scalar>::value,
+  gemm(toTransChar<_Scalar>(transb), toTransChar<_Scalar>(transa),
        c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),
        alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
 }

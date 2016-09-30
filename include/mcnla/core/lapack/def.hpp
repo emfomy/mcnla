@@ -40,28 +40,33 @@ namespace detail {}
 using JobOption = char;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert transpose option to char.
+/// @copydoc  mcnla::blas::toTransChar
 ///
-template <TransOption _trans, typename _Scalar>
-using TransChar = mcnla::blas::TransChar<_trans, _Scalar>;
+template<typename _Scalar>
+static constexpr char toTransChar( const TransOption trans ) {
+  return blas::toTransChar<_Scalar>(trans);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert upper/lower option to char.
+/// @copydoc  mcnla::blas::toUploChar
 ///
-template <UploOption _uplo, Layout _layout>
-using UploChar = mcnla::blas::UploChar<_uplo, _layout>;
+static constexpr char toUploChar( UploOption uplo, Layout layout ) {
+  return blas::toUploChar(uplo, layout);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert diagonal option to char.
+/// @copydoc  mcnla::blas::toDiagChar
 ///
-template <UploOption _uplo>
-using DiagChar = mcnla::blas::DiagChar<_uplo>;
+static constexpr char toDiagChar( UploOption uplo ) {
+  return blas::toDiagChar(uplo);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert side option to char.
+/// @copydoc  mcnla::blas::toSideChar
 ///
-template <SideOption _side, Layout _layout>
-using SideChar = mcnla::blas::SideChar<_side, _layout>;
+static constexpr char toSideChar( SideOption uplo, Layout layout ) {
+  return blas::toSideChar(uplo, layout);
+}
 
 }  // namespace lapack
 

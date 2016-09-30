@@ -35,9 +35,6 @@ namespace mcnla {
 ///
 namespace detail {}
 
-/// The type of MPI integer.
-using mpi_int_t = int32_t;
-
 }  // namespace mcnla
 
 #endif  // MCNLA_DEF_HPP_

@@ -37,7 +37,7 @@ inline void syrk(
   assert(c.getNrow() == c.getNcol());
   assert(c.getNrow() == a.template getNrow<_trans>());
 
-  detail::syrk(UploChar<_uplo, _layout>::value, TransChar<trans, _Scalar>::value, c.getNrow(), a.template getNcol<_trans>(),
+  detail::syrk(toUploChar(_uplo, _layout), toTransChar<_Scalar>(trans), c.getNrow(), a.template getNcol<_trans>(),
                alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
 }
 

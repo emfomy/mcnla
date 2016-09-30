@@ -41,7 +41,7 @@ inline void symm(
     assert(a.getNcol()  == c.getNcol());
   }
 
-  detail::symm(SideChar<_side, _layout>::value, UploChar<_uplo, _layout>::value,
+  detail::symm(toSideChar(_side, _layout), toUploChar(_uplo, _layout),
                c.template getSize<0>(), c.template getSize<1>(),
                alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(), beta, c.getValue(), c.getPitch());
 }

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/blas/blas/asum.hpp
-/// @brief   The BLAS ASUM.
+/// @file    include/mcnla/core/blas/blas/nrm2.hpp
+/// @brief   The BLAS NRM2.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_BLAS_BLAS_ASUM_HPP_
-#define MCNLA_CORE_BLAS_BLAS_ASUM_HPP_
+#ifndef MCNLA_CORE_BLAS_BLAS_NRM2_HPP_
+#define MCNLA_CORE_BLAS_BLAS_NRM2_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -15,11 +15,11 @@
 
 #include <mcnla/core/blas/plugin/blas_plugin_begin.h>
 
-// Computes the sum of magnitudes of the vector elements.
-extern CPP_REAL4 sasum_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
-extern CPP_REAL8 dasum_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
-extern CPP_COMP4 casum_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
-extern CPP_COMP8 zasum_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRAN_INT incx );
+// Computes the Euclidean norm of a vector.
+extern CPP_REAL4 snrm2_(  const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
+extern CPP_REAL8 dnrm2_(  const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
+extern CPP_REAL4 scnrm2_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
+extern CPP_REAL8 dznrm2_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRAN_INT incx );
 
 #include <mcnla/core/blas/plugin/blas_plugin_end.h>
 
@@ -41,21 +41,21 @@ namespace blas {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the sum of magnitudes of the vector elements.
+/// @brief  Computes the Euclidean norm of a vector.
 ///
 //@{
-static inline float asum(
+static inline float nrm2(
     const index_t n, const float* x, const index_t incx
-) noexcept { return sasum_(&n, x, &incx); }
-static inline double asum(
+) noexcept { return snrm2_(&n, x, &incx); }
+static inline double nrm2(
     const index_t n, const double* x, const index_t incx
-) noexcept { return dasum_(&n, x, &incx); }
-static inline std::complex<float> asum(
+) noexcept { return dnrm2_(&n, x, &incx); }
+static inline float nrm2(
     const index_t n, const std::complex<float>* x, const index_t incx
-) noexcept { return casum_(&n, x, &incx); }
-static inline std::complex<double> asum(
+) noexcept { return scnrm2_(&n, x, &incx); }
+static inline double nrm2(
     const index_t n, const std::complex<double>* x, const index_t incx
-) noexcept { return zasum_(&n, x, &incx); }
+) noexcept { return dznrm2_(&n, x, &incx); }
 //@}
 
 }  // namespace detail
@@ -64,4 +64,4 @@ static inline std::complex<double> asum(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_BLAS_BLAS_ASUM_HPP_
+#endif  // MCNLA_CORE_BLAS_BLAS_NRM2_HPP_
