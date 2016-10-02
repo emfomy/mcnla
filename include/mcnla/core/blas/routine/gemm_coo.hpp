@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/blas/routine/axpby.hpp>
+#include <mcnla/core/blas/routine/scal0.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -22,6 +23,7 @@ namespace mcnla {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  blas3_module
 /// @brief  Computes a matrix-matrix product where one input matrix is general COO matrix.
 ///
 //@{
@@ -43,7 +45,7 @@ inline void gemm(
   assert(c.getNcol()                   == b.template getNcol<_transb>());
   assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
 
-  zeroize(c);
+  blas::scal0(c);
   if ( !isTranspose(_transb) ) {
     for ( auto tuple : a ) {
       axpby(alpha * tuple.getValue(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
@@ -73,7 +75,7 @@ inline void gemm(
   assert(c.getNrow()                   == b.template getNrow<_transa>());
   assert(a.template getNrow<_transb>() == b.template getNcol<_transa>());
 
-  zeroize(c);
+  blas::scal0(c);
   if ( !isTranspose(_transb) ) {
     for ( auto tuple : a ) {
       axpby(alpha * tuple.getValue(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));

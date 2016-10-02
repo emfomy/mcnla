@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/kit/zeroize.hpp
-/// @brief   The zeroize routines.
+/// @file    include/mcnla/core/blas/routine/scal0.hpp
+/// @brief   The BLAS SCAL0 routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_KIT_ZEROIZE_HPP_
-#define MCNLA_CORE_MATRIX_KIT_ZEROIZE_HPP_
+#ifndef MCNLA_CORE_BLAS_ROUTINE_SCAL0_HPP_
+#define MCNLA_CORE_BLAS_ROUTINE_SCAL0_HPP_
 
 #include <cstring>
-#include <mcnla/core/matrix/dense.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -17,66 +17,78 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Set the vector to zero.
+//  The BLAS namespace
+//
+namespace blas {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  blas1_module
+/// @brief  Computes the product of a vector by zero.
+///
+/// @attention  The out-of-range spaces are also copied. It is efficient if the stride is much larger.
 ///
 //@{
 template <typename _Scalar>
-inline void zeroize(
+inline void scal0(
   DenseVector<_Scalar> &x
 ) noexcept {
   std::memset(x.getValue(), 0, x.getLength() * x.getStride() * sizeof(_Scalar));
 }
 
 template <typename _Scalar>
-inline void zeroize(
+inline void scal0(
   DenseVector<_Scalar> &&x
 ) noexcept {
-  zeroize(x);
+  scal0(x);
 }
 //@}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Set the matrix to zero.
+/// @ingroup  blas1_module
+/// @brief  Computes the product of a matrix by zero.
 ///
 /// @attention  The out-of-range spaces are also copied. It is efficient if the leading dimension is much larger than the size.
 ///
 //@{
 template <typename _Scalar, Layout _layout>
-inline void zeroize(
+inline void scal0(
   DenseMatrix<_Scalar, _layout> &x
 ) noexcept {
-  zeroize(x.vectorize());
+  scal0(x.vectorize());
 }
 
 template <typename _Scalar, Layout _layout>
-inline void zeroize(
+inline void scal0(
   DenseMatrix<_Scalar, _layout> &&x
 ) noexcept {
-  zeroize(x.vectorize());
+  scal0(x.vectorize());
 }
 //@}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Set the cube to zero.
+/// @ingroup  blas1_module
+/// @brief  Computes the product of a cube by zero.
 ///
-/// @attention  The out-of-range spaces are also copied. It is efficient if the dimensions is much larger than the sizes.
+/// @attention  The out-of-range spaces are also copied. It is efficient if the pitches is much larger than the sizes.
 ///
 //@{
 template <typename _Scalar, Layout _layout>
-inline void zeroize(
+inline void scal0(
   DenseCube<_Scalar, _layout> &x
 ) noexcept {
-  zeroize(x.vectorize());
+  scal0(x.vectorize());
 }
 
 template <typename _Scalar, Layout _layout>
-inline void zeroize(
+inline void scal0(
   DenseCube<_Scalar, _layout> &&x
 ) noexcept {
-  zeroize(x.vectorize());
+  scal0(x.vectorize());
 }
 //@}
 
+}  // namespace blas
+
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_KIT_ZEROIZE_HPP_
+#endif  // MCNLA_CORE_BLAS_ROUTINE_SCAL0_HPP_

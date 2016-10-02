@@ -11,6 +11,7 @@
 #include <mcnla/core/blas/routine/copy.hpp>
 #include <mcnla/core/blas/routine/copy_coo.hpp>
 #include <mcnla/core/blas/routine/scal.hpp>
+#include <mcnla/core/blas/routine/scal0.hpp>
 #include <mcnla/core/blas/routine/axpy.hpp>
 #include <mcnla/core/blas/routine/axpby.hpp>
 #include <mcnla/core/blas/routine/nrm2.hpp>

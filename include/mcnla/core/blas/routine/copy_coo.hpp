@@ -9,6 +9,7 @@
 #define MCNLA_CORE_BLAS_ROUTINE_COPY_COO_HPP_
 
 #include <mcnla/core/matrix.hpp>
+#include <mcnla/core/blas/routine/scal0.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -21,6 +22,7 @@ namespace mcnla {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  blas1_module
 /// @brief  Copies COO vector to dense vector.
 ///
 //@{
@@ -30,7 +32,7 @@ inline void copy(
           DenseVector<_Scalar> &y
 ) noexcept {
   assert(x.getSizes() == y.getSizes());
-  zeroize(y);
+  blas::scal0(y);
   for ( auto tuple : x ) {
     y(tuple.template getIdx<0>()) = tuple.getValue();
   }

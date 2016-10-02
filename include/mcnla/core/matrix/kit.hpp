@@ -11,6 +11,4 @@
 #include <mcnla/core/matrix/kit/idx_range.hpp>
 #include <mcnla/core/matrix/kit/idx_range.ipp>
 
-#include <mcnla/core/matrix/kit/zeroize.hpp>
-
 #endif  // MCNLA_CORE_MATRIX_KIT_HPP_
