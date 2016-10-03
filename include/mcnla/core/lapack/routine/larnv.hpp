@@ -27,6 +27,8 @@ namespace lapack {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Returns a vector of random numbers from a uniform or normal distribution.
 ///
+/// @attention  The out-of-range spaces are also changed.
+///
 //@{
 template <index_t idist, typename _Scalar>
 inline void larnv(
@@ -34,8 +36,8 @@ inline void larnv(
     index_t iseed[4]
 ) noexcept {
   static_assert(traits::ScalarTraits<_Scalar>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
-                "The value of 'idist' is invalid!");
-  detail::larnv(idist, iseed, x.getLength(), x.getValue());
+                "Invalid idist!");
+  detail::larnv(idist, iseed, x.getLength() * x.getStride(), x.getValue());
 }
 
 template <index_t idist, typename _Scalar>

@@ -258,7 +258,7 @@ CooTuple<_ndim, const _Scalar, const index_t> CooData<_ndim, _Scalar>::getTuple(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value array pointer.
+/// @brief  Gets the raw value array pointer.
 ///
 template <index_t _ndim, typename _Scalar>
 std::shared_ptr<std::valarray<_Scalar>>& CooData<_ndim, _Scalar>::getValuePtr() noexcept { return value_; }
@@ -270,7 +270,7 @@ template <index_t _ndim, typename _Scalar>
 const std::shared_ptr<std::valarray<_Scalar>>& CooData<_ndim, _Scalar>::getValuePtr() const noexcept { return value_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index array pointer.
+/// @brief  Gets the raw index array pointer.
 ///
 template <index_t _ndim, typename _Scalar>
 std::shared_ptr<std::valarray<index_t>>& CooData<_ndim, _Scalar>::getIdxPtr( const index_t dim ) noexcept {

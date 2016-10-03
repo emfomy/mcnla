@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_data.ipp
-/// @brief   The implementation of dense data storage.
+/// @file    include/mcnla/core/matrix/kit/array.ipp
+/// @brief   The implementation of array.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_DATA_IPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_DATA_IPP_
+#ifndef MCNLA_CORE_MATRIX_KIT_ARRAY_IPP_
+#define MCNLA_CORE_MATRIX_KIT_ARRAY_IPP_
 
-#include <mcnla/core/matrix/dense/dense_data.hpp>
+#include <mcnla/core/matrix/kit/array.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -18,160 +18,186 @@ namespace mcnla {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData() noexcept
-  : value_() {}
+template <typename _Type>
+Array<_Type>::Array() noexcept
+  : BaseType(kNullPtr),
+    offset_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData(
+template <typename _Type>
+Array<_Type>::Array(
     const index_t capability
 ) noexcept
-  : value_(capability) {}
+  : BaseType(new std::valarray<_Type>(capability)),
+    offset_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData(
-    const ValueArrayType &value
+template <typename _Type>
+Array<_Type>::Array(
+    const BaseType &value,
+    const index_t offset
 ) noexcept
-  : value_(value) {}
+  : BaseType(value),
+    offset_(offset) {
+  assert(offset_ >= 0 && offset_ <= this->getCapability());
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData( const DenseData &other ) noexcept
-  : value_(other.value_) {}
+template <typename _Type>
+Array<_Type>::Array( const Array &other ) noexcept
+  : BaseType(other),
+    offset_(other.offset_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>::DenseData( DenseData &&other ) noexcept
-  : value_(std::move(other.value_)) {}
+template <typename _Type>
+Array<_Type>::Array( Array &&other ) noexcept
+  : BaseType(std::move(other)),
+    offset_(other.offset_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>& DenseData<_Scalar>::operator=( const DenseData &other ) noexcept {
-  value_ = other.value_;
+template <typename _Type>
+Array<_Type>& Array<_Type>::operator=( const Array &other ) noexcept {
+  BaseType::operator=(other); offset_ = other.offset_;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar>
-DenseData<_Scalar>& DenseData<_Scalar>::operator=( DenseData &&other ) noexcept {
-  value_ = std::move(other.value_);
+template <typename _Type>
+Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
+  BaseType::operator=(std::move(other)); offset_ = other.offset_; other.offset_ = 0;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
 ///
-template <typename _Scalar>
-void DenseData<_Scalar>::operator>>=( const index_t offset ) noexcept {
-  value_ >>= offset;
+template <typename _Type>
+void Array<_Type>::operator>>=( const index_t offset ) noexcept {
+  offset_ += offset;
+  assert(offset_ >= 0 && offset_ <= this->getCapability());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
 ///
-template <typename _Scalar>
-void DenseData<_Scalar>::operator<<=( const index_t offset ) noexcept {
-  value_ <<= offset;
+template <typename _Type>
+void Array<_Type>::operator<<=( const index_t offset ) noexcept {
+  offset_ -= offset;
+  assert(offset_ >= 0 && offset_ <= this->getCapability());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
 ///
-template <typename _Scalar>
-DenseData<_Scalar> DenseData<_Scalar>::operator>>( const index_t offset ) noexcept {
-  return DenseData(value_ >> offset);
+template <typename _Type>
+Array<_Type> Array<_Type>::operator>>( const index_t offset ) noexcept {
+  Array retval = *this; retval >>= offset; return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
 ///
-template <typename _Scalar>
-const DenseData<_Scalar> DenseData<_Scalar>::operator>>( const index_t offset ) const noexcept {
-  return DenseData(value_ >> offset);
+template <typename _Type>
+const Array<_Type> Array<_Type>::operator>>( const index_t offset ) const noexcept {
+  Array retval = *this; retval >>= offset; return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
 ///
-template <typename _Scalar>
-DenseData<_Scalar> DenseData<_Scalar>::operator<<( const index_t offset ) noexcept {
-  return DenseData(value_ << offset);
+template <typename _Type>
+Array<_Type> Array<_Type>::operator<<( const index_t offset ) noexcept {
+  Array retval = *this; retval <<= offset; return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
 ///
-template <typename _Scalar>
-const DenseData<_Scalar> DenseData<_Scalar>::operator<<( const index_t offset ) const noexcept {
-  return DenseData(value_ << offset);
+template <typename _Type>
+const Array<_Type> Array<_Type>::operator<<( const index_t offset ) const noexcept {
+  Array retval = *this; retval <<= offset; return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of value array.
+/// @brief  Gets the length of valarray.
 ///
-template <typename _Scalar>
-index_t DenseData<_Scalar>::getCapability() const noexcept { return value_.getCapability(); }
+template <typename _Type>
+index_t Array<_Type>::getCapability() const noexcept {
+  return this->getValarray().size();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset of value array.
+/// @brief  Gets the offset.
 ///
-template <typename _Scalar>
-index_t DenseData<_Scalar>::getOffset() const noexcept { return value_.getOffset(); }
+template <typename _Type>
+index_t Array<_Type>::getOffset() const noexcept {
+  return offset_;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @brief  Gets the data pointer.
 ///
-template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::getValue() noexcept { return *value_; }
+template <typename _Type>
+_Type* Array<_Type>::operator*() noexcept {
+  return &(this->getValarray()[offset_]);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
+/// @brief  Gets the data pointer.
 ///
-template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return *value_; }
+template <typename _Type>
+const _Type* Array<_Type>::operator*() const noexcept {
+  return &(this->getValarray()[offset_]);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value array.
+/// @brief  Gets the data of given index.
 ///
-template <typename _Scalar>
-Array<_Scalar>& DenseData<_Scalar>::getValueArray() noexcept { return value_; }
+template <typename _Type>
+_Type& Array<_Type>::operator[]( const index_t idx ) noexcept {
+  return this->getValarray()[idx+offset_];
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValueArray
+/// @brief  Gets the data of given index.
 ///
-template <typename _Scalar>
-const Array<_Scalar>& DenseData<_Scalar>::getValueArray() const noexcept { return value_; }
+template <typename _Type>
+const _Type& Array<_Type>::operator[]( const index_t idx ) const noexcept {
+  return this->getValarray()[idx+offset_];
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value valarray.
+/// @brief  Gets the valarray.
 ///
-template <typename _Scalar>
-std::valarray<_Scalar>& DenseData<_Scalar>::getValueValarray() noexcept { return value_.getValarray(); }
+template <typename _Type>
+std::valarray<_Type>& Array<_Type>::getValarray() noexcept {
+  return *(this->get());
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValueValarray
+/// @brief  Gets the valarray.
 ///
-template <typename _Scalar>
-const std::valarray<_Scalar>& DenseData<_Scalar>::getValueValarray() const noexcept { return value_.getValarray(); }
+template <typename _Type>
+const std::valarray<_Type>& Array<_Type>::getValarray() const noexcept {
+  return *(this->get());
+}
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DATA_IPP_
+#endif  // MCNLA_CORE_MATRIX_KIT_ARRAY_IPP_

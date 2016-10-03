@@ -48,7 +48,7 @@ inline void copy(
 /// @ingroup  blas1_module
 /// @brief  Copies matrix to another matrix.
 ///
-/// @attention  The out-of-range spaces are also copied. It is efficient if the leading dimension is much larger than the size.
+/// @attention  The out-of-range spaces are also copied. It is inefficient if the leading dimension is much larger than the size.
 ///
 //@{
 template <typename _Scalar, Layout _layout>
@@ -74,7 +74,7 @@ inline void copy(
 /// @ingroup  blas1_module
 /// @brief  Copies cube to another cube.
 ///
-/// @attention  The out-of-range spaces are also copied. It is efficient if the dimensions is much larger than the sizes.
+/// @attention  The out-of-range spaces are also copied. It is inefficient if the dimensions is much larger than the sizes.
 ///
 //@{
 template <typename _Scalar, Layout _layout>

@@ -20,47 +20,34 @@ namespace mcnla {
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase() noexcept
-  : offset_(0),
-    data_() {}
+  : data_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
-    const index_t capability,
-    const index_t offset
+    const index_t capability
 ) noexcept
-  : offset_(offset),
-    data_(capability) {
-  assert(offset_ >= 0);
-}
+  : data_(capability) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
-    const ValuePtrType &value,
-    const index_t offset
+    const ValueArrayType &value
 ) noexcept
-  : offset_(offset),
-    data_(value) {
-  assert(offset_ >= 0);
-}
+  : data_(value) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
-    const DataType &data,
-    const index_t offset
+    const DataType &data
 ) noexcept
-  : offset_(offset),
-    data_(data) {
-  assert(offset_ >= 0 && offset_ <= data_.getCapability());
-}
+  : data_(data) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -69,18 +56,14 @@ DenseBase<_Derived>::DenseBase(
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase( const DenseBase &other ) noexcept
-  : offset_(other.offset_),
-    data_(other.data_) {}
+  : data_(other.data_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase( DenseBase &&other ) noexcept
-  : offset_(other.offset_),
-    data_(std::move(other.data_)) {
-  other.offset_ = 0;
-}
+  : data_(std::move(other.data_)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -89,7 +72,7 @@ DenseBase<_Derived>::DenseBase( DenseBase &&other ) noexcept
 ///
 template <class _Derived>
 DenseBase<_Derived>& DenseBase<_Derived>::operator=( const DenseBase &other ) noexcept {
-  offset_ = other.offset_; data_ = other.data_;
+  data_ = other.data_;
   return *this;
 }
 
@@ -98,7 +81,7 @@ DenseBase<_Derived>& DenseBase<_Derived>::operator=( const DenseBase &other ) no
 ///
 template <class _Derived>
 DenseBase<_Derived>& DenseBase<_Derived>::operator=( DenseBase &&other ) noexcept {
-  offset_ = other.offset_; data_ = std::move(other.data_); other.offset_ = 0;
+  data_ = std::move(other.data_);
   return *this;
 }
 
@@ -112,7 +95,7 @@ index_t DenseBase<_Derived>::getCapability() const noexcept { return getData().g
 /// @brief  Gets the offset of starting position.
 ///
 template <class _Derived>
-index_t DenseBase<_Derived>::getOffset() const noexcept { return offset_; }
+index_t DenseBase<_Derived>::getOffset() const noexcept { return getData().getOffset(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data storage.
@@ -127,19 +110,31 @@ template <class _Derived>
 const typename DenseBase<_Derived>::DataType& DenseBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value array.
+/// @brief  Gets the raw value array.
 ///
 template <class _Derived>
-typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexcept {
-  return getData().getValue() + getOffset();
-}
+typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexcept { return getData().getValue(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <class _Derived>
-const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() const noexcept {
-  return getData().getValue() + getOffset();
+const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() const noexcept { return getData().getValue(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value valarray.
+///
+template <class _Derived>
+typename DenseBase<_Derived>::ValueValarrayType& DenseBase<_Derived>::getValueValarray() noexcept {
+  return getData().getValueValarray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValueValarray
+///
+template <class _Derived>
+const typename DenseBase<_Derived>::ValueValarrayType& DenseBase<_Derived>::getValueValarray() const noexcept {
+  return getData().getValueValarray();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

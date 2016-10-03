@@ -28,14 +28,12 @@ class DenseBase {
 
  private:
 
-  using ScalarType   = typename traits::Traits<_Derived>::ScalarType;
-  using ValuePtrType = std::shared_ptr<std::valarray<ScalarType>>;
-  using DataType     = DenseData<ScalarType>;
+  using ScalarType        = typename traits::Traits<_Derived>::ScalarType;
+  using ValueArrayType    = Array<ScalarType>;
+  using ValueValarrayType = std::valarray<ScalarType>;
+  using DataType          = DenseData<ScalarType>;
 
  protected:
-
-  /// The offset of starting position.
-  index_t offset_;
 
   /// The data storage
   DataType data_;
@@ -44,9 +42,9 @@ class DenseBase {
 
   // Constructors
   inline DenseBase() noexcept;
-  inline DenseBase( const index_t capability, const index_t offset = 0 ) noexcept;
-  inline DenseBase( const ValuePtrType &value, const index_t offset = 0 ) noexcept;
-  inline DenseBase( const DataType &data, const index_t offset = 0 ) noexcept;
+  inline DenseBase( const index_t capability ) noexcept;
+  inline DenseBase( const ValueArrayType &value ) noexcept;
+  inline DenseBase( const DataType &data ) noexcept;
   inline DenseBase( const DenseBase &other ) noexcept;
   inline DenseBase( DenseBase &&other ) noexcept;
 
@@ -61,12 +59,14 @@ class DenseBase {
   inline index_t getOffset() const noexcept;
 
   // Gets data storage
-  inline DataType& getData() noexcept;
+  inline       DataType& getData() noexcept;
   inline const DataType& getData() const noexcept;
 
-  // Gets value array
-  inline ScalarType* getValue() noexcept;
+  // Gets data
+  inline       ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
+  inline       ValueValarrayType& getValueValarray() noexcept;
+  inline const ValueValarrayType& getValueValarray() const noexcept;
 
   // Gets derived class
   inline       _Derived& derived() noexcept;

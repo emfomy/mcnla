@@ -8,8 +8,6 @@
 #ifndef MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_IPP_
 #define MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_IPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
 #include <mcnla/core/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -108,7 +108,6 @@ class DenseMatrix
   using MatrixBaseType::ncol_;
   using MatrixBaseType::size0_;
   using MatrixBaseType::size1_;
-  using DenseBaseType::offset_;
   using DenseBaseType::data_;
 
  public:
@@ -119,12 +118,9 @@ class DenseMatrix
   inline DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
   inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-                      const index_t capability, const index_t offset = 0 ) noexcept;
-  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch,
-                      const index_t capability, const index_t offset = 0 ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-                      const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capability ) noexcept;
+  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch, const index_t capability ) noexcept;
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const ValuePtrType &value ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                       const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const DenseMatrix &other ) noexcept;
@@ -145,6 +141,9 @@ class DenseMatrix
   inline const ScalarType& getElem( const index_t rowidx, const index_t colidx ) const noexcept;
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+
+  // Gets mask
+  inline const std::gslice getValueMask() const noexcept;
 
   // Gets internal position
   inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;

@@ -109,7 +109,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
 
   // Exchange Q
   for ( index_t i = 0; i < cube_q_.getNpage(); ++i ) {
-    blas::scal0(cube_q_.getPage(i).getRows({parameters_.getNrow(), nrow_all_}));
+    blas::memset0(cube_q_.getPage(i).getRows({parameters_.getNrow(), nrow_all_}));
     mpi::alltoall(cube_q_.getPage(i), cube_qj_.getPages({i*mpi_size, (i+1)*mpi_size}), mpi_comm);
   }
 
@@ -129,8 +129,8 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     mpi::allreduce(cube_b_, MPI_SUM, mpi_comm);
 
     // Xj := 0; D := 0
-    blas::scal0(matrix_xj_);
-    blas::scal0(matrix_d_);
+    blas::memset0(matrix_xj_);
+    blas::memset0(matrix_d_);
 
     for ( index_t i = 0; i < num_sketch; ++i ) {
       // D += Bi' * Bi

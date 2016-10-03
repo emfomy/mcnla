@@ -1,7 +1,7 @@
 # The CMake setting of 'demo/'
 
 # Set complier flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall -Wextra -Wpedantic" PARENT_SCOPE)
+set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic" PARENT_SCOPE)
 # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic" PARENT_SCOPE)
 
 # MKL

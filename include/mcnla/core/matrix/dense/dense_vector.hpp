@@ -68,7 +68,7 @@ class DenseVector
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
-  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
+  using ValueArrayType    = Array<ScalarType>;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -90,7 +90,6 @@ class DenseVector
   index_t stride_;
 
   using VectorBaseType::length_;
-  using DenseBaseType::offset_;
   using DenseBaseType::data_;
 
  public:
@@ -98,9 +97,8 @@ class DenseVector
   // Constructors
   inline DenseVector() noexcept;
   inline DenseVector( const index_t length, const index_t stride = 1 ) noexcept;
-  inline DenseVector( const index_t length, const index_t stride, const index_t capability, const index_t offset = 0 ) noexcept;
-  inline DenseVector( const index_t length, const index_t stride,
-                      const ValuePtrType &value, const index_t offset = 0 ) noexcept;
+  inline DenseVector( const index_t length, const index_t stride, const index_t capability ) noexcept;
+  inline DenseVector( const index_t length, const index_t stride, const ValueArrayType &value ) noexcept;
   inline DenseVector( const index_t length, const index_t stride, const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseVector( const DenseVector &other ) noexcept;
   inline DenseVector( DenseVector &&other ) noexcept;
@@ -121,6 +119,9 @@ class DenseVector
   inline       ScalarType& operator()( const index_t idx ) noexcept;
   inline const ScalarType& operator()( const index_t idx ) const noexcept;
 
+  // Gets mask
+  inline const std::gslice getValueMask() const noexcept;
+
   // Gets internal position
   inline index_t getPos( const index_t idx ) const noexcept;
 
@@ -130,11 +131,13 @@ class DenseVector
   inline ConstIteratorType cfind( const index_t idx ) const noexcept;
 
   // Resizes
-  inline void resize( const index_t length ) noexcept;
+  inline void resize( const index_t length, const index_t stride ) noexcept;
 
   // Gets segment
   inline       VectorType getSegment( const IdxRange range ) noexcept;
   inline const VectorType getSegment( const IdxRange range ) const noexcept;
+  inline       VectorType expand() noexcept;
+  inline const VectorType expand() const noexcept;
 
 };
 

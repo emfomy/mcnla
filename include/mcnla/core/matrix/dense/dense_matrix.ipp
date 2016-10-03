@@ -82,15 +82,14 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    const index_t capability,
-    const index_t offset
+    const index_t capability
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(capability, offset),
+    DenseBaseType(capability),
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(capability >= pitch_ * size1_ - (pitch_-size0_) + offset_);
+  assert(capability >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,10 +99,9 @@ template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const std::pair<index_t, index_t> sizes,
     const index_t pitch,
-    const index_t capability,
-    const index_t offset
+    const index_t capability
 ) noexcept
-  : DenseMatrix(sizes.first, sizes.second, pitch, capability, offset) {}
+  : DenseMatrix(sizes.first, sizes.second, pitch, capability, this->getOffset()) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -113,15 +111,14 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    const ValuePtrType &value,
-    const index_t offset
+    const ValuePtrType &value
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(value, offset),
+    DenseBaseType(value),
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + offset_);
+  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,11 +133,11 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t offset
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(data, offset),
+    DenseBaseType(data >> offset),
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + offset_);
+  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,6 +253,14 @@ const _Scalar& DenseMatrix<_Scalar, _layout>::operator()(
 ) const noexcept { return getElem(rowidx, colidx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value valarray mask.
+///
+template <typename _Scalar, Layout _layout>
+const std::gslice DenseMatrix<_Scalar, _layout>::getValueMask() const noexcept {
+  return std::gslice(this->getOffset(), {size_t(size1_), size_t(size0_)}, {size_t(pitch_), 1});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
 ///
 template <typename _Scalar, Layout _layout>
@@ -273,7 +278,7 @@ index_t DenseMatrix<_Scalar, _layout>::getPos(
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, changeLayout(_layout)> DenseMatrix<_Scalar, _layout>::transpose() noexcept {
-  return DenseMatrix<_Scalar, changeLayout(_layout)>(ncol_, nrow_, pitch_, data_, offset_);
+  return DenseMatrix<_Scalar, changeLayout(_layout)>(ncol_, nrow_, pitch_, data_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -342,8 +347,7 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getBlock(
 ) noexcept {
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch_, data_,
-                                       getPos(rowrange.begin, colrange.begin));
+  return MatrixType(rowrange.getLength(), colrange.getLength(), pitch_, data_, getPos(rowrange.begin, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,8 +360,7 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getBlock(
 ) const noexcept {
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), colrange.getLength(), pitch_, data_,
-                                       getPos(rowrange.begin, colrange.begin));
+  return MatrixType(rowrange.getLength(), colrange.getLength(), pitch_, data_, getPos(rowrange.begin, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -368,7 +371,7 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getCols(
     const IdxRange colrange
 ) noexcept {
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), pitch_, data_, getPos(0, colrange.begin) + offset_);
+  return MatrixType(nrow_, colrange.getLength(), pitch_, data_, getPos(0, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,7 +382,7 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getCols(
     const IdxRange colrange
 ) const noexcept {
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(nrow_, colrange.getLength(), pitch_, data_, getPos(0, colrange.begin) + offset_);
+  return MatrixType(nrow_, colrange.getLength(), pitch_, data_, getPos(0, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -390,7 +393,7 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getRows(
     const IdxRange rowrange
 ) noexcept {
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, pitch_, data_, getPos(rowrange.begin, 0) + offset_);
+  return MatrixType(rowrange.getLength(), ncol_, pitch_, data_, getPos(rowrange.begin, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,7 +404,7 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getRows(
     const IdxRange rowrange
 ) const noexcept {
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseMatrix<_Scalar, _layout>(rowrange.getLength(), ncol_, pitch_, data_, getPos(rowrange.begin, 0) + offset_);
+  return MatrixType(rowrange.getLength(), ncol_, pitch_, data_, getPos(rowrange.begin, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -412,7 +415,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
     const index_t colidx
 ) noexcept {
   assert(colidx >= 0 && colidx < ncol_);
-  return DenseVector<_Scalar>(nrow_, getColInc(), data_, getPos(0, colidx) + offset_);
+  return VectorType(nrow_, getColInc(), data_, getPos(0, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,7 +426,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
     const index_t colidx
 ) const noexcept {
   assert(colidx >= 0 && colidx < ncol_);
-  return DenseVector<_Scalar>(nrow_, getColInc(), data_, getPos(0, colidx) + offset_);
+  return VectorType(nrow_, getColInc(), data_, getPos(0, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -436,7 +439,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getColSegment(
 ) noexcept {
   assert(colidx >= 0 && colidx < ncol_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseVector<_Scalar>(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx) + offset_);
+  return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -449,7 +452,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getColSegment(
 ) const noexcept {
   assert(colidx >= 0 && colidx < ncol_);
   assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  return DenseVector<_Scalar>(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx) + offset_);
+  return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -460,7 +463,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
     const index_t rowidx
 ) noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
-  return DenseVector<_Scalar>(ncol_, getRowInc(), data_, getPos(rowidx, 0) + offset_);
+  return VectorType(ncol_, getRowInc(), data_, getPos(rowidx, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -471,7 +474,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
     const index_t rowidx
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
-  return DenseVector<_Scalar>(ncol_, getRowInc(), data_, getPos(rowidx, 0) + offset_);
+  return VectorType(ncol_, getRowInc(), data_, getPos(rowidx, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -484,7 +487,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
 ) noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseVector<_Scalar>(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin) + offset_);
+  return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -497,7 +500,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
 ) const noexcept {
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  return DenseVector<_Scalar>(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin) + offset_);
+  return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -525,7 +528,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
       length = ncol_ - idx;
     }
   }
-  return DenseVector<_Scalar>(length, pitch_+1, data_, internal_idx);
+  return VectorType(length, pitch_+1, data_, internal_idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -553,7 +556,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
       length = ncol_ - idx;
     }
   }
-  return DenseVector<_Scalar>(length, pitch_+1, data_, internal_idx);
+  return VectorType(length, pitch_+1, data_, internal_idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -563,7 +566,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
-  return DenseVector<_Scalar>(pitch_ * size1_, 1, data_, getPos(0, 0) + offset_);
+  return VectorType(pitch_ * size1_, 1, data_, getPos(0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -571,7 +574,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noexcept {
-  return DenseVector<_Scalar>(pitch_ * size1_, 1, data_, getPos(0, 0) + offset_);
+  return VectorType(pitch_ * size1_, 1, data_, getPos(0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

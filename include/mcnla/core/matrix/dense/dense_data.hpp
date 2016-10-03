@@ -12,6 +12,7 @@
 #include <mcnla/core/def.hpp>
 #include <valarray>
 #include <memory>
+#include <mcnla/core/matrix/kit/array.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -28,46 +29,44 @@ class DenseData {
 
  private:
 
-  using ValuePtrType = std::shared_ptr<std::valarray<_Scalar>>;
+  using ValueArrayType    = Array<_Scalar>;
+  using ValueValarrayType = std::valarray<_Scalar>;
 
  protected:
 
   /// The value array.
-  ValuePtrType value_;
-
-  /// The empty value array
-  static const ValuePtrType kNullValue;
+  ValueArrayType value_;
 
  public:
 
   // Constructors
   inline DenseData() noexcept;
   inline DenseData( const index_t capability ) noexcept;
-  inline DenseData( const ValuePtrType &value ) noexcept;
+  inline DenseData( const ValueArrayType &value ) noexcept;
   inline DenseData( const DenseData &other ) noexcept;
   inline DenseData( DenseData &&other ) noexcept;
 
   // Operators
   inline DenseData& operator=( const DenseData &other ) noexcept;
   inline DenseData& operator=( DenseData &&other ) noexcept;
-  inline bool operator==( const DenseData& other ) const noexcept;
-  inline bool operator!=( const DenseData& other ) const noexcept;
-  inline       _Scalar* operator*() noexcept;
-  inline const _Scalar* operator*() const noexcept;
+  inline void operator>>=( const index_t offset ) noexcept;
+  inline void operator<<=( const index_t offset ) noexcept;
+  inline       DenseData operator>>( const index_t offset ) noexcept;
+  inline const DenseData operator>>( const index_t offset ) const noexcept;
+  inline       DenseData operator<<( const index_t offset ) noexcept;
+  inline const DenseData operator<<( const index_t offset ) const noexcept;
 
   // Gets data
   inline       index_t  getCapability() const noexcept;
+  inline       index_t  getOffset() const noexcept;
   inline       _Scalar* getValue() noexcept;
   inline const _Scalar* getValue() const noexcept;
-
-  // Gets data pointer
-  inline       ValuePtrType& getValuePtr() noexcept;
-  inline const ValuePtrType& getValuePtr() const noexcept;
+  inline       ValueArrayType& getValueArray() noexcept;
+  inline const ValueArrayType& getValueArray() const noexcept;
+  inline       ValueValarrayType& getValueValarray() noexcept;
+  inline const ValueValarrayType& getValueValarray() const noexcept;
 
 };
-
-template <typename _Scalar>
-const typename DenseData<_Scalar>::ValuePtrType DenseData<_Scalar>::kNullValue = std::make_shared<std::valarray<_Scalar>>();
 
 }  // namespace mcnla
 

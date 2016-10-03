@@ -120,7 +120,6 @@ class DenseCube
   using CubeBaseType::size0_;
   using CubeBaseType::size1_;
   using CubeBaseType::size2_;
-  using DenseBaseType::offset_;
   using DenseBaseType::data_;
 
  public:
@@ -133,14 +132,14 @@ class DenseCube
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
                     const index_t pitch0, const index_t pitch1 ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch0, const index_t pitch1,
-                    const index_t capability, const index_t offset = 0 ) noexcept;
-  inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches,
-                    const index_t capability, const index_t offset = 0 ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch0, const index_t pitch1,
-                    const ValuePtrType &value, const index_t offset = 0 ) noexcept;
-  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage, const index_t pitch0, const index_t pitch1,
-                    const DataType &data, const index_t offset = 0 ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+                    const index_t pitch0, const index_t pitch1, const index_t capability ) noexcept;
+  inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes,
+                    const std::pair<index_t, index_t> pitches, const index_t capability ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+                    const index_t pitch0, const index_t pitch1, const ValuePtrType &value ) noexcept;
+  inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
+                    const index_t pitch0, const index_t pitch1, const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseCube( const DenseCube &other ) noexcept;
   inline DenseCube( DenseCube &&other ) noexcept;
 
@@ -161,6 +160,9 @@ class DenseCube
   inline const ScalarType& getElem( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) noexcept;
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;
+
+  // Gets mask
+  inline const std::gslice getValueMask() const noexcept;
 
   // Gets internal position
   inline index_t getPos( const index_t rowidx, const index_t colidx, const index_t pageidx ) const noexcept;

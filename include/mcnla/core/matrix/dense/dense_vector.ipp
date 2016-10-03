@@ -46,14 +46,13 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
     const index_t stride,
-    const index_t capability,
-    const index_t offset
+    const index_t capability
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(capability, offset),
+    DenseBaseType(capability),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(capability >= stride_ * (length_-1) + 1 + offset_);
+  assert(capability >= stride_ * (length_-1) + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,14 +62,13 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
     const index_t stride,
-    const ValuePtrType &value,
-    const index_t offset
+    const ValueArrayType &value
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(value, offset),
+    DenseBaseType(value),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(this->getCapability() >= stride_ * (length_-1) + 1 + offset_);
+  assert(this->getCapability() >= stride_ * (length_-1) + 1 + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,10 +82,10 @@ DenseVector<_Scalar>::DenseVector(
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(data, offset),
+    DenseBaseType(data >> offset),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(this->getCapability() >= stride_ * (length_-1) + 1 + offset_);
+  assert(this->getCapability() >= stride_ * (length_-1) + 1 + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,6 +195,14 @@ const _Scalar& DenseVector<_Scalar>::operator()(
 ) const noexcept { return getElem(idx); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value valarray mask.
+///
+template <typename _Scalar>
+const std::gslice DenseVector<_Scalar>::getValueMask() const noexcept {
+  return std::gslice(this->getOffset(), {size_t(length_)}, {size_t(stride_)});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
 ///
 template <typename _Scalar>
@@ -245,10 +251,13 @@ typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::cfind(
 ///
 template <typename _Scalar>
 void DenseVector<_Scalar>::resize(
-    const index_t length
+    const index_t length,
+    const index_t stride
 ) noexcept {
-  assert(length > 0 && length <= data_.getCapability());
+  assert(length >= 0);
+  assert(this->getCapability() >= stride * (length-1) + 1 + this->getOffset());
   length_ = length;
+  stride_ = stride;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +268,7 @@ DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), stride_, data_, getPos(range.begin) + offset_);
+  return VectorType(range.getLength(), stride_, data_, getPos(range.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +279,26 @@ const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) const noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  return DenseVector<_Scalar>(range.getLength(), stride_, data_, getPos(range.begin) + offset_);
+  return VectorType(range.getLength(), stride_, data_, getPos(range.begin));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Expand the vector.
+/// Sets stride to 1.
+///
+/// @attention  The output vector contains the out-of-range spaces.
+///
+template <typename _Scalar>
+DenseVector<_Scalar> DenseVector<_Scalar>::expand() noexcept {
+  return VectorType(length_ * stride_, 1, data_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydox  expand
+///
+template <typename _Scalar>
+const DenseVector<_Scalar> DenseVector<_Scalar>::expand() const noexcept {
+  return VectorType(length_ * stride_, 1, data_);
 }
 
 }  // namespace mcnla
