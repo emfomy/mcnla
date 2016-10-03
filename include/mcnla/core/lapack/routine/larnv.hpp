@@ -25,6 +25,7 @@ namespace mcnla {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  lapack_auxiliary_module
 /// @brief  Returns a vector of random numbers from a uniform or normal distribution.
 ///
 /// @attention  The out-of-range spaces are also changed.

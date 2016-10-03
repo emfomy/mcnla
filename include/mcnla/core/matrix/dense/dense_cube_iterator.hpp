@@ -56,6 +56,7 @@ struct Traits<matrix::DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  matrix_dense_module
 /// The dense cube iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -99,11 +100,13 @@ class DenseCubeIteratorBase : public DenseIteratorBase<DenseCubeIteratorBase<_Sc
 
 };
 
+/// @ingroup  matrix_dense_module
 template <typename _Scalar, Layout _layout>
-using DenseCubeIterator = DenseCubeIteratorBase<_Scalar, _layout, DenseCube<_Scalar, _layout>>;
+using DenseCubeIterator = mcnla::matrix::DenseCubeIteratorBase<_Scalar, _layout, DenseCube<_Scalar, _layout>>;
 
+/// @ingroup  matrix_dense_module
 template <typename _Scalar, Layout _layout>
-using DenseCubeConstIterator = DenseCubeIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
+using DenseCubeConstIterator = mcnla::matrix::DenseCubeIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
 
 }  // namespace matrix
 

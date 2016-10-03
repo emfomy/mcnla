@@ -31,7 +31,7 @@ namespace isvd {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class SketcherBase : public CrtpBase<_Derived, SketcherBase<_Derived>> {
+class SketcherBase : public utility::CrtpBase<_Derived, SketcherBase<_Derived>> {
 
  public:
 

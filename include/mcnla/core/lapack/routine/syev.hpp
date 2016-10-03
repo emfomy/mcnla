@@ -25,7 +25,10 @@ namespace mcnla {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  lapack_driver_module
 /// @copydoc  mcnla::lapack::SyevDriver::compute
+///
+/// @see  mcnla::lapack::SyevDriver
 ///
 //@{
 template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>

@@ -25,7 +25,10 @@ namespace mcnla {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  lapack_driver_module
 /// @copydoc  mcnla::lapack::GesvdDriver::compute
+///
+/// @see  mcnla::lapack::GesvdDriver
 ///
 //@{
 template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Layout _layout>

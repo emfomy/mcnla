@@ -59,6 +59,7 @@ struct Traits<matrix::CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>> 
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  matrix_coo_module
 /// The coordinate list (COO) matrix iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -101,11 +102,13 @@ class CooMatrixIteratorBase : public CooIteratorBase<CooMatrixIteratorBase<_Scal
 
 };
 
+/// @ingroup  matrix_coo_module
 template <typename _Scalar, Layout _layout>
-using CooMatrixIterator = CooMatrixIteratorBase<_Scalar, index_t, _layout, CooMatrix<_Scalar, _layout>>;
+using CooMatrixIterator = mcnla::matrix::CooMatrixIteratorBase<_Scalar, index_t, _layout, CooMatrix<_Scalar, _layout>>;
 
+/// @ingroup  matrix_coo_module
 template <typename _Scalar, Layout _layout>
-using CooMatrixConstIterator = CooMatrixIteratorBase<const _Scalar, const index_t, _layout, const CooMatrix<_Scalar, _layout>>;
+using CooMatrixConstIterator = mcnla::matrix::CooMatrixIteratorBase<const _Scalar, const index_t, _layout, const CooMatrix<_Scalar, _layout>>;
 
 }  // namespace matrix
 

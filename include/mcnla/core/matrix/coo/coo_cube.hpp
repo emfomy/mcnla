@@ -76,6 +76,7 @@ struct Traits<matrix::CooCube<_Scalar, _layout>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  matrix_coo_module
 /// The coordinate list (COO) cube class.
 ///
 /// @tparam  _Scalar  The scalar type.

@@ -26,9 +26,12 @@ namespace mcnla {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::lapack::detail::gesvd
+/// @ingroup  lapack_driver_module
+/// @brief  Computes the singular value decomposition of a general rectangular matrix.
 ///
 /// @tparam  _Matrix  The matrix type.
+///
+/// @see mcnla::lapack::gesvd
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 class GesvdDriver {

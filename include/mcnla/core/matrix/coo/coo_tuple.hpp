@@ -110,6 +110,7 @@ struct CooTupleHelper<_ndim, 0> {
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  matrix_coo_module
 /// The coordinate list (COO) tuple.
 ///
 /// @tparam  _ndim    The dimension.
@@ -185,9 +186,11 @@ class CooTuple : public detail::CooTupleBase<_ndim, _Scalar&, _Index&> {
 
 };
 
-// Makes a tuple
+/// @ingroup  matrix_coo_module
 template <typename __Index, typename... __Args>
 inline CooTuple<sizeof...(__Args)+1, void*,   __Index> makeCooTuple( const __Index idx, const __Args... args );
+
+/// @ingroup  matrix_coo_module
 template <typename __Scalar, typename __Index, typename... __Args>
 inline CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args );
 

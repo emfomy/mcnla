@@ -26,9 +26,12 @@ namespace mcnla {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::lapack::detail::syev
+/// @ingroup  lapack_driver_module
+/// @brief  Computes all eigenvalues and, optionally, eigenvectors of a symmetric or Hermitian matrix.
 ///
 /// @tparam  _Matrix  The matrix type.
+///
+/// @see mcnla::lapack::syev
 ///
 template <class _Matrix, JobOption _jobz, UploOption _uplo = UploOption::LOWER>
 class SyevDriver {

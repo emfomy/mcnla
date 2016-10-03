@@ -55,6 +55,7 @@ struct Traits<matrix::DenseVectorIteratorBase<_Scalar, _Vector>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  matrix_dense_module
 /// The dense vector iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -94,11 +95,13 @@ class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase
 
 };
 
+/// @ingroup  matrix_dense_module
 template <typename _Scalar>
-using DenseVectorIterator = DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
+using DenseVectorIterator = mcnla::matrix::DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
 
+/// @ingroup  matrix_dense_module
 template <typename _Scalar>
-using DenseVectorConstIterator = DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+using DenseVectorConstIterator = mcnla::matrix::DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
 
 }  // namespace matrix
 

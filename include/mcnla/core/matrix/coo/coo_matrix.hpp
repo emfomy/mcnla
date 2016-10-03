@@ -72,6 +72,7 @@ struct Traits<matrix::CooMatrix<_Scalar, _layout>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  matrix_coo_module
 /// The coordinate list (COO) matrix class.
 ///
 /// @tparam  _Scalar  The scalar type.

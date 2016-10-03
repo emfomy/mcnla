@@ -1,15 +1,21 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/base/tensor_base.hpp
-/// @brief   The tensor interface.
+/// @file    include/mcnla/core/utility/def.hpp
+/// @brief   The utility definitions.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_BASE_TENSOR_BASE_HPP_
-#define MCNLA_CORE_MATRIX_BASE_TENSOR_BASE_HPP_
+#ifndef MCNLA_CORE_UTILITY_DEF_HPP_
+#define MCNLA_CORE_UTILITY_DEF_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  utility_module  Utility Module
+/// @ingroup   core_module
+/// @brief     The Utility Module
+///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -17,28 +23,13 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
-/// The interface of tensor type.
+/// The utility namespace.
+/// @ingroup  utility_module
 ///
-/// @tparam  _Derived  The derived type.
-///
-template <class _Derived>
-class TensorBase {
+namespace utility {
 
- protected:
-
-  // Constructors
-  inline TensorBase() noexcept {};
-
-};
-
-}  // namespace matrix
+}  // namespace utility
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_BASE_TENSOR_BASE_HPP_
+#endif  // MCNLA_CORE_UTILITY_DEF_HPP_

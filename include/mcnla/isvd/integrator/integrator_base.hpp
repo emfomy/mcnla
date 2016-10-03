@@ -31,7 +31,7 @@ namespace isvd {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class IntegratorBase : public CrtpBase<_Derived, IntegratorBase<_Derived>> {
+class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derived>> {
 
  public:
 

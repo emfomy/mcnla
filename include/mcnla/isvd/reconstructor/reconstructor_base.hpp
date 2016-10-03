@@ -31,7 +31,7 @@ namespace isvd {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class ReconstructorBase : public CrtpBase<_Derived, ReconstructorBase<_Derived>> {
+class ReconstructorBase : public utility::CrtpBase<_Derived, ReconstructorBase<_Derived>> {
 
  public:
 
