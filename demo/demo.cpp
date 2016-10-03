@@ -15,10 +15,12 @@
 
 using ScalarType = double;
 
-void create( mcnla::DenseMatrix<ScalarType> &matrix_a, mcnla::DenseMatrix<ScalarType> &matrix_u_true,
+void create( mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
+             mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
              const mcnla::index_t rank, mcnla::index_t seed[4] ) noexcept;
 template <mcnla::Layout _layout>
-void check( const mcnla::DenseMatrix<ScalarType, _layout> &matrix_u, const mcnla::DenseMatrix<ScalarType> &matrix_u_true,
+void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
+            const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
             ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,11 +72,11 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize solver
-  mcnla::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
-  mcnla::isvd::Solver<mcnla::DenseMatrix<ScalarType>,
-                      mcnla::isvd::GaussianProjectionSketcher<mcnla::DenseMatrix<ScalarType>>,
-                      mcnla::isvd::KolmogorovNagumoTypeIntegrator<mcnla::DenseMatrix<ScalarType>>,
-                      mcnla::isvd::StandardReconstructor<mcnla::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
+  mcnla::isvd::Solver<mcnla::matrix::DenseMatrix<ScalarType>,
+                      mcnla::isvd::GaussianProjectionSketcher<mcnla::matrix::DenseMatrix<ScalarType>>,
+                      mcnla::isvd::KolmogorovNagumoTypeIntegrator<mcnla::matrix::DenseMatrix<ScalarType>>,
+                      mcnla::isvd::StandardReconstructor<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeed(seed);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
@@ -156,17 +158,17 @@ int main( int argc, char **argv ) {
 /// Create matrix A
 ///
 void create(
-          mcnla::DenseMatrix<ScalarType> &matrix_a,
-          mcnla::DenseMatrix<ScalarType> &matrix_u_true,
+          mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
+          mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
     const mcnla::index_t rank,
           mcnla::index_t seed[4]
 ) noexcept {
-  matrix_u_true = mcnla::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
+  matrix_u_true = mcnla::matrix::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
 
-  mcnla::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
-  mcnla::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
-  mcnla::DenseMatrix<ScalarType> matrix_empty;
-  mcnla::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
+  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
 
   // Generate U & V using normal random
   mcnla::lapack::larnv<3>(matrix_u.vectorize(), seed);
@@ -194,15 +196,15 @@ void create(
 ///
 template <mcnla::Layout _layout>
 void check(
-    const mcnla::DenseMatrix<ScalarType, _layout> &matrix_u,
-    const mcnla::DenseMatrix<ScalarType> &matrix_u_true,
+    const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
+    const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
           ScalarType &smax,
           ScalarType &smin,
           ScalarType &smean
 ) noexcept {
-  mcnla::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
-  mcnla::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
-  mcnla::DenseMatrix<ScalarType> matrix_empty;
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
+  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
 
   // U2 := Utrue' * U
   mcnla::blas::gemm<mcnla::TransOption::TRANS, mcnla::TransOption::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);

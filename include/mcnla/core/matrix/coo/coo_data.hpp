@@ -20,6 +20,11 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <index_t _ndim, typename _Scalar> class CooData;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -185,6 +190,8 @@ const typename CooData<_ndim, _Scalar>::ValuePtrType
 template <index_t _ndim, typename _Scalar>
 const typename CooData<_ndim, _Scalar>::IdxPtrType
     CooData<_ndim, _Scalar>::kNullIdx   = std::make_shared<std::valarray<index_t>>();
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

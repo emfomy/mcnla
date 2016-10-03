@@ -25,11 +25,18 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class DenseCube;
 template <typename _Scalar, Layout _layout> class DenseMatrix;
 template <typename _Scalar> class DenseVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -43,27 +50,32 @@ namespace traits {
 /// @tparam  _layout  The storage layout.
 ///
 template <typename _Scalar, Layout _layout>
-struct Traits<DenseCube<_Scalar, _layout>> {
+struct Traits<matrix::DenseCube<_Scalar, _layout>> {
   static constexpr index_t ndim = 3;
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType        = DenseVector<ScalarType>;
-  using RealVectorType    = DenseVector<RealScalarType>;
-  using MatrixType        = DenseMatrix<ScalarType, _layout>;
-  using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
-  using CubeType          = DenseCube<ScalarType, _layout>;
-  using RealCubeType      = DenseCube<RealScalarType, _layout>;
-  using TransposeType     = DenseCube<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = DenseCube<RealScalarType, changeLayout(_layout)>;
+  using VectorType        = matrix::DenseVector<ScalarType>;
+  using RealVectorType    = matrix::DenseVector<RealScalarType>;
+  using MatrixType        = matrix::DenseMatrix<ScalarType, _layout>;
+  using RealMatrixType    = matrix::DenseMatrix<RealScalarType, _layout>;
+  using CubeType          = matrix::DenseCube<ScalarType, _layout>;
+  using RealCubeType      = matrix::DenseCube<RealScalarType, _layout>;
+  using TransposeType     = matrix::DenseCube<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = matrix::DenseCube<RealScalarType, changeLayout(_layout)>;
 
-  using IteratorType      = DenseCubeIterator<ScalarType, _layout>;
-  using ConstIteratorType = DenseCubeConstIterator<ScalarType, _layout>;
+  using IteratorType      = matrix::DenseCubeIterator<ScalarType, _layout>;
+  using ConstIteratorType = matrix::DenseCubeConstIterator<ScalarType, _layout>;
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense cube class.
@@ -228,6 +240,8 @@ class DenseCube
   inline index_t getTubeInc() const noexcept;
 
 };
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

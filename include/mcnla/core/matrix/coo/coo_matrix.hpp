@@ -22,10 +22,17 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class CooMatrix;
 template <typename _Scalar> class CooVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -39,25 +46,30 @@ namespace traits {
 /// @tparam  _layout  The storage layout.
 ///
 template <typename _Scalar, Layout _layout>
-struct Traits<CooMatrix<_Scalar, _layout>> {
+struct Traits<matrix::CooMatrix<_Scalar, _layout>> {
   static constexpr index_t ndim = 2;
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType        = CooVector<ScalarType>;
-  using RealVectorType    = CooVector<RealScalarType>;
-  using MatrixType        = CooMatrix<ScalarType, _layout>;
-  using RealMatrixType    = CooMatrix<RealScalarType, _layout>;
-  using TransposeType     = CooMatrix<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = CooMatrix<RealScalarType, changeLayout(_layout)>;
+  using VectorType        = matrix::CooVector<ScalarType>;
+  using RealVectorType    = matrix::CooVector<RealScalarType>;
+  using MatrixType        = matrix::CooMatrix<ScalarType, _layout>;
+  using RealMatrixType    = matrix::CooMatrix<RealScalarType, _layout>;
+  using TransposeType     = matrix::CooMatrix<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = matrix::CooMatrix<RealScalarType, changeLayout(_layout)>;
 
-  using IteratorType      = CooMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType = CooMatrixConstIterator<ScalarType, _layout>;
+  using IteratorType      = matrix::CooMatrixIterator<ScalarType, _layout>;
+  using ConstIteratorType = matrix::CooMatrixConstIterator<ScalarType, _layout>;
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) matrix class.
@@ -172,6 +184,8 @@ class CooMatrix
   inline const VectorType getRow( const index_t rowidx ) const noexcept;
 
 };
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

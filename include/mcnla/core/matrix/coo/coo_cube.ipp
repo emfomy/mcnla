@@ -17,6 +17,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <typename _Scalar, Layout _layout>
@@ -284,10 +289,10 @@ void CooCube<_Scalar, _layout>::getPosNnz(
   assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
   assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
   assert(isSorted());
-  auto begintuple = isColMajor(_layout) ? mcnla::makeCooTuple(rowrange.begin, colrange.begin, pagerange.begin)
-                                        : mcnla::makeCooTuple(colrange.begin, rowrange.begin, pagerange.begin);
-  auto endtuple   = isColMajor(_layout) ? mcnla::makeCooTuple(rowrange.end, colrange.end, pagerange.end)
-                                        : mcnla::makeCooTuple(colrange.end, rowrange.end, pagerange.end);
+  auto begintuple = isColMajor(_layout) ? makeCooTuple(rowrange.begin, colrange.begin, pagerange.begin)
+                                        : makeCooTuple(colrange.begin, rowrange.begin, pagerange.begin);
+  auto endtuple   = isColMajor(_layout) ? makeCooTuple(rowrange.end, colrange.end, pagerange.end)
+                                        : makeCooTuple(colrange.end, rowrange.end, pagerange.end);
   auto it0 = std::lower_bound(this->begin(), this->end(), begintuple);
   auto it1 = std::lower_bound(it0, this->end(), endtuple);
   pos = it0.getPos();
@@ -307,7 +312,7 @@ typename CooCube<_Scalar, _layout>::IteratorType CooCube<_Scalar, _layout>::find
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
   assert(isSorted());
-  auto tuple = isColMajor(_layout) ? mcnla::makeCooTuple(rowidx, colidx, pageidx) : mcnla::makeCooTuple(colidx, rowidx, pageidx);
+  auto tuple = isColMajor(_layout) ? makeCooTuple(rowidx, colidx, pageidx) : makeCooTuple(colidx, rowidx, pageidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
 }
@@ -325,7 +330,7 @@ typename CooCube<_Scalar, _layout>::ConstIteratorType CooCube<_Scalar, _layout>:
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
   assert(isSorted());
-  auto tuple = isColMajor(_layout) ? mcnla::makeCooTuple(rowidx, colidx, pageidx) : mcnla::makeCooTuple(colidx, rowidx, pageidx);
+  auto tuple = isColMajor(_layout) ? makeCooTuple(rowidx, colidx, pageidx) : makeCooTuple(colidx, rowidx, pageidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
 }
@@ -472,6 +477,8 @@ const CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
   index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
 }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

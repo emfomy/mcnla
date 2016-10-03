@@ -19,10 +19,17 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class CooCube;
 template <typename _Scalar, typename _Index, Layout _layout, class _Cube> class CooCubeIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -37,7 +44,7 @@ namespace traits {
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
-struct Traits<CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>> {
+struct Traits<matrix::CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>> {
   static constexpr index_t ndim = 3;
   using ScalarType    = _Scalar;
   using IndexType     = _Index;
@@ -45,6 +52,11 @@ struct Traits<CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>> {
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) cube iterator.
@@ -95,6 +107,8 @@ using CooCubeIterator = CooCubeIteratorBase<_Scalar, index_t, _layout, CooCube<_
 
 template <typename _Scalar, Layout _layout>
 using CooCubeConstIterator = CooCubeIteratorBase<const _Scalar, const index_t, _layout, const CooCube<_Scalar, _layout>>;
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

@@ -19,6 +19,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <typename _Scalar>
@@ -197,8 +202,8 @@ void CooVector<_Scalar>::getPosNnz(
 ) const noexcept {
   assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
   assert(isSorted());
-  auto it0 = std::lower_bound(this->begin(), this->end(), mcnla::makeCooTuple(range.begin));
-  auto it1 = std::lower_bound(it0, this->end(), mcnla::makeCooTuple(range.end));
+  auto it0 = std::lower_bound(this->begin(), this->end(), makeCooTuple(range.begin));
+  auto it1 = std::lower_bound(it0, this->end(), makeCooTuple(range.end));
   pos = it0.getPos();
   nnz = it1.getPos() - pos;
 }
@@ -269,6 +274,8 @@ void CooVector<_Scalar>::resize(
   assert(length >= 0);
   length_ = length;
 }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

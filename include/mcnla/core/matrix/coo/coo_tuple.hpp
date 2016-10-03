@@ -18,6 +18,11 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <index_t _ndim, typename _Scalar, typename _Index> class CooTuple;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -186,6 +191,8 @@ inline CooTuple<sizeof...(__Args)+1, void*,   __Index> makeCooTuple( const __Ind
 template <typename __Scalar, typename __Index, typename... __Args>
 inline CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args );
 
+}  // namespace matrix
+
 }  // namespace mcnla
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +201,8 @@ inline CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scala
 namespace std {
 
 template <mcnla::index_t _ndim, typename _Scalar, typename _Index>
-inline void swap( mcnla::CooTuple<_ndim, _Scalar, _Index> a, mcnla::CooTuple<_ndim, _Scalar, _Index> b ) noexcept;
+inline void swap( mcnla::matrix::CooTuple<_ndim, _Scalar, _Index> a,
+                  mcnla::matrix::CooTuple<_ndim, _Scalar, _Index> b ) noexcept;
 
 }  // namespace std
 

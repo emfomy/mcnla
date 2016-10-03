@@ -16,6 +16,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The detail namespace.
 //
 namespace detail {
@@ -320,6 +325,8 @@ template <index_t _ndim, typename _Scalar> template <index_t... _dims>
 const CooData<sizeof...(_dims), _Scalar> CooData<_ndim, _Scalar>::getReduced() const noexcept {
   return detail::CooDataHelper<_ndim, _Scalar, sizeof...(_dims), _dims...>::getConstData(*this);
 }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

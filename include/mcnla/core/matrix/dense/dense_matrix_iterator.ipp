@@ -16,6 +16,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, Layout __layout, class __Matrix>
@@ -66,6 +71,8 @@ template <typename _Scalar, Layout _layout, class _Matrix>
 index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getPos() const noexcept {
   return container_->getPos(getRowIdx(), getColIdx());
 }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

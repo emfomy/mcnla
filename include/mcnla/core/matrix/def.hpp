@@ -1,36 +1,42 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/def.hpp
-/// @brief   The iSVD definitions.
+/// @file    include/mcnla/core/matrix/def.hpp
+/// @brief   The matrix definitions.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_DEF_HPP_
-#define MCNLA_ISVD_DEF_HPP_
+#ifndef MCNLA_CORE_MATRIX_DEF_HPP_
+#define MCNLA_CORE_MATRIX_DEF_HPP_
 
 #include <mcnla/def.hpp>
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_module  iSVD Module
-/// @brief     The iSVD Module
+/// @defgroup  matrix_module  matrix Module
+/// @ingroup   core_module
+/// @brief     The matrix Module
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The MCNLA namespace
+//  The MCNLA namespace.
 //
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_module
-/// The iSVD namespace.
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The matrix namespace.
+/// @ingroup  matrix_module
 ///
-namespace isvd {
+namespace matrix {
 
-using namespace matrix;
+}  // namespace matrix
 
-}  // namespace isvd
+}  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_DEF_HPP_
+#endif  // MCNLA_CORE_MATRIX_DEF_HPP_

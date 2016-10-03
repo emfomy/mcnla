@@ -16,6 +16,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, typename __Index, Layout __layout, class __Cube>
@@ -64,6 +69,8 @@ template <typename _Scalar, typename _Index, Layout _layout, class _Cube>
 index_t CooCubeIteratorBase<_Scalar, _Index, _layout, _Cube>::getPos() const noexcept {
   return this->getItIdx();
 }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

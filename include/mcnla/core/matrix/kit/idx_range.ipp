@@ -16,6 +16,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
 bool IdxRange::operator==( const IdxRange& other ) const noexcept { return (begin == other.begin && end == other.end); }
@@ -29,6 +34,8 @@ bool IdxRange::operator!=( const IdxRange& other ) const noexcept { return !(*th
 /// @brief  Gets the length of the range.
 ///
 index_t IdxRange::getLength() const noexcept { return (end-begin); }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

@@ -19,10 +19,17 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class CooVector;
 template <typename _Scalar, typename _Index, class _Vector> class CooVectorIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -37,7 +44,7 @@ namespace traits {
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, typename _Index, class _Vector>
-struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {
+struct Traits<matrix::CooVectorIteratorBase<_Scalar, _Index, _Vector>> {
   static constexpr index_t ndim = 1;
   using ScalarType    = _Scalar;
   using IndexType     = _Index;
@@ -45,6 +52,11 @@ struct Traits<CooVectorIteratorBase<_Scalar, _Index, _Vector>> {
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector iterator.
@@ -94,6 +106,8 @@ using CooVectorIterator = CooVectorIteratorBase<_Scalar, index_t, CooVector<_Sca
 
 template <typename _Scalar>
 using CooVectorConstIterator = CooVectorIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

@@ -23,11 +23,18 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class CooCube;
 template <typename _Scalar, Layout _layout> class CooMatrix;
 template <typename _Scalar> class CooVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -41,27 +48,32 @@ namespace traits {
 /// @tparam  _layout  The storage layout.
 ///
 template <typename _Scalar, Layout _layout>
-struct Traits<CooCube<_Scalar, _layout>> {
+struct Traits<matrix::CooCube<_Scalar, _layout>> {
   static constexpr index_t ndim = 3;
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType        = CooVector<ScalarType>;
-  using RealVectorType    = CooVector<RealScalarType>;
-  using MatrixType        = CooMatrix<ScalarType, _layout>;
-  using RealMatrixType    = CooMatrix<RealScalarType, _layout>;
-  using CubeType          = CooCube<ScalarType, _layout>;
-  using RealCubeType      = CooCube<RealScalarType, _layout>;
-  using TransposeType     = CooCube<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = CooCube<RealScalarType, changeLayout(_layout)>;
+  using VectorType        = matrix::CooVector<ScalarType>;
+  using RealVectorType    = matrix::CooVector<RealScalarType>;
+  using MatrixType        = matrix::CooMatrix<ScalarType, _layout>;
+  using RealMatrixType    = matrix::CooMatrix<RealScalarType, _layout>;
+  using CubeType          = matrix::CooCube<ScalarType, _layout>;
+  using RealCubeType      = matrix::CooCube<RealScalarType, _layout>;
+  using TransposeType     = matrix::CooCube<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = matrix::CooCube<RealScalarType, changeLayout(_layout)>;
 
-  using IteratorType      = CooCubeIterator<ScalarType, _layout>;
-  using ConstIteratorType = CooCubeConstIterator<ScalarType, _layout>;
+  using IteratorType      = matrix::CooCubeIterator<ScalarType, _layout>;
+  using ConstIteratorType = matrix::CooCubeConstIterator<ScalarType, _layout>;
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) cube class.
@@ -188,6 +200,8 @@ class CooCube
   inline const VectorType getRow( const index_t rowidx, const index_t pageidx ) const noexcept;
 
 };
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

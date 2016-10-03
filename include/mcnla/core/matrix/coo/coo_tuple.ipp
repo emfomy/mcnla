@@ -18,6 +18,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The detail namespace.
 //
 namespace detail {
@@ -295,14 +300,17 @@ CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &valu
   return CooTuple<sizeof...(__Args)+1, __Scalar, __Index>(std::tie(idx, args..., value));
 }
 
+}  // namespace matrix
+
 }  // namespace mcnla
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Swap two COO tuples
 ///
 template <mcnla::index_t _ndim, typename _Scalar, typename _Index>
-void std::swap( mcnla::CooTuple<_ndim, _Scalar, _Index> a, mcnla::CooTuple<_ndim, _Scalar, _Index> b ) noexcept {
-  mcnla::detail::CooTupleHelper<_ndim>::swap(a, b);
+void std::swap( mcnla::matrix::CooTuple<_ndim, _Scalar, _Index> a,
+                mcnla::matrix::CooTuple<_ndim, _Scalar, _Index> b ) noexcept {
+  mcnla::matrix::detail::CooTupleHelper<_ndim>::swap(a, b);
 }
 
 #endif  // MCNLA_CORE_MATRIX_COO_COO_TUPLE_IPP_

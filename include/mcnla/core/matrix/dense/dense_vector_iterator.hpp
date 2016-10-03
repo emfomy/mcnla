@@ -17,10 +17,17 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class DenseVector;
 template <typename _Scalar, class _Vector> class DenseVectorIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -34,13 +41,18 @@ namespace traits {
 /// @tparam  _Vector  The vector type.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<DenseVectorIteratorBase<_Scalar, _Vector>> {
+struct Traits<matrix::DenseVectorIteratorBase<_Scalar, _Vector>> {
   static constexpr index_t ndim = 1;
   using ScalarType    = _Scalar;
   using ContainerType = _Vector;
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator.
@@ -87,6 +99,8 @@ using DenseVectorIterator = DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar
 
 template <typename _Scalar>
 using DenseVectorConstIterator = DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

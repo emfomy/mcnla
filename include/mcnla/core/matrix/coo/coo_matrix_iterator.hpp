@@ -19,10 +19,17 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class CooMatrix;
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix> class CooMatrixIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -37,7 +44,7 @@ namespace traits {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, typename _Index, Layout _layout, class _Matrix>
-struct Traits<CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>> {
+struct Traits<matrix::CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>> {
   static constexpr index_t ndim = 2;
   using ScalarType    = _Scalar;
   using IndexType     = _Index;
@@ -45,6 +52,11 @@ struct Traits<CooMatrixIteratorBase<_Scalar, _Index, _layout, _Matrix>> {
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) matrix iterator.
@@ -94,6 +106,8 @@ using CooMatrixIterator = CooMatrixIteratorBase<_Scalar, index_t, _layout, CooMa
 
 template <typename _Scalar, Layout _layout>
 using CooMatrixConstIterator = CooMatrixIteratorBase<const _Scalar, const index_t, _layout, const CooMatrix<_Scalar, _layout>>;
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

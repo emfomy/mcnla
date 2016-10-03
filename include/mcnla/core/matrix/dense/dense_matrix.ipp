@@ -17,6 +17,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <typename _Scalar, Layout _layout>
@@ -592,6 +597,8 @@ template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::getRowInc() const noexcept {
   return isColMajor(_layout) ? pitch_ : 1;
 }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

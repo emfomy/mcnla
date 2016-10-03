@@ -16,6 +16,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
 template <typename _Scalar>
@@ -171,6 +176,8 @@ std::valarray<_Scalar>& DenseData<_Scalar>::getValueValarray() noexcept { return
 ///
 template <typename _Scalar>
 const std::valarray<_Scalar>& DenseData<_Scalar>::getValueValarray() const noexcept { return value_.getValarray(); }
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

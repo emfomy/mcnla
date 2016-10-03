@@ -23,10 +23,17 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class DenseMatrix;
 template <typename _Scalar> class DenseVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -40,25 +47,30 @@ namespace traits {
 /// @tparam  _layout  The storage layout.
 ///
 template <typename _Scalar, Layout _layout>
-struct Traits<DenseMatrix<_Scalar, _layout>> {
+struct Traits<matrix::DenseMatrix<_Scalar, _layout>> {
   static constexpr index_t ndim = 2;
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
   using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType        = DenseVector<ScalarType>;
-  using RealVectorType    = DenseVector<RealScalarType>;
-  using MatrixType        = DenseMatrix<ScalarType, _layout>;
-  using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
-  using TransposeType     = DenseMatrix<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = DenseMatrix<RealScalarType, changeLayout(_layout)>;
+  using VectorType        = matrix::DenseVector<ScalarType>;
+  using RealVectorType    = matrix::DenseVector<RealScalarType>;
+  using MatrixType        = matrix::DenseMatrix<ScalarType, _layout>;
+  using RealMatrixType    = matrix::DenseMatrix<RealScalarType, _layout>;
+  using TransposeType     = matrix::DenseMatrix<ScalarType, changeLayout(_layout)>;
+  using RealTransposeType = matrix::DenseMatrix<RealScalarType, changeLayout(_layout)>;
 
-  using IteratorType      = DenseMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType = DenseMatrixConstIterator<ScalarType, _layout>;
+  using IteratorType      = matrix::DenseMatrixIterator<ScalarType, _layout>;
+  using ConstIteratorType = matrix::DenseMatrixConstIterator<ScalarType, _layout>;
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix class.
@@ -188,6 +200,8 @@ class DenseMatrix
   inline index_t getRowInc() const noexcept;
 
 };
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

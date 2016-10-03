@@ -17,10 +17,17 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout> class DenseCube;
 template <typename _Scalar, Layout _layout, class _Cube> class DenseCubeIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -35,13 +42,18 @@ namespace traits {
 /// @tparam  _Cube    The cube type.
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
-struct Traits<DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
+struct Traits<matrix::DenseCubeIteratorBase<_Scalar, _layout, _Cube>> {
   static constexpr index_t ndim = 3;
   using ScalarType    = _Scalar;
   using ContainerType = _Cube;
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense cube iterator.
@@ -92,6 +104,8 @@ using DenseCubeIterator = DenseCubeIteratorBase<_Scalar, _layout, DenseCube<_Sca
 
 template <typename _Scalar, Layout _layout>
 using DenseCubeConstIterator = DenseCubeIteratorBase<const _Scalar, _layout, const DenseCube<_Scalar, _layout>>;
+
+}  // namespace matrix
 
 }  // namespace mcnla
 

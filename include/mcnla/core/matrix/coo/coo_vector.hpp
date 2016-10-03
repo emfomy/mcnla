@@ -21,9 +21,16 @@
 //
 namespace mcnla {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class CooVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -36,19 +43,24 @@ namespace traits {
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-struct Traits<CooVector<_Scalar>> {
+struct Traits<matrix::CooVector<_Scalar>> {
   static constexpr index_t ndim = 1;
-  using ScalarType     = _Scalar;
-  using RealScalarType = typename traits::ScalarTraits<_Scalar>::RealType;
+  using ScalarType        = _Scalar;
+  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
 
-  using VectorType     = CooVector<ScalarType>;
-  using RealVectorType = CooVector<RealScalarType>;
+  using VectorType        = matrix::CooVector<ScalarType>;
+  using RealVectorType    = matrix::CooVector<RealScalarType>;
 
-  using IteratorType      = CooVectorIterator<ScalarType>;
-  using ConstIteratorType = CooVectorConstIterator<ScalarType>;
+  using IteratorType      = matrix::CooVectorIterator<ScalarType>;
+  using ConstIteratorType = matrix::CooVectorConstIterator<ScalarType>;
 };
 
 }  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The matrix namespace.
+//
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector class.
@@ -138,6 +150,8 @@ class CooVector
   inline void resize( const index_t length ) noexcept;
 
 };
+
+}  // namespace matrix
 
 }  // namespace mcnla
 
