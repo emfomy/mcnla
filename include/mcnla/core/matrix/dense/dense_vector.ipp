@@ -73,7 +73,7 @@ DenseVector<_Scalar>::DenseVector(
     DenseBaseType(value),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(this->getCapacity() >= stride_ * (length_-1) + 1 + this->getOffset());
+  assert(this->getCapacity() > stride_ * (length_-1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ DenseVector<_Scalar>::DenseVector(
     DenseBaseType(data >> offset),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(this->getCapacity() >= stride_ * (length_-1) + 1 + this->getOffset());
+  assert(this->getCapacity() > stride_ * (length_-1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +260,7 @@ void DenseVector<_Scalar>::resize(
     const index_t stride
 ) noexcept {
   assert(length >= 0);
-  assert(this->getCapacity() >= stride * (length-1) + 1 + this->getOffset());
+  assert(this->getCapacity() > stride * (length-1));
   length_ = length;
   stride_ = stride;
 }

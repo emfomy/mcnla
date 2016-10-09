@@ -177,22 +177,22 @@ class CooTuple : public detail::CooTupleBase<_ndim, _Scalar&, _Index&> {
   template <index_t _dim> inline const _Index& getIdx() const noexcept;
 
   // Makes
-  template <typename __Index, typename... __Args>
-  friend inline CooTuple<sizeof...(__Args)+1, void*,    __Index>
-      makeCooTuple( const __Index idx, const __Args... args );
-  template <typename __Scalar, typename __Index, typename... __Args>
-  friend inline CooTuple<sizeof...(__Args)+1, __Scalar, __Index>
-      makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args );
+  template <typename __Index, typename... __Indexs>
+  friend inline CooTuple<sizeof...(__Indexs)+1, void*,    __Index>
+      makeCooTuple( const __Index idx, const __Indexs... idxs );
+  template <typename __Scalar, typename __Index, typename... __Indexs>
+  friend inline CooTuple<sizeof...(__Indexs)+1, __Scalar, __Index>
+      makeCooRefTuple( __Scalar &value, __Index &idx, __Indexs&... idxs );
 
 };
 
 /// @ingroup  matrix_coo_module
-template <typename __Index, typename... __Args>
-inline CooTuple<sizeof...(__Args)+1, void*,   __Index> makeCooTuple( const __Index idx, const __Args... args );
+template <typename __Index, typename... __Indexs>
+inline CooTuple<sizeof...(__Indexs)+1, void*,   __Index> makeCooTuple( const __Index idx, const __Indexs... idxs );
 
 /// @ingroup  matrix_coo_module
-template <typename __Scalar, typename __Index, typename... __Args>
-inline CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args );
+template <typename __Scalar, typename __Index, typename... __Indexs>
+inline CooTuple<sizeof...(__Indexs)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Indexs&... idxs );
 
 }  // namespace matrix
 

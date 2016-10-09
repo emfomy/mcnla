@@ -38,8 +38,8 @@ namespace isvd {
 /// @tparam  _Integrator     The integrator type.
 /// @tparam  _Reconstructor  The reconstructor type.
 ///
-/// @attention  The solver should have been #initialize&zwnj;d before calling #compute.
-/// @attention  The solver should be re-#initialize&zwnj;d after changing parameters.
+/// @attention  The solver should have been @link initialize() initialized@endlink before calling #compute.
+/// @attention  The solver should be @link initialize() re-initialized@endlink after changing parameters.
 ///
 template <class _Matrix,
           class _Sketcher = GaussianProjectionSketcher<_Matrix>,

@@ -120,7 +120,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch1_(pitch1) {
   assert(pitch0_ >= size0_ && pitch1_ >= size1_);
   assert(pitch0_ > 0 && pitch1_ > 0);
-  assert(capacity >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffSet());
+  assert(capacity >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch1_(pitch1) {
   assert(pitch0_ >= size0_ && pitch1_ >= size1_);
   assert(pitch0_ > 0 && pitch1_ > 0);
-  assert(this->getCapacity() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffSet());
+  assert(this->getCapacity() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch1_(pitch1) {
   assert(pitch0_ >= size0_ && pitch1_ >= size1_);
   assert(pitch0_ > 0 && pitch1_ > 0);
-  assert(this->getCapacity() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffset());
+  assert(this->getCapacity() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

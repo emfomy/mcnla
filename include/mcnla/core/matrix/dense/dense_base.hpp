@@ -60,15 +60,15 @@ class DenseBase {
 
  public:
 
-  // Gets information
-  inline index_t getCapacity() const noexcept;
-  inline index_t getOffset() const noexcept;
-
   // Gets data storage
   inline       DataType& getData() noexcept;
   inline const DataType& getData() const noexcept;
 
-  // Gets data
+  // Gets information
+  inline index_t getCapacity() const noexcept;
+  inline index_t getOffset() const noexcept;
+
+  // Gets array
   inline       ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
   inline       ValueArrayType& getValueArray() noexcept;

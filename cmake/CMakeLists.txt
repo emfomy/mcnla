@@ -1,4 +1,4 @@
-# The CMake setting of 'demo/'
+# The CMake setting of 'cmake/'
 
 # Set complier flags
 set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic" PARENT_SCOPE)

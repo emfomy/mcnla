@@ -33,8 +33,7 @@ class DenseData {
 
  private:
 
-  using ValueArrayType    = Array<_Scalar>;
-  using ValueValarrayType = std::valarray<_Scalar>;
+  using ValueArrayType = Array<_Scalar>;
 
  protected:
 

@@ -27,7 +27,7 @@ namespace matrix {
 ///
 /// @tparam  _Derived  The derived type.
 ///
-template <typename _Derived>
+template <class _Derived>
 class SparseBase {
 
  protected:
@@ -51,6 +51,9 @@ class SparseBase {
 
   // Gets information
   inline index_t getNnz() const noexcept;
+
+  // Sets information
+  inline void setNnz( const index_t nnz ) noexcept;
 
   // Gets derived class
   inline       _Derived& derived() noexcept;

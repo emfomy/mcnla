@@ -26,7 +26,6 @@ namespace matrix {
 template <class _Derived>
 CooBase<_Derived>::CooBase() noexcept
   : SparseBaseType(),
-    offset_(0),
     data_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,10 +36,7 @@ CooBase<_Derived>::CooBase(
     const index_t capacity
 ) noexcept
   : SparseBaseType(),
-    offset_(0),
-    data_(capacity) {
-  assert(offset_ >= 0);
-}
+    data_(capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -48,14 +44,10 @@ CooBase<_Derived>::CooBase(
 template <class _Derived>
 CooBase<_Derived>::CooBase(
     const index_t nnz,
-    const index_t capacity,
-    const index_t offset
+    const index_t capacity
 ) noexcept
   : SparseBaseType(nnz),
-    offset_(offset),
-    data_(capacity) {
-  assert(offset_ >= 0);
-}
+    data_(capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -63,15 +55,15 @@ CooBase<_Derived>::CooBase(
 template <class _Derived>
 CooBase<_Derived>::CooBase(
     const index_t nnz,
-    const ValuePtrType &value,
-    const std::array<IdxPtrType, ndim> &idxs,
-    const index_t offset
+    const ValueArrayType &value,
+    const std::array<IdxArrayType, ndim> &idxs
 ) noexcept
   : SparseBaseType(nnz),
-    offset_(offset),
     data_(value, idxs) {
-  assert(offset_ >= 0);
-  assert(data_.getCapacity() >= nnz_ + offset_);
+  assert(getValueCapacity() >= nnz_);
+  for ( index_t dim = 0; dim < ndim; ++dim ) {
+    assert(getIdxCapacity(dim) >= nnz_);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,14 +72,14 @@ CooBase<_Derived>::CooBase(
 template <class _Derived>
 CooBase<_Derived>::CooBase(
     const index_t nnz,
-    const DataType &data,
-    const index_t offset
+    const DataType &data
 ) noexcept
   : SparseBaseType(nnz),
-    offset_(offset),
     data_(data) {
-  assert(offset_ >= 0);
-  assert(data_.getCapacity() >= nnz_ + offset_);
+  assert(getValueCapacity() >= nnz_);
+  for ( index_t dim = 0; dim < ndim; ++dim ) {
+    assert(getIdxCapacity(dim) >= nnz_);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +90,6 @@ CooBase<_Derived>::CooBase(
 template <class _Derived>
 CooBase<_Derived>::CooBase( const CooBase &other ) noexcept
   : SparseBaseType(other),
-    offset_(other.offset_),
     data_(other.data_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,10 +98,7 @@ CooBase<_Derived>::CooBase( const CooBase &other ) noexcept
 template <class _Derived>
 CooBase<_Derived>::CooBase( CooBase &&other ) noexcept
   : SparseBaseType(std::move(other)),
-    offset_(other.offset_),
-    data_(std::move(other.data_)) {
-  other.offset_ = 0;
-}
+    data_(std::move(other.data_)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -119,7 +107,7 @@ CooBase<_Derived>::CooBase( CooBase &&other ) noexcept
 ///
 template <class _Derived>
 CooBase<_Derived>& CooBase<_Derived>::operator=( const CooBase &other ) noexcept {
-  SparseBaseType::operator=(other); offset_ = other.offset_; data_ = other.data_;
+  SparseBaseType::operator=(other); data_ = other.data_;
   return *this;
 }
 
@@ -128,27 +116,9 @@ CooBase<_Derived>& CooBase<_Derived>::operator=( const CooBase &other ) noexcept
 ///
 template <class _Derived>
 CooBase<_Derived>& CooBase<_Derived>::operator=( CooBase &&other ) noexcept {
-  SparseBaseType::operator=(std::move(other)); offset_ = other.offset_; data_ = std::move(other.data_); other.offset_ = 0;
+  SparseBaseType::operator=(std::move(other)); data_ = std::move(other.data_);
   return *this;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::CooData::getCapacity
-///
-template <class _Derived>
-index_t CooBase<_Derived>::getCapacity() const noexcept { return getData().getCapacity(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset of starting position.
-///
-template <class _Derived>
-index_t CooBase<_Derived>::getOffset() const noexcept { return offset_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of nonzero elements.
-///
-template <class _Derived>
-void CooBase<_Derived>::setNnz( const index_t nnz ) noexcept { nnz_ = nnz; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data storage.
@@ -163,11 +133,47 @@ template <class _Derived>
 const typename CooBase<_Derived>::DataType& CooBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::CooData::getValue
+/// @brief  Gets the capacity of the value array.
+///
+template <class _Derived>
+index_t CooBase<_Derived>::getValueCapacity() const noexcept { return getValueArray().getCapacity(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of the value array.
+///
+template <class _Derived>
+index_t CooBase<_Derived>::getValueOffset() const noexcept { return getValueArray().getOffset(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the capacity of the index array.
+///
+template <class _Derived>
+index_t CooBase<_Derived>::getIdxCapacity( const index_t dim ) const noexcept { return getIdxArray(dim).getCapacity(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of the index array.
+///
+template <class _Derived>
+index_t CooBase<_Derived>::getIdxOffset( const index_t dim ) const noexcept { return getIdxArray(dim).getOffset(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdxCapacity
+///
+template <class _Derived> template <index_t _dim>
+index_t CooBase<_Derived>::getIdxCapacity() const noexcept { return getIdxArray<_dim>().getCapacity(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdxOffset
+///
+template <class _Derived> template <index_t _dim>
+index_t CooBase<_Derived>::getIdxOffset() const noexcept { return getIdxArray<_dim>().getOffset(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
 ///
 template <class _Derived>
 typename CooBase<_Derived>::ScalarType* CooBase<_Derived>::getValue() noexcept {
-  return getData().getValue() + getOffset();
+  return *(getValueArray());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,16 +181,95 @@ typename CooBase<_Derived>::ScalarType* CooBase<_Derived>::getValue() noexcept {
 ///
 template <class _Derived>
 const typename CooBase<_Derived>::ScalarType* CooBase<_Derived>::getValue() const noexcept {
-  return getData().getValue() + getOffset();
+  return *(getValueArray());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::CooData::getIdx
+/// @brief  Gets the value array.
+///
+template <class _Derived>
+typename CooBase<_Derived>::ValueArrayType& CooBase<_Derived>::getValueArray() noexcept {
+  return getData().getValueArray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValueArray
+///
+template <class _Derived>
+const typename CooBase<_Derived>::ValueArrayType& CooBase<_Derived>::getValueArray() const noexcept {
+  return getData().getValueArray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value valarray.
+///
+template <class _Derived>
+typename CooBase<_Derived>::ValueValarrayType& CooBase<_Derived>::getValueValarray() noexcept {
+  return getValueArray().getValarray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValueValarray
+///
+template <class _Derived>
+const typename CooBase<_Derived>::ValueValarrayType& CooBase<_Derived>::getValueValarray() const noexcept {
+  return getValueArray().getValarray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
+///
+template <class _Derived>
+index_t* CooBase<_Derived>::getIdx( const index_t dim ) noexcept {
+  return *(getIdxArray(dim));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdx
+///
+template <class _Derived>
+const index_t* CooBase<_Derived>::getIdx( const index_t dim ) const noexcept {
+  return *(getIdxArray(dim));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value array.
+///
+template <class _Derived>
+typename CooBase<_Derived>::IdxArrayType& CooBase<_Derived>::getIdxArray( const index_t dim ) noexcept {
+  return getData().getIdxArray(dim);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdxArray
+///
+template <class _Derived>
+const typename CooBase<_Derived>::IdxArrayType& CooBase<_Derived>::getIdxArray( const index_t dim ) const noexcept {
+  return getData().getIdxArray(dim);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value valarray.
+///
+template <class _Derived>
+typename CooBase<_Derived>::IdxValarrayType& CooBase<_Derived>::getIdxValarray( const index_t dim ) noexcept {
+  return getIdxArray(dim).getValarray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdxValarray
+///
+template <class _Derived>
+const typename CooBase<_Derived>::IdxValarrayType& CooBase<_Derived>::getIdxValarray( const index_t dim ) const noexcept {
+  return getIdxArray(dim).getValarray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array.
 ///
 template <class _Derived> template <index_t _dim>
 index_t* CooBase<_Derived>::getIdx() noexcept {
-  static_assert(_dim >= 0 && _dim < ndim, "Invalid dimension!");
-  return getData().getIdx<_dim>() + getOffset();
+  return *(getIdxArray<_dim>());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,8 +277,39 @@ index_t* CooBase<_Derived>::getIdx() noexcept {
 ///
 template <class _Derived> template <index_t _dim>
 const index_t* CooBase<_Derived>::getIdx() const noexcept {
-  static_assert(_dim >= 0 && _dim < ndim, "Invalid dimension!");
-  return getData().getIdx<_dim>() + getOffset();
+  return *(getIdxArray<_dim>());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value array.
+///
+template <class _Derived> template <index_t _dim>
+typename CooBase<_Derived>::IdxArrayType& CooBase<_Derived>::getIdxArray() noexcept {
+  return getData().getIdxArray<_dim>();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdxArray
+///
+template <class _Derived> template <index_t _dim>
+const typename CooBase<_Derived>::IdxArrayType& CooBase<_Derived>::getIdxArray() const noexcept {
+  return getData().getIdxArray<_dim>();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value valarray.
+///
+template <class _Derived> template <index_t _dim>
+typename CooBase<_Derived>::IdxValarrayType& CooBase<_Derived>::getIdxValarray() noexcept {
+  return getIdxArray<_dim>().getValarray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getIdxValarray
+///
+template <class _Derived> template <index_t _dim>
+const typename CooBase<_Derived>::IdxValarrayType& CooBase<_Derived>::getIdxValarray() const noexcept {
+  return getIdxArray<_dim>().getValarray();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

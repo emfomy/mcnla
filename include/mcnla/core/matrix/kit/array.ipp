@@ -48,7 +48,7 @@ Array<_Type>::Array(
 ) noexcept
   : BaseType(value),
     offset_(offset) {
-  assert(offset_ >= 0 && offset_ <= this->getCapacity());
+  assert(offset_ >= 0 && offset_ <= getSize());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
 template <typename _Type>
 void Array<_Type>::operator>>=( const index_t offset ) noexcept {
   offset_ += offset;
-  assert(offset_ >= 0 && offset_ <= this->getCapacity());
+  assert(offset_ >= 0 && offset_ <= getSize());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ void Array<_Type>::operator>>=( const index_t offset ) noexcept {
 template <typename _Type>
 void Array<_Type>::operator<<=( const index_t offset ) noexcept {
   offset_ -= offset;
-  assert(offset_ >= 0 && offset_ <= this->getCapacity());
+  assert(offset_ >= 0 && offset_ <= getSize());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,15 +140,29 @@ const Array<_Type> Array<_Type>::operator<<( const index_t offset ) const noexce
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of valarray.
+/// @brief  Gets the memory size.
+///
+/// @note  @link getCapacity() capacity@endlink + @link getOffset() offset@endlink = @link getSize() memory size@endlink.
 ///
 template <typename _Type>
-index_t Array<_Type>::getCapacity() const noexcept {
+index_t Array<_Type>::getSize() const noexcept {
   return this->getValarray().size();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the capacity.
+///
+/// @note  @link getCapacity() capacity@endlink + @link getOffset() offset@endlink = @link getSize() memory size@endlink.
+///
+template <typename _Type>
+index_t Array<_Type>::getCapacity() const noexcept {
+  return getSize() - getOffset();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset.
+///
+/// @note  @link getCapacity() capacity@endlink + @link getOffset() offset@endlink = @link getSize() memory size@endlink.
 ///
 template <typename _Type>
 index_t Array<_Type>::getOffset() const noexcept {

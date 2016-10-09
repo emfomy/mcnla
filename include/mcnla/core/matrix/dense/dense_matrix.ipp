@@ -94,7 +94,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(capacity >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
+  assert(capacity >= pitch_ * size1_ - (pitch_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t pitch,
     const index_t capacity
 ) noexcept
-  : DenseMatrix(sizes.first, sizes.second, pitch, capacity, this->getOffset()) {}
+  : DenseMatrix(sizes.first, sizes.second, pitch, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -123,7 +123,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapacity() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
+  assert(this->getCapacity() >= pitch_ * size1_ - (pitch_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapacity() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
+  assert(this->getCapacity() >= pitch_ * size1_ - (pitch_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

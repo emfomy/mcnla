@@ -280,12 +280,12 @@ const _Index& CooTuple<_ndim, _Scalar, _Index>::getIdx() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Makes a COO tuple
 ///
-/// @param  idx    The first index (idx0).
-/// @param  args   The rest of indices in storage order (idx1, idx2, ...).
+/// @param  idx   The first index (idx0).
+/// @param  idxs  The rest of indices in storage order (idx1, idx2, ...).
 ///
-template <typename __Index, typename... __Args>
-CooTuple<sizeof...(__Args)+1, void*, __Index> makeCooTuple( const __Index idx, const __Args... args ) {
-  return CooTuple<sizeof...(__Args)+1, void*, __Index>(std::make_tuple(idx, args..., nullptr));
+template <typename __Index, typename... __Indexs>
+CooTuple<sizeof...(__Indexs)+1, void*, __Index> makeCooTuple( const __Index idx, const __Indexs... idxs ) {
+  return CooTuple<sizeof...(__Indexs)+1, void*, __Index>(std::make_tuple(idx, idxs..., nullptr));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,11 +293,11 @@ CooTuple<sizeof...(__Args)+1, void*, __Index> makeCooTuple( const __Index idx, c
 ///
 /// @param  value  The value.
 /// @param  idx    The first index (idx0).
-/// @param  args   The rest of indices in storage order (idx1, idx2, ...).
+/// @param  idxs   The rest of indices in storage order (idx1, idx2, ...).
 ///
-template <typename __Scalar, typename __Index, typename... __Args>
-CooTuple<sizeof...(__Args)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Args&... args ) {
-  return CooTuple<sizeof...(__Args)+1, __Scalar, __Index>(std::tie(idx, args..., value));
+template <typename __Scalar, typename __Index, typename... __Indexs>
+CooTuple<sizeof...(__Indexs)+1, __Scalar, __Index> makeCooRefTuple( __Scalar &value, __Index &idx, __Indexs&... idxs ) {
+  return CooTuple<sizeof...(__Indexs)+1, __Scalar, __Index>(std::tie(idx, idxs..., value));
 }
 
 }  // namespace matrix

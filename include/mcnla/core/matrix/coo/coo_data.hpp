@@ -122,12 +122,10 @@ class CooData {
 
  private:
 
-  using ValueArrayType    = Array<_Scalar>;
-  using IdxArrayType      = Array<index_t>;
-  using ValueValarrayType = std::valarray<_Scalar>;
-  using IdxValarrayType   = std::valarray<index_t>;
-  using TupleType         = CooTuple<_ndim, _Scalar, index_t>;
-  using ConstTupleType    = CooTuple<_ndim, const _Scalar, const index_t>;
+  using ValueArrayType = Array<_Scalar>;
+  using IdxArrayType   = Array<index_t>;
+  using TupleType      = CooTuple<_ndim, _Scalar, index_t>;
+  using ConstTupleType = CooTuple<_ndim, const _Scalar, const index_t>;
 
  protected:
 

@@ -4,13 +4,8 @@
 find_package(Doxygen REQUIRED)
 
 # Set documentation directory
-set(MCNLA_DOCS_DIR "${CMAKE_BINARY_DIR}/docs")
-
-# Create configure files
-configure_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-)
+set(MCNLA_DOCS_DIR "${PROJECT_BINARY_DIR}/docs")
+set(MCNLA_DOCS_DIR "${MCNLA_DOCS_DIR}" PARENT_SCOPE)
 
 # Add rule
 if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
