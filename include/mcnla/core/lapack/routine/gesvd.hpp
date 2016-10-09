@@ -30,11 +30,10 @@ namespace lapack {
 ///
 /// @see  mcnla::lapack::GesvdDriver
 ///
-//@{
 template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Layout _layout>
 inline void gesvd(
     DenseMatrix<_Scalar, _layout> &a,
-    DenseVector<typename traits::ScalarTraits<_Scalar>::RealType> &s,
+    DenseVector<RealType<_Scalar>> &s,
     DenseMatrix<_Scalar, _layout> &u,
     DenseMatrix<_Scalar, _layout> &vt
 ) noexcept {
@@ -42,11 +41,12 @@ inline void gesvd(
   driver(a, s, u, vt);
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <JobOption _jobu, JobOption _jobvt, class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
 inline void gesvd( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept {
   gesvd<_jobu, _jobvt>(a, s, u, vt);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace lapack
 

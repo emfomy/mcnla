@@ -25,7 +25,6 @@ namespace blas {
 /// @ingroup  blas1_module
 /// @brief  Computes a vector-scalar product and adds the result to a vector.
 ///
-//@{
 template <typename _Scalar>
 inline void axpy(
     const typename DenseVector<_Scalar>::ScalarType alpha,
@@ -35,6 +34,7 @@ inline void axpy(
   detail::axpy(x.getLength(), alpha, x.getValue(), x.getStride(), y.getValue(), y.getStride());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void axpy(
     const typename DenseVector<_Scalar>::ScalarType alpha,
@@ -43,7 +43,7 @@ inline void axpy(
 ) noexcept {
   axpy(alpha, x, y);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

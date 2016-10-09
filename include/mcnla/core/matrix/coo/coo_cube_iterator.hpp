@@ -105,11 +105,11 @@ class CooCubeIteratorBase : public CooIteratorBase<CooCubeIteratorBase<_Scalar, 
 
 /// @ingroup  matrix_coo_module
 template <typename _Scalar, Layout _layout>
-using CooCubeIterator = mcnla::matrix::CooCubeIteratorBase<_Scalar, index_t, _layout, CooCube<_Scalar, _layout>>;
+using CooCubeIterator = CooCubeIteratorBase<_Scalar, index_t, _layout, CooCube<_Scalar, _layout>>;
 
 /// @ingroup  matrix_coo_module
 template <typename _Scalar, Layout _layout>
-using CooCubeConstIterator = mcnla::matrix::CooCubeIteratorBase<const _Scalar, const index_t, _layout, const CooCube<_Scalar, _layout>>;
+using CooCubeConstIterator = CooCubeIteratorBase<const _Scalar, const index_t, _layout, const CooCube<_Scalar, _layout>>;
 
 }  // namespace matrix
 

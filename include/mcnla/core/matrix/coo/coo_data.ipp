@@ -29,28 +29,28 @@ template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_
 CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim, __dims...>::getData(
     DataType &data, _Args&... args
 ) noexcept {
-  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getData(data, args..., data.template getIdxPtr<__dim>());
+  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getData(data, args..., data.template getIdxArray<__dim>());
 }
 
 template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim> template <typename... _Args>
 CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim>::getData(
     DataType &data, _Args&... args
 ) noexcept {
-  return ReducedType(data.getValuePtr(), {args..., data.template getIdxPtr<__dim>()});
+  return ReducedType(data.getValueArray(), {args..., data.template getIdxArray<__dim>()});
 }
 
 template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim, index_t... __dims> template <typename... _Args>
 const CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim, __dims...>::getConstData(
     const DataType &data, _Args&... args
 ) noexcept {
-  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getConstData(data, args..., data.template getIdxPtr<__dim>());
+  return CooDataHelper<_ndim, _Scalar, __ndim, __dims...>::getConstData(data, args..., data.template getIdxArray<__dim>());
 }
 
 template <index_t _ndim, typename _Scalar, index_t __ndim, index_t __dim> template <typename... _Args>
 const CooData<__ndim, _Scalar> CooDataHelper<_ndim, _Scalar, __ndim, __dim>::getConstData(
     const DataType &data, _Args&... args
 ) noexcept {
-  return ReducedType(data.getValuePtr(), {args..., data.template getIdxPtr<__dim>()});
+  return ReducedType(data.getValueArray(), {args..., data.template getIdxArray<__dim>()});
 }
 
 template <index_t _ndim, typename _Scalar, index_t _dim> template <typename... _Args>
@@ -88,43 +88,32 @@ CooTuple<_ndim, const _Scalar, const index_t> CooDataTupleHelper<_ndim, _Scalar,
 ///
 template <index_t _ndim, typename _Scalar>
 CooData<_ndim, _Scalar>::CooData() noexcept
-  : value_(kNullValue),
-    idxs_() {
-  for ( index_t i = 0; i < _ndim; ++i ) {
-    idxs_[i] = kNullIdx;
-  }
-}
+  : value_(),
+    idxs_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <index_t _ndim, typename _Scalar>
 CooData<_ndim, _Scalar>::CooData(
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : value_(new std::valarray<_Scalar>(capability)) {
-  assert(capability > 0);
-  for ( index_t i = 0; i < _ndim; ++i ) {
-    idxs_[i] = std::make_shared<std::valarray<index_t>>(capability);
+  : value_(capacity) {
+  for ( auto &idx : idxs_ ) {
+    idx = IdxArrayType(capacity);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-/// @attention  The size of @a value and each element in @a idxs should be the same.
-///
 template <index_t _ndim, typename _Scalar>
 CooData<_ndim, _Scalar>::CooData(
-    const ValuePtrType &value,
-    const std::array<IdxPtrType, _ndim> &idxs
+    const ValueArrayType &value,
+    const std::array<IdxArrayType, _ndim> &idxs
 ) noexcept
   : value_(value),
-    idxs_(idxs) {
-  for ( index_t i = 0; i < _ndim; ++i ) {
-    assert(value->size() == idxs_[i]->size());
-  }
-}
+    idxs_(idxs) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -165,85 +154,105 @@ CooData<_ndim, _Scalar>& CooData<_ndim, _Scalar>::operator=( CooData &&other ) n
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
+/// @brief  Right-shift the offset.
 ///
 template <index_t _ndim, typename _Scalar>
-_Scalar* CooData<_ndim, _Scalar>::operator*() noexcept { return getValue(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <index_t _ndim, typename _Scalar>
-const _Scalar* CooData<_ndim, _Scalar>::operator*() const noexcept { return getValue(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Equal-to operator.
-///
-template <index_t _ndim, typename _Scalar>
-bool CooData<_ndim, _Scalar>::operator==( const CooData& other ) const noexcept {
-  return this->value_ == other.value_ && this->idxs_ == other.idxs_;
+void CooData<_ndim, _Scalar>::operator>>=( const index_t offset ) noexcept {
+  value_ >>= offset;
+  for ( auto &idx : idxs_ ) {
+    idx >>= offset;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Not-equal-to operator.
+/// @brief  Left-shift the offset.
 ///
 template <index_t _ndim, typename _Scalar>
-bool CooData<_ndim, _Scalar>::operator!=( const CooData& other ) const noexcept {
-  return !(*this == other);
+void CooData<_ndim, _Scalar>::operator<<=( const index_t offset ) noexcept {
+  value_ <<= offset;
+  for ( auto &idx : idxs_ ) {
+    idx <<= offset;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of value array.
+/// @brief  Right-shift the offset.
 ///
 template <index_t _ndim, typename _Scalar>
-index_t CooData<_ndim, _Scalar>::getCapability() const noexcept { return value_->size(); }
+CooData<_ndim, _Scalar> CooData<_ndim, _Scalar>::operator>>( const index_t offset ) noexcept {
+  auto retval = *this; retval >>= offset; return retval;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @brief  Right-shift the offset.
 ///
 template <index_t _ndim, typename _Scalar>
-_Scalar* CooData<_ndim, _Scalar>::getValue() noexcept { return &((*value_)[0]); }
+const CooData<_ndim, _Scalar> CooData<_ndim, _Scalar>::operator>>( const index_t offset ) const noexcept {
+  auto retval = *this; retval >>= offset; return retval;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
+/// @brief  Left-shift the offset.
 ///
 template <index_t _ndim, typename _Scalar>
-const _Scalar* CooData<_ndim, _Scalar>::getValue() const noexcept { return &((*value_)[0]); }
+CooData<_ndim, _Scalar> CooData<_ndim, _Scalar>::operator<<( const index_t offset ) noexcept {
+  auto retval = *this; retval <<= offset; return retval;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw index array.
+/// @brief  Left-shift the offset.
 ///
 template <index_t _ndim, typename _Scalar>
-index_t* CooData<_ndim, _Scalar>::getIdx( const index_t dim ) noexcept {
+const CooData<_ndim, _Scalar> CooData<_ndim, _Scalar>::operator<<( const index_t offset ) const noexcept {
+  auto retval = *this; retval <<= offset; return retval;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw value array array.
+///
+template <index_t _ndim, typename _Scalar>
+Array<_Scalar>& CooData<_ndim, _Scalar>::getValueArray() noexcept { return value_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValueArray
+///
+template <index_t _ndim, typename _Scalar>
+const Array<_Scalar>& CooData<_ndim, _Scalar>::getValueArray() const noexcept { return value_; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw index array pointer.
+///
+template <index_t _ndim, typename _Scalar>
+Array<index_t>& CooData<_ndim, _Scalar>::getIdxArray( const index_t dim ) noexcept {
   assert(dim >= 0 && dim < _ndim);
-  return &((*idxs_[dim])[0]);
+  return idxs_[dim];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdx
+/// @copydoc  getIdxArray
 ///
 template <index_t _ndim, typename _Scalar>
-const index_t* CooData<_ndim, _Scalar>::getIdx( const index_t dim ) const noexcept {
+const Array<index_t>& CooData<_ndim, _Scalar>::getIdxArray( const index_t dim ) const noexcept {
   assert(dim >= 0 && dim < _ndim);
-  return &((*idxs_[dim])[0]);
+  return idxs_[dim];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdx
+/// @copydoc  getIdxArray
 ///
 template <index_t _ndim, typename _Scalar> template <index_t _dim>
-index_t* CooData<_ndim, _Scalar>::getIdx() noexcept {
+Array<index_t>& CooData<_ndim, _Scalar>::getIdxArray() noexcept {
   static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
-  return &((*idxs_[_dim])[0]);
+  return idxs_[_dim];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdx
+/// @copydoc  getIdxArray
 ///
 template <index_t _ndim, typename _Scalar> template <index_t _dim>
-const index_t* CooData<_ndim, _Scalar>::getIdx() const noexcept {
+const Array<index_t>& CooData<_ndim, _Scalar>::getIdxArray() const noexcept {
   static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
-  return &((*idxs_[_dim])[0]);
+  return idxs_[_dim];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,54 +269,6 @@ CooTuple<_ndim, _Scalar, index_t> CooData<_ndim, _Scalar>::getTuple( const index
 template <index_t _ndim, typename _Scalar>
 CooTuple<_ndim, const _Scalar, const index_t> CooData<_ndim, _Scalar>::getTuple( const index_t itidx ) const noexcept {
   return detail::CooDataTupleHelper<_ndim, _Scalar>::getConstTuple(*this, itidx);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array pointer.
-///
-template <index_t _ndim, typename _Scalar>
-std::shared_ptr<std::valarray<_Scalar>>& CooData<_ndim, _Scalar>::getValuePtr() noexcept { return value_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValuePtr
-///
-template <index_t _ndim, typename _Scalar>
-const std::shared_ptr<std::valarray<_Scalar>>& CooData<_ndim, _Scalar>::getValuePtr() const noexcept { return value_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw index array pointer.
-///
-template <index_t _ndim, typename _Scalar>
-std::shared_ptr<std::valarray<index_t>>& CooData<_ndim, _Scalar>::getIdxPtr( const index_t dim ) noexcept {
-  assert(dim >= 0 && dim < _ndim);
-  return idxs_[dim];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdxPtr
-///
-template <index_t _ndim, typename _Scalar>
-const std::shared_ptr<std::valarray<index_t>>& CooData<_ndim, _Scalar>::getIdxPtr( const index_t dim ) const noexcept {
-  assert(dim >= 0 && dim < _ndim);
-  return idxs_[dim];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdxPtr
-///
-template <index_t _ndim, typename _Scalar> template <index_t _dim>
-std::shared_ptr<std::valarray<index_t>>& CooData<_ndim, _Scalar>::getIdxPtr() noexcept {
-  static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
-  return idxs_[_dim];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getIdxPtr
-///
-template <index_t _ndim, typename _Scalar> template <index_t _dim>
-const std::shared_ptr<std::valarray<index_t>>& CooData<_ndim, _Scalar>::getIdxPtr() const noexcept {
-  static_assert(_dim >= 0 && _dim < _ndim, "Invalid dimension!");
-  return idxs_[_dim];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

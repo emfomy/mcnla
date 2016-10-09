@@ -25,7 +25,6 @@ namespace blas {
 /// @ingroup  blas3_module
 /// @brief  Performs a symmetric/Hermitian rank-k update.
 ///
-//@{
 template <TransOption _trans = TransOption::NORMAL, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
@@ -42,6 +41,7 @@ inline void syrk(
                alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <TransOption _trans = TransOption::NORMAL, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
@@ -51,7 +51,7 @@ inline void syrk(
 ) noexcept {
   syrk<_trans, _uplo>(alpha, a, beta, c);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

@@ -27,7 +27,7 @@ namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  lapack_driver_module
-/// @brief  Computes the singular value decomposition of a general rectangular matrix.
+/// @brief  The singular value solver of general rectangular matrices.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///

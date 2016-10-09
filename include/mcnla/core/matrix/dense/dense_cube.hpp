@@ -55,7 +55,7 @@ struct Traits<matrix::DenseCube<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
 
   using VectorType        = matrix::DenseVector<ScalarType>;
   using RealVectorType    = matrix::DenseVector<RealScalarType>;
@@ -96,7 +96,7 @@ class DenseCube
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
@@ -146,9 +146,9 @@ class DenseCube
                     const index_t pitch0, const index_t pitch1 ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes, const std::pair<index_t, index_t> pitches ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-                    const index_t pitch0, const index_t pitch1, const index_t capability ) noexcept;
+                    const index_t pitch0, const index_t pitch1, const index_t capacity ) noexcept;
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes,
-                    const std::pair<index_t, index_t> pitches, const index_t capability ) noexcept;
+                    const std::pair<index_t, index_t> pitches, const index_t capacity ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
                     const index_t pitch0, const index_t pitch1, const ValuePtrType &value ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,

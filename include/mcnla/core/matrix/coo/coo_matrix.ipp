@@ -56,10 +56,10 @@ template <typename _Scalar, Layout _layout>
 CooMatrix<_Scalar, _layout>::CooMatrix(
     const index_t nrow,
     const index_t ncol,
-    const index_t capability
+    const index_t capacity
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    CooBaseType(capability) {}
+    CooBaseType(capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -67,9 +67,9 @@ CooMatrix<_Scalar, _layout>::CooMatrix(
 template <typename _Scalar, Layout _layout>
 CooMatrix<_Scalar, _layout>::CooMatrix(
     const std::pair<index_t, index_t> sizes,
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : CooMatrix(sizes.first, sizes.second, capability) {}
+  : CooMatrix(sizes.first, sizes.second, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -79,11 +79,11 @@ CooMatrix<_Scalar, _layout>::CooMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t nnz,
-    const index_t capability,
+    const index_t capacity,
     const index_t offset
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    CooBaseType(nnz, capability, offset) {}
+    CooBaseType(nnz, capacity, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -92,10 +92,10 @@ template <typename _Scalar, Layout _layout>
 CooMatrix<_Scalar, _layout>::CooMatrix(
     const std::pair<index_t, index_t> sizes,
     const index_t nnz,
-    const index_t capability,
+    const index_t capacity,
     const index_t offset
 ) noexcept
-  : CooMatrix(sizes.first, sizes.second, nnz, capability, offset) {}
+  : CooMatrix(sizes.first, sizes.second, nnz, capacity, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.

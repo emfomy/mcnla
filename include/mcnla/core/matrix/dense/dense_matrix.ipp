@@ -87,14 +87,14 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    const index_t capability
+    const index_t capacity
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    DenseBaseType(capability),
+    DenseBaseType(capacity),
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(capability >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
+  assert(capacity >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,9 +104,9 @@ template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const std::pair<index_t, index_t> sizes,
     const index_t pitch,
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : DenseMatrix(sizes.first, sizes.second, pitch, capability, this->getOffset()) {}
+  : DenseMatrix(sizes.first, sizes.second, pitch, capacity, this->getOffset()) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -123,7 +123,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
+  assert(this->getCapacity() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   assert(pitch_ >= size0_);
   assert(pitch_ > 0);
-  assert(this->getCapability() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
+  assert(this->getCapacity() >= pitch_ * size1_ - (pitch_-size0_) + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,7 +337,7 @@ void DenseMatrix<_Scalar, _layout>::resize(
 ) noexcept {
   assert(nrow >= 0 && ncol >= 0);
   assert((isColMajor(_layout) ? nrow : ncol) <= pitch_);
-  assert((isColMajor(_layout) ? (pitch_ * ncol) : (pitch_ * nrow)) <= data_.getCapability());
+  assert((isColMajor(_layout) ? (pitch_ * ncol) : (pitch_ * nrow)) <= data_.getCapacity());
   nrow_ = nrow;
   ncol_ = ncol;
 }

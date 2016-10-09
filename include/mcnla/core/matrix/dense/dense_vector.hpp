@@ -47,7 +47,7 @@ struct Traits<matrix::DenseVector<_Scalar>> {
   static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
 
   using VectorType        = matrix::DenseVector<ScalarType>;
   using RealVectorType    = matrix::DenseVector<RealScalarType>;
@@ -80,7 +80,7 @@ class DenseVector
   static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
   using ValueArrayType    = Array<ScalarType>;
 
   using VectorType        = DenseVector<ScalarType>;
@@ -110,7 +110,7 @@ class DenseVector
   // Constructors
   inline DenseVector() noexcept;
   inline DenseVector( const index_t length, const index_t stride = 1 ) noexcept;
-  inline DenseVector( const index_t length, const index_t stride, const index_t capability ) noexcept;
+  inline DenseVector( const index_t length, const index_t stride, const index_t capacity ) noexcept;
   inline DenseVector( const index_t length, const index_t stride, const ValueArrayType &value ) noexcept;
   inline DenseVector( const index_t length, const index_t stride, const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseVector( const DenseVector &other ) noexcept;

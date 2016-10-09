@@ -25,7 +25,6 @@ namespace blas {
 /// @ingroup  blas1_module
 /// @brief  Scales two vectors, adds them to one another and stores result in the vector.
 ///
-//@{
 template <typename _Scalar>
 inline void axpby(
     const typename DenseVector<_Scalar>::ScalarType alpha,
@@ -36,6 +35,7 @@ inline void axpby(
   detail::axpby(x.getLength(), alpha, x.getValue(), x.getStride(), beta, y.getValue(), y.getStride());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void axpby(
     const typename DenseVector<_Scalar>::ScalarType alpha,
@@ -45,7 +45,7 @@ inline void axpby(
 ) noexcept {
   axpby(alpha, x, beta, y);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

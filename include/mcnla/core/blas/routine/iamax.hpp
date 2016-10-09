@@ -42,7 +42,7 @@ inline index_t iamax(
 ///
 //@{
 template <typename _Scalar>
-inline typename traits::ScalarTraits<_Scalar>::RealType amax(
+inline RealType<_Scalar> amax(
     const DenseVector<_Scalar> &x
 ) noexcept {
   index_t idx = detail::iamax(x.getLength(), x.getValue(), x.getStride());

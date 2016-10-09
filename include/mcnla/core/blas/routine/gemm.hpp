@@ -80,7 +80,6 @@ inline void gemm(
 /// @ingroup  blas3_module
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
-//@{
 template <TransOption _transa = TransOption::NORMAL, TransOption _transb = TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
@@ -93,6 +92,7 @@ inline void gemm(
   detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <TransOption _transa = TransOption::NORMAL, TransOption _transb = TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
@@ -104,7 +104,7 @@ inline void gemm(
 ) noexcept {
   detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

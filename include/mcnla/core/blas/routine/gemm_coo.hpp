@@ -86,7 +86,9 @@ inline void gemm(
     }
   }
 }
+//@}
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <TransOption _transa = TransOption::NORMAL, TransOption _transb = TransOption::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
@@ -110,7 +112,7 @@ inline void gemm(
 ) noexcept {
   detail::gemm<_transb, _transa>(alpha, b, a, beta, c);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

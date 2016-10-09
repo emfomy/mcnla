@@ -25,7 +25,6 @@ namespace blas {
 /// @ingroup  blas1_module
 /// @brief  Copies vector to another vector.
 ///
-//@{
 template <typename _Scalar>
 inline void copy(
     const DenseVector<_Scalar> &x,
@@ -35,6 +34,7 @@ inline void copy(
   detail::copy(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void copy(
     const DenseVector<_Scalar> &x,
@@ -42,7 +42,7 @@ inline void copy(
 ) noexcept {
   copy(x, y);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas1_module
@@ -50,7 +50,6 @@ inline void copy(
 ///
 /// @attention  The out-of-range spaces are also copied. It is inefficient if the leading dimension is much larger than the size.
 ///
-//@{
 template <typename _Scalar, Layout _layout>
 inline void copy(
     const DenseMatrix<_Scalar, _layout> &x,
@@ -60,6 +59,7 @@ inline void copy(
   copy(x.vectorize(), y.vectorize());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout>
 inline void copy(
     const DenseMatrix<_Scalar, _layout> &x,
@@ -68,7 +68,7 @@ inline void copy(
   assert(x.getSizes() == y.getSizes() && y.getPitch() == x.getPitch());
   copy(x.vectorize(), y.vectorize());
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas1_module
@@ -76,7 +76,6 @@ inline void copy(
 ///
 /// @attention  The out-of-range spaces are also copied. It is inefficient if the dimensions is much larger than the sizes.
 ///
-//@{
 template <typename _Scalar, Layout _layout>
 inline void copy(
     const DenseCube<_Scalar, _layout> &x,
@@ -86,6 +85,7 @@ inline void copy(
   copy(x.vectorize(), y.vectorize());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout>
 inline void copy(
     const DenseCube<_Scalar, _layout> &x,
@@ -94,7 +94,7 @@ inline void copy(
   assert(x.getSizes() == y.getSizes() && y.getPitches() == x.getPitches());
   copy(x.vectorize(), y.vectorize());
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

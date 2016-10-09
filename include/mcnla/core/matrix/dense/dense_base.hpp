@@ -48,7 +48,7 @@ class DenseBase {
 
   // Constructors
   inline DenseBase() noexcept;
-  inline DenseBase( const index_t capability ) noexcept;
+  inline DenseBase( const index_t capacity ) noexcept;
   inline DenseBase( const ValueArrayType &value ) noexcept;
   inline DenseBase( const DataType &data ) noexcept;
   inline DenseBase( const DenseBase &other ) noexcept;
@@ -61,7 +61,7 @@ class DenseBase {
  public:
 
   // Gets information
-  inline index_t getCapability() const noexcept;
+  inline index_t getCapacity() const noexcept;
   inline index_t getOffset() const noexcept;
 
   // Gets data storage
@@ -71,6 +71,8 @@ class DenseBase {
   // Gets data
   inline       ScalarType* getValue() noexcept;
   inline const ScalarType* getValue() const noexcept;
+  inline       ValueArrayType& getValueArray() noexcept;
+  inline const ValueArrayType& getValueArray() const noexcept;
   inline       ValueValarrayType& getValueValarray() noexcept;
   inline const ValueValarrayType& getValueValarray() const noexcept;
 

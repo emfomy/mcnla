@@ -25,7 +25,6 @@ namespace blas {
 /// @ingroup  blas1_module
 /// @brief  Computes the product of a vector by a scalar.
 ///
-//@{
 template <typename _Scalar>
 inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
@@ -42,6 +41,7 @@ inline void scal(
   detail::scal(x.getLength(), alpha, x.getValue(), x.getStride());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
@@ -57,7 +57,7 @@ inline void scal(
 ) noexcept {
   scal(alpha, x);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

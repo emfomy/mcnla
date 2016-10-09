@@ -104,11 +104,11 @@ class CooVectorIteratorBase : public CooIteratorBase<CooVectorIteratorBase<_Scal
 
 /// @ingroup  matrix_coo_module
 template <typename _Scalar>
-using CooVectorIterator = mcnla::matrix::CooVectorIteratorBase<_Scalar, index_t, CooVector<_Scalar>>;
+using CooVectorIterator = CooVectorIteratorBase<_Scalar, index_t, CooVector<_Scalar>>;
 
 /// @ingroup  matrix_coo_module
 template <typename _Scalar>
-using CooVectorConstIterator = mcnla::matrix::CooVectorIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
+using CooVectorConstIterator = CooVectorIteratorBase<const _Scalar, const index_t, const CooVector<_Scalar>>;
 
 }  // namespace matrix
 

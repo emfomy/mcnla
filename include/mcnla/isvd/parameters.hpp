@@ -36,7 +36,7 @@ class Parameters {
 
  private:
 
-  using RealScalar = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalar = RealType<_Scalar>;
 
  public:
 

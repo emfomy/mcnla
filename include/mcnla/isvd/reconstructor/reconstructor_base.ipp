@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/reconstructor/reconstructor_base.ipp
-/// @brief   The implementation of MCNLA reconstructor interface.
+/// @brief   The implementation of iSVD reconstructor interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

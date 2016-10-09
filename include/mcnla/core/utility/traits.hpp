@@ -58,6 +58,12 @@ struct ScalarTraits<std::complex<_Scalar>> {
 
 }  // namespace traits
 
+template <typename _Scalar>
+using RealType = typename traits::ScalarTraits<_Scalar>::RealType;
+
+template <typename _Scalar>
+using ComplexType = typename traits::ScalarTraits<_Scalar>::ComplexType;
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_UTILITY_TRAITS_HPP_

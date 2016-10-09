@@ -112,15 +112,15 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t npage,
     const index_t pitch0,
     const index_t pitch1,
-    const index_t capability
+    const index_t capacity
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    DenseBaseType(capability),
+    DenseBaseType(capacity),
     pitch0_(pitch0),
     pitch1_(pitch1) {
   assert(pitch0_ >= size0_ && pitch1_ >= size1_);
   assert(pitch0_ > 0 && pitch1_ > 0);
-  assert(capability >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffSet());
+  assert(capacity >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffSet());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,9 +130,9 @@ template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>::DenseCube(
     const std::tuple<index_t, index_t, index_t> sizes,
     const std::pair<index_t, index_t> pitches,
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : DenseCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), pitches.first, pitches.second, capability) {}
+  : DenseCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), pitches.first, pitches.second, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -152,7 +152,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch1_(pitch1) {
   assert(pitch0_ >= size0_ && pitch1_ >= size1_);
   assert(pitch0_ > 0 && pitch1_ > 0);
-  assert(this->getCapability() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffSet());
+  assert(this->getCapacity() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffSet());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch1_(pitch1) {
   assert(pitch0_ >= size0_ && pitch1_ >= size1_);
   assert(pitch0_ > 0 && pitch1_ > 0);
-  assert(this->getCapability() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffset());
+  assert(this->getCapacity() >= pitch0_ * pitch1_ * npage_ - (pitch0_-size0_) + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,7 +403,7 @@ void DenseCube<_Scalar, _layout>::resize(
   assert(nrow >= 0 && ncol >= 0 && npage >= 0);
   assert((isColMajor(_layout) ? nrow : ncol) <= pitch0_);
   assert((isColMajor(_layout) ? ncol : nrow) <= pitch1_);
-  assert(pitch0_ * pitch1_ * npage <= data_.getCapability());
+  assert(pitch0_ * pitch1_ * npage <= data_.getCapacity());
   nrow_ = nrow;
   ncol_ = ncol;
   npage_ = npage;

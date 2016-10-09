@@ -58,10 +58,10 @@ CooCube<_Scalar, _layout>::CooCube(
     const index_t nrow,
     const index_t ncol,
     const index_t npage,
-    const index_t capability
+    const index_t capacity
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    CooBaseType(capability) {}
+    CooBaseType(capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -69,9 +69,9 @@ CooCube<_Scalar, _layout>::CooCube(
 template <typename _Scalar, Layout _layout>
 CooCube<_Scalar, _layout>::CooCube(
     const std::tuple<index_t, index_t, index_t> sizes,
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), capability) {}
+  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -82,11 +82,11 @@ CooCube<_Scalar, _layout>::CooCube(
     const index_t ncol,
     const index_t npage,
     const index_t nnz,
-    const index_t capability,
+    const index_t capacity,
     const index_t offset
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    CooBaseType(nnz, capability, offset) {}
+    CooBaseType(nnz, capacity, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -95,10 +95,10 @@ template <typename _Scalar, Layout _layout>
 CooCube<_Scalar, _layout>::CooCube(
     const std::tuple<index_t, index_t, index_t> sizes,
     const index_t nnz,
-    const index_t capability,
+    const index_t capacity,
     const index_t offset
 ) noexcept
-  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), nnz, capability, offset) {}
+  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), nnz, capacity, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.

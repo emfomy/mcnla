@@ -34,11 +34,11 @@ CooBase<_Derived>::CooBase() noexcept
 ///
 template <class _Derived>
 CooBase<_Derived>::CooBase(
-    const index_t capability
+    const index_t capacity
 ) noexcept
   : SparseBaseType(),
     offset_(0),
-    data_(capability) {
+    data_(capacity) {
   assert(offset_ >= 0);
 }
 
@@ -48,12 +48,12 @@ CooBase<_Derived>::CooBase(
 template <class _Derived>
 CooBase<_Derived>::CooBase(
     const index_t nnz,
-    const index_t capability,
+    const index_t capacity,
     const index_t offset
 ) noexcept
   : SparseBaseType(nnz),
     offset_(offset),
-    data_(capability) {
+    data_(capacity) {
   assert(offset_ >= 0);
 }
 
@@ -71,7 +71,7 @@ CooBase<_Derived>::CooBase(
     offset_(offset),
     data_(value, idxs) {
   assert(offset_ >= 0);
-  assert(data_.getCapability() >= nnz_ + offset_);
+  assert(data_.getCapacity() >= nnz_ + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ CooBase<_Derived>::CooBase(
     offset_(offset),
     data_(data) {
   assert(offset_ >= 0);
-  assert(data_.getCapability() >= nnz_ + offset_);
+  assert(data_.getCapacity() >= nnz_ + offset_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,10 +133,10 @@ CooBase<_Derived>& CooBase<_Derived>::operator=( CooBase &&other ) noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::CooData::getCapability
+/// @copydoc  mcnla::matrix::CooData::getCapacity
 ///
 template <class _Derived>
-index_t CooBase<_Derived>::getCapability() const noexcept { return getData().getCapability(); }
+index_t CooBase<_Derived>::getCapacity() const noexcept { return getData().getCapacity(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of starting position.

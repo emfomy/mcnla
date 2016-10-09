@@ -51,13 +51,13 @@ template <typename _Scalar>
 DenseVector<_Scalar>::DenseVector(
     const index_t length,
     const index_t stride,
-    const index_t capability
+    const index_t capacity
 ) noexcept
   : VectorBaseType(length),
-    DenseBaseType(capability),
+    DenseBaseType(capacity),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(capability >= stride_ * (length_-1) + 1);
+  assert(capacity >= stride_ * (length_-1) + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ DenseVector<_Scalar>::DenseVector(
     DenseBaseType(value),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(this->getCapability() >= stride_ * (length_-1) + 1 + this->getOffset());
+  assert(this->getCapacity() >= stride_ * (length_-1) + 1 + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ DenseVector<_Scalar>::DenseVector(
     DenseBaseType(data >> offset),
     stride_(stride) {
   assert(stride_ > 0);
-  assert(this->getCapability() >= stride_ * (length_-1) + 1 + this->getOffset());
+  assert(this->getCapacity() >= stride_ * (length_-1) + 1 + this->getOffset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +260,7 @@ void DenseVector<_Scalar>::resize(
     const index_t stride
 ) noexcept {
   assert(length >= 0);
-  assert(this->getCapability() >= stride * (length-1) + 1 + this->getOffset());
+  assert(this->getCapacity() >= stride * (length-1) + 1 + this->getOffset());
   length_ = length;
   stride_ = stride;
 }

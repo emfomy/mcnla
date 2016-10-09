@@ -29,7 +29,7 @@ namespace blas {
 ///
 //@{
 template <typename _Scalar>
-inline typename traits::ScalarTraits<_Scalar>::RealType nrm2(
+inline RealType<_Scalar> nrm2(
     const DenseVector<_Scalar> &x
 ) noexcept {
   return detail::nrm2(x.getLength(), x.getValue(), x.getStride());

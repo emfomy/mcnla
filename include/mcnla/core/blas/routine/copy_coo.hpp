@@ -25,7 +25,6 @@ namespace blas {
 /// @ingroup  blas1_module
 /// @brief  Copies COO vector to dense vector.
 ///
-//@{
 template <typename _Scalar>
 inline void copy(
     const CooVector<_Scalar> &x,
@@ -39,6 +38,7 @@ inline void copy(
   }
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void copy(
     const CooVector<_Scalar> &x,
@@ -46,7 +46,7 @@ inline void copy(
 ) noexcept {
   copy(x, y);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

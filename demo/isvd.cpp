@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    demo/mcnla.cpp
-/// @brief   The MCNLA algorithm
+/// @brief   The iSVD algorithm
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -147,17 +147,17 @@ int main( int argc, char **argv ) {
     }
     if ( verbose && mpi_rank == 0 ) {
       printf("\nS: "); for ( auto xx = 0; xx < k; ++xx ) { printf("%12.6f", vector_s[xx]); } printf("\n");
-      printf("svd(U_true' * U): max = %.6f, min = %.6f, mean = %.6f\n", smax, smin, smean); fflush(stdout);
+      printf("svd(U_true' * U): max = %.6f, mean = %.6f, min = %.6f\n", smax, smean, smin); fflush(stdout);
     }
-    if ( mpi_rank == 0 ) { printf("%*d: max = %.6f, min = %.6f, mean = %.6f\n", int(log10(num_test)+1), t, smax, smin, smean); }
-    if ( mpi_rank == 0 ) { acc_min(smin); acc_max(smax); acc_mean(smean); }
+    if ( mpi_rank == 0 ) { printf("%*d: max = %.6f, mean = %.6f, min = %.6f\n", int(log10(num_test)+1), t, smax, smean, smin); }
+    if ( mpi_rank == 0 ) { acc_max(smax); acc_mean(smean); acc_min(smin); }
   }
 
   if ( mpi_rank == 0 ) {
-    printf("Used %.6f seconds averagely.\n", total_time / num_test);
-    printf("mean(op(svd(U_true' * U)): max = %.6f, min = %.6f, mean = %.6f\n", mean(acc_max), mean(acc_min), mean(acc_mean));
-    printf("sd(op(svd(U_true' * U)):   max = %.6f, min = %.6f, mean = %.6f\n",
-           sqrt(variance(acc_max)), sqrt(variance(acc_min)), sqrt(variance(acc_mean)));
+    printf("\nUsed %.6f seconds averagely.\n", total_time / num_test);
+    printf("mean(op(svd(U_true' * U)): max = %.6f, mean = %.6f, min = %.6f\n", mean(acc_max), mean(acc_mean), mean(acc_min));
+    printf("sd(op(svd(U_true' * U)):   max = %.6f, mean = %.6f, min = %.6f\n",
+           sqrt(variance(acc_max))), sqrt(variance(acc_mean)), sqrt(variance(acc_min));
   }
 
   // ====================================================================================================================== //

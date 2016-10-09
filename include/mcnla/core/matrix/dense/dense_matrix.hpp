@@ -52,7 +52,7 @@ struct Traits<matrix::DenseMatrix<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
 
   using VectorType        = matrix::DenseVector<ScalarType>;
   using RealVectorType    = matrix::DenseVector<RealScalarType>;
@@ -91,7 +91,7 @@ class DenseMatrix
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
 
   using VectorType        = DenseVector<ScalarType>;
@@ -131,8 +131,8 @@ class DenseMatrix
   inline DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
   inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capability ) noexcept;
-  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch, const index_t capability ) noexcept;
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capacity ) noexcept;
+  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const ValuePtrType &value ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                       const DataType &data, const index_t offset = 0 ) noexcept;

@@ -32,9 +32,9 @@ DenseBase<_Derived>::DenseBase() noexcept
 ///
 template <class _Derived>
 DenseBase<_Derived>::DenseBase(
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : data_(capability) {}
+  : data_(capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -91,16 +91,16 @@ DenseBase<_Derived>& DenseBase<_Derived>::operator=( DenseBase &&other ) noexcep
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of value array.
+/// @brief  Gets the length of the value array.
 ///
 template <class _Derived>
-index_t DenseBase<_Derived>::getCapability() const noexcept { return getData().getCapability(); }
+index_t DenseBase<_Derived>::getCapacity() const noexcept { return getValueArray().getCapacity(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset of starting position.
+/// @brief  Gets the offset of the value array.
 ///
 template <class _Derived>
-index_t DenseBase<_Derived>::getOffset() const noexcept { return getData().getOffset(); }
+index_t DenseBase<_Derived>::getOffset() const noexcept { return getValueArray().getOffset(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data storage.
@@ -118,20 +118,40 @@ const typename DenseBase<_Derived>::DataType& DenseBase<_Derived>::getData() con
 /// @brief  Gets the raw value array.
 ///
 template <class _Derived>
-typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexcept { return getData().getValue(); }
+typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() noexcept {
+  return *(getValueArray());
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getValue
 ///
 template <class _Derived>
-const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() const noexcept { return getData().getValue(); }
+const typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValue() const noexcept {
+  return *(getValueArray());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value array.
+///
+template <class _Derived>
+typename DenseBase<_Derived>::ValueArrayType& DenseBase<_Derived>::getValueArray() noexcept {
+  return getData().getValueArray();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getValueArray
+///
+template <class _Derived>
+const typename DenseBase<_Derived>::ValueArrayType& DenseBase<_Derived>::getValueArray() const noexcept {
+  return getData().getValueArray();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value valarray.
 ///
 template <class _Derived>
 typename DenseBase<_Derived>::ValueValarrayType& DenseBase<_Derived>::getValueValarray() noexcept {
-  return getData().getValueValarray();
+  return getValueArray().getValarray();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +159,7 @@ typename DenseBase<_Derived>::ValueValarrayType& DenseBase<_Derived>::getValueVa
 ///
 template <class _Derived>
 const typename DenseBase<_Derived>::ValueValarrayType& DenseBase<_Derived>::getValueValarray() const noexcept {
-  return getData().getValueValarray();
+  return getValueArray().getValarray();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

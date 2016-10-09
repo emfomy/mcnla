@@ -32,9 +32,9 @@ DenseData<_Scalar>::DenseData() noexcept
 ///
 template <typename _Scalar>
 DenseData<_Scalar>::DenseData(
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : value_(capability) {}
+  : value_(capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -130,30 +130,6 @@ const DenseData<_Scalar> DenseData<_Scalar>::operator<<( const index_t offset ) 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of value array.
-///
-template <typename _Scalar>
-index_t DenseData<_Scalar>::getCapability() const noexcept { return value_.getCapability(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset of value array.
-///
-template <typename _Scalar>
-index_t DenseData<_Scalar>::getOffset() const noexcept { return value_.getOffset(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
-///
-template <typename _Scalar>
-_Scalar* DenseData<_Scalar>::getValue() noexcept { return *value_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
-///
-template <typename _Scalar>
-const _Scalar* DenseData<_Scalar>::getValue() const noexcept { return *value_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value array.
 ///
 template <typename _Scalar>
@@ -164,18 +140,6 @@ Array<_Scalar>& DenseData<_Scalar>::getValueArray() noexcept { return value_; }
 ///
 template <typename _Scalar>
 const Array<_Scalar>& DenseData<_Scalar>::getValueArray() const noexcept { return value_; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value valarray.
-///
-template <typename _Scalar>
-std::valarray<_Scalar>& DenseData<_Scalar>::getValueValarray() noexcept { return value_.getValarray(); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValueValarray
-///
-template <typename _Scalar>
-const std::valarray<_Scalar>& DenseData<_Scalar>::getValueValarray() const noexcept { return value_.getValarray(); }
 
 }  // namespace matrix
 

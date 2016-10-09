@@ -51,7 +51,7 @@ struct Traits<matrix::CooMatrix<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
 
   using VectorType        = matrix::CooVector<ScalarType>;
   using RealVectorType    = matrix::CooVector<RealScalarType>;
@@ -92,7 +92,7 @@ class CooMatrix
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
   using IdxPtrType        = std::shared_ptr<std::valarray<index_t>>;
 
@@ -130,12 +130,12 @@ class CooMatrix
   inline CooMatrix() noexcept;
   inline CooMatrix( const index_t ncol, const index_t nrow ) noexcept;
   inline CooMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
-  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t capability ) noexcept;
-  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capability ) noexcept;
+  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t capacity ) noexcept;
+  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capacity ) noexcept;
   inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
-                    const index_t capability, const index_t offset = 0 ) noexcept;
+                    const index_t capacity, const index_t offset = 0 ) noexcept;
   inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t nnz,
-                    const index_t capability, const index_t offset = 0 ) noexcept;
+                    const index_t capacity, const index_t offset = 0 ) noexcept;
   inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz, const ValuePtrType &value,
                     const IdxPtrType &rowidx, const IdxPtrType &colidx, const index_t offset = 0 ) noexcept;
   inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,

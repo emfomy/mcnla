@@ -134,6 +134,10 @@ static constexpr bool isUnitDiag( const UploOption uplo ) noexcept {
   return !!(uplo & UploOption::UNITLOWER);
 }
 
+static constexpr UploOption changeUplo( const UploOption uplo ) noexcept {
+  return uplo ^ UploOption::UPPER;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The enumeration of matrix operation size.
 ///

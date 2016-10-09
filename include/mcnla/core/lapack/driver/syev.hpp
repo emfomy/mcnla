@@ -27,7 +27,7 @@ namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  lapack_driver_module
-/// @brief  Computes all eigenvalues and, optionally, eigenvectors of a symmetric or Hermitian matrix.
+/// @brief  The eigenvalue solver of symmetric / Hermitian matrices.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///

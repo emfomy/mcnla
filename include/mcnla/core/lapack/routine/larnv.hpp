@@ -30,7 +30,6 @@ namespace lapack {
 ///
 /// @attention  The out-of-range spaces are also changed.
 ///
-//@{
 template <index_t idist, typename _Scalar>
 inline void larnv(
     DenseVector<_Scalar> &x,
@@ -41,6 +40,7 @@ inline void larnv(
   detail::larnv(idist, iseed, x.getLength() * x.getStride(), x.getValue());
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <index_t idist, typename _Scalar>
 inline void larnv(
     DenseVector<_Scalar> &&x,
@@ -48,7 +48,7 @@ inline void larnv(
 ) noexcept {
   larnv<idist>(x, iseed);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace lapack
 

@@ -46,7 +46,7 @@ template <typename _Scalar>
 struct Traits<matrix::CooVector<_Scalar>> {
   static constexpr index_t ndim = 1;
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
 
   using VectorType        = matrix::CooVector<ScalarType>;
   using RealVectorType    = matrix::CooVector<RealScalarType>;
@@ -81,7 +81,7 @@ class CooVector
   static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
   using IdxPtrType        = std::shared_ptr<std::valarray<index_t>>;
 
@@ -111,8 +111,8 @@ class CooVector
   // Constructors
   inline CooVector() noexcept;
   inline CooVector( const index_t length ) noexcept;
-  inline CooVector( const index_t length, const index_t capability ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz, const index_t capability, const index_t offset = 0 ) noexcept;
+  inline CooVector( const index_t length, const index_t capacity ) noexcept;
+  inline CooVector( const index_t length, const index_t nnz, const index_t capacity, const index_t offset = 0 ) noexcept;
   inline CooVector( const index_t length, const index_t nnz,
                     const ValuePtrType &value, const IdxPtrType &idx, const index_t offset = 0 ) noexcept;
   inline CooVector( const index_t length, const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;

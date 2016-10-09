@@ -27,7 +27,6 @@ namespace blas {
 ///
 /// @attention  the out-of-range spaces are also changed.
 ///
-//@{
 template <typename _Scalar>
 inline void memset0(
   DenseVector<_Scalar> &x
@@ -35,13 +34,14 @@ inline void memset0(
   std::memset(x.getValue(), 0, x.getNelem() * sizeof(_Scalar));
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void memset0(
   DenseVector<_Scalar> &&x
 ) noexcept {
   memset0(x);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas1_module
@@ -49,7 +49,6 @@ inline void memset0(
 ///
 /// @attention  the out-of-range spaces are also changed.
 ///
-//@{
 template <typename _Scalar, Layout _layout>
 inline void memset0(
   DenseMatrix<_Scalar, _layout> &x
@@ -57,13 +56,14 @@ inline void memset0(
   std::memset(x.getValue(), 0, x.getNelem() * sizeof(_Scalar));
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout>
 inline void memset0(
   DenseMatrix<_Scalar, _layout> &&x
 ) noexcept {
   memset0(x);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas1_module
@@ -71,7 +71,6 @@ inline void memset0(
 ///
 /// @attention  the out-of-range spaces are also changed.
 ///
-//@{
 template <typename _Scalar, Layout _layout>
 inline void memset0(
   DenseCube<_Scalar, _layout> &x
@@ -79,13 +78,14 @@ inline void memset0(
   std::memset(x.getValue(), 0, x.getNelem() * sizeof(_Scalar));
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout>
 inline void memset0(
   DenseCube<_Scalar, _layout> &&x
 ) noexcept {
   memset0(x);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 

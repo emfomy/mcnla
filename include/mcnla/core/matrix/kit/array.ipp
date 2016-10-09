@@ -33,9 +33,9 @@ Array<_Type>::Array() noexcept
 ///
 template <typename _Type>
 Array<_Type>::Array(
-    const index_t capability
+    const index_t capacity
 ) noexcept
-  : BaseType(new std::valarray<_Type>(capability)),
+  : BaseType(new std::valarray<_Type>(capacity)),
     offset_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ Array<_Type>::Array(
 ) noexcept
   : BaseType(value),
     offset_(offset) {
-  assert(offset_ >= 0 && offset_ <= this->getCapability());
+  assert(offset_ >= 0 && offset_ <= this->getCapacity());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
 template <typename _Type>
 void Array<_Type>::operator>>=( const index_t offset ) noexcept {
   offset_ += offset;
-  assert(offset_ >= 0 && offset_ <= this->getCapability());
+  assert(offset_ >= 0 && offset_ <= this->getCapacity());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ void Array<_Type>::operator>>=( const index_t offset ) noexcept {
 template <typename _Type>
 void Array<_Type>::operator<<=( const index_t offset ) noexcept {
   offset_ -= offset;
-  assert(offset_ >= 0 && offset_ <= this->getCapability());
+  assert(offset_ >= 0 && offset_ <= this->getCapacity());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ const Array<_Type> Array<_Type>::operator<<( const index_t offset ) const noexce
 /// @brief  Gets the length of valarray.
 ///
 template <typename _Type>
-index_t Array<_Type>::getCapability() const noexcept {
+index_t Array<_Type>::getCapacity() const noexcept {
   return this->getValarray().size();
 }
 

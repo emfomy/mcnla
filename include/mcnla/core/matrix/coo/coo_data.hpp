@@ -11,9 +11,8 @@
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <array>
-#include <valarray>
-#include <memory>
 #include <mcnla/core/matrix/coo/coo_tuple.hpp>
+#include <mcnla/core/matrix/kit/array.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -43,7 +42,7 @@ struct CooDataHelper {
 
   using DataType    = CooData<_ndim, _Scalar>;
   using ReducedType = CooData<__ndim, _Scalar>;
-  using IdxsType    = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
+  using IdxsType    = std::array<Array<index_t>, __ndim>;
 
   template <typename... _Args>
   static inline       ReducedType getData( DataType &data, _Args&... args ) noexcept;
@@ -61,7 +60,7 @@ struct CooDataHelper<_ndim, _Scalar, __ndim, __dim> {
 
   using DataType    = CooData<_ndim, _Scalar>;
   using ReducedType = CooData<__ndim, _Scalar>;
-  using IdxsType    = std::array<std::shared_ptr<std::valarray<index_t>>, __ndim>;
+  using IdxsType    = std::array<Array<index_t>, __ndim>;
 
   template <typename... _Args>
   static inline       ReducedType getData( DataType &data, _Args&... args ) noexcept;
@@ -123,74 +122,57 @@ class CooData {
 
  private:
 
-  using ValuePtrType   = std::shared_ptr<std::valarray<_Scalar>>;
-  using IdxPtrType     = std::shared_ptr<std::valarray<index_t>>;
-  using TupleType      = CooTuple<_ndim, _Scalar, index_t>;
-  using ConstTupleType = CooTuple<_ndim, const _Scalar, const index_t>;
+  using ValueArrayType    = Array<_Scalar>;
+  using IdxArrayType      = Array<index_t>;
+  using ValueValarrayType = std::valarray<_Scalar>;
+  using IdxValarrayType   = std::valarray<index_t>;
+  using TupleType         = CooTuple<_ndim, _Scalar, index_t>;
+  using ConstTupleType    = CooTuple<_ndim, const _Scalar, const index_t>;
 
  protected:
 
   /// The value array.
-  ValuePtrType value_;
+  ValueArrayType value_;
 
   /// The index array.
-  std::array<IdxPtrType, _ndim> idxs_;
-
-  /// The empty value array
-  static const ValuePtrType kNullValue;
-
-  /// The empty value array
-  static const IdxPtrType kNullIdx;
+  std::array<IdxArrayType, _ndim> idxs_;
 
  public:
 
   // Constructors
   inline CooData() noexcept;
-  inline CooData( const index_t capability ) noexcept;
-  inline CooData( const ValuePtrType &value, const std::array<IdxPtrType, _ndim> &idxs ) noexcept;
+  inline CooData( const index_t capacity ) noexcept;
+  inline CooData( const ValueArrayType &value, const std::array<IdxArrayType, _ndim> &idxs ) noexcept;
   inline CooData( const CooData &other ) noexcept;
   inline CooData( CooData &&other ) noexcept;
 
   // Operators
   inline CooData& operator=( const CooData &other ) noexcept;
   inline CooData& operator=( CooData &&other ) noexcept;
-  inline bool operator==( const CooData& other ) const noexcept;
-  inline bool operator!=( const CooData& other ) const noexcept;
-  inline       _Scalar* operator*() noexcept;
-  inline const _Scalar* operator*() const noexcept;
+  inline void operator>>=( const index_t offset ) noexcept;
+  inline void operator<<=( const index_t offset ) noexcept;
+  inline       CooData operator>>( const index_t offset ) noexcept;
+  inline const CooData operator>>( const index_t offset ) const noexcept;
+  inline       CooData operator<<( const index_t offset ) noexcept;
+  inline const CooData operator<<( const index_t offset ) const noexcept;
 
-  // Gets data
-  inline        index_t getCapability() const noexcept;
-  inline       _Scalar* getValue() noexcept;
-  inline const _Scalar* getValue() const noexcept;
-  inline       index_t* getIdx( const index_t dim ) noexcept;
-  inline const index_t* getIdx( const index_t dim ) const noexcept;
-  template <index_t _dim> inline       index_t* getIdx() noexcept;
-  template <index_t _dim> inline const index_t* getIdx() const noexcept;
+  // Gets array
+  inline       ValueArrayType& getValueArray() noexcept;
+  inline const ValueArrayType& getValueArray() const noexcept;
+  inline       IdxArrayType& getIdxArray( const index_t dim ) noexcept;
+  inline const IdxArrayType& getIdxArray( const index_t dim ) const noexcept;
+  template <index_t _dim> inline       IdxArrayType& getIdxArray() noexcept;
+  template <index_t _dim> inline const IdxArrayType& getIdxArray() const noexcept;
+
+  // Gets tuple
   inline TupleType      getTuple( const index_t itidx ) noexcept;
   inline ConstTupleType getTuple( const index_t itidx ) const noexcept;
-
-  // Gets data pointer
-  inline       ValuePtrType& getValuePtr() noexcept;
-  inline const ValuePtrType& getValuePtr() const noexcept;
-  inline       IdxPtrType&   getIdxPtr( const index_t dim ) noexcept;
-  inline const IdxPtrType&   getIdxPtr( const index_t dim ) const noexcept;
-  template <index_t _dim> inline       IdxPtrType& getIdxPtr() noexcept;
-  template <index_t _dim> inline const IdxPtrType& getIdxPtr() const noexcept;
 
   // Reduces dimension
   template <index_t... _dims> inline       CooData<sizeof...(_dims), _Scalar> getReduced() noexcept;
   template <index_t... _dims> inline const CooData<sizeof...(_dims), _Scalar> getReduced() const noexcept;
 
 };
-
-template <index_t _ndim, typename _Scalar>
-const typename CooData<_ndim, _Scalar>::ValuePtrType
-    CooData<_ndim, _Scalar>::kNullValue = std::make_shared<std::valarray<_Scalar>>();
-
-template <index_t _ndim, typename _Scalar>
-const typename CooData<_ndim, _Scalar>::IdxPtrType
-    CooData<_ndim, _Scalar>::kNullIdx   = std::make_shared<std::valarray<index_t>>();
 
 }  // namespace matrix
 

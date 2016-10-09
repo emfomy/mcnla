@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/integrator/integrator_base.ipp
-/// @brief   The implementation of MCNLA integrator interface.
+/// @brief   The implementation of iSVD integrator interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

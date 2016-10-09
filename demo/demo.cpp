@@ -95,8 +95,8 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Create statistics collector
   boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_max;
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_min;
   boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_mean;
+  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_min;
   boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_time;
   boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_time_s;
   boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_time_i;
@@ -137,16 +137,17 @@ int main( int argc, char **argv ) {
 
   // Display statistics results
   if ( mpi_rank == mpi_root ) {
+    std::cout << std::endl;
     std::cout << "Average total computing time: " << boost::accumulators::mean(acc_time) << " seconds." << std::endl;
     std::cout << "Average sketching time:       " << boost::accumulators::mean(acc_time_s) << " seconds." << std::endl;
     std::cout << "Average integrating time:     " << boost::accumulators::mean(acc_time_i) << " seconds." << std::endl;
     std::cout << "Average reconstructing time:  " << boost::accumulators::mean(acc_time_r) << " seconds." << std::endl;
     std::cout << "mean(svd(U_true' * U)): max = " << boost::accumulators::mean(acc_max)
-                                    << ", min = " << boost::accumulators::mean(acc_min)
-                                   << ", mean = " << boost::accumulators::mean(acc_mean) << std::endl;
+                                   << ", mean = " << boost::accumulators::mean(acc_mean)
+                                    << ", min = " << boost::accumulators::mean(acc_min) << std::endl;
     std::cout << "sd(svd(U_true' * U)):   max = " << std::sqrt(boost::accumulators::variance(acc_max))
-                                    << ", min = " << std::sqrt(boost::accumulators::variance(acc_min))
-                                   << ", mean = " << std::sqrt(boost::accumulators::variance(acc_mean)) << std::endl;
+                                   << ", mean = " << std::sqrt(boost::accumulators::variance(acc_mean))
+                                    << ", min = " << std::sqrt(boost::accumulators::variance(acc_min)) << std::endl;
     std::cout << "mean(iter) = " << boost::accumulators::mean(acc_iter) << std::endl;
     std::cout << "sd(iter)   = " << std::sqrt(boost::accumulators::variance(acc_iter)) << std::endl;
   }

@@ -39,7 +39,7 @@ class Array : public std::shared_ptr<std::valarray<_Type>> {
   // The offset.
   index_t offset_;
 
-  /// The empty array
+  /// The empty array pointer.
   static const BaseType kNullPtr;
 
  public:
@@ -62,7 +62,7 @@ class Array : public std::shared_ptr<std::valarray<_Type>> {
   inline const Array operator<<( const index_t offset ) const noexcept;
 
   // Gets information
-  inline index_t getCapability() const noexcept;
+  inline index_t getCapacity() const noexcept;
   inline index_t getOffset() const noexcept;
 
   // Gets data

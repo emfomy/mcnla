@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/sketcher/sketcher_base.ipp
-/// @brief   The implementation of MCNLA sketcher interface.
+/// @brief   The implementation of iSVD sketcher interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

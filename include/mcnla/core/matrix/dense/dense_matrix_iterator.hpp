@@ -101,11 +101,11 @@ class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase
 
 /// @ingroup  matrix_dense_module
 template <typename _Scalar, Layout _layout>
-using DenseMatrixIterator = mcnla::matrix::DenseMatrixIteratorBase<_Scalar, _layout, DenseMatrix<_Scalar, _layout>>;
+using DenseMatrixIterator = DenseMatrixIteratorBase<_Scalar, _layout, DenseMatrix<_Scalar, _layout>>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Scalar, Layout _layout>
-using DenseMatrixConstIterator = mcnla::matrix::DenseMatrixIteratorBase<const _Scalar, _layout, const DenseMatrix<_Scalar, _layout>>;
+using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Scalar, _layout, const DenseMatrix<_Scalar, _layout>>;
 
 }  // namespace matrix
 

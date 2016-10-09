@@ -10,8 +10,6 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
-#include <valarray>
-#include <memory>
 #include <mcnla/core/matrix/kit/array.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +45,7 @@ class DenseData {
 
   // Constructors
   inline DenseData() noexcept;
-  inline DenseData( const index_t capability ) noexcept;
+  inline DenseData( const index_t capacity ) noexcept;
   inline DenseData( const ValueArrayType &value ) noexcept;
   inline DenseData( const DenseData &other ) noexcept;
   inline DenseData( DenseData &&other ) noexcept;
@@ -62,15 +60,9 @@ class DenseData {
   inline       DenseData operator<<( const index_t offset ) noexcept;
   inline const DenseData operator<<( const index_t offset ) const noexcept;
 
-  // Gets data
-  inline       index_t  getCapability() const noexcept;
-  inline       index_t  getOffset() const noexcept;
-  inline       _Scalar* getValue() noexcept;
-  inline const _Scalar* getValue() const noexcept;
+  // Gets array
   inline       ValueArrayType& getValueArray() noexcept;
   inline const ValueArrayType& getValueArray() const noexcept;
-  inline       ValueValarrayType& getValueValarray() noexcept;
-  inline const ValueValarrayType& getValueValarray() const noexcept;
 
 };
 

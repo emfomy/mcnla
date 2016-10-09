@@ -53,7 +53,7 @@ struct Traits<matrix::CooCube<_Scalar, _layout>> {
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
 
   using VectorType        = matrix::CooVector<ScalarType>;
   using RealVectorType    = matrix::CooVector<RealScalarType>;
@@ -96,7 +96,7 @@ class CooCube
   static constexpr Layout layout = _layout;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = typename traits::ScalarTraits<_Scalar>::RealType;
+  using RealScalarType    = RealType<_Scalar>;
   using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
   using IdxPtrType        = std::shared_ptr<std::valarray<index_t>>;
 
@@ -138,12 +138,12 @@ class CooCube
   inline CooCube() noexcept;
   inline CooCube( const index_t ncol, const index_t nrow, const index_t npage ) noexcept;
   inline CooCube( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  inline CooCube( const index_t ncol, const index_t nrow, const index_t npage, const index_t capability ) noexcept;
-  inline CooCube( const std::tuple<index_t, index_t, index_t> sizes, const index_t capability ) noexcept;
+  inline CooCube( const index_t ncol, const index_t nrow, const index_t npage, const index_t capacity ) noexcept;
+  inline CooCube( const std::tuple<index_t, index_t, index_t> sizes, const index_t capacity ) noexcept;
   inline CooCube( const index_t ncol, const index_t nrow, const index_t npage,
-                  const index_t nnz, const index_t capability, const index_t offset = 0 ) noexcept;
+                  const index_t nnz, const index_t capacity, const index_t offset = 0 ) noexcept;
   inline CooCube( const std::tuple<index_t, index_t, index_t> sizes,
-                  const index_t nnz, const index_t capability, const index_t offset = 0 ) noexcept;
+                  const index_t nnz, const index_t capacity, const index_t offset = 0 ) noexcept;
   inline CooCube( const index_t ncol, const index_t nrow, const index_t npage, const index_t nnz,
                   const ValuePtrType &value, const IdxPtrType &rowidx, const IdxPtrType &colidx, const IdxPtrType &pageidx,
                   const index_t offset = 0 ) noexcept;

@@ -29,7 +29,6 @@ namespace blas {
 ///             Uses memset0 instead if the out-of-range spaces are useless.
 /// @attention  However, memset0 is slow if the stride is vary large.
 ///
-//@{
 template <typename _Scalar>
 inline void scal0(
   DenseVector<_Scalar> &x
@@ -41,13 +40,14 @@ inline void scal0(
   }
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void scal0(
   DenseVector<_Scalar> &&x
 ) noexcept {
   scal0(x);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas1_module
@@ -57,7 +57,6 @@ inline void scal0(
 ///             Uses memset0 instead if the out-of-range spaces are useless.
 /// @attention  However, memset0 is slow if the pitch is vary large.
 ///
-//@{
 template <typename _Scalar, Layout _layout>
 inline void scal0(
   DenseMatrix<_Scalar, _layout> &x
@@ -69,13 +68,14 @@ inline void scal0(
   }
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout>
 inline void scal0(
   DenseMatrix<_Scalar, _layout> &&x
 ) noexcept {
   scal0(x);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas1_module
@@ -85,7 +85,6 @@ inline void scal0(
 ///             Uses memset0 instead if the out-of-range spaces are useless.
 /// @attention  However, memset0 is slow if the pitch is vary large.
 ///
-//@{
 template <typename _Scalar, Layout _layout>
 inline void scal0(
   DenseCube<_Scalar, _layout> &x
@@ -97,13 +96,14 @@ inline void scal0(
   }
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Layout _layout>
 inline void scal0(
   DenseCube<_Scalar, _layout> &&x
 ) noexcept {
   scal0(x);
 }
-//@}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace blas
 
