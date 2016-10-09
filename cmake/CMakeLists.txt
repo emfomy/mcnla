@@ -44,12 +44,6 @@ if(MPI_FOUND)
 endif()
 set(MPI_PROCS 4 CACHE PATH "The number of MPI processes")
 
-# Boost
-find_package(Boost REQUIRED)
-if(Boost_FOUND)
-  set(INCS ${INCS} "${Boost_INCLUDE_DIRS}")
-endif()
-
 # LAPACK
 if(NOT MCNLA_USE_MKL)
   find_package(LAPACK REQUIRED)

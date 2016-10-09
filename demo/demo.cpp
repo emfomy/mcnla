@@ -7,13 +7,13 @@
 
 #include <iostream>
 #include <iomanip>
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/mean.hpp>
-#include <boost/accumulators/statistics/variance.hpp>
+#include <valarray>
 #include <mcnla.hpp>
 
 using ScalarType = double;
+
+ScalarType tolerance = 1e-4;
+mcnla::index_t maxiter = 256;
 
 void create( mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
              mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
@@ -23,11 +23,24 @@ void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
             const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
             ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
 
+class StatisticsSet {
+ private:
+  std::valarray<double> set_;
+  std::valarray<double> diff_;
+  size_t size_;
+
+ public:
+  StatisticsSet( const int capacity ) : set_(capacity), diff_(capacity), size_(0) {};
+  void operator()( const double value ) { assert(size_ < set_.size()); set_[size_++] = value; }
+  double mean() { return set_.sum() / set_.size(); }
+  double var() { diff_ = set_ - mean(); diff_ *= diff_; return diff_.sum() / diff_.size(); };
+  double sd() { return std::sqrt(var()); };
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
-  ScalarType smax, smin, smean;
 
   // ====================================================================================================================== //
   // Initialize MPI
@@ -71,6 +84,11 @@ int main( int argc, char **argv ) {
   }
 
   // ====================================================================================================================== //
+  // Create statistics collector
+  StatisticsSet set_max(num_test),  set_mean(num_test),   set_min(num_test),
+                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
+
+  // ====================================================================================================================== //
   // Initialize solver
   mcnla::matrix::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
   mcnla::isvd::Solver<mcnla::matrix::DenseMatrix<ScalarType>,
@@ -78,6 +96,7 @@ int main( int argc, char **argv ) {
                       mcnla::isvd::KolmogorovNagumoTypeIntegrator<mcnla::matrix::DenseMatrix<ScalarType>>,
                       mcnla::isvd::StandardReconstructor<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeed(seed);
+  solver.setTolerance(tolerance).setMaxIteration(maxiter);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << solver.getSketcherName() << "." << std::endl;
@@ -91,17 +110,6 @@ int main( int argc, char **argv ) {
     create(matrix_a, matrix_u_true, k, seed);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
-
-  // ====================================================================================================================== //
-  // Create statistics collector
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_max;
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_mean;
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_min;
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_time;
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_time_s;
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_time_i;
-  boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_time_r;
-  boost::accumulators::accumulator_set<mcnla::index_t, boost::accumulators::stats<boost::accumulators::tag::variance>> acc_iter;
 
   // ====================================================================================================================== //
   // Run MCNLA
@@ -119,6 +127,7 @@ int main( int argc, char **argv ) {
 
     // Check result
     if ( mpi_rank == mpi_root ) {
+      ScalarType smax, smin, smean;
       check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
       auto iter    = solver.getIntegratorIter();
       auto maxiter = solver.getParameters().getMaxIteration();
@@ -130,26 +139,26 @@ int main( int argc, char **argv ) {
                 << " | svd(U_true' * U): " << smax << " / " << smin << " / " << smean
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter << std::endl;
-      acc_min(smin); acc_max(smax); acc_mean(smean);
-      acc_time(time); acc_time_s(time_s); acc_time_r(time_r); acc_time_i(time_i); acc_iter(iter);
+      set_min(smin); set_max(smax); set_mean(smean);
+      set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
     }
   }
 
   // Display statistics results
   if ( mpi_rank == mpi_root ) {
     std::cout << std::endl;
-    std::cout << "Average total computing time: " << boost::accumulators::mean(acc_time) << " seconds." << std::endl;
-    std::cout << "Average sketching time:       " << boost::accumulators::mean(acc_time_s) << " seconds." << std::endl;
-    std::cout << "Average integrating time:     " << boost::accumulators::mean(acc_time_i) << " seconds." << std::endl;
-    std::cout << "Average reconstructing time:  " << boost::accumulators::mean(acc_time_r) << " seconds." << std::endl;
-    std::cout << "mean(svd(U_true' * U)): max = " << boost::accumulators::mean(acc_max)
-                                   << ", mean = " << boost::accumulators::mean(acc_mean)
-                                    << ", min = " << boost::accumulators::mean(acc_min) << std::endl;
-    std::cout << "sd(svd(U_true' * U)):   max = " << std::sqrt(boost::accumulators::variance(acc_max))
-                                   << ", mean = " << std::sqrt(boost::accumulators::variance(acc_mean))
-                                    << ", min = " << std::sqrt(boost::accumulators::variance(acc_min)) << std::endl;
-    std::cout << "mean(iter) = " << boost::accumulators::mean(acc_iter) << std::endl;
-    std::cout << "sd(iter)   = " << std::sqrt(boost::accumulators::variance(acc_iter)) << std::endl;
+    std::cout << "Average total computing time: " << set_time.mean() << " seconds." << std::endl;
+    std::cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << std::endl;
+    std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
+    std::cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << std::endl;
+    std::cout << "mean(svd(U_true' * U)): max = " << set_max.mean()
+                                   << ", mean = " << set_mean.mean()
+                                    << ", min = " << set_min.mean() << std::endl;
+    std::cout << "sd(svd(U_true' * U)):   max = " << set_max.sd()
+                                   << ", mean = " << set_mean.sd()
+                                    << ", min = " << set_min.sd() << std::endl;
+    std::cout << "mean(iter) = " << set_iter.mean() << std::endl;
+    std::cout << "sd(iter)   = " << set_iter.sd() << std::endl;
   }
 
   MPI_Finalize();

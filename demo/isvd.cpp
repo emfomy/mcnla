@@ -7,38 +7,49 @@
 
 #include <cmath>
 #include <iostream>
+#include <iomanip>
+#include <valarray>
 #include <algorithm>
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/mean.hpp>
-#include <boost/accumulators/statistics/variance.hpp>
 #include <mcnla/core/utility.hpp>
 #include <mpi.h>
 #include <mkl.h>
 
 using namespace std;
-using namespace boost::accumulators;
-using namespace mcnla;
+using namespace mcnla::utility;
 
 int mpi_size;
 int mpi_rank;
 
-double tolorance = 1e-4;
+double tolerance = 1e-4;
+int maxiter = 256;
 
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int seed[4] );
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
              const double *matrix_a, double *matrices_qjt, int seed[4] );
-void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt );
+void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter );
 void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
 void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
             double &smax, double &smin, double &smean );
 
+class StatisticsSet {
+ private:
+  valarray<double> set_;
+  valarray<double> diff_;
+  size_t size_;
+
+ public:
+  StatisticsSet( const int capacity ) : set_(capacity), diff_(capacity), size_(0) {};
+  void operator()( const double value ) { assert(size_ < set_.size()); set_[size_++] = value; }
+  double mean() { return set_.sum() / set_.size(); }
+  double var() { diff_ = set_ - mean(); diff_ *= diff_; return diff_.sum() / diff_.size(); };
+  double sd() { return sqrt(var()); };
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
-  double start_time = 0.0, total_time = 0.0, smax, smin, smean;
 
   // ====================================================================================================================== //
   // Initialize MPI
@@ -73,7 +84,14 @@ int main( int argc, char **argv ) {
   int m = mj * mpi_size;
   assert(k <= m && m <= n);
 
-  if ( mpi_rank == 0 ) { printf("m = %d, n = %d, k = %d, N = %d, K = %d\n\n", m, n, k, N, mpi_size); }
+  if ( mpi_rank == 0 ) {
+    cout << "m = " << m
+       << ", n = " << n
+       << ", k = " << k
+       << ", p = " << 0
+       << ", N = " << Nj*mpi_size
+       << ", K = " << mpi_size << endl << endl;
+  }
 
   // ====================================================================================================================== //
   // Allocate memory
@@ -85,7 +103,11 @@ int main( int argc, char **argv ) {
   auto vector_s      = malloc<double>(k);
   auto matrix_qjt    = malloc<double>(k * mj);
   auto matrices_qjt  = malloc<double>(k * mj * N);
-  accumulator_set<double, stats<tag::variance>> acc_max, acc_min, acc_mean;
+
+  // ====================================================================================================================== //
+  // Create statistics collector
+  StatisticsSet set_max(num_test),  set_mean(num_test),   set_min(num_test),
+                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
 
   // ====================================================================================================================== //
   // Generate matrix
@@ -100,64 +122,76 @@ int main( int argc, char **argv ) {
   // Run MCNLA
   if ( mpi_rank == 0 ) {
     cout << "Start MCNLA." << endl;
+    std::cout << std::fixed << std::setprecision(6);
   }
 
   for ( auto t = 0; t < num_test; ++t ) {
+    double smax, smin, smean, time, time_s = 0.0, time_i = 0.0, time_r = 0.0; int iter;
+
     MPI_Barrier(MPI_COMM_WORLD);
-    if ( mpi_rank == 0 ) {
-      start_time = MPI_Wtime();
-    }
 
     // ================================================================================================================== //
     // Random sketch
     if ( verbose && mpi_rank == 0 ) { cout << "Sketching ...................... " << flush; }
+    if ( mpi_rank == 0 ) { time_s = MPI_Wtime(); }
     fill(matrices_qjt, matrices_qjt+k*mj*N, 0.0);
     sketch(Nj, m, m0, n, k, matrix_a, matrices_qjt, seed);
     for ( auto i = 0; i < Nj; ++i ) {
       MPI_Alltoall(MPI_IN_PLACE, k*mj, MPI_DOUBLE, matrices_qjt+i*k*m, k*mj, MPI_DOUBLE, MPI_COMM_WORLD);
     }
+    if ( mpi_rank == 0 ) { time_s = MPI_Wtime() - time_s; }
     if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
 
     // ================================================================================================================== //
     // Integrate
     if ( verbose && mpi_rank == 0 ) { cout << "Integrating .................... " << flush; }
-    integrate(N, mj, k, matrices_qjt, matrix_qjt);
+    if ( mpi_rank == 0 ) { time_i = MPI_Wtime(); }
+    integrate(N, mj, k, matrices_qjt, matrix_qjt, iter);
     MPI_Gather(matrix_qjt, k*mj, MPI_DOUBLE, matrix_qt, k*mj, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    if ( mpi_rank == 0 ) { time_i = MPI_Wtime() - time_i; }
     if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
 
     // ================================================================================================================== //
     // Reconstruct SVD
     if ( verbose && mpi_rank == 0 ) { cout << "Reconstructing ................. " << flush; }
     if ( mpi_rank == 0 ) {
+      time_r = MPI_Wtime();
       reconstruct(m0, n, k, matrix_a, matrix_qt, matrix_u, matrix_vt, vector_s);
+      time_r = MPI_Wtime() - time_r;
     }
     if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
 
-    // ================================================================================================================== //
-    // Check time
     MPI_Barrier(MPI_COMM_WORLD);
-    if ( mpi_rank == 0 ) {
-      total_time += MPI_Wtime() - start_time;
-    }
 
     // ================================================================================================================== //
     // Check result
     if ( mpi_rank == 0 ) {
       check(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
+      time = time_s + time_i + time_r;
+      cout << setw(log10(num_test)+1) << t
+                << " | svd(U_true' * U): " << smax << " / " << smin << " / " << smean
+                << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
+                << " | iter: " << setw(log10(maxiter)+1) << iter << endl;
+      set_min(smin); set_max(smax); set_mean(smean);
+      set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
     }
-    if ( verbose && mpi_rank == 0 ) {
-      printf("\nS: "); for ( auto xx = 0; xx < k; ++xx ) { printf("%12.6f", vector_s[xx]); } printf("\n");
-      printf("svd(U_true' * U): max = %.6f, mean = %.6f, min = %.6f\n", smax, smean, smin); fflush(stdout);
-    }
-    if ( mpi_rank == 0 ) { printf("%*d: max = %.6f, mean = %.6f, min = %.6f\n", int(log10(num_test)+1), t, smax, smean, smin); }
-    if ( mpi_rank == 0 ) { acc_max(smax); acc_mean(smean); acc_min(smin); }
   }
 
+  // Display statistics results
   if ( mpi_rank == 0 ) {
-    printf("\nUsed %.6f seconds averagely.\n", total_time / num_test);
-    printf("mean(op(svd(U_true' * U)): max = %.6f, mean = %.6f, min = %.6f\n", mean(acc_max), mean(acc_mean), mean(acc_min));
-    printf("sd(op(svd(U_true' * U)):   max = %.6f, mean = %.6f, min = %.6f\n",
-           sqrt(variance(acc_max))), sqrt(variance(acc_mean)), sqrt(variance(acc_min));
+    cout << endl;
+    cout << "Average total computing time: " << set_time.mean() << " seconds." << endl;
+    cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << endl;
+    cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << endl;
+    cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << endl;
+    cout << "mean(svd(U_true' * U)): max = " << set_max.mean()
+                              << ", mean = " << set_mean.mean()
+                               << ", min = " << set_min.mean() << endl;
+    cout << "sd(svd(U_true' * U)):   max = " << set_max.sd()
+                              << ", mean = " << set_mean.sd()
+                               << ", min = " << set_min.sd() << endl;
+    cout << "mean(iter) = " << set_iter.mean() << endl;
+    cout << "sd(iter)   = " << set_iter.sd() << endl;
   }
 
   // ====================================================================================================================== //
@@ -232,7 +266,7 @@ void sketch( const int Nj, const int m, const int m0, const int n, const int k,
   free(vector_tmp_b);
 }
 
-void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt ) {
+void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter ) {
   auto matrix_b   = malloc<double>(k * k * N);
   auto matrix_d   = malloc<double>(k * k);
   auto matrix_c   = malloc<double>(k * k);
@@ -245,7 +279,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
   // Qj' := Q0'
   cblas_dcopy(k*mj, matrices_qjt, 1, matrix_qjt, 1);
 
-  while ( !is_converged ) {
+  for ( iter = 0; iter < maxiter && !is_converged; ++iter ) {
 
     // ================================================================================================================== //
     // X = (I - Q * Q') * sum( Qi * Qi' )/N * Q
@@ -336,10 +370,9 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // Check convergence
     if ( mpi_rank == 0 ) {
       for ( auto i = 0; i < k; ++i ) {
-        matrix_c[i+i*k] -= 1.0;
+        vector_e[i] -= 1.0;
       }
-      LAPACKE_dsyev(LAPACK_COL_MAJOR, 'N', 'L', k, matrix_c, k, vector_e);
-      is_converged = !(abs(vector_e[cblas_idamax(k, vector_e, 1)]) > tolorance);
+      is_converged = !(cblas_dnrm2(k, vector_e, 1) / k > tolerance);
     }
     MPI_Bcast(&is_converged, 1, MPI_CHAR, 0, MPI_COMM_WORLD);
   }
