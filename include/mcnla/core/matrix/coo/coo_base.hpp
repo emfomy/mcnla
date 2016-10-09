@@ -40,12 +40,15 @@ class CooBase : public SparseBase<_Derived> {
 
   using ScalarType        = typename traits::Traits<_Derived>::ScalarType;
   using ValueArrayType    = Array<ScalarType>;
-  using IdxArrayType      = Array<index_t>;
   using ValueValarrayType = std::valarray<ScalarType>;
+  using IdxArrayType      = Array<index_t>;
   using IdxValarrayType   = std::valarray<index_t>;
+
   using TupleType         = CooTuple<ndim, ScalarType, index_t>;
   using ConstTupleType    = CooTuple<ndim, const ScalarType, const index_t>;
+
   using DataType          = CooData<ndim, ScalarType>;
+
   using SparseBaseType    = SparseBase<_Derived>;
 
  protected:
@@ -72,6 +75,10 @@ class CooBase : public SparseBase<_Derived> {
 
  public:
 
+  // Gets data storage
+  inline       DataType& getData() noexcept;
+  inline const DataType& getData() const noexcept;
+
   // Gets information
   inline index_t getValueCapacity() const noexcept;
   inline index_t getValueOffset() const noexcept;
@@ -79,10 +86,6 @@ class CooBase : public SparseBase<_Derived> {
   inline index_t getIdxOffset( const index_t dim ) const noexcept;
   template <index_t _dim> inline index_t getIdxCapacity() const noexcept;
   template <index_t _dim> inline index_t getIdxOffset() const noexcept;
-
-  // Gets data storage
-  inline       DataType& getData() noexcept;
-  inline const DataType& getData() const noexcept;
 
   // Gets value array
   inline       ScalarType* getValue() noexcept;

@@ -79,11 +79,10 @@ CooMatrix<_Scalar, _layout>::CooMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t nnz,
-    const index_t capacity,
-    const index_t offset
+    const index_t capacity
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    CooBaseType(nnz, capacity, offset) {}
+    CooBaseType(nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -92,10 +91,9 @@ template <typename _Scalar, Layout _layout>
 CooMatrix<_Scalar, _layout>::CooMatrix(
     const std::pair<index_t, index_t> sizes,
     const index_t nnz,
-    const index_t capacity,
-    const index_t offset
+    const index_t capacity
 ) noexcept
-  : CooMatrix(sizes.first, sizes.second, nnz, capacity, offset) {}
+  : CooMatrix(sizes.first, sizes.second, nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -105,13 +103,12 @@ CooMatrix<_Scalar, _layout>::CooMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t nnz,
-    const ValuePtrType &value,
-    const IdxPtrType &rowidx,
-    const IdxPtrType &colidx,
-    const index_t offset
+    const ValueArrayType &value,
+    const IdxArrayType &rowidx,
+    const IdxArrayType &colidx
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    CooBaseType(nnz, value, {isColMajor(_layout) ? rowidx : colidx, isColMajor(_layout) ? colidx : rowidx}, offset) {}
+    CooBaseType(nnz, value, {isColMajor(_layout) ? rowidx : colidx, isColMajor(_layout) ? colidx : rowidx}) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.
@@ -125,7 +122,7 @@ CooMatrix<_Scalar, _layout>::CooMatrix(
     const index_t offset
 ) noexcept
   : MatrixBaseType(nrow, ncol),
-    CooBaseType(nnz, data, offset) {}
+    CooBaseType(nnz, data >> offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -336,7 +333,7 @@ bool CooMatrix<_Scalar, _layout>::isSorted() const noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 CooMatrix<_Scalar, changeLayout(_layout)> CooMatrix<_Scalar, _layout>::transpose() noexcept {
-  return CooMatrix<_Scalar, changeLayout(_layout)>(ncol_, nrow_, nnz_, data_, offset_);
+  return CooMatrix<_Scalar, changeLayout(_layout)>(ncol_, nrow_, nnz_, data_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -366,7 +363,7 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(colidx >= 0 && colidx < ncol_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, pos, nnz);
-  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos + offset_);
+  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,7 +376,7 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
   assert(colidx >= 0 && colidx < ncol_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, pos, nnz);
-  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos + offset_);
+  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,7 +391,7 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
   assert(rowidx >= 0 && rowidx < nrow_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, {0, ncol_}, pos, nnz);
-  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
+  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,7 +404,7 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
   assert(rowidx >= 0 && rowidx < nrow_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, {0, ncol_}, pos, nnz);
-  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
+  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }
 
 }  // namespace matrix

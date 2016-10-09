@@ -91,6 +91,7 @@ Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
+/// Add the #offset_ to @a offset.
 ///
 template <typename _Type>
 void Array<_Type>::operator>>=( const index_t offset ) noexcept {
@@ -100,6 +101,7 @@ void Array<_Type>::operator>>=( const index_t offset ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
+/// Subtract #offset_ from @a offset.
 ///
 template <typename _Type>
 void Array<_Type>::operator<<=( const index_t offset ) noexcept {
@@ -109,6 +111,7 @@ void Array<_Type>::operator<<=( const index_t offset ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
+/// Add the #offset_ to @a offset.
 ///
 template <typename _Type>
 Array<_Type> Array<_Type>::operator>>( const index_t offset ) noexcept {
@@ -117,6 +120,7 @@ Array<_Type> Array<_Type>::operator>>( const index_t offset ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
+/// Add the #offset_ to @a offset.
 ///
 template <typename _Type>
 const Array<_Type> Array<_Type>::operator>>( const index_t offset ) const noexcept {
@@ -125,6 +129,7 @@ const Array<_Type> Array<_Type>::operator>>( const index_t offset ) const noexce
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
+/// Subtract #offset_ from @a offset.
 ///
 template <typename _Type>
 Array<_Type> Array<_Type>::operator<<( const index_t offset ) noexcept {
@@ -133,6 +138,7 @@ Array<_Type> Array<_Type>::operator<<( const index_t offset ) noexcept {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
+/// Subtract #offset_ from @a offset.
 ///
 template <typename _Type>
 const Array<_Type> Array<_Type>::operator<<( const index_t offset ) const noexcept {

@@ -59,11 +59,10 @@ template <typename _Scalar>
 CooVector<_Scalar>::CooVector(
     const index_t length,
     const index_t nnz,
-    const index_t capacity,
-    const index_t offset
+    const index_t capacity
 ) noexcept
   : VectorBaseType(length),
-    CooBaseType(nnz, capacity, offset) {}
+    CooBaseType(nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -72,12 +71,11 @@ template <typename _Scalar>
 CooVector<_Scalar>::CooVector(
     const index_t length,
     const index_t nnz,
-    const ValuePtrType &value,
-    const IdxPtrType &idx,
-    const index_t offset
+    const ValueArrayType &value,
+    const IdxArrayType &idx
 ) noexcept
   : VectorBaseType(length),
-    CooBaseType(nnz, value, {idx}, offset) {}
+    CooBaseType(nnz, value, {idx}) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.
@@ -90,7 +88,7 @@ CooVector<_Scalar>::CooVector(
     const index_t offset
 ) noexcept
   : VectorBaseType(length),
-    CooBaseType(nnz, data, offset) {}
+    CooBaseType(nnz, data >> offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.

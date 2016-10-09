@@ -37,6 +37,7 @@ class DenseBase {
   using ScalarType        = typename traits::Traits<_Derived>::ScalarType;
   using ValueArrayType    = Array<ScalarType>;
   using ValueValarrayType = std::valarray<ScalarType>;
+
   using DataType          = DenseData<ScalarType>;
 
  protected:

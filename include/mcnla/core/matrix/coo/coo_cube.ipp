@@ -82,11 +82,10 @@ CooCube<_Scalar, _layout>::CooCube(
     const index_t ncol,
     const index_t npage,
     const index_t nnz,
-    const index_t capacity,
-    const index_t offset
+    const index_t capacity
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    CooBaseType(nnz, capacity, offset) {}
+    CooBaseType(nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -95,10 +94,9 @@ template <typename _Scalar, Layout _layout>
 CooCube<_Scalar, _layout>::CooCube(
     const std::tuple<index_t, index_t, index_t> sizes,
     const index_t nnz,
-    const index_t capacity,
-    const index_t offset
+    const index_t capacity
 ) noexcept
-  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), nnz, capacity, offset) {}
+  : CooCube(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -109,14 +107,13 @@ CooCube<_Scalar, _layout>::CooCube(
     const index_t ncol,
     const index_t npage,
     const index_t nnz,
-    const ValuePtrType &value,
-    const IdxPtrType &rowidx,
-    const IdxPtrType &colidx,
-    const IdxPtrType &pageidx,
-    const index_t offset
+    const ValueArrayType &value,
+    const IdxArrayType &rowidx,
+    const IdxArrayType &colidx,
+    const IdxArrayType &pageidx
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    CooBaseType(nnz, value, {isColMajor(_layout) ? rowidx : colidx, isColMajor(_layout) ? colidx : rowidx, pageidx}, offset) {}
+    CooBaseType(nnz, value, {isColMajor(_layout) ? rowidx : colidx, isColMajor(_layout) ? colidx : rowidx, pageidx}) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct from data storage.
@@ -131,7 +128,7 @@ CooCube<_Scalar, _layout>::CooCube(
     const index_t offset
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
-    CooBaseType(nnz, data, offset) {}
+    CooBaseType(nnz, data >> offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -370,7 +367,7 @@ bool CooCube<_Scalar, _layout>::isSorted() const noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 CooCube<_Scalar, changeLayout(_layout)> CooCube<_Scalar, _layout>::transpose() noexcept {
-  return CooCube<_Scalar, changeLayout(_layout)>(ncol_, nrow_, npage_, nnz_, data_, offset_);
+  return CooCube<_Scalar, changeLayout(_layout)>(ncol_, nrow_, npage_, nnz_, data_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -399,7 +396,7 @@ CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getPage(
 ) noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
+  return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,7 +408,7 @@ const CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getPage(
 ) const noexcept {
   assert(pageidx >= 0 && pageidx < npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
-  return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos + offset_);
+  return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -428,7 +425,7 @@ CooVector<_Scalar> CooCube<_Scalar, _layout>::getCol(
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos + offset_);
+  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -443,7 +440,7 @@ const CooVector<_Scalar> CooCube<_Scalar, _layout>::getCol(
   assert(colidx >= 0 && colidx < ncol_);
   assert(pageidx >= 0 && pageidx < npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos + offset_);
+  return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -460,7 +457,7 @@ CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(pageidx >= 0 && pageidx < npage_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
+  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -475,7 +472,7 @@ const CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
   assert(rowidx >= 0 && rowidx < nrow_);
   assert(pageidx >= 0 && pageidx < npage_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
-  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos + offset_);
+  return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }
 
 }  // namespace matrix

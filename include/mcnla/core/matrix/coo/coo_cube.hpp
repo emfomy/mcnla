@@ -97,8 +97,8 @@ class CooCube
 
   using ScalarType        = _Scalar;
   using RealScalarType    = RealType<_Scalar>;
-  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
-  using IdxPtrType        = std::shared_ptr<std::valarray<index_t>>;
+  using ValueArrayType    = Array<ScalarType>;
+  using IdxArrayType      = Array<index_t>;
 
   using VectorType        = CooVector<ScalarType>;
   using RealVectorType    = CooVector<RealScalarType>;
@@ -129,7 +129,6 @@ class CooCube
   using CubeBaseType::size1_;
   using CubeBaseType::size2_;
   using CooBaseType::nnz_;
-  using CooBaseType::offset_;
   using CooBaseType::data_;
 
  public:
@@ -141,12 +140,10 @@ class CooCube
   inline CooCube( const index_t ncol, const index_t nrow, const index_t npage, const index_t capacity ) noexcept;
   inline CooCube( const std::tuple<index_t, index_t, index_t> sizes, const index_t capacity ) noexcept;
   inline CooCube( const index_t ncol, const index_t nrow, const index_t npage,
-                  const index_t nnz, const index_t capacity, const index_t offset = 0 ) noexcept;
-  inline CooCube( const std::tuple<index_t, index_t, index_t> sizes,
-                  const index_t nnz, const index_t capacity, const index_t offset = 0 ) noexcept;
-  inline CooCube( const index_t ncol, const index_t nrow, const index_t npage, const index_t nnz,
-                  const ValuePtrType &value, const IdxPtrType &rowidx, const IdxPtrType &colidx, const IdxPtrType &pageidx,
-                  const index_t offset = 0 ) noexcept;
+                  const index_t nnz, const index_t capacity ) noexcept;
+  inline CooCube( const std::tuple<index_t, index_t, index_t> sizes, const index_t nnz, const index_t capacity ) noexcept;
+  inline CooCube( const index_t ncol, const index_t nrow, const index_t npage, const index_t nnz, const ValueArrayType &value,
+                  const IdxArrayType &rowidx, const IdxArrayType &colidx, const IdxArrayType &pageidx ) noexcept;
   inline CooCube( const index_t ncol, const index_t nrow, const index_t npage, const index_t nnz,
                   const DataType &data, const index_t offset = 0 ) noexcept;
   inline CooCube( const CooCube &other ) noexcept;
