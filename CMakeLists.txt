@@ -14,6 +14,22 @@ set(MCNLA_VERSION_PATCH 0)
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+# Enable testing
+enable_testing()
+
+# Check compiler support
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
+  include(CheckCXXCompilerFlag)
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  if(NOT COMPILER_SUPPORTS_CXX11)
+    message(
+      FATAL_ERROR
+      "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. "
+      "Please use a diffferent C++ compiler."
+    )
+  endif()
+endif()
+
 # Set word size
 set(MCNLA_SYSTEM_INT_SIZE 32 CACHE PATH "The system integer size.")
 if(MCNLA_SYSTEM_INT_SIZE EQUAL 32)
@@ -29,6 +45,7 @@ add_subdirectory(cmake)
 add_subdirectory(doxygen)
 if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
   add_subdirectory(demo)
+  add_subdirectory(check)
 endif()
 
 # Create configure files
