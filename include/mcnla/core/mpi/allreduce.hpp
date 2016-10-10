@@ -47,7 +47,7 @@ inline void allreduce(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
-/// @brief  Combines values from all processes and distributes the result back to all processes. (in-place version)
+/// @brief  Combines values from all processes and distributes the result back to all processes (in-place version).
 ///
 /// @attention  The size of @a buffer should be the same for all MPI nodes.
 /// @attention  @a buffer should be shrunk.
