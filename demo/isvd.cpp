@@ -372,7 +372,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
       for ( auto i = 0; i < k; ++i ) {
         vector_e[i] -= 1.0;
       }
-      is_converged = !(cblas_dnrm2(k, vector_e, 1) / k > tolerance);
+      is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tolerance);
     }
     MPI_Bcast(&is_converged, 1, MPI_CHAR, 0, MPI_COMM_WORLD);
   }
