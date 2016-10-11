@@ -15,8 +15,7 @@ endif()
 
 # Add check folders
 include(check.cmake)
-add_check(core_matrix "Matrix Module test")
-# add_check(core_blas   "BLAS Module test")
+add_check(core/matrix/dense "Dense Container Module test")
 
 # Add rule 'check'
 add_custom_target(

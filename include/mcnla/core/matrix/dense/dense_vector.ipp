@@ -287,25 +287,6 @@ const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
   return VectorType(range.getLength(), stride_, data_, getPos(range.begin));
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Expand the vector.
-/// Sets stride to 1.
-///
-/// @attention  The output vector contains the out-of-range spaces.
-///
-template <typename _Scalar>
-DenseVector<_Scalar> DenseVector<_Scalar>::expand() noexcept {
-  return VectorType(length_ * stride_, 1, data_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  expand
-///
-template <typename _Scalar>
-const DenseVector<_Scalar> DenseVector<_Scalar>::expand() const noexcept {
-  return VectorType(length_ * stride_, 1, data_);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla
