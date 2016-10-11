@@ -1,5 +1,10 @@
 # The CMake setting of 'check/'
 
+# Break
+if(NOT MCNLA_BUILD_TEST)
+  return()
+endif()
+
 # GTEST
 set(GTEST_ROOT "" CACHE PATH "The root path of Google Test.")
 find_package(GTest REQUIRED)

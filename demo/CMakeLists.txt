@@ -1,5 +1,10 @@
 # The CMake setting of 'demo/'
 
+# Break
+if(NOT MCNLA_BUILD_DEMO)
+  return()
+endif()
+
 # Set target
 add_executable(demo demo.cpp)
 target_include_directories(demo PUBLIC "${PROJECT_BINARY_DIR}/include")

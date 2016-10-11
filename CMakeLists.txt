@@ -14,21 +14,11 @@ set(MCNLA_VERSION_PATCH 0)
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# Enable testing
-enable_testing()
-
-# Check compiler support
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
-  include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  if(NOT COMPILER_SUPPORTS_CXX11)
-    message(
-      FATAL_ERROR
-      "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. "
-      "Please use a diffferent C++ compiler."
-    )
-  endif()
-endif()
+# Set options
+option(MCNLA_USE_MKL        "Uses MKL as BLAS and LAPACK." "OFF")
+option(MCNLA_BUILD_DEMO     "Build demo codes."            "ON")
+option(MCNLA_BUILD_TEST     "Build test codes."            "ON")
+option(MCNLA_BUILD_DOC      "Build documentation."         "ON")
 
 # Set word size
 set(MCNLA_SYSTEM_INT_SIZE 32 CACHE PATH "The system integer size.")
@@ -40,13 +30,29 @@ else()
   message(SEND_ERROR "Unsupport system integer size! (Only support 32 or 64.)")
 endif()
 
+# Check compiler support
+if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
+  include(CheckCXXCompilerFlag)
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  if(NOT COMPILER_SUPPORTS_CXX11)
+    message(
+      FATAL_ERROR
+      "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. "
+      "Please use a diffferent C++ compiler."
+    )
+  endif()
+endif()
+
+# Enable testing
+if(MCNLA_BUILD_TEST)
+  enable_testing()
+endif()
+
 # Add subdirectories
 add_subdirectory(cmake)
 add_subdirectory(doxygen)
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
-  add_subdirectory(demo)
-  add_subdirectory(check)
-endif()
+add_subdirectory(demo)
+add_subdirectory(check)
 
 # Create configure files
 file(

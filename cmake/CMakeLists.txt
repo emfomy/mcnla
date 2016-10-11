@@ -1,11 +1,20 @@
 # The CMake setting of 'cmake/'
 
+# Set options
+if(MCNLA_USE_MKL)
+  set(DEFS ${DEFS} "MCNLA_USE_MKL")
+endif()
+
+# Break
+if(NOT MCNLA_BUILD_DEMO AND NOT MCNLA_BUILD_TEST)
+  return()
+endif()
+
 # Set complier flags
 set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic" PARENT_SCOPE)
 # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic" PARENT_SCOPE)
 
 # MKL
-option(MCNLA_USE_MKL "Uses MKL as BLAS and LAPACK." "OFF")
 if(MCNLA_USE_MKL)
   set(DEFS ${DEFS} "MCNLA_USE_MKL")
 
