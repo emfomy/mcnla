@@ -148,6 +148,7 @@ class DenseMatrix
   // Gets information
   inline index_t getPitch() const noexcept;
   inline bool isShrunk() const noexcept;
+  inline bool isSquare() const noexcept;
 
   // Gets element
   inline       ScalarType& getElem( const index_t rowidx, const index_t colidx ) noexcept;
