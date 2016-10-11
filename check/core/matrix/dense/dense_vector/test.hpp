@@ -28,9 +28,9 @@ class DenseVectorTest : public testing::Test {
 };
 
 template <typename _Scalar>
-class DenseVectorTest_Length8_Stride1 : public DenseVectorTest<_Scalar, 8, 1, 10> {};
-TYPED_TEST_CASE(DenseVectorTest_Length8_Stride1, MyTypes);
+class DenseVectorSize_Length8_Stride1 : public DenseVectorTest<_Scalar, 8, 1, 10> {};
+TYPED_TEST_CASE(DenseVectorSize_Length8_Stride1, MyTypes);
 
 template <typename _Scalar>
-class DenseVectorTest_Length8_Stride3 : public DenseVectorTest<_Scalar, 8, 3, 30> {};
-TYPED_TEST_CASE(DenseVectorTest_Length8_Stride3, MyTypes);
+class DenseVectorSize_Length8_Stride3 : public DenseVectorTest<_Scalar, 8, 3, 30> {};
+TYPED_TEST_CASE(DenseVectorSize_Length8_Stride3, MyTypes);

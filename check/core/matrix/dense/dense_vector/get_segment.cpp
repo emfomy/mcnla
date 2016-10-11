@@ -1,7 +1,7 @@
 #include "test.hpp"
 #include <queue>
 
-TYPED_TEST(DenseVectorTest_Length8_Stride1, GetSegment) {
+TYPED_TEST(DenseVectorSize_Length8_Stride1, GetSegment) {
   auto stride   = this->stride_;
   auto capacity = this->capacity_;
   auto vec      = this->vec_;
@@ -44,7 +44,7 @@ TYPED_TEST(DenseVectorTest_Length8_Stride1, GetSegment) {
 }
 
 
-TYPED_TEST(DenseVectorTest_Length8_Stride3, GetSegment) {
+TYPED_TEST(DenseVectorSize_Length8_Stride3, GetSegment) {
   auto stride   = this->stride_;
   auto capacity = this->capacity_;
   auto vec      = this->vec_;
