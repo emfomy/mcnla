@@ -60,7 +60,7 @@ inline void alltoall(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
-/// @brief  All processes send data to all. (in-place version)
+/// @brief  All processes send data to all (in-place version).
 ///
 /// @attention  The size of @a buffer should be the same for all MPI nodes.
 /// @attention  @a buffer should be shrunk.

@@ -67,7 +67,7 @@ class Parameters {
   index_t rank_ = 0;
 
   /// The oversampling dimension.
-  index_t over_rank_ = 0;
+  index_t over_rank_ = 12;
 
   /// The number of random sketches per MPI node.
   index_t num_sketch_each_ = 0;
