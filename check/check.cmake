@@ -18,8 +18,17 @@ function(add_check checkname checkcomment)
   set_target_properties(${checktarget} PROPERTIES LINK_FLAGS    ${LNKFLGS})
 
   # Add test
-  add_test(NAME ${checkname} COMMAND ${checktarget})
-  set(CMAKE_CHECK_TARGETS ${CMAKE_CHECK_TARGETS} ${checktarget})
-  set(CMAKE_CHECK_TARGETS ${CMAKE_CHECK_TARGETS} PARENT_SCOPE)
+  # add_test(NAME ${checkname} COMMAND ${checktarget})
+  gtest_add_tests(${checktarget} "" check.cpp)
+  set(CMAKE_CHECK_TARGETS ${CMAKE_CHECK_TARGETS} ${checktarget} PARENT_SCOPE)
+
+  # Add rule
+  add_custom_target(
+    check_${checkname}
+    COMMAND ./${checktarget}
+    DEPENDS ${checktarget}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Check test ${checkname}"
+  )
 
 endfunction(add_check)
