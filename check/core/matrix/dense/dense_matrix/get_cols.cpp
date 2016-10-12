@@ -12,13 +12,13 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCols) {
 
   auto block = mat.getCols({col0, col0+cols});
 
-  EXPECT_EQ(block.getNrow(),   nrow);
-  EXPECT_EQ(block.getNcol(),   cols);
-  EXPECT_EQ(block.getNelem(),  nrow * cols);
-  EXPECT_EQ(block.getSizes(),  std::make_pair(nrow, cols));
-  EXPECT_EQ(block.getPitch(),  pitch);
+  EXPECT_EQ(block.getNrow(),  nrow);
+  EXPECT_EQ(block.getNcol(),  cols);
+  EXPECT_EQ(block.getNelem(), nrow * cols);
+  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
+  EXPECT_EQ(block.getPitch(), pitch);
 
-  EXPECT_FALSE(block.isShrunk());
+  EXPECT_TRUE(block.isShrunk());
   EXPECT_FALSE(block.isSquare());
 
   EXPECT_EQ(block.getCapacity(), capacity - col0*pitch);
@@ -64,11 +64,11 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCols) {
 
   auto block = mat.getCols({col0, col0+cols});
 
-  EXPECT_EQ(block.getNrow(),   nrow);
-  EXPECT_EQ(block.getNcol(),   cols);
-  EXPECT_EQ(block.getNelem(),  nrow * cols);
-  EXPECT_EQ(block.getSizes(),  std::make_pair(nrow, cols));
-  EXPECT_EQ(block.getPitch(),  pitch);
+  EXPECT_EQ(block.getNrow(),  nrow);
+  EXPECT_EQ(block.getNcol(),  cols);
+  EXPECT_EQ(block.getNelem(), nrow * cols);
+  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
+  EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
   EXPECT_FALSE(block.isSquare());
@@ -116,11 +116,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCols) {
 
   auto block = mat.getCols({col0, col0+cols});
 
-  EXPECT_EQ(block.getNrow(),   nrow);
-  EXPECT_EQ(block.getNcol(),   cols);
-  EXPECT_EQ(block.getNelem(),  nrow * cols);
-  EXPECT_EQ(block.getSizes(),  std::make_pair(nrow, cols));
-  EXPECT_EQ(block.getPitch(),  pitch);
+  EXPECT_EQ(block.getNrow(),  nrow);
+  EXPECT_EQ(block.getNcol(),  cols);
+  EXPECT_EQ(block.getNelem(), nrow * cols);
+  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
+  EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
   EXPECT_FALSE(block.isSquare());
@@ -168,11 +168,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCols) {
 
   auto block = mat.getCols({col0, col0+cols});
 
-  EXPECT_EQ(block.getNrow(),   nrow);
-  EXPECT_EQ(block.getNcol(),   cols);
-  EXPECT_EQ(block.getNelem(),  nrow * cols);
-  EXPECT_EQ(block.getSizes(),  std::make_pair(nrow, cols));
-  EXPECT_EQ(block.getPitch(),  pitch);
+  EXPECT_EQ(block.getNrow(),  nrow);
+  EXPECT_EQ(block.getNcol(),  cols);
+  EXPECT_EQ(block.getNelem(), nrow * cols);
+  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
+  EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
   EXPECT_FALSE(block.isSquare());

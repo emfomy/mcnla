@@ -1,3 +1,5 @@
+#pragma once
+
 #include <gtest/gtest.h>
 #include <mcnla.hpp>
 
@@ -28,9 +30,9 @@ class DenseVectorTest : public testing::Test {
 };
 
 template <typename _Scalar>
-class DenseVectorSize_Length8_Stride1 : public DenseVectorTest<_Scalar, 8, 1, 10> {};
-TYPED_TEST_CASE(DenseVectorSize_Length8_Stride1, MyTypes);
+class DenseVectorTest_Size8_Stride1 : public DenseVectorTest<_Scalar, 8, 1, 10> {};
+TYPED_TEST_CASE(DenseVectorTest_Size8_Stride1, MyTypes);
 
 template <typename _Scalar>
-class DenseVectorSize_Length8_Stride3 : public DenseVectorTest<_Scalar, 8, 3, 30> {};
-TYPED_TEST_CASE(DenseVectorSize_Length8_Stride3, MyTypes);
+class DenseVectorTest_Size8_Stride3 : public DenseVectorTest<_Scalar, 8, 3, 30> {};
+TYPED_TEST_CASE(DenseVectorTest_Size8_Stride3, MyTypes);

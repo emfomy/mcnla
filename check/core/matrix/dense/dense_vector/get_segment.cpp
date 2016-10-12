@@ -1,7 +1,7 @@
 #include "test.hpp"
 #include <queue>
 
-TYPED_TEST(DenseVectorSize_Length8_Stride1, GetSegment) {
+TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
   auto stride   = this->stride_;
   auto capacity = this->capacity_;
   auto vec      = this->vec_;
@@ -11,10 +11,10 @@ TYPED_TEST(DenseVectorSize_Length8_Stride1, GetSegment) {
 
   auto segment = vec.getSegment({idx0, idx0+idxs});
 
-  EXPECT_EQ(segment.getLength(),   idxs);
-  EXPECT_EQ(segment.getNelem(),    idxs);
-  EXPECT_EQ(segment.getSizes(),    idxs);
-  EXPECT_EQ(segment.getStride(),   stride);
+  EXPECT_EQ(segment.getLength(), idxs);
+  EXPECT_EQ(segment.getNelem(),  idxs);
+  EXPECT_EQ(segment.getSizes(),  idxs);
+  EXPECT_EQ(segment.getStride(), stride);
 
   EXPECT_TRUE(segment.isShrunk());
 
@@ -44,7 +44,7 @@ TYPED_TEST(DenseVectorSize_Length8_Stride1, GetSegment) {
 }
 
 
-TYPED_TEST(DenseVectorSize_Length8_Stride3, GetSegment) {
+TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
   auto stride   = this->stride_;
   auto capacity = this->capacity_;
   auto vec      = this->vec_;
@@ -54,10 +54,10 @@ TYPED_TEST(DenseVectorSize_Length8_Stride3, GetSegment) {
 
   auto segment = vec.getSegment({idx0, idx0+idxs});
 
-  EXPECT_EQ(segment.getLength(),   idxs);
-  EXPECT_EQ(segment.getNelem(),    idxs);
-  EXPECT_EQ(segment.getSizes(),    idxs);
-  EXPECT_EQ(segment.getStride(),   stride);
+  EXPECT_EQ(segment.getLength(), idxs);
+  EXPECT_EQ(segment.getNelem(),  idxs);
+  EXPECT_EQ(segment.getSizes(),  idxs);
+  EXPECT_EQ(segment.getStride(), stride);
 
   EXPECT_FALSE(segment.isShrunk());
 

@@ -24,3 +24,17 @@ add_custom_target(
   DEPENDS ${CMAKE_CHECK_TARGETS}
   COMMENT "Running tests"
 )
+
+# Add rule 'build_test'
+add_custom_target(
+  build_test
+  DEPENDS ${CMAKE_CHECK_TARGETS}
+  COMMENT "Building tests"
+)
+
+# Add rule 'run_test'
+add_custom_target(
+  run_test
+  DEPENDS ${CMAKE_CHECK_RULES}
+  COMMENT "Running tests"
+)

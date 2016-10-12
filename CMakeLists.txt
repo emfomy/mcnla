@@ -15,10 +15,10 @@ set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set options
-option(MCNLA_USE_MKL        "Uses MKL as BLAS and LAPACK." "OFF")
-option(MCNLA_BUILD_DEMO     "Build demo codes."            "ON")
-option(MCNLA_BUILD_TEST     "Build test codes."            "ON")
-option(MCNLA_BUILD_DOC      "Build documentation."         "ON")
+option(MCNLA_USE_MKL    "Uses MKL as BLAS and LAPACK." "OFF")
+option(MCNLA_BUILD_DEMO "Build demo codes."            "ON")
+option(MCNLA_BUILD_TEST "Build test codes."            "ON")
+option(MCNLA_BUILD_DOC  "Build documentation."         "ON")
 
 # Set word size
 set(MCNLA_SYSTEM_INT_SIZE 32 CACHE PATH "The system integer size.")
