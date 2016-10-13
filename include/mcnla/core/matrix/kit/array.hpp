@@ -46,7 +46,7 @@ class Array : public std::shared_ptr<std::valarray<_Type>> {
 
   // Constructors
   inline Array() noexcept;
-  inline Array( const index_t size ) noexcept;
+  inline Array( const index_t size, const index_t offset = 0 ) noexcept;
   inline Array( const BaseType &ptr, const index_t offset = 0 ) noexcept;
   inline Array( const Array &other ) noexcept;
   inline Array( Array &&other ) noexcept;

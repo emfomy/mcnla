@@ -92,7 +92,7 @@ class DenseMatrix
 
   using ScalarType        = _Scalar;
   using RealScalarType    = RealType<_Scalar>;
-  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
+  using ValueArrayType    = Array<ScalarType>;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -133,7 +133,7 @@ class DenseMatrix
   inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const ValuePtrType &value ) noexcept;
+  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const ValueArrayType &value ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                       const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const DenseMatrix &other ) noexcept;
@@ -148,6 +148,7 @@ class DenseMatrix
   // Gets information
   inline index_t getPitch() const noexcept;
   inline bool isShrunk() const noexcept;
+  inline bool isSquare() const noexcept;
 
   // Gets element
   inline       ScalarType& getElem( const index_t rowidx, const index_t colidx ) noexcept;

@@ -149,8 +149,6 @@ class DenseVector
   // Gets segment
   inline       VectorType getSegment( const IdxRange range ) noexcept;
   inline const VectorType getSegment( const IdxRange range ) const noexcept;
-  inline       VectorType expand() noexcept;
-  inline const VectorType expand() const noexcept;
 
 };
 

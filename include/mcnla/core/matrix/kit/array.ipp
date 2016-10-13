@@ -33,10 +33,11 @@ Array<_Type>::Array() noexcept
 ///
 template <typename _Type>
 Array<_Type>::Array(
-    const index_t capacity
+    const index_t capacity,
+    const index_t offset
 ) noexcept
   : BaseType(new std::valarray<_Type>(capacity)),
-    offset_(0) {}
+    offset_(offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.

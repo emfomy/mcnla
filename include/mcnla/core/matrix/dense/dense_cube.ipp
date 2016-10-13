@@ -144,7 +144,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
     const index_t npage,
     const index_t pitch0,
     const index_t pitch1,
-    const ValuePtrType &value
+    const ValueArrayType &value
 ) noexcept
   : CubeBaseType(nrow, ncol, npage),
     DenseBaseType(value),
@@ -331,8 +331,7 @@ index_t DenseCube<_Scalar, _layout>::getPos(
     const index_t colidx,
     const index_t pageidx
 ) const noexcept {
-  return (isColMajor(_layout) ? (rowidx + colidx * pitch0_) : (colidx + rowidx * pitch0_))
-         + pageidx * pitch0_ * pitch1_;
+  return (isColMajor(_layout) ? (rowidx + colidx * pitch0_) : (colidx + rowidx * pitch0_)) + pageidx * pitch0_ * pitch1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -649,9 +648,9 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlock(
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
   if ( isColMajor(_layout) ) {
-    return MatrixType(nrow_, pitch1_ * npage_, pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(nrow_, pitch1_ * npage_ - (pitch0_-size0_), pitch0_, data_, getPos(0, 0, 0));
   } else {
-    return MatrixType(pitch1_ * npage_, ncol_, pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(pitch1_ * npage_ - (pitch0_-size0_), ncol_, pitch0_, data_, getPos(0, 0, 0));
   }
 }
 
@@ -661,9 +660,9 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() const noexcept {
   if ( isColMajor(_layout) ) {
-    return MatrixType(nrow_, pitch1_ * npage_, pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(nrow_, pitch1_ * npage_ - (pitch0_-size0_), pitch0_, data_, getPos(0, 0, 0));
   } else {
-    return MatrixType(pitch1_ * npage_, ncol_, pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(pitch1_ * npage_ - (pitch0_-size0_), ncol_, pitch0_, data_, getPos(0, 0, 0));
   }
 }
 
@@ -898,7 +897,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
-  return VectorType(pitch0_ * pitch1_ * npage_, 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * npage_ - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -906,7 +905,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexcept {
-  return VectorType(pitch0_ * pitch1_ * npage_, 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * npage_ - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

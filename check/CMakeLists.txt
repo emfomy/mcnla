@@ -1,28 +1,32 @@
 # The CMake setting of 'check/'
 
-# CPPUNIT root
-set(CPPUNIT_ROOT "" CACHE PATH "The root path of CppUnit.")
-
-# CPPUNIT include
-find_path(CPPUNIT_INCLUDE NAMES cppunit PATHS ${CPPUNIT_ROOT})
-if(CPPUNIT_INCLUDE STREQUAL CPPUNIT_INCLUDE-NOTFOUND)
-  message(FATAL_ERROR "Could NOT find CppUnit headers.")
+# Break
+if(NOT MCNLA_BUILD_TEST)
+  return()
 endif()
-set(INCS ${INCS} "${CPPUNIT_INCLUDE}")
-message(STATUS "Found CppUnit headers.")
 
-# CPPUNIT library
-find_library(CPPUNIT_LIBRARY NAMES cppunit PATHS ${CPPUNIT_ROOT})
-if(CPPUNIT_LIBRARY STREQUAL CPPUNIT_LIBRARY-NOTFOUND)
-  message(FATAL_ERROR "Could NOT find CppUnit libraries.")
+# GTEST
+set(GTEST_ROOT "" CACHE PATH "The root path of Google Test.")
+if(${CMAKE_VERSION} VERSION_LESS 3.1)
+  find_package(GTest_ 1.8 REQUIRED)
+else()
+  find_package(GTest  1.8 REQUIRED)
 endif()
-set(LIBS ${LIBS} "${CPPUNIT_LIBRARY}")
-message(STATUS "Found CppUnit libraries.")
+if(GTEST_FOUND)
+  set(INCS ${INCS} "${GTEST_INCLUDE_DIRS}")
+  set(LIBS ${LIBS} "${GTEST_BOTH_LIBRARIES}")
+endif()
 
 # Add check folders
 include(check.cmake)
-add_check(core_matrix "Matrix Module test")
-add_check(core_blas   "BLAS Module test")
+add_check(core/matrix/dense "Dense Container Module test")
+
+# Add rule 'build_test'
+add_custom_target(
+  build_test
+  DEPENDS ${CMAKE_CHECK_TARGETS}
+  COMMENT "Building tests"
+)
 
 # Add rule 'check'
 add_custom_target(

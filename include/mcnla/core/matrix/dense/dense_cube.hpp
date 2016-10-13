@@ -97,7 +97,7 @@ class DenseCube
 
   using ScalarType        = _Scalar;
   using RealScalarType    = RealType<_Scalar>;
-  using ValuePtrType      = std::shared_ptr<std::valarray<ScalarType>>;
+  using ValueArrayType    = Array<ScalarType>;
 
   using VectorType        = DenseVector<ScalarType>;
   using RealVectorType    = DenseVector<RealScalarType>;
@@ -150,7 +150,7 @@ class DenseCube
   inline DenseCube( const std::tuple<index_t, index_t, index_t> sizes,
                     const std::pair<index_t, index_t> pitches, const index_t capacity ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
-                    const index_t pitch0, const index_t pitch1, const ValuePtrType &value ) noexcept;
+                    const index_t pitch0, const index_t pitch1, const ValueArrayType &value ) noexcept;
   inline DenseCube( const index_t nrow, const index_t ncol, const index_t npage,
                     const index_t pitch0, const index_t pitch1, const DataType &data, const index_t offset = 0 ) noexcept;
   inline DenseCube( const DenseCube &other ) noexcept;
