@@ -41,9 +41,9 @@ inline void gemm(
   constexpr int dimb = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 1 : 0;
   constexpr int dimc = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 0 : 1;
 
-  assert(c.getNrow()                   == a.template getNrow<_transa>());
-  assert(c.getNcol()                   == b.template getNcol<_transb>());
-  assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
+  mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
+  mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
+  mcnla_assert_eq(a.template getNcol<_transa>(), b.template getNrow<_transb>());
 
   blas::memset0(c);
   if ( !isTranspose(_transb) ) {
@@ -71,9 +71,9 @@ inline void gemm(
   constexpr int dimb = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 0 : 1;
   constexpr int dimc = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 1 : 0;
 
-  assert(c.getNcol()                   == a.template getNcol<_transb>());
-  assert(c.getNrow()                   == b.template getNrow<_transa>());
-  assert(a.template getNrow<_transb>() == b.template getNcol<_transa>());
+  mcnla_assert_eq(c.getNcol(),                   a.template getNcol<_transb>());
+  mcnla_assert_eq(c.getNrow(),                   b.template getNrow<_transa>());
+  mcnla_assert_eq(a.template getNrow<_transb>(), b.template getNcol<_transa>());
 
   blas::memset0(c);
   if ( !isTranspose(_transb) ) {

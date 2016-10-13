@@ -15,6 +15,7 @@ endif()
 if(GTEST_FOUND)
   set(INCS ${INCS} "${GTEST_INCLUDE_DIRS}")
   set(LIBS ${LIBS} "${GTEST_BOTH_LIBRARIES}")
+  set(DEFS ${DEFS} "MCNLA_USE_GTEST")
 endif()
 
 # Add check folders

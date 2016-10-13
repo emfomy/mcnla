@@ -10,7 +10,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonalLower) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   const mcnla::index_t idx = 3;
 
@@ -58,7 +58,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonalLower) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   const mcnla::index_t idx = 3;
 
@@ -106,7 +106,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonalLower) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   const mcnla::index_t idx = 3;
 
@@ -154,7 +154,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonalLower) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   const mcnla::index_t idx = 3;
 

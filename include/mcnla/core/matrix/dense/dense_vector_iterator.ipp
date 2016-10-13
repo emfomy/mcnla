@@ -36,7 +36,7 @@ std::ostream& operator<< ( std::ostream &out, const DenseVectorIteratorBase<__Sc
 ///
 template <typename _Scalar, class _Vector>
 _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
+  mcnla_assert_gelt(itidx_, 0, container_->getNelem());
   return container_->getValue()[getPos()];
 }
 

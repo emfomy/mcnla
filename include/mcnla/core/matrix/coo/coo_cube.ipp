@@ -236,9 +236,9 @@ _Scalar CooCube<_Scalar, _layout>::getElem(
     const index_t colidx,
     const index_t pageidx
 ) const noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(rowidx,  0, nrow_);
+  mcnla_assert_gelt(colidx,  0, ncol_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
   auto it = find(rowidx, colidx, pageidx);
   return (it != this->end()) ? it.getValue() : 0;
 }
@@ -264,9 +264,9 @@ index_t CooCube<_Scalar, _layout>::getPos(
     const index_t colidx,
     const index_t pageidx
 ) const noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(rowidx,  0, nrow_);
+  mcnla_assert_gelt(colidx,  0, ncol_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
   auto it = find(rowidx, colidx, pageidx);
   return (it != this->end()) ? it.getPos() : -1;
 }
@@ -282,10 +282,10 @@ void CooCube<_Scalar, _layout>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  assert(pagerange.begin >= 0 && pagerange.end <= npage_ && pagerange.getLength() >= 0);
-  assert(isSorted());
+  mcnla_assert_gele(rowrange.begin,  rowrange.end,  nrow_);  mcnla_assert_ge(rowrange.getLength(),  0);
+  mcnla_assert_gele(colrange.begin,  colrange.end,  ncol_);  mcnla_assert_ge(colrange.getLength(),  0);
+  mcnla_assert_gele(pagerange.begin, pagerange.end, npage_); mcnla_assert_ge(pagerange.getLength(), 0);
+  mcnla_assert_true(isSorted());
   auto begintuple = isColMajor(_layout) ? makeCooTuple(rowrange.begin, colrange.begin, pagerange.begin)
                                         : makeCooTuple(colrange.begin, rowrange.begin, pagerange.begin);
   auto endtuple   = isColMajor(_layout) ? makeCooTuple(rowrange.end, colrange.end, pagerange.end)
@@ -305,10 +305,10 @@ typename CooCube<_Scalar, _layout>::IteratorType CooCube<_Scalar, _layout>::find
     const index_t colidx,
     const index_t pageidx
 ) noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
-  assert(isSorted());
+  mcnla_assert_gelt(rowidx,  0, nrow_);
+  mcnla_assert_gelt(colidx,  0, ncol_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
+  mcnla_assert_true(isSorted());
   auto tuple = isColMajor(_layout) ? makeCooTuple(rowidx, colidx, pageidx) : makeCooTuple(colidx, rowidx, pageidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
@@ -323,10 +323,10 @@ typename CooCube<_Scalar, _layout>::ConstIteratorType CooCube<_Scalar, _layout>:
     const index_t colidx,
     const index_t pageidx
 ) const noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
-  assert(isSorted());
+  mcnla_assert_gelt(rowidx,  0, nrow_);
+  mcnla_assert_gelt(colidx,  0, ncol_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
+  mcnla_assert_true(isSorted());
   auto tuple = isColMajor(_layout) ? makeCooTuple(rowidx, colidx, pageidx) : makeCooTuple(colidx, rowidx, pageidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
@@ -381,7 +381,9 @@ void CooCube<_Scalar, _layout>::resize(
     const index_t ncol,
     const index_t npage
 ) noexcept {
-  assert(nrow >= 0 && ncol >= 0 && npage >= 0);
+  mcnla_assert_ge(nrow,  0);
+  mcnla_assert_ge(ncol,  0);
+  mcnla_assert_ge(npage, 0);
   nrow_ = nrow;
   ncol_ = ncol;
   npage_ = npage;
@@ -394,7 +396,7 @@ template <typename _Scalar, Layout _layout>
 CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getPage(
     const index_t pageidx
 ) noexcept {
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(pageidx, pageidx, npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos);
 }
@@ -406,7 +408,7 @@ template <typename _Scalar, Layout _layout>
 const CooMatrix<_Scalar, _layout> CooCube<_Scalar, _layout>::getPage(
     const index_t pageidx
 ) const noexcept {
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(pageidx, pageidx, npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooMatrix<_Scalar, _layout>(nrow_, ncol_, nnz, data_.template getReduced<0, 1>(), pos);
 }
@@ -422,8 +424,8 @@ CooVector<_Scalar> CooCube<_Scalar, _layout>::getCol(
     const index_t pageidx
 ) noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(colidx,  0, ncol_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
@@ -437,8 +439,8 @@ const CooVector<_Scalar> CooCube<_Scalar, _layout>::getCol(
     const index_t pageidx
 ) const noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(colidx,  0, ncol_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
@@ -454,8 +456,8 @@ CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
     const index_t pageidx
 ) noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(rowidx,  0, nrow_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }
@@ -469,8 +471,8 @@ const CooVector<_Scalar> CooCube<_Scalar, _layout>::getRow(
     const index_t pageidx
 ) const noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(pageidx >= 0 && pageidx < npage_);
+  mcnla_assert_gelt(rowidx,  0, nrow_);
+  mcnla_assert_gelt(pageidx, 0, npage_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx}, {0, ncol_}, {pageidx, pageidx}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }

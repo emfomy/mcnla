@@ -38,7 +38,8 @@ MatrixBase<_Derived>::MatrixBase(
 ) noexcept
   : nrow_(nrow),
     ncol_(ncol) {
-  assert(nrow_ >= 0 && ncol_ >= 0);
+  mcnla_assert_ge(nrow_, 0);
+  mcnla_assert_ge(ncol_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -41,7 +41,9 @@ CubeBase<_Derived>::CubeBase(
   : nrow_(nrow),
     ncol_(ncol),
     npage_(npage) {
-  assert(nrow_ >= 0 && ncol_ >= 0 && npage >= 0);
+  mcnla_assert_ge(nrow_,  0);
+  mcnla_assert_ge(ncol_,  0);
+  mcnla_assert_ge(npage_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -97,7 +97,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::initializeImpl() noexcept {
 ///
 template <class _Matrix>
 void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
-  assert(parameters_.isInitialized());
+  mcnla_assert_true(parameters_.isInitialized());
 
   const auto mpi_comm = parameters_.mpi_comm;
   const auto mpi_size = parameters_.mpi_size;
@@ -235,7 +235,7 @@ index_t KolmogorovNagumoTypeIntegrator<_Matrix>::getIterImpl() const noexcept {
 template <class _Matrix>
 DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
     KolmogorovNagumoTypeIntegrator<_Matrix>::getCubeQImpl() noexcept {
-  assert(parameters_.isInitialized());
+  mcnla_assert_true(parameters_.isInitialized());
   return cube_q_cut_;
 }
 
@@ -245,7 +245,7 @@ DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::
 template <class _Matrix>
 const DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
     KolmogorovNagumoTypeIntegrator<_Matrix>::getCubeQImpl() const noexcept {
-  assert(parameters_.isInitialized());
+  mcnla_assert_true(parameters_.isInitialized());
   return cube_q_cut_;
 }
 
@@ -255,7 +255,7 @@ const DenseCube<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, La
 template <class _Matrix>
 DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
     KolmogorovNagumoTypeIntegrator<_Matrix>::getMatrixQcImpl() noexcept {
-  assert(parameters_.isInitialized());
+  mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_cut_;
 }
 
@@ -265,7 +265,7 @@ DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout
 template <class _Matrix>
 const DenseMatrix<typename KolmogorovNagumoTypeIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
     KolmogorovNagumoTypeIntegrator<_Matrix>::getMatrixQcImpl() const noexcept {
-  assert(parameters_.isInitialized());
+  mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_cut_;
 }
 

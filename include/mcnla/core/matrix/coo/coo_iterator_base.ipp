@@ -77,7 +77,7 @@ template <class _Derived>
 bool CooIteratorBase<_Derived>::operator==(
     const CooIteratorBase &other
 ) const noexcept {
-  assert(container_ == other.container_);
+  mcnla_assert_eq(container_, other.container_);
   return (itidx_ == other.itidx_);
 }
 
@@ -98,7 +98,7 @@ template <class _Derived>
 bool CooIteratorBase<_Derived>::operator>(
     const CooIteratorBase &other
 ) const noexcept {
-  assert(container_ == other.container_);
+  mcnla_assert_eq(container_, other.container_);
   return (itidx_ > other.itidx_);
 }
 
@@ -109,7 +109,7 @@ template <class _Derived>
 bool CooIteratorBase<_Derived>::operator<(
     const CooIteratorBase &other
 ) const noexcept {
-  assert(container_ == other.container_);
+  mcnla_assert_eq(container_, other.container_);
   return (itidx_ < other.itidx_);
 }
 
@@ -138,7 +138,7 @@ bool CooIteratorBase<_Derived>::operator>=(
 ///
 template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::operator++() noexcept {
-  assert(container_ != nullptr);
+  mcnla_assert_ne(container_, nullptr);
 
   const auto nnz = container_->getNnz();
   if ( ++itidx_ > nnz ) {
@@ -152,7 +152,7 @@ _Derived& CooIteratorBase<_Derived>::operator++() noexcept {
 ///
 template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::operator--() noexcept {
-  assert(container_ != nullptr);
+  mcnla_assert_ne(container_, nullptr);
 
   if ( --itidx_ < 0 ) {
     itidx_ = 0;
@@ -185,8 +185,8 @@ _Derived CooIteratorBase<_Derived>::operator--( int ) noexcept {
 ///
 template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
-  assert(container_ != nullptr);
-  assert(num >= 0);
+  mcnla_assert_ne(container_, nullptr);
+  mcnla_assert_ge(num, 0);
 
   const auto nnz = container_->getNnz();
   if ( (itidx_+=num) > nnz ) {
@@ -200,8 +200,8 @@ _Derived& CooIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
 ///
 template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
-  assert(container_ != nullptr);
-  assert(num >= 0);
+  mcnla_assert_ne(container_, nullptr);
+  mcnla_assert_ge(num, 0);
 
   if ( (itidx_-=num) < 0 ) {
     itidx_ = 0;
@@ -232,7 +232,7 @@ _Derived CooIteratorBase<_Derived>::operator-( const index_t num ) const noexcep
 ///
 template <class _Derived>
 index_t CooIteratorBase<_Derived>::operator-( const CooIteratorBase &other ) const noexcept {
-  assert(container_ != nullptr);
+  mcnla_assert_ne(container_, nullptr);
   return (this->itidx_ - other.itidx_);
 }
 
@@ -262,7 +262,7 @@ index_t CooIteratorBase<_Derived>::getItIdx() const noexcept {
 ///
 template <class _Derived>
 typename CooIteratorBase<_Derived>::ScalarType& CooIteratorBase<_Derived>::getValue() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNnz());
+  mcnla_assert_gelt(itidx_, 0, container_->getNnz());
   return container_->getValue()[itidx_];
 }
 
@@ -273,7 +273,7 @@ typename CooIteratorBase<_Derived>::ScalarType& CooIteratorBase<_Derived>::getVa
 ///
 template <class _Derived> template <index_t _dim>
 typename CooIteratorBase<_Derived>::IndexType& CooIteratorBase<_Derived>::getIdx() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNnz());
+  mcnla_assert_gelt(itidx_, 0, container_->getNnz());
   return container_->getIdx<_dim>()[itidx_];
 }
 
@@ -284,7 +284,7 @@ typename CooIteratorBase<_Derived>::IndexType& CooIteratorBase<_Derived>::getIdx
 ///
 template <class _Derived>
 typename CooIteratorBase<_Derived>::TupleType CooIteratorBase<_Derived>::getTuple() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNnz());
+  mcnla_assert_gelt(itidx_, 0, container_->getNnz());
   return container_->getTuple(itidx_);
 }
 

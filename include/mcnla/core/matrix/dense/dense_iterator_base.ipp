@@ -67,7 +67,6 @@ _Derived& DenseIteratorBase<_Derived>::operator=(
 ///
 template <class _Derived>
 typename DenseIteratorBase<_Derived>::ScalarType& DenseIteratorBase<_Derived>::operator*() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
   return derived().getValue();
 }
 
@@ -78,7 +77,6 @@ typename DenseIteratorBase<_Derived>::ScalarType& DenseIteratorBase<_Derived>::o
 ///
 template <class _Derived>
 typename DenseIteratorBase<_Derived>::ScalarType* DenseIteratorBase<_Derived>::operator->() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
   return &(derived().getValue());
 }
 
@@ -89,7 +87,7 @@ template <class _Derived>
 bool DenseIteratorBase<_Derived>::operator==(
     const DenseIteratorBase &other
 ) const noexcept {
-  assert(container_ == other.container_);
+  mcnla_assert_eq(container_, other.container_);
   return (itidx_ == other.itidx_);
 }
 
@@ -110,7 +108,7 @@ template <class _Derived>
 bool DenseIteratorBase<_Derived>::operator>(
     const DenseIteratorBase &other
 ) const noexcept {
-  assert(container_ == other.container_);
+  mcnla_assert_eq(container_, other.container_);
   return (itidx_ > other.itidx_);
 }
 
@@ -121,7 +119,7 @@ template <class _Derived>
 bool DenseIteratorBase<_Derived>::operator<(
     const DenseIteratorBase &other
 ) const noexcept {
-  assert(container_ == other.container_);
+  mcnla_assert_eq(container_, other.container_);
   return (itidx_ < other.itidx_);
 }
 
@@ -150,7 +148,7 @@ bool DenseIteratorBase<_Derived>::operator>=(
 ///
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator++() noexcept {
-  assert(container_ != nullptr);
+  mcnla_assert_ne(container_, nullptr);
 
   const auto nelem = container_->getNelem();
   if ( ++itidx_ > nelem ) {
@@ -164,7 +162,7 @@ _Derived& DenseIteratorBase<_Derived>::operator++() noexcept {
 ///
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator--() noexcept {
-  assert(container_ != nullptr);
+  mcnla_assert_ne(container_, nullptr);
 
   if ( --itidx_ < 0 ) {
     itidx_ = 0;
@@ -197,8 +195,8 @@ _Derived DenseIteratorBase<_Derived>::operator--( int ) noexcept {
 ///
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator+=( const index_t num ) noexcept {
-  assert(container_ != nullptr);
-  assert(num >= 0);
+  mcnla_assert_ne(container_, nullptr);
+  mcnla_assert_ge(num, 0);
 
   const auto nelem = container_->getNelem();
   if ( (itidx_+=num) > nelem ) {
@@ -212,8 +210,8 @@ _Derived& DenseIteratorBase<_Derived>::operator+=( const index_t num ) noexcept 
 ///
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator-=( const index_t num ) noexcept {
-  assert(container_ != nullptr);
-  assert(num >= 0);
+  mcnla_assert_ne(container_, nullptr);
+  mcnla_assert_ge(num, 0);
 
   if ( (itidx_-=num) < 0 ) {
     itidx_ = 0;
@@ -244,7 +242,7 @@ _Derived DenseIteratorBase<_Derived>::operator-( const index_t num ) const noexc
 ///
 template <class _Derived>
 index_t DenseIteratorBase<_Derived>::operator-( const DenseIteratorBase &other ) const noexcept {
-  assert(container_ != nullptr);
+  mcnla_assert_ne(container_, nullptr);
   return (this->itidx_ - other.itidx_);
 }
 

@@ -76,9 +76,9 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
     return;
   }
 
-  assert(parameters_.isInitialized());
-  assert(matrix_a.getSizes()  == std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
-  assert(matrix_qc.getSizes() == std::make_pair(parameters_.getNrow(), parameters_.getDimSketch()));
+  mcnla_assert_true(parameters_.isInitialized());
+  mcnla_assert_eq(matrix_a.getSizes(),  std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
+  mcnla_assert_eq(matrix_qc.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getDimSketch()));
 
   // Vt := Q' * A
   blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qc, matrix_a, 0.0, matrix_vt_);
@@ -104,7 +104,7 @@ constexpr const char* StandardReconstructor<_Matrix>::getNameImpl() const noexce
 template <class _Matrix>
 const DenseVector<typename StandardReconstructor<_Matrix>::RealScalarType>&
     StandardReconstructor<_Matrix>::getVectorSImpl() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return vector_s_cut_;
 }
 
@@ -114,7 +114,7 @@ const DenseVector<typename StandardReconstructor<_Matrix>::RealScalarType>&
 template <class _Matrix>
 const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&
     StandardReconstructor<_Matrix>::getMatrixUImpl() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return matrix_u_cut_;
 }
 
@@ -124,7 +124,7 @@ const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::C
 template <class _Matrix>
 const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&
     StandardReconstructor<_Matrix>::getMatrixVtImpl() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return matrix_vt_cut_;
 }
 

@@ -41,7 +41,8 @@ GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
     ncol_(ncol),
     work_(query(nrow, ncol)),
     rwork_(is_real ? RealVectorType() : RealVectorType(5 * std::min(nrow, ncol))) {
-  assert(nrow_ > 0 && ncol_ > 0);
+  mcnla_assert_gt(nrow_, 0);
+  mcnla_assert_gt(ncol_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +78,8 @@ template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::resize(
     const index_t nrow, const index_t ncol
 ) noexcept {
-  assert(nrow > 0 && ncol > 0);
+  mcnla_assert_gt(nrow_, 0);
+  mcnla_assert_gt(ncol_, 0);
   nrow_ = nrow;
   ncol_ = ncol;
   work_ = VectorType(query(nrow, ncol));
@@ -152,29 +154,30 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
     _Matrix &u,
     _Matrix &vt
 ) noexcept {
-  assert(nrow_ > 0 && ncol_ > 0);
-  assert(a.getSizes() == std::make_pair(nrow_, ncol_));
+  mcnla_assert_gt(nrow_, 0);
+  mcnla_assert_gt(ncol_, 0);
+  mcnla_assert_eq(a.getSizes(), std::make_pair(nrow_, ncol_));
 
   if ( __jobu == 'A' ) {
-    assert(u.getSizes() == std::make_pair(nrow_, nrow_));
+    mcnla_assert_eq(u.getSizes(), std::make_pair(nrow_, nrow_));
   } else if ( __jobu == 'S' ) {
-    assert(u.getSizes() == std::make_pair(nrow_, std::min(nrow_, ncol_)));
+    mcnla_assert_eq(u.getSizes(), std::make_pair(nrow_, std::min(nrow_, ncol_)));
   }
 
   if ( __jobvt == 'A' ) {
-    assert(u.getSizes() == std::make_pair(ncol_, ncol_));
+    mcnla_assert_eq(u.getSizes(), std::make_pair(ncol_, ncol_));
   } else if ( __jobvt == 'S' ) {
-    assert(vt.getSizes() == std::make_pair(std::min(nrow_, ncol_), ncol_));
+    mcnla_assert_eq(vt.getSizes(), std::make_pair(std::min(nrow_, ncol_), ncol_));
   }
 
   if ( isColMajor(layout) ) {
-    assert(detail::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
-                           s.getValue(), u.getValue(), u.getPitch(), vt.getValue(), vt.getPitch(),
-                           work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
+    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
+                                  s.getValue(), u.getValue(), u.getPitch(), vt.getValue(), vt.getPitch(),
+                                  work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
   } else {
-    assert(detail::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
-                           s.getValue(), vt.getValue(), vt.getPitch(), u.getValue(), u.getPitch(),
-                           work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
+    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
+                                  s.getValue(), vt.getValue(), vt.getPitch(), u.getValue(), u.getPitch(),
+                                  work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
   }
 }
 
@@ -187,11 +190,11 @@ index_t GesvdDriver<_Matrix, _jobu, _jobvt>::query(
 ) const noexcept {
   ScalarType lwork;
   if ( isColMajor(layout) ) {
-    assert(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
-                           nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr) == 0);
+    mcnla_assert_eq(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
+                                  nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr), 0);
   } else {
-    assert(detail::gesvd(_jobvt, _jobu, ncol, nrow, nullptr, ncol, nullptr,
-                           nullptr, ncol, nullptr, nrow, &lwork, -1, nullptr) == 0);
+    mcnla_assert_eq(detail::gesvd(_jobvt, _jobu, ncol, nrow, nullptr, ncol, nullptr,
+                                  nullptr, ncol, nullptr, nrow, &lwork, -1, nullptr), 0);
   }
   return lwork;
 }

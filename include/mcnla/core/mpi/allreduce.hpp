@@ -38,9 +38,9 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::data_type;
-  assert(send.derived().isShrunk());
-  assert(recv.derived().isShrunk());
-  assert(send.derived().getSizes() == recv.derived().getSizes());
+  mcnla_assert_true(send.derived().isShrunk());
+  mcnla_assert_true(recv.derived().isShrunk());
+  mcnla_assert_eq(send.derived().getSizes(), recv.derived().getSizes());
   mpi_int_t size = send.derived().getNelem();
   MPI_Allreduce(send.getValue(), recv.getValue(), size, data_type, op, comm);
 }
@@ -59,7 +59,7 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::data_type;
-  assert(buffer.derived().isShrunk());
+  mcnla_assert_true(buffer.derived().isShrunk());
   mpi_int_t size = buffer.derived().getNelem();
   MPI_Allreduce(MPI_IN_PLACE, buffer.derived().getValue(), size, data_type, op, comm);
 }

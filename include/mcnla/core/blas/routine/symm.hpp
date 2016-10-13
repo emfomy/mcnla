@@ -33,16 +33,15 @@ inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
-  assert(a.getNrow()  == a.getNcol());
-  assert(b.getSizes() == c.getSizes());
+  mcnla_assert_eq(a.getNrow(),  a.getNcol());
+  mcnla_assert_eq(b.getSizes(), c.getSizes());
   if ( isLeftSide(_side) ) {
-    assert(a.getNrow()  == c.getNrow());
+    mcnla_assert_eq(a.getNrow(), c.getNrow());
   } else {
-    assert(a.getNcol()  == c.getNcol());
+    mcnla_assert_eq(a.getNcol(), c.getNcol());
   }
 
-  detail::symm(toSideChar(_side, _layout), toUploChar(_uplo, _layout),
-               c.template getSize<0>(), c.template getSize<1>(),
+  detail::symm(toSideChar(_side, _layout), toUploChar(_uplo, _layout), c.template getSize<0>(), c.template getSize<1>(),
                alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(), beta, c.getValue(), c.getPitch());
 }
 

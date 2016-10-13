@@ -10,7 +10,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonal) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   auto segment = mat.getDiagonal();
 
@@ -56,7 +56,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonal) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   auto segment = mat.getDiagonal();
 
@@ -102,7 +102,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonal) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   auto segment = mat.getDiagonal();
 
@@ -148,7 +148,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonal) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  ASSERT_TRUE(nrow > ncol);
+  ASSERT_GT(nrow, ncol);
 
   auto segment = mat.getDiagonal();
 
