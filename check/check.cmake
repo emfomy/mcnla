@@ -21,7 +21,7 @@ function(add_check checkpath checkcomment)
 
   # Add test
   add_test(NAME ${checkpath} COMMAND ${checktarget})
-  # gtest_add_tests(${checktarget} "" check.cpp ${files})
+  gtest_add_tests(${checktarget} "" check.cpp ${files})
   set(CMAKE_CHECK_TARGETS ${CMAKE_CHECK_TARGETS} ${checktarget} PARENT_SCOPE)
 
   # Add rule

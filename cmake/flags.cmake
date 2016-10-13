@@ -1,5 +1,3 @@
-# The CMake setting of 'cmake/'
-
 # Set options
 if(MCNLA_USE_MKL)
   set(DEFS ${DEFS} "MCNLA_USE_MKL")
@@ -11,8 +9,8 @@ if(NOT MCNLA_BUILD_DEMO AND NOT MCNLA_BUILD_TEST)
 endif()
 
 # Set complier flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic" PARENT_SCOPE)
-# set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic" PARENT_SCOPE)
+set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic")
+# set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic")
 
 # MKL
 if(MCNLA_USE_MKL)
@@ -60,9 +58,3 @@ if(NOT MCNLA_USE_MKL)
     set(LIBS ${LIBS} "${LAPACK_LIBRARIES}")
   endif()
 endif()
-
-set(INCS    "${INCS}"    PARENT_SCOPE)
-set(LIBS    "${LIBS}"    PARENT_SCOPE)
-set(DEFS    "${DEFS}"    PARENT_SCOPE)
-set(COMFLGS "${COMFLGS}" PARENT_SCOPE)
-set(LNKFLGS "${LNKFLGS}" PARENT_SCOPE)

@@ -14,58 +14,22 @@ set(MCNLA_VERSION_PATCH 0)
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# Set options
-option(MCNLA_USE_MKL    "Uses MKL as BLAS and LAPACK." "OFF")
-option(MCNLA_BUILD_DEMO "Build demo codes."            "ON")
-option(MCNLA_BUILD_TEST "Build test codes."            "ON")
-option(MCNLA_BUILD_DOC  "Build documentation."         "ON")
+# Set module path
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-# Set word size
-set(MCNLA_SYSTEM_INT_SIZE 32 CACHE PATH "The system integer size.")
-if(MCNLA_SYSTEM_INT_SIZE EQUAL 32)
-  message(STATUS "Uses 32bit integer (LP64).")
-elseif(MCNLA_SYSTEM_INT_SIZE EQUAL 64)
-  message(STATUS "Uses 64bit integer (ILP64).")
-else()
-  message(SEND_ERROR "Unsupport system integer size! (Only support 32 or 64.)")
-endif()
+# Sets the options
+include(cmake/options.cmake)
 
-# Check compiler support
-if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
-  include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  if(NOT COMPILER_SUPPORTS_CXX11)
-    message(
-      FATAL_ERROR
-      "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. "
-      "Please use a diffferent C++ compiler."
-    )
-  endif()
-endif()
-
-# Enable testing
-if(MCNLA_BUILD_TEST)
-  enable_testing()
-endif()
+# Sets the compile flags
+include(cmake/flags.cmake)
 
 # Add subdirectories
-add_subdirectory(cmake)
 add_subdirectory(doxygen)
 add_subdirectory(demo)
 add_subdirectory(check)
 
 # Create configure files
-file(
-  GLOB_RECURSE configfiles
-  RELATIVE "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/*.in"
-)
-foreach(configfile ${configfiles})
-  string(REGEX REPLACE "\\.[^.]*$" "" file ${configfile})
-  configure_file(
-    "${PROJECT_SOURCE_DIR}/${configfile}"
-    "${PROJECT_BINARY_DIR}/${file}"
-  )
-endforeach()
+include(cmake/configure.cmake)
 
 # Display message
 message(STATUS "================================================================")
