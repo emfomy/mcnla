@@ -6,7 +6,7 @@
 using MyTypes = testing::Types<float, double, std::complex<float>, std::complex<double>>;
 
 template <typename _Scalar, mcnla::Layout _layout,
-          mcnla::index_t _nrow, mcnla::index_t _ncol, mcnla::index_t _pitch, mcnla::index_t _capacity>
+          mcnla::index_t _nrow, mcnla::index_t _ncol, mcnla::index_t _pitch, mcnla::index_t _memsize, mcnla::index_t _offset>
 class DenseMatrixTest : public testing::Test {
 
  protected:
@@ -14,7 +14,9 @@ class DenseMatrixTest : public testing::Test {
   const mcnla::index_t nrow_     = _nrow;
   const mcnla::index_t ncol_     = _ncol;
   const mcnla::index_t pitch_    = _pitch;
-  const mcnla::index_t capacity_ = _capacity;
+  const mcnla::index_t memsize_  = _memsize;
+  const mcnla::index_t capacity_ = _memsize-_offset;
+  const mcnla::index_t offset_   = _offset;
 
   std::valarray<_Scalar> valarray_;
   mcnla::matrix::DenseMatrix<_Scalar, _layout> mat_;
@@ -22,7 +24,8 @@ class DenseMatrixTest : public testing::Test {
   mcnla::index_t iseed[4] = {0, 0, 0, 1};
 
   virtual void SetUp() {
-    mat_ = mcnla::matrix::DenseMatrix<_Scalar, _layout>(nrow_, ncol_, pitch_, capacity_);
+    mcnla::matrix::Array<_Scalar> array(memsize_, offset_);
+    mat_ = mcnla::matrix::DenseMatrix<_Scalar, _layout>(nrow_, ncol_, pitch_, array);
     mcnla::lapack::larnv<3>(mat_.vectorize(), iseed);
     valarray_ = mat_.getValueValarray();
   }
@@ -32,17 +35,17 @@ class DenseMatrixTest : public testing::Test {
 };
 
 template <typename _Scalar>
-class DenseMatrixTest_ColMajor_Size8x5_Pitch8 : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 8, 100> {};
+class DenseMatrixTest_ColMajor_Size8x5_Pitch8  : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 8,  100, 32> {};
 TYPED_TEST_CASE(DenseMatrixTest_ColMajor_Size8x5_Pitch8, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_ColMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 10, 100> {};
+class DenseMatrixTest_ColMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 10, 100, 32> {};
 TYPED_TEST_CASE(DenseMatrixTest_ColMajor_Size8x5_Pitch10, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_RowMajor_Size8x5_Pitch5 : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 5, 100> {};
+class DenseMatrixTest_RowMajor_Size8x5_Pitch5  : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 5,  100, 23> {};
 TYPED_TEST_CASE(DenseMatrixTest_RowMajor_Size8x5_Pitch5, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_RowMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 10, 100> {};
+class DenseMatrixTest_RowMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 10, 100, 23> {};
 TYPED_TEST_CASE(DenseMatrixTest_RowMajor_Size8x5_Pitch10, MyTypes);

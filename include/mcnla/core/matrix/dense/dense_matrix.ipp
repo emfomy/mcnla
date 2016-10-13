@@ -116,7 +116,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    const ValuePtrType &value
+    const ValueArrayType &value
 ) noexcept
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(value),
@@ -519,6 +519,8 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a diagonal vector.
 ///
+/// @note @a idx > 0 for above diagonals, @a idx < 0 for below diagonals.
+///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
     const index_t idx
@@ -579,7 +581,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
-  return VectorType(pitch_ * size1_, 1, data_, getPos(0, 0));
+  return VectorType(pitch_ * size1_ - (pitch_-size0_), 1, data_, getPos(0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -587,7 +589,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noexcept {
-  return VectorType(pitch_ * size1_, 1, data_, getPos(0, 0));
+  return VectorType(pitch_ * size1_ - (pitch_-size0_), 1, data_, getPos(0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

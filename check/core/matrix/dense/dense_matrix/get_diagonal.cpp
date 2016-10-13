@@ -1,7 +1,8 @@
 #include "test.hpp"
 #include <queue>
 
-TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetRow) {
+TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonal) {
+  auto nrow     = this->nrow_;
   auto ncol     = this->ncol_;
   auto pitch    = this->pitch_;
   auto capacity = this->capacity_;
@@ -9,34 +10,34 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetRow) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  const mcnla::index_t rowidx = 3;
+  ASSERT_TRUE(nrow > ncol);
 
-  auto segment = mat.getRow(rowidx);
+  auto segment = mat.getDiagonal();
 
   EXPECT_EQ(segment.getLength(), ncol);
   EXPECT_EQ(segment.getNelem(),  ncol);
   EXPECT_EQ(segment.getSizes(),  ncol);
-  EXPECT_EQ(segment.getStride(), pitch);
+  EXPECT_EQ(segment.getStride(), pitch+1);
 
   EXPECT_FALSE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity - rowidx);
-  EXPECT_EQ(segment.getOffset(),   offset + rowidx);
+  EXPECT_EQ(segment.getCapacity(), capacity);
+  EXPECT_EQ(segment.getOffset(),   offset + 0);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(rowidx, 0)));
+  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), mat(rowidx, i));
+    EXPECT_EQ(segment(i), mat(i, i));
   }
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + rowidx + i*pitch]);
+    EXPECT_EQ(segment(i), valarray[offset + i + i*pitch]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < ncol; ++i ) {
-    tmp.push(valarray[offset + rowidx + i*pitch]);
+    tmp.push(valarray[offset + i + i*pitch]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
@@ -46,7 +47,8 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetRow) {
 }
 
 
-TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetRow) {
+TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonal) {
+  auto nrow     = this->nrow_;
   auto ncol     = this->ncol_;
   auto pitch    = this->pitch_;
   auto capacity = this->capacity_;
@@ -54,34 +56,34 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetRow) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  const mcnla::index_t rowidx = 3;
+  ASSERT_TRUE(nrow > ncol);
 
-  auto segment = mat.getRow(rowidx);
+  auto segment = mat.getDiagonal();
 
   EXPECT_EQ(segment.getLength(), ncol);
   EXPECT_EQ(segment.getNelem(),  ncol);
   EXPECT_EQ(segment.getSizes(),  ncol);
-  EXPECT_EQ(segment.getStride(), pitch);
+  EXPECT_EQ(segment.getStride(), pitch+1);
 
   EXPECT_FALSE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity - rowidx);
-  EXPECT_EQ(segment.getOffset(),   offset + rowidx);
+  EXPECT_EQ(segment.getCapacity(), capacity);
+  EXPECT_EQ(segment.getOffset(),   offset + 0);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(rowidx, 0)));
+  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), mat(rowidx, i));
+    EXPECT_EQ(segment(i), mat(i, i));
   }
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + rowidx + i*pitch]);
+    EXPECT_EQ(segment(i), valarray[offset + i + i*pitch]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < ncol; ++i ) {
-    tmp.push(valarray[offset + rowidx + i*pitch]);
+    tmp.push(valarray[offset + i + i*pitch]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
@@ -91,7 +93,8 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetRow) {
 }
 
 
-TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetRow) {
+TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonal) {
+  auto nrow     = this->nrow_;
   auto ncol     = this->ncol_;
   auto pitch    = this->pitch_;
   auto capacity = this->capacity_;
@@ -99,34 +102,34 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetRow) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  const mcnla::index_t rowidx = 3;
+  ASSERT_TRUE(nrow > ncol);
 
-  auto segment = mat.getRow(rowidx);
+  auto segment = mat.getDiagonal();
 
   EXPECT_EQ(segment.getLength(), ncol);
   EXPECT_EQ(segment.getNelem(),  ncol);
   EXPECT_EQ(segment.getSizes(),  ncol);
-  EXPECT_EQ(segment.getStride(), 1);
+  EXPECT_EQ(segment.getStride(), pitch+1);
 
-  EXPECT_TRUE(segment.isShrunk());
+  EXPECT_FALSE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity - rowidx*pitch);
-  EXPECT_EQ(segment.getOffset(),   offset + rowidx*pitch);
+  EXPECT_EQ(segment.getCapacity(), capacity);
+  EXPECT_EQ(segment.getOffset(),   offset + 0);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(rowidx, 0)));
+  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), mat(rowidx, i));
+    EXPECT_EQ(segment(i), mat(i, i));
   }
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + rowidx*pitch + i]);
+    EXPECT_EQ(segment(i), valarray[offset + i*pitch + i]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < ncol; ++i ) {
-    tmp.push(valarray[offset + rowidx*pitch + i]);
+    tmp.push(valarray[offset + i*pitch + i]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
@@ -136,7 +139,8 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetRow) {
 }
 
 
-TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetRow) {
+TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonal) {
+  auto nrow     = this->nrow_;
   auto ncol     = this->ncol_;
   auto pitch    = this->pitch_;
   auto capacity = this->capacity_;
@@ -144,34 +148,34 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetRow) {
   auto mat      = this->mat_;
   auto valarray = this->valarray_;
 
-  const mcnla::index_t rowidx = 3;
+  ASSERT_TRUE(nrow > ncol);
 
-  auto segment = mat.getRow(rowidx);
+  auto segment = mat.getDiagonal();
 
   EXPECT_EQ(segment.getLength(), ncol);
   EXPECT_EQ(segment.getNelem(),  ncol);
   EXPECT_EQ(segment.getSizes(),  ncol);
-  EXPECT_EQ(segment.getStride(), 1);
+  EXPECT_EQ(segment.getStride(), pitch+1);
 
-  EXPECT_TRUE(segment.isShrunk());
+  EXPECT_FALSE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity - rowidx*pitch);
-  EXPECT_EQ(segment.getOffset(),   offset + rowidx*pitch);
+  EXPECT_EQ(segment.getCapacity(), capacity);
+  EXPECT_EQ(segment.getOffset(),   offset + 0);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(rowidx, 0)));
+  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), mat(rowidx, i));
+    EXPECT_EQ(segment(i), mat(i, i));
   }
 
   for ( auto i = 0; i < ncol; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + rowidx*pitch + i]);
+    EXPECT_EQ(segment(i), valarray[offset + i*pitch + i]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < ncol; ++i ) {
-    tmp.push(valarray[offset + rowidx*pitch + i]);
+    tmp.push(valarray[offset + i*pitch + i]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
