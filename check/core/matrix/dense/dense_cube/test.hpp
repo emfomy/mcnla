@@ -37,31 +37,41 @@ class DenseCubeTest : public testing::Test {
 };
 
 template <typename _Scalar>
-class DenseCubeTest_ColMajor_Size8x5x7_Pitch8x8
-    : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 13, 8,  13, 3375, 32> {};
-TYPED_TEST_CASE(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x8,   MyTypes);
+class DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5
+  : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 7, 8,   5,  400, 120> {};
+TYPED_TEST_CASE(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5,   MyTypes);
 
 template <typename _Scalar>
 class DenseCubeTest_ColMajor_Size8x5x7_Pitch8x10
-    : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 13, 8,  15, 3375, 32> {};
+  : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 7, 8,  10,  800, 280> {};
 TYPED_TEST_CASE(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x10,  MyTypes);
 
 template <typename _Scalar>
-class DenseCubeTest_ColMajor_Size8x5x7_Pitch10x8
-    : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 13, 10, 13, 3375, 32> {};
-TYPED_TEST_CASE(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x8,  MyTypes);
+class DenseCubeTest_ColMajor_Size8x5x7_Pitch10x5
+  : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 7, 10,  5,  500, 152> {};
+TYPED_TEST_CASE(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x5,  MyTypes);
 
 template <typename _Scalar>
 class DenseCubeTest_ColMajor_Size8x5x7_Pitch10x10
-    : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 13, 10, 15, 3375, 32> {};
+  : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 7, 10, 10, 1000, 352> {};
 TYPED_TEST_CASE(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x10, MyTypes);
 
 template <typename _Scalar>
-class DenseCubeTest_RowMajor_Size8x5x7_Pitch5x5
-    : public DenseCubeTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 13, 5,  10, 3375, 23> {};
-TYPED_TEST_CASE(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x5,   MyTypes);
+class DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8
+  : public DenseCubeTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 7,  5,  8,  400, 120> {};
+TYPED_TEST_CASE(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8,   MyTypes);
 
 template <typename _Scalar>
 class DenseCubeTest_RowMajor_Size8x5x7_Pitch5x10
-    : public DenseCubeTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 13, 10, 10, 3375, 23> {};
+  : public DenseCubeTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 7, 5,  10,  500, 160> {};
 TYPED_TEST_CASE(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x10,  MyTypes);
+
+template <typename _Scalar>
+class DenseCubeTest_RowMajor_Size8x5x7_Pitch10x8
+  : public DenseCubeTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 7, 10,  8,  800, 245> {};
+TYPED_TEST_CASE(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x8,  MyTypes);
+
+template <typename _Scalar>
+class DenseCubeTest_RowMajor_Size8x5x7_Pitch10x10
+  : public DenseCubeTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 7, 10, 10, 1000, 325> {};
+TYPED_TEST_CASE(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x10, MyTypes);

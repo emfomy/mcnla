@@ -126,7 +126,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(capacity, pitch0_ * pitch1_ * npage_ - (pitch0_-size0_));
+  mcnla_assert_ge(capacity, pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage_ - (pitch0_-size0_));
+  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +184,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage_ - (pitch0_-size0_));
+  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -909,7 +909,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
-  return VectorType(pitch0_ * pitch1_ * npage_ - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -917,7 +917,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexcept {
-  return VectorType(pitch0_ * pitch1_ * npage_ - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

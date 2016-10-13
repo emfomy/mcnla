@@ -2,13 +2,13 @@
 #include <queue>
 
 TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonalUpper) {
-  auto nrow     = this->nrow_;
-  auto ncol     = this->ncol_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto ncol     = this->ncol_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   ASSERT_GT(nrow, ncol);
 
@@ -50,13 +50,13 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonalUpper) {
 
 
 TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonalUpper) {
-  auto nrow     = this->nrow_;
-  auto ncol     = this->ncol_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto ncol     = this->ncol_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   ASSERT_GT(nrow, ncol);
 
@@ -98,13 +98,13 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonalUpper) {
 
 
 TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonalUpper) {
-  auto nrow     = this->nrow_;
-  auto ncol     = this->ncol_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto ncol     = this->ncol_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   ASSERT_GT(nrow, ncol);
 
@@ -146,13 +146,13 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonalUpper) {
 
 
 TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonalUpper) {
-  auto nrow     = this->nrow_;
-  auto ncol     = this->ncol_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto ncol     = this->ncol_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   ASSERT_GT(nrow, ncol);
 

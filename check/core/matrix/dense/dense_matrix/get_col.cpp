@@ -2,12 +2,12 @@
 #include <queue>
 
 TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCol) {
-  auto nrow     = this->nrow_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   const mcnla::index_t colidx = 2;
 
@@ -47,12 +47,12 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCol) {
 
 
 TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCol) {
-  auto nrow     = this->nrow_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   const mcnla::index_t colidx = 2;
 
@@ -92,12 +92,12 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCol) {
 
 
 TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCol) {
-  auto nrow     = this->nrow_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   const mcnla::index_t colidx = 2;
 
@@ -137,12 +137,12 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCol) {
 
 
 TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCol) {
-  auto nrow     = this->nrow_;
-  auto pitch    = this->pitch_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto mat      = this->mat_;
-  auto valarray = this->valarray_;
+  const auto nrow     = this->nrow_;
+  const auto pitch    = this->pitch_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto mat      = this->mat_;
+  const auto valarray = this->valarray_;
 
   const mcnla::index_t colidx = 2;
 
