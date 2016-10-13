@@ -10,5 +10,7 @@ int main( int argc, char **argv ) {
             << MCNLA_CHECK_NAME << std::endl << std::endl;
 
   testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+  auto retval = RUN_ALL_TESTS();
+  assert(testing::UnitTest::GetInstance()->test_to_run_count() > 0);
+  return retval;
 }

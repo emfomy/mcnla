@@ -9,6 +9,7 @@ function(add_check checkpath checkcomment)
   # Set target
   file(GLOB_RECURSE files "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}/*.cpp")
   list(SORT files)
+  list(REVERSE files)
   add_executable(${checktarget} EXCLUDE_FROM_ALL check.cpp ${files})
   target_include_directories(${checktarget} PUBLIC "${PROJECT_BINARY_DIR}/include")
   target_include_directories(${checktarget} PUBLIC "${PROJECT_SOURCE_DIR}/include")
@@ -20,7 +21,8 @@ function(add_check checkpath checkcomment)
   set_target_properties(${checktarget} PROPERTIES LINK_FLAGS    ${LNKFLGS})
 
   # Add test
-  add_test(NAME ${checkpath} COMMAND ${checktarget})
+  list(REVERSE files)
+  # add_test(NAME ${checkpath} COMMAND ${checktarget})
   gtest_add_tests(${checktarget} "" check.cpp ${files})
   set(CMAKE_CHECK_TARGETS ${CMAKE_CHECK_TARGETS} ${checktarget} PARENT_SCOPE)
 
