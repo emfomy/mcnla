@@ -94,7 +94,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   mcnla_assert_ge(pitch_, size0_);
   mcnla_assert_gt(pitch_, 0);
-  mcnla_assert_ge(capacity, pitch_ * size1_ - (pitch_-size0_));
+  mcnla_assert_ge(capacity, pitch_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   mcnla_assert_ge(pitch_, size0_);
   mcnla_assert_gt(pitch_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch_ * size1_ - (pitch_-size0_));
+  mcnla_assert_ge(this->getCapacity(), pitch_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     pitch_(pitch) {
   mcnla_assert_ge(pitch_, size0_);
   mcnla_assert_gt(pitch_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch_ * size1_ - (pitch_-size0_));
+  mcnla_assert_ge(this->getCapacity(), pitch_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -577,12 +577,17 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Vectorize the matrix.
+/// Returns a vector containing all elements between (0, 0) and (#nrow_-1, #ncol_-1) in the memory.
+///
+/// @note  The length of the output vector is #pitch_ &times; (#size1_-1) + #size0_.
 ///
 /// @attention  The output vector contains the out-of-range spaces.
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
-  return VectorType(pitch_ * size1_ - (pitch_-size0_), 1, data_, getPos(0, 0));
+  mcnla_assert_gt(size0_, 0);
+  mcnla_assert_gt(size1_, 0);
+  return VectorType(pitch_ * (size1_-1) + size0_, 1, data_, getPos(0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -590,7 +595,9 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noexcept {
-  return VectorType(pitch_ * size1_ - (pitch_-size0_), 1, data_, getPos(0, 0));
+  mcnla_assert_gt(size0_, 0);
+  mcnla_assert_gt(size1_, 0);
+  return VectorType(pitch_ * (size1_-1) + size0_, 1, data_, getPos(0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

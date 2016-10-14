@@ -126,7 +126,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(capacity, pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_));
+  mcnla_assert_ge(capacity, pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_));
+  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +184,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_));
+  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -654,15 +654,20 @@ const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::getBlock(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Unfold the cube.
+/// Returns a matrix containing all columns between (:, 0, 0) and (:, #ncol_-1, #npage_-1) for column-major storage,
+///                             all rows between (0, :, 0) and (#nrow_-1, :, #npage_-1) for row-major storage.
+///
+/// @note  The size of the output matrix is #nrow_ by #pitch1_ &times; (#npage_-1) + #size1_ for column-major storage,
+///                                      is #pitch1_ &times; (#npage_-1) + #size1_ by #ncol_ for row-major storage.
 ///
 /// @attention  The output matrix contains the out-of-range spaces in the second dimension.
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
   if ( isColMajor(_layout) ) {
-    return MatrixType(nrow_, pitch1_ * npage_ - (pitch0_-size0_), pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(nrow_, pitch1_ * (npage_-1) + size1_, pitch0_, data_, getPos(0, 0, 0));
   } else {
-    return MatrixType(pitch1_ * npage_ - (pitch0_-size0_), ncol_, pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(pitch1_ * (npage_-1) + size1_, ncol_, pitch0_, data_, getPos(0, 0, 0));
   }
 }
 
@@ -672,9 +677,9 @@ DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() noexcept {
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseCube<_Scalar, _layout>::unfold() const noexcept {
   if ( isColMajor(_layout) ) {
-    return MatrixType(nrow_, pitch1_ * npage_ - (pitch0_-size0_), pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(nrow_, pitch1_ * (npage_-1) + size1_, pitch0_, data_, getPos(0, 0, 0));
   } else {
-    return MatrixType(pitch1_ * npage_ - (pitch0_-size0_), ncol_, pitch0_, data_, getPos(0, 0, 0));
+    return MatrixType(pitch1_ * (npage_-1) + size1_, ncol_, pitch0_, data_, getPos(0, 0, 0));
   }
 }
 
@@ -904,12 +909,16 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Vectorize the cube.
+/// Returns a vector containing all elements between (0, 0, 0) and (#nrow_-1, #ncol_-1, #npage_-1) in the memory.
+///
+/// @note  The length of the output vector is
+///            #pitch0_ &times; #pitch1_ &times; (#npage_-1) + #pitch0_ &times; (#size1_-1) + #size0_.
 ///
 /// @attention  The output vector contains the out-of-range spaces.
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
-  return VectorType(pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_, 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -917,7 +926,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexcept {
-  return VectorType(pitch0_ * pitch1_ * npage_ - pitch0_ * (pitch1_-size1_) - (pitch0_-size0_), 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_, 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

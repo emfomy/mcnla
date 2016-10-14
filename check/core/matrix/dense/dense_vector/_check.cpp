@@ -55,7 +55,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Check) {
   EXPECT_EQ(vec.getCapacity(), capacity);
   EXPECT_EQ(vec.getOffset(),   offset);
 
-  EXPECT_EQ(vec.getCapacity(), (length-1) * stride + 1);
+  EXPECT_EQ(vec.getCapacity(), length * stride - (stride-1));
 
   for ( auto i = 0; i < length; ++i ) {
     EXPECT_EQ(vec(i), valarray[offset + i*stride]);

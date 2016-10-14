@@ -12,9 +12,11 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
 
   auto segment = mat.vectorize();
 
-  EXPECT_EQ(segment.getLength(), nrow*ncol);
-  EXPECT_EQ(segment.getNelem(),  nrow*ncol);
-  EXPECT_EQ(segment.getSizes(),  nrow*ncol);
+  const auto idxs = nrow * ncol;
+
+  EXPECT_EQ(segment.getLength(), idxs);
+  EXPECT_EQ(segment.getNelem(),  idxs);
+  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -39,7 +41,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
 
   std::queue<TypeParam> tmp;
   for ( auto j = 0; j < ncol; ++j ) {
-    for ( auto i = 0; i < pitch; ++i ) {
+    for ( auto i = 0; i < nrow; ++i ) {
       tmp.push(valarray[offset + i + j*pitch]);
     }
   }
@@ -48,6 +50,13 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  auto ptr = &(valarray[offset]);
+  for ( auto value : segment ) {
+    EXPECT_EQ(value, *ptr);
+    ++ptr;
+  }
+  EXPECT_EQ(ptr, &(valarray[offset + idxs]));
 }
 
 
@@ -62,9 +71,11 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
 
   auto segment = mat.vectorize();
 
-  EXPECT_EQ(segment.getLength(), pitch*ncol - (pitch-nrow));
-  EXPECT_EQ(segment.getNelem(),  pitch*ncol - (pitch-nrow));
-  EXPECT_EQ(segment.getSizes(),  pitch*ncol - (pitch-nrow));
+  const auto idxs = pitch*ncol - (pitch-nrow);
+
+  EXPECT_EQ(segment.getLength(), idxs);
+  EXPECT_EQ(segment.getNelem(),  idxs);
+  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -81,8 +92,9 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
     }
   }
 
-  for ( auto i = 0; i < nrow; ++i ) {
+  for ( auto i = 0; i < pitch; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
+      if ( i >= nrow && j == ncol-1 ) break;
       EXPECT_EQ(segment(i + j*pitch), valarray[offset + i + j*pitch]);
     }
   }
@@ -90,9 +102,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
   std::queue<TypeParam> tmp;
   for ( auto j = 0; j < ncol; ++j ) {
     for ( auto i = 0; i < pitch; ++i ) {
-      if ( i >= nrow && j >= ncol-1 ) {
-        break;
-      }
+      if ( i >= nrow && j == ncol-1 ) break;
       tmp.push(valarray[offset + i + j*pitch]);
     }
   }
@@ -101,6 +111,13 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  auto ptr = &(valarray[offset]);
+  for ( auto value : segment ) {
+    EXPECT_EQ(value, *ptr);
+    ++ptr;
+  }
+  EXPECT_EQ(ptr, &(valarray[offset + idxs]));
 }
 
 
@@ -115,9 +132,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
 
   auto segment = mat.vectorize();
 
-  EXPECT_EQ(segment.getLength(), nrow*ncol);
-  EXPECT_EQ(segment.getNelem(),  nrow*ncol);
-  EXPECT_EQ(segment.getSizes(),  nrow*ncol);
+  const auto idxs = nrow * ncol;
+
+  EXPECT_EQ(segment.getLength(), idxs);
+  EXPECT_EQ(segment.getNelem(),  idxs);
+  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -142,7 +161,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < nrow; ++i ) {
-    for ( auto j = 0; j < pitch; ++j ) {
+    for ( auto j = 0; j < ncol; ++j ) {
       tmp.push(valarray[offset + i*pitch + j]);
     }
   }
@@ -151,6 +170,13 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  auto ptr = &(valarray[offset]);
+  for ( auto value : segment ) {
+    EXPECT_EQ(value, *ptr);
+    ++ptr;
+  }
+  EXPECT_EQ(ptr, &(valarray[offset + idxs]));
 }
 
 
@@ -165,9 +191,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
 
   auto segment = mat.vectorize();
 
-  EXPECT_EQ(segment.getLength(), pitch*nrow - (pitch-ncol));
-  EXPECT_EQ(segment.getNelem(),  pitch*nrow - (pitch-ncol));
-  EXPECT_EQ(segment.getSizes(),  pitch*nrow - (pitch-ncol));
+  const auto idxs = pitch*nrow - (pitch-ncol);
+
+  EXPECT_EQ(segment.getLength(), idxs);
+  EXPECT_EQ(segment.getNelem(),  idxs);
+  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -185,7 +213,8 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
   }
 
   for ( auto i = 0; i < nrow; ++i ) {
-    for ( auto j = 0; j < ncol; ++j ) {
+    for ( auto j = 0; j < pitch; ++j ) {
+      if ( i == nrow-1 && j >= ncol ) break;
       EXPECT_EQ(segment(i*pitch + j), valarray[offset + i*pitch + j]);
     }
   }
@@ -193,9 +222,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < pitch; ++j ) {
-      if ( i >= nrow-1 && j >= ncol ) {
-        break;
-      }
+      if ( i == nrow-1 && j >= ncol ) break;
       tmp.push(valarray[offset + i*pitch + j]);
     }
   }
@@ -204,4 +231,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  auto ptr = &(valarray[offset]);
+  for ( auto value : segment ) {
+    EXPECT_EQ(value, *ptr);
+    ++ptr;
+  }
+  EXPECT_EQ(ptr, &(valarray[offset + idxs]));
 }
