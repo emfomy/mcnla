@@ -39,7 +39,7 @@ SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
   : dim_(dim),
     work_(query(dim)),
     rwork_(is_real ? RealVectorType() : RealVectorType(3*dim)) {
-  assert(dim_ > 0);
+  mcnla_assert_gt(dim_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
     const _Matrix &a
 ) noexcept
   : SyevDriver(a.getNrow()) {
-  assert(a.getNrow() == a.getNcol());
+  mcnla_assert_eq(a.getNrow(), a.getNcol());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ template <class _Matrix, JobOption _jobz, UploOption _uplo>
 void SyevDriver<_Matrix, _jobz, _uplo>::resize(
     const index_t dim
 ) noexcept {
-  assert(dim > 0);
+  mcnla_assert_gt(dim, 0);
   dim_ = dim;
   work_ = VectorType(query(dim));
   if ( is_real ) {
@@ -91,7 +91,7 @@ template <class _Matrix, JobOption _jobz, UploOption _uplo>
 void SyevDriver<_Matrix, _jobz, _uplo>::resize(
     const _Matrix &a
 ) noexcept {
-  assert(a.getNrow() == a.getNcol());
+  mcnla_assert_eq(a.getNrow(), a.getNcol());
   resize(a.getNrow());
 }
 
@@ -144,11 +144,11 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
     _Matrix &a,
     RealVectorType &w
 ) noexcept {
-  assert(dim_ > 0);
-  assert(a.getSizes() == std::make_pair(dim_, dim_));
-  assert(w.getLength() == a.getNrow());
-  assert(detail::syev(__jobz, toUploChar(_uplo, layout), a.getNrow(), a.getValue(), a.getPitch(),
-                        w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()) == 0);
+  mcnla_assert_gt(dim_, 0);
+  mcnla_assert_eq(a.getSizes(), std::make_pair(dim_, dim_));
+  mcnla_assert_eq(w.getLength(), a.getNrow());
+  mcnla_assert_eq(detail::syev(__jobz, toUploChar(_uplo, layout), a.getNrow(), a.getValue(), a.getPitch(),
+                               w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ index_t SyevDriver<_Matrix, _jobz, _uplo>::query(
     const index_t dim
 ) const noexcept {
   ScalarType lwork;
-  assert(detail::syev(_jobz, toUploChar(_uplo, layout), dim, nullptr, dim, nullptr, &lwork, -1, nullptr) == 0);
+  mcnla_assert_eq(detail::syev(_jobz, toUploChar(_uplo, layout), dim, nullptr, dim, nullptr, &lwork, -1, nullptr), 0);
   return lwork;
 }
 

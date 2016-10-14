@@ -224,7 +224,8 @@ const Array<_Scalar>& CooData<_ndim, _Scalar>::getValueArray() const noexcept { 
 ///
 template <index_t _ndim, typename _Scalar>
 Array<index_t>& CooData<_ndim, _Scalar>::getIdxArray( const index_t dim ) noexcept {
-  assert(dim >= 0 && dim < _ndim);
+  mcnla_assert_ge(dim, 0);
+  mcnla_assert_lt(dim, _ndim);
   return idxs_[dim];
 }
 
@@ -233,7 +234,8 @@ Array<index_t>& CooData<_ndim, _Scalar>::getIdxArray( const index_t dim ) noexce
 ///
 template <index_t _ndim, typename _Scalar>
 const Array<index_t>& CooData<_ndim, _Scalar>::getIdxArray( const index_t dim ) const noexcept {
-  assert(dim >= 0 && dim < _ndim);
+  mcnla_assert_ge(dim, 0);
+  mcnla_assert_lt(dim, _ndim);
   return idxs_[dim];
 }
 

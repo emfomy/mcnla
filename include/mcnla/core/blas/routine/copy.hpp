@@ -30,7 +30,7 @@ inline void copy(
     const DenseVector<_Scalar> &x,
           DenseVector<_Scalar> &y
 ) noexcept {
-  assert(x.getSizes() == y.getSizes());
+  mcnla_assert_eq(x.getSizes(), y.getSizes());
   detail::copy(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
 }
 
@@ -55,7 +55,8 @@ inline void copy(
     const DenseMatrix<_Scalar, _layout> &x,
           DenseMatrix<_Scalar, _layout> &y
 ) noexcept {
-  assert(x.getSizes() == y.getSizes() && y.getPitch() == x.getPitch());
+  mcnla_assert_eq(x.getSizes(), y.getSizes());
+  mcnla_assert_eq(x.getPitch(), y.getPitch());
   copy(x.vectorize(), y.vectorize());
 }
 
@@ -65,7 +66,8 @@ inline void copy(
     const DenseMatrix<_Scalar, _layout> &x,
           DenseMatrix<_Scalar, _layout> &&y
 ) noexcept {
-  assert(x.getSizes() == y.getSizes() && y.getPitch() == x.getPitch());
+  mcnla_assert_eq(x.getSizes(), y.getSizes());
+  mcnla_assert_eq(x.getPitch(), y.getPitch());
   copy(x.vectorize(), y.vectorize());
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -81,7 +83,8 @@ inline void copy(
     const DenseCube<_Scalar, _layout> &x,
           DenseCube<_Scalar, _layout> &y
 ) noexcept {
-  assert(x.getSizes() == y.getSizes() && y.getPitches() == x.getPitches());
+  mcnla_assert_eq(x.getSizes(),   y.getSizes());
+  mcnla_assert_eq(x.getPitches(), y.getPitches());
   copy(x.vectorize(), y.vectorize());
 }
 
@@ -91,7 +94,8 @@ inline void copy(
     const DenseCube<_Scalar, _layout> &x,
           DenseCube<_Scalar, _layout> &&y
 ) noexcept {
-  assert(x.getSizes() == y.getSizes() && y.getPitches() == x.getPitches());
+  mcnla_assert_eq(x.getSizes(),   y.getSizes());
+  mcnla_assert_eq(x.getPitches(), y.getPitches());
   copy(x.vectorize(), y.vectorize());
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

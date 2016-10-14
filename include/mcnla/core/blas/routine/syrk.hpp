@@ -34,8 +34,8 @@ inline void syrk(
 ) noexcept {
   constexpr TransOption trans = isColMajor(_layout) ? _trans : _trans ^ TransOption::TRANS;
 
-  assert(c.getNrow() == c.getNcol());
-  assert(c.getNrow() == a.template getNrow<_trans>());
+  mcnla_assert_eq(c.getNrow(), c.getNcol());
+  mcnla_assert_eq(c.getNrow(), a.template getNrow<_trans>());
 
   detail::syrk(toUploChar(_uplo, _layout), toTransChar<_Scalar>(trans), c.getNrow(), a.template getNcol<_trans>(),
                alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());

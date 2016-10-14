@@ -37,7 +37,7 @@ inline void bcast(
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::data_type;
-  assert(buffer.derived().isShrunk());
+  mcnla_assert_true(buffer.derived().isShrunk());
   MPI_Bcast(buffer.getValue(), buffer.derived().getNelem(), data_type, root, comm);
 }
 

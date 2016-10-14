@@ -41,7 +41,7 @@ DenseVector<_Scalar>::DenseVector(
   : VectorBaseType(length),
     DenseBaseType(stride * length),
     stride_(stride) {
-  assert(stride_ > 0);
+  mcnla_assert_gt(stride_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ DenseVector<_Scalar>::DenseVector(
   : VectorBaseType(length),
     DenseBaseType(capacity),
     stride_(stride) {
-  assert(stride_ > 0);
-  assert(capacity >= stride_ * (length_-1) + 1);
+  mcnla_assert_gt(stride_, 0);
+  mcnla_assert_ge(capacity, stride_ * (length_-1) + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,8 +72,8 @@ DenseVector<_Scalar>::DenseVector(
   : VectorBaseType(length),
     DenseBaseType(value),
     stride_(stride) {
-  assert(stride_ > 0);
-  assert(this->getCapacity() > stride_ * (length_-1));
+  mcnla_assert_gt(stride_, 0);
+  mcnla_assert_ge(this->getCapacity(), stride_ * (length_-1) + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,8 +89,8 @@ DenseVector<_Scalar>::DenseVector(
   : VectorBaseType(length),
     DenseBaseType(data >> offset),
     stride_(stride) {
-  assert(stride_ > 0);
-  assert(this->getCapacity() > stride_ * (length_-1));
+  mcnla_assert_gt(stride_, 0);
+  mcnla_assert_ge(this->getCapacity(), stride_ * (length_-1) + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +168,7 @@ template <typename _Scalar>
 _Scalar& DenseVector<_Scalar>::getElem(
     const index_t idx
 ) noexcept {
-  assert(idx >= 0 && idx < length_);
+  mcnla_assert_gelt(idx, 0, length_);
   return this->getValue()[getPos(idx)];
 }
 
@@ -179,7 +179,7 @@ template <typename _Scalar>
 const _Scalar& DenseVector<_Scalar>::getElem(
     const index_t idx
 ) const noexcept {
-  assert(idx >= 0 && idx < length_);
+  mcnla_assert_gelt(idx, 0, length_);
   return this->getValue()[getPos(idx)];
 }
 
@@ -224,7 +224,7 @@ template <typename _Scalar>
 typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::find(
     const index_t idx
 ) noexcept {
-  assert(idx >= 0 && idx < length_);
+  mcnla_assert_gelt(idx, 0, length_);
   return IteratorType(this, idx);
 }
 
@@ -235,7 +235,7 @@ template <typename _Scalar>
 typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::find(
     const index_t idx
 ) const noexcept {
-  assert(idx >= 0 && idx < length_);
+  mcnla_assert_gelt(idx, 0, length_);
   return ConstIteratorType(this, idx);
 }
 
@@ -259,8 +259,8 @@ void DenseVector<_Scalar>::resize(
     const index_t length,
     const index_t stride
 ) noexcept {
-  assert(length >= 0);
-  assert(this->getCapacity() > stride * (length-1));
+  mcnla_assert_ge(length, 0);
+  mcnla_assert_ge(this->getCapacity(), stride * (length-1) + 1);
   length_ = length;
   stride_ = stride;
 }
@@ -272,7 +272,7 @@ template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) noexcept {
-  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
+  mcnla_assert_gele(range.begin, 0, length_); mcnla_assert_ge(range.getLength(), 0);
   return VectorType(range.getLength(), stride_, data_, getPos(range.begin));
 }
 
@@ -283,7 +283,7 @@ template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) const noexcept {
-  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
+  mcnla_assert_gele(range.begin, 0, length_); mcnla_assert_ge(range.getLength(), 0);
   return VectorType(range.getLength(), stride_, data_, getPos(range.begin));
 }
 

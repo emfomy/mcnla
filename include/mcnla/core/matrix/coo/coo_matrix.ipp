@@ -213,8 +213,8 @@ _Scalar CooMatrix<_Scalar, _layout>::getElem(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
+  mcnla_assert_gelt(rowidx, 0, nrow_);
+  mcnla_assert_gelt(colidx, 0, ncol_);
   auto it = find(rowidx, colidx);
   return (it != this->end()) ? it.getValue() : 0;
 }
@@ -238,8 +238,8 @@ index_t CooMatrix<_Scalar, _layout>::getPos(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
+  mcnla_assert_gelt(rowidx, 0, nrow_);
+  mcnla_assert_gelt(colidx, 0, ncol_);
   auto it = find(rowidx, colidx);
   return (it != this->end()) ? it.getPos() : -1;
 }
@@ -254,9 +254,9 @@ void CooMatrix<_Scalar, _layout>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
-  assert(rowrange.begin >= 0 && rowrange.end <= nrow_ && rowrange.getLength() >= 0);
-  assert(colrange.begin >= 0 && colrange.end <= ncol_ && colrange.getLength() >= 0);
-  assert(isSorted());
+  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_true(isSorted());
   auto begintuple = isColMajor(_layout) ? makeCooTuple(rowrange.begin, colrange.begin)
                                         : makeCooTuple(colrange.begin, rowrange.begin);
   auto endtuple   = isColMajor(_layout) ? makeCooTuple(rowrange.end, colrange.end)
@@ -275,9 +275,9 @@ typename CooMatrix<_Scalar, _layout>::IteratorType CooMatrix<_Scalar, _layout>::
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(isSorted());
+  mcnla_assert_gelt(rowidx, 0, nrow_);
+  mcnla_assert_gelt(colidx, 0, ncol_);
+  mcnla_assert_true(isSorted());
   auto tuple = isColMajor(_layout) ? makeCooTuple(rowidx, colidx) : makeCooTuple(colidx, rowidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
@@ -291,9 +291,9 @@ typename CooMatrix<_Scalar, _layout>::ConstIteratorType CooMatrix<_Scalar, _layo
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  assert(rowidx >= 0 && rowidx < nrow_);
-  assert(colidx >= 0 && colidx < ncol_);
-  assert(isSorted());
+  mcnla_assert_gelt(rowidx, 0, nrow_);
+  mcnla_assert_gelt(colidx, 0, ncol_);
+  mcnla_assert_true(isSorted());
   auto tuple = isColMajor(_layout) ? makeCooTuple(rowidx, colidx) : makeCooTuple(colidx, rowidx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
@@ -346,7 +346,8 @@ void CooMatrix<_Scalar, _layout>::resize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
-  assert(nrow >= 0 && ncol >= 0);
+  mcnla_assert_ge(nrow, 0);
+  mcnla_assert_ge(ncol, 0);
   nrow_ = nrow;
   ncol_ = ncol;
 }
@@ -361,7 +362,7 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
     const index_t colidx
 ) noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
+  mcnla_assert_gelt(colidx, 0, ncol_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, pos, nnz);
   return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
@@ -374,7 +375,7 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getCol(
     const index_t colidx
 ) const noexcept {
   static_assert(isColMajor(_layout), "This routine is only available in column-major matrices.");
-  assert(colidx >= 0 && colidx < ncol_);
+  mcnla_assert_gelt(colidx, 0, ncol_);
   index_t pos, nnz; getPosNnz({0, nrow_}, {colidx, colidx}, pos, nnz);
   return CooVector<_Scalar>(nrow_, nnz, data_.template getReduced<0>(), pos);
 }
@@ -389,7 +390,7 @@ CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
     const index_t rowidx
 ) noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
+  mcnla_assert_gelt(rowidx, 0, nrow_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, {0, ncol_}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }
@@ -402,7 +403,7 @@ const CooVector<_Scalar> CooMatrix<_Scalar, _layout>::getRow(
     const index_t rowidx
 ) const noexcept {
   static_assert(isRowMajor(_layout), "This routine is only available in row-major matrices.");
-  assert(rowidx >= 0 && rowidx < nrow_);
+  mcnla_assert_gelt(rowidx, 0, nrow_);
   index_t pos, nnz; getPosNnz({rowidx, rowidx+1}, {0, ncol_}, pos, nnz);
   return CooVector<_Scalar>(ncol_, nnz, data_.template getReduced<1>(), pos);
 }

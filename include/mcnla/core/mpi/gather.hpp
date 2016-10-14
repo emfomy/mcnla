@@ -38,10 +38,12 @@ inline void gather(
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<_Scalar>::data_type;
-  assert(send.isShrunk());
-  assert(recv.isShrunk());
-  assert(isCommRoot(root, comm) ? send.template getSize<0>()                     == recv.template getSize<0>() : true);
-  assert(isCommRoot(root, comm) ? send.template getSize<1>() * getCommSize(comm) == recv.template getSize<1>() : true);
+  mcnla_assert_true(send.isShrunk());
+  mcnla_assert_true(recv.isShrunk());
+  if ( isCommRoot(root, comm) ) {
+    mcnla_assert_eq(send.template getSize<0>(),                     recv.template getSize<0>());
+    mcnla_assert_eq(send.template getSize<1>() * getCommSize(comm), recv.template getSize<1>());
+  }
   mpi_int_t size = send.getNelem();
   MPI_Gather(send.getValue(), size, data_type, recv.getValue(), size, data_type, root, comm);
 }

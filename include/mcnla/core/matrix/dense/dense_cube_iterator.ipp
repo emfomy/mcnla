@@ -42,7 +42,7 @@ std::ostream& operator<< ( std::ostream &out, const DenseCubeIteratorBase<__Scal
 ///
 template <typename _Scalar, Layout _layout, class _Cube>
 _Scalar& DenseCubeIteratorBase<_Scalar, _layout, _Cube>::getValue() const noexcept {
-  assert(itidx_ >= 0 && itidx_ < container_->getNelem());
+  mcnla_assert_gelt(itidx_, 0, container_->getNelem());
   return container_->getValue()[getPos()];
 }
 

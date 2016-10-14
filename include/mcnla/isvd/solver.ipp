@@ -42,10 +42,14 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexcept {
   MPI_Bcast(&parameters_, sizeof(Parameters<ScalarType>), MPI_BYTE, mpi_root_, mpi_comm_);
 
-  assert(parameters_.getNcol() >= parameters_.getNrow() && parameters_.getNrow() > 0);
-  assert(parameters_.getNrow() >= parameters_.getDimSketch());
-  assert(parameters_.getRank() > 0 && parameters_.getOverRank() >= 0);
-  assert(parameters_.getNumSketchEach() > 0);
+  mcnla_assert_ge(parameters_.getNcol(), parameters_.getNrow());
+  mcnla_assert_gt(parameters_.getNrow(), 0);
+  mcnla_assert_ge(parameters_.getNrow(), parameters_.getDimSketch());
+
+  mcnla_assert_gt(parameters_.getRank(), 0);
+  mcnla_assert_ge(parameters_.getOverRank(), 0);
+
+  mcnla_assert_gt(parameters_.getNumSketchEach(), 0);
 
   sketcher_.initialize();
   integrator_.initialize();
@@ -62,8 +66,8 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Matrix &matrix_a ) noexcept {
-  assert(parameters_.isInitialized());
-  assert(matrix_a.getSizes() == std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
+  mcnla_assert_true(parameters_.isInitialized());
+  mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
 
   double start_time = MPI_Wtime();
   sketcher_.sketch(matrix_a, integrator_.getCubeQ());
@@ -109,7 +113,7 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::g
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTime() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return sketcher_time_;
 }
 
@@ -118,7 +122,7 @@ double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTime(
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTime() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return integrator_time_;
 }
 
@@ -127,7 +131,7 @@ double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTim
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorTime() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return reconstructor_time_;
 }
 
@@ -149,7 +153,7 @@ index_t Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorIt
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::RealScalarType>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSingularValues() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return reconstructor_.getVectorS();
 }
 
@@ -161,7 +165,7 @@ const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getLeftSingularVectors() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return reconstructor_.getMatrixU();
 }
 
@@ -173,7 +177,7 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getRightSingularVectors() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return reconstructor_.getMatrixVt();
 }
 
@@ -185,7 +189,7 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::ROWMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
-  assert(parameters_.isComputed());
+  mcnla_assert_true(parameters_.isComputed());
   return integrator_.getMatrixQc();
 }
 
@@ -197,7 +201,7 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ParametersType&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getParameters() const noexcept {
-  assert( mpi_rank_ == mpi_root_ );
+  mcnla_assert_eq(mpi_rank_, mpi_root_);
   return parameters_;
 }
 

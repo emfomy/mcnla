@@ -42,9 +42,9 @@ inline void gemm(
   constexpr TransOption transa = isColMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
   constexpr TransOption transb = isColMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
 
-  assert(c.getNrow()                   == a.template getNrow<_transa>());
-  assert(c.getNcol()                   == b.template getNcol<_transb>());
-  assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
+  mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
+  mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
+  mcnla_assert_eq(a.template getNcol<_transa>(), b.template getNrow<_transb>());
 
   gemm(toTransChar<_Scalar>(transa), toTransChar<_Scalar>(transb),
        c.getNrow(), c.getNcol(), a.template getNcol<_transa>(),
@@ -64,9 +64,9 @@ inline void gemm(
   constexpr TransOption transa = isRowMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
   constexpr TransOption transb = isRowMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
 
-  assert(c.getNrow()                   == a.template getNrow<_transa>());
-  assert(c.getNcol()                   == b.template getNcol<_transb>());
-  assert(a.template getNcol<_transa>() == b.template getNrow<_transb>());
+  mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
+  mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
+  mcnla_assert_eq(a.template getNcol<_transa>(), b.template getNrow<_transb>());
 
   gemm(toTransChar<_Scalar>(transb), toTransChar<_Scalar>(transa),
        c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),

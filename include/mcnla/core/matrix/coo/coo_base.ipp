@@ -60,9 +60,9 @@ CooBase<_Derived>::CooBase(
 ) noexcept
   : SparseBaseType(nnz),
     data_(value, idxs) {
-  assert(getValueCapacity() >= nnz_);
+  mcnla_assert_ge(getValueCapacity(), nnz_);
   for ( index_t dim = 0; dim < ndim; ++dim ) {
-    assert(getIdxCapacity(dim) >= nnz_);
+    mcnla_assert_ge(getIdxCapacity(dim), nnz_);
   }
 }
 
@@ -76,9 +76,9 @@ CooBase<_Derived>::CooBase(
 ) noexcept
   : SparseBaseType(nnz),
     data_(data) {
-  assert(getValueCapacity() >= nnz_);
+  mcnla_assert_ge(getValueCapacity(), nnz_);
   for ( index_t dim = 0; dim < ndim; ++dim ) {
-    assert(getIdxCapacity(dim) >= nnz_);
+    mcnla_assert_ge(getIdxCapacity(dim), nnz_);
   }
 }
 

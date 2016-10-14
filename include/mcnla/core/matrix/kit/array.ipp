@@ -49,7 +49,7 @@ Array<_Type>::Array(
 ) noexcept
   : BaseType(value),
     offset_(offset) {
-  assert(offset_ >= 0 && offset_ <= getSize());
+  mcnla_assert_gele(offset_, 0, getSize());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
 template <typename _Type>
 void Array<_Type>::operator>>=( const index_t offset ) noexcept {
   offset_ += offset;
-  assert(offset_ >= 0 && offset_ <= getSize());
+  mcnla_assert_gele(offset_, 0, getSize());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ void Array<_Type>::operator>>=( const index_t offset ) noexcept {
 template <typename _Type>
 void Array<_Type>::operator<<=( const index_t offset ) noexcept {
   offset_ -= offset;
-  assert(offset_ >= 0 && offset_ <= getSize());
+  mcnla_assert_gele(offset_, 0, getSize());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

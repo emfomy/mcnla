@@ -2,11 +2,11 @@
 #include <queue>
 
 TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
-  auto stride   = this->stride_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto vec      = this->vec_;
-  auto valarray = this->valarray_;
+  const auto stride   = this->stride_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto vec      = this->vec_;
+  const auto valarray = this->valarray_;
 
   const mcnla::index_t idx0 = 2, idxs = 5;
 
@@ -46,11 +46,11 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
 
 
 TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
-  auto stride   = this->stride_;
-  auto capacity = this->capacity_;
-  auto offset   = this->offset_;
-  auto vec      = this->vec_;
-  auto valarray = this->valarray_;
+  const auto stride   = this->stride_;
+  const auto capacity = this->capacity_;
+  const auto offset   = this->offset_;
+  const auto vec      = this->vec_;
+  const auto valarray = this->valarray_;
 
   const mcnla::index_t idx0 = 2, idxs = 5;
 

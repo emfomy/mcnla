@@ -162,7 +162,7 @@ template <typename _Scalar>
 _Scalar CooVector<_Scalar>::getElem(
     const index_t idx
 ) const noexcept {
-  assert(idx >= 0 && idx < length_);
+  mcnla_assert_gelt(idx, 0, length_);
   auto it = find(idx);
   return (it != this->end()) ? it.getValue() : 0;
 }
@@ -184,7 +184,7 @@ template <typename _Scalar>
 index_t CooVector<_Scalar>::getPos(
     const index_t idx
 ) const noexcept {
-  assert(idx >= 0 && idx < length_);
+  mcnla_assert_gelt(idx, 0, length_);
   auto it = find(idx);
   return (it != this->end()) ? it.getPos() : -1;
 }
@@ -198,8 +198,8 @@ void CooVector<_Scalar>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
-  assert(range.begin >= 0 && range.end <= length_ && range.getLength() >= 0);
-  assert(isSorted());
+  mcnla_assert_gele(range.begin, 0, length_); mcnla_assert_ge(range.getLength(), 0);
+  mcnla_assert_true(isSorted());
   auto it0 = std::lower_bound(this->begin(), this->end(), makeCooTuple(range.begin));
   auto it1 = std::lower_bound(it0, this->end(), makeCooTuple(range.end));
   pos = it0.getPos();
@@ -213,8 +213,8 @@ template <typename _Scalar>
 typename CooVector<_Scalar>::IteratorType CooVector<_Scalar>::find(
     const index_t idx
 ) noexcept {
-  assert(idx >= 0 && idx < length_);
-  assert(isSorted());
+  mcnla_assert_gelt(idx, 0, length_);
+  mcnla_assert_true(isSorted());
   auto tuple = makeCooTuple(idx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
@@ -227,8 +227,8 @@ template <typename _Scalar>
 typename CooVector<_Scalar>::ConstIteratorType CooVector<_Scalar>::find(
     const index_t idx
 ) const noexcept {
-  assert(idx >= 0 && idx < length_);
-  assert(isSorted());
+  mcnla_assert_gelt(idx, 0, length_);
+  mcnla_assert_true(isSorted());
   auto tuple = makeCooTuple(idx);
   auto it = std::lower_bound(this->begin(), this->end(), tuple);
   return (it == this->end() || *it == tuple) ? it : this->end();
@@ -269,7 +269,7 @@ template <typename _Scalar>
 void CooVector<_Scalar>::resize(
     const index_t length
 ) noexcept {
-  assert(length >= 0);
+  mcnla_assert_ge(length, 0);
   length_ = length;
 }
 

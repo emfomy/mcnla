@@ -39,11 +39,11 @@ inline void alltoall(
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<_Scalar>::data_type;
-  assert(send.isShrunk());
-  assert(recv.isShrunk());
-  assert(send.template getSize<0>() == recv.template getSize<0>());
-  assert(send.template getSize<1>() == recv.template getSize<1>() * recv.getNpage());
-  assert(recv.getNpage()            == getCommSize(comm));
+  mcnla_assert_true(send.isShrunk());
+  mcnla_assert_true(recv.isShrunk());
+  mcnla_assert_eq(send.template getSize<0>(), recv.template getSize<0>());
+  mcnla_assert_eq(send.template getSize<1>(), recv.template getSize<1>() * recv.getNpage());
+  mcnla_assert_eq(recv.getNpage(), getCommSize(comm));
   mpi_int_t size = recv.template getSize<0>() * recv.template getSize<1>();
   MPI_Alltoall(send.getValue(), size, data_type, recv.getValue(), size, data_type, comm);
 }
@@ -72,8 +72,8 @@ inline void alltoall(
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<_Scalar>::data_type;
-  assert(buffer.isShrunk());
-  assert(buffer.getNpage() == getCommSize(comm));
+  mcnla_assert_true(buffer.isShrunk());
+  mcnla_assert_eq(buffer.getNpage(), getCommSize(comm));
   mpi_int_t size = buffer.template getSize<0>() * buffer.template getSize<1>();
   MPI_Alltoall(MPI_IN_PLACE, size, data_type, buffer.getValue(), size, data_type, comm);
 }

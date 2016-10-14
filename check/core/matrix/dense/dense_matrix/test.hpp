@@ -35,17 +35,17 @@ class DenseMatrixTest : public testing::Test {
 };
 
 template <typename _Scalar>
-class DenseMatrixTest_ColMajor_Size8x5_Pitch8  : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 8,  100, 32> {};
+class DenseMatrixTest_ColMajor_Size8x5_Pitch8  : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 8,  80,  40> {};
 TYPED_TEST_CASE(DenseMatrixTest_ColMajor_Size8x5_Pitch8, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_ColMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 10, 100, 32> {};
+class DenseMatrixTest_ColMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 10, 100, 52> {};
 TYPED_TEST_CASE(DenseMatrixTest_ColMajor_Size8x5_Pitch10, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_RowMajor_Size8x5_Pitch5  : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 5,  100, 23> {};
+class DenseMatrixTest_RowMajor_Size8x5_Pitch5  : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 5,  50,  10> {};
 TYPED_TEST_CASE(DenseMatrixTest_RowMajor_Size8x5_Pitch5, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_RowMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 10, 100, 23> {};
+class DenseMatrixTest_RowMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 10, 100, 25> {};
 TYPED_TEST_CASE(DenseMatrixTest_RowMajor_Size8x5_Pitch10, MyTypes);

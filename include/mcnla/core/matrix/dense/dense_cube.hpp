@@ -192,16 +192,16 @@ class DenseCube
   inline void resize( const index_t nrow, const index_t ncol, const index_t npage ) noexcept;
 
   // Gets cube block
-  inline       CubeType getSubCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) noexcept;
-  inline const CubeType getSubCube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) const noexcept;
+  inline       CubeType getSubcube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) noexcept;
+  inline const CubeType getSubcube( const IdxRange rowrange, const IdxRange colrange, const IdxRange pagerange ) const noexcept;
   inline       CubeType getTubes( const IdxRange rowrange, const IdxRange colrange ) noexcept;
   inline const CubeType getTubes( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
   inline       CubeType getPages( const IdxRange pagerange ) noexcept;
   inline const CubeType getPages( const IdxRange pagerange ) const noexcept;
-  inline       CubeType getColPages( const IdxRange rowrange ) noexcept;
-  inline const CubeType getColPages( const IdxRange rowrange ) const noexcept;
-  inline       CubeType getRowPages( const IdxRange colrange ) noexcept;
-  inline const CubeType getRowPages( const IdxRange colrange ) const noexcept;
+  inline       CubeType getColPages( const IdxRange colrange ) noexcept;
+  inline const CubeType getColPages( const IdxRange colrange ) const noexcept;
+  inline       CubeType getRowPages( const IdxRange rowrange ) noexcept;
+  inline const CubeType getRowPages( const IdxRange rowrange ) const noexcept;
 
   // Gets matrix block
   inline       MatrixType getPage( const index_t pageidx ) noexcept;

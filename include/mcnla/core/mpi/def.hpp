@@ -44,7 +44,7 @@ using namespace matrix;
 /// @return       The number of processes in the group of @a comm.
 ///
 static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
-  mpi_int_t size; assert(MPI_Comm_size(comm, &size) == 0); return size;
+  mpi_int_t size; mcnla_assert_eq(MPI_Comm_size(comm, &size), 0); return size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
 /// @return       The rank of the calling process in group of @a comm.
 ///
 static inline mpi_int_t getCommRank( const MPI_Comm comm ) noexcept {
-  mpi_int_t rank; assert(MPI_Comm_rank(comm, &rank) == 0); return rank;
+  mpi_int_t rank; mcnla_assert_eq(MPI_Comm_rank(comm, &rank), 0); return rank;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
