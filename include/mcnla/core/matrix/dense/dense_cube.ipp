@@ -424,7 +424,7 @@ void DenseCube<_Scalar, _layout>::resize(
 /// @brief  Gets a cube block.
 ///
 template <typename _Scalar, Layout _layout>
-DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getSubCube(
+DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getSubcube(
     const IdxRange rowrange,
     const IdxRange colrange,
     const IdxRange pagerange
@@ -437,10 +437,10 @@ DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getSubCube(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getSubCube
+/// @copydoc  getSubcube
 ///
 template <typename _Scalar, Layout _layout>
-const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getSubCube(
+const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getSubcube(
     const IdxRange rowrange,
     const IdxRange colrange,
     const IdxRange pagerange
@@ -453,7 +453,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getSubCube(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getSubCube
+/// @copydoc  getSubcube
 ///
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getTubes(
@@ -481,7 +481,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getTubes(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getSubCube
+/// @copydoc  getSubcube
 ///
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPages(
@@ -503,7 +503,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getPages(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getSubCube
+/// @copydoc  getSubcube
 ///
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getColPages(
@@ -525,7 +525,7 @@ const DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getColPages(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getSubCube
+/// @copydoc  getSubcube
 ///
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout> DenseCube<_Scalar, _layout>::getRowPages(

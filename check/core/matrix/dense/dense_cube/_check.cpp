@@ -227,7 +227,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8, Check) {
   EXPECT_EQ(cube.getNrow(),    nrow);
   EXPECT_EQ(cube.getNcol(),    ncol);
   EXPECT_EQ(cube.getNpage(),   npage);
-  EXPECT_EQ(cube.getNelem(),   ncol * nrow * npage);
+  EXPECT_EQ(cube.getNelem(),   nrow * ncol * npage);
   EXPECT_EQ(cube.getSizes(),   std::make_tuple(nrow, ncol, npage));
   EXPECT_EQ(cube.getPitch0(),  pitch0);
   EXPECT_EQ(cube.getPitch1(),  pitch1);
@@ -240,7 +240,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8, Check) {
 
   EXPECT_EQ(cube.getNcol(), cube.getPitch0());
   EXPECT_EQ(cube.getNrow(), cube.getPitch1());
-  EXPECT_EQ(cube.getCapacity(), ncol * nrow * npage);
+  EXPECT_EQ(cube.getCapacity(), nrow * ncol * npage);
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -280,7 +280,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x10, Check) {
   EXPECT_EQ(cube.getNrow(),    nrow);
   EXPECT_EQ(cube.getNcol(),    ncol);
   EXPECT_EQ(cube.getNpage(),   npage);
-  EXPECT_EQ(cube.getNelem(),   ncol * nrow * npage);
+  EXPECT_EQ(cube.getNelem(),   nrow * ncol * npage);
   EXPECT_EQ(cube.getSizes(),   std::make_tuple(nrow, ncol, npage));
   EXPECT_EQ(cube.getPitch0(),  pitch0);
   EXPECT_EQ(cube.getPitch1(),  pitch1);
@@ -333,7 +333,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x8, Check) {
   EXPECT_EQ(cube.getNrow(),    nrow);
   EXPECT_EQ(cube.getNcol(),    ncol);
   EXPECT_EQ(cube.getNpage(),   npage);
-  EXPECT_EQ(cube.getNelem(),   ncol * nrow * npage);
+  EXPECT_EQ(cube.getNelem(),   nrow * ncol * npage);
   EXPECT_EQ(cube.getSizes(),   std::make_tuple(nrow, ncol, npage));
   EXPECT_EQ(cube.getPitch0(),  pitch0);
   EXPECT_EQ(cube.getPitch1(),  pitch1);
@@ -386,7 +386,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x10, Check) {
   EXPECT_EQ(cube.getNrow(),    nrow);
   EXPECT_EQ(cube.getNcol(),    ncol);
   EXPECT_EQ(cube.getNpage(),   npage);
-  EXPECT_EQ(cube.getNelem(),   ncol * nrow * npage);
+  EXPECT_EQ(cube.getNelem(),   nrow * ncol * npage);
   EXPECT_EQ(cube.getSizes(),   std::make_tuple(nrow, ncol, npage));
   EXPECT_EQ(cube.getPitch0(),  pitch0);
   EXPECT_EQ(cube.getPitch1(),  pitch1);
