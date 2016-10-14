@@ -136,7 +136,7 @@ int main( int argc, char **argv ) {
       auto time_r = solver.getReconstructorTime();
       auto time = time_s + time_i + time_r;
       std::cout << std::setw(log10(num_test)+1) << t
-                << " | svd(U_true' * U): " << smax << " / " << smin << " / " << smean
+                << " | svd(U_true' * U): " << smax << " / " << smean << " / " << smin
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter << std::endl;
       set_min(smin); set_max(smax); set_mean(smean);

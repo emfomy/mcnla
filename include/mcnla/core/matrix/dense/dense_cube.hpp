@@ -206,10 +206,10 @@ class DenseCube
   // Gets matrix block
   inline       MatrixType getPage( const index_t pageidx ) noexcept;
   inline const MatrixType getPage( const index_t pageidx ) const noexcept;
-  inline       MatrixType getCols( const index_t pageidx, const IdxRange rowrange ) noexcept;
-  inline const MatrixType getCols( const index_t pageidx, const IdxRange rowrange ) const noexcept;
-  inline       MatrixType getRows( const index_t pageidx, const IdxRange colrange ) noexcept;
-  inline const MatrixType getRows( const index_t pageidx, const IdxRange colrange ) const noexcept;
+  inline       MatrixType getCols( const index_t pageidx, const IdxRange colrange ) noexcept;
+  inline const MatrixType getCols( const index_t pageidx, const IdxRange colrange ) const noexcept;
+  inline       MatrixType getRows( const index_t pageidx, const IdxRange rowrange ) noexcept;
+  inline const MatrixType getRows( const index_t pageidx, const IdxRange rowrange ) const noexcept;
   inline       MatrixType getBlock( const index_t pageidx, const IdxRange rowrange, const IdxRange colrange ) noexcept;
   inline const MatrixType getBlock( const index_t pageidx, const IdxRange rowrange, const IdxRange colrange ) const noexcept;
   inline       MatrixType unfold() noexcept;

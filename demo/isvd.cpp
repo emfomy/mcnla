@@ -6,16 +6,15 @@
 ///
 
 #include <cmath>
+#include <cassert>
 #include <iostream>
 #include <iomanip>
 #include <valarray>
-#include <algorithm>
-#include <mcnla/core/utility.hpp>
+#include <mcnla/config.hpp>
 #include <mpi.h>
 #include <mkl.h>
 
 using namespace std;
-using namespace mcnla::utility;
 
 int mpi_size;
 int mpi_rank;
@@ -61,7 +60,7 @@ int main( int argc, char **argv ) {
     cout << "MCNLA "
          << MCNLA_VERSION_MAJOR << "."
          << MCNLA_VERSION_MINOR << "."
-         << MCNLA_VERSION_PATCH << " old demo" << endl << endl;
+         << MCNLA_VERSION_PATCH << " plain demo" << endl << endl;
   }
 
   int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
@@ -95,14 +94,14 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate memory
-  auto matrix_a      = malloc<double>(m0 * n);
-  auto matrix_u_true = malloc<double>(m0 * k);
-  auto matrix_qt     = malloc<double>(k * m);
-  auto matrix_u      = malloc<double>(m0 * k);
-  auto matrix_vt     = malloc<double>(k  * n);
-  auto vector_s      = malloc<double>(k);
-  auto matrix_qjt    = malloc<double>(k * mj);
-  auto matrices_qjt  = malloc<double>(k * mj * N);
+  auto matrix_a      = static_cast<double*>(malloc(m0 * n      * sizeof(double)));
+  auto matrix_u_true = static_cast<double*>(malloc(m0 * k      * sizeof(double)));
+  auto matrix_qt     = static_cast<double*>(malloc(k  * m      * sizeof(double)));
+  auto matrix_u      = static_cast<double*>(malloc(m0 * k      * sizeof(double)));
+  auto matrix_vt     = static_cast<double*>(malloc(k  * n      * sizeof(double)));
+  auto vector_s      = static_cast<double*>(malloc(k           * sizeof(double)));
+  auto matrix_qjt    = static_cast<double*>(malloc(k  * mj     * sizeof(double)));
+  auto matrices_qjt  = static_cast<double*>(malloc(k  * mj * N * sizeof(double)));
 
   // ====================================================================================================================== //
   // Create statistics collector
@@ -169,7 +168,7 @@ int main( int argc, char **argv ) {
       check(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
       time = time_s + time_i + time_r;
       cout << setw(log10(num_test)+1) << t
-                << " | svd(U_true' * U): " << smax << " / " << smin << " / " << smean
+                << " | svd(U_true' * U): " << smax << " / " << smean << " / " << smin
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << setw(log10(maxiter)+1) << iter << endl;
       set_min(smin); set_max(smax); set_mean(smean);
@@ -212,10 +211,10 @@ int main( int argc, char **argv ) {
 }
 
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int seed[4] ) {
-  auto matrix_u     = malloc<double>(m0 * m0);
-  auto matrix_v     = malloc<double>(n  * m0);
-  auto vector_tmp_s = malloc<double>(m0);
-  auto vector_tmp_b = malloc<double>(m0);
+  auto matrix_u     = static_cast<double*>(malloc(m0 * m0 * sizeof(double)));
+  auto matrix_v     = static_cast<double*>(malloc(n  * m0 * sizeof(double)));
+  auto vector_tmp_s = static_cast<double*>(malloc(m0      * sizeof(double)));
+  auto vector_tmp_b = static_cast<double*>(malloc(m0      * sizeof(double)));
 
   // Generate U & V using normal random
   LAPACKE_dlarnv(3, seed, m0*m0, matrix_u);
@@ -246,9 +245,9 @@ void createA( const int m0, const int n, const int k, double *matrix_a, double *
 
 void sketch( const int Nj, const int m, const int m0, const int n, const int k,
              const double *matrix_a, double *matrices_qjt, int seed[4] ) {
-  auto matrix_oit = malloc<double>(k * n);
-  auto vector_tmp_s = malloc<double>(k);
-  auto vector_tmp_b = malloc<double>(k);
+  auto matrix_oit   = static_cast<double*>(malloc(k * n * sizeof(double)));
+  auto vector_tmp_s = static_cast<double*>(malloc(k     * sizeof(double)));
+  auto vector_tmp_b = static_cast<double*>(malloc(k     * sizeof(double)));
 
   for ( auto i = 0; i < Nj; ++i ) {
     LAPACKE_dlarnv(3, seed, k*n, matrix_oit);
@@ -267,12 +266,12 @@ void sketch( const int Nj, const int m, const int m0, const int n, const int k,
 }
 
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter ) {
-  auto matrix_b   = malloc<double>(k * k * N);
-  auto matrix_d   = malloc<double>(k * k);
-  auto matrix_c   = malloc<double>(k * k);
-  auto matrix_xjt = malloc<double>(k * mj);
-  auto matrix_tmp = malloc<double>(k * mj);
-  auto vector_e   = malloc<double>(k);
+  auto matrix_b   = static_cast<double*>(malloc(k * k * N * sizeof(double)));
+  auto matrix_d   = static_cast<double*>(malloc(k * k     * sizeof(double)));
+  auto matrix_c   = static_cast<double*>(malloc(k * k     * sizeof(double)));
+  auto matrix_xjt = static_cast<double*>(malloc(k * mj    * sizeof(double)));
+  auto matrix_tmp = static_cast<double*>(malloc(k * mj    * sizeof(double)));
+  auto vector_e   = static_cast<double*>(malloc(k         * sizeof(double)));
 
   bool is_converged = false;
 
@@ -388,8 +387,8 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
 
 void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s ) {
-  auto matrix_w   = malloc<double>(k * k);
-  auto vector_tmp = malloc<double>(k);
+  auto matrix_w   = static_cast<double*>(malloc(k * k * sizeof(double)));
+  auto vector_tmp = static_cast<double*>(malloc(k     * sizeof(double)));
 
   // V := Q' * A
   cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, k, n, m0, 1.0, matrix_qt, k, matrix_a, m0, 0.0, matrix_vt, k);
@@ -407,9 +406,9 @@ void reconstruct( const int m0, const int n, const int k,
 
 void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
             double &smax, double &smin, double &smean ) {
-  auto matrix_tmp  = malloc<double>(k * k);
-  auto vector_tmp1 = malloc<double>(k);
-  auto vector_tmp2 = malloc<double>(k);
+  auto matrix_tmp  = static_cast<double*>(malloc(k * k * sizeof(double)));
+  auto vector_tmp1 = static_cast<double*>(malloc(k     * sizeof(double)));
+  auto vector_tmp2 = static_cast<double*>(malloc(k     * sizeof(double)));
 
   // TMP := Utrue' * U
   cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, k, k, m0, 1.0, matrix_u_true, m0, matrix_u, m0, 0.0, matrix_tmp, k);
