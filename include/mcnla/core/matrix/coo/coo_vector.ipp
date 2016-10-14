@@ -198,7 +198,7 @@ void CooVector<_Scalar>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
-  mcnla_assert_gele(range.begin, 0, length_); mcnla_assert_ge(range.getLength(), 0);
+  mcnla_assert_ge(range.begin, 0); mcnla_assert_le(range.end, length_); mcnla_assert_ge(range.getLength(), 0);
   mcnla_assert_true(isSorted());
   auto it0 = std::lower_bound(this->begin(), this->end(), makeCooTuple(range.begin));
   auto it1 = std::lower_bound(it0, this->end(), makeCooTuple(range.end));

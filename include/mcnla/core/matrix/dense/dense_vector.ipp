@@ -272,7 +272,7 @@ template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) noexcept {
-  mcnla_assert_gele(range.begin, 0, length_); mcnla_assert_ge(range.getLength(), 0);
+  mcnla_assert_ge(range.begin, 0); mcnla_assert_le(range.end, length_); mcnla_assert_ge(range.getLength(), 0);
   return VectorType(range.getLength(), stride_, data_, getPos(range.begin));
 }
 
@@ -283,7 +283,7 @@ template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
     const IdxRange range
 ) const noexcept {
-  mcnla_assert_gele(range.begin, 0, length_); mcnla_assert_ge(range.getLength(), 0);
+  mcnla_assert_ge(range.begin, 0); mcnla_assert_le(range.end, length_); mcnla_assert_ge(range.getLength(), 0);
   return VectorType(range.getLength(), stride_, data_, getPos(range.begin));
 }
 

@@ -359,8 +359,8 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getBlock(
     const IdxRange rowrange,
     const IdxRange colrange
 ) noexcept {
-  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
-  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
   return MatrixType(rowrange.getLength(), colrange.getLength(), pitch_, data_, getPos(rowrange.begin, colrange.begin));
 }
 
@@ -372,8 +372,8 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getBlock(
     const IdxRange rowrange,
     const IdxRange colrange
 ) const noexcept {
-  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
-  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
   return MatrixType(rowrange.getLength(), colrange.getLength(), pitch_, data_, getPos(rowrange.begin, colrange.begin));
 }
 
@@ -384,7 +384,7 @@ template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getCols(
     const IdxRange colrange
 ) noexcept {
-  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
   return MatrixType(nrow_, colrange.getLength(), pitch_, data_, getPos(0, colrange.begin));
 }
 
@@ -395,7 +395,7 @@ template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getCols(
     const IdxRange colrange
 ) const noexcept {
-  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
   return MatrixType(nrow_, colrange.getLength(), pitch_, data_, getPos(0, colrange.begin));
 }
 
@@ -406,7 +406,7 @@ template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getRows(
     const IdxRange rowrange
 ) noexcept {
-  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
   return MatrixType(rowrange.getLength(), ncol_, pitch_, data_, getPos(rowrange.begin, 0));
 }
 
@@ -417,7 +417,7 @@ template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::getRows(
     const IdxRange rowrange
 ) const noexcept {
-  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
   return MatrixType(rowrange.getLength(), ncol_, pitch_, data_, getPos(rowrange.begin, 0));
 }
 
@@ -452,7 +452,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getColSegment(
     const IdxRange rowrange
 ) noexcept {
   mcnla_assert_gelt(colidx, 0, ncol_);
-  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
   return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx));
 }
 
@@ -465,7 +465,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getColSegment(
     const IdxRange rowrange
 ) const noexcept {
   mcnla_assert_gelt(colidx, 0, ncol_);
-  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
   return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx));
 }
 
@@ -500,7 +500,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
     const IdxRange colrange
 ) noexcept {
   mcnla_assert_gelt(rowidx, 0, nrow_);
-  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
   return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin));
 }
 
@@ -513,7 +513,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
     const IdxRange colrange
 ) const noexcept {
   mcnla_assert_gelt(rowidx, 0, nrow_);
-  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
   return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin));
 }
 
