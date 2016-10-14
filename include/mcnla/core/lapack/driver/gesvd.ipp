@@ -78,8 +78,8 @@ template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::resize(
     const index_t nrow, const index_t ncol
 ) noexcept {
-  mcnla_assert_gt(nrow_, 0);
-  mcnla_assert_gt(ncol_, 0);
+  mcnla_assert_gt(nrow, 0);
+  mcnla_assert_gt(ncol, 0);
   nrow_ = nrow;
   ncol_ = ncol;
   work_ = VectorType(query(nrow, ncol));

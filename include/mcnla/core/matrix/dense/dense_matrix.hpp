@@ -176,10 +176,10 @@ class DenseMatrix
   // Gets matrix block
   inline       MatrixType getBlock( const IdxRange rowrange, const IdxRange colrange ) noexcept;
   inline const MatrixType getBlock( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
-  inline       MatrixType getCols( const IdxRange rowrange ) noexcept;
-  inline const MatrixType getCols( const IdxRange rowrange ) const noexcept;
-  inline       MatrixType getRows( const IdxRange colrange ) noexcept;
-  inline const MatrixType getRows( const IdxRange colrange ) const noexcept;
+  inline       MatrixType getCols( const IdxRange colrange ) noexcept;
+  inline const MatrixType getCols( const IdxRange colrange ) const noexcept;
+  inline       MatrixType getRows( const IdxRange rowrange ) noexcept;
+  inline const MatrixType getRows( const IdxRange rowrange ) const noexcept;
 
   // Gets vector segment
   inline       VectorType getCol( const index_t colidx ) noexcept;
