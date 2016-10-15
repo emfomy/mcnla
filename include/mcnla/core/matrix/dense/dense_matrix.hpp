@@ -198,8 +198,8 @@ class DenseMatrix
  protected:
 
   // Gets stride
-  inline index_t getColInc() const noexcept;
-  inline index_t getRowInc() const noexcept;
+  inline index_t getColStride() const noexcept;
+  inline index_t getRowStride() const noexcept;
 
 };
 

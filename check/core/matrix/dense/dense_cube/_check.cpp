@@ -51,6 +51,10 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -104,6 +108,10 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x10, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -157,6 +165,10 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x5, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -210,6 +222,10 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x10, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -263,6 +279,10 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -316,6 +336,10 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x10, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -369,6 +393,10 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x8, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -422,4 +450,8 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x10, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : cube ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }

@@ -228,17 +228,17 @@ class DenseCube
   inline const VectorType getTube( const index_t rowidx, const index_t colidx ) const noexcept;
   inline       VectorType getTubeSegment( const index_t rowidx, const index_t colidx, const IdxRange pagerange ) noexcept;
   inline const VectorType getTubeSegment( const index_t rowidx, const index_t colidx, const IdxRange pagerange ) const noexcept;
-  inline       VectorType getDiagonal( const index_t pageidx, const index_t idx ) noexcept;
-  inline const VectorType getDiagonal( const index_t pageidx, const index_t idx ) const noexcept;
+  inline       VectorType getDiagonal( const index_t pageidx, const index_t idx = 0 ) noexcept;
+  inline const VectorType getDiagonal( const index_t pageidx, const index_t idx = 0 ) const noexcept;
   inline       VectorType vectorize() noexcept;
   inline const VectorType vectorize() const noexcept;
 
  protected:
 
   // Gets stride
-  inline index_t getColInc() const noexcept;
-  inline index_t getRowInc() const noexcept;
-  inline index_t getTubeInc() const noexcept;
+  inline index_t getColStride() const noexcept;
+  inline index_t getRowStride() const noexcept;
+  inline index_t getTubeStride() const noexcept;
 
 };
 

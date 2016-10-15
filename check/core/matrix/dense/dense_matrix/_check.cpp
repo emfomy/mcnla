@@ -42,6 +42,10 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : mat ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -86,6 +90,10 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : mat ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -130,6 +138,10 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : mat ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -174,4 +186,8 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : mat ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }

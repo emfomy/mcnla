@@ -254,8 +254,8 @@ void CooMatrix<_Scalar, _layout>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
-  mcnla_assert_gele(rowrange.begin, 0, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
-  mcnla_assert_gele(colrange.begin, 0, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
+  mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
   mcnla_assert_true(isSorted());
   auto begintuple = isColMajor(_layout) ? makeCooTuple(rowrange.begin, colrange.begin)
                                         : makeCooTuple(colrange.begin, rowrange.begin);

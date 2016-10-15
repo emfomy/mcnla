@@ -282,9 +282,9 @@ void CooCube<_Scalar, _layout>::getPosNnz(
           index_t &pos,
           index_t &nnz
 ) const noexcept {
-  mcnla_assert_gele(rowrange.begin,  rowrange.end,  nrow_);  mcnla_assert_ge(rowrange.getLength(),  0);
-  mcnla_assert_gele(colrange.begin,  colrange.end,  ncol_);  mcnla_assert_ge(colrange.getLength(),  0);
-  mcnla_assert_gele(pagerange.begin, pagerange.end, npage_); mcnla_assert_ge(pagerange.getLength(), 0);
+  mcnla_assert_ge(rowrange.begin,  0); mcnla_assert_le(rowrange.end,  nrow_);  mcnla_assert_ge(rowrange.getLength(),  0);
+  mcnla_assert_ge(colrange.begin,  0); mcnla_assert_le(colrange.end,  ncol_);  mcnla_assert_ge(colrange.getLength(),  0);
+  mcnla_assert_ge(pagerange.begin, 0); mcnla_assert_le(pagerange.end, npage_); mcnla_assert_ge(pagerange.getLength(), 0);
   mcnla_assert_true(isSorted());
   auto begintuple = isColMajor(_layout) ? makeCooTuple(rowrange.begin, colrange.begin, pagerange.begin)
                                         : makeCooTuple(colrange.begin, rowrange.begin, pagerange.begin);
