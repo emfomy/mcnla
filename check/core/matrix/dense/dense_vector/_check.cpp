@@ -34,6 +34,10 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : vec ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }
 
 
@@ -70,4 +74,8 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Check) {
     tmp.pop();
   }
   EXPECT_EQ(tmp.size(), 0);
+
+  for ( auto value : vec ) {
+    EXPECT_NE(value, TypeParam(0));
+  }
 }

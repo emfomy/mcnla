@@ -429,7 +429,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
     const index_t colidx
 ) noexcept {
   mcnla_assert_gelt(colidx, 0, ncol_);
-  return VectorType(nrow_, getColInc(), data_, getPos(0, colidx));
+  return VectorType(nrow_, getColStride(), data_, getPos(0, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -440,7 +440,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getCol(
     const index_t colidx
 ) const noexcept {
   mcnla_assert_gelt(colidx, 0, ncol_);
-  return VectorType(nrow_, getColInc(), data_, getPos(0, colidx));
+  return VectorType(nrow_, getColStride(), data_, getPos(0, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -453,7 +453,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getColSegment(
 ) noexcept {
   mcnla_assert_gelt(colidx, 0, ncol_);
   mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
-  return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx));
+  return VectorType(rowrange.getLength(), getColStride(), data_, getPos(rowrange.begin, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -466,7 +466,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getColSegment(
 ) const noexcept {
   mcnla_assert_gelt(colidx, 0, ncol_);
   mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
-  return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx));
+  return VectorType(rowrange.getLength(), getColStride(), data_, getPos(rowrange.begin, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -477,7 +477,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
     const index_t rowidx
 ) noexcept {
   mcnla_assert_gelt(rowidx, 0, nrow_);
-  return VectorType(ncol_, getRowInc(), data_, getPos(rowidx, 0));
+  return VectorType(ncol_, getRowStride(), data_, getPos(rowidx, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,7 +488,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRow(
     const index_t rowidx
 ) const noexcept {
   mcnla_assert_gelt(rowidx, 0, nrow_);
-  return VectorType(ncol_, getRowInc(), data_, getPos(rowidx, 0));
+  return VectorType(ncol_, getRowStride(), data_, getPos(rowidx, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -501,7 +501,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
 ) noexcept {
   mcnla_assert_gelt(rowidx, 0, nrow_);
   mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
-  return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin));
+  return VectorType(colrange.getLength(), getRowStride(), data_, getPos(rowidx, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -514,7 +514,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getRowSegment(
 ) const noexcept {
   mcnla_assert_gelt(rowidx, 0, nrow_);
   mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
-  return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin));
+  return VectorType(colrange.getLength(), getRowStride(), data_, getPos(rowidx, colrange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -604,7 +604,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noex
 /// @brief  Gets the column stride.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseMatrix<_Scalar, _layout>::getColInc() const noexcept {
+index_t DenseMatrix<_Scalar, _layout>::getColStride() const noexcept {
   return isColMajor(_layout) ? 1 : pitch_;
 }
 
@@ -612,7 +612,7 @@ index_t DenseMatrix<_Scalar, _layout>::getColInc() const noexcept {
 /// @brief  Gets the row stride.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseMatrix<_Scalar, _layout>::getRowInc() const noexcept {
+index_t DenseMatrix<_Scalar, _layout>::getRowStride() const noexcept {
   return isColMajor(_layout) ? pitch_ : 1;
 }
 

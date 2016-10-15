@@ -126,7 +126,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(capacity, pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_);
+  mcnla_assert_ge(capacity, pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_);
+  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +184,7 @@ DenseCube<_Scalar, _layout>::DenseCube(
   mcnla_assert_ge(pitch1_, size1_);
   mcnla_assert_gt(pitch0_, 0);
   mcnla_assert_gt(pitch1_, 0);
-  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_);
+  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -693,7 +693,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getCol(
 ) noexcept {
   mcnla_assert_gelt(colidx,  0, ncol_);
   mcnla_assert_gelt(pageidx, 0, npage_);
-  return VectorType(nrow_, getColInc(), data_, getPos(0, colidx, pageidx));
+  return VectorType(nrow_, getColStride(), data_, getPos(0, colidx, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -706,7 +706,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getCol(
 ) const noexcept {
   mcnla_assert_gelt(colidx,  0, ncol_);
   mcnla_assert_gelt(pageidx, 0, npage_);
-  return VectorType(nrow_, getColInc(), data_, getPos(0, colidx, pageidx));
+  return VectorType(nrow_, getColStride(), data_, getPos(0, colidx, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -721,7 +721,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getColSegment(
   mcnla_assert_gelt(colidx,  0, ncol_);
   mcnla_assert_gelt(pageidx, 0, npage_);
   mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
-  return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx, pageidx));
+  return VectorType(rowrange.getLength(), getColStride(), data_, getPos(rowrange.begin, colidx, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -736,7 +736,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getColSegment(
   mcnla_assert_gelt(colidx,  0, ncol_);
   mcnla_assert_gelt(pageidx, 0, npage_);
   mcnla_assert_ge(rowrange.begin, 0); mcnla_assert_le(rowrange.end, nrow_); mcnla_assert_ge(rowrange.getLength(), 0);
-  return VectorType(rowrange.getLength(), getColInc(), data_, getPos(rowrange.begin, colidx, pageidx));
+  return VectorType(rowrange.getLength(), getColStride(), data_, getPos(rowrange.begin, colidx, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -749,7 +749,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRow(
 ) noexcept {
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(pageidx, 0, npage_);
-  return VectorType(ncol_, getRowInc(), data_, getPos(rowidx, 0, pageidx));
+  return VectorType(ncol_, getRowStride(), data_, getPos(rowidx, 0, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -762,7 +762,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRow(
 ) const noexcept {
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(pageidx, 0, npage_);
-  return VectorType(ncol_, getRowInc(), data_, getPos(rowidx, 0, pageidx));
+  return VectorType(ncol_, getRowStride(), data_, getPos(rowidx, 0, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -777,7 +777,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRowSegment(
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(pageidx, 0, npage_);
   mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
-  return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin, pageidx));
+  return VectorType(colrange.getLength(), getRowStride(), data_, getPos(rowidx, colrange.begin, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -792,7 +792,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getRowSegment(
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(pageidx, 0, npage_);
   mcnla_assert_ge(colrange.begin, 0); mcnla_assert_le(colrange.end, ncol_); mcnla_assert_ge(colrange.getLength(), 0);
-  return VectorType(colrange.getLength(), getRowInc(), data_, getPos(rowidx, colrange.begin, pageidx));
+  return VectorType(colrange.getLength(), getRowStride(), data_, getPos(rowidx, colrange.begin, pageidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -805,7 +805,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTube(
 ) noexcept {
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(colidx,  0, ncol_);
-  return VectorType(npage_, getTubeInc(), data_, getPos(rowidx, colidx, 0));
+  return VectorType(npage_, getTubeStride(), data_, getPos(rowidx, colidx, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -818,7 +818,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTube(
 ) const noexcept {
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(colidx,  0, ncol_);
-  return VectorType(npage_, getTubeInc(), data_, getPos(rowidx, colidx, 0));
+  return VectorType(npage_, getTubeStride(), data_, getPos(rowidx, colidx, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -833,7 +833,7 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTubeSegment(
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(colidx,  0, ncol_);
   mcnla_assert_ge(pagerange.begin, 0); mcnla_assert_le(pagerange.end, npage_); mcnla_assert_ge(pagerange.getLength(), 0);
-  return VectorType(pagerange.getLength(), getTubeInc(), data_, getPos(rowidx, colidx, pagerange.begin));
+  return VectorType(pagerange.getLength(), getTubeStride(), data_, getPos(rowidx, colidx, pagerange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -848,7 +848,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getTubeSegment(
   mcnla_assert_gelt(rowidx,  0, nrow_);
   mcnla_assert_gelt(colidx,  0, ncol_);
   mcnla_assert_ge(pagerange.begin, 0); mcnla_assert_le(pagerange.end, npage_); mcnla_assert_ge(pagerange.getLength(), 0);
-  return VectorType(pagerange.getLength(), getTubeInc(), data_, getPos(rowidx, colidx, pagerange.begin));
+  return VectorType(pagerange.getLength(), getTubeStride(), data_, getPos(rowidx, colidx, pagerange.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -918,7 +918,7 @@ const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
-  return VectorType(pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_, 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_, 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -926,14 +926,14 @@ DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseCube<_Scalar, _layout>::vectorize() const noexcept {
-  return VectorType(pitch0_ * pitch1_ * (npage_-1) - pitch0_ * (size1_-1) + size0_, 1, data_, getPos(0, 0, 0));
+  return VectorType(pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_, 1, data_, getPos(0, 0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the column stride.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getColInc() const noexcept {
+index_t DenseCube<_Scalar, _layout>::getColStride() const noexcept {
   return isColMajor(_layout) ? 1 : pitch0_;
 }
 
@@ -941,7 +941,7 @@ index_t DenseCube<_Scalar, _layout>::getColInc() const noexcept {
 /// @brief  Gets the row stride.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getRowInc() const noexcept {
+index_t DenseCube<_Scalar, _layout>::getRowStride() const noexcept {
   return isColMajor(_layout) ? pitch0_ : 1;
 }
 
@@ -949,7 +949,7 @@ index_t DenseCube<_Scalar, _layout>::getRowInc() const noexcept {
 /// @brief  Gets the tube stride.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseCube<_Scalar, _layout>::getTubeInc() const noexcept {
+index_t DenseCube<_Scalar, _layout>::getTubeStride() const noexcept {
   return pitch0_ * pitch1_;
 }
 
