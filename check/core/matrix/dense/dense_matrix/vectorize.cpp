@@ -14,6 +14,8 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
 
   const auto idxs = nrow * ncol;
 
+  EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
+
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
   EXPECT_EQ(segment.getSizes(),  idxs);
@@ -71,7 +73,9 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
 
   auto segment = mat.vectorize();
 
-  const auto idxs = pitch*ncol - (pitch-nrow);
+  const auto idxs = pitch * ncol - (pitch-nrow);
+
+  EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
@@ -134,6 +138,8 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
 
   const auto idxs = nrow * ncol;
 
+  EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
+
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
   EXPECT_EQ(segment.getSizes(),  idxs);
@@ -191,7 +197,9 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
 
   auto segment = mat.vectorize();
 
-  const auto idxs = pitch*nrow - (pitch-ncol);
+  const auto idxs = nrow * pitch - (pitch-ncol);
+
+  EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);

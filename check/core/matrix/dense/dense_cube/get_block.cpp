@@ -27,6 +27,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
 
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
+
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
       EXPECT_EQ(block(i, j), cube(i+row0, j+col0, pageidx));
@@ -78,6 +81,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x10, GetBlock) {
 
   EXPECT_EQ(block.getCapacity(), capacity - (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
+
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -131,6 +137,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x5, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
 
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
+
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
       EXPECT_EQ(block(i, j), cube(i+row0, j+col0, pageidx));
@@ -182,6 +191,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x10, GetBlock) {
 
   EXPECT_EQ(block.getCapacity(), capacity - (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0 + col0*pitch0 + pageidx*pitch0*pitch1));
+
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -235,6 +247,9 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
 
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
+
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
       EXPECT_EQ(block(i, j), cube(i+row0, j+col0, pageidx));
@@ -286,6 +301,9 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x10, GetBlock) {
 
   EXPECT_EQ(block.getCapacity(), capacity - (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
+
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -339,6 +357,9 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x8, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
 
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
+
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
       EXPECT_EQ(block(i, j), cube(i+row0, j+col0, pageidx));
@@ -390,6 +411,9 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x10, GetBlock) {
 
   EXPECT_EQ(block.getCapacity(), capacity - (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
   EXPECT_EQ(block.getOffset(),   offset + (row0*pitch0 + col0 + pageidx*pitch0*pitch1));
+
+  EXPECT_EQ(block.getValue(),            &(cube(row0, col0, pageidx)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {

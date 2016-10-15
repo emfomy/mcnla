@@ -16,6 +16,8 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5, Unfold) {
 
   const auto cols = ncol * npage;
 
+  EXPECT_EQ(cols * pitch0, &(cube(0, ncol-1, npage-1)) - &(cube(0, 0, 0)) + pitch0);
+
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * cols);
@@ -27,6 +29,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5, Unfold) {
 
   EXPECT_EQ(block.getCapacity(), capacity);
   EXPECT_EQ(block.getOffset(),   offset);
+
+  EXPECT_EQ(block.getValue(),            &(cube(0, 0, 0)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -75,6 +80,8 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x10, Unfold) {
 
   const auto cols = pitch1 * npage - (pitch1-ncol);
 
+  EXPECT_EQ(cols * pitch0, &(cube(0, ncol-1, npage-1)) - &(cube(0, 0, 0)) + pitch0);
+
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * (cols));
@@ -86,6 +93,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x10, Unfold) {
 
   EXPECT_EQ(block.getCapacity(), capacity);
   EXPECT_EQ(block.getOffset(),   offset);
+
+  EXPECT_EQ(block.getValue(),            &(cube(0, 0, 0)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -136,6 +146,8 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x5, Unfold) {
 
   const auto cols = ncol * npage;
 
+  EXPECT_EQ(cols * pitch0, &(cube(0, ncol-1, npage-1)) - &(cube(0, 0, 0)) + pitch0);
+
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * cols);
@@ -147,6 +159,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x5, Unfold) {
 
   EXPECT_EQ(block.getCapacity(), capacity);
   EXPECT_EQ(block.getOffset(),   offset);
+
+  EXPECT_EQ(block.getValue(),            &(cube(0, 0, 0)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -195,6 +210,8 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x10, Unfold) {
 
   const auto cols = pitch1 * npage - (pitch1-ncol);
 
+  EXPECT_EQ(cols * pitch0, &(cube(0, ncol-1, npage-1)) - &(cube(0, 0, 0)) + pitch0);
+
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * (cols));
@@ -206,6 +223,9 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x10, Unfold) {
 
   EXPECT_EQ(block.getCapacity(), capacity);
   EXPECT_EQ(block.getOffset(),   offset);
+
+  EXPECT_EQ(block.getValue(),            &(cube(0, 0, 0)));
+  EXPECT_EQ(&(block.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -255,6 +275,8 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8, Unfold) {
   auto block = cube.unfold();
 
   const auto rows = nrow * npage;
+
+  EXPECT_EQ(rows * pitch0, &(cube(nrow-1, 0, npage-1)) - &(cube(0, 0, 0)) + pitch0);
 
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  ncol);
@@ -314,6 +336,8 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x10, Unfold) {
   auto block = cube.unfold();
 
   const auto rows = pitch1 * npage - (pitch1-nrow);
+
+  EXPECT_EQ(rows * pitch0, &(cube(nrow-1, 0, npage-1)) - &(cube(0, 0, 0)) + pitch0);
 
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  ncol);
@@ -376,6 +400,8 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x8, Unfold) {
 
   const auto rows = nrow * npage;
 
+  EXPECT_EQ(rows * pitch0, &(cube(nrow-1, 0, npage-1)) - &(cube(0, 0, 0)) + pitch0);
+
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  ncol);
   EXPECT_EQ(block.getNelem(), rows * ncol);
@@ -434,6 +460,8 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x10, Unfold) {
   auto block = cube.unfold();
 
   const auto rows = pitch1 * npage - (pitch1-nrow);
+
+  EXPECT_EQ(rows * pitch0, &(cube(nrow-1, 0, npage-1)) - &(cube(0, 0, 0)) + pitch0);
 
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  ncol);
