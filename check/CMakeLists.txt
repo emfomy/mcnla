@@ -15,12 +15,16 @@ endif()
 if(GTEST_FOUND)
   set(INCS ${INCS} "${GTEST_INCLUDE_DIRS}")
   set(LIBS ${LIBS} "${GTEST_BOTH_LIBRARIES}")
-  set(DEFS ${DEFS} "MCNLA_USE_GTEST")
 endif()
 
 # Add check folders
 include(check.cmake)
-add_check(core/matrix/dense "Dense Container Module test")
+add_check(core/matrix/dense/dense_vector/test       "Dense Vector test")
+add_check(core/matrix/dense/dense_vector/death_test "Dense Vector death test")
+add_check(core/matrix/dense/dense_matrix/test       "Dense Matrix test")
+add_check(core/matrix/dense/dense_matrix/death_test "Dense Matrix death test")
+add_check(core/matrix/dense/dense_cube/test         "Dense Cube   test")
+add_check(core/matrix/dense/dense_cube/death_test   "Dense Cube   death test")
 
 # Add rule 'build_test'
 add_custom_target(

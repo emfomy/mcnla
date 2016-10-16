@@ -6,7 +6,7 @@
 using MyTypes = testing::Types<float, double, std::complex<float>, std::complex<double>>;
 
 template <typename _Scalar, mcnla::index_t _length, mcnla::index_t _stride, mcnla::index_t _memsize, mcnla::index_t _offset>
-class DenseVectorTest : public testing::Test {
+class DenseVectorTestBase : public testing::Test {
 
  protected:
 
@@ -33,9 +33,21 @@ class DenseVectorTest : public testing::Test {
 };
 
 template <typename _Scalar>
-class DenseVectorTest_Size8_Stride1 : public DenseVectorTest<_Scalar, 8, 1, 10, 2> {};
+class DenseVectorTest_Size8_Stride1 : public DenseVectorTestBase<_Scalar, 8, 1, 10, 2> {};
 TYPED_TEST_CASE(DenseVectorTest_Size8_Stride1, MyTypes);
 
 template <typename _Scalar>
-class DenseVectorTest_Size8_Stride3 : public DenseVectorTest<_Scalar, 8, 3, 25, 3> {};
+class DenseVectorTest_Size8_Stride3 : public DenseVectorTestBase<_Scalar, 8, 3, 25, 3> {};
 TYPED_TEST_CASE(DenseVectorTest_Size8_Stride3, MyTypes);
+
+template <typename _Scalar>
+class DenseVectorDeathTest : public testing::Test {};
+TYPED_TEST_CASE(DenseVectorDeathTest, MyTypes);
+
+template <typename _Scalar>
+using DenseVectorDeathTest_Size8_Stride1 = DenseVectorTest_Size8_Stride1<_Scalar>;
+TYPED_TEST_CASE(DenseVectorDeathTest_Size8_Stride1, MyTypes);
+
+template <typename _Scalar>
+using DenseVectorDeathTest_Size8_Stride3 = DenseVectorTest_Size8_Stride3<_Scalar>;
+TYPED_TEST_CASE(DenseVectorDeathTest_Size8_Stride3, MyTypes);
