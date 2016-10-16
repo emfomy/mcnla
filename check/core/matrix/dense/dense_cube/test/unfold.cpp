@@ -1,4 +1,3 @@
-#define MCNLA_USE_GTEST
 #include "../test.hpp"
 #include <queue>
 

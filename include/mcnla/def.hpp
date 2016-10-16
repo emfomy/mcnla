@@ -37,10 +37,10 @@
 #define mcnla_assert_gt( val1, val2 )  assert(val1 >  val2);
 #define mcnla_assert_ge( val1, val2 )  assert(val1 >= val2);
 
-#define mcnla_assert_gtlt( val, bound1, bound2 )  { assert(val >  bound1 && val <  bound2); }
-#define mcnla_assert_gtle( val, bound1, bound2 )  { assert(val >  bound1 && val <= bound2); }
-#define mcnla_assert_gelt( val, bound1, bound2 )  { assert(val >= bound1 && val <  bound2); }
-#define mcnla_assert_gele( val, bound1, bound2 )  { assert(val >= bound1 && val <= bound2); }
+#define mcnla_assert_gtlt( val, bound1, bound2 )  assert(val >  bound1 && val <  bound2);
+#define mcnla_assert_gtle( val, bound1, bound2 )  assert(val >  bound1 && val <= bound2);
+#define mcnla_assert_gelt( val, bound1, bound2 )  assert(val >= bound1 && val <  bound2);
+#define mcnla_assert_gele( val, bound1, bound2 )  assert(val >= bound1 && val <= bound2);
 
 #else  // MCNLA_USE_GTEST
 

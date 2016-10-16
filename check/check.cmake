@@ -1,6 +1,6 @@
 # check/check.cmake
 
-function(add_check checkpath checkcomment)
+function(add_check checkpath checkcomment defs)
 
   # Set target name
   string(REPLACE "/" "_" checkname "${checkpath}")
@@ -16,6 +16,7 @@ function(add_check checkpath checkcomment)
   target_include_directories(${checktarget} SYSTEM PUBLIC ${INCS})
   target_link_libraries(${checktarget} ${LIBS})
   target_compile_definitions(${checktarget} PUBLIC ${DEFS})
+  target_compile_definitions(${checktarget} PUBLIC ${defs})
   target_compile_definitions(${checktarget} PUBLIC "MCNLA_CHECK_NAME=\"${checkcomment}\"")
   set_target_properties(${checktarget} PROPERTIES COMPILE_FLAGS ${COMFLGS})
   set_target_properties(${checktarget} PROPERTIES LINK_FLAGS    ${LNKFLGS})
