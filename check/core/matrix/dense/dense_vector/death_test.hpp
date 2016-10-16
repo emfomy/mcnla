@@ -3,7 +3,7 @@
 #include "test.hpp"
 
 template <typename _Scalar>
-class DenseVectorDeathTest : public testing::Test {};
+using DenseVectorDeathTest = DenseVectorTest<_Scalar>;
 TYPED_TEST_CASE(DenseVectorDeathTest, MyTypes);
 
 template <typename _Scalar>

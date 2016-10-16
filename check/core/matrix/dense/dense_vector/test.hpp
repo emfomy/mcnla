@@ -34,6 +34,10 @@ class DenseVectorTestBase : public testing::Test {
 
 
 template <typename _Scalar>
+class DenseVectorTest : public testing::Test {};
+TYPED_TEST_CASE(DenseVectorTest, MyTypes);
+
+template <typename _Scalar>
 class DenseVectorTest_Size8_Stride1 : public DenseVectorTestBase<_Scalar, 8, 1, 10, 2> {};
 TYPED_TEST_CASE(DenseVectorTest_Size8_Stride1, MyTypes);
 

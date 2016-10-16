@@ -68,7 +68,9 @@ Array<_Type>::Array( const Array &other ) noexcept
 template <typename _Type>
 Array<_Type>::Array( Array &&other ) noexcept
   : BaseType(std::move(other)),
-    offset_(other.offset_) {}
+    offset_(other.offset_) {
+  static_cast<BaseType&>(other) = kNullPtr; other.offset_ = 0;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -86,7 +88,8 @@ Array<_Type>& Array<_Type>::operator=( const Array &other ) noexcept {
 ///
 template <typename _Type>
 Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
-  BaseType::operator=(std::move(other)); offset_ = other.offset_; other.offset_ = 0;
+  BaseType::operator=(std::move(other)); offset_ = other.offset_;
+  static_cast<BaseType&>(other) = kNullPtr; other.offset_ = 0;
   return *this;
 }
 
