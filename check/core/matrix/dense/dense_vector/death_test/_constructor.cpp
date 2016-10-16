@@ -1,4 +1,4 @@
-#include "../test.hpp"
+#include "../death_test.hpp"
 
 TYPED_TEST(DenseVectorDeathTest, Constructor) {
   using VectorType = mcnla::matrix::DenseVector<TypeParam>;

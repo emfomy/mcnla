@@ -13,18 +13,18 @@ else()
   find_package(GTest  1.8 REQUIRED)
 endif()
 if(GTEST_FOUND)
-  set(INCS ${INCS} "${GTEST_INCLUDE_DIRS}")
-  set(LIBS ${LIBS} "${GTEST_BOTH_LIBRARIES}")
+  list(APPEND INCS "${GTEST_INCLUDE_DIRS}")
+  list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")
 endif()
 
 # Add check folders
 include(check.cmake)
-add_check(core/matrix/dense/dense_vector/test       "Dense Vector test" "MCNLA_USE_GTEST")
-add_check(core/matrix/dense/dense_vector/death_test "Dense Vector death test" "")
-add_check(core/matrix/dense/dense_matrix/test       "Dense Matrix test" "MCNLA_USE_GTEST")
-add_check(core/matrix/dense/dense_matrix/death_test "Dense Matrix death test" "")
-add_check(core/matrix/dense/dense_cube/test         "Dense Cube test" "MCNLA_USE_GTEST")
-add_check(core/matrix/dense/dense_cube/death_test   "Dense Cube death test" "")
+add_check_test(core/matrix/dense/dense_vector  "Dense Vector test")
+add_check_death(core/matrix/dense/dense_vector "Dense Vector death test")
+add_check_test(core/matrix/dense/dense_matrix  "Dense Matrix test")
+add_check_death(core/matrix/dense/dense_matrix "Dense Matrix death test")
+add_check_test(core/matrix/dense/dense_cube    "Dense Cube test")
+add_check_death(core/matrix/dense/dense_cube   "Dense Cube death test")
 
 # Add rule 'build_test'
 add_custom_target(

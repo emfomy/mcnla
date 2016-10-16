@@ -1,4 +1,4 @@
-#include "../test.hpp"
+#include "../death_test.hpp"
 
 
 TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, ConstMethod) {

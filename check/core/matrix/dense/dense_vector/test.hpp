@@ -32,6 +32,7 @@ class DenseVectorTestBase : public testing::Test {
 
 };
 
+
 template <typename _Scalar>
 class DenseVectorTest_Size8_Stride1 : public DenseVectorTestBase<_Scalar, 8, 1, 10, 2> {};
 TYPED_TEST_CASE(DenseVectorTest_Size8_Stride1, MyTypes);
@@ -39,15 +40,3 @@ TYPED_TEST_CASE(DenseVectorTest_Size8_Stride1, MyTypes);
 template <typename _Scalar>
 class DenseVectorTest_Size8_Stride3 : public DenseVectorTestBase<_Scalar, 8, 3, 25, 3> {};
 TYPED_TEST_CASE(DenseVectorTest_Size8_Stride3, MyTypes);
-
-template <typename _Scalar>
-class DenseVectorDeathTest : public testing::Test {};
-TYPED_TEST_CASE(DenseVectorDeathTest, MyTypes);
-
-template <typename _Scalar>
-using DenseVectorDeathTest_Size8_Stride1 = DenseVectorTest_Size8_Stride1<_Scalar>;
-TYPED_TEST_CASE(DenseVectorDeathTest_Size8_Stride1, MyTypes);
-
-template <typename _Scalar>
-using DenseVectorDeathTest_Size8_Stride3 = DenseVectorTest_Size8_Stride3<_Scalar>;
-TYPED_TEST_CASE(DenseVectorDeathTest_Size8_Stride3, MyTypes);

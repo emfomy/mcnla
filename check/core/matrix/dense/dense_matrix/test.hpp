@@ -7,7 +7,7 @@ using MyTypes = testing::Types<float, double, std::complex<float>, std::complex<
 
 template <typename _Scalar, mcnla::Layout _layout,
           mcnla::index_t _nrow, mcnla::index_t _ncol, mcnla::index_t _pitch, mcnla::index_t _memsize, mcnla::index_t _offset>
-class DenseMatrixTest : public testing::Test {
+class DenseMatrixTestBase : public testing::Test {
 
  protected:
 
@@ -34,18 +34,23 @@ class DenseMatrixTest : public testing::Test {
 
 };
 
+
 template <typename _Scalar>
-class DenseMatrixTest_ColMajor_Size8x5_Pitch8  : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 8,  80,  40> {};
+class DenseMatrixTest_ColMajor_Size8x5_Pitch8
+  : public DenseMatrixTestBase<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 8,  80,  40> {};
 TYPED_TEST_CASE(DenseMatrixTest_ColMajor_Size8x5_Pitch8, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_ColMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 10, 100, 52> {};
+class DenseMatrixTest_ColMajor_Size8x5_Pitch10
+  : public DenseMatrixTestBase<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 10, 100, 52> {};
 TYPED_TEST_CASE(DenseMatrixTest_ColMajor_Size8x5_Pitch10, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_RowMajor_Size8x5_Pitch5  : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 5,  50,  10> {};
+class DenseMatrixTest_RowMajor_Size8x5_Pitch5
+  : public DenseMatrixTestBase<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 5,  50,  10> {};
 TYPED_TEST_CASE(DenseMatrixTest_RowMajor_Size8x5_Pitch5, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixTest_RowMajor_Size8x5_Pitch10 : public DenseMatrixTest<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 10, 100, 25> {};
+class DenseMatrixTest_RowMajor_Size8x5_Pitch10
+  : public DenseMatrixTestBase<_Scalar, mcnla::Layout::ROWMAJOR, 8, 5, 10, 100, 25> {};
 TYPED_TEST_CASE(DenseMatrixTest_RowMajor_Size8x5_Pitch10, MyTypes);
