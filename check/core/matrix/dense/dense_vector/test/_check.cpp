@@ -1,6 +1,9 @@
 #include "../test.hpp"
 #include <queue>
 
+TYPED_TEST(DenseVectorTest, Check) {
+}
+
 TYPED_TEST(DenseVectorTest_Size8_Stride1, Check) {
   const auto length   = this->length_;
   const auto stride   = this->stride_;

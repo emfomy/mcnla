@@ -3,11 +3,11 @@
 #include "test.hpp"
 
 template <typename _Scalar>
-class DenseMatrixDeathTest_ColMajor : public testing::Test {};
+using DenseMatrixDeathTest_ColMajor = DenseMatrixTest_ColMajor<_Scalar>;
 TYPED_TEST_CASE(DenseMatrixDeathTest_ColMajor, MyTypes);
 
 template <typename _Scalar>
-class DenseMatrixDeathTest_RowMajor : public testing::Test {};
+using DenseMatrixDeathTest_RowMajor = DenseMatrixTest_RowMajor<_Scalar>;
 TYPED_TEST_CASE(DenseMatrixDeathTest_RowMajor, MyTypes);
 
 template <typename _Scalar>

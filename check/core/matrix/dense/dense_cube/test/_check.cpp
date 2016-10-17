@@ -1,6 +1,13 @@
 #include "../test.hpp"
 #include <queue>
 
+TYPED_TEST(DenseCubeTest_ColMajor, Check) {
+}
+
+
+TYPED_TEST(DenseCubeTest_RowMajor, Check) {
+}
+
 TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5, Check) {
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;

@@ -15,7 +15,7 @@ set(CMAKE_COLOR_MAKEFILE ON)
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set module path
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 # Sets the options
 include(cmake/options.cmake)
@@ -32,8 +32,4 @@ add_subdirectory(check)
 include(cmake/configure.cmake)
 
 # Display message
-message(STATUS "================================================================")
-message(STATUS "Set 'MCNLA_SYSTEM_INT_SIZE' to change the system integer size: 32(LP64) / 64(ILP64).")
-message(STATUS "Set 'MCNLA_USE_MKL' to enable Intel MKL.")
-message(STATUS "Set 'MPI_PROCS' to set the number of MPI processes.")
-message(STATUS "================================================================")
+include(cmake/display.cmake)

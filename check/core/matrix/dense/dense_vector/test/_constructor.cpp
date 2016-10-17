@@ -20,6 +20,20 @@ TYPED_TEST(DenseVectorTest, Constructor) {
   }
 
   {
+    VectorType vec1(0);
+
+    EXPECT_EQ(vec1.getLength(), 0);
+    EXPECT_EQ(vec1.getNelem(),  0);
+    EXPECT_EQ(vec1.getSizes(),  0);
+    EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_TRUE(vec1.isShrunk());
+
+    EXPECT_EQ(vec1.getCapacity(), 0);
+    EXPECT_EQ(vec1.getOffset(),   0);
+  }
+
+  {
     VectorType vec1(length);
 
     EXPECT_EQ(vec1.getLength(), length);

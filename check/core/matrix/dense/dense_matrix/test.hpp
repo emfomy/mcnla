@@ -36,6 +36,14 @@ class DenseMatrixTestBase : public testing::Test {
 
 
 template <typename _Scalar>
+class DenseMatrixTest_ColMajor : public testing::Test {};
+TYPED_TEST_CASE(DenseMatrixTest_ColMajor, MyTypes);
+
+template <typename _Scalar>
+class DenseMatrixTest_RowMajor : public testing::Test {};
+TYPED_TEST_CASE(DenseMatrixTest_RowMajor, MyTypes);
+
+template <typename _Scalar>
 class DenseMatrixTest_ColMajor_Size8x5_Pitch8
   : public DenseMatrixTestBase<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 8,  80,  40> {};
 TYPED_TEST_CASE(DenseMatrixTest_ColMajor_Size8x5_Pitch8, MyTypes);

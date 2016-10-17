@@ -1,5 +1,3 @@
-# Configure the files
-
 # Create configure files
 file(
   GLOB_RECURSE configfiles
