@@ -414,7 +414,7 @@ void DenseCube<_Scalar, _layout>::resize(
   mcnla_assert_ge(npage, 0);
   mcnla_assert_le(pitch0_, isColMajor(_layout) ? nrow : ncol);
   mcnla_assert_le(pitch1_, isColMajor(_layout) ? ncol : nrow);
-  mcnla_assert_ge(data_.getCapacity(), pitch0_ * pitch1_ * npage);
+  mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage);
   nrow_ = nrow;
   ncol_ = ncol;
   npage_ = npage;

@@ -80,6 +80,7 @@ class CooBase : public SparseBase<_Derived> {
   inline const DataType& getData() const noexcept;
 
   // Gets information
+  inline bool    isEmpty() const noexcept;
   inline index_t getValueCapacity() const noexcept;
   inline index_t getValueOffset() const noexcept;
   inline index_t getIdxCapacity( const index_t dim ) const noexcept;

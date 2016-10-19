@@ -66,6 +66,7 @@ class DenseBase {
   inline const DataType& getData() const noexcept;
 
   // Gets information
+  inline bool    isEmpty() const noexcept;
   inline index_t getCapacity() const noexcept;
   inline index_t getOffset() const noexcept;
 

@@ -17,5 +17,9 @@ int main( int argc, char **argv ) {
             << MCNLA_VERSION_MINOR << "."
             << MCNLA_VERSION_PATCH << " test" << std::endl << std::endl;
 
+  mcnla::matrix::DenseMatrix<double> mat;
+  mcnla::utility::loadMatrixMarket(mat, "test.mtx");
+  std::cout << mat << std::endl;
+
   return 0;
 }

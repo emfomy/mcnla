@@ -147,6 +147,12 @@ const Array<_Type> Array<_Type>::operator<<( const index_t offset ) const noexce
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Determines if the memory size is zero.
+///
+template <typename _Type>
+bool Array<_Type>::isEmpty() const noexcept { return (getSize() == 0); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the memory size.
 ///
 /// @note  @link getCapacity() capacity@endlink + @link getOffset() offset@endlink = @link getSize() memory size@endlink.
