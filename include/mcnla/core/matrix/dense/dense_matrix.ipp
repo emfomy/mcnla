@@ -344,7 +344,7 @@ void DenseMatrix<_Scalar, _layout>::resize(
   mcnla_assert_ge(nrow, 0);
   mcnla_assert_ge(ncol, 0);
   mcnla_assert_ge(pitch_, (isColMajor(_layout) ? nrow : ncol));
-  mcnla_assert_ge(data_.getCapacity(), isColMajor(_layout) ? (pitch_ * ncol) : (pitch_ * nrow));
+  mcnla_assert_ge(this->getCapacity(), isColMajor(_layout) ? (pitch_ * ncol) : (pitch_ * nrow));
   nrow_ = nrow;
   ncol_ = ncol;
 }

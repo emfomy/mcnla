@@ -103,6 +103,12 @@ template <class _Derived>
 const typename DenseBase<_Derived>::DataType& DenseBase<_Derived>::getData() const noexcept { return data_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Determines if the memory size is zero.
+///
+template <class _Derived>
+bool DenseBase<_Derived>::isEmpty() const noexcept { return getValueArray().isEmpty(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the value array.
 ///
 template <class _Derived>

@@ -6,7 +6,7 @@ if(NOT MCNLA_BUILD_DEMO)
 endif()
 
 # Set target
-add_executable(demo demo.cpp)
+add_executable(demo test.cpp)
 target_include_directories(demo PUBLIC "${PROJECT_BINARY_DIR}/include")
 target_include_directories(demo PUBLIC "${PROJECT_SOURCE_DIR}/include")
 target_include_directories(demo PUBLIC SYSTEM ${INCS})
