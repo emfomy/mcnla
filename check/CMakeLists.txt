@@ -7,11 +7,7 @@ endif()
 
 # GTEST
 set(GTEST_ROOT "" CACHE PATH "The root path of Google Test.")
-if(${CMAKE_VERSION} VERSION_LESS 3.1)
-  find_package(GTest_ 1.8 REQUIRED)
-else()
-  find_package(GTest  1.8 REQUIRED)
-endif()
+find_package(GTest  1.8 REQUIRED)
 if(GTEST_FOUND)
   list(APPEND INCS "${GTEST_INCLUDE_DIRS}")
   list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")
@@ -25,6 +21,8 @@ add_check_test(core/matrix/dense/dense_matrix  "Dense Matrix test")
 add_check_death(core/matrix/dense/dense_matrix "Dense Matrix death test")
 add_check_test(core/matrix/dense/dense_cube    "Dense Cube test")
 add_check_death(core/matrix/dense/dense_cube   "Dense Cube death test")
+
+add_mpi_check(isvd/integrator/kolmogorov_nagumo_type_integrator "Kolmogorov-Nagumo-type Integrator test" 1 2 4)
 
 # Add rule 'build_test'
 add_custom_target(

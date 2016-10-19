@@ -13,7 +13,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor, Constructor) {
     EXPECT_EQ(mat1.getNcol(),  0);
     EXPECT_EQ(mat1.getNelem(), 0 * 0);
     EXPECT_EQ(mat1.getSizes(), std::make_pair(0, 0));
-    EXPECT_EQ(mat1.getPitch(), 1);
+    EXPECT_EQ(mat1.getPitch(), 0);
 
     EXPECT_TRUE(mat1.isShrunk());
 

@@ -50,6 +50,9 @@ class Parameters {
   const mpi_int_t mpi_root;
 
  protected:
+#ifdef MCNLA_USE_GTEST
+ public:
+#endif  // MCNLA_USE_GTEST
 
   /// The tag shows if the solver is initialized or not.
   bool initialized_ = false;
