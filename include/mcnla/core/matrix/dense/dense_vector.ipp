@@ -261,6 +261,7 @@ void DenseVector<_Scalar>::resize(
 ) noexcept {
   mcnla_assert_ge(length, 0);
   mcnla_assert_gt(stride, 0);
+  mcnla_assert_true(length != 0 || stride != 0);
   mcnla_assert_ge(this->getCapacity(), stride * (length-1) + 1);
   length_ = length;
   stride_ = stride;

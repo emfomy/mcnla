@@ -7,7 +7,7 @@ TYPED_TEST(DenseVectorDeathTest, Constructor) {
   ArrayType array(25, 4);
 
   EXPECT_DEATH(VectorType vec1(-1), "");
-  EXPECT_DEATH(VectorType vec1(8, 0), "");
+  EXPECT_DEATH(VectorType vec1(0, 0), "");
   EXPECT_DEATH(VectorType vec1(8, 3, 21), "");
   EXPECT_DEATH(VectorType vec1(8, 3, array), "");
 }

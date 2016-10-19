@@ -28,7 +28,7 @@ template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>::DenseMatrix() noexcept
   : MatrixBaseType(),
     DenseBaseType(),
-    pitch_(1) {}
+    pitch_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -41,7 +41,6 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(size0_ * size1_),
     pitch_(size0_) {
-  mcnla_assert_gt(pitch_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +65,6 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     DenseBaseType(pitch * size1_),
     pitch_(pitch) {
   mcnla_assert_ge(pitch_, size0_);
-  mcnla_assert_gt(pitch_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +91,6 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     DenseBaseType(capacity),
     pitch_(pitch) {
   mcnla_assert_ge(pitch_, size0_);
-  mcnla_assert_gt(pitch_, 0);
   mcnla_assert_ge(capacity, pitch_ * (size1_-1) + size0_);
 }
 
@@ -122,7 +119,6 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
     DenseBaseType(value),
     pitch_(pitch) {
   mcnla_assert_ge(pitch_, size0_);
-  mcnla_assert_gt(pitch_, 0);
   mcnla_assert_ge(this->getCapacity(), pitch_ * (size1_-1) + size0_);
 }
 
@@ -140,8 +136,10 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
   : MatrixBaseType(nrow, ncol),
     DenseBaseType(data >> offset),
     pitch_(pitch) {
+  mcnla_assert_ge(nrow_, 0);
+  mcnla_assert_ge(ncol_, 0);
+  mcnla_assert_ge(pitch_, 0);
   mcnla_assert_ge(pitch_, size0_);
-  mcnla_assert_gt(pitch_, 0);
   mcnla_assert_ge(this->getCapacity(), pitch_ * (size1_-1) + size0_);
 }
 
@@ -164,7 +162,7 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix( DenseMatrix &&other ) noexcept
   : MatrixBaseType(std::move(other)),
     DenseBaseType(std::move(other)),
     pitch_(other.pitch_) {
-  other.pitch_ = 1;
+  other.pitch_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +182,7 @@ DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( const D
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( DenseMatrix &&other ) noexcept {
   MatrixBaseType::operator=(std::move(other)); DenseBaseType::operator=(std::move(other));
-  pitch_ = other.pitch_; other.pitch_ = 1;
+  pitch_ = other.pitch_; other.pitch_ = 0;
   return *this;
 }
 
@@ -585,8 +583,6 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::getDiagonal(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
-  mcnla_assert_gt(size0_, 0);
-  mcnla_assert_gt(size1_, 0);
   return VectorType(pitch_ * (size1_-1) + size0_, 1, data_, getPos(0, 0));
 }
 
@@ -595,8 +591,6 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() noexcept {
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::vectorize() const noexcept {
-  mcnla_assert_gt(size0_, 0);
-  mcnla_assert_gt(size1_, 0);
   return VectorType(pitch_ * (size1_-1) + size0_, 1, data_, getPos(0, 0));
 }
 

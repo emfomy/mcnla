@@ -41,9 +41,9 @@ CubeBase<_Derived>::CubeBase(
   : nrow_(nrow),
     ncol_(ncol),
     npage_(npage) {
-  mcnla_assert_ge(nrow_,  0);
-  mcnla_assert_ge(ncol_,  0);
-  mcnla_assert_ge(npage_, 0);
+  mcnla_assert_ge(nrow_,  0)
+  mcnla_assert_ge(ncol_,  0)
+  mcnla_assert_ge(npage_, 0)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,8 +95,7 @@ CubeBase<_Derived>& CubeBase<_Derived>::operator=( const CubeBase &other ) noexc
 ///
 template <class _Derived>
 CubeBase<_Derived>& CubeBase<_Derived>::operator=( CubeBase &&other ) noexcept {
-  nrow_ = other.nrow_; ncol_ = other.ncol_; npage_ = other.npage_;
-  other.nrow_ = 0;     other.ncol_ = 0;     other.npage_ = 0;
+  nrow_ = other.nrow_; ncol_ = other.ncol_; npage_ = other.npage_; other.nrow_ = 0; other.ncol_ = 0; other.npage_ = 0;
   return *this;
 }
 
