@@ -369,7 +369,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // Check convergence
     if ( mpi_rank == 0 ) {
       for ( auto i = 0; i < k; ++i ) {
-        vector_e[i] -= 1.0;
+        vector_e[i] = sqrt(vector_e) - 1.0;
       }
       is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tolerance);
     }

@@ -6,6 +6,8 @@
 
 TEST(KolmogorovNagumoTypeIntegratorTest, Test) {
   using ScalarType = double;
+  auto mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
+  auto mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
 
   // Reads data
   mcnla::matrix::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> cube_q_true;
@@ -22,7 +24,7 @@ TEST(KolmogorovNagumoTypeIntegratorTest, Test) {
   const mcnla::index_t k  = cube_q_true.getNcol();
   const mcnla::index_t p  = 0;
   const mcnla::index_t N  = cube_q_true.getNpage();
-  const mcnla::index_t K  = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
+  const mcnla::index_t K  = mpi_size;
   const mcnla::index_t Nj = N / K;
   ASSERT_EQ(N % K, 0);
 
@@ -41,9 +43,8 @@ TEST(KolmogorovNagumoTypeIntegratorTest, Test) {
   parameters.initialized_ = true;
 
   // Copies data
-  auto mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
-  for ( auto i = 0; i < Nj; ++i ) {
-    mcnla::blas::copy(cube_q_true.getPage(mpi_rank+i), integrator.getCubeQ().getPage(i));
+  for ( auto i = 0; i < Nj; i++ ) {
+    mcnla::blas::copy(cube_q_true.getPage(mpi_rank + i*mpi_size), integrator.getCubeQ().getPage(i));
   }
 
   // Integrates
