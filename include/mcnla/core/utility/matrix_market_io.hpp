@@ -55,7 +55,7 @@ void loadMatrixMarket(
   if ( vector.isEmpty() ) {
     vector = matrix::DenseVector<_Scalar>(m);
   } else {
-    vector.resize(m, vector.getStride());
+    mcnla_assert_eq(vector.getSizes(), m);
   }
 
   // Read values
@@ -107,9 +107,17 @@ void loadMatrixMarket(
   index_t m, n;
   fin >> m >> n;
   if ( matrix.isEmpty() ) {
-    matrix = matrix::DenseMatrix<_Scalar, _layout>(m, n);
+    if ( isColMajor(_layout) ) {
+      matrix = matrix::DenseMatrix<_Scalar, _layout>(m, n);
+    } else {
+      matrix = matrix::DenseMatrix<_Scalar, _layout>(n, m);
+    }
   } else {
-    matrix.resize(m, n);
+    if ( isColMajor(_layout) ) {
+      mcnla_assert_eq(matrix.getSizes(), std::make_pair(m, n));
+    } else {
+      mcnla_assert_eq(matrix.getSizes(), std::make_pair(n, m));
+    }
   }
 
   // Read values
@@ -161,9 +169,17 @@ void loadMatrixMarket(
   index_t m, n, k;
   fin >> m >> n >> k;
   if ( cube.isEmpty() ) {
-    cube = matrix::DenseCube<_Scalar, _layout>(m, n, k);
+    if ( isColMajor(_layout) ) {
+      cube = matrix::DenseCube<_Scalar, _layout>(m, n, k);
+    } else {
+      cube = matrix::DenseCube<_Scalar, _layout>(n, m, k);
+    }
   } else {
-    cube.resize(m, n, k);
+    if ( isColMajor(_layout) ) {
+      mcnla_assert_eq(cube.getSizes(), std::make_tuple(m, n, k));
+    } else {
+      mcnla_assert_eq(cube.getSizes(), std::make_tuple(n, m, k));
+    }
   }
 
   // Read values

@@ -36,6 +36,15 @@ class DenseCubeTest : public testing::Test {
 
 };
 
+
+template <typename _Scalar>
+class DenseCubeTest_ColMajor : public testing::Test {};
+TYPED_TEST_CASE(DenseCubeTest_ColMajor, MyTypes);
+
+template <typename _Scalar>
+class DenseCubeTest_RowMajor : public testing::Test {};
+TYPED_TEST_CASE(DenseCubeTest_RowMajor, MyTypes);
+
 template <typename _Scalar>
 class DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5
   : public DenseCubeTest<_Scalar, mcnla::Layout::COLMAJOR, 8, 5, 7, 8,   5,  400, 120> {};

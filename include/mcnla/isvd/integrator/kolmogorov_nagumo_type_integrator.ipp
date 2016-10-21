@@ -202,7 +202,7 @@ void KolmogorovNagumoTypeIntegrator<_Matrix>::integrateImpl() noexcept {
     // Check convergence
     if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
       for ( index_t i = 0; i < dim_sketch; ++i ) {
-        vector_e_(i) -= 1.0;
+        vector_e_(i) = std::sqrt(vector_e_(i)) - 1.0;
       }
       is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
     }

@@ -88,8 +88,7 @@ MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( const MatrixBase &other )
 ///
 template <class _Derived>
 MatrixBase<_Derived>& MatrixBase<_Derived>::operator=( MatrixBase &&other ) noexcept {
-  nrow_ = other.nrow_; ncol_ = other.ncol_;
-  other.nrow_ = 0;     other.ncol_ = 0;
+  nrow_ = other.nrow_; ncol_ = other.ncol_; other.nrow_ = 0; other.ncol_ = 0;
   return *this;
 }
 

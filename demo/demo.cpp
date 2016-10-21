@@ -114,7 +114,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Run MCNLA
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Start MCNLA." << std::endl;
+    std::cout << "Start iSVD." << std::endl;
     std::cout << std::fixed << std::setprecision(6);
   }
 

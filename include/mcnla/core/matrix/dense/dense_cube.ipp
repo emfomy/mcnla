@@ -27,8 +27,8 @@ template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>::DenseCube() noexcept
   : CubeBaseType(),
     DenseBaseType(),
-    pitch0_(1),
-    pitch1_(1) {}
+    pitch0_(0),
+    pitch1_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -43,8 +43,6 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(size0_ * size1_ * size2_),
     pitch0_(size0_),
     pitch1_(size1_) {
-  mcnla_assert_gt(pitch0_, 0);
-  mcnla_assert_gt(pitch1_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,8 +69,6 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch0_(pitch0),
     pitch1_(size1_) {
   mcnla_assert_ge(pitch0_, size0_);
-  mcnla_assert_gt(pitch0_, 0);
-  mcnla_assert_gt(pitch1_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,8 +88,6 @@ DenseCube<_Scalar, _layout>::DenseCube(
     pitch1_(pitch1) {
   mcnla_assert_ge(pitch0, size0_);
   mcnla_assert_ge(pitch1, size1_);
-  mcnla_assert_gt(pitch0_, 0);
-  mcnla_assert_gt(pitch1_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,10 +116,8 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(capacity),
     pitch0_(pitch0),
     pitch1_(pitch1) {
-  mcnla_assert_ge(pitch0_, size0_);
-  mcnla_assert_ge(pitch1_, size1_);
-  mcnla_assert_gt(pitch0_, 0);
-  mcnla_assert_gt(pitch1_, 0);
+  mcnla_assert_ge(pitch0, size0_);
+  mcnla_assert_ge(pitch1, size1_);
   mcnla_assert_ge(capacity, pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_);
 }
 
@@ -156,10 +148,8 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(value),
     pitch0_(pitch0),
     pitch1_(pitch1) {
-  mcnla_assert_ge(pitch0_, size0_);
-  mcnla_assert_ge(pitch1_, size1_);
-  mcnla_assert_gt(pitch0_, 0);
-  mcnla_assert_gt(pitch1_, 0);
+  mcnla_assert_ge(pitch0, size0_);
+  mcnla_assert_ge(pitch1, size1_);
   mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_);
 }
 
@@ -180,10 +170,13 @@ DenseCube<_Scalar, _layout>::DenseCube(
     DenseBaseType(data >> offset),
     pitch0_(pitch0),
     pitch1_(pitch1) {
-  mcnla_assert_ge(pitch0_, size0_);
-  mcnla_assert_ge(pitch1_, size1_);
-  mcnla_assert_gt(pitch0_, 0);
-  mcnla_assert_gt(pitch1_, 0);
+  mcnla_assert_ge(nrow_, 0);
+  mcnla_assert_ge(ncol_, 0);
+  mcnla_assert_ge(npage_, 0);
+  mcnla_assert_ge(pitch0_, 0);
+  mcnla_assert_ge(pitch1_, 0);
+  mcnla_assert_ge(pitch0, size0_);
+  mcnla_assert_ge(pitch1, size1_);
   mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * (npage_-1) + pitch0_ * (size1_-1) + size0_);
 }
 
@@ -208,7 +201,7 @@ DenseCube<_Scalar, _layout>::DenseCube( DenseCube &&other ) noexcept
     DenseBaseType(std::move(other)),
     pitch0_(other.pitch0_),
     pitch1_(other.pitch1_) {
-  other.pitch0_ = 1; other.pitch1_ = 1;
+  other.pitch0_ = 0; other.pitch1_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,8 +222,7 @@ DenseCube<_Scalar, _layout>& DenseCube<_Scalar, _layout>::operator=( const Dense
 template <typename _Scalar, Layout _layout>
 DenseCube<_Scalar, _layout>& DenseCube<_Scalar, _layout>::operator=( DenseCube &&other ) noexcept {
   CubeBaseType::operator=(std::move(other)); DenseBaseType::operator=(std::move(other));
-  pitch0_ = other.pitch0_; pitch1_ = other.pitch1_;
-  other.pitch0_ = 1;       other.pitch1_ = 1;
+  pitch0_ = other.pitch0_; pitch1_ = other.pitch1_; other.pitch0_ = 0; other.pitch1_ = 0;
   return *this;
 }
 
@@ -412,8 +404,8 @@ void DenseCube<_Scalar, _layout>::resize(
   mcnla_assert_ge(nrow,  0);
   mcnla_assert_ge(ncol,  0);
   mcnla_assert_ge(npage, 0);
-  mcnla_assert_le(pitch0_, isColMajor(_layout) ? nrow : ncol);
-  mcnla_assert_le(pitch1_, isColMajor(_layout) ? ncol : nrow);
+  mcnla_assert_ge(pitch0_, isColMajor(_layout) ? nrow : ncol);
+  mcnla_assert_ge(pitch1_, isColMajor(_layout) ? ncol : nrow);
   mcnla_assert_ge(this->getCapacity(), pitch0_ * pitch1_ * npage);
   nrow_ = nrow;
   ncol_ = ncol;

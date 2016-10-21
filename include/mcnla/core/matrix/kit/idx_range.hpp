@@ -41,6 +41,13 @@ struct IdxRange {
   inline index_t getLength() const noexcept;
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Print to stream.
+///
+static inline std::ostream& operator<<( std::ostream &out, const IdxRange &range ) {
+  return out << "[" << range.begin << ", " << range.end << ")";
+}
+
 }  // namespace matrix
 
 }  // namespace mcnla

@@ -57,7 +57,7 @@ int main( int argc, char **argv ) {
   MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
   if ( mpi_rank == 0 ) {
-    cout << "MCNLA "
+    cout << "iSVD "
          << MCNLA_VERSION_MAJOR << "."
          << MCNLA_VERSION_MINOR << "."
          << MCNLA_VERSION_PATCH << " plain demo" << endl << endl;
@@ -120,7 +120,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Run MCNLA
   if ( mpi_rank == 0 ) {
-    cout << "Start MCNLA." << endl;
+    cout << "Start iSVD." << endl;
     std::cout << std::fixed << std::setprecision(6);
   }
 
@@ -369,7 +369,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // Check convergence
     if ( mpi_rank == 0 ) {
       for ( auto i = 0; i < k; ++i ) {
-        vector_e[i] -= 1.0;
+        vector_e[i] = sqrt(vector_e) - 1.0;
       }
       is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tolerance);
     }
