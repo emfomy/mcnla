@@ -1,15 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/utility/matrix_matlet_io.hpp
+/// @file    include/mcnla/core/io/matrix_market.hpp
 /// @brief   The Matrix Market IO utilities.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_UTILITY_MATRIX_MARKET_IO_HPP_
-#define MCNLA_CORE_MATRIX_UTILITY_MATRIX_MARKET_IO_HPP_
+#ifndef MCNLA_CORE_IO_MATRIX_MARKET_HPP_
+#define MCNLA_CORE_IO_MATRIX_MARKET_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
+#include <mcnla/core/io/def.hpp>
 #include <fstream>
 #include <mcnla/core/matrix.hpp>
 
@@ -19,12 +20,12 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The utility namespace.
+//  The I/O namespace.
 //
-namespace utility {
+namespace io {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  utility_module
+/// @ingroup  io_module
 /// Load a dense vector from a matrix market file.
 ///
 /// @note  If @a vector is empty, the memory will be allocated.
@@ -78,7 +79,7 @@ inline void loadMatrixMarket(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  utility_module
+/// @ingroup  io_module
 /// Load a dense matrix from a matrix market file.
 ///
 /// @note  If @a matrix is empty, the memory will be allocated.
@@ -140,7 +141,7 @@ inline void loadMatrixMarket(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  utility_module
+/// @ingroup  io_module
 /// Load a dense cube from a matrix market file.
 ///
 /// @note  If @a cube is empty, the memory will be allocated.
@@ -205,4 +206,4 @@ inline void loadMatrixMarket(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_UTILITY_MATRIX_MARKET_IO_HPP_
+#endif  // MCNLA_CORE_IO_MATRIX_MARKET_HPP_

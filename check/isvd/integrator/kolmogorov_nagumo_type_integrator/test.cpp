@@ -12,8 +12,8 @@ TEST(KolmogorovNagumoTypeIntegratorTest, Test) {
   // Reads data
   mcnla::matrix::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> cube_q_true;
   mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qc_true;
-  mcnla::utility::loadMatrixMarket(cube_q_true, CUBE_Q_PATH);
-  mcnla::utility::loadMatrixMarket(matrix_qc_true, MATRIX_C_PATH);
+  mcnla::io::loadMatrixMarket(cube_q_true, CUBE_Q_PATH);
+  mcnla::io::loadMatrixMarket(matrix_qc_true, MATRIX_C_PATH);
 
   // Checks size
   ASSERT_EQ(cube_q_true.getNrow(), matrix_qc_true.getNrow());

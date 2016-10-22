@@ -53,7 +53,7 @@ macro(_ADD_MPI_CHECK checktype)
   _add_check_predo("${checktype}")
 
   foreach(procs ${ARGN})
-    add_test(NAME ${checkname}_${procs} COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ${checktarget})
+    add_test(NAME ${checkname0}_${procs} COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ${checktarget})
 
     # Add rule
     add_custom_target(
@@ -63,7 +63,7 @@ macro(_ADD_MPI_CHECK checktype)
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Check test ${checkpath}"
     )
-    set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_${checkname}_${procs} PARENT_SCOPE)
+    set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_${checkname0}_${procs} PARENT_SCOPE)
   endforeach()
 endmacro()
 
@@ -86,7 +86,7 @@ endfunction()
 
 ################################################################################
 
-function(ADD_MPI_CHECK checkpath checkcomment)
+function(ADD_MPI_CHECK checkpath checkcomment checkname0)
   list(APPEND DEFS "MCNLA_USE_GTEST")
   _add_mpi_check("" ${ARGN})
 endfunction()

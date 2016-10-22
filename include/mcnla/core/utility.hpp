@@ -11,6 +11,5 @@
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/memory.hpp>
 #include <mcnla/core/utility/traits.hpp>
-#include <mcnla/core/utility/matrix_market_io.hpp>
 
 #endif  // MCNLA_CORE_UTILITY_HPP_
