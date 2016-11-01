@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/kolmogorov_nagumo_type_integrator.hpp
+/// @file    include/mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp
 /// @brief   The Kolmogorov-Nagumo-type integrator.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_HPP_
-#define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_HPP_
+#ifndef MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_
+#define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
@@ -25,7 +25,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class KolmogorovNagumoTypeIntegrator;
+template <class _Matrix> class KolmogorovNagumoIntegrator;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -41,7 +41,7 @@ namespace traits {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<isvd::KolmogorovNagumoTypeIntegrator<_Matrix>> {
+struct Traits<isvd::KolmogorovNagumoIntegrator<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
@@ -60,13 +60,13 @@ namespace isvd {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>> {
+class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>> {
 
-  friend IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
+  friend IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>>;
 
  private:
 
-  using BaseType = IntegratorBase<KolmogorovNagumoTypeIntegrator<_Matrix>>;
+  using BaseType = IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>>;
 
  public:
 
@@ -138,7 +138,7 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
  public:
 
   // Constructor
-  inline KolmogorovNagumoTypeIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
+  inline KolmogorovNagumoIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 
@@ -166,4 +166,4 @@ class KolmogorovNagumoTypeIntegrator : public IntegratorBase<KolmogorovNagumoTyp
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_TYPE_INTEGRATOR_HPP_
+#endif  // MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_

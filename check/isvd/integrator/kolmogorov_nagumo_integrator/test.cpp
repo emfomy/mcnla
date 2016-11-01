@@ -4,7 +4,7 @@
 #define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
 #define MATRIX_C_PATH MCNLA_DATA_PATH "/qct.mtx"
 
-TEST(KolmogorovNagumoTypeIntegratorTest, Test) {
+TEST(KolmogorovNagumoIntegratorTest, Test) {
   using ScalarType = double;
   auto mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
   auto mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
@@ -38,7 +38,7 @@ TEST(KolmogorovNagumoTypeIntegratorTest, Test) {
   parameters.max_iteration_ = 256;
 
   // Initializes
-  mcnla::isvd::KolmogorovNagumoTypeIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters);
+  mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters);
   integrator.initialize();
   parameters.initialized_ = true;
 
@@ -60,7 +60,5 @@ TEST(KolmogorovNagumoTypeIntegratorTest, Test) {
         ASSERT_NEAR(matrix_qc(i, j), matrix_qc_true(i, j), 1e-10);
       }
     }
-#pragma warning
-    // std::cout << matrix_qc.getRows({0, 5}) << std::endl;
   }
 }

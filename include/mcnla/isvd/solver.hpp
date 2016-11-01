@@ -43,7 +43,7 @@ namespace isvd {
 ///
 template <class _Matrix,
           class _Sketcher = GaussianProjectionSketcher<_Matrix>,
-          class _Integrator = KolmogorovNagumoTypeIntegrator<_Matrix>,
+          class _Integrator = KolmogorovNagumoIntegrator<_Matrix>,
           class _Reconstructor = StandardReconstructor<_Matrix>>
 class Solver {
 

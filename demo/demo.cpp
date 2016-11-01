@@ -93,7 +93,7 @@ int main( int argc, char **argv ) {
   mcnla::matrix::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
   mcnla::isvd::Solver<mcnla::matrix::DenseMatrix<ScalarType>,
                       mcnla::isvd::GaussianProjectionSketcher<mcnla::matrix::DenseMatrix<ScalarType>>,
-                      mcnla::isvd::KolmogorovNagumoTypeIntegrator<mcnla::matrix::DenseMatrix<ScalarType>>,
+                      mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>>,
                       mcnla::isvd::StandardReconstructor<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeed(seed);
   solver.setTolerance(tolerance).setMaxIteration(maxiter);
