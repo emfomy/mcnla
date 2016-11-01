@@ -174,7 +174,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Check) {
   EXPECT_EQ(mat.getOffset(),   offset);
 
   EXPECT_LT(mat.getNcol(), mat.getPitch());
-  EXPECT_EQ(mat.getCapacity(), pitch * nrow - (pitch-ncol));
+  EXPECT_EQ(mat.getCapacity(), nrow * pitch - (pitch-ncol));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {

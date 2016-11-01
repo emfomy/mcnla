@@ -1,20 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/utility/def.hpp
-/// @brief   The utility definitions.
+/// @file    include/mcnla/core/io/def.hpp
+/// @brief   The I/O definitions.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_UTILITY_DEF_HPP_
-#define MCNLA_CORE_UTILITY_DEF_HPP_
+#ifndef MCNLA_CORE_IO_DEF_HPP_
+#define MCNLA_CORE_IO_DEF_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  utility_module  Utility Module
+/// @defgroup  io_module  I/O Module
 /// @ingroup   core_module
-/// @brief     The Utility Module
+/// @brief     The I/O Module
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,11 +23,11 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The utility namespace.
-/// @ingroup  utility_module
+/// The I/O namespace.
+/// @ingroup  io_module
 ///
-namespace utility {}
+namespace io {}
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_UTILITY_DEF_HPP_
+#endif  // MCNLA_CORE_IO_DEF_HPP_
