@@ -84,10 +84,11 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
   const auto mpi_comm = parameters_.mpi_comm;
   const auto mpi_root = parameters_.mpi_root;
-  const auto num_sketch    = parameters_.getNumSketch();
-  const auto dim_sketch    = parameters_.getDimSketch();
-  const auto max_iteration = parameters_.getMaxIteration();
-  const auto tolerance     = parameters_.getTolerance();
+  const auto num_sketch      = parameters_.getNumSketch();
+  const auto num_sketch_each = parameters_.getNumSketchEach();
+  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto max_iteration   = parameters_.getMaxIteration();
+  const auto tolerance       = parameters_.getTolerance();
 
   // Broadcast Q0 to Qc
   if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
@@ -105,8 +106,8 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
     blas::memset0(matrix_x_);
     blas::memset0(matrix_d_);
 
-    for ( index_t i = 0; i < num_sketch; ++i ) {
-      // Bi = Qi' * Qc
+    for ( index_t i = 0; i < num_sketch_each; ++i ) {
+      // Bi := Qi' * Qc
       blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_q_.getPage(i), matrix_qc_, 0.0, matrix_b_);
 
       // D += Bi' * Bi
