@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/demo.cpp
-/// @brief   The demo code
+/// @file    demo/demo1.cpp
+/// @brief   The demo code 1
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -69,7 +69,7 @@ int main( int argc, char **argv ) {
   int argi = 0;
   mcnla::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
   mcnla::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  mcnla::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
+  mcnla::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000000;
   mcnla::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
   mcnla::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
@@ -175,30 +175,32 @@ void create(
 ) noexcept {
   matrix_u_true = mcnla::matrix::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
 
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_e(matrix_a.getSizes());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), rank);
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), rank);
   mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
   mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
 
-  // Generate U & V using normal random
+  // Generate U, V & E using normal random
   mcnla::lapack::larnv<3>(matrix_u.vectorize(), seed);
   mcnla::lapack::larnv<3>(matrix_v.vectorize(), seed);
+  mcnla::lapack::larnv<3>(matrix_e.vectorize(), seed);
 
   // Orthogonalize U & V
   mcnla::lapack::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
   mcnla::lapack::gesvd<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
 
   // Copy U
-  mcnla::blas::copy(matrix_u.getCols({0, rank}), matrix_u_true);
+  mcnla::blas::copy(matrix_u, matrix_u_true);
 
   // A := U * S * V'
   for ( mcnla::index_t i = 0; i < rank; ++i ) {
     mcnla::blas::scal(1.0/(i+1), matrix_u.getCol(i));
   }
-  for ( mcnla::index_t i = rank; i < matrix_a.getNrow(); ++i ) {
-    mcnla::blas::scal(1e-2/(i+1), matrix_u.getCol(i));
-  }
   mcnla::blas::gemm<mcnla::TransOption::NORMAL, mcnla::TransOption::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
+
+  // A += E * 1e-2/rank
+  mcnla::blas::axpy(1e-2/rank, matrix_e.vectorize(), matrix_a.vectorize());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

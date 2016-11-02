@@ -2,7 +2,7 @@
 #include <mcnla.hpp>
 
 #define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
-#define MATRIX_C_PATH MCNLA_DATA_PATH "/qct.mtx"
+#define MATRIX_QBAR_PATH MCNLA_DATA_PATH "/qbt.mtx"
 
 TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   using ScalarType = double;
@@ -11,13 +11,13 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
 
   // Reads data
   mcnla::matrix::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> cube_q_true;
-  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qc_true;
+  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar_true;
   mcnla::io::loadMatrixMarket(cube_q_true, CUBE_Q_PATH);
-  mcnla::io::loadMatrixMarket(matrix_qc_true, MATRIX_C_PATH);
+  mcnla::io::loadMatrixMarket(matrix_qbar_true, MATRIX_QBAR_PATH);
 
   // Checks size
-  ASSERT_EQ(cube_q_true.getNrow(), matrix_qc_true.getNrow());
-  ASSERT_EQ(cube_q_true.getNcol(), matrix_qc_true.getNcol());
+  ASSERT_EQ(cube_q_true.getNrow(), matrix_qbar_true.getNrow());
+  ASSERT_EQ(cube_q_true.getNcol(), matrix_qbar_true.getNcol());
 
   // Gets size
   const mcnla::index_t m  = cube_q_true.getNrow();
@@ -51,13 +51,13 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   integrator.integrate();
 
   // Checks result
-  auto matrix_qc = integrator.getMatrixQc();
+  auto matrix_qbar = integrator.getMatrixQbar();
   if ( mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
-    ASSERT_EQ(matrix_qc.getSizes(), matrix_qc_true.getSizes());
+    ASSERT_EQ(matrix_qbar.getSizes(), matrix_qbar_true.getSizes());
     ASSERT_EQ(integrator.getIter(), 45);
     for ( auto i = 0; i < m; ++i ) {
       for ( auto j = 0; j < k; ++j ) {
-        ASSERT_NEAR(matrix_qc(i, j), matrix_qc_true(i, j), 1e-10);
+        ASSERT_NEAR(matrix_qbar(i, j), matrix_qbar_true(i, j), 1e-10);
       }
     }
   }

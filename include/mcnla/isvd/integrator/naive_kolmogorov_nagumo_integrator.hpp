@@ -84,12 +84,6 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   /// The parameters.
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
-  /// The number of rows of the matrix per MPI node.
-  index_t nrow_each_;
-
-  /// The number of rows of the matrix of all MPI nodes.
-  index_t nrow_all_;
-
   /// The vector E.
   index_t iter_;
 
@@ -142,8 +136,8 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   // Gets matrices
   inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
   inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() const noexcept;
-  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() noexcept;
-  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() const noexcept;
+  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
+  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 
 };
 

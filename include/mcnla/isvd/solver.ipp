@@ -78,7 +78,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
   integrator_time_ = MPI_Wtime() - start_time;
 
   start_time = MPI_Wtime();
-  reconstructor_.reconstruct(matrix_a, integrator_.getMatrixQc());
+  reconstructor_.reconstruct(matrix_a, integrator_.getMatrixQbar());
   reconstructor_time_ = MPI_Wtime() - start_time;
 
   parameters_.computed_ = true;
@@ -190,7 +190,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::ROWMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return integrator_.getMatrixQc();
+  return integrator_.getMatrixQbar();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

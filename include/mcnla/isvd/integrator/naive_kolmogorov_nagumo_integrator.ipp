@@ -35,14 +35,17 @@ NaiveKolmogorovNagumoIntegrator<_Matrix>::NaiveKolmogorovNagumoIntegrator(
 template <class _Matrix>
 void NaiveKolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
 
+  const auto nrow            = parameters_.getNrow();
+  const auto num_sketch_each = parameters_.getNumSketchEach();
+  const auto dim_sketch      = parameters_.getDimSketch();
   iter_ = -1;
 
-  const auto cube_q_sizes = std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(), parameters_.getNumSketchEach());
+  const auto cube_q_sizes = std::make_tuple(nrow, dim_sketch, num_sketch_each);
   if ( cube_q_.getSizes() != cube_q_sizes ) {
     cube_q_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_q_sizes);
   }
 
-  const auto matrix_qc_sizes = std::make_pair(parameters_.getNrow(), parameters_.getDimSketch());
+  const auto matrix_qc_sizes = std::make_pair(nrow, dim_sketch);
   if ( matrix_qc_.getSizes() != matrix_qc_sizes ) {
     matrix_qc_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qc_sizes);
   }
@@ -53,7 +56,7 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
     matrix_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qc_sizes);
   }
 
-  const auto matrix_b_sizes = std::make_pair(parameters_.getDimSketch(), parameters_.getDimSketch());
+  const auto matrix_b_sizes = std::make_pair(dim_sketch, dim_sketch);
   if ( matrix_b_.getSizes() != matrix_b_sizes ) {
     matrix_b_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_b_sizes);
   }
@@ -64,12 +67,12 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
     matrix_c_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_b_sizes);
   }
 
-  const auto vector_e_sizes = parameters_.getDimSketch();
+  const auto vector_e_sizes = dim_sketch;
   if ( vector_e_.getSizes() != vector_e_sizes ) {
     vector_e_ = DenseVector<ScalarType>(vector_e_sizes);
   }
 
-  const auto syev_sizes = parameters_.getDimSketch();
+  const auto syev_sizes = dim_sketch;
   if ( syev_driver_.getSizes() != syev_sizes ) {
     syev_driver_.resize(syev_sizes);
   }
@@ -82,8 +85,8 @@ template <class _Matrix>
 void NaiveKolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
-  const auto mpi_comm = parameters_.mpi_comm;
-  const auto mpi_root = parameters_.mpi_root;
+  const auto mpi_comm        = parameters_.mpi_comm;
+  const auto mpi_root        = parameters_.mpi_root;
   const auto num_sketch      = parameters_.getNumSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();
   const auto dim_sketch      = parameters_.getDimSketch();
@@ -223,21 +226,21 @@ const DenseCube<typename NaiveKolmogorovNagumoIntegrator<_Matrix>::ScalarType, L
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQc
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
 ///
 template <class _Matrix>
 DenseMatrix<typename NaiveKolmogorovNagumoIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
-    NaiveKolmogorovNagumoIntegrator<_Matrix>::getMatrixQcImpl() noexcept {
+    NaiveKolmogorovNagumoIntegrator<_Matrix>::getMatrixQbarImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQc
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
 ///
 template <class _Matrix>
 const DenseMatrix<typename NaiveKolmogorovNagumoIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
-    NaiveKolmogorovNagumoIntegrator<_Matrix>::getMatrixQcImpl() const noexcept {
+    NaiveKolmogorovNagumoIntegrator<_Matrix>::getMatrixQbarImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_;
 }

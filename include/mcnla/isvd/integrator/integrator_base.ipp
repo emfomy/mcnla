@@ -83,17 +83,17 @@ const DenseCube<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>
 ///
 template <class _Derived>
 DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::getMatrixQc() noexcept {
-  return this->derived().getMatrixQcImpl();
+    IntegratorBase<_Derived>::getMatrixQbar() noexcept {
+  return this->derived().getMatrixQbarImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getMatrixQc
+/// @copydoc  getMatrixQbar
 ///
 template <class _Derived>
 const DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::getMatrixQc() const noexcept {
-  return this->derived().getMatrixQcImpl();
+    IntegratorBase<_Derived>::getMatrixQbar() const noexcept {
+  return this->derived().getMatrixQbarImpl();
 }
 
 }  // namespace isvd

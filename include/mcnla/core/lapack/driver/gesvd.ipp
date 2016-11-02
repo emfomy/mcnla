@@ -170,13 +170,16 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
     mcnla_assert_eq(vt.getSizes(), std::make_pair(std::min(nrow_, ncol_), ncol_));
   }
 
+  auto u_pitch  = (u.getPitch()  > 0) ? u.getPitch()  : 1;
+  auto vt_pitch = (vt.getPitch() > 0) ? vt.getPitch() : 1;
+
   if ( isColMajor(layout) ) {
     mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
-                                  s.getValue(), u.getValue(), u.getPitch(), vt.getValue(), vt.getPitch(),
+                                  s.getValue(), u.getValue(), u_pitch, vt.getValue(), vt_pitch,
                                   work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
   } else {
     mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
-                                  s.getValue(), vt.getValue(), vt.getPitch(), u.getValue(), u.getPitch(),
+                                  s.getValue(), vt.getValue(), vt_pitch, u.getValue(), u_pitch,
                                   work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
   }
 }

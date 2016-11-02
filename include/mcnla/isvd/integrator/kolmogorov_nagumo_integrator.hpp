@@ -157,8 +157,8 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   // Gets matrices
   inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
   inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() const noexcept;
-  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() noexcept;
-  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQcImpl() const noexcept;
+  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
+  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 
 };
 
