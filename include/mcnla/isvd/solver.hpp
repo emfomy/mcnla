@@ -85,9 +85,6 @@ class Solver {
   /// @copydoc  mcnla::isvd::Parameters::mpi_root
   const mpi_int_t &mpi_root_ = parameters_.mpi_root;
 
-  /// The MPI rank.
-  const mpi_int_t mpi_rank_;
-
   /// The random seed
   index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    demo/demo1.cpp
-/// @brief   The demo code 1
+/// @brief   The demo code (generate A using normal random)
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -14,14 +14,6 @@ using ScalarType = double;
 
 ScalarType tolerance = 1e-4;
 mcnla::index_t maxiter = 256;
-
-void create( mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
-             mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
-             const mcnla::index_t rank, mcnla::index_t seed[4] ) noexcept;
-template <mcnla::Layout _layout>
-void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
-            const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
-            ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
 
 class StatisticsSet {
  private:
@@ -69,7 +61,7 @@ int main( int argc, char **argv ) {
   int argi = 0;
   mcnla::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
   mcnla::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  mcnla::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000000;
+  mcnla::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
   mcnla::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
   mcnla::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
@@ -85,8 +77,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Create statistics collector
-  StatisticsSet set_max(num_test),  set_mean(num_test),   set_min(num_test),
-                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
+  StatisticsSet set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
 
   // ====================================================================================================================== //
   // Initialize solver
@@ -107,14 +98,15 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Generate matrix
   if ( mpi_rank == mpi_root ) {
-    create(matrix_a, matrix_u_true, k, seed);
+    std::cout << "Generate A using normal random." << std::endl << std::endl;
+    mcnla::lapack::larnv<3>(matrix_a.vectorize(), seed);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Run MCNLA
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Start iSVD." << std::endl;
+    std::cout << "Start iSVD." << std::endl << std::endl;
     std::cout << std::fixed << std::setprecision(6);
   }
 
@@ -127,8 +119,6 @@ int main( int argc, char **argv ) {
 
     // Check result
     if ( mpi_rank == mpi_root ) {
-      ScalarType smax, smin, smean;
-      check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
       auto iter    = solver.getIntegratorIter();
       auto maxiter = solver.getParameters().getMaxIteration();
       auto time_s = solver.getSketcherTime();
@@ -136,10 +126,8 @@ int main( int argc, char **argv ) {
       auto time_r = solver.getReconstructorTime();
       auto time = time_s + time_i + time_r;
       std::cout << std::setw(log10(num_test)+1) << t
-                << " | svd(U_true' * U): " << smax << " / " << smean << " / " << smin
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter << std::endl;
-      set_min(smin); set_max(smax); set_mean(smean);
       set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
     }
   }
@@ -151,79 +139,9 @@ int main( int argc, char **argv ) {
     std::cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << std::endl;
     std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
     std::cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << std::endl;
-    std::cout << "mean(svd(U_true' * U)): max = " << set_max.mean()
-                                   << ", mean = " << set_mean.mean()
-                                    << ", min = " << set_min.mean() << std::endl;
-    std::cout << "sd(svd(U_true' * U)):   max = " << set_max.sd()
-                                   << ", mean = " << set_mean.sd()
-                                    << ", min = " << set_min.sd() << std::endl;
     std::cout << "mean(iter) = " << set_iter.mean() << std::endl;
     std::cout << "sd(iter)   = " << set_iter.sd() << std::endl;
   }
 
   MPI_Finalize();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Create matrix A
-///
-void create(
-          mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
-          mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
-    const mcnla::index_t rank,
-          mcnla::index_t seed[4]
-) noexcept {
-  matrix_u_true = mcnla::matrix::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
-
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_e(matrix_a.getSizes());
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), rank);
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), rank);
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
-  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
-
-  // Generate U, V & E using normal random
-  mcnla::lapack::larnv<3>(matrix_u.vectorize(), seed);
-  mcnla::lapack::larnv<3>(matrix_v.vectorize(), seed);
-  mcnla::lapack::larnv<3>(matrix_e.vectorize(), seed);
-
-  // Orthogonalize U & V
-  mcnla::lapack::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
-  mcnla::lapack::gesvd<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
-
-  // Copy U
-  mcnla::blas::copy(matrix_u, matrix_u_true);
-
-  // A := U * S * V'
-  for ( mcnla::index_t i = 0; i < rank; ++i ) {
-    mcnla::blas::scal(1.0/(i+1), matrix_u.getCol(i));
-  }
-  mcnla::blas::gemm<mcnla::TransOption::NORMAL, mcnla::TransOption::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
-
-  // A += E * 1e-2/rank
-  mcnla::blas::axpy(1e-2/rank, matrix_e.vectorize(), matrix_a.vectorize());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Check the result
-///
-template <mcnla::Layout _layout>
-void check(
-    const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
-    const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
-          ScalarType &smax,
-          ScalarType &smin,
-          ScalarType &smean
-) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
-  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
-
-  // U2 := Utrue' * U
-  mcnla::blas::gemm<mcnla::TransOption::TRANS, mcnla::TransOption::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);
-
-  // Compute the SVD of U2
-  mcnla::lapack::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
-  smax  = mcnla::blas::amax(vector_s);
-  smin  = mcnla::blas::amin(vector_s);
-  smean = mcnla::blas::asum(vector_s) / vector_s.getLength();
 }

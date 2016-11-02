@@ -143,7 +143,7 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // B := E^(1/4) * B
     for ( index_t i = 0; i < dim_sketch; ++i ) {
-      blas::scal(pow(vector_e_(i), 0.25), matrix_b_.getRow(i));
+      blas::scal(std::pow(vector_e_(i), 0.25), matrix_b_.getRow(i));
     }
 
     // D := I/2 + B' * B
@@ -160,8 +160,8 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // D := E^(1/4) * D; B := E^(-1/4) * B
     for ( index_t i = 0; i < dim_sketch; ++i ) {
-      blas::scal(pow(vector_e_(i),  0.25), matrix_d_.getRow(i));
-      blas::scal(pow(vector_e_(i), -0.25), matrix_b_.getRow(i));
+      blas::scal(std::pow(vector_e_(i),  0.25), matrix_d_.getRow(i));
+      blas::scal(std::pow(vector_e_(i), -0.25), matrix_b_.getRow(i));
     }
 
     // C := D' * D

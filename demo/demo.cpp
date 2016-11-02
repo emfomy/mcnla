@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    demo/demo.cpp
-/// @brief   The demo code
+/// @brief   The demo code (generate A with given singular values)
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -107,6 +107,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Generate matrix
   if ( mpi_rank == mpi_root ) {
+    std::cout << "Generate A with given singular values." << std::endl << std::endl;
     create(matrix_a, matrix_u_true, k, seed);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
@@ -114,7 +115,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Run MCNLA
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Start iSVD." << std::endl;
+    std::cout << "Start iSVD." << std::endl << std::endl;
     std::cout << std::fixed << std::setprecision(6);
   }
 
