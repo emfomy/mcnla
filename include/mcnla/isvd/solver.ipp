@@ -29,7 +29,6 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
     const mpi_int_t mpi_root
 ) noexcept
   : parameters_(mpi_comm, mpi_root),
-    mpi_rank_(mpi::getCommRank(mpi_comm)),
     sketcher_(parameters_, seed_),
     integrator_(parameters_),
     reconstructor_(parameters_) {}
@@ -78,7 +77,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
   integrator_time_ = MPI_Wtime() - start_time;
 
   start_time = MPI_Wtime();
-  reconstructor_.reconstruct(matrix_a, integrator_.getMatrixQc());
+  reconstructor_.reconstruct(matrix_a, integrator_.getMatrixQbar());
   reconstructor_time_ = MPI_Wtime() - start_time;
 
   parameters_.computed_ = true;
@@ -190,7 +189,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::ROWMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return integrator_.getMatrixQc();
+  return integrator_.getMatrixQbar();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +200,7 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ParametersType&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getParameters() const noexcept {
-  mcnla_assert_eq(mpi_rank_, mpi_root_);
+  mcnla_assert_true(mpi::isCommRoot(mpi_root_, mpi_comm_));
   return parameters_;
 }
 
@@ -213,7 +212,7 @@ const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Paramete
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSize( const index_t nrow, const index_t ncol ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.nrow_ = nrow; parameters_.ncol_ = ncol;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
@@ -224,7 +223,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSize( const _Matrix &matrix ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   return setSize(matrix.getNrow(), matrix.getNcol());
 }
 
@@ -236,7 +235,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setRank( const index_t rank ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.rank_ = rank;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
@@ -249,7 +248,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setOverRank( const index_t over_rank ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.over_rank_ = over_rank;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
@@ -257,13 +256,13 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of total random sketches
 ///
-/// @attention  @a num_sketch must be a multiple of #mpi_rank_.
+/// @attention  @a num_sketch must be a multiple of #mpi_size_.
 /// @attention  Only affects on root rank.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketch( const index_t num_sketch ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.num_sketch_each_ = num_sketch / parameters_.mpi_rank_;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
@@ -276,7 +275,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketchEach( const index_t num_sketch_each ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.num_sketch_each_ = num_sketch_each;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
@@ -289,7 +288,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setMaxIteration( const index_t max_iteration ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.max_iteration_ = max_iteration;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
@@ -302,7 +301,7 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setTolerance( const RealScalarType tolerance ) noexcept {
-  if ( mpi_rank_ != mpi_root_ ) { return *this; }
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.tolerance_ = tolerance;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
