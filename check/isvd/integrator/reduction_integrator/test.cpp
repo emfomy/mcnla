@@ -2,9 +2,9 @@
 #include <mcnla.hpp>
 
 #define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
-#define MATRIX_QBAR_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
+#define MATRIX_QBAR_PATH MCNLA_DATA_PATH "/qbt_re.mtx"
 
-TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
+TEST(ReductionIntegratorTest, Test) {
   using ScalarType = double;
   auto mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
   auto mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
@@ -23,7 +23,7 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   const mcnla::index_t m  = cube_q_true.getNrow();
   const mcnla::index_t k  = cube_q_true.getNcol();
   const mcnla::index_t p  = 0;
-  const mcnla::index_t N  = cube_q_true.getNpage();
+  const mcnla::index_t N  = 16;
   const mcnla::index_t K  = mpi_size;
   const mcnla::index_t Nj = N / K;
   ASSERT_EQ(N % K, 0);
@@ -38,7 +38,7 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   parameters.max_iteration_ = 256;
 
   // Initializes
-  mcnla::isvd::NaiveKolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters);
+  mcnla::isvd::ReductionIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters);
   integrator.initialize();
   parameters.initialized_ = true;
 
@@ -51,13 +51,17 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   integrator.integrate();
 
   // Checks result
+  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2_true(m, m);
+  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2(m, m);
   auto matrix_qbar = integrator.getMatrixQbar();
+  mcnla::blas::syrk<mcnla::TransOption::NORMAL>(1.0, matrix_qbar_true, 0.0, matrix_qbar2_true);
+  mcnla::blas::syrk<mcnla::TransOption::NORMAL>(1.0, matrix_qbar,      0.0, matrix_qbar2);
   if ( mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
     ASSERT_EQ(matrix_qbar.getSizes(), matrix_qbar_true.getSizes());
-    ASSERT_EQ(integrator.getIter(), 45);
+    ASSERT_EQ(integrator.getIter(), -1);
     for ( auto i = 0; i < m; ++i ) {
-      for ( auto j = 0; j < k; ++j ) {
-        ASSERT_NEAR(matrix_qbar(i, j), matrix_qbar_true(i, j), 1e-10) << "(i, j) = (" << i << ", " << j << ")";
+      for ( auto j = i; j < m; ++j ) {
+        ASSERT_NEAR(matrix_qbar2(i, j), matrix_qbar2_true(i, j), 1e-10) << "(i, j) = (" << i << ", " << j << ")";
       }
     }
   }
