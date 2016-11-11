@@ -2,7 +2,7 @@
 #include <mcnla.hpp>
 
 #define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
-#define MATRIX_QBAR_PATH MCNLA_DATA_PATH "/qbt.mtx"
+#define MATRIX_QBAR_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
 
 TEST(KolmogorovNagumoIntegratorTest, Test) {
   using ScalarType = double;
@@ -44,7 +44,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {
-    mcnla::blas::copy(cube_q_true.getPage(mpi_rank + i*mpi_size), integrator.getCubeQ().getPage(i));
+    mcnla::blas::copy(cube_q_true.getPage(mpi_rank*Nj + i), integrator.getCubeQ().getPage(i));
   }
 
   // Integrates
@@ -57,7 +57,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
     ASSERT_EQ(integrator.getIter(), 45);
     for ( auto i = 0; i < m; ++i ) {
       for ( auto j = 0; j < k; ++j ) {
-        ASSERT_NEAR(matrix_qbar(i, j), matrix_qbar_true(i, j), 1e-10);
+        ASSERT_NEAR(matrix_qbar(i, j), matrix_qbar_true(i, j), 1e-10) << "(i, j) = (" << i << ", " << j << ")";
       }
     }
   }

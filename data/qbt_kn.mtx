@@ -1,5 +1,6 @@
 %%MatrixMarket matrix array real general
-% The transpose of the matrix Qbar
+% The transpose of the matrix Qbar using Kolmogorov-Nagumo-type integrator
+% Iter = 45
 11 101
  0.04363468636238618
  0.03517444589246641

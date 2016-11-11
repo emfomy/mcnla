@@ -31,7 +31,7 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_module
 ///
-/// The iSVD solver.
+/// The Integrated Singular Value Decomposition solver.
 ///
 /// @tparam  _Matrix         The matrix type.
 /// @tparam  _Sketcher       The sketcher type.
