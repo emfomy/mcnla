@@ -23,7 +23,7 @@ TEST(ReductionIntegratorTest, Test) {
   const mcnla::index_t m  = cube_q_true.getNrow();
   const mcnla::index_t k  = cube_q_true.getNcol();
   const mcnla::index_t p  = 0;
-  const mcnla::index_t N  = 16;
+  const mcnla::index_t N  = 8;
   const mcnla::index_t K  = mpi_size;
   const mcnla::index_t Nj = N / K;
   ASSERT_EQ(N % K, 0);
@@ -61,7 +61,7 @@ TEST(ReductionIntegratorTest, Test) {
     ASSERT_EQ(integrator.getIter(), -1);
     for ( auto i = 0; i < m; ++i ) {
       for ( auto j = i; j < m; ++j ) {
-        ASSERT_NEAR(matrix_qbar2(i, j), matrix_qbar2_true(i, j), 1e-10) << "(i, j) = (" << i << ", " << j << ")";
+        ASSERT_NEAR(matrix_qbar2(i, j), matrix_qbar2_true(i, j), 1e-8) << "(i, j) = (" << i << ", " << j << ")";
       }
     }
   }

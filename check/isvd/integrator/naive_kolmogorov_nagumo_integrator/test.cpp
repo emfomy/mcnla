@@ -54,10 +54,10 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   auto matrix_qbar = integrator.getMatrixQbar();
   if ( mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
     ASSERT_EQ(matrix_qbar.getSizes(), matrix_qbar_true.getSizes());
-    ASSERT_EQ(integrator.getIter(), 45);
+    ASSERT_EQ(integrator.getIter(), 41);
     for ( auto i = 0; i < m; ++i ) {
       for ( auto j = 0; j < k; ++j ) {
-        ASSERT_NEAR(matrix_qbar(i, j), matrix_qbar_true(i, j), 1e-10) << "(i, j) = (" << i << ", " << j << ")";
+        ASSERT_NEAR(matrix_qbar(i, j), matrix_qbar_true(i, j), 1e-8) << "(i, j) = (" << i << ", " << j << ")";
       }
     }
   }
