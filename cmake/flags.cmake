@@ -13,17 +13,21 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic")
 # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic")
 
 # MKL
+set(MKL_FOUND false)
 if(MCNLA_USE_MKL)
-  if(NOT DEFINED MKLROOT)
+  if(NOT DEFINED MKLROOT OR MKLROOT STREQUAL "")
     set(MKLROOT "$ENV{MKLROOT}")
   endif()
-  set(MKLROOT ${MKLROOT} CACHE PATH "The root path of Intel MKL")
 
-  if(DEFINED MKLROOT)
+  if(NOT MKLROOT STREQUAL "")
     set(MKL_FOUND true)
-  else()
+  endif()
+
+  if(NOT MKL_FOUND)
     message(SEND_ERROR "Intel MKL is not found (missing:  MKLROOT)")
   endif()
+
+  set(MKLROOT "${MKLROOT}" CACHE PATH "The root path of Intel MKL" FORCE)
 
   if(MKL_FOUND)
     message(STATUS "Found Intel MKL")
