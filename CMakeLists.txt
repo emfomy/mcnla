@@ -31,5 +31,8 @@ add_subdirectory(check)
 # Create configure files
 include(cmake/configure.cmake)
 
+# Sets install rule
+include(cmake/install.cmake)
+
 # Display message
 include(cmake/display.cmake)

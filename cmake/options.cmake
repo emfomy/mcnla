@@ -6,15 +6,15 @@ option(MCNLA_BUILD_TEST "Build test codes."            "ON")
 option(MCNLA_BUILD_DOC  "Build documentation."         "ON")
 
 # Set variables
-unset(MKL_USE_ILP64)
 if(MCNLA_USE_MKL)
   list(APPEND DEFS "MCNLA_USE_MKL")
-  set(MKL_USE_ILP64 ${MCNLA_USE_ILP64})
-endif()
-if(NOT MCNLA_USE_ILP64)
-  set(MCNLA_SYSTEM_INT_SIZE "32")
+  set(MKL_ILP64 ${MCNLA_USE_ILP64})
 else()
-  set(MCNLA_SYSTEM_INT_SIZE "64")
+  unset(MKL_ILP64)
+endif()
+
+if(MCNLA_USE_ILP64)
+  list(APPEND DEFS "MCNLA_USE_ILP64")
 endif()
 
 # Check compiler support

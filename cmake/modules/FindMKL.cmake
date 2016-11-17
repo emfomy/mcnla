@@ -13,7 +13,7 @@ set(MKLROOT "${MKLROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
 
 ################################################################################
 
-if(NOT MKL_USE_ILP64)
+if(NOT MKL_ILP64)
   set(mkllib "mkl_intel_lp64")
   set(mklflg "-m64")
 else()

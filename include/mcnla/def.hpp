@@ -66,6 +66,23 @@
 ///
 namespace mcnla {
 
+/// The type of index.
+#ifndef MCNLA_USE_ILP64
+using index_t = std::int32_t;
+#else
+using index_t = std::int64_t;
+#endif
+
+/// The type of size.
+#ifndef MCNLA_USE_ILP64
+using size_t = std::uint32_t;
+#else
+using size_t = std::uint64_t;
+#endif
+
+/// The format width
+static constexpr size_t ios_width = 14;
+
 }  // namespace mcnla
 
 #endif  // MCNLA_DEF_HPP_
