@@ -1,8 +1,3 @@
-# Set options
-if(MCNLA_USE_MKL)
-  list(APPEND DEFS "MCNLA_USE_MKL")
-endif()
-
 # Break
 if(NOT MCNLA_BUILD_DEMO AND NOT MCNLA_BUILD_TEST)
   return()
@@ -13,33 +8,20 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic")
 # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic")
 
 # MKL
-set(MKL_FOUND false)
 if(MCNLA_USE_MKL)
-  if(NOT DEFINED MKLROOT OR MKLROOT STREQUAL "")
-    set(MKLROOT "$ENV{MKLROOT}")
-  endif()
-
-  if(NOT MKLROOT STREQUAL "")
-    set(MKL_FOUND true)
-  endif()
-
-  if(NOT MKL_FOUND)
-    message(SEND_ERROR "Intel MKL is not found (missing:  MKLROOT)")
-  endif()
-
-  set(MKLROOT "${MKLROOT}" CACHE PATH "The root path of Intel MKL" FORCE)
-
+  find_package(MKL REQUIRED)
   if(MKL_FOUND)
-    message(STATUS "Found Intel MKL")
-    list(APPEND INCS "${MKLROOT}/include")
+    list(APPEND INCS "${MKL_INCLUDES}")
+    list(APPEND LIBS "${MKL_LIBRARIES}")
+    set(COMFLGS "${COMFLGS} ${MKL_FLAGS}")
+  endif()
+endif()
 
-    if(MCNLA_SYSTEM_INT_SIZE EQUAL 32)
-      list(APPEND LIBS "-Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a ${MKLROOT}/lib/intel64/libmkl_core.a -Wl,--end-group -lgomp -lpthread -lm -ldl")
-      set(COMFLGS "${COMFLGS} -m64")
-    elseif(MCNLA_SYSTEM_INT_SIZE EQUAL 64)
-      list(APPEND LIBS "-Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_ilp64.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a ${MKLROOT}/lib/intel64/libmkl_core.a -Wl,--end-group -lgomp -lpthread -lm -ldl")
-      set(COMFLGS "${COMFLGS} -DMKL_ILP64 -m64")
-    endif()
+# LAPACK
+if(NOT MCNLA_USE_MKL)
+  find_package(LAPACK REQUIRED)
+  if(LAPACK_FOUND)
+    list(APPEND LIBS "${LAPACK_LIBRARIES}")
   endif()
 endif()
 
@@ -51,12 +33,4 @@ if(MPI_FOUND)
   set(COMFLGS "${COMFLGS} ${MPI_COMPILE_FLAGS}")
   set(LNKFLGS "${LNKFLGS} ${MPI_LINK_FLAGS}")
 endif()
-set(MPI_PROCS 4 CACHE PATH "The number of MPI processes")
-
-# LAPACK
-if(NOT MCNLA_USE_MKL)
-  find_package(LAPACK REQUIRED)
-  if(LAPACK_FOUND)
-    list(APPEND LIBS "${LAPACK_LIBRARIES}")
-  endif()
-endif()
+set(MPI_PROCS 4 CACHE PATH "The number of MPI processes.")

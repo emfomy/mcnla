@@ -1,17 +1,20 @@
 # Set options
 option(MCNLA_USE_MKL    "Uses MKL as BLAS and LAPACK." "OFF")
+option(MCNLA_USE_ILP64  "Uses 64bit integer."          "OFF")
 option(MCNLA_BUILD_DEMO "Build demo codes."            "ON")
 option(MCNLA_BUILD_TEST "Build test codes."            "ON")
 option(MCNLA_BUILD_DOC  "Build documentation."         "ON")
 
-# Set word size
-set(MCNLA_SYSTEM_INT_SIZE 32 CACHE PATH "The system integer size.")
-if(MCNLA_SYSTEM_INT_SIZE EQUAL 32)
-  message(STATUS "Uses 32bit integer (LP64).")
-elseif(MCNLA_SYSTEM_INT_SIZE EQUAL 64)
-  message(STATUS "Uses 64bit integer (ILP64).")
+# Set variables
+unset(MKL_USE_ILP64)
+if(MCNLA_USE_MKL)
+  list(APPEND DEFS "MCNLA_USE_MKL")
+  set(MKL_USE_ILP64 ${MCNLA_USE_ILP64})
+endif()
+if(NOT MCNLA_USE_ILP64)
+  set(MCNLA_SYSTEM_INT_SIZE "32")
 else()
-  message(SEND_ERROR "Unsupport system integer size! (Only support 32 or 64.)")
+  set(MCNLA_SYSTEM_INT_SIZE "64")
 endif()
 
 # Check compiler support
