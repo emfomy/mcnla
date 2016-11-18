@@ -1,12 +1,14 @@
 # Create configure files
+unset(cfgfiles)
 file(
-  GLOB_RECURSE configfiles
+  GLOB_RECURSE cfgfiles
   RELATIVE "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/*.in"
 )
-foreach(configfile ${configfiles})
-  string(REGEX REPLACE "\\.[^.]*$" "" file ${configfile})
+foreach(cfgfile ${cfgfiles})
+  string(REGEX REPLACE "\\.[^.]*$" "" file ${cfgfile})
   configure_file(
-    "${PROJECT_SOURCE_DIR}/${configfile}"
+    "${PROJECT_SOURCE_DIR}/${cfgfile}"
     "${PROJECT_BINARY_DIR}/${file}"
+    @ONLY
   )
 endforeach()

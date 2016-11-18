@@ -53,9 +53,9 @@ int main( int argc, char **argv ) {
   // Display program information
   if ( mpi_rank == mpi_root ) {
     std::cout << "MCNLA "
-              << MCNLA_VERSION_MAJOR << "."
-              << MCNLA_VERSION_MINOR << "."
-              << MCNLA_VERSION_PATCH << " demo" << std::endl << std::endl;
+              << MCNLA_MAJOR_VERSION << "."
+              << MCNLA_MINOR_VERSION << "."
+              << MCNLA_PATCH_VERSION << " demo" << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //

@@ -6,9 +6,10 @@ cmake_minimum_required(VERSION 3.0)
 set(MCNLA_NAME "Monte Carlo Numerical Linear Algebra Package")
 
 # Set version number
-set(MCNLA_VERSION_MAJOR 0)
-set(MCNLA_VERSION_MINOR 4)
-set(MCNLA_VERSION_PATCH 0)
+set(MCNLA_MAJOR_VERSION 0)
+set(MCNLA_MINOR_VERSION 4)
+set(MCNLA_PATCH_VERSION 0)
+set(MCNLA_VERSION "${MCNLA_MAJOR_VERSION}.${MCNLA_MINOR_VERSION}.${MCNLA_PATCH_VERSION}")
 
 # Set Makefile
 set(CMAKE_COLOR_MAKEFILE ON)
@@ -16,6 +17,11 @@ set(CMAKE_COLOR_MAKEFILE ON)
 
 # Set module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
+# Set install prefix
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_VERSION}" CACHE PATH "The install path prefix." FORCE)
+endif()
 
 # Sets the options
 include(cmake/options.cmake)

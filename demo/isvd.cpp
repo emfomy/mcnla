@@ -58,9 +58,9 @@ int main( int argc, char **argv ) {
 
   if ( mpi_rank == 0 ) {
     cout << "iSVD "
-         << MCNLA_VERSION_MAJOR << "."
-         << MCNLA_VERSION_MINOR << "."
-         << MCNLA_VERSION_PATCH << " plain demo" << endl << endl;
+         << MCNLA_MAJOR_VERSION << "."
+         << MCNLA_MINOR_VERSION << "."
+         << MCNLA_PATCH_VERSION << " plain demo" << endl << endl;
   }
 
   int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
