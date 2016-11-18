@@ -7,7 +7,7 @@ set(MCNLA_NAME "Monte Carlo Numerical Linear Algebra Package")
 
 # Set version number
 set(MCNLA_VERSION_MAJOR 0)
-set(MCNLA_VERSION_MINOR 3)
+set(MCNLA_VERSION_MINOR 4)
 set(MCNLA_VERSION_PATCH 0)
 
 # Set Makefile

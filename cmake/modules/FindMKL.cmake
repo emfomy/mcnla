@@ -5,11 +5,11 @@
 # Locate the Intel Math Kernel Library.
 #
 
-if(NOT DEFINED MKLROOT OR MKLROOT STREQUAL "")
-  set(MKLROOT "$ENV{MKLROOT}")
+if(NOT DEFINED MKL_ROOT OR MKL_ROOT STREQUAL "")
+  set(MKL_ROOT "$ENV{MKLROOT}")
 endif()
 
-set(MKLROOT "${MKLROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
+set(MKL_ROOT "${MKL_ROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
 
 ################################################################################
 
@@ -29,7 +29,7 @@ set(MKL_FLAG "${mklflg}" CACHE PATH "The compiler flag of Intel MKL." FORCE)
 
 find_path(
   MKL_INCLUDE mkl.h
-  HINTS "${MKLROOT}/include"
+  HINTS "${MKL_ROOT}/include"
   DOC "The include directory of Intel MKL."
 )
 
@@ -38,21 +38,21 @@ find_path(
 find_library(
   MKL_LIBRARY_CORE
   NAMES mkl_core
-  HINTS "${MKLROOT}/lib/intel64"
+  HINTS "${MKL_ROOT}/lib/intel64"
   DOC "The core library of Intel MKL."
 )
 
 find_library(
   MKL_LIBRARY_THREAD
   NAMES mkl_gnu_thread
-  HINTS "${MKLROOT}/lib/intel64"
+  HINTS "${MKL_ROOT}/lib/intel64"
   DOC "The thread library of Intel MKL."
 )
 
 find_library(
   MKL_LIBRARY_LP
   NAMES ${mkllib}
-  HINTS "${MKLROOT}/lib/intel64"
+  HINTS "${MKL_ROOT}/lib/intel64"
   DOC "The integer library of Intel MKL."
 )
 
@@ -60,7 +60,7 @@ find_library(
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-  MKL DEFAULT_MSG MKLROOT MKL_FLAG MKL_INCLUDE MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP
+  MKL DEFAULT_MSG MKL_ROOT MKL_FLAG MKL_INCLUDE MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP
 )
 
 mark_as_advanced(MKL_FLAG MKL_INCLUDE MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP)
