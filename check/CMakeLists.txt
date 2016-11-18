@@ -7,7 +7,11 @@ endif()
 
 # GTEST
 set(GTEST_ROOT "" CACHE PATH "The root path of Google Test.")
-find_package(GTest 1.8 REQUIRED)
+if(CMAKE_VERSION VERSION_LESS 3.4.1)
+  find_package(GTest_ 1.8 REQUIRED)
+else()
+  find_package(GTest 1.8 REQUIRED)
+endif()
 if(GTEST_FOUND)
   list(APPEND INCS "${GTEST_INCLUDE_DIRS}")
   list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")

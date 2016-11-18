@@ -1,9 +1,9 @@
 # Set options
+option(MCNLA_BUILD_DEMO "Build demo codes."            "ON")
+option(MCNLA_BUILD_TEST "Build test codes."            "OFF")
+option(MCNLA_BUILD_DOC  "Build documentation."         "OFF")
 option(MCNLA_USE_MKL    "Uses MKL as BLAS and LAPACK." "OFF")
 option(MCNLA_USE_ILP64  "Uses 64bit integer."          "OFF")
-option(MCNLA_BUILD_DEMO "Build demo codes."            "ON")
-option(MCNLA_BUILD_TEST "Build test codes."            "ON")
-option(MCNLA_BUILD_DOC  "Build documentation."         "ON")
 
 # Set variables
 if(MCNLA_USE_MKL)
