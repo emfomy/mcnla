@@ -20,15 +20,47 @@ message(STATUS "")
 message(STATUS "Build demo codes:     ${MCNLA_BUILD_DEMO}")
 message(STATUS "Build test codes:     ${MCNLA_BUILD_TEST}")
 message(STATUS "Build documentation:  ${MCNLA_BUILD_DOC}")
+
+message(STATUS "")
+
+message(STATUS "Use MPI:              ${MPI_LIBRARIES}")
+
+if(NOT MCNLA_USE_MKL)
+set(LAPACK_LIBS ${LAPACK_LIBRARIES})
+list(REMOVE_DUPLICATES LAPACK_LIBS)
+message(STATUS "Use BLAS & LAPACK:    ${LAPACK_LIBS}")
+else()
+message(STATUS "Use BLAS & LAPACK:    OFF")
+endif()
+
+if(MCNLA_USE_MKL)
+message(STATUS "Use Intel MKL:        ${MKL_ROOT}")
+else()
+message(STATUS "Use Intel MKL:        OFF")
+endif()
+
+if(MCNLA_BUILD_TEST)
+message(STATUS "Use Google Test:      ${GTEST_LIBRARY}")
+else()
+message(STATUS "Use Google Test:      OFF")
+endif()
+
+if(MCNLA_BUILD_DOC)
+message(STATUS "Use Doxygen:          ${DOXYGEN_EXECUTABLE}")
+else()
+message(STATUS "Use Doxygen:          OFF")
+endif()
+
 message(STATUS "")
 
 if(NOT MCNLA_USE_ILP64)
-message(STATUS "System Integer size:  32bit (LP64)")
+message(STATUS "System integer size:  32bit (LP64)")
 else()
-message(STATUS "System Integer size:  64bit (ILP64)")
+message(STATUS "System integer size:  64bit (ILP64)")
 endif()
-message(STATUS "Use Intel MKL:        ${MCNLA_USE_MKL}")
+
 message(STATUS "MPI processes:        ${MPI_PROCS}")
+
 message(STATUS "")
 message(STATUS "================================================================================")
 message(STATUS "")

@@ -1,3 +1,8 @@
+# Set install prefix
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_VERSION}" CACHE PATH "The install path prefix." FORCE)
+endif()
+
 # Set options
 option(MCNLA_BUILD_DEMO "Build demo codes."            "ON")
 option(MCNLA_BUILD_TEST "Build test codes."            "OFF")

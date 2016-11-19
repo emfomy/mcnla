@@ -5,8 +5,11 @@
 # Locate the Intel Math Kernel Library.
 #
 
-if(NOT DEFINED MKL_ROOT OR MKL_ROOT STREQUAL "")
-  set(MKL_ROOT "$ENV{MKLROOT}")
+set(MKL_ROOT "${MKL_ROOT}")
+if(MKL_ROOT STREQUAL "")
+  if(DEFINED ENV{MKLROOT})
+    set(MKL_ROOT "$ENV{MKLROOT}")
+  endif()
 endif()
 
 set(MKL_ROOT "${MKL_ROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
@@ -59,11 +62,12 @@ find_library(
 ################################################################################
 
 include(FindPackageHandleStandardArgs)
+set(MKL_LIBS "${MKL_LIBRARY_CORE};${MKL_LIBRARY_THREAD};${MKL_LIBRARY_LP}")
 find_package_handle_standard_args(
-  MKL DEFAULT_MSG MKL_ROOT MKL_FLAG MKL_INCLUDE MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP
+  MKL DEFAULT_MSG MKL_LIBS MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP MKL_INCLUDE MKL_FLAG
 )
 
-mark_as_advanced(MKL_FLAG MKL_INCLUDE MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP)
+mark_as_advanced(MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP MKL_INCLUDE MKL_FLAG)
 
 set(MKL_INCLUDES  "${MKL_INCLUDE}")
 set(MKL_LIBRARIES "-Wl,--start-group ${MKL_LIBRARY_CORE} ${MKL_LIBRARY_THREAD} ${MKL_LIBRARY_LP} -Wl,--end-group -lgomp -lpthread -lm -ldl")

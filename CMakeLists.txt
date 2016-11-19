@@ -18,11 +18,6 @@ set(CMAKE_COLOR_MAKEFILE ON)
 # Set module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-# Set install prefix
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_VERSION}" CACHE PATH "The install path prefix." FORCE)
-endif()
-
 # Sets the options
 include(cmake/options.cmake)
 
