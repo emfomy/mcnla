@@ -13,13 +13,13 @@ Monte Carlo Numerical Linear Algebra Package
 * Mu Yang <<emfomy@gmail.com>>
 
 ## Requirements
-* CMake 3+.
-* C++ compiler with C++11 support (GCC 5+ recommended).
-* LAPACK library.
-* MPI Library.
+* [CMake](https://cmake.org) 3+.
+* C++ compiler with C++11 support ([GCC](https://gcc.gnu.org) 5+ recommended).
+* [BLAS](http://www.netlib.org/blas) & [LAPACK](http://www.netlib.org/lapack) library.
+* MPI Library ([OpenMPI](https://www.open-mpi.org) or [MPICH](http://www.mpich.org)).
 
 ### Optional
-* [Intel&reg; Math Kernel Library](https://software.intel.com/en-us/intel-mkl) (**Recommended** for better performance, used for LAPACK and BLAS).
+* [Intel&reg; Math Kernel Library](https://software.intel.com/en-us/intel-mkl) (**Recommended** for better performance, used for BLAS & LAPACK).
 * [DOxygen](http://www.stack.nl/~dimitri/doxygen/) (Used for documentation).
 * [Google Test Library](https://github.com/google/googletest) (Used for code testing).
 
@@ -67,7 +67,7 @@ ccmake ..
 ### How to set CMake options?
 
 * Use `ccmake ..` or `ccmake <path-to-source>` in the `build` folder.
-* Press <Enter> on the option you want to change, change it, and press `<Enter>` again.
+* Press `<Enter>` on the option you want to change, change it, and press `<Enter>` again.
 * After changing the options, press `<c>` to configure, and press `<g>` to generate Makefiles if configured successfully.
 * To quit without saving, press `<q>`.
 
@@ -77,10 +77,9 @@ ccmake ..
 
 ### Why Google Test is not found?
 
-* `GTEST_ROOT` should be set to a folder containing `include` and `lib` of Google Test.
-* Make sure you set `GTEST_ROOT` with `ccmake`.
+* Set `GTEST_ROOT` to a folder containing `include` and `lib` of Google Test.
 
-### How to use 64bit integer?
+### How to use 64 bit integer?
 
 * Set `MCNLA_USE_ILP64` with `ccmake`.
 * If you want to compile directly, add `-DMCNLA_USE_ILP64` to compiler flag.
