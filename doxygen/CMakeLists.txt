@@ -5,9 +5,6 @@ if(NOT MCNLA_BUILD_DOC)
   return()
 endif()
 
-# DOxygen
-find_package(Doxygen REQUIRED)
-
 # Set documentation directory
 set(MCNLA_DOCS_DIR "${PROJECT_BINARY_DIR}/docs")
 set(MCNLA_DOCS_DIR "${MCNLA_DOCS_DIR}" PARENT_SCOPE)

@@ -21,8 +21,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 # Sets the options
 include(cmake/options.cmake)
 
-# Sets the compile flags
-include(cmake/flags.cmake)
+# Sets the packages
+include(cmake/packages.cmake)
 
 # Add subdirectories
 add_subdirectory(demo)

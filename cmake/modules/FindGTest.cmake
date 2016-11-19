@@ -98,6 +98,8 @@
 #
 # Modified by Mu Yang <emfomy@gmail.com>
 
+set(GTEST_ROOT "${GTEST_ROOT}" CACHE PATH "The root path of Google Test." FORCE)
+
 function(GTEST_ADD_TESTS executable extra_args)
   if(NOT ARGN)
     message(FATAL_ERROR "Missing ARGN: Read the documentation for GTEST_ADD_TESTS")
@@ -144,8 +146,8 @@ function(_gtest_find_library _name)
   find_library(${_name}
     NAMES ${ARGN}
     HINTS
-      ENV GTEST_ROOT
-      ${GTEST_ROOT}
+      "$ENV{GTEST_ROOT}"
+      "${GTEST_ROOT}"
     PATH_SUFFIXES ${_gtest_libpath_suffixes}
   )
   mark_as_advanced(${_name})
@@ -173,8 +175,8 @@ endif()
 
 find_path(GTEST_INCLUDE_DIR gtest/gtest.h
   HINTS
-    $ENV{GTEST_ROOT}/include
-    ${GTEST_ROOT}/include
+    "$ENV{GTEST_ROOT}/include"
+    "${GTEST_ROOT}/include"
 )
 mark_as_advanced(GTEST_INCLUDE_DIR)
 
@@ -260,7 +262,6 @@ endif()
 
 #
 
-set(GTEST_ROOT "${GTEST_ROOT}")
 if(GTEST_ROOT STREQUAL "")
   set(GTEST_ROOT "$ENV{GTEST_ROOT}")
 endif()

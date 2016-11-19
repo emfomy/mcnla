@@ -40,7 +40,7 @@ message(STATUS "Use Intel MKL:        OFF")
 endif()
 
 if(MCNLA_BUILD_TEST)
-message(STATUS "Use Google Test:      ${GTEST_LIBRARY}")
+message(STATUS "Use Google Test:      ${GTEST_BOTH_LIBRARIES}")
 else()
 message(STATUS "Use Google Test:      OFF")
 endif()
