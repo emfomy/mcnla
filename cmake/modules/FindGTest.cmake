@@ -1,3 +1,6 @@
+# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+# file Copyright.txt or https://cmake.org/licensing for details.
+
 #.rst:
 # FindGTest
 # ---------
@@ -90,179 +93,179 @@
 #      add_executable(FooTest FooUnitTest.cc)
 #      GTEST_ADD_TESTS(FooTest "${FooTestArgs}" AUTO)
 
-#=============================================================================
-# Copyright 2009 Kitware, Inc.
-# Copyright 2009 Philip Lowman <philip@yhbt.com>
-# Copyright 2009 Daniel Blezek <blezek@gmail.com>
-#
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
-#
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
-#=============================================================================
-# (To distribute this file outside of CMake, substitute the full
-#  License text for the above reference.)
 #
 # Thanks to Daniel Blezek <blezek@gmail.com> for the GTEST_ADD_TESTS code
+#
+# Modified by Mu Yang <emfomy@gmail.com>
+
+set(GTEST_ROOT "${GTEST_ROOT}" CACHE PATH "The root path of Google Test." FORCE)
 
 function(GTEST_ADD_TESTS executable extra_args)
-    if(NOT ARGN)
-        message(FATAL_ERROR "Missing ARGN: Read the documentation for GTEST_ADD_TESTS")
-    endif()
-    if(ARGN STREQUAL "AUTO")
-        # obtain sources used for building that executable
-        get_property(ARGN TARGET ${executable} PROPERTY SOURCES)
-    endif()
-    set(gtest_case_name_regex ".*\\( *([A-Za-z_0-9]+) *, *([A-Za-z_0-9]+) *\\).*")
-    set(gtest_test_type_regex "(TYPED_TEST|TEST_?[FP]?)")
-    foreach(source ${ARGN})
-        set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${source})
-        file(READ "${source}" contents)
-        string(REGEX MATCHALL "${gtest_test_type_regex} *\\(([A-Za-z_0-9 ,]+)\\)" found_tests ${contents})
-        foreach(hit ${found_tests})
-          string(REGEX MATCH "${gtest_test_type_regex}" test_type ${hit})
+  if(NOT ARGN)
+    message(FATAL_ERROR "Missing ARGN: Read the documentation for GTEST_ADD_TESTS")
+  endif()
+  if(ARGN STREQUAL "AUTO")
+    # obtain sources used for building that executable
+    get_property(ARGN TARGET ${executable} PROPERTY SOURCES)
+  endif()
+  set(gtest_case_name_regex ".*\\( *([A-Za-z_0-9]+) *, *([A-Za-z_0-9]+) *\\).*")
+  set(gtest_test_type_regex "(TYPED_TEST|TEST_?[FP]?)")
+  foreach(source ${ARGN})
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${source})
+    file(READ "${source}" contents)
+    string(REGEX MATCHALL "${gtest_test_type_regex} *\\(([A-Za-z_0-9 ,]+)\\)" found_tests ${contents})
+    foreach(hit ${found_tests})
+      string(REGEX MATCH "${gtest_test_type_regex}" test_type ${hit})
 
-          # Parameterized tests have a different signature for the filter
-          if("x${test_type}" STREQUAL "xTEST_P")
-            string(REGEX REPLACE ${gtest_case_name_regex}  "*/\\1.\\2/*" test_name ${hit})
-          elseif("x${test_type}" STREQUAL "xTEST_F" OR "x${test_type}" STREQUAL "xTEST")
-            string(REGEX REPLACE ${gtest_case_name_regex} "\\1.\\2" test_name ${hit})
-          elseif("x${test_type}" STREQUAL "xTYPED_TEST")
-            string(REGEX REPLACE ${gtest_case_name_regex} "\\1/*.\\2" test_name ${hit})
-          else()
-            message(WARNING "Could not parse GTest ${hit} for adding to CTest.")
-            continue()
-          endif()
-          add_test(NAME ${test_name} COMMAND ${executable} --gtest_filter=${test_name} ${extra_args})
-        endforeach()
+      # Parameterized tests have a different signature for the filter
+      if("x${test_type}" STREQUAL "xTEST_P")
+      string(REGEX REPLACE ${gtest_case_name_regex}  "*/\\1.\\2/*" test_name ${hit})
+      elseif("x${test_type}" STREQUAL "xTEST_F" OR "x${test_type}" STREQUAL "xTEST")
+      string(REGEX REPLACE ${gtest_case_name_regex} "\\1.\\2" test_name ${hit})
+      elseif("x${test_type}" STREQUAL "xTYPED_TEST")
+      string(REGEX REPLACE ${gtest_case_name_regex} "\\1/*.\\2" test_name ${hit})
+      else()
+      message(WARNING "Could not parse GTest ${hit} for adding to CTest.")
+      continue()
+      endif()
+      add_test(NAME ${test_name} COMMAND ${executable} --gtest_filter=${test_name} ${extra_args})
     endforeach()
+  endforeach()
 endfunction()
 
 function(_gtest_append_debugs _endvar _library)
-    if(${_library} AND ${_library}_DEBUG)
-        set(_output optimized ${${_library}} debug ${${_library}_DEBUG})
-    else()
-        set(_output ${${_library}})
-    endif()
-    set(${_endvar} ${_output} PARENT_SCOPE)
+  if(${_library} AND ${_library}_DEBUG)
+    set(_output optimized ${${_library}} debug ${${_library}_DEBUG})
+  else()
+    set(_output ${${_library}})
+  endif()
+  set(${_endvar} ${_output} PARENT_SCOPE)
 endfunction()
 
 function(_gtest_find_library _name)
-    find_library(${_name}
-        NAMES ${ARGN}
-        HINTS
-            ENV GTEST_ROOT
-            ${GTEST_ROOT}
-        PATH_SUFFIXES ${_gtest_libpath_suffixes}
-    )
-    mark_as_advanced(${_name})
+  find_library(${_name}
+    NAMES ${ARGN}
+    HINTS
+      "$ENV{GTEST_ROOT}"
+      "${GTEST_ROOT}"
+    PATH_SUFFIXES ${_gtest_libpath_suffixes}
+  )
+  mark_as_advanced(${_name})
 endfunction()
 
 #
 
 if(NOT DEFINED GTEST_MSVC_SEARCH)
-    set(GTEST_MSVC_SEARCH MD)
+  set(GTEST_MSVC_SEARCH MD)
 endif()
 
 set(_gtest_libpath_suffixes lib)
 if(MSVC)
-    if(GTEST_MSVC_SEARCH STREQUAL "MD")
-        list(APPEND _gtest_libpath_suffixes
-            msvc/gtest-md/Debug
-            msvc/gtest-md/Release)
-    elseif(GTEST_MSVC_SEARCH STREQUAL "MT")
-        list(APPEND _gtest_libpath_suffixes
-            msvc/gtest/Debug
-            msvc/gtest/Release)
-    endif()
+  if(GTEST_MSVC_SEARCH STREQUAL "MD")
+    list(APPEND _gtest_libpath_suffixes
+      msvc/gtest-md/Debug
+      msvc/gtest-md/Release)
+  elseif(GTEST_MSVC_SEARCH STREQUAL "MT")
+    list(APPEND _gtest_libpath_suffixes
+      msvc/gtest/Debug
+      msvc/gtest/Release)
+  endif()
 endif()
 
 
 find_path(GTEST_INCLUDE_DIR gtest/gtest.h
-    HINTS
-        $ENV{GTEST_ROOT}/include
-        ${GTEST_ROOT}/include
+  HINTS
+    "$ENV{GTEST_ROOT}/include"
+    "${GTEST_ROOT}/include"
 )
 mark_as_advanced(GTEST_INCLUDE_DIR)
 
 if(MSVC AND GTEST_MSVC_SEARCH STREQUAL "MD")
-    # The provided /MD project files for Google Test add -md suffixes to the
-    # library names.
-    _gtest_find_library(GTEST_LIBRARY            gtest-md  gtest)
-    _gtest_find_library(GTEST_LIBRARY_DEBUG      gtest-mdd gtestd)
-    _gtest_find_library(GTEST_MAIN_LIBRARY       gtest_main-md  gtest_main)
-    _gtest_find_library(GTEST_MAIN_LIBRARY_DEBUG gtest_main-mdd gtest_maind)
+  # The provided /MD project files for Google Test add -md suffixes to the
+  # library names.
+  _gtest_find_library(GTEST_LIBRARY            gtest-md  gtest)
+  _gtest_find_library(GTEST_LIBRARY_DEBUG      gtest-mdd gtestd)
+  _gtest_find_library(GTEST_MAIN_LIBRARY       gtest_main-md  gtest_main)
+  _gtest_find_library(GTEST_MAIN_LIBRARY_DEBUG gtest_main-mdd gtest_maind)
 else()
-    _gtest_find_library(GTEST_LIBRARY            gtest)
-    _gtest_find_library(GTEST_LIBRARY_DEBUG      gtestd)
-    _gtest_find_library(GTEST_MAIN_LIBRARY       gtest_main)
-    _gtest_find_library(GTEST_MAIN_LIBRARY_DEBUG gtest_maind)
+  _gtest_find_library(GTEST_LIBRARY            gtest)
+  _gtest_find_library(GTEST_LIBRARY_DEBUG      gtestd)
+  _gtest_find_library(GTEST_MAIN_LIBRARY       gtest_main)
+  _gtest_find_library(GTEST_MAIN_LIBRARY_DEBUG gtest_maind)
 endif()
 
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(GTest DEFAULT_MSG GTEST_LIBRARY GTEST_INCLUDE_DIR GTEST_MAIN_LIBRARY)
 
 if(GTEST_FOUND)
-    set(GTEST_INCLUDE_DIRS ${GTEST_INCLUDE_DIR})
-    _gtest_append_debugs(GTEST_LIBRARIES      GTEST_LIBRARY)
-    _gtest_append_debugs(GTEST_MAIN_LIBRARIES GTEST_MAIN_LIBRARY)
-    set(GTEST_BOTH_LIBRARIES ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
+  set(GTEST_INCLUDE_DIRS ${GTEST_INCLUDE_DIR})
+  _gtest_append_debugs(GTEST_LIBRARIES      GTEST_LIBRARY)
+  _gtest_append_debugs(GTEST_MAIN_LIBRARIES GTEST_MAIN_LIBRARY)
+  set(GTEST_BOTH_LIBRARIES ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
 
-    # include(CMakeFindDependencyMacro)
-    # find_dependency(Threads)
+  include(CMakeFindDependencyMacro)
+  find_dependency(Threads)
 
-    if(NOT TARGET GTest::GTest)
-        add_library(GTest::GTest UNKNOWN IMPORTED)
-        set_target_properties(GTest::GTest PROPERTIES
-            INTERFACE_LINK_LIBRARIES "Threads::Threads")
-        if(GTEST_INCLUDE_DIRS)
-            set_target_properties(GTest::GTest PROPERTIES
-                INTERFACE_INCLUDE_DIRECTORIES "${GTEST_INCLUDE_DIRS}")
-        endif()
-        if(EXISTS "${GTEST_LIBRARY}")
-            set_target_properties(GTest::GTest PROPERTIES
-                IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
-                IMPORTED_LOCATION "${GTEST_LIBRARY}")
-        endif()
-        if(EXISTS "${GTEST_LIBRARY_DEBUG}")
-            set_property(TARGET GTest::GTest APPEND PROPERTY
-                IMPORTED_CONFIGURATIONS DEBUG)
-            set_target_properties(GTest::GTest PROPERTIES
-                IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-                IMPORTED_LOCATION_DEBUG "${GTEST_LIBRARY_DEBUG}")
-        endif()
-        if(EXISTS "${GTEST_LIBRARY_RELEASE}")
-            set_property(TARGET GTest::GTest APPEND PROPERTY
-                IMPORTED_CONFIGURATIONS RELEASE)
-            set_target_properties(GTest::GTest PROPERTIES
-                IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-                IMPORTED_LOCATION_RELEASE "${GTEST_LIBRARY_RELEASE}")
-        endif()
-      endif()
-      if(NOT TARGET GTest::Main)
-          add_library(GTest::Main UNKNOWN IMPORTED)
-          set_target_properties(GTest::Main PROPERTIES
-              INTERFACE_LINK_LIBRARIES "GTest::GTest")
-          if(EXISTS "${GTEST_MAIN_LIBRARY}")
-              set_target_properties(GTest::Main PROPERTIES
-                  IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
-                  IMPORTED_LOCATION "${GTEST_MAIN_LIBRARY}")
-          endif()
-          if(EXISTS "${GTEST_MAIN_LIBRARY_DEBUG}")
-            set_property(TARGET GTest::Main APPEND PROPERTY
-                IMPORTED_CONFIGURATIONS DEBUG)
-            set_target_properties(GTest::Main PROPERTIES
-                IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
-                IMPORTED_LOCATION_DEBUG "${GTEST_MAIN_LIBRARY_DEBUG}")
-          endif()
-          if(EXISTS "${GTEST_MAIN_LIBRARY_RELEASE}")
-            set_property(TARGET GTest::Main APPEND PROPERTY
-                IMPORTED_CONFIGURATIONS RELEASE)
-            set_target_properties(GTest::Main PROPERTIES
-                IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
-                IMPORTED_LOCATION_RELEASE "${GTEST_MAIN_LIBRARY_RELEASE}")
-          endif()
+  if(NOT TARGET GTest::GTest)
+    add_library(GTest::GTest UNKNOWN IMPORTED)
+    set_target_properties(GTest::GTest PROPERTIES
+      INTERFACE_LINK_LIBRARIES "Threads::Threads")
+    if(GTEST_INCLUDE_DIRS)
+      set_target_properties(GTest::GTest PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${GTEST_INCLUDE_DIRS}")
     endif()
+    if(EXISTS "${GTEST_LIBRARY}")
+      set_target_properties(GTest::GTest PROPERTIES
+        IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+        IMPORTED_LOCATION "${GTEST_LIBRARY}")
+    endif()
+    if(EXISTS "${GTEST_LIBRARY_RELEASE}")
+      set_property(TARGET GTest::GTest APPEND PROPERTY
+        IMPORTED_CONFIGURATIONS RELEASE)
+      set_target_properties(GTest::GTest PROPERTIES
+        IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+        IMPORTED_LOCATION_RELEASE "${GTEST_LIBRARY_RELEASE}")
+    endif()
+    if(EXISTS "${GTEST_LIBRARY_DEBUG}")
+      set_property(TARGET GTest::GTest APPEND PROPERTY
+        IMPORTED_CONFIGURATIONS DEBUG)
+      set_target_properties(GTest::GTest PROPERTIES
+        IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+        IMPORTED_LOCATION_DEBUG "${GTEST_LIBRARY_DEBUG}")
+    endif()
+    endif()
+    if(NOT TARGET GTest::Main)
+      add_library(GTest::Main UNKNOWN IMPORTED)
+      set_target_properties(GTest::Main PROPERTIES
+        INTERFACE_LINK_LIBRARIES "GTest::GTest")
+      if(EXISTS "${GTEST_MAIN_LIBRARY}")
+        set_target_properties(GTest::Main PROPERTIES
+          IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+          IMPORTED_LOCATION "${GTEST_MAIN_LIBRARY}")
+      endif()
+      if(EXISTS "${GTEST_MAIN_LIBRARY_RELEASE}")
+      set_property(TARGET GTest::Main APPEND PROPERTY
+        IMPORTED_CONFIGURATIONS RELEASE)
+      set_target_properties(GTest::Main PROPERTIES
+        IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+        IMPORTED_LOCATION_RELEASE "${GTEST_MAIN_LIBRARY_RELEASE}")
+      endif()
+      if(EXISTS "${GTEST_MAIN_LIBRARY_DEBUG}")
+      set_property(TARGET GTest::Main APPEND PROPERTY
+        IMPORTED_CONFIGURATIONS DEBUG)
+      set_target_properties(GTest::Main PROPERTIES
+        IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+        IMPORTED_LOCATION_DEBUG "${GTEST_MAIN_LIBRARY_DEBUG}")
+      endif()
+  endif()
 endif()
+
+#
+
+if(GTEST_ROOT STREQUAL "")
+  set(GTEST_ROOT "$ENV{GTEST_ROOT}")
+endif()
+if(GTEST_ROOT STREQUAL "" AND DEFINED GTEST_INCLUDE_DIR)
+  get_filename_component(GTEST_ROOT "${GTEST_INCLUDE_DIR}/.." REALPATH)
+endif()
+set(GTEST_ROOT "${GTEST_ROOT}" CACHE PATH "The root path of Google Test." FORCE)

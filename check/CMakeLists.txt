@@ -5,9 +5,7 @@ if(NOT MCNLA_BUILD_TEST)
   return()
 endif()
 
-# GTEST
-set(GTEST_ROOT "" CACHE PATH "The root path of Google Test.")
-find_package(GTest 1.8 REQUIRED)
+# GTest
 if(GTEST_FOUND)
   list(APPEND INCS "${GTEST_INCLUDE_DIRS}")
   list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")

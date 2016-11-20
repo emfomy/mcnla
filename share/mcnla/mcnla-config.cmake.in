@@ -1,0 +1,2 @@
+# Compute paths
+set(MCNLA_INCLUDES "@CMAKE_INSTALL_PREFIX@/include")

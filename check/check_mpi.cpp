@@ -11,9 +11,9 @@ int main( int argc, char **argv ) {
   }
 
   std::cout << "MCNLA "
-            << MCNLA_VERSION_MAJOR << "."
-            << MCNLA_VERSION_MINOR << "."
-            << MCNLA_VERSION_PATCH << " "
+            << MCNLA_MAJOR_VERSION << "."
+            << MCNLA_MINOR_VERSION << "."
+            << MCNLA_PATCH_VERSION << " "
             << MCNLA_CHECK_NAME << std::endl << std::endl;
 
   std::cout << "Using " << mcnla::mpi::getCommSize(MPI_COMM_WORLD) << " MPI nodes." << std::endl << std::endl;

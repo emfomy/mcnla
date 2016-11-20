@@ -2,13 +2,14 @@
 
 # Set project
 project(MCNLA)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 set(MCNLA_NAME "Monte Carlo Numerical Linear Algebra Package")
 
 # Set version number
-set(MCNLA_VERSION_MAJOR 0)
-set(MCNLA_VERSION_MINOR 3)
-set(MCNLA_VERSION_PATCH 0)
+set(MCNLA_MAJOR_VERSION 0)
+set(MCNLA_MINOR_VERSION 4)
+set(MCNLA_PATCH_VERSION 0)
+set(MCNLA_VERSION "${MCNLA_MAJOR_VERSION}.${MCNLA_MINOR_VERSION}.${MCNLA_PATCH_VERSION}")
 
 # Set Makefile
 set(CMAKE_COLOR_MAKEFILE ON)
@@ -20,13 +21,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 # Sets the options
 include(cmake/options.cmake)
 
-# Sets the compile flags
-include(cmake/flags.cmake)
+# Sets the packages
+include(cmake/packages.cmake)
 
 # Add subdirectories
-add_subdirectory(doxygen)
 add_subdirectory(demo)
 add_subdirectory(check)
+add_subdirectory(doxygen)
 
 # Create configure files
 include(cmake/configure.cmake)

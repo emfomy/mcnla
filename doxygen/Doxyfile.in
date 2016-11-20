@@ -38,7 +38,7 @@ PROJECT_NAME           = "MCNLA"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = "@MCNLA_VERSION_MAJOR@.@MCNLA_VERSION_MINOR@.@MCNLA_VERSION_PATCH@"
+PROJECT_NUMBER         = "@MCNLA_MAJOR_VERSION@.@MCNLA_MINOR_VERSION@.@MCNLA_PATCH_VERSION@"
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
