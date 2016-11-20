@@ -23,7 +23,7 @@ message(STATUS "Build documentation:  ${MCNLA_BUILD_DOC}")
 
 message(STATUS "")
 
-if((MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST) AND NOT MCNLA_USE_MKL)
+if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
   message(STATUS "Use MPI:              ${MPI_LIBRARIES}")
 else()
   message(STATUS "Use MPI:              OFF")
@@ -63,7 +63,9 @@ else()
   message(STATUS "System integer size:  64bit (ILP64)")
 endif()
 
-message(STATUS "MPI processes:        ${MPI_PROCS}")
+if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
+  message(STATUS "MPI processes:        ${MPI_PROCS}")
+endif()
 
 message(STATUS "")
 message(STATUS "================================================================================")

@@ -14,19 +14,25 @@ endif()
 
 set(MKL_ROOT "${MKL_ROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
 
+unset(MKL_FLAG CACHE)
+unset(MKL_INCLUDE CACHE)
+unset(MKL_LIBRARY_CORE CACHE)
+unset(MKL_LIBRARY_THREAD CACHE)
+unset(MKL_LIBRARY_LP CACHE)
+
 ################################################################################
 
 if(NOT MKL_ILP64)
-  set(mkllib "mkl_intel_lp64")
-  set(mklflg "-m64")
+  set(mkllib  "mkl_intel_lp64")
+  set(mklflag "-m64")
 else()
-  set(mkllib "mkl_intel_ilp64")
-  set(mklflg "-DMKL_ILP64 -m64")
+  set(mkllib  "mkl_intel_ilp64")
+  set(mklflag "-DMKL_ILP64 -m64")
 endif()
 
 ################################################################################
 
-set(MKL_FLAG "${mklflg}" CACHE PATH "The compiler flag of Intel MKL." FORCE)
+set(MKL_FLAG "${mklflag}" CACHE PATH "The compiler flag of Intel MKL." FORCE)
 
 ################################################################################
 
