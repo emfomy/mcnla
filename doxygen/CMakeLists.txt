@@ -1,32 +1,24 @@
 # The CMake setting of 'doxygen/'
 
-# DOxygen
-find_package(Doxygen REQUIRED)
+# Break
+if(NOT MCNLA_BUILD_DOC)
+  return()
+endif()
 
-# Create configure files
-configure_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-)
+# Set documentation directory
+set(MCNLA_DOCS_DIR "${PROJECT_BINARY_DIR}/docs")
+set(MCNLA_DOCS_DIR "${MCNLA_DOCS_DIR}" PARENT_SCOPE)
 
 # Add rule
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
-  add_custom_target(
-    doc
-    COMMAND doxygen "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-    COMMENT "Generating documentation with Doxygen"
-  )
-else()
-  add_custom_target(
-    doc ALL
-    COMMAND doxygen "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-    COMMENT "Generating documentation with Doxygen"
-  )
-endif()
+add_custom_target(
+  doc
+  COMMAND doxygen "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+  COMMENT "Generating documentation with Doxygen"
+)
 
 # Add to clean rule
 set_directory_properties(
   PROPERTIES
   ADDITIONAL_MAKE_CLEAN_FILES
-  "${CMAKE_BINARY_DIR}/documentation"
+  "${MCNLA_DOCS_DIR}"
 )

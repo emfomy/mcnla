@@ -1,40 +1,39 @@
 # The main CMake setting
 
 # Set project
-project(iSVD)
-cmake_minimum_required(VERSION 2.8)
+project(MCNLA)
+cmake_minimum_required(VERSION 3.0)
+set(MCNLA_NAME "Monte Carlo Numerical Linear Algebra Package")
 
 # Set version number
-set(ISVD_VERSION_MAJOR 0)
-set(ISVD_VERSION_MINOR 3)
-set(ISVD_VERSION_PATCH 0)
+set(MCNLA_MAJOR_VERSION 0)
+set(MCNLA_MINOR_VERSION 4)
+set(MCNLA_PATCH_VERSION 0)
+set(MCNLA_VERSION "${MCNLA_MAJOR_VERSION}.${MCNLA_MINOR_VERSION}.${MCNLA_PATCH_VERSION}")
 
 # Set Makefile
 set(CMAKE_COLOR_MAKEFILE ON)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# Set word size
-set(ISVD_SYSTEM_INT_SIZE 32 CACHE PATH "The system integer size.")
-if(ISVD_SYSTEM_INT_SIZE EQUAL 32)
-  message(STATUS "Uses 32bit integer (LP64).")
-elseif(ISVD_SYSTEM_INT_SIZE EQUAL 64)
-  message(STATUS "Uses 64bit integer (ILP64).")
-else()
-  message(SEND_ERROR "Unsupport system integer size! (Only support 32 or 64.)")
-endif()
+# Set module path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
+# Sets the options
+include(cmake/options.cmake)
+
+# Sets the packages
+include(cmake/packages.cmake)
 
 # Add subdirectories
-add_subdirectory(cmake)
-add_subdirectory(include)
+add_subdirectory(demo)
+add_subdirectory(check)
 add_subdirectory(doxygen)
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Doc")
-  add_subdirectory(demo)
-endif()
+
+# Create configure files
+include(cmake/configure.cmake)
+
+# Sets install rule
+include(cmake/install.cmake)
 
 # Display message
-message(STATUS "================================================================")
-message(STATUS "Set 'ISVD_SYSTEM_INT_SIZE' to change the system integer size: 32(LP64) / 64(ILP64).")
-message(STATUS "Set 'ISVD_USE_MKL' to enable Intel MKL.")
-message(STATUS "Set 'MPI_PROCS' to set the number of MPI processes.")
-message(STATUS "Set 'CMAKE_BUILD_TYPE=Doc' for creating documentation only.")
-message(STATUS "================================================================")
+include(cmake/display.cmake)
