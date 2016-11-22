@@ -5,8 +5,8 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_SET_VECTOR_SET_IPP_
-#define MCNLA_CORE_MATRIX_SET_VECTOR_SET_IPP_
+#ifndef MCNLA_CORE_MATRIX_SET_VECTOR_SET_BASE_IPP_
+#define MCNLA_CORE_MATRIX_SET_VECTOR_SET_BASE_IPP_
 
 #include <mcnla/core/matrix/set/vector_set_base.hpp>
 
@@ -24,25 +24,25 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Derived>
-VectorSet<_Derived>::VectorSet() noexcept {}
+VectorSetBase<_Derived>::VectorSetBase() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of vector.
 ///
 template <class _Derived>
-index_t VectorSet<_Derived>::getLength() const noexcept { return this->derived().getLength(); }
+index_t VectorSetBase<_Derived>::getLength() const noexcept { return this->derived().getLength(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of vectors.
 ///
 template <class _Derived>
-index_t VectorSet<_Derived>::getNvec() const noexcept { return this->derived().getNvec(); }
+index_t VectorSetBase<_Derived>::getNvec() const noexcept { return this->derived().getNvec(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector.
 ///
 template <class _Derived>
-typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::getVector( const index_t idx ) noexcept {
+typename VectorSetBase<_Derived>::VectorType VectorSetBase<_Derived>::getVector( const index_t idx ) noexcept {
   return this->derived().getVector(idx);
 }
 
@@ -50,7 +50,7 @@ typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::getVector( const i
 /// @copydoc  getVector
 ///
 template <class _Derived>
-const typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::getVector( const index_t idx ) const noexcept {
+const typename VectorSetBase<_Derived>::VectorType VectorSetBase<_Derived>::getVector( const index_t idx ) const noexcept {
   return this->derived().getVector(idx);
 }
 
@@ -58,7 +58,7 @@ const typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::getVector( c
 /// @copydoc  getVector
 ///
 template <class _Derived>
-typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::operator()( const index_t idx ) noexcept {
+typename VectorSetBase<_Derived>::VectorType VectorSetBase<_Derived>::operator()( const index_t idx ) noexcept {
   return this->derived().getVector(idx);
 }
 
@@ -66,7 +66,7 @@ typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::operator()( const 
 /// @copydoc  getVector
 ///
 template <class _Derived>
-const typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::operator()( const index_t idx ) const noexcept {
+const typename VectorSetBase<_Derived>::VectorType VectorSetBase<_Derived>::operator()( const index_t idx ) const noexcept {
   return this->derived().getVector(idx);
 }
 
@@ -74,4 +74,4 @@ const typename VectorSet<_Derived>::VectorType VectorSet<_Derived>::operator()( 
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_SET_VECTOR_SET_IPP_
+#endif  // MCNLA_CORE_MATRIX_SET_VECTOR_SET_BASE_IPP_

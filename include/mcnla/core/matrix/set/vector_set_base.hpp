@@ -5,8 +5,8 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_SET_VECTOR_SET_HPP_
-#define MCNLA_CORE_MATRIX_SET_VECTOR_SET_HPP_
+#ifndef MCNLA_CORE_MATRIX_SET_VECTOR_SET_BASE_HPP_
+#define MCNLA_CORE_MATRIX_SET_VECTOR_SET_BASE_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -30,7 +30,7 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class VectorSet : public utility::CrtpBase<_Derived, VectorSet<_Derived>> {
+class VectorSetBase : public utility::CrtpBase<_Derived, VectorSetBase<_Derived>> {
 
  private:
 
@@ -39,7 +39,7 @@ class VectorSet : public utility::CrtpBase<_Derived, VectorSet<_Derived>> {
  protected:
 
   // Constructors
-  inline VectorSet() noexcept;
+  inline VectorSetBase() noexcept;
 
  public:
 
@@ -59,4 +59,4 @@ class VectorSet : public utility::CrtpBase<_Derived, VectorSet<_Derived>> {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_SET_VECTOR_SET_HPP_
+#endif  // MCNLA_CORE_MATRIX_SET_VECTOR_SET_BASE_HPP_

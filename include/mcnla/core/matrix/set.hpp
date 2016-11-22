@@ -13,4 +13,7 @@
 #include <mcnla/core/matrix/set/matrix_set_base.hpp>
 #include <mcnla/core/matrix/set/matrix_set_base.ipp>
 
+#include <mcnla/core/matrix/set/dense_matrix_set_120.hpp>
+#include <mcnla/core/matrix/set/dense_matrix_set_120.ipp>
+
 #endif  // MCNLA_CORE_MATRIX_SET_HPP_
