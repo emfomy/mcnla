@@ -66,6 +66,7 @@ class DenseMatrixSet120
 
  public:
 
+  using SetType    = DenseMatrixSet120<_Scalar>;
   using MatrixType = DenseMatrix<_Scalar, Layout::ROWMAJOR>;
 
  private:
@@ -83,13 +84,26 @@ class DenseMatrixSet120
   // Constructors
   inline DenseMatrixSet120() noexcept;
   inline DenseMatrixSet120( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline DenseMatrixSet120( const index_t ncol, const DataType &data ) noexcept;
   inline DenseMatrixSet120( const DenseMatrixSet120 &other ) noexcept;
   inline DenseMatrixSet120( DenseMatrixSet120 &&other ) noexcept;
+
+  // Gets data
+  inline       MatrixType& getData() noexcept;
+  inline const MatrixType& getData() const noexcept;
+
+  // Gets set
+  inline       SetType getRows( const IdxRange rowrange ) noexcept;
+  inline const SetType getRows( const IdxRange rowrange ) const noexcept;
 
   // Gets matrix
   inline       MatrixType unfold() noexcept;
   inline const MatrixType unfold() const noexcept;
 
+  using BaseType::getNrow;
+  using BaseType::getNcol;
+  using BaseType::getNmat;
+  using BaseType::getMatrix;
   using BaseType::operator();
   using DataType::begin;
   using DataType::cbegin;

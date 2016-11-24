@@ -17,6 +17,7 @@
 #include <mcnla/core/matrix/dense/dense_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
+#include <mcnla/core/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

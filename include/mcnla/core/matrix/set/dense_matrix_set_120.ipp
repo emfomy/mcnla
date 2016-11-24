@@ -41,10 +41,88 @@ DenseMatrixSet120<_Scalar>::DenseMatrixSet120(
   : BaseType(),
     DataType(nrow, ncol*nmat),
     ncol_(ncol) {
-  mcnla_assert_ge(nrow, 0);
-  mcnla_assert_ge(ncol, 0);
-  mcnla_assert_ge(nmat, 0);
+  mcnla_assert_ge(this->getNrow(), 0);
+  mcnla_assert_ge(this->getNcol(), 0);
+  mcnla_assert_ge(this->getNmat(), 0);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <class _Scalar>
+DenseMatrixSet120<_Scalar>::DenseMatrixSet120(
+    const index_t ncol,
+    const DataType &data
+) noexcept
+  : BaseType(),
+    DataType(data),
+    ncol_(ncol) {
+  mcnla_assert_ge(this->getNrow(), 0);
+  mcnla_assert_ge(this->getNcol(), 0);
+  mcnla_assert_ge(this->getNmat(), 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
+///
+template <class _Scalar>
+DenseMatrixSet120<_Scalar>::DenseMatrixSet120( const DenseMatrixSet120 &other ) noexcept
+  : BaseType(other),
+    DataType(other),
+    ncol_(other.ncol_) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <class _Scalar>
+DenseMatrixSet120<_Scalar>::DenseMatrixSet120( DenseMatrixSet120 &&other ) noexcept
+  : BaseType(std::move(other)),
+    DataType(std::move(other)),
+    ncol_(other.ncol_) {
+  other.ncol_ = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw data.
+///
+template <class _Scalar>
+DenseMatrix<_Scalar, Layout::ROWMAJOR>& DenseMatrixSet120<_Scalar>::getData() noexcept { return *this; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getData
+///
+template <class _Scalar>
+const DenseMatrix<_Scalar, Layout::ROWMAJOR>& DenseMatrixSet120<_Scalar>::getData() const noexcept { return *this; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a set of rows.
+///
+template <class _Scalar>
+DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getRows( const IdxRange rowrange ) noexcept {
+  return SetType(this->getNcol(), this->getData().getRows(rowrange));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a set of rows.
+///
+template <class _Scalar>
+const DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getRows( const IdxRange rowrange ) const noexcept {
+  return SetType(this->getNcol(), this->getData().getRows(rowrange));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Unfolds the set.
+///
+template <class _Scalar>
+DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::unfold() noexcept { return *this; }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  unfold
+///
+template <class _Scalar>
+const DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::unfold() const noexcept { return *this; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixSetBase::getNrow
@@ -81,18 +159,6 @@ const DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::getMatr
   mcnla_assert_gelt(idx, 0, this->getNmat());
   return DataType::getCols({idx*ncol_, (idx+1)*ncol_});
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Unfold the set.
-///
-template <class _Scalar>
-DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::unfold() noexcept { return *this; }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  unfold
-///
-template <class _Scalar>
-const DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::unfold() const noexcept { return *this; }
 
 }  // namespace matrix
 

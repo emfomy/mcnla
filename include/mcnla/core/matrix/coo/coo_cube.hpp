@@ -17,6 +17,7 @@
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix.hpp>
 #include <mcnla/core/matrix/coo/coo_cube_iterator.hpp>
+#include <mcnla/core/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

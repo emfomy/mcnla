@@ -19,6 +19,7 @@
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
 #include <mcnla/core/matrix/dense/dense_cube_iterator.hpp>
+#include <mcnla/core/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
