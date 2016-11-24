@@ -17,9 +17,16 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrix<double> mat;
-  mcnla::io::loadMatrixMarket(mat, "test.mtx");
-  std::cout << mat << std::endl;
+  mcnla::matrix::DenseMatrixSet120<double> set(3, 2, 4);
+  int i = 0;
+  for ( auto &v : set ) {
+    v = ++i;
+  }
+  std::cout << set.unfold() << std::endl << std::endl;
+
+  for ( auto i = 0; i < set.getNmat(); ++i ) {
+    std::cout << set(i) << std::endl << std::endl;
+  }
 
   return 0;
 }

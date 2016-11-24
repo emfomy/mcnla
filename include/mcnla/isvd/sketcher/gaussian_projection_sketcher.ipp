@@ -59,6 +59,7 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
     const _Matrix &matrix_a,
           DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q
 ) noexcept {
+
   mcnla_assert_true(parameters_.isInitialized());
   mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
   mcnla_assert_eq(cube_q.getSizes(),   std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),

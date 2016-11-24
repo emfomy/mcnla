@@ -11,6 +11,7 @@
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/matrix/set/matrix_set_base.hpp>
+#include <mcnla/core/matrix/dense/dense_matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -58,7 +59,10 @@ namespace matrix {
 ///
 template <typename _Scalar>
 class DenseMatrixSet120
-  : public MatrixSetBase<DenseMatrixSet120<_Scalar>> {
+  : public MatrixSetBase<DenseMatrixSet120<_Scalar>>,
+    protected DenseMatrix<_Scalar, Layout::ROWMAJOR> {
+
+  friend MatrixSetBase<DenseMatrixSet120<_Scalar>>;
 
  public:
 
@@ -67,14 +71,12 @@ class DenseMatrixSet120
  private:
 
   using BaseType = MatrixSetBase<DenseMatrixSet120<_Scalar>>;
+  using DataType = DenseMatrix<_Scalar, Layout::ROWMAJOR>;
 
  protected:
 
+  // The number of columns in each matrix.
   index_t ncol_;
-
-  index_t nmat_;
-
-  MatrixType data_;
 
  public:
 
@@ -83,6 +85,16 @@ class DenseMatrixSet120
   inline DenseMatrixSet120( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
   inline DenseMatrixSet120( const DenseMatrixSet120 &other ) noexcept;
   inline DenseMatrixSet120( DenseMatrixSet120 &&other ) noexcept;
+
+  // Gets matrix
+  inline       MatrixType unfold() noexcept;
+  inline const MatrixType unfold() const noexcept;
+
+  using BaseType::operator();
+  using DataType::begin;
+  using DataType::cbegin;
+  using DataType::end;
+  using DataType::cend;
 
  protected:
 
@@ -94,8 +106,6 @@ class DenseMatrixSet120
   // Gets matrix
   inline       MatrixType getMatrixImpl( const index_t idx ) noexcept;
   inline const MatrixType getMatrixImpl( const index_t idx ) const noexcept;
-  inline       MatrixType& unfold() noexcept;
-  inline const MatrixType& unfold() const noexcept;
 
 };
 

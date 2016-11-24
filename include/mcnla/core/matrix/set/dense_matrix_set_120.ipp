@@ -26,9 +26,8 @@ namespace matrix {
 template <class _Scalar>
 DenseMatrixSet120<_Scalar>::DenseMatrixSet120() noexcept
   : BaseType(),
-    ncol_(0),
-    nmat_(0),
-    data_() {}
+    DataType(),
+    ncol_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -40,15 +39,18 @@ DenseMatrixSet120<_Scalar>::DenseMatrixSet120(
     const index_t nmat
 ) noexcept
   : BaseType(),
-    ncol_(ncol),
-    nmat_(nmat),
-    data_(nrow, ncol*nmat) {}
+    DataType(nrow, ncol*nmat),
+    ncol_(ncol) {
+  mcnla_assert_ge(nrow, 0);
+  mcnla_assert_ge(ncol, 0);
+  mcnla_assert_ge(nmat, 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixSetBase::getNrow
 ///
 template <class _Scalar>
-index_t DenseMatrixSet120<_Scalar>::getNrowImpl() const noexcept { return data_.getNrow(); }
+index_t DenseMatrixSet120<_Scalar>::getNrowImpl() const noexcept { return DataType::nrow_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixSetBase::getNcol
@@ -60,14 +62,15 @@ index_t DenseMatrixSet120<_Scalar>::getNcolImpl() const noexcept { return ncol_;
 /// @copydoc  mcnla::matrix::MatrixSetBase::getNmat
 ///
 template <class _Scalar>
-index_t DenseMatrixSet120<_Scalar>::getNmatImpl() const noexcept { return nmat_; }
+index_t DenseMatrixSet120<_Scalar>::getNmatImpl() const noexcept { return DataType::ncol_ / ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixSetBase::getMatrix
 ///
 template <class _Scalar>
 DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::getMatrixImpl( const index_t idx ) noexcept {
-  return data_.getCols({idx*ncol_, (idx+1)*ncol_});
+  mcnla_assert_gelt(idx, 0, this->getNmat());
+  return DataType::getCols({idx*ncol_, (idx+1)*ncol_});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,20 +78,21 @@ DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::getMatrixImpl
 ///
 template <class _Scalar>
 const DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::getMatrixImpl( const index_t idx ) const noexcept {
-  return data_.getCols({idx*ncol_, (idx+1)*ncol_});
+  mcnla_assert_gelt(idx, 0, this->getNmat());
+  return DataType::getCols({idx*ncol_, (idx+1)*ncol_});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Unfold the set.
 ///
 template <class _Scalar>
-DenseMatrix<_Scalar, Layout::ROWMAJOR>& DenseMatrixSet120<_Scalar>::unfold() noexcept { return data_; }
+DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::unfold() noexcept { return *this; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  unfold
 ///
 template <class _Scalar>
-const DenseMatrix<_Scalar, Layout::ROWMAJOR>& DenseMatrixSet120<_Scalar>::unfold() const noexcept { return data_; }
+const DenseMatrix<_Scalar, Layout::ROWMAJOR> DenseMatrixSet120<_Scalar>::unfold() const noexcept { return *this; }
 
 }  // namespace matrix
 
