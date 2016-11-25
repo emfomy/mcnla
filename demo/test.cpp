@@ -17,26 +17,28 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrixSet120<double> set(5, 2, 4);
-  int i = 0;
+  MPI_Init(&argc, &argv);
+  mcnla::mpi_int_t mpi_root = 0;
+  mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
+
+  mcnla::matrix::DenseMatrixSet120<double> set(8, 2, 3);
+  int i = mpi_rank * 100;
   for ( auto &v : set.getData() ) {
-    v = ++i;
-  }
-  std::cout << set.unfold() << std::endl << std::endl;
-
-  for ( auto i = 0; i < set.getNmat(); ++i ) {
-    std::cout << set(i) << std::endl << std::endl;
+    v = i; i++;
   }
 
-  std::cout << set.getRows({1, 3}).unfold() << std::endl << std::endl;
-
-  auto subset = set.getRows({1, 3});
-
-  std::cout << subset.unfold() << std::endl << std::endl;
-
-  for ( auto i = 0; i < subset.getNmat(); ++i ) {
-    std::cout << subset(i) << std::endl << std::endl;
+  if ( mpi_rank == mpi_root ) {
+    std::cout << set.unfold() << std::endl;
   }
+
+  mcnla::mpi::alltoall(set.unfold(), MPI_COMM_WORLD);
+
+  if ( mpi_rank == mpi_root ) {
+    std::cout << set.unfold() << std::endl;
+  }
+
+  MPI_Finalize();
 
   return 0;
 }

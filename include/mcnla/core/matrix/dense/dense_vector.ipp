@@ -154,7 +154,7 @@ template <typename _Scalar>
 index_t DenseVector<_Scalar>::getStride() const noexcept { return stride_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Determines if the dimensions is equal to the sizes.
+/// @brief  Determines if the dimensions are equal to the sizes.
 ///
 template <typename _Scalar>
 bool DenseVector<_Scalar>::isShrunk() const noexcept {

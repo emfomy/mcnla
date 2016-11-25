@@ -92,6 +92,9 @@ class DenseMatrixSet120
   inline DenseMatrixSet120& operator=( const DenseMatrixSet120 &other ) noexcept;
   inline DenseMatrixSet120& operator=( DenseMatrixSet120 &&other ) noexcept;
 
+  // Gets information
+  inline bool isShrunk() const noexcept;
+
   // Gets data
   inline       MatrixType& getData() noexcept;
   inline const MatrixType& getData() const noexcept;

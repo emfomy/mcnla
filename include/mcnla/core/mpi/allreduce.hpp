@@ -45,6 +45,18 @@ inline void allreduce(
   MPI_Allreduce(send.getValue(), recv.getValue(), size, data_type, op, comm);
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Derived>
+inline void allreduce(
+    const DenseBase<_Derived> &send,
+          DenseBase<_Derived> &&recv,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  allreduce(send, recv, op, comm);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
 /// @brief  Combines values from all processes and distributes the result back to all processes (in-place version).
