@@ -62,6 +62,8 @@ namespace isvd {
 template <class _Matrix>
 class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNagumoIntegrator<_Matrix>> {
 
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+
   friend IntegratorBase<NaiveKolmogorovNagumoIntegrator<_Matrix>>;
 
  private:
@@ -73,8 +75,7 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
-
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  using SetType        = DenseMatrixSet120<ScalarType>;
 
  protected:
 
@@ -88,7 +89,7 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   index_t iter_;
 
   /// The cube Q.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_q_;
+  DenseMatrixSet120<ScalarType> cube_q_;
 
   /// The matrix Qc.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
@@ -134,8 +135,8 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   inline index_t getIterImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
-  inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() const noexcept;
+  inline       DenseMatrixSet120<ScalarType>& getCubeQImpl() noexcept;
+  inline const DenseMatrixSet120<ScalarType>& getCubeQImpl() const noexcept;
   inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 

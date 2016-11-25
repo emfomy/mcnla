@@ -64,8 +64,7 @@ index_t IntegratorBase<_Derived>::getIter() const noexcept {
 /// @brief  Gets the cube Q.
 ///
 template <class _Derived>
-DenseCube<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::getCubeQ() noexcept {
+DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& IntegratorBase<_Derived>::getCubeQ() noexcept {
   return this->derived().getCubeQImpl();
 }
 
@@ -73,8 +72,7 @@ DenseCube<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
 /// @copydoc  getCubeQ
 ///
 template <class _Derived>
-const DenseCube<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::getCubeQ() const noexcept {
+const DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& IntegratorBase<_Derived>::getCubeQ() const noexcept {
   return this->derived().getCubeQImpl();
 }
 

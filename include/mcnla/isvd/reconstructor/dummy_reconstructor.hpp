@@ -60,6 +60,8 @@ namespace isvd {
 template <class _Matrix>
 class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>> {
 
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+
   friend ReconstructorBase<DummyReconstructor<_Matrix>>;
 
  private:
@@ -71,8 +73,6 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
-
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 

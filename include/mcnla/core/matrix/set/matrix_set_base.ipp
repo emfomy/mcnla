@@ -45,6 +45,14 @@ template <class _Derived>
 index_t MatrixSetBase<_Derived>::getNmat() const noexcept { return this->derived().getNmatImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::tuple<index_t, index_t, index_t> MatrixSetBase<_Derived>::getSizes() const noexcept {
+  return std::make_tuple(getNrow(), getNcol(), getNmat());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a matrix.
 ///
 template <class _Derived>

@@ -76,6 +76,17 @@ inline void allreduce(
   MPI_Allreduce(MPI_IN_PLACE, buffer.derived().getValue(), size, data_type, op, comm);
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Derived>
+inline void allreduce(
+          DenseBase<_Derived> &&buffer,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  allreduce(buffer, op, comm);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 }  // namespace mpi
 
 }  // namespace mcnla

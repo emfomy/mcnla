@@ -62,6 +62,8 @@ namespace isvd {
 template <class _Matrix>
 class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>> {
 
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+
   friend IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>>;
 
  private:
@@ -73,8 +75,6 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
-
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
  protected:
 
@@ -94,13 +94,13 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   index_t iter_;
 
   /// The cube Q.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_q_;
+  DenseMatrixSet120<ScalarType> cube_q_;
 
   /// The cut cube Q.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_q_cut_;
+  DenseMatrixSet120<ScalarType> cube_q_cut_;
 
   /// The cube Qj.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_qj_;
+  DenseMatrixSet120<ScalarType> cube_qj_;
 
   /// The matrix Qc.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
@@ -112,7 +112,7 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qcj_;
 
   /// The cube B.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_b_;
+  DenseMatrixSet120<ScalarType> cube_b_;
 
   /// The matrix B.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_b_;
@@ -155,8 +155,8 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   inline index_t getIterImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
-  inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() const noexcept;
+  inline       DenseMatrixSet120<ScalarType>& getCubeQImpl() noexcept;
+  inline const DenseMatrixSet120<ScalarType>& getCubeQImpl() const noexcept;
   inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 

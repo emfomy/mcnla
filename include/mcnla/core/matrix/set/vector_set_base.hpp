@@ -46,6 +46,7 @@ class VectorSetBase : public utility::CrtpBase<_Derived, VectorSetBase<_Derived>
   // Gets information
   inline index_t getLength() const noexcept;
   inline index_t getNvec() const noexcept;
+  inline std::pair<index_t, index_t> getSizes() const noexcept;
 
   // Gets vector
   inline       VectorType getVector( const index_t idx ) noexcept;

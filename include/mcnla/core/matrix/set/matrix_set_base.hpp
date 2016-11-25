@@ -47,6 +47,7 @@ class MatrixSetBase : public utility::CrtpBase<_Derived, MatrixSetBase<_Derived>
   inline index_t getNrow() const noexcept;
   inline index_t getNcol() const noexcept;
   inline index_t getNmat() const noexcept;
+  inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;
 
   // Gets matrix
   inline       MatrixType getMatrix( const index_t idx ) noexcept;

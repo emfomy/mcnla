@@ -47,13 +47,13 @@ void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
 
   const auto cube_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
   if ( cube_q_.getSizes() != cube_q_sizes || !cube_q_.isShrunk() ) {
-    cube_q_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_q_sizes);
+    cube_q_ = DenseMatrixSet120<ScalarType>(cube_q_sizes);
   }
-  cube_q_cut_ = cube_q_.getRowPages({0, parameters_.getNrow()});
+  cube_q_cut_ = cube_q_.getMatrixRows({0, parameters_.getNrow()});
 
   const auto cube_qj_sizes = std::make_tuple(nrow_each_, dim_sketch, num_sketch);
   if ( cube_qj_.getSizes() != cube_qj_sizes || !cube_qj_.isShrunk() ) {
-    cube_qj_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_qj_sizes);
+    cube_qj_ = DenseMatrixSet120<ScalarType>(cube_qj_sizes);
   }
 
   const auto matrix_qc_sizes = std::make_pair(nrow_all_, dim_sketch);
@@ -75,9 +75,9 @@ void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
 
   const auto cube_b_sizes = std::make_tuple(dim_sketch, dim_sketch, num_sketch);
   if ( cube_b_.getSizes() != cube_b_sizes || !cube_b_.isShrunk() ) {
-    cube_b_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_b_sizes);
+    cube_b_ = DenseMatrixSet120<ScalarType>(cube_b_sizes);
   }
-  matrix_b_ = cube_b_.getPage(0);
+  matrix_b_ = cube_b_(0);
 
   const auto matrix_b_sizes = matrix_b_.getSizes();
   if ( matrix_d_.getSizes() != matrix_b_sizes ) {
@@ -114,13 +114,13 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto tolerance     = parameters_.getTolerance();
 
   // Exchange Q
-  for ( index_t i = 0; i < cube_q_.getNpage(); ++i ) {
-    blas::memset0(cube_q_.getPage(i).getRows({parameters_.getNrow(), nrow_all_}));
-    mpi::alltoall(cube_q_.getPage(i), cube_qj_.getPages({i*mpi_size, (i+1)*mpi_size}), mpi_comm);
+  for ( index_t i = 0; i < cube_q_.getNmat(); ++i ) {
+    blas::memset0(cube_q_(i).getRows({parameters_.getNrow(), nrow_all_}));
+    mpi::alltoall(cube_q_(i), cube_qj_.getSubset({i*mpi_size, (i+1)*mpi_size}).unfold(), mpi_comm);
   }
 
   // Qc := Q0
-  blas::copy(cube_qj_.getPage(0), matrix_qcj_);
+  blas::copy(cube_qj_(0), matrix_qcj_);
 
   bool is_converged = false;
   for ( iter_ = 0; iter_ < max_iteration && !is_converged; ++iter_ ) {
@@ -130,9 +130,9 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // Bi := sum( Qij' * Qcj )
     for ( index_t i = 0; i < num_sketch; ++i ) {
-      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), matrix_qcj_, 0.0, cube_b_.getPage(i));
+      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_qj_(i), matrix_qcj_, 0.0, cube_b_(i));
     }
-    mpi::allreduce(cube_b_, MPI_SUM, mpi_comm);
+    mpi::allreduce(cube_b_.unfold(), MPI_SUM, mpi_comm);
 
     // Xj := 0; D := 0
     blas::memset0(matrix_xj_);
@@ -140,10 +140,10 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
     for ( index_t i = 0; i < num_sketch; ++i ) {
       // D += Bi' * Bi
-      blas::syrk<TransOption::TRANS>(1.0, cube_b_.getPage(i), 1.0, matrix_d_);
+      blas::syrk<TransOption::TRANS>(1.0, cube_b_(i), 1.0, matrix_d_);
 
       // Xj += Qij * Bi
-      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, cube_qj_.getPage(i), cube_b_.getPage(i), 1.0, matrix_xj_);
+      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, cube_qj_(i), cube_b_(i), 1.0, matrix_xj_);
     }
 
     // Xj -= Qcj * D
@@ -236,7 +236,7 @@ index_t KolmogorovNagumoIntegrator<_Matrix>::getIterImpl() const noexcept {
 /// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
 ///
 template <class _Matrix>
-DenseCube<typename KolmogorovNagumoIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
+DenseMatrixSet120<typename KolmogorovNagumoIntegrator<_Matrix>::ScalarType>&
     KolmogorovNagumoIntegrator<_Matrix>::getCubeQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return cube_q_cut_;
@@ -246,7 +246,7 @@ DenseCube<typename KolmogorovNagumoIntegrator<_Matrix>::ScalarType, Layout::ROWM
 /// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
 ///
 template <class _Matrix>
-const DenseCube<typename KolmogorovNagumoIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
+const DenseMatrixSet120<typename KolmogorovNagumoIntegrator<_Matrix>::ScalarType>&
     KolmogorovNagumoIntegrator<_Matrix>::getCubeQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return cube_q_cut_;

@@ -62,6 +62,8 @@ namespace isvd {
 template <class _Matrix>
 class ReductionIntegrator : public IntegratorBase<ReductionIntegrator<_Matrix>> {
 
+  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+
   friend IntegratorBase<ReductionIntegrator<_Matrix>>;
 
  private:
@@ -73,8 +75,7 @@ class ReductionIntegrator : public IntegratorBase<ReductionIntegrator<_Matrix>> 
   using ScalarType     = typename _Matrix::ScalarType;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
-
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  using SetType        = DenseMatrixSet120<ScalarType>;
 
  protected:
 
@@ -85,7 +86,7 @@ class ReductionIntegrator : public IntegratorBase<ReductionIntegrator<_Matrix>> 
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The cube Q.
-  DenseCube<ScalarType, Layout::ROWMAJOR> cube_q_;
+  DenseMatrixSet120<ScalarType> cube_q_;
 
   /// The matrix Qbar.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_q_bar_;
@@ -131,8 +132,8 @@ class ReductionIntegrator : public IntegratorBase<ReductionIntegrator<_Matrix>> 
   inline index_t getIterImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() noexcept;
-  inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQImpl() const noexcept;
+  inline       DenseMatrixSet120<ScalarType>& getCubeQImpl() noexcept;
+  inline const DenseMatrixSet120<ScalarType>& getCubeQImpl() const noexcept;
   inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 

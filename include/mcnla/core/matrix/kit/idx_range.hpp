@@ -36,6 +36,10 @@ struct IdxRange {
   // Operators
   inline bool operator==( const IdxRange& other ) const noexcept;
   inline bool operator!=( const IdxRange& other ) const noexcept;
+  inline IdxRange operator+( const index_t scalar ) const noexcept;
+  inline IdxRange operator-( const index_t scalar ) const noexcept;
+  inline IdxRange operator*( const index_t scalar ) const noexcept;
+  inline IdxRange operator/( const index_t scalar ) const noexcept;
 
   // Gets data
   inline index_t getLength() const noexcept;

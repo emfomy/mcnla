@@ -56,13 +56,12 @@ class Solver {
   static_assert(std::is_base_of<ReconstructorBase<_Reconstructor>, _Reconstructor>::value,
                 "'_Reconstructor' is not a reconstructor!");
 
-  static_assert(std::is_same<_Matrix, typename SketcherBase<_Sketcher>::MatrixType>::value,
+  static_assert(std::is_same<_Matrix, typename _Sketcher::MatrixType>::value,
                 "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, typename IntegratorBase<_Sketcher>::MatrixType>::value,
+  static_assert(std::is_same<_Matrix, typename _Integrator::MatrixType>::value,
                 "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, typename ReconstructorBase<_Sketcher>::MatrixType>::value,
+  static_assert(std::is_same<_Matrix, typename _Reconstructor::MatrixType>::value,
                 "The matrix type does not fit!");
-
 
  public:
 

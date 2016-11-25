@@ -64,8 +64,8 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
   inline index_t getIter() const noexcept;
 
   // Gets matrices
-  inline       DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() noexcept;
-  inline const DenseCube<ScalarType, Layout::ROWMAJOR>& getCubeQ() const noexcept;
+  inline       DenseMatrixSet120<ScalarType>& getCubeQ() noexcept;
+  inline const DenseMatrixSet120<ScalarType>& getCubeQ() const noexcept;
   inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbar() noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbar() const noexcept;
 

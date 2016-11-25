@@ -47,6 +47,15 @@ DenseMatrixSet120<_Scalar>::DenseMatrixSet120(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Scalar>
+DenseMatrixSet120<_Scalar>::DenseMatrixSet120(
+    const std::tuple<index_t, index_t, index_t> sizes
+) noexcept
+  : DenseMatrixSet120(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <class _Scalar>
@@ -128,15 +137,31 @@ const DenseMatrix<_Scalar, Layout::ROWMAJOR>& DenseMatrixSet120<_Scalar>::getDat
 /// @brief  Gets a set of rows.
 ///
 template <class _Scalar>
-DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getRows( const IdxRange rowrange ) noexcept {
-  return SetType(ncol_, data_.getRows(rowrange));
+DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getSubset( const IdxRange idxrange ) noexcept {
+  return SetType(ncol_, data_.getCols(idxrange * ncol_));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getSubset.
+///
+template <class _Scalar>
+const DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getSubset( const IdxRange idxrange ) const noexcept {
+  return SetType(ncol_, data_.getCols(idxrange * ncol_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a set of rows.
 ///
 template <class _Scalar>
-const DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getRows( const IdxRange rowrange ) const noexcept {
+DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getMatrixRows( const IdxRange rowrange ) noexcept {
+  return SetType(ncol_, data_.getRows(rowrange));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getMatrixRows.
+///
+template <class _Scalar>
+const DenseMatrixSet120<_Scalar> DenseMatrixSet120<_Scalar>::getMatrixRows( const IdxRange rowrange ) const noexcept {
   return SetType(ncol_, data_.getRows(rowrange));
 }
 

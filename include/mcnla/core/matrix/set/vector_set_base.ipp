@@ -39,6 +39,14 @@ template <class _Derived>
 index_t VectorSetBase<_Derived>::getNvec() const noexcept { return this->derived().getNvec(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::pair<index_t, index_t> VectorSetBase<_Derived>::getSizes() const noexcept {
+  return std::make_tuple(getLength()(), getNvec());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector.
 ///
 template <class _Derived>

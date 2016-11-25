@@ -10,6 +10,7 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
+#include <tuple>
 #include <mcnla/core/matrix/set/matrix_set_base.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
 
@@ -84,6 +85,7 @@ class DenseMatrixSet120
   // Constructors
   inline DenseMatrixSet120() noexcept;
   inline DenseMatrixSet120( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline DenseMatrixSet120( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
   inline DenseMatrixSet120( const index_t ncol, const MatrixType &data ) noexcept;
   inline DenseMatrixSet120( const DenseMatrixSet120 &other ) noexcept;
   inline DenseMatrixSet120( DenseMatrixSet120 &&other ) noexcept;
@@ -100,8 +102,10 @@ class DenseMatrixSet120
   inline const MatrixType& getData() const noexcept;
 
   // Gets set
-  inline       SetType getRows( const IdxRange rowrange ) noexcept;
-  inline const SetType getRows( const IdxRange rowrange ) const noexcept;
+  inline       SetType getSubset( const IdxRange idxrange ) noexcept;
+  inline const SetType getSubset( const IdxRange idxrange ) const noexcept;
+  inline       SetType getMatrixRows( const IdxRange rowrange ) noexcept;
+  inline const SetType getMatrixRows( const IdxRange rowrange ) const noexcept;
 
   // Gets matrix
   inline       MatrixType unfold() noexcept;

@@ -40,7 +40,7 @@ void SketcherBase<_Derived>::initialize() noexcept { this->derived().initializeI
 template <class _Derived>
 void SketcherBase<_Derived>::sketch(
     const MatrixType &matrix_a,
-          DenseCube<ScalarType, Layout::ROWMAJOR> &cube_q
+          DenseMatrixSet120<ScalarType> &cube_q
 ) noexcept { this->derived().sketchImpl(matrix_a, cube_q); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
