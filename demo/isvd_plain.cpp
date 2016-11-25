@@ -30,6 +30,8 @@ void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
 void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
             double &smax, double &smin, double &smean );
+void check_frobenius( const int m0, const int n, const int k, const double *matrix_a,
+                      const double *matrix_u, const double *matrix_vt, const double *vector_s, double &fnorm );
 
 class StatisticsSet {
  private:
@@ -89,7 +91,9 @@ int main( int argc, char **argv ) {
        << ", k = " << k
        << ", p = " << 0
        << ", N = " << Nj*mpi_size
-       << ", K = " << mpi_size << endl << endl;
+       << ", K = " << mpi_size << endl
+       << "tolerance = " << tolerance
+       << ", maxiter = " << maxiter << endl << endl;
   }
 
   // ====================================================================================================================== //
@@ -105,7 +109,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Create statistics collector
-  StatisticsSet set_max(num_test),  set_mean(num_test),   set_min(num_test),
+  StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_fnorm(num_test),
                 set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
 
   // ====================================================================================================================== //
@@ -125,7 +129,7 @@ int main( int argc, char **argv ) {
   }
 
   for ( auto t = 0; t < num_test; ++t ) {
-    double smax, smin, smean, time, time_s = 0.0, time_i = 0.0, time_r = 0.0; int iter;
+    double smax, smin, smean, fnorm, time, time_s = 0.0, time_i = 0.0, time_r = 0.0; int iter;
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -166,12 +170,15 @@ int main( int argc, char **argv ) {
     // Check result
     if ( mpi_rank == 0 ) {
       check(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
+      check_frobenius(m0, n, k, matrix_a, matrix_u, matrix_vt, vector_s, fnorm);
+
       time = time_s + time_i + time_r;
       cout << setw(log10(num_test)+1) << t
-                << " | svd(U_true' * U): " << smax << " / " << smean << " / " << smin
+                << " | svd(Ut'U): " << smax << " / " << smean << " / " << smin
+                << " | |A-USV'|_F: " << fnorm
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << setw(log10(maxiter)+1) << iter << endl;
-      set_min(smin); set_max(smax); set_mean(smean);
+      set_smax(smax); set_smean(smean);   set_smin(smin);     set_fnorm(fnorm);
       set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
     }
   }
@@ -183,12 +190,14 @@ int main( int argc, char **argv ) {
     cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << endl;
     cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << endl;
     cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << endl;
-    cout << "mean(svd(U_true' * U)): max = " << set_max.mean()
-                              << ", mean = " << set_mean.mean()
-                               << ", min = " << set_min.mean() << endl;
-    cout << "sd(svd(U_true' * U)):   max = " << set_max.sd()
-                              << ", mean = " << set_mean.sd()
-                               << ", min = " << set_min.sd() << endl;
+    cout << "mean(svd(U_true' * U)): max = " << set_smax.mean()
+                              << ", mean = " << set_smean.mean()
+                               << ", min = " << set_smin.mean() << endl;
+    cout << "sd(svd(U_true' * U)):   max = " << set_smax.sd()
+                              << ", mean = " << set_smean.sd()
+                               << ", min = " << set_smin.sd() << endl;
+    cout << "mean(norm(A-USV')_F)        = " << set_fnorm.mean() << endl;
+    cout << "sd(norm(A-USV')_F)          = " << set_fnorm.sd() << endl;
     cout << "mean(iter) = " << set_iter.mean() << endl;
     cout << "sd(iter)   = " << set_iter.sd() << endl;
   }
@@ -367,13 +376,10 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
 
     // ================================================================================================================== //
     // Check convergence
-    if ( mpi_rank == 0 ) {
-      for ( auto i = 0; i < k; ++i ) {
-        vector_e[i] = sqrt(vector_e) - 1.0;
-      }
-      is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tolerance);
+    for ( auto i = 0; i < k; ++i ) {
+      vector_e[i] = sqrt(vector_e[i]) - 1.0;
     }
-    MPI_Bcast(&is_converged, 1, MPI_CHAR, 0, MPI_COMM_WORLD);
+    is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tolerance);
   }
 
   // Free memory
@@ -423,4 +429,28 @@ void check( const int m0, const int k, const double *matrix_u_true, const double
   free(matrix_tmp);
   free(vector_tmp1);
   free(vector_tmp2);
+}
+
+void check_frobenius( const int m0, const int n, const int k, const double *matrix_a,
+                      const double *matrix_u, const double *matrix_vt, const double *vector_s, double &fnorm ) {
+  auto matrix_a_tmp = static_cast<double*>(malloc(m0 * n * sizeof(double)));
+  auto matrix_u_tmp = static_cast<double*>(malloc(m0 * k * sizeof(double)));
+
+  // A_tmp := A, U_tmp := U
+  cblas_dcopy(m0*n, matrix_a, 1, matrix_a_tmp, 1);
+  cblas_dcopy(m0*k, matrix_u, 1, matrix_u_tmp, 1);
+
+  // A_tmp -= U * S * V'
+  for ( auto i = 0; i < k; ++i ) {
+    cblas_dscal(m0, vector_s[i], matrix_u_tmp+i*m0, 1);
+  }
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, m0, n, k,
+              -1.0, matrix_u_tmp, m0, matrix_vt, k, 1.0, matrix_a_tmp, m0);
+
+  // fnorm := norm(A_tmp)_F
+  fnorm = cblas_dnrm2(m0*n, matrix_a_tmp, 1);
+
+  // Free memory
+  free(matrix_a_tmp);
+  free(matrix_u_tmp);
 }
