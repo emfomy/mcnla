@@ -59,8 +59,7 @@ namespace matrix {
 ///
 template <typename _Scalar>
 class DenseMatrixSet120
-  : public MatrixSetBase<DenseMatrixSet120<_Scalar>>,
-    protected DenseMatrix<_Scalar, Layout::ROWMAJOR> {
+  : public MatrixSetBase<DenseMatrixSet120<_Scalar>> {
 
   friend MatrixSetBase<DenseMatrixSet120<_Scalar>>;
 
@@ -72,11 +71,12 @@ class DenseMatrixSet120
  private:
 
   using BaseType = MatrixSetBase<DenseMatrixSet120<_Scalar>>;
-  using DataType = DenseMatrix<_Scalar, Layout::ROWMAJOR>;
 
  protected:
 
-  // The number of columns in each matrix.
+  MatrixType data_;
+
+  /// The number of columns in each matrix.
   index_t ncol_;
 
  public:
@@ -84,9 +84,13 @@ class DenseMatrixSet120
   // Constructors
   inline DenseMatrixSet120() noexcept;
   inline DenseMatrixSet120( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline DenseMatrixSet120( const index_t ncol, const DataType &data ) noexcept;
+  inline DenseMatrixSet120( const index_t ncol, const MatrixType &data ) noexcept;
   inline DenseMatrixSet120( const DenseMatrixSet120 &other ) noexcept;
   inline DenseMatrixSet120( DenseMatrixSet120 &&other ) noexcept;
+
+  // Operators
+  inline DenseMatrixSet120& operator=( const DenseMatrixSet120 &other ) noexcept;
+  inline DenseMatrixSet120& operator=( DenseMatrixSet120 &&other ) noexcept;
 
   // Gets data
   inline       MatrixType& getData() noexcept;
@@ -99,16 +103,6 @@ class DenseMatrixSet120
   // Gets matrix
   inline       MatrixType unfold() noexcept;
   inline const MatrixType unfold() const noexcept;
-
-  using BaseType::getNrow;
-  using BaseType::getNcol;
-  using BaseType::getNmat;
-  using BaseType::getMatrix;
-  using BaseType::operator();
-  using DataType::begin;
-  using DataType::cbegin;
-  using DataType::end;
-  using DataType::cend;
 
  protected:
 

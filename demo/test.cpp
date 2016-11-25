@@ -19,7 +19,7 @@ int main( int argc, char **argv ) {
 
   mcnla::matrix::DenseMatrixSet120<double> set(5, 2, 4);
   int i = 0;
-  for ( auto &v : set ) {
+  for ( auto &v : set.getData() ) {
     v = ++i;
   }
   std::cout << set.unfold() << std::endl << std::endl;
