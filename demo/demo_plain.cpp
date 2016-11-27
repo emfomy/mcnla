@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/mcnla.cpp
-/// @brief   The iSVD algorithm
+/// @file    demo/demo_plain.cpp
+/// @brief   The plain demo code
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,9 +8,8 @@
 #include <cmath>
 #include <cassert>
 #include <iostream>
-#include <iomanip>
-#include <valarray>
 #include <mcnla/config.hpp>
+#include "statistics_set.hpp"
 #include <mpi.h>
 #include <mkl.h>
 
@@ -28,24 +27,10 @@ void sketch( const int Nj, const int m, const int m0, const int n, const int k,
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter );
 void reconstruct( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
-void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
-            double &smax, double &smin, double &smean );
-void check_frobenius( const int m0, const int n, const int k, const double *matrix_a,
-                      const double *matrix_u, const double *matrix_vt, const double *vector_s, double &frres );
-
-class StatisticsSet {
- private:
-  valarray<double> set_;
-  valarray<double> diff_;
-  size_t size_;
-
- public:
-  StatisticsSet( const int capacity ) : set_(capacity), diff_(capacity), size_(0) {};
-  void operator()( const double value ) { assert(size_ < set_.size()); set_[size_++] = value; }
-  double mean() { return set_.sum() / set_.size(); }
-  double var() { diff_ = set_ - mean(); diff_ *= diff_; return diff_.sum() / diff_.size(); };
-  double sd() { return sqrt(var()); };
-};
+void check_u( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
+              double &smax, double &smin, double &smean );
+void check( const int m0, const int n, const int k, const double *matrix_a,
+            const double *matrix_u, const double *matrix_vt, const double *vector_s, double &frres );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -125,7 +110,7 @@ int main( int argc, char **argv ) {
   // Run MCNLA
   if ( mpi_rank == 0 ) {
     cout << "Start iSVD." << endl;
-    std::cout << std::fixed << std::setprecision(6);
+    cout << fixed << setprecision(6);
   }
 
   for ( auto t = 0; t < num_test; ++t ) {
@@ -169,13 +154,13 @@ int main( int argc, char **argv ) {
     // ================================================================================================================== //
     // Check result
     if ( mpi_rank == 0 ) {
-      check(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
-      check_frobenius(m0, n, k, matrix_a, matrix_u, matrix_vt, vector_s, frres);
+      check_u(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
+      check(m0, n, k, matrix_a, matrix_u, matrix_vt, vector_s, frres);
 
       time = time_s + time_i + time_r;
       cout << setw(log10(num_test)+1) << t
-                << " | svd(Ut'U): " << smax << " / " << smean << " / " << smin
-                << " | |A-USV'|_F: " << frres
+                << " | error_u: " << smax << " / " << smean << " / " << smin
+                << " | error_a: " << frres
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << setw(log10(maxiter)+1) << iter << endl;
       set_smax(smax); set_smean(smean);   set_smin(smin);     set_frres(frres);
@@ -190,16 +175,19 @@ int main( int argc, char **argv ) {
     cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << endl;
     cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << endl;
     cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << endl;
-    cout << "mean(svd(U_true' * U)): max = " << set_smax.mean()
-                              << ", mean = " << set_smean.mean()
-                               << ", min = " << set_smin.mean() << endl;
-    cout << "sd(svd(U_true' * U)):   max = " << set_smax.sd()
-                              << ", mean = " << set_smean.sd()
-                               << ", min = " << set_smin.sd() << endl;
-    cout << "mean(norm(A-USV')_F)        = " << set_frres.mean() << endl;
-    cout << "sd(norm(A-USV')_F)          = " << set_frres.sd() << endl;
+    cout << "mean(error_u): max = " << set_smax.mean()
+                     << ", mean = " << set_smean.mean()
+                      << ", min = " << set_smin.mean() << endl;
+    cout << "sd(error_u):   max = " << set_smax.sd()
+                     << ", mean = " << set_smean.sd()
+                      << ", min = " << set_smin.sd() << endl;
+    cout << "mean(error_a) = " << set_frres.mean() << endl;
+    cout << "sd(error_a)   = " << set_frres.sd() << endl;
     cout << "mean(iter) = " << set_iter.mean() << endl;
     cout << "sd(iter)   = " << set_iter.sd() << endl;
+    cout << endl;
+    cout << "error_a = norm(A-USV')_F/norm(A)_F" << endl;
+    cout << "error_u = svd(U_true' U)_2" << endl;
   }
 
   // ====================================================================================================================== //
@@ -410,8 +398,8 @@ void reconstruct( const int m0, const int n, const int k,
   free(vector_tmp);
 }
 
-void check( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
-            double &smax, double &smin, double &smean ) {
+void check_u( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
+              double &smax, double &smin, double &smean ) {
   auto matrix_tmp  = static_cast<double*>(malloc(k * k * sizeof(double)));
   auto vector_tmp1 = static_cast<double*>(malloc(k     * sizeof(double)));
   auto vector_tmp2 = static_cast<double*>(malloc(k     * sizeof(double)));
@@ -431,8 +419,8 @@ void check( const int m0, const int k, const double *matrix_u_true, const double
   free(vector_tmp2);
 }
 
-void check_frobenius( const int m0, const int n, const int k, const double *matrix_a,
-                      const double *matrix_u, const double *matrix_vt, const double *vector_s, double &frres ) {
+void check( const int m0, const int n, const int k, const double *matrix_a,
+            const double *matrix_u, const double *matrix_vt, const double *vector_s, double &frres ) {
   auto matrix_a_tmp = static_cast<double*>(malloc(m0 * n * sizeof(double)));
   auto matrix_u_tmp = static_cast<double*>(malloc(m0 * k * sizeof(double)));
 

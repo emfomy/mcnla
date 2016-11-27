@@ -2,20 +2,20 @@
 
 macro(SET_TARGET target files)
   # Set target
-  add_executable(${target} EXCLUDE_FROM_ALL ${files})
-  target_include_directories(${target} PUBLIC "${PROJECT_BINARY_DIR}/include")
-  target_include_directories(${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
-  target_include_directories(${target} PUBLIC SYSTEM ${INCS})
-  target_link_libraries(${target} ${LIBS})
-  target_compile_definitions(${target} PUBLIC ${DEFS})
-  set_target_properties(${target} PROPERTIES COMPILE_FLAGS ${COMFLGS})
-  set_target_properties(${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
+  add_executable(mcnla_${target} EXCLUDE_FROM_ALL ${files})
+  target_include_directories(mcnla_${target} PUBLIC "${PROJECT_BINARY_DIR}/include")
+  target_include_directories(mcnla_${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
+  target_include_directories(mcnla_${target} PUBLIC SYSTEM ${INCS})
+  target_link_libraries(mcnla_${target} ${LIBS})
+  target_compile_definitions(mcnla_${target} PUBLIC ${DEFS})
+  set_target_properties(mcnla_${target} PROPERTIES COMPILE_FLAGS ${COMFLGS})
+  set_target_properties(mcnla_${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
 
   # Add run rule
   add_custom_target(
     run_${target}
-    COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./${target}
-    DEPENDS ${target}
+    COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./mcnla_${target}
+    DEPENDS mcnla_${target}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Running ${target}"
   )
@@ -29,8 +29,11 @@ endif()
 # Set target (demo)
 set_target(demo demo.cpp)
 
-# Set target (plain)
-set_target(plain isvd_plain.cpp)
+# Set target (demo_plain)
+set_target(demo_plain demo_plain.cpp)
+
+# Set target (isvd)
+set_target(isvd isvd.cpp)
 
 # Add rule 'run'
 add_custom_target(run DEPENDS run_demo)

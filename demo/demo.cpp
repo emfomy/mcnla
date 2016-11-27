@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    demo/demo.cpp
-/// @brief   The demo code (generate A with given singular values)
+/// @brief   The demo code
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #include <iostream>
-#include <iomanip>
-#include <valarray>
 #include <mcnla.hpp>
+#include "statistics_set.hpp"
 
 using ScalarType = double;
 
@@ -20,30 +19,16 @@ void create( mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
              const mcnla::index_t rank, mcnla::index_t seed[4] ) noexcept;
 
 template <mcnla::Layout _layout>
-void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
-            const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
-            ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
+void check_u( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
+              const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
+              ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
 
 template <mcnla::Layout _layout>
-void check_frobenius( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_a,
-                      const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
-                      const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_vt,
-                      const mcnla::matrix::DenseVector<ScalarType> &vector_s,
-                      ScalarType &frres ) noexcept;
-
-class StatisticsSet {
- private:
-  std::valarray<double> set_;
-  std::valarray<double> diff_;
-  size_t size_;
-
- public:
-  StatisticsSet( const int capacity ) : set_(capacity), diff_(capacity), size_(0) {};
-  void operator()( const double value ) { assert(size_ < set_.size()); set_[size_++] = value; }
-  double mean() { return set_.sum() / set_.size(); }
-  double var() { diff_ = set_ - mean(); diff_ *= diff_; return diff_.sum() / diff_.size(); };
-  double sd() { return std::sqrt(var()); };
-};
+void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_a,
+            const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
+            const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_vt,
+            const mcnla::matrix::DenseVector<ScalarType> &vector_s,
+            ScalarType &frres ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -139,8 +124,8 @@ int main( int argc, char **argv ) {
     // Check result
     if ( mpi_rank == mpi_root ) {
       ScalarType smax, smin, smean, frres;
-      check(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
-      check_frobenius(matrix_a, solver.getLeftSingularVectors(), solver.getRightSingularVectors(),
+      check_u(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
+      check(matrix_a, solver.getLeftSingularVectors(), solver.getRightSingularVectors(),
                       solver.getSingularValues(), frres);
       auto iter    = solver.getIntegratorIter();
       auto maxiter = solver.getParameters().getMaxIteration();
@@ -149,8 +134,8 @@ int main( int argc, char **argv ) {
       auto time_r = solver.getReconstructorTime();
       auto time = time_s + time_i + time_r;
       std::cout << std::setw(log10(num_test)+1) << t
-                << " | svd(Ut'U): " << smax << " / " << smean << " / " << smin
-                << " | |A-USV'|_F: " << frres
+                << " | error_u: " << smax << " / " << smean << " / " << smin
+                << " | error_a: " << frres
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter << std::endl;
       set_smax(smax); set_smean(smean);   set_smin(smin);     set_frres(frres);
@@ -165,16 +150,19 @@ int main( int argc, char **argv ) {
     std::cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << std::endl;
     std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
     std::cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << std::endl;
-    std::cout << "mean(svd(U_true' * U)): max = " << set_smax.mean()
-                                   << ", mean = " << set_smean.mean()
-                                    << ", min = " << set_smin.mean() << std::endl;
-    std::cout << "sd(svd(U_true' * U)):   max = " << set_smax.sd()
-                                   << ", mean = " << set_smean.sd()
-                                    << ", min = " << set_smin.sd() << std::endl;
-    std::cout << "mean(norm(A-USV')_F)        = " << set_frres.mean() << std::endl;
-    std::cout << "sd(norm(A-USV')_F)          = " << set_frres.sd() << std::endl;
+    std::cout << "mean(error_u): max = " << set_smax.mean()
+                          << ", mean = " << set_smean.mean()
+                           << ", min = " << set_smin.mean() << std::endl;
+    std::cout << "sd(error_u):   max = " << set_smax.sd()
+                          << ", mean = " << set_smean.sd()
+                           << ", min = " << set_smin.sd() << std::endl;
+    std::cout << "mean(error_a) = " << set_frres.mean() << std::endl;
+    std::cout << "sd(error_a)   = " << set_frres.sd() << std::endl;
     std::cout << "mean(iter) = " << set_iter.mean() << std::endl;
     std::cout << "sd(iter)   = " << set_iter.sd() << std::endl;
+    std::cout << std::endl;
+    std::cout << "error_a = norm(A-USV')_F/norm(A)_F" << std::endl;
+    std::cout << "error_u = svd(U_true' U)_2" << std::endl;
   }
 
   MPI_Finalize();
@@ -221,7 +209,7 @@ void create(
 /// Check the result
 ///
 template <mcnla::Layout _layout>
-void check(
+void check_u(
     const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
     const mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
           ScalarType &smax,
@@ -246,7 +234,7 @@ void check(
 /// Check the result (Frobenius)
 ///
 template <mcnla::Layout _layout>
-void check_frobenius(
+void check(
     const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_a,
     const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
     const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_vt,
