@@ -28,7 +28,7 @@ void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_a,
             const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
             const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_vt,
             const mcnla::matrix::DenseVector<ScalarType> &vector_s,
-            ScalarType &frres ) noexcept;
+            ScalarType &frerr ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -80,7 +80,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Create statistics collector
-  StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frres(num_test),
+  StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frerr(num_test),
                 set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
 
   // ====================================================================================================================== //
@@ -123,10 +123,10 @@ int main( int argc, char **argv ) {
 
     // Check result
     if ( mpi_rank == mpi_root ) {
-      ScalarType smax, smin, smean, frres;
+      ScalarType smax, smin, smean, frerr;
       check_u(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
       check(matrix_a, solver.getLeftSingularVectors(), solver.getRightSingularVectors(),
-                      solver.getSingularValues(), frres);
+                      solver.getSingularValues(), frerr);
       auto iter    = solver.getIntegratorIter();
       auto maxiter = solver.getParameters().getMaxIteration();
       auto time_s = solver.getSketcherTime();
@@ -135,10 +135,10 @@ int main( int argc, char **argv ) {
       auto time = time_s + time_i + time_r;
       std::cout << std::setw(log10(num_test)+1) << t
                 << " | error_u: " << smax << " / " << smean << " / " << smin
-                << " | error_a: " << frres
+                << " | error_a: " << frerr
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter << std::endl;
-      set_smax(smax); set_smean(smean);   set_smin(smin);     set_frres(frres);
+      set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
       set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
     }
   }
@@ -156,8 +156,8 @@ int main( int argc, char **argv ) {
     std::cout << "sd(error_u):   max = " << set_smax.sd()
                           << ", mean = " << set_smean.sd()
                            << ", min = " << set_smin.sd() << std::endl;
-    std::cout << "mean(error_a) = " << set_frres.mean() << std::endl;
-    std::cout << "sd(error_a)   = " << set_frres.sd() << std::endl;
+    std::cout << "mean(error_a) = " << set_frerr.mean() << std::endl;
+    std::cout << "sd(error_a)   = " << set_frerr.sd() << std::endl;
     std::cout << "mean(iter) = " << set_iter.mean() << std::endl;
     std::cout << "sd(iter)   = " << set_iter.sd() << std::endl;
     std::cout << std::endl;
@@ -239,7 +239,7 @@ void check(
     const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
     const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_vt,
     const mcnla::matrix::DenseVector<ScalarType>          &vector_s,
-          ScalarType &frres
+          ScalarType &frerr
 ) noexcept {
   mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.getSizes());
   mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.getSizes());
@@ -254,6 +254,6 @@ void check(
   }
   mcnla::blas::gemm<mcnla::TransOption::NORMAL, mcnla::TransOption::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
 
-  // frres := norm(A_tmp)_F / norm(A)_F
-  frres = mcnla::blas::nrm2(matrix_a_tmp.vectorize()) / mcnla::blas::nrm2(matrix_a.vectorize());
+  // frerr := norm(A_tmp)_F / norm(A)_F
+  frerr = mcnla::blas::nrm2(matrix_a_tmp.vectorize()) / mcnla::blas::nrm2(matrix_a.vectorize());
 }
