@@ -29,19 +29,19 @@ enum class Layout {
 };
 
 static constexpr bool operator !( const Layout layout ) noexcept {
-  return !static_cast<const bool>(layout);
+  return !static_cast<bool>(layout);
 }
 
 static constexpr Layout operator|( const Layout a, const Layout b ) noexcept {
-  return static_cast<const Layout>(static_cast<const int>(a) | static_cast<const int>(b));
+  return static_cast<Layout>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 static constexpr Layout operator&( const Layout a, const Layout b ) noexcept {
-  return static_cast<const Layout>(static_cast<const int>(a) & static_cast<const int>(b));
+  return static_cast<Layout>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 static constexpr Layout operator^( const Layout a, const Layout b ) noexcept {
-  return static_cast<const Layout>(static_cast<const int>(a) ^ static_cast<const int>(b));
+  return static_cast<Layout>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
 static constexpr bool isColMajor( const Layout layout ) noexcept {
@@ -67,19 +67,19 @@ enum class TransOption {
 };
 
 static constexpr bool operator !( const TransOption trans ) noexcept {
-  return !static_cast<const bool>(trans);
+  return !static_cast<bool>(trans);
 }
 
 static constexpr TransOption operator|( const TransOption a, const TransOption b ) noexcept {
-  return static_cast<const TransOption>(static_cast<const int>(a) | static_cast<const int>(b));
+  return static_cast<TransOption>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 static constexpr TransOption operator&( const TransOption a, const TransOption b ) noexcept {
-  return static_cast<const TransOption>(static_cast<const int>(a) & static_cast<const int>(b));
+  return static_cast<TransOption>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 static constexpr TransOption operator^( const TransOption a, const TransOption b ) noexcept {
-  return static_cast<const TransOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
+  return static_cast<TransOption>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
 static constexpr bool isTranspose( const TransOption trans ) noexcept {
@@ -101,19 +101,19 @@ enum class UploOption {
 };
 
 static constexpr bool operator!( const UploOption uplo ) noexcept {
-  return !static_cast<const bool>(uplo);
+  return !static_cast<bool>(uplo);
 }
 
 static constexpr UploOption operator|( const UploOption a, const UploOption b ) noexcept {
-  return static_cast<const UploOption>(static_cast<const int>(a) | static_cast<const int>(b));
+  return static_cast<UploOption>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 static constexpr UploOption operator&( const UploOption a, const UploOption b ) noexcept {
-  return static_cast<const UploOption>(static_cast<const int>(a) & static_cast<const int>(b));
+  return static_cast<UploOption>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 static constexpr UploOption operator^( const UploOption a, const UploOption b ) noexcept {
-  return static_cast<const UploOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
+  return static_cast<UploOption>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
 static constexpr bool isLower( const UploOption uplo ) noexcept {
@@ -141,19 +141,19 @@ enum class SideOption {
 };
 
 static constexpr bool operator!( const SideOption side ) noexcept {
-  return !static_cast<const bool>(side);
+  return !static_cast<bool>(side);
 }
 
 static constexpr SideOption operator|( const SideOption a, const SideOption b ) noexcept {
-  return static_cast<const SideOption>(static_cast<const int>(a) | static_cast<const int>(b));
+  return static_cast<SideOption>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 static constexpr SideOption operator&( const SideOption a, const SideOption b ) noexcept {
-  return static_cast<const SideOption>(static_cast<const int>(a) & static_cast<const int>(b));
+  return static_cast<SideOption>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 static constexpr SideOption operator^( const SideOption a, const SideOption b ) noexcept {
-  return static_cast<const SideOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
+  return static_cast<SideOption>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
 static constexpr bool isLeftSide( const SideOption side ) noexcept {

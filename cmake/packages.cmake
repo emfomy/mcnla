@@ -1,7 +1,7 @@
 if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
   # Set complier flags
-  set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -Wpedantic")
-  # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -Wpedantic")
+  set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -pedantic")
+  # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -pedantic")
 
   # MPI
   find_package(MPI REQUIRED)
@@ -11,7 +11,7 @@ if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
     set(COMFLGS "${COMFLGS} ${MPI_COMPILE_FLAGS}")
     set(LNKFLGS "${LNKFLGS} ${MPI_LINK_FLAGS}")
   endif()
-  set(MPI_PROCS 4 CACHE PATH "The number of MPI processes.")
+  set(MPI_PROCS 4 CACHE STRING "The number of MPI processes.")
 
   # MKL
   if(MCNLA_USE_MKL)

@@ -4,13 +4,19 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 # Set options
-option(MCNLA_BUILD_DEMO "Build demo codes."            "ON")
-option(MCNLA_BUILD_TEST "Build test codes."            "OFF")
-option(MCNLA_BUILD_DOC  "Build documentation."         "OFF")
-option(MCNLA_USE_MKL    "Uses MKL as BLAS and LAPACK." "OFF")
-option(MCNLA_USE_ILP64  "Uses 64bit integer."          "OFF")
+option(MCNLA_BUILD_DEMO "Build demo codes."                             "ON")
+option(MCNLA_BUILD_TEST "Build test codes."                             "OFF")
+option(MCNLA_BUILD_DOC  "Build documentation."                          "OFF")
+option(MCNLA_USE_ILP64  "Uses 64bit integer."                           "OFF")
+option(MCNLA_USE_MKL    "Uses Intel MKL."                               "OFF")
+option(MKL_USE_OMP      "Uses multithread MKL. (Require MCNLA_USE_MKL)" "OFF")
+option(MKL_USE_IOMP     "Uses Intel OMP. (Require MKL_USE_OMP)"         "OFF")
 
 # Set variables
+if(MCNLA_USE_ILP64)
+  list(APPEND DEFS "MCNLA_USE_ILP64")
+endif()
+
 if(MCNLA_USE_MKL)
   list(APPEND DEFS "MCNLA_USE_MKL")
   set(MKL_ILP64 ${MCNLA_USE_ILP64})
@@ -18,8 +24,14 @@ else()
   unset(MKL_ILP64)
 endif()
 
-if(MCNLA_USE_ILP64)
-  list(APPEND DEFS "MCNLA_USE_ILP64")
+if(MKL_USE_OMP)
+  if(MKL_USE_IOMP)
+    set(MKL_OMP "IOMP")
+  else()
+    set(MKL_OMP "GOMP")
+  endif()
+else()
+  set(MKL_OMP "OFF")
 endif()
 
 # Check compiler support

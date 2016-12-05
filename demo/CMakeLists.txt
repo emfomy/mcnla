@@ -1,25 +1,42 @@
 # The CMake setting of 'demo/'
 
+macro(SET_TARGET target files)
+  # Set target
+  add_executable(mcnla_${target} EXCLUDE_FROM_ALL ${files})
+  target_include_directories(mcnla_${target} PUBLIC "${PROJECT_BINARY_DIR}/include")
+  target_include_directories(mcnla_${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
+  target_include_directories(mcnla_${target} PUBLIC SYSTEM ${INCS})
+  target_link_libraries(mcnla_${target} ${LIBS})
+  target_compile_definitions(mcnla_${target} PUBLIC ${DEFS})
+  set_target_properties(mcnla_${target} PROPERTIES COMPILE_FLAGS ${COMFLGS})
+  set_target_properties(mcnla_${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
+
+  # Add run rule
+  add_custom_target(
+    run_${target}
+    COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./mcnla_${target}
+    DEPENDS mcnla_${target}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Running ${target}"
+  )
+endmacro()
+
 # Break
 if(NOT MCNLA_BUILD_DEMO)
   return()
 endif()
 
-# Set target
-add_executable(demo EXCLUDE_FROM_ALL demo.cpp)
-target_include_directories(demo PUBLIC "${PROJECT_BINARY_DIR}/include")
-target_include_directories(demo PUBLIC "${PROJECT_SOURCE_DIR}/include")
-target_include_directories(demo PUBLIC SYSTEM ${INCS})
-target_link_libraries(demo ${LIBS})
-target_compile_definitions(demo PUBLIC ${DEFS})
-set_target_properties(demo PROPERTIES COMPILE_FLAGS ${COMFLGS})
-set_target_properties(demo PROPERTIES LINK_FLAGS    ${LNKFLGS})
+# Set target (demo)
+set_target(demo demo.cpp)
+
+# Set target (demo_plain)
+set_target(demo_plain demo_plain.cpp)
+
+# Set target (isvd)
+set_target(isvd isvd.cpp)
+
+# Set target (test)
+set_target(test test.cpp)
 
 # Add rule 'run'
-add_custom_target(
-  run
-  COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} ./demo
-  DEPENDS demo
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMENT "Running demo"
-)
+add_custom_target(run DEPENDS run_demo)
