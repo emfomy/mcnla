@@ -107,7 +107,7 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   void initializeImpl() noexcept;
 
   // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &cube_q ) noexcept;
+  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
 
   // Gets name
   inline constexpr const char* getNameImpl() const noexcept;

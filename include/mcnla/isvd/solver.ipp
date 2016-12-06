@@ -69,7 +69,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
   mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
 
   double start_time = MPI_Wtime();
-  sketcher_.sketch(matrix_a, integrator_.getCubeQ());
+  sketcher_.sketch(matrix_a, integrator_.getSetQ());
   sketcher_time_ = MPI_Wtime() - start_time;
 
   start_time = MPI_Wtime();

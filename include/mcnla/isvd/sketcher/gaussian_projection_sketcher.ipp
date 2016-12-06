@@ -57,18 +57,18 @@ void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::sketchImpl(
     const _Matrix &matrix_a,
-          DenseMatrixSet120<ScalarType> &cube_q
+          DenseMatrixSet120<ScalarType> &set_q
 ) noexcept {
 
   mcnla_assert_true(parameters_.isInitialized());
   mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
-  mcnla_assert_eq(cube_q.getSizes(),   std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
+  mcnla_assert_eq(set_q.getSizes(),   std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
                                                                               parameters_.getNumSketchEach()));
 
   for ( index_t i = 0; i < parameters_.getNumSketchEach(); ++i ) {
     lapack::larnv<3>(matrix_omega_.vectorize(), this->seed_);
-    blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, cube_q(i));
-    gesvd_driver_(cube_q(i), vector_s_, matrix_empty_, matrix_empty_);
+    blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, set_q(i));
+    gesvd_driver_(set_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
 }
 

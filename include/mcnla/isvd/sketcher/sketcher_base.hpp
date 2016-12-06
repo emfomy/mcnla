@@ -57,7 +57,7 @@ class SketcherBase : public utility::CrtpBase<_Derived, SketcherBase<_Derived>> 
   inline void initialize() noexcept;
 
   // Random sketches
-  inline void sketch( const MatrixType &matrix_a, DenseMatrixSet120<ScalarType> &cube_q ) noexcept;
+  inline void sketch( const MatrixType &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
 
   // Gets name
   inline constexpr const char* getName() const noexcept;

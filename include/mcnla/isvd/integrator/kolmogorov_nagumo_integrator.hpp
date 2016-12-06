@@ -93,14 +93,17 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   /// The vector E.
   index_t iter_;
 
-  /// The cube Q.
-  DenseMatrixSet120<ScalarType> cube_q_;
+  /// The set Q.
+  DenseMatrixSet120<ScalarType> set_q_;
 
-  /// The cut cube Q.
-  DenseMatrixSet120<ScalarType> cube_q_cut_;
+  /// The cut set Q.
+  DenseMatrixSet120<ScalarType> set_q_cut_;
 
-  /// The cube Qj.
-  DenseMatrixSet120<ScalarType> cube_qj_;
+  /// The set Qj.
+  DenseMatrixSet120<ScalarType> set_qj_;
+
+  /// The matrix Qjs.
+  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qjs_;
 
   /// The matrix Qc.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
@@ -111,17 +114,17 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   /// The matrix Qcj.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qcj_;
 
-  /// The cube B.
-  DenseMatrixSet120<ScalarType> cube_b_;
+  /// The matrix Bs.
+  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_bs_;
 
-  /// The matrix B.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_b_;
+  /// The matrix C.
+  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_c_;
 
   /// The matrix D.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_d_;
 
-  /// The matrix C.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_c_;
+  /// The matrix F.
+  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_f_;
 
   /// The matrix Xj.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_xj_;
@@ -155,8 +158,8 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   inline index_t getIterImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& getCubeQImpl() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& getCubeQImpl() const noexcept;
+  inline       DenseMatrixSet120<ScalarType>& getSetQImpl() noexcept;
+  inline const DenseMatrixSet120<ScalarType>& getSetQImpl() const noexcept;
   inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 

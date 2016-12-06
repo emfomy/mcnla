@@ -88,8 +88,8 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   /// The vector E.
   index_t iter_;
 
-  /// The cube Q.
-  DenseMatrixSet120<ScalarType> cube_q_;
+  /// The set Q.
+  DenseMatrixSet120<ScalarType> set_q_;
 
   /// The matrix Qc.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
@@ -135,8 +135,8 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   inline index_t getIterImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& getCubeQImpl() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& getCubeQImpl() const noexcept;
+  inline       DenseMatrixSet120<ScalarType>& getSetQImpl() noexcept;
+  inline const DenseMatrixSet120<ScalarType>& getSetQImpl() const noexcept;
   inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 
