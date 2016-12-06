@@ -37,6 +37,12 @@
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  blas0_module  BLAS-Like Module
+/// @ingroup   blas_module
+/// @brief     The BLAS-Like Module
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
 //
 namespace mcnla {
@@ -55,11 +61,18 @@ using namespace matrix;
 namespace detail {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert layout to char.
+///
+static constexpr char toLayoutChar( Layout layout ) {
+  return isColMajor(layout) ? 'C' : 'R';
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
 ///
 template<typename _Scalar>
 static constexpr char toTransChar( const TransOption trans ) {
-  return !isTranspose(trans) ? ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? '?' : 'N')
+  return !isTranspose(trans) ? ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'R' : 'N')
                              : ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
 }
 

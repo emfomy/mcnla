@@ -48,6 +48,18 @@ inline void gather(
   MPI_Gather(send.getValue(), size, data_type, recv.getValue(), size, data_type, root, comm);
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar, Layout _layout>
+inline void gather(
+    const DenseMatrix<_Scalar, _layout> &send,
+          DenseMatrix<_Scalar, _layout> &&recv,
+    const mpi_int_t root,
+    const MPI_Comm comm
+) noexcept {
+  gather(send, recv, root, comm);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 }  // namespace mpi
 
 }  // namespace mcnla

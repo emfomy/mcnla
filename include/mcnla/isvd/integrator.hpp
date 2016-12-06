@@ -13,9 +13,10 @@
 
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.ipp>
-#include <mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.hpp>
-#include <mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.ipp>
-#include <mcnla/isvd/integrator/reduction_integrator.hpp>
-#include <mcnla/isvd/integrator/reduction_integrator.ipp>
+#pragma warning
+// #include <mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.hpp>
+// #include <mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.ipp>
+// #include <mcnla/isvd/integrator/reduction_integrator.hpp>
+// #include <mcnla/isvd/integrator/reduction_integrator.ipp>
 
 #endif  // MCNLA_ISVD_INTEGRATOR_HPP_

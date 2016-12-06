@@ -258,7 +258,7 @@ std::pair<index_t, index_t> DenseCube<_Scalar, _layout>::getPitches() const noex
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Determines if the dimensions is equal to the sizes.
+/// @brief  Determines if the dimensions are equal to the sizes.
 ///
 template <typename _Scalar, Layout _layout>
 bool DenseCube<_Scalar, _layout>::isShrunk() const noexcept {

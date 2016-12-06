@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/integrator_base.ipp
-/// @brief   The implementation of iSVD integrator interface.
+/// @file    include/mcnla/core/matrix/set/matrix_set_base.ipp
+/// @brief   The implementation of matrix set interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_BASE_IPP_
-#define MCNLA_ISVD_INTEGRATOR_BASE_IPP_
+#ifndef MCNLA_CORE_MATRIX_SET_MATRIX_SET_BASE_IPP_
+#define MCNLA_CORE_MATRIX_SET_MATRIX_SET_BASE_IPP_
 
-#include <mcnla/isvd/integrator/integrator_base.hpp>
+#include <mcnla/core/matrix/set/matrix_set_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -16,86 +16,76 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
+//  The matrix namespace.
 //
-namespace isvd {
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given parameters.
+/// @brief  Default constructor.
 ///
 template <class _Derived>
-IntegratorBase<_Derived>::IntegratorBase(
-    const Parameters<ScalarType> &parameters
-) noexcept : parameters_(parameters) {}
+MatrixSetBase<_Derived>::MatrixSetBase() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Initializes.
+/// @brief  Gets the number of rows of matrix.
 ///
 template <class _Derived>
-void IntegratorBase<_Derived>::initialize() noexcept {
-  this->derived().initializeImpl();
+index_t MatrixSetBase<_Derived>::getNrow() const noexcept { return this->derived().getNrowImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of column of matrix.
+///
+template <class _Derived>
+index_t MatrixSetBase<_Derived>::getNcol() const noexcept { return this->derived().getNcolImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of matrices.
+///
+template <class _Derived>
+index_t MatrixSetBase<_Derived>::getNmat() const noexcept { return this->derived().getNmatImpl(); }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::tuple<index_t, index_t, index_t> MatrixSetBase<_Derived>::getSizes() const noexcept {
+  return std::make_tuple(getNrow(), getNcol(), getNmat());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Integrates.
+/// @brief  Gets a matrix.
 ///
 template <class _Derived>
-void IntegratorBase<_Derived>::integrate() noexcept {
-  this->derived().integrateImpl();
+typename MatrixSetBase<_Derived>::MatrixType MatrixSetBase<_Derived>::getMatrix( const index_t idx ) noexcept {
+  return this->derived().getMatrixImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getIntegratorName
+/// @copydoc  getMatrix
 ///
 template <class _Derived>
-constexpr const char* IntegratorBase<_Derived>::getName() const noexcept {
-  return this->derived().getNameImpl();
+const typename MatrixSetBase<_Derived>::MatrixType MatrixSetBase<_Derived>::getMatrix( const index_t idx ) const noexcept {
+  return this->derived().getMatrixImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getIntegratorIter
+/// @copydoc  getMatrix
 ///
 template <class _Derived>
-index_t IntegratorBase<_Derived>::getIter() const noexcept {
-  return this->derived().getIterImpl();
+typename MatrixSetBase<_Derived>::MatrixType MatrixSetBase<_Derived>::operator()( const index_t idx ) noexcept {
+  return getMatrix(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the set Q.
+/// @copydoc  getMatrix
 ///
 template <class _Derived>
-DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& IntegratorBase<_Derived>::getSetQ() noexcept {
-  return this->derived().getSetQImpl();
+const typename MatrixSetBase<_Derived>::MatrixType MatrixSetBase<_Derived>::operator()( const index_t idx ) const noexcept {
+  return getMatrix(idx);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getSetQ
-///
-template <class _Derived>
-const DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& IntegratorBase<_Derived>::getSetQ() const noexcept {
-  return this->derived().getSetQImpl();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the matrix Qc.
-///
-template <class _Derived>
-DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::getMatrixQbar() noexcept {
-  return this->derived().getMatrixQbarImpl();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getMatrixQbar
-///
-template <class _Derived>
-const DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::getMatrixQbar() const noexcept {
-  return this->derived().getMatrixQbarImpl();
-}
-
-}  // namespace isvd
+}  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_BASE_IPP_
+#endif  // MCNLA_CORE_MATRIX_SET_MATRIX_SET_BASE_IPP_

@@ -13,7 +13,6 @@
 #include <tuple>
 #include <mcnla/core/utility/traits.hpp>
 #include <mcnla/core/matrix/base/tensor_base.hpp>
-#include <mcnla/core/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

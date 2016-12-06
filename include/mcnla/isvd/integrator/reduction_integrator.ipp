@@ -44,9 +44,9 @@ void ReductionIntegrator<_Matrix>::initializeImpl() noexcept {
   mcnla_assert_true(utility::isPowerOf2(num_sketch_each));
   mcnla_assert_eq(parameters_.mpi_root, 0);
 
-  const auto cube_q_sizes = std::make_tuple(nrow, dim_sketch, num_sketch_each);
-  if ( cube_q_.getSizes() != cube_q_sizes ) {
-    cube_q_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_q_sizes);
+  const auto set_q_sizes = std::make_tuple(nrow, dim_sketch, num_sketch_each);
+  if ( set_q_.getSizes() != set_q_sizes ) {
+    set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
   }
 
   const auto matrix_q_sizes = std::make_pair(nrow, dim_sketch);
@@ -98,25 +98,25 @@ void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
     for ( index_t i = 0; i < num_sketch_each; i += 2*j ) {
 
       // U := Q(i)' * Q(i+j)
-      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_q_.getPage(i), cube_q_.getPage(i+j), 0.0, matrix_u_);
+      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, set_q_.getPage(i), set_q_.getPage(i+j), 0.0, matrix_u_);
 
       // Compute the SVD of U -> U * S * Vt
       gesvd_driver_(matrix_u_, vector_s_, matrix_empty_, matrix_vt_);
 
       // Q(i) := Q(i) * U + Q(i+j) * V
-      blas::copy(cube_q_.getPage(i), matrix_buffer_);
-      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, cube_q_.getPage(i));
-      blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, cube_q_.getPage(i+j), matrix_vt_, 1.0, cube_q_.getPage(i));
+      blas::copy(set_q_.getPage(i), matrix_buffer_);
+      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, set_q_.getPage(i));
+      blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, set_q_.getPage(i+j), matrix_vt_, 1.0, set_q_.getPage(i));
 
       // Q(i) /= sqrt(2(I+S))
       for ( index_t k = 0; k < dim_sketch; ++k ) {
-        blas::scal(1.0 / sqrt(2.0 * vector_s_(k) + 2.0), cube_q_.getPage(i).getCol(k));
+        blas::scal(1.0 / sqrt(2.0 * vector_s_(k) + 2.0), set_q_.getPage(i).getCol(k));
       }
 
     }
   }
 
-  matrix_q_bar_ = cube_q_.getPage(0);
+  matrix_q_bar_ = set_q_.getPage(0);
   MPI_Status status;
 
   // Cross-node integrate.
@@ -166,23 +166,23 @@ index_t ReductionIntegrator<_Matrix>::getIterImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
 ///
 template <class _Matrix>
-DenseCube<typename ReductionIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
-    ReductionIntegrator<_Matrix>::getCubeQImpl() noexcept {
+DenseMatrixSet120<typename ReductionIntegrator<_Matrix>::ScalarType>&
+    ReductionIntegrator<_Matrix>::getSetQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return cube_q_;
+  return set_q_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
 ///
 template <class _Matrix>
-const DenseCube<typename ReductionIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
-    ReductionIntegrator<_Matrix>::getCubeQImpl() const noexcept {
+const DenseMatrixSet120<typename ReductionIntegrator<_Matrix>::ScalarType>&
+    ReductionIntegrator<_Matrix>::getSetQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return cube_q_;
+  return set_q_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

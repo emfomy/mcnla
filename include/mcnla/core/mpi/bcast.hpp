@@ -41,6 +41,17 @@ inline void bcast(
   MPI_Bcast(buffer.getValue(), buffer.derived().getNelem(), data_type, root, comm);
 }
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Derived>
+inline void bcast(
+          DenseBase<_Derived> &&buffer,
+    const mpi_int_t root,
+    const MPI_Comm comm
+) noexcept {
+  bcast(buffer, root, comm);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 }  // namespace mpi
 
 }  // namespace mcnla

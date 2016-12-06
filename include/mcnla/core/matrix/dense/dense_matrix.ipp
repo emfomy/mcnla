@@ -204,7 +204,7 @@ template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::getPitch() const noexcept { return pitch_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Determines if the dimensions is equal to the sizes.
+/// @brief  Determines if the dimensions are equal to the sizes.
 ///
 template <typename _Scalar, Layout _layout>
 bool DenseMatrix<_Scalar, _layout>::isShrunk() const noexcept {

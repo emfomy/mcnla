@@ -40,9 +40,9 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
   const auto dim_sketch      = parameters_.getDimSketch();
   iter_ = -1;
 
-  const auto cube_q_sizes = std::make_tuple(nrow, dim_sketch, num_sketch_each);
-  if ( cube_q_.getSizes() != cube_q_sizes ) {
-    cube_q_ = DenseCube<ScalarType, Layout::ROWMAJOR>(cube_q_sizes);
+  const auto set_q_sizes = std::make_tuple(nrow, dim_sketch, num_sketch_each);
+  if ( set_q_.getSizes() != set_q_sizes ) {
+    set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
   }
 
   const auto matrix_qc_sizes = std::make_pair(nrow, dim_sketch);
@@ -95,7 +95,7 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
   // Broadcast Q0 to Qc
   if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
-    blas::copy(cube_q_.getPage(0), matrix_qc_);
+    blas::copy(set_q_.getPage(0), matrix_qc_);
   }
   mcnla::mpi::bcast(matrix_qc_, mpi_root, MPI_COMM_WORLD);
 
@@ -111,13 +111,13 @@ void NaiveKolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
     for ( index_t i = 0; i < num_sketch_each; ++i ) {
       // Bi := Qi' * Qc
-      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, cube_q_.getPage(i), matrix_qc_, 0.0, matrix_b_);
+      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, set_q_.getPage(i), matrix_qc_, 0.0, matrix_b_);
 
       // D += Bi' * Bi
       blas::syrk<TransOption::TRANS>(1.0, matrix_b_, 1.0, matrix_d_);
 
       // X += Qi * Bi
-      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, cube_q_.getPage(i), matrix_b_, 1.0, matrix_x_);
+      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, set_q_.getPage(i), matrix_b_, 1.0, matrix_x_);
     }
 
     // X -= Qc * D
@@ -206,23 +206,23 @@ index_t NaiveKolmogorovNagumoIntegrator<_Matrix>::getIterImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
 ///
 template <class _Matrix>
-DenseCube<typename NaiveKolmogorovNagumoIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
-    NaiveKolmogorovNagumoIntegrator<_Matrix>::getCubeQImpl() noexcept {
+DenseMatrixSet120<typename NaiveKolmogorovNagumoIntegrator<_Matrix>::ScalarType>&
+    NaiveKolmogorovNagumoIntegrator<_Matrix>::getSetQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return cube_q_;
+  return set_q_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getCubeQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
 ///
 template <class _Matrix>
-const DenseCube<typename NaiveKolmogorovNagumoIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
-    NaiveKolmogorovNagumoIntegrator<_Matrix>::getCubeQImpl() const noexcept {
+const DenseMatrixSet120<typename NaiveKolmogorovNagumoIntegrator<_Matrix>::ScalarType>&
+    NaiveKolmogorovNagumoIntegrator<_Matrix>::getSetQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return cube_q_;
+  return set_q_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
