@@ -44,7 +44,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {
-    mcnla::blas::copy(cube_q_true.getPage(mpi_rank*Nj + i), integrator.getCubeQ().getPage(i));
+    mcnla::blas::omatcopy(1.0, cube_q_true.getPage(mpi_rank*Nj + i), integrator.getCubeQ().getMatrix(i));
   }
 
   // Integrates

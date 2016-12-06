@@ -24,4 +24,6 @@
 #include <mcnla/core/blas/routine/symm.hpp>
 #include <mcnla/core/blas/routine/syrk.hpp>
 
+#include <mcnla/core/blas/routine/omatcopy.hpp>
+
 #endif  // MCNLA_CORE_BLAS_ROUTINE_HPP_
