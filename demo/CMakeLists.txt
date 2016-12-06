@@ -29,6 +29,9 @@ endif()
 # Set target (demo)
 set_target(demo demo.cpp)
 
+# Set target (demo1)
+set_target(demo1 demo1.cpp)
+
 # Set target (demo_plain)
 set_target(demo_plain demo_plain.cpp)
 

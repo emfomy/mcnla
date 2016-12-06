@@ -53,7 +53,7 @@ int main( int argc, char **argv ) {
   int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
   int m0       = ( argc > 2 ) ? atoi(argv[2]) : 1000;
   int n        = ( argc > 3 ) ? atoi(argv[3]) : 10000;
-  int k        = ( argc > 4 ) ? atoi(argv[4]) : 10;
+  int k        = ( argc > 4 ) ? atoi(argv[4]) : 100;
   int num_test = ( argc > 5 ) ? atoi(argv[5]) : 100;
 
   // ====================================================================================================================== //
@@ -159,8 +159,8 @@ int main( int argc, char **argv ) {
 
       time = time_s + time_i + time_r;
       cout << setw(log10(num_test)+1) << t
-                << " | error_u: " << smax << " / " << smean << " / " << smin
-                << " | error_a: " << frerr
+                << " | validity: " << smax << " / " << smean << " / " << smin
+                << " | error: " << frerr
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << setw(log10(maxiter)+1) << iter << endl;
       set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
@@ -175,19 +175,19 @@ int main( int argc, char **argv ) {
     cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << endl;
     cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << endl;
     cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << endl;
-    cout << "mean(error_u): max = " << set_smax.mean()
-                     << ", mean = " << set_smean.mean()
-                      << ", min = " << set_smin.mean() << endl;
-    cout << "sd(error_u):   max = " << set_smax.sd()
-                     << ", mean = " << set_smean.sd()
-                      << ", min = " << set_smin.sd() << endl;
-    cout << "mean(error_a) = " << set_frerr.mean() << endl;
-    cout << "sd(error_a)   = " << set_frerr.sd() << endl;
+    cout << "mean(validity): max = " << set_smax.mean()
+                      << ", mean = " << set_smean.mean()
+                       << ", min = " << set_smin.mean() << endl;
+    cout << "sd(validity):   max = " << set_smax.sd()
+                      << ", mean = " << set_smean.sd()
+                       << ", min = " << set_smin.sd() << endl;
+    cout << "mean(error) = " << set_frerr.mean() << endl;
+    cout << "sd(error)   = " << set_frerr.sd() << endl;
     cout << "mean(iter) = " << set_iter.mean() << endl;
     cout << "sd(iter)   = " << set_iter.sd() << endl;
     cout << endl;
-    cout << "error_a = norm(A-USV')_F/norm(A)_F" << endl;
-    cout << "error_u = svd(U_true' U)_2" << endl;
+    cout << "error    = norm(A-USV')_F/norm(A)_F" << endl;
+    cout << "validity = svd(U_true' U)_2" << endl;
   }
 
   // ====================================================================================================================== //
