@@ -78,12 +78,13 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 1;
-  mcnla::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m        = matrix_a.getNrow();
-  mcnla::index_t n        = matrix_a.getNcol();
-  mcnla::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
-  mcnla::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  mcnla::index_t Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  mcnla::index_t m         = matrix_a.getNrow();
+  mcnla::index_t n         = matrix_a.getNcol();
+  mcnla::index_t k         = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
+  mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
@@ -121,7 +122,7 @@ int main( int argc, char **argv ) {
     std::cout << std::fixed << std::setprecision(6);
   }
 
-  for ( mcnla::index_t t = 0; t < num_test; ++t ) {
+  for ( int t = -skip_test; t < num_test; ++t ) {
 
     // Run solver
     MPI_Barrier(MPI_COMM_WORLD);
@@ -129,7 +130,7 @@ int main( int argc, char **argv ) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Check result
-    if ( mpi_rank == mpi_root ) {
+    if ( mpi_rank == mpi_root  ) {
       ScalarType frerr;
       check(matrix_a, solver.getLeftSingularVectors(), solver.getRightSingularVectors(), solver.getSingularValues(), frerr);
       auto iter    = solver.getIntegratorIter();
@@ -142,7 +143,9 @@ int main( int argc, char **argv ) {
                 << " | error: " << frerr
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")" << std::endl;
-      set_frerr(frerr); set_iter(iter); set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i);
+      if ( t >= 0 ) {
+        set_frerr(frerr); set_iter(iter); set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i);
+      }
     }
   }
 

@@ -51,6 +51,22 @@ constexpr const char* SketcherBase<_Derived>::getName() const noexcept {
   return this->derived().getNameImpl();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getSketcherTime
+///
+template <class _Derived>
+double SketcherBase<_Derived>::getTime() const noexcept {
+  return this->derived().getTimeImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getSketcherTimes
+///
+template <class _Derived>
+const std::vector<double> SketcherBase<_Derived>::getTimes() const noexcept {
+  return this->derived().getTimesImpl();
+}
+
 }  // namespace isvd
 
 }  // namespace mcnla

@@ -62,6 +62,10 @@ class SketcherBase : public utility::CrtpBase<_Derived, SketcherBase<_Derived>> 
   // Gets name
   inline constexpr const char* getName() const noexcept;
 
+  // Gets compute time
+  inline double getTime() const noexcept;
+  inline const std::vector<double> getTimes() const noexcept;
+
 };
 
 }  // namespace isvd

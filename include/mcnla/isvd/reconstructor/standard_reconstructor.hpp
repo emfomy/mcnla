@@ -84,6 +84,18 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   /// The parameters.
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
+  /// The starting time
+  double time0_;
+
+  /// The ending time of Q' * A
+  double time1_;
+
+  /// The ending time of SVD
+  double time2_;
+
+  /// The ending time of Q * W
+  double time3_;
+
   /// The matrix W.
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;
 
@@ -129,6 +141,10 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
 
   // Gets name
   inline constexpr const char* getNameImpl() const noexcept;
+
+  // Gets time
+  inline double getTimeImpl() const noexcept;
+  inline const std::vector<double> getTimesImpl() const noexcept;
 
   // Gets matrices
   inline const DenseVector<RealScalarType>& getVectorSImpl() const noexcept;

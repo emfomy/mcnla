@@ -44,6 +44,9 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
   /// The parameters.
   const Parameters<ScalarType> &parameters_;
 
+  /// The time of integrating
+  double integrating_time_;
+
  protected:
 
   // Constructor
@@ -59,6 +62,10 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
 
   // Gets name
   inline constexpr const char* getName() const noexcept;
+
+  // Gets compute time
+  inline double getTime() const noexcept;
+  inline const std::vector<double> getTimes() const noexcept;
 
   // Gets iterator number
   inline index_t getIter() const noexcept;

@@ -68,17 +68,11 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
   mcnla_assert_true(parameters_.isInitialized());
   mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
 
-  double start_time = MPI_Wtime();
   sketcher_.sketch(matrix_a, integrator_.getSetQ());
-  sketcher_time_ = MPI_Wtime() - start_time;
 
-  start_time = MPI_Wtime();
   integrator_.integrate();
-  integrator_time_ = MPI_Wtime() - start_time;
 
-  start_time = MPI_Wtime();
   reconstructor_.reconstruct(matrix_a, integrator_.getMatrixQbar());
-  reconstructor_time_ = MPI_Wtime() - start_time;
 
   parameters_.computed_ = true;
 }
@@ -113,7 +107,7 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::g
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return sketcher_time_;
+  return sketcher_.getTime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +116,7 @@ double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTime(
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return integrator_time_;
+  return integrator_.getTime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +125,34 @@ double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTim
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return reconstructor_time_;
+  return reconstructor_.getTime();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the times of running each steps of sketcher.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTimes() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return sketcher_.getTimes();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the times of running each steps of integrator.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTimes() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return integrator_.getTimes();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the times of running each steps of reconstructor.
+///
+template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
+const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorTimes() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return reconstructor_.getTimes();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +162,7 @@ double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructor
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 index_t Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorIter() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
   return integrator_.getIter();
 }
 

@@ -98,6 +98,10 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
   // Gets name
   inline constexpr const char* getNameImpl() const noexcept;
 
+  // Gets compute time
+  inline double getTimeImpl() const noexcept;
+  inline const std::vector<double> getTimesImpl() const noexcept;
+
   // Gets matrices
   inline const DenseVector<RealScalarType>& getVectorSImpl() const noexcept = delete;
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixUImpl() const noexcept = delete;

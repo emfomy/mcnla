@@ -50,11 +50,13 @@ int main( int argc, char **argv ) {
          << MCNLA_PATCH_VERSION << " plain demo" << endl << endl;
   }
 
-  int Nj       = ( argc > 1 ) ? atoi(argv[1]) : 4;
-  int m0       = ( argc > 2 ) ? atoi(argv[2]) : 1000;
-  int n        = ( argc > 3 ) ? atoi(argv[3]) : 10000;
-  int k        = ( argc > 4 ) ? atoi(argv[4]) : 100;
-  int num_test = ( argc > 5 ) ? atoi(argv[5]) : 100;
+  int argi = 0;
+  int Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  int m0        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
+  int n         = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
+  int k         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  int num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  int skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
 
   // ====================================================================================================================== //
   // Initialize random seed
@@ -153,7 +155,7 @@ int main( int argc, char **argv ) {
 
     // ================================================================================================================== //
     // Check result
-    if ( mpi_rank == 0 ) {
+    if ( mpi_rank == 0  ) {
       check_u(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
       check(m0, n, k, matrix_a, matrix_u, matrix_vt, vector_s, frerr);
 
@@ -163,8 +165,10 @@ int main( int argc, char **argv ) {
                 << " | error: " << frerr
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
                 << " | iter: " << setw(log10(maxiter)+1) << iter << endl;
-      set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
-      set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
+      if ( t >= 0 ) {
+        set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
+        set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
+      }
     }
   }
 

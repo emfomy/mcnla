@@ -84,13 +84,25 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   /// The parameters.
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
+  /// The starting time
+  double time0_;
+
+  /// The ending time of reforming Q
+  double time1_;
+
+  /// The ending time of integrating
+  double time2_;
+
+  /// The ending time of gathering Qc
+  double time3_;
+
   /// The number of rows of the matrix per MPI node.
   index_t nrow_each_;
 
   /// The number of rows of the matrix of all MPI nodes.
   index_t nrow_all_;
 
-  /// The vector E.
+  /// The number of iteration.
   index_t iter_;
 
   /// The set Q.
@@ -153,6 +165,10 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
 
   // Gets name
   inline constexpr const char* getNameImpl() const noexcept;
+
+  // Gets time
+  inline double getTimeImpl() const noexcept;
+  inline const std::vector<double> getTimesImpl() const noexcept;
 
   // Gets name
   inline index_t getIterImpl() const noexcept;

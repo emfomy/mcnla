@@ -60,12 +60,13 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 0;
-  mcnla::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  mcnla::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  mcnla::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
-  mcnla::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
-  mcnla::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  mcnla::index_t Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  mcnla::index_t m         = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
+  mcnla::index_t n         = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
+  mcnla::index_t k         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
+  mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
@@ -114,7 +115,7 @@ int main( int argc, char **argv ) {
     std::cout << std::fixed << std::setprecision(6);
   }
 
-  for ( mcnla::index_t t = 0; t < num_test; ++t ) {
+  for ( int t = -skip_test; t < num_test; ++t ) {
 
     // Run solver
     MPI_Barrier(MPI_COMM_WORLD);
@@ -122,7 +123,7 @@ int main( int argc, char **argv ) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Check result
-    if ( mpi_rank == mpi_root ) {
+    if ( mpi_rank == mpi_root  ) {
       ScalarType smax, smin, smean, frerr;
       check_u(solver.getLeftSingularVectors(), matrix_u_true, smax, smin, smean);
       check(matrix_a, solver.getLeftSingularVectors(), solver.getRightSingularVectors(), solver.getSingularValues(), frerr);
@@ -137,8 +138,10 @@ int main( int argc, char **argv ) {
                 << " | error: " << frerr
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")" << std::endl;
-      set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
-      set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
+      if ( t >= 0 ) {
+        set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
+        set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
+      }
     }
   }
 

@@ -40,10 +40,15 @@ void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
   const auto num_sketch      = parameters_.getNumSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();
   const auto dim_sketch      = parameters_.getDimSketch();
+
+  time0_ = 0;
+  time1_ = 0;
+  time2_ = 0;
+  time3_ = 0;
+
   nrow_each_ = (nrow-1) / mpi_size + 1;
   nrow_all_  = nrow_each_ * mpi_size;
   iter_      = -1;
-
 
   const auto set_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
   if ( set_q_.getSizes() != set_q_sizes || !set_q_.isShrunk() ) {
@@ -117,6 +122,8 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto max_iteration   = parameters_.getMaxIteration();
   const auto tolerance       = parameters_.getTolerance();
 
+  time0_ = MPI_Wtime();
+
   // Exchange Q
   blas::memset0(set_q_.getMatrixRows({parameters_.getNrow(), nrow_all_}).unfold());
   mpi::alltoall(set_q_.unfold(), mpi_comm);
@@ -130,6 +137,8 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
   // Qc := Q0
   blas::omatcopy(1.0, set_qj_(0), matrix_qcj_);
+
+  time1_ = MPI_Wtime();
 
   bool is_converged = false;
   for ( iter_ = 0; iter_ < max_iteration && !is_converged; ++iter_ ) {
@@ -210,8 +219,12 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
     is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
   }
 
+  time2_ = MPI_Wtime();
+
   // Gather Qc
   mpi::gather(matrix_qcj_, matrix_qc_, mpi_root, mpi_comm);
+
+  time3_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,6 +233,22 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 template <class _Matrix>
 constexpr const char* KolmogorovNagumoIntegrator<_Matrix>::getNameImpl() const noexcept {
   return name_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getTime
+///
+template <class _Matrix>
+double KolmogorovNagumoIntegrator<_Matrix>::getTimeImpl() const noexcept {
+  return time3_-time0_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getTimes
+///
+template <class _Matrix>
+const std::vector<double> KolmogorovNagumoIntegrator<_Matrix>::getTimesImpl() const noexcept {
+  return {time1_-time0_, time2_-time1_, time3_-time2_};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

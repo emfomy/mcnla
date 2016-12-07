@@ -60,6 +60,10 @@ class ReconstructorBase : public utility::CrtpBase<_Derived, ReconstructorBase<_
   // Gets name
   inline constexpr const char* getName() const noexcept;
 
+  // Gets compute time
+  inline double getTime() const noexcept;
+  inline const std::vector<double> getTimes() const noexcept;
+
   // Gets matrices
   inline const DenseVector<RealScalarType>& getVectorS() const noexcept;
   inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixU() const noexcept;

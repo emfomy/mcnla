@@ -10,6 +10,7 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
+#include <vector>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/utility.hpp>
 #include <mcnla/isvd/parameters.hpp>
@@ -96,15 +97,6 @@ class Solver {
   /// The reconstructor.
   _Reconstructor reconstructor_;
 
-  /// The time of running sketcher
-  double sketcher_time_;
-
-  /// The time of running integrator
-  double integrator_time_;
-
-  /// The time of running reconstructor
-  double reconstructor_time_;
-
  public:
 
   // Constructor
@@ -125,6 +117,9 @@ class Solver {
   inline double getSketcherTime() const noexcept;
   inline double getIntegratorTime() const noexcept;
   inline double getReconstructorTime() const noexcept;
+  inline const std::vector<double> getSketcherTimes() const noexcept;
+  inline const std::vector<double> getIntegratorTimes() const noexcept;
+  inline const std::vector<double> getReconstructorTimes() const noexcept;
 
   // Gets iterator number
   inline index_t getIntegratorIter() const noexcept;

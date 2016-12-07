@@ -84,8 +84,20 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   /// The parameters.
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
+  /// The starting time
+  double time0_;
+
+  /// The ending time of random generating
+  double time1_;
+
+  /// The ending time of random sketching
+  double time2_;
+
+  /// The ending time of orthonormalizing
+  double time3_;
+
   /// The matrix Omega.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_omega_;
+  DenseMatrixSet120<ScalarType> set_omega_;
 
   /// The vector S.
   DenseVector<RealScalarType> vector_s_;
@@ -111,6 +123,10 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
 
   // Gets name
   inline constexpr const char* getNameImpl() const noexcept;
+
+  // Gets time
+  inline double getTimeImpl() const noexcept;
+  inline const std::vector<double> getTimesImpl() const noexcept;
 
 };
 

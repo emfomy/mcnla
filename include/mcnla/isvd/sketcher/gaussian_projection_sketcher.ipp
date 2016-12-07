@@ -34,17 +34,27 @@ GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
 
-  const auto matrix_omega_sizes = std::make_pair(parameters_.getNcol(), parameters_.getDimSketch());
-  if ( matrix_omega_.getSizes() != matrix_omega_sizes ) {
-    matrix_omega_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_omega_sizes);
+  const auto nrow            = parameters_.getNrow();
+  const auto ncol            = parameters_.getNcol();
+  const auto num_sketch_each = parameters_.getNumSketchEach();
+  const auto dim_sketch      = parameters_.getDimSketch();
+
+  time0_ = 0;
+  time1_ = 0;
+  time2_ = 0;
+  time3_ = 0;
+
+  const auto set_omega_sizes = std::make_tuple(ncol, dim_sketch, num_sketch_each);
+  if ( set_omega_.getSizes() != set_omega_sizes ) {
+    set_omega_ = DenseMatrixSet120<ScalarType>(set_omega_sizes);
   }
 
-  const auto vector_s_sizes = parameters_.getDimSketch();
+  const auto vector_s_sizes = dim_sketch;
   if ( vector_s_.getSizes() != vector_s_sizes ) {
     vector_s_ = DenseVector<RealScalarType>(vector_s_sizes);
   }
 
-  const auto gesvd_sizes = std::make_pair(parameters_.getNrow(), parameters_.getDimSketch());
+  const auto gesvd_sizes = std::make_pair(nrow, dim_sketch);
   if ( gesvd_driver_.getSizes() != gesvd_sizes ) {
     gesvd_driver_.resize(gesvd_sizes);
   }
@@ -61,15 +71,30 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 ) noexcept {
 
   mcnla_assert_true(parameters_.isInitialized());
-  mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
-  mcnla_assert_eq(set_q.getSizes(),   std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
-                                                                              parameters_.getNumSketchEach()));
 
-  for ( index_t i = 0; i < parameters_.getNumSketchEach(); ++i ) {
-    lapack::larnv<3>(matrix_omega_.vectorize(), this->seed_);
-    blas::gemm(1.0, matrix_a, matrix_omega_, 0.0, set_q(i));
+  const auto nrow            = parameters_.getNrow();
+  const auto ncol            = parameters_.getNcol();
+  const auto num_sketch_each = parameters_.getNumSketchEach();
+  const auto dim_sketch      = parameters_.getDimSketch();
+
+  mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(nrow, ncol));
+  mcnla_assert_eq(set_q.getSizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
+
+  time0_ = MPI_Wtime();
+
+  // Random sample Omega using normal Gaussian distribution
+  lapack::larnv<3>(set_omega_.unfold().vectorize(), this->seed_);
+  time1_ = MPI_Wtime();
+
+  // Q := A * Omega
+  blas::gemm(1.0, matrix_a, set_omega_.unfold(), 0.0, set_q.unfold());
+  time2_ = MPI_Wtime();
+
+  // Compute the left singular vectors of Q
+  for ( index_t i = 0; i < num_sketch_each; ++i ) {
     gesvd_driver_(set_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
+  time3_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +103,22 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 template <class _Matrix>
 constexpr const char* GaussianProjectionSketcher<_Matrix>::getNameImpl() const noexcept {
   return name_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::SketcherBase::getTime
+///
+template <class _Matrix>
+double GaussianProjectionSketcher<_Matrix>::getTimeImpl() const noexcept {
+  return time3_-time0_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::SketcherBase::getTimes
+///
+template <class _Matrix>
+const std::vector<double> GaussianProjectionSketcher<_Matrix>::getTimesImpl() const noexcept {
+  return {time1_-time0_, time2_-time1_, time3_-time2_};
 }
 
 }  // namespace isvd
