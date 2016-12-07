@@ -186,8 +186,8 @@ int main( int argc, char **argv ) {
     cout << "mean(iter) = " << set_iter.mean() << endl;
     cout << "sd(iter)   = " << set_iter.sd() << endl;
     cout << endl;
-    cout << "error    = norm(A-USV')_F/norm(A)_F" << endl;
     cout << "validity = svd(U_true' U)_2" << endl;
+    cout << "error    = norm(A-USV')_F/norm(A)_F" << endl;
   }
 
   // ====================================================================================================================== //

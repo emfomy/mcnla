@@ -82,11 +82,11 @@ static inline void omatcopy(
 #else  // MCNLA_USE_MKL
 
 template <typename _Scalar>
-inline index_t omatcopy(
+inline void omatcopy(
     const char ordering, const char trans, const index_t rows, const index_t cols, const _Scalar alpha,
     const _Scalar* a, const index_t lda, _Scalar* b, index_t ldb
 ) noexcept {
-  #pragma warning
+  #error Not Implemented!
 }
 
 #endif  // MCNLA_USE_MKL

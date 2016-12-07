@@ -57,7 +57,7 @@ int main( int argc, char **argv ) {
   mcnla::index_t Nj       = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
   mcnla::index_t m        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
   mcnla::index_t n        = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  mcnla::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  mcnla::index_t k        = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t p        = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
   mcnla::index_t num_test = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
   assert(k <= m && m <= n);
