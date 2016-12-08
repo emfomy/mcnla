@@ -19,54 +19,37 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrixSet120<double> set;
-  mcnla::io::loadMatrixMarket(set, TEST_PATH);
-  std::cout << set.unfold() << std::endl;
+  MPI_Init(&argc, &argv);
+  mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
 
-  // MPI_Init(&argc, &argv);
-  // mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
-  // mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
+  int K = mpi_size, n = 3;
 
-  // int K = mpi_size, n = 3;
+  mcnla::matrix::DenseMatrix<double, mcnla::Layout::ROWMAJOR> A(K, n), B(1, n);
 
-  // int a[K*n], b[n];
+  for ( auto i = 0; i < K; ++i ) {
+    for ( auto j = 0; j < n; ++j ) {
+      A(i, j) = 100*mpi_rank + 10*i + j;
+    }
+  }
 
-  // int counts[] = {n, n, n, n};
+  for ( auto k = 0; k < mpi_size; ++k ) {
+    MPI_Barrier(MPI_COMM_WORLD);
+    if ( k == mpi_rank ) {
+      std::cout << mpi_rank << std::endl << A << std::endl << std::flush;
+    }
+  }
 
-  // for ( auto i = 0; i < K; ++i ) {
-  //   for ( auto j = 0; j < n; ++j ) {
-  //     a[i*n+j] = 100*mpi_rank + 10*i + j;
-  //   }
-  // }
+  mcnla::mpi::reducescatter(A, B, MPI_SUM, MPI_COMM_WORLD);
 
-  // for ( auto k = 0; k < mpi_size; ++k ) {
-  //   MPI_Barrier(MPI_COMM_WORLD);
-  //   if ( k == mpi_rank ) {
-  //     std::cout << mpi_rank << std::endl;
-  //     for ( auto i = 0; i < K; ++i ) {
-  //       for ( auto j = 0; j < n; ++j ) {
-  //         std::cout << a[i*n+j] << '\t';
-  //       }
-  //       std::cout << std::endl;
-  //     }
-  //     std::cout << std::endl << std::flush;
-  //   }
-  // }
+  for ( auto k = 0; k < mpi_size; ++k ) {
+    MPI_Barrier(MPI_COMM_WORLD);
+    if ( k == mpi_rank ) {
+      std::cout << mpi_rank << std::endl << B << std::endl << std::flush;
+    }
+  }
 
-  // MPI_Reduce_scatter(a, b, counts, MPI_INTEGER, MPI_SUM, MPI_COMM_WORLD);
-
-  // for ( auto k = 0; k < mpi_size; ++k ) {
-  //   MPI_Barrier(MPI_COMM_WORLD);
-  //   if ( k == mpi_rank ) {
-  //     std::cout << mpi_rank << std::endl;
-  //     for ( auto j = 0; j < n; ++j ) {
-  //       std::cout << b[j] << '\t';
-  //     }
-  //     std::cout << std::endl << std::endl << std::flush;
-  //   }
-  // }
-
-  // MPI_Finalize();
+  MPI_Finalize();
 
   return 0;
 }
