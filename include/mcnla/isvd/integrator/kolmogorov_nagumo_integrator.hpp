@@ -111,8 +111,8 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   /// The cut set Q.
   DenseMatrixSet120<ScalarType> set_q_cut_;
 
-  /// The set Qj.
-  DenseMatrixSet120<ScalarType> set_qj_;
+  /// The matrix Qs.
+  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qs_;
 
   /// The matrix Qjs.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qjs_;
