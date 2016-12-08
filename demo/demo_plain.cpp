@@ -115,7 +115,7 @@ int main( int argc, char **argv ) {
     cout << fixed << setprecision(6);
   }
 
-  for ( auto t = 0; t < num_test; ++t ) {
+  for ( auto t = -skip_test; t < num_test; ++t ) {
     double smax, smin, smean, frerr, time, time_s = 0.0, time_i = 0.0, time_r = 0.0; int iter;
 
     MPI_Barrier(MPI_COMM_WORLD);

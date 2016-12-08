@@ -54,7 +54,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
   if ( set_q_.getSizes() != set_q_sizes || !set_q_.isShrunk() ) {
     set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
   }
-  set_q_cut_ = set_q_.getMatrixRows({0, parameters_.getNrow()});
+  set_q_cut_ = set_q_.getMatrixRows({0, nrow});
   matrix_qs_ = set_q_.unfold();
 
   const auto matrix_qjs_sizes = std::make_pair(nrow_each_, dim_sketch * num_sketch);
@@ -66,7 +66,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
   if ( matrix_qc_.getSizes() != matrix_qc_sizes || !matrix_qc_.isShrunk() ) {
     matrix_qc_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qc_sizes);
   }
-  matrix_qc_cut_ = matrix_qc_.getRows({0, parameters_.getNrow()});
+  matrix_qc_cut_ = matrix_qc_.getRows({0, nrow});
 
   const auto matrix_qcj_sizes = std::make_pair(nrow_each_, dim_sketch);
   if ( matrix_qcj_.getSizes() != matrix_qcj_sizes ) {
@@ -116,6 +116,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto mpi_comm        = parameters_.mpi_comm;
   const auto mpi_size        = parameters_.mpi_size;
   const auto mpi_root        = parameters_.mpi_root;
+  const auto nrow            = parameters_.getNrow();
   const auto dim_sketch      = parameters_.getDimSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();
   const auto num_sketch      = parameters_.getNumSketch();
@@ -125,7 +126,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   time0_ = MPI_Wtime();
 
   // Exchange Q
-  blas::memset0(set_q_.getMatrixRows({parameters_.getNrow(), nrow_all_}).unfold());
+  blas::memset0(set_q_.getMatrixRows({nrow, nrow_all_}).unfold());
   mpi::alltoall(set_q_.unfold(), mpi_comm);
 
   // Reform Qj
