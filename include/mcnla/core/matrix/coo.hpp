@@ -28,9 +28,9 @@
 #include <mcnla/core/matrix/coo/coo_matrix_iterator.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix_iterator.ipp>
 
-#include <mcnla/core/matrix/coo/coo_cube.hpp>
-#include <mcnla/core/matrix/coo/coo_cube.ipp>
-#include <mcnla/core/matrix/coo/coo_cube_iterator.hpp>
-#include <mcnla/core/matrix/coo/coo_cube_iterator.ipp>
+// #include <mcnla/core/matrix/coo/coo_cube.hpp>
+// #include <mcnla/core/matrix/coo/coo_cube.ipp>
+// #include <mcnla/core/matrix/coo/coo_cube_iterator.hpp>
+// #include <mcnla/core/matrix/coo/coo_cube_iterator.ipp>
 
 #endif  // MCNLA_CORE_MATRIX_COO_HPP_

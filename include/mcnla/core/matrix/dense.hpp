@@ -26,9 +26,9 @@
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.ipp>
 
-#include <mcnla/core/matrix/dense/dense_cube.hpp>
-#include <mcnla/core/matrix/dense/dense_cube.ipp>
-#include <mcnla/core/matrix/dense/dense_cube_iterator.hpp>
-#include <mcnla/core/matrix/dense/dense_cube_iterator.ipp>
+// #include <mcnla/core/matrix/dense/dense_cube.hpp>
+// #include <mcnla/core/matrix/dense/dense_cube.ipp>
+// #include <mcnla/core/matrix/dense/dense_cube_iterator.hpp>
+// #include <mcnla/core/matrix/dense/dense_cube_iterator.ipp>
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_HPP_

@@ -10,7 +10,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   auto mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
 
   // Reads data
-  mcnla::matrix::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> set_q_true;
+  mcnla::matrix::DenseMatrixSet120<ScalarType> set_q_true;
   mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar_true;
   mcnla::io::loadMatrixMarket(set_q_true, CUBE_Q_PATH);
   mcnla::io::loadMatrixMarket(matrix_qbar_true, MATRIX_QBAR_PATH);
@@ -23,7 +23,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   const mcnla::index_t m  = set_q_true.getNrow();
   const mcnla::index_t k  = set_q_true.getNcol();
   const mcnla::index_t p  = 0;
-  const mcnla::index_t N  = set_q_true.getNpage();
+  const mcnla::index_t N  = set_q_true.getNmat();
   const mcnla::index_t K  = mpi_size;
   const mcnla::index_t Nj = N / K;
   ASSERT_EQ(N % K, 0);
@@ -44,7 +44,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {
-    mcnla::blas::omatcopy(1.0, set_q_true.getPage(mpi_rank*Nj + i), integrator.getSetQ().getMatrix(i));
+    mcnla::blas::omatcopy(1.0, set_q_true(mpi_rank*Nj + i), integrator.getSetQ().getMatrix(i));
   }
 
   // Integrates

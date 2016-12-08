@@ -72,34 +72,6 @@ inline void copy(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  blas1_module
-/// @brief  Copies cube to another cube.
-///
-/// @attention  The out-of-range spaces are also copied. It is inefficient if the dimensions is much larger than the sizes.
-///
-template <typename _Scalar, Layout _layout>
-inline void copy(
-    const DenseCube<_Scalar, _layout> &x,
-          DenseCube<_Scalar, _layout> &y
-) noexcept {
-  mcnla_assert_eq(x.getSizes(),   y.getSizes());
-  mcnla_assert_eq(x.getPitches(), y.getPitches());
-  copy(x.vectorize(), y.vectorize());
-}
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout>
-inline void copy(
-    const DenseCube<_Scalar, _layout> &x,
-          DenseCube<_Scalar, _layout> &&y
-) noexcept {
-  mcnla_assert_eq(x.getSizes(),   y.getSizes());
-  mcnla_assert_eq(x.getPitches(), y.getPitches());
-  copy(x.vectorize(), y.vectorize());
-}
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 }  // namespace blas
 
 }  // namespace mcnla

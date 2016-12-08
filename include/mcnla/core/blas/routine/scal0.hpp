@@ -77,34 +77,6 @@ inline void scal0(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  blas1_module
-/// @brief  Computes the product of a cube by zero.
-///
-/// @attention  It is inefficient if the pitches is different from the sizes.
-///             Uses memset0 instead if the out-of-range spaces are useless.
-/// @attention  However, memset0 is slow if the pitch is vary large.
-///
-template <typename _Scalar, Layout _layout>
-inline void scal0(
-  DenseCube<_Scalar, _layout> &x
-) noexcept {
-  if ( x.isShrunk() ) {
-    std::memset(x.getValue(), 0, x.getNelem() * sizeof(_Scalar));
-  } else {
-    x.getValueValarray()[x.getValueMask()] = 0;
-  }
-}
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout>
-inline void scal0(
-  DenseCube<_Scalar, _layout> &&x
-) noexcept {
-  scal0(x);
-}
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 }  // namespace blas
 
 }  // namespace mcnla

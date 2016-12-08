@@ -65,28 +65,6 @@ inline void memset0(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  blas1_module
-/// @brief  Set a cube to zero.
-///
-/// @attention  the out-of-range spaces are also changed.
-///
-template <typename _Scalar, Layout _layout>
-inline void memset0(
-  DenseCube<_Scalar, _layout> &x
-) noexcept {
-  std::memset(x.getValue(), 0, x.getNelem() * sizeof(_Scalar));
-}
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout>
-inline void memset0(
-  DenseCube<_Scalar, _layout> &&x
-) noexcept {
-  memset0(x);
-}
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 }  // namespace blas
 
 }  // namespace mcnla
