@@ -90,7 +90,7 @@ struct MpiScalarTraits {};
 ///
 template <>
 struct MpiScalarTraits<char> {
-  static constexpr const MPI_Datatype &data_type = MPI_CHARACTER;
+  static constexpr const MPI_Datatype &datatype = MPI_CHARACTER;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ struct MpiScalarTraits<char> {
 ///
 template <>
 struct MpiScalarTraits<int8_t> {
-  static constexpr const MPI_Datatype &data_type = MPI_INTEGER1;
+  static constexpr const MPI_Datatype &datatype = MPI_INTEGER1;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ struct MpiScalarTraits<int8_t> {
 ///
 template <>
 struct MpiScalarTraits<int16_t> {
-  static constexpr const MPI_Datatype &data_type = MPI_INTEGER2;
+  static constexpr const MPI_Datatype &datatype = MPI_INTEGER2;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +114,7 @@ struct MpiScalarTraits<int16_t> {
 ///
 template <>
 struct MpiScalarTraits<int32_t> {
-  static constexpr const MPI_Datatype &data_type = MPI_INTEGER4;
+  static constexpr const MPI_Datatype &datatype = MPI_INTEGER4;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ struct MpiScalarTraits<int32_t> {
 ///
 template <>
 struct MpiScalarTraits<int64_t> {
-  static constexpr const MPI_Datatype &data_type = MPI_INTEGER8;
+  static constexpr const MPI_Datatype &datatype = MPI_INTEGER8;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ struct MpiScalarTraits<int64_t> {
 ///
 template <>
 struct MpiScalarTraits<float> {
-  static constexpr const MPI_Datatype &data_type = MPI_REAL4;
+  static constexpr const MPI_Datatype &datatype = MPI_REAL4;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ struct MpiScalarTraits<float> {
 ///
 template <>
 struct MpiScalarTraits<double> {
-  static constexpr const MPI_Datatype &data_type = MPI_REAL8;
+  static constexpr const MPI_Datatype &datatype = MPI_REAL8;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ struct MpiScalarTraits<double> {
 ///
 template <>
 struct MpiScalarTraits<std::complex<float>> {
-  static constexpr const MPI_Datatype &data_type = MPI_COMPLEX8;
+  static constexpr const MPI_Datatype &datatype = MPI_COMPLEX8;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ struct MpiScalarTraits<std::complex<float>> {
 ///
 template <>
 struct MpiScalarTraits<std::complex<double>> {
-  static constexpr const MPI_Datatype &data_type = MPI_COMPLEX16;
+  static constexpr const MPI_Datatype &datatype = MPI_COMPLEX16;
 };
 
 }  // namespace traits

@@ -37,13 +37,13 @@ inline void alltoall(
           DenseMatrix<_Scalar, _layout> &recv,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<_Scalar>::data_type;
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.getSizes(), recv.getSizes());
   mcnla_assert_eq(send.template getSize<1>() % getCommSize(comm), 0);
-  mpi_int_t size = send.getNelem() / getCommSize(comm);
-  MPI_Alltoall(send.getValue(), size, data_type, recv.getValue(), size, data_type, comm);
+  mpi_int_t count = send.getNelem() / getCommSize(comm);
+  MPI_Alltoall(send.getValue(), count, datatype, recv.getValue(), count, datatype, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -69,11 +69,11 @@ inline void alltoall(
           DenseMatrix<_Scalar, _layout> &buffer,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<_Scalar>::data_type;
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
   mcnla_assert_true(buffer.isShrunk());
   mcnla_assert_eq(buffer.template getSize<1>() % getCommSize(comm), 0);
-  mpi_int_t size = buffer.getNelem() / getCommSize(comm);
-  MPI_Alltoall(MPI_IN_PLACE, size, data_type, buffer.getValue(), size, data_type, comm);
+  mpi_int_t count = buffer.getNelem() / getCommSize(comm);
+  MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.getValue(), count, datatype, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

@@ -13,6 +13,8 @@
 
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.ipp>
+#include <mcnla/isvd/integrator/extrinsic_mean_integrator.hpp>
+#include <mcnla/isvd/integrator/extrinsic_mean_integrator.ipp>
 // #include <mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.hpp>
 // #include <mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.ipp>
 // #include <mcnla/isvd/integrator/reduction_integrator.hpp>

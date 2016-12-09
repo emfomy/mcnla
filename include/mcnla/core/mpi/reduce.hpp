@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/allreduce.hpp
-/// @brief   The MPI ALLREDUCE routine.
+/// @file    include/mcnla/core/mpi/reduce.hpp
+/// @brief   The MPI REDUCE routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MPI_ALLREDUCE_HPP_
-#define MCNLA_CORE_MPI_ALLREDUCE_HPP_
+#ifndef MCNLA_CORE_MPI_REDUCE_HPP_
+#define MCNLA_CORE_MPI_REDUCE_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -25,65 +25,73 @@ namespace mpi {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
-/// @brief  Combines values from all processes and distributes the result back to all processes.
+/// @brief  Reduces values on all processes within a group.
 ///
-/// @attention  The size of @a send and @a recv should be the same for all MPI nodes.
+/// @attention  The size of @a send should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
 template <class _Derived>
-inline void allreduce(
+inline void reduce(
     const DenseBase<_Derived> &send,
           DenseBase<_Derived> &recv,
     const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(send.derived().isShrunk());
   mcnla_assert_true(recv.derived().isShrunk());
   mcnla_assert_eq(send.derived().getSizes(), recv.derived().getSizes());
-  mpi_int_t count = recv.derived().getNelem();
-  MPI_Allreduce(send.getValue(), recv.getValue(), count, datatype, op, comm);
+  mpi_int_t size = send.derived().getNelem();
+  MPI_Reduce(send.getValue(), recv.getValue(), size, datatype, op, root, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
-inline void allreduce(
+inline void reduce(
     const DenseBase<_Derived> &send,
           DenseBase<_Derived> &&recv,
     const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  allreduce(send, recv, op, comm);
+  reduce(send, recv, op, root, comm);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
-/// @brief  Combines values from all processes and distributes the result back to all processes (in-place version).
+/// @brief  Reduces values on all processes within a group (in-place version).
 ///
 /// @attention  The size of @a buffer should be the same for all MPI nodes.
 /// @attention  @a buffer should be shrunk.
 ///
 template <class _Derived>
-inline void allreduce(
+inline void reduce(
           DenseBase<_Derived> &buffer,
     const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(buffer.derived().isShrunk());
   mpi_int_t count = buffer.derived().getNelem();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), count, datatype, op, comm);
+  if ( isCommRoot(root, comm) ) {
+    MPI_Reduce(MPI_IN_PLACE, buffer.getValue(), count, datatype, op, root, comm);
+  } else {
+    MPI_Reduce(buffer.getValue(), buffer.getValue(), count, datatype, op, root, comm);
+  }
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
-inline void allreduce(
+inline void reduce(
           DenseBase<_Derived> &&buffer,
     const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  allreduce(buffer, op, comm);
+  reduce(buffer, op, root, comm);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -91,4 +99,4 @@ inline void allreduce(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MPI_ALLREDUCE_HPP_
+#endif  // MCNLA_CORE_MPI_REDUCE_HPP_

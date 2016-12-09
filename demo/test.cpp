@@ -40,7 +40,7 @@ int main( int argc, char **argv ) {
     }
   }
 
-  mcnla::mpi::reducescatter(A, B, MPI_SUM, MPI_COMM_WORLD);
+  mcnla::mpi::reduceScatterBlock(A, B, MPI_SUM, MPI_COMM_WORLD);
 
   for ( auto k = 0; k < mpi_size; ++k ) {
     MPI_Barrier(MPI_COMM_WORLD);

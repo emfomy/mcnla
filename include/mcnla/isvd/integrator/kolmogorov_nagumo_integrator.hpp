@@ -53,7 +53,7 @@ struct Traits<isvd::KolmogorovNagumoIntegrator<_Matrix>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_module
+/// @ingroup  isvd_integrator_module
 ///
 /// The Kolmogorov-Nagumo-type integrator.
 ///

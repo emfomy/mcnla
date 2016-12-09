@@ -150,7 +150,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
     blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qcj_, matrix_qjs_, 0.0, matrix_bs_);
     mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
 
-    // D  := Bs' * Bs
+    // D  := Bs * Bs'
     blas::syrk<TransOption::NORMAL>(1.0, matrix_bs_, 0.0, matrix_d_);
 
     // Xj := 1/N * Qjs * Bs'

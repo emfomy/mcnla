@@ -37,9 +37,10 @@ inline void recv(
     const MPI_Comm comm,
           MPI_Status &status
 ) noexcept {
-  constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::data_type;
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(buffer.derived().isShrunk());
-  MPI_Recv(buffer.getValue(), buffer.derived().getNelem(), data_type, source, tag, comm, &status);
+  mpi_int_t count = buffer.derived().getNelem();
+  MPI_Recv(buffer.getValue(), count, datatype, source, tag, comm, &status);
 }
 
 }  // namespace mpi

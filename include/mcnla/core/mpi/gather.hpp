@@ -37,15 +37,15 @@ inline void gather(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &data_type = traits::MpiScalarTraits<_Scalar>::data_type;
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   if ( isCommRoot(root, comm) ) {
     mcnla_assert_eq(send.template getSize<0>(),                     recv.template getSize<0>());
     mcnla_assert_eq(send.template getSize<1>() * getCommSize(comm), recv.template getSize<1>());
   }
-  mpi_int_t size = send.getNelem();
-  MPI_Gather(send.getValue(), size, data_type, recv.getValue(), size, data_type, root, comm);
+  mpi_int_t count = send.getNelem();
+  MPI_Gather(send.getValue(), count, datatype, recv.getValue(), count, datatype, root, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
