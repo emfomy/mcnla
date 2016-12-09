@@ -11,8 +11,11 @@ if(MKL_ROOT STREQUAL "")
     set(MKL_ROOT "$ENV{MKLROOT}")
   endif()
 endif()
-get_filename_component(MKL_ROOT "${MKL_ROOT}" REALPATH)
-get_filename_component(INTEL_ROOT "${MKL_ROOT}/../compiler" REALPATH)
+
+if(NOT MKL_ROOT STREQUAL "")
+  get_filename_component(MKL_ROOT "${MKL_ROOT}" REALPATH)
+  get_filename_component(INTEL_ROOT "${MKL_ROOT}/../compiler" REALPATH)
+endif()
 
 set(MKL_ROOT "${MKL_ROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
 set(INTEL_ROOT "${INTEL_ROOT}" CACHE PATH "The root path of Intel Parallel Studio.")

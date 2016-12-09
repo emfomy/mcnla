@@ -47,6 +47,9 @@ ccmake ..
 
 * Set `MCNLA_USE_ILP64` to change the system integer size. (`OFF`: 32bit / `ON`: 64bit)
 * Set `MCNLA_USE_MKL`   to enable Intel MKL.
+* Set `MKL_USE_OMP`     to enable multithread MKL. (Require `MCNLA_USE_MKL`)
+* Set `MKL_USE_IOMP`    to enable Intel OMP.       (Require `MKL_USE_OMP`)
+
 * Set `MPI_PROCS`       to set the number of MPI processes. (Default: 4)
 
 * Set `MKL_ROOT`   for the root path of Intel MKL. (Automatically set if environment variable `MKLROOT` is set.)
@@ -56,7 +59,6 @@ ccmake ..
 
 | Command      | Detail                   |
 |--------------|--------------------------|
-| `make demo`  | build demo code          |
 | `make run`   | run demo code            |
 | `make check` | build and run test codes |
 | `make doc`   | build documentation      |

@@ -193,7 +193,7 @@ index_t DenseMatrixSet120<_Scalar>::getNcolImpl() const noexcept { return ncol_;
 /// @copydoc  mcnla::matrix::MatrixSetBase::getNmat
 ///
 template <class _Scalar>
-index_t DenseMatrixSet120<_Scalar>::getNmatImpl() const noexcept { return data_.getNcol() / ncol_; }
+index_t DenseMatrixSet120<_Scalar>::getNmatImpl() const noexcept { return ncol_ ? (data_.getNcol() / ncol_) : 0; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixSetBase::getMatrix
