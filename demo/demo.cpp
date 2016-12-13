@@ -153,11 +153,11 @@ int main( int argc, char **argv ) {
     std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
     std::cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << std::endl;
     std::cout << "mean(validity): max = " << set_smax.mean()
-                          << ", mean = " << set_smean.mean()
-                           << ", min = " << set_smin.mean() << std::endl;
+                           << ", mean = " << set_smean.mean()
+                            << ", min = " << set_smin.mean() << std::endl;
     std::cout << "sd(validity):   max = " << set_smax.sd()
-                          << ", mean = " << set_smean.sd()
-                           << ", min = " << set_smin.sd() << std::endl;
+                           << ", mean = " << set_smean.sd()
+                            << ", min = " << set_smin.sd() << std::endl;
     std::cout << "mean(error) = " << set_frerr.mean() << std::endl;
     std::cout << "sd(error)   = " << set_frerr.sd() << std::endl;
     std::cout << "mean(iter) = " << set_iter.mean() << std::endl;

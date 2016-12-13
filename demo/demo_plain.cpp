@@ -22,7 +22,7 @@ double tolerance = 1e-4;
 int maxiter = 256;
 
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int seed[4] );
-void sketch( const int Nj, const int m, const int m0, const int n, const int k,
+void sketch( const int Nj, const int m, const int m0, const int n, const int k, const int q,
              const double *matrix_a, double *matrices_qjt, int seed[4] );
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter );
 void reconstruct( const int m0, const int n, const int k,
@@ -54,7 +54,8 @@ int main( int argc, char **argv ) {
   int Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
   int m0        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
   int n         = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  int k         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
+  int k         = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  int q         = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
   int num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   int skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
 
@@ -77,6 +78,7 @@ int main( int argc, char **argv ) {
        << ", n = " << n
        << ", k = " << k
        << ", p = " << 0
+       << ", q = " << q
        << ", N = " << Nj*mpi_size
        << ", K = " << mpi_size << endl
        << "tolerance = " << tolerance
@@ -125,7 +127,7 @@ int main( int argc, char **argv ) {
     if ( verbose && mpi_rank == 0 ) { cout << "Sketching ...................... " << flush; }
     if ( mpi_rank == 0 ) { time_s = MPI_Wtime(); }
     fill(matrices_qjt, matrices_qjt+k*mj*N, 0.0);
-    sketch(Nj, m, m0, n, k, matrix_a, matrices_qjt, seed);
+    sketch(Nj, m, m0, n, k, q, matrix_a, matrices_qjt, seed);
     for ( auto i = 0; i < Nj; ++i ) {
       MPI_Alltoall(MPI_IN_PLACE, k*mj, MPI_DOUBLE, matrices_qjt+i*k*m, k*mj, MPI_DOUBLE, MPI_COMM_WORLD);
     }
@@ -175,7 +177,7 @@ int main( int argc, char **argv ) {
   // Display statistics results
   if ( mpi_rank == 0 ) {
     cout << endl;
-    cout << "Average total computing time: " << set_time.mean() << " seconds." << endl;
+    cout << "Average total computing time: " << set_time.mean()   << " seconds." << endl;
     cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << endl;
     cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << endl;
     cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << endl;
@@ -244,7 +246,7 @@ void createA( const int m0, const int n, const int k, double *matrix_a, double *
   free(vector_tmp_b);
 }
 
-void sketch( const int Nj, const int m, const int m0, const int n, const int k,
+void sketch( const int Nj, const int m, const int m0, const int n, const int k, const int q,
              const double *matrix_a, double *matrices_qjt, int seed[4] ) {
   auto matrix_oit   = static_cast<double*>(malloc(k * n * sizeof(double)));
   auto vector_tmp_s = static_cast<double*>(malloc(k     * sizeof(double)));
@@ -254,7 +256,12 @@ void sketch( const int Nj, const int m, const int m0, const int n, const int k,
     LAPACKE_dlarnv(3, seed, k*n, matrix_oit);
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans,
                 k, m0, n, 1.0, matrix_oit, k, matrix_a, m0, 0.0, matrices_qjt+i*k*m, k);
-
+    for ( auto j = 0; j < q; ++j ) {
+      cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans,
+                  k, n, m0, 1.0, matrices_qjt+i*k*m, k, matrix_a, m0, 0.0, matrix_oit, k);
+      cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans,
+                  k, m0, n, 1.0, matrix_oit, k, matrix_a, m0, 0.0, matrices_qjt+i*k*m, k);
+    }
 
     LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'N', 'O', k, m0, matrices_qjt+i*k*m, k,
                    vector_tmp_s, nullptr, 1, nullptr, 1, vector_tmp_b);
