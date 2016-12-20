@@ -79,13 +79,15 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
   /// The name.
   static constexpr const char* name_= "Dummy Reconstructor";
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
 
  public:
 
   // Constructor
-  inline DummyReconstructor( const Parameters<ScalarType> &parameters ) noexcept;
+  inline DummyReconstructor( const Parameters<ScalarType> &parameters,
+                             const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  protected:
 

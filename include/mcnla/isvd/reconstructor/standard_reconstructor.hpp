@@ -81,9 +81,6 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   /// The name.
   static constexpr const char* name_= "Standard Reconstructor";
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The starting time
   double time0_;
 
@@ -126,10 +123,15 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   /// The GESVD driver.
   lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::COLMAJOR>, 'S', 'O'> gesvd_driver_;
 
+  using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
+
  public:
 
   // Constructor
-  inline StandardReconstructor( const Parameters<ScalarType> &parameters ) noexcept;
+  inline StandardReconstructor( const Parameters<ScalarType> &parameters,
+                                const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  protected:
 

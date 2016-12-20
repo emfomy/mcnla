@@ -24,10 +24,8 @@ namespace isvd {
 /// @brief  Default constructor
 ///
 template <typename _Scalar>
-Parameters<_Scalar>::Parameters( const MPI_Comm comm, const mpi_int_t root ) noexcept
-  : mpi_comm(comm),
-    mpi_size(mpi::getCommSize(comm)),
-    mpi_root(root) {}
+Parameters<_Scalar>::Parameters( const index_t mpi_size ) noexcept
+  : mpi_size_(mpi_size) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Check if the solver is initialized.
@@ -75,7 +73,7 @@ index_t Parameters<_Scalar>::getDimSketch() const noexcept { return rank_ + over
 /// @brief  Gets the number of random sketches of all MPI nodes.
 ///
 template <typename _Scalar>
-index_t Parameters<_Scalar>::getNumSketch() const noexcept { return num_sketch_each_ * mpi_size; }
+index_t Parameters<_Scalar>::getNumSketch() const noexcept { return num_sketch_each_ * mpi_size_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches per MPI node.

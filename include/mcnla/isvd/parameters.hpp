@@ -10,7 +10,6 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mpi.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -37,17 +36,6 @@ class Parameters {
  private:
 
   using RealScalar = RealType<_Scalar>;
-
- public:
-
-  /// The MPI communicator.
-  const MPI_Comm mpi_comm;
-
-  /// The MPI size.
-  const mpi_int_t mpi_size;
-
-  /// The MPI root.
-  const mpi_int_t mpi_root;
 
  protected:
 #ifdef MCNLA_USE_GTEST
@@ -81,10 +69,13 @@ class Parameters {
   /// The tolerance of converge condition.
   RealScalar tolerance_ = 1e-4;
 
+  /// The MPI size
+  const index_t mpi_size_;
+
  public:
 
   // Constructors
-  Parameters( const MPI_Comm comm, const mpi_int_t root = 0 ) noexcept;
+  Parameters( const index_t mpi_size ) noexcept;
 
   // Gets parameter
   inline bool isInitialized() const noexcept;

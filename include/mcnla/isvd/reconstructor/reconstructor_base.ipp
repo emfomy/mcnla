@@ -25,8 +25,13 @@ namespace isvd {
 ///
 template <class _Derived>
 ReconstructorBase<_Derived>::ReconstructorBase(
-    const Parameters<ScalarType> &parameters
-) noexcept : parameters_(parameters) {}
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : parameters_(parameters),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.

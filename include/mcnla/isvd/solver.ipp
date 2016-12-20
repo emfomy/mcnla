@@ -28,10 +28,12 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
-  : parameters_(mpi_comm, mpi_root),
-    sketcher_(parameters_, seed_),
-    integrator_(parameters_),
-    reconstructor_(parameters_) {}
+  : parameters_(mpi::getCommSize(mpi_comm)),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root),
+    sketcher_(parameters_, mpi_comm, mpi_root, seed_),
+    integrator_(parameters_, mpi_comm, mpi_root),
+    reconstructor_(parameters_, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.
@@ -285,7 +287,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketch( const index_t num_sketch ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
-  parameters_.num_sketch_each_ = num_sketch / parameters_.mpi_rank_;
+  parameters_.num_sketch_each_ = num_sketch / mpi::getCommSize(mpi_comm_);
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
 }
 

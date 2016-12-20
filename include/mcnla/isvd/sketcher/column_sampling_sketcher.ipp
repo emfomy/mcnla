@@ -25,8 +25,11 @@ namespace isvd {
 ///
 template <class _Matrix>
 ColumnSamplingSketcher<_Matrix>::ColumnSamplingSketcher(
-    const Parameters<ScalarType> &parameters, index_t *seed
-) noexcept : BaseType(parameters, seed) {}
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root,
+    index_t *seed
+) noexcept : BaseType(parameters, mpi_comm, mpi_root,, seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherBase::initialize

@@ -82,9 +82,6 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
   /// The name.
   static constexpr const char* name_= "Column Sampling Sketcher";
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The vector S.
   DenseVector<RealScalarType> vector_s_;
 
@@ -100,10 +97,15 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
   /// The uniform integer distribution
   std::uniform_int_distribution<index_t> random_distribution_;
 
+  using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
+
  public:
 
   // Constructor
-  inline ColumnSamplingSketcher( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline ColumnSamplingSketcher( const Parameters<ScalarType> &parameters,
+                                 const MPI_Comm mpi_comm, const mpi_int_t mpi_root, index_t *seed ) noexcept;
 
  protected:
 

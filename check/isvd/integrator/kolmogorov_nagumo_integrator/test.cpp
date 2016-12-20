@@ -29,7 +29,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   ASSERT_EQ(N % K, 0);
 
   // Sets parameters
-  mcnla::isvd::Parameters<ScalarType> parameters(MPI_COMM_WORLD, 0);
+  mcnla::isvd::Parameters<ScalarType> parameters(K);
   parameters.nrow_ = m;
   parameters.rank_ = k;
   parameters.over_rank_ = p;
@@ -38,7 +38,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   parameters.max_iteration_ = 256;
 
   // Initializes
-  mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters);
+  mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters, MPI_COMM_WORLD, 0);
   integrator.initialize();
   parameters.initialized_ = true;
 

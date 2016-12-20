@@ -25,8 +25,10 @@ namespace isvd {
 ///
 template <class _Matrix>
 DummyReconstructor<_Matrix>::DummyReconstructor(
-    const Parameters<ScalarType> &parameters
-) noexcept : BaseType(parameters) {}
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::ReconstructorBase::initialize

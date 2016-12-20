@@ -25,8 +25,15 @@ namespace isvd {
 ///
 template <class _Derived>
 SketcherBase<_Derived>::SketcherBase(
-    const Parameters<ScalarType> &parameters, index_t *seed
-) noexcept : parameters_(parameters), seed_(seed) {}
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root,
+    index_t *seed
+) noexcept
+  : parameters_(parameters),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root),
+    seed_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.

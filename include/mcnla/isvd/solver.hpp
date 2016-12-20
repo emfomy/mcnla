@@ -76,14 +76,11 @@ class Solver {
   /// The parameters.
   ParametersType parameters_;
 
-  /// @copydoc  mcnla::isvd::Parameters::mpi_comm
-  const MPI_Comm &mpi_comm_ = parameters_.mpi_comm;
+  /// The MPI communicator.
+  const MPI_Comm mpi_comm_;
 
-  /// @copydoc  mcnla::isvd::Parameters::mpi_size
-  const mpi_int_t &mpi_size_ = parameters_.mpi_size;
-
-  /// @copydoc  mcnla::isvd::Parameters::mpi_root
-  const mpi_int_t &mpi_root_ = parameters_.mpi_root;
+  /// The MPI root.
+  const mpi_int_t mpi_root_;
 
   /// The random seed
   index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};

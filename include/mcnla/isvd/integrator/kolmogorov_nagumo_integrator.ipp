@@ -26,8 +26,10 @@ namespace isvd {
 ///
 template <class _Matrix>
 KolmogorovNagumoIntegrator<_Matrix>::KolmogorovNagumoIntegrator(
-    const Parameters<ScalarType> &parameters
-) noexcept : BaseType(parameters) {}
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::IntegratorBase::initialize
@@ -35,7 +37,7 @@ KolmogorovNagumoIntegrator<_Matrix>::KolmogorovNagumoIntegrator(
 template <class _Matrix>
 void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
 
-  const auto mpi_size        = parameters_.mpi_size;
+  const auto mpi_size        = mpi::getCommSize(mpi_comm_);
   const auto nrow            = parameters_.getNrow();
   const auto num_sketch      = parameters_.getNumSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();
@@ -113,9 +115,8 @@ template <class _Matrix>
 void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
-  const auto mpi_comm        = parameters_.mpi_comm;
-  const auto mpi_size        = parameters_.mpi_size;
-  const auto mpi_root        = parameters_.mpi_root;
+  const auto mpi_size        = mpi::getCommSize(mpi_comm_);
+  const auto mpi_rank        = mpi::getCommRank(mpi_comm_);
   const auto nrow            = parameters_.getNrow();
   const auto dim_sketch      = parameters_.getDimSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();
@@ -127,7 +128,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
   // Exchange Q
   blas::memset0(set_q_.getMatrixRows({nrow, nrow_all_}).unfold());
-  mpi::alltoall(set_q_.unfold(), mpi_comm);
+  mpi::alltoall(set_q_.unfold(), mpi_comm_);
 
   // Reform Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
@@ -148,7 +149,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // Bs := sum( Qcj' * Qjs )
     blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qcj_, matrix_qjs_, 0.0, matrix_bs_);
-    mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
+    mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm_);
 
     // D  := Bs * Bs'
     blas::syrk<TransOption::NORMAL>(1.0, matrix_bs_, 0.0, matrix_d_);
@@ -164,7 +165,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // D := I/4 - sum(Xj' * Xj)
     blas::syrk<TransOption::TRANS>(-1.0, matrix_xj_, 0.0, matrix_d_);
-    mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm);
+    mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm_);
     for ( index_t i = 0; i < dim_sketch; ++i ) {
       matrix_d_(i, i) += 0.25;
     }
@@ -222,7 +223,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   time2_ = MPI_Wtime();
 
   // Gather Qc
-  mpi::gather(matrix_qcj_, matrix_qc_, mpi_root, mpi_comm);
+  mpi::gather(matrix_qcj_, matrix_qc_, mpi_root_, mpi_comm_);
 
   time3_ = MPI_Wtime();
 }

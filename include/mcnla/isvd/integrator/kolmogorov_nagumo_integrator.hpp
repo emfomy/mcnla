@@ -81,9 +81,6 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   /// The name.
   static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The starting time
   double time0_;
 
@@ -150,10 +147,15 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   /// The SYEV driver.
   lapack::SyevDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
 
+  using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
+
  public:
 
   // Constructor
-  inline KolmogorovNagumoIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
+  inline KolmogorovNagumoIntegrator( const Parameters<ScalarType> &parameters,
+                                     const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  protected:
 

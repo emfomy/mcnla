@@ -26,8 +26,10 @@ namespace isvd {
 ///
 template <class _Matrix>
 ExtrinsicMeanIntegrator<_Matrix>::ExtrinsicMeanIntegrator(
-    const Parameters<ScalarType> &parameters
-) noexcept : BaseType(parameters) {}
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept : BaseType(parameters, mpi_comm_, mpi_root_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::IntegratorBase::initialize
@@ -35,7 +37,7 @@ ExtrinsicMeanIntegrator<_Matrix>::ExtrinsicMeanIntegrator(
 template <class _Matrix>
 void ExtrinsicMeanIntegrator<_Matrix>::initializeImpl() noexcept {
 
-  const auto mpi_size        = parameters_.mpi_size;
+  const auto mpi_size        = mpi::getCommSize(mpi_comm_);
   const auto nrow            = parameters_.getNrow();
   const auto num_sketch      = parameters_.getNumSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();
@@ -117,10 +119,8 @@ template <class _Matrix>
 void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
-  const auto mpi_comm        = parameters_.mpi_comm;
-  const auto mpi_size        = parameters_.mpi_size;
-  const auto mpi_root        = parameters_.mpi_root;
-  const auto mpi_rank        = mpi::getCommRank(mpi_comm);
+  const auto mpi_size        = mpi::getCommSize(mpi_comm_);
+  const auto mpi_rank        = mpi::getCommRank(mpi_comm_);
   const auto nrow            = parameters_.getNrow();
   const auto dim_sketch      = parameters_.getDimSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();
@@ -129,7 +129,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
 
   // Exchange Q
   blas::memset0(set_q_.getMatrixRows({nrow, nrow_all_}).unfold());
-  mpi::alltoall(set_q_.unfold(), matrix_tmp_, mpi_comm);
+  mpi::alltoall(set_q_.unfold(), matrix_tmp_, mpi_comm_);
 
   // Reform Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
@@ -141,7 +141,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
 
   // Bs := sum( Qjs' * Qjs )
   blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qjs_, matrix_qjs_, 0.0, matrix_bjs_);
-  mpi::reduceScatterBlock(matrix_bjs_, matrix_bis_, MPI_SUM, mpi_comm);
+  mpi::reduceScatterBlock(matrix_bjs_, matrix_bis_, MPI_SUM, mpi_comm_);
 
   time2_ = MPI_Wtime();
 
@@ -159,7 +159,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   if ( mpi_rank == 0 ) {
     blas::omatcopy(1.0, set_g_(0), matrix_g0_);
   }
-  mpi::bcast(matrix_g0_, 0, mpi_comm);
+  mpi::bcast(matrix_g0_, 0, mpi_comm_);
 
   time3_ = MPI_Wtime();
 
@@ -185,10 +185,10 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   time4_ = MPI_Wtime();
 
   // Qbar := SVD( Qbar )
-  mpi::reduce(matrix_qbar_, MPI_SUM, mpi_root, mpi_comm);
+  mpi::reduce(matrix_qbar_, MPI_SUM, mpi_root_, mpi_comm_);
 
   // Compute the left singular vectors of Qbar
-  if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
+  if ( mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
     gesvd_driver_(matrix_qbar_, vector_s_, matrix_empty_, matrix_empty_);
   }
 

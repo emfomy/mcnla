@@ -25,8 +25,10 @@ namespace isvd {
 ///
 template <class _Matrix>
 StandardReconstructor<_Matrix>::StandardReconstructor(
-    const Parameters<ScalarType> &parameters
-) noexcept : BaseType(parameters) {}
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::ReconstructorBase::initialize
@@ -81,7 +83,7 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
     const _Matrix &matrix_a,
     const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
 ) noexcept {
-  if ( !mpi::isCommRoot(parameters_.mpi_root, parameters_.mpi_comm) ) {
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
     return;
   }
 

@@ -81,9 +81,6 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   /// The name.
   static constexpr const char* name_= "Gaussian Projection Sketcher";
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
   /// The starting time
   double time0_;
 
@@ -108,10 +105,15 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   /// The GESVD driver
   lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
 
+  using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
+
  public:
 
   // Constructor
-  inline GaussianProjectionSketcher( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline GaussianProjectionSketcher( const Parameters<ScalarType> &parameters,
+                                     const MPI_Comm mpi_comm, const mpi_int_t mpi_root, index_t *seed ) noexcept;
 
  protected:
 

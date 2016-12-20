@@ -40,16 +40,23 @@ class SketcherBase : public utility::CrtpBase<_Derived, SketcherBase<_Derived>> 
 
  protected:
 
-  /// The parameters.
+  /// @copydoc  mcnla::isvd::solver::parameters_
   const Parameters<ScalarType> &parameters_;
 
-  /// The random seed
+  /// @copydoc  mcnla::isvd::solver::mpi_comm_
+  const MPI_Comm mpi_comm_;
+
+  /// @copydoc  mcnla::isvd::solver::mpi_root_
+  const mpi_int_t mpi_root_;
+
+  /// @copydoc  mcnla::isvd::solver::seed_
   index_t *seed_;
 
  protected:
 
   // Constructor
-  inline SketcherBase( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline SketcherBase( const Parameters<ScalarType> &parameters,
+                       const MPI_Comm mpi_comm, const mpi_int_t mpi_root, index_t *seed ) noexcept;
 
  public:
 

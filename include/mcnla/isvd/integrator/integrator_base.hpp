@@ -41,16 +41,20 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
 
  protected:
 
-  /// The parameters.
+  /// @copydoc  mcnla::isvd::solver::parameters_
   const Parameters<ScalarType> &parameters_;
 
-  /// The time of integrating
-  double integrating_time_;
+  /// @copydoc  mcnla::isvd::solver::mpi_comm_
+  const MPI_Comm mpi_comm_;
+
+  /// @copydoc  mcnla::isvd::solver::mpi_root_
+  const mpi_int_t mpi_root_;
 
  protected:
 
   // Constructor
-  inline IntegratorBase( const Parameters<ScalarType> &parameters ) noexcept;
+  inline IntegratorBase( const Parameters<ScalarType> &parameters,
+                         const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  public:
 
