@@ -116,7 +116,6 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
   const auto mpi_size        = mpi::getCommSize(mpi_comm_);
-  const auto mpi_rank        = mpi::getCommRank(mpi_comm_);
   const auto nrow            = parameters_.getNrow();
   const auto dim_sketch      = parameters_.getDimSketch();
   const auto num_sketch_each = parameters_.getNumSketchEach();

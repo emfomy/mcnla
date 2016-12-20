@@ -31,8 +31,14 @@ inline void omatcopy(
     const DenseMatrix<_Scalar, _layout> &a,
           DenseMatrix<_Scalar, _layout> &b
 ) noexcept {
+#ifdef MCNLA_USE_MKL
   detail::omatcopy(toLayoutChar(_layout), toTransChar<_Scalar>(_trans), a.getNrow(), a.getNcol(),
                    alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch());
+#else  // MCNLA_USE_MKL
+  for ( auto ait = a.cbegin(), bit = b.begin(); ait != a.cend(); ++ait, ++bit ) {
+    *bit = alpha * *ait;
+  }
+#endif  // MCNLA_USE_MKL
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

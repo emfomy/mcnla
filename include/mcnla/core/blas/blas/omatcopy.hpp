@@ -86,7 +86,7 @@ inline void omatcopy(
     const char ordering, const char trans, const index_t rows, const index_t cols, const _Scalar alpha,
     const _Scalar* a, const index_t lda, _Scalar* b, index_t ldb
 ) noexcept {
-  #error Not Implemented!
+  #pragma warning Not Implemented!
 }
 
 #endif  // MCNLA_USE_MKL
