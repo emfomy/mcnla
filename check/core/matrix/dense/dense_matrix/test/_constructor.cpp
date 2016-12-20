@@ -256,7 +256,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat1.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat1.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat1.getValue(),            mat.getValue());
+    EXPECT_EQ(mat1.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat1.getValueValarray()), &(mat.getValueValarray()));
 
 
@@ -286,7 +286,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat2.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat2.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat2.getValue(),            mat.getValue());
+    EXPECT_EQ(mat2.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat2.getValueValarray()), &(mat.getValueValarray()));
   }
 }
@@ -388,7 +388,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat1.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat1.getValue(),            mat.getValue());
+    EXPECT_EQ(mat1.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat1.getValueValarray()), &(mat.getValueValarray()));
 
 
@@ -418,7 +418,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat2.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat2.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat2.getValue(),            mat.getValue());
+    EXPECT_EQ(mat2.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat2.getValueValarray()), &(mat.getValueValarray()));
   }
 }
@@ -520,7 +520,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat1.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat1.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat1.getValue(),            mat.getValue());
+    EXPECT_EQ(mat1.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat1.getValueValarray()), &(mat.getValueValarray()));
 
 
@@ -550,7 +550,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat2.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat2.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat2.getValue(),            mat.getValue());
+    EXPECT_EQ(mat2.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat2.getValueValarray()), &(mat.getValueValarray()));
   }
 }
@@ -652,7 +652,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat1.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat1.getValue(),            mat.getValue());
+    EXPECT_EQ(mat1.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat1.getValueValarray()), &(mat.getValueValarray()));
 
 
@@ -682,7 +682,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat2.getCapacity(), mat.getCapacity());
     EXPECT_EQ(mat2.getOffset(),   mat.getOffset());
 
-    EXPECT_EQ(mat2.getValue(),            mat.getValue());
+    EXPECT_EQ(mat2.getValuePtr(),            mat.getValuePtr());
     EXPECT_EQ(&(mat2.getValueValarray()), &(mat.getValueValarray()));
   }
 }

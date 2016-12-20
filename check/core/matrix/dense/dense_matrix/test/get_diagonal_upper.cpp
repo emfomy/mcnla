@@ -26,7 +26,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonalUpper) {
   EXPECT_EQ(segment.getCapacity(), capacity - idx*pitch);
   EXPECT_EQ(segment.getOffset(),   offset + idx*pitch);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, idx)));
+  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, idx)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol-idx; ++i ) {
@@ -74,7 +74,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonalUpper) {
   EXPECT_EQ(segment.getCapacity(), capacity - idx*pitch);
   EXPECT_EQ(segment.getOffset(),   offset + idx*pitch);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, idx)));
+  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, idx)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol-idx; ++i ) {
@@ -122,7 +122,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonalUpper) {
   EXPECT_EQ(segment.getCapacity(), capacity - idx);
   EXPECT_EQ(segment.getOffset(),   offset + idx);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, idx)));
+  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, idx)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol-idx; ++i ) {
@@ -170,7 +170,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonalUpper) {
   EXPECT_EQ(segment.getCapacity(), capacity - idx);
   EXPECT_EQ(segment.getOffset(),   offset + idx);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, idx)));
+  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, idx)));
   EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
 
   for ( auto i = 0; i < ncol-idx; ++i ) {

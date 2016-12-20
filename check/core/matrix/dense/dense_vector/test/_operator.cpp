@@ -42,7 +42,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec1.getValue(),            vec.getValue());
+    EXPECT_EQ(vec1.getValuePtr(),            vec.getValuePtr());
     EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
 
 
@@ -70,7 +70,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec2.getValue(),            vec.getValue());
+    EXPECT_EQ(vec2.getValuePtr(),            vec.getValuePtr());
     EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
   }
 }
@@ -119,7 +119,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec1.getValue(),            vec.getValue());
+    EXPECT_EQ(vec1.getValuePtr(),            vec.getValuePtr());
     EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
 
 
@@ -147,7 +147,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec2.getValue(),            vec.getValue());
+    EXPECT_EQ(vec2.getValuePtr(),            vec.getValuePtr());
     EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
   }
 }

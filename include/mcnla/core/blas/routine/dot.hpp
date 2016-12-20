@@ -31,7 +31,7 @@ inline _Scalar dot(
     const DenseVector<_Scalar> &y
 ) noexcept {
   mcnla_assert_eq(x.getSizes(), y.getSizes());
-  return detail::dot(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
+  return detail::dot(x.getLength(), x.getValuePtr(), x.getStride(), y.getValuePtr(), y.getStride());
 }
 
 }  // namespace blas

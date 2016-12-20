@@ -37,7 +37,7 @@ inline void larnv(
 ) noexcept {
   static_assert(traits::ScalarTraits<_Scalar>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
                 "Invalid idist!");
-  detail::larnv(idist, iseed, (x.getLength()-1) * x.getStride() + 1, x.getValue());
+  detail::larnv(idist, iseed, (x.getLength()-1) * x.getStride() + 1, x.getValuePtr());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

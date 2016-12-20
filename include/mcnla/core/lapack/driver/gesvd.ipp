@@ -174,13 +174,13 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   auto vt_pitch = (vt.getPitch() > 0) ? vt.getPitch() : 1;
 
   if ( isColMajor(layout) ) {
-    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValue(), a.getPitch(),
-                                  s.getValue(), u.getValue(), u_pitch, vt.getValue(), vt_pitch,
-                                  work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
+    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValuePtr(), a.getPitch(),
+                                  s.getValuePtr(), u.getValuePtr(), u_pitch, vt.getValuePtr(), vt_pitch,
+                                  work_.getValuePtr(), work_.getLength(), rwork_.getValuePtr()), 0);
   } else {
-    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValue(), a.getPitch(),
-                                  s.getValue(), vt.getValue(), vt_pitch, u.getValue(), u_pitch,
-                                  work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
+    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValuePtr(), a.getPitch(),
+                                  s.getValuePtr(), vt.getValuePtr(), vt_pitch, u.getValuePtr(), u_pitch,
+                                  work_.getValuePtr(), work_.getLength(), rwork_.getValuePtr()), 0);
   }
 }
 

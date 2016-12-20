@@ -39,7 +39,7 @@ inline void send(
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(buffer.derived().isShrunk());
   mpi_int_t count = buffer.derived().getNelem();
-  MPI_Send(buffer.getValue(), count, datatype, dest, tag, comm);
+  MPI_Send(buffer.getValuePtr(), count, datatype, dest, tag, comm);
 }
 
 }  // namespace mpi

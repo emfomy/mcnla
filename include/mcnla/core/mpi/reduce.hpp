@@ -43,7 +43,7 @@ inline void reduce(
   mcnla_assert_true(recv.derived().isShrunk());
   mcnla_assert_eq(send.derived().getSizes(), recv.derived().getSizes());
   mpi_int_t size = send.derived().getNelem();
-  MPI_Reduce(send.getValue(), recv.getValue(), size, datatype, op, root, comm);
+  MPI_Reduce(send.getValuePtr(), recv.getValuePtr(), size, datatype, op, root, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -77,9 +77,9 @@ inline void reduce(
   mcnla_assert_true(buffer.derived().isShrunk());
   mpi_int_t count = buffer.derived().getNelem();
   if ( isCommRoot(root, comm) ) {
-    MPI_Reduce(MPI_IN_PLACE, buffer.getValue(), count, datatype, op, root, comm);
+    MPI_Reduce(MPI_IN_PLACE, buffer.getValuePtr(), count, datatype, op, root, comm);
   } else {
-    MPI_Reduce(buffer.getValue(), buffer.getValue(), count, datatype, op, root, comm);
+    MPI_Reduce(buffer.getValuePtr(), buffer.getValuePtr(), count, datatype, op, root, comm);
   }
 }
 

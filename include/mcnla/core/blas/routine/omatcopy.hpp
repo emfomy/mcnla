@@ -32,7 +32,7 @@ inline void omatcopy(
           DenseMatrix<_Scalar, _layout> &b
 ) noexcept {
   detail::omatcopy(toLayoutChar(_layout), toTransChar<_Scalar>(_trans), a.getNrow(), a.getNcol(),
-                   alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch());
+                   alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

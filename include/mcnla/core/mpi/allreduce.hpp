@@ -42,7 +42,7 @@ inline void allreduce(
   mcnla_assert_true(recv.derived().isShrunk());
   mcnla_assert_eq(send.derived().getSizes(), recv.derived().getSizes());
   mpi_int_t count = recv.derived().getNelem();
-  MPI_Allreduce(send.getValue(), recv.getValue(), count, datatype, op, comm);
+  MPI_Allreduce(send.getValuePtr(), recv.getValuePtr(), count, datatype, op, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -73,7 +73,7 @@ inline void allreduce(
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(buffer.derived().isShrunk());
   mpi_int_t count = buffer.derived().getNelem();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.getValue(), count, datatype, op, comm);
+  MPI_Allreduce(MPI_IN_PLACE, buffer.getValuePtr(), count, datatype, op, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

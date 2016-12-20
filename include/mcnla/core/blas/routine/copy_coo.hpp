@@ -34,7 +34,7 @@ inline void copy(
   mcnla_assert_eq(y.getStride(), 1);
   blas::memset0(y);
   for ( auto tuple : x ) {
-    y(tuple.template getIdx<0>()) = tuple.getValue();
+    y(tuple.template getIdx<0>()) = tuple.getValuePtr();
   }
 }
 

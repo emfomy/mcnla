@@ -40,7 +40,7 @@ inline void recv(
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(buffer.derived().isShrunk());
   mpi_int_t count = buffer.derived().getNelem();
-  MPI_Recv(buffer.getValue(), count, datatype, source, tag, comm, &status);
+  MPI_Recv(buffer.getValuePtr(), count, datatype, source, tag, comm, &status);
 }
 
 }  // namespace mpi

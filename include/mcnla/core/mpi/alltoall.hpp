@@ -43,7 +43,7 @@ inline void alltoall(
   mcnla_assert_eq(send.getSizes(), recv.getSizes());
   mcnla_assert_eq(send.template getSize<1>() % getCommSize(comm), 0);
   mpi_int_t count = send.getNelem() / getCommSize(comm);
-  MPI_Alltoall(send.getValue(), count, datatype, recv.getValue(), count, datatype, comm);
+  MPI_Alltoall(send.getValuePtr(), count, datatype, recv.getValuePtr(), count, datatype, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -73,7 +73,7 @@ inline void alltoall(
   mcnla_assert_true(buffer.isShrunk());
   mcnla_assert_eq(buffer.template getSize<1>() % getCommSize(comm), 0);
   mpi_int_t count = buffer.getNelem() / getCommSize(comm);
-  MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.getValue(), count, datatype, comm);
+  MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.getValuePtr(), count, datatype, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

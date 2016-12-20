@@ -45,7 +45,7 @@ inline void gather(
     mcnla_assert_eq(send.template getSize<1>() * getCommSize(comm), recv.template getSize<1>());
   }
   mpi_int_t count = send.getNelem();
-  MPI_Gather(send.getValue(), count, datatype, recv.getValue(), count, datatype, root, comm);
+  MPI_Gather(send.getValuePtr(), count, datatype, recv.getValuePtr(), count, datatype, root, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

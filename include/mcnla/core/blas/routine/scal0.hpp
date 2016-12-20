@@ -34,7 +34,7 @@ inline void scal0(
   DenseVector<_Scalar> &x
 ) noexcept {
   if ( x.isShrunk() ) {
-    std::memset(x.getValue(), 0, x.getNelem() * sizeof(_Scalar));
+    std::memset(x.getValuePtr(), 0, x.getNelem() * sizeof(_Scalar));
   } else {
     x.getValueValarray()[x.getValueMask()] = 0;
   }
@@ -62,7 +62,7 @@ inline void scal0(
   DenseMatrix<_Scalar, _layout> &x
 ) noexcept {
   if ( x.isShrunk() ) {
-    std::memset(x.getValue(), 0, x.getNelem() * sizeof(_Scalar));
+    std::memset(x.getValuePtr(), 0, x.getNelem() * sizeof(_Scalar));
   } else {
     x.getValueValarray()[x.getValueMask()] = 0;
   }

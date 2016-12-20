@@ -31,7 +31,7 @@ inline void copy(
           DenseVector<_Scalar> &y
 ) noexcept {
   mcnla_assert_eq(x.getSizes(), y.getSizes());
-  detail::copy(x.getLength(), x.getValue(), x.getStride(), y.getValue(), y.getStride());
+  detail::copy(x.getLength(), x.getValuePtr(), x.getStride(), y.getValuePtr(), y.getStride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

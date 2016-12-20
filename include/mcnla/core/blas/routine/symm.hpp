@@ -42,7 +42,7 @@ inline void symm(
   }
 
   detail::symm(toSideChar(_side, _layout), toUploChar(_uplo, _layout), c.template getSize<0>(), c.template getSize<1>(),
-               alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(), beta, c.getValue(), c.getPitch());
+               alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

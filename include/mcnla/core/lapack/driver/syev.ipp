@@ -147,8 +147,8 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
   mcnla_assert_gt(dim_, 0);
   mcnla_assert_eq(a.getSizes(), std::make_pair(dim_, dim_));
   mcnla_assert_eq(w.getLength(), a.getNrow());
-  mcnla_assert_eq(detail::syev(__jobz, toUploChar(_uplo, layout), a.getNrow(), a.getValue(), a.getPitch(),
-                               w.getValue(), work_.getValue(), work_.getLength(), rwork_.getValue()), 0);
+  mcnla_assert_eq(detail::syev(__jobz, toUploChar(_uplo, layout), a.getNrow(), a.getValuePtr(), a.getPitch(),
+                               w.getValuePtr(), work_.getValuePtr(), work_.getLength(), rwork_.getValuePtr()), 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -39,7 +39,7 @@ inline void bcast(
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(buffer.derived().isShrunk());
   mpi_int_t count = buffer.derived().getNelem();
-  MPI_Bcast(buffer.getValue(), count, datatype, root, comm);
+  MPI_Bcast(buffer.getValuePtr(), count, datatype, root, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

@@ -48,11 +48,11 @@ inline void gemm(
   blas::memset0(c);
   if ( !isTranspose(_transb) ) {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValue(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.getValuePtr(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
     }
   } else {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValue(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.getValuePtr(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
     }
   }
 }
@@ -78,11 +78,11 @@ inline void gemm(
   blas::memset0(c);
   if ( !isTranspose(_transb) ) {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValue(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.getValuePtr(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));
     }
   } else {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValue(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.getValuePtr(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));
     }
   }
 }

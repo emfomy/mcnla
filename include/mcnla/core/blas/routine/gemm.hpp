@@ -48,7 +48,7 @@ inline void gemm(
 
   gemm(toTransChar<_Scalar>(transa), toTransChar<_Scalar>(transb),
        c.getNrow(), c.getNcol(), a.template getNcol<_transa>(),
-       alpha, a.getValue(), a.getPitch(), b.getValue(), b.getPitch(), beta, c.getValue(), c.getPitch());
+       alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
 
 template <TransOption _transa = TransOption::NORMAL,
@@ -70,7 +70,7 @@ inline void gemm(
 
   gemm(toTransChar<_Scalar>(transb), toTransChar<_Scalar>(transa),
        c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),
-       alpha, b.getValue(), b.getPitch(), a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
+       alpha, b.getValuePtr(), b.getPitch(), a.getValuePtr(), a.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
 //@}
 

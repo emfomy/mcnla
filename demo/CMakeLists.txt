@@ -42,4 +42,4 @@ set_target(isvd isvd.cpp)
 set_target(test test.cpp)
 
 # Add rule 'run'
-add_custom_target(run DEPENDS run_demo)
+add_custom_target(run DEPENDS run_test)

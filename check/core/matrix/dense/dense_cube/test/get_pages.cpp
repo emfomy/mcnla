@@ -29,7 +29,7 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x5, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
@@ -92,7 +92,7 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch8x10, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
@@ -155,7 +155,7 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x5, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
@@ -218,7 +218,7 @@ TYPED_TEST(DenseCubeTest_ColMajor_Size8x5x7_Pitch10x10, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
@@ -281,7 +281,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x8, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
@@ -344,7 +344,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch5x10, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
@@ -407,7 +407,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x8, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {
@@ -470,7 +470,7 @@ TYPED_TEST(DenseCubeTest_RowMajor_Size8x5x7_Pitch10x10, GetPages) {
   EXPECT_EQ(subcube.getCapacity(), capacity - page0*pitch0*pitch1);
   EXPECT_EQ(subcube.getOffset(),   offset + page0*pitch0*pitch1);
 
-  EXPECT_EQ(subcube.getValue(),            &(cube(0, 0, page0)));
+  EXPECT_EQ(subcube.getValuePtr(),            &(cube(0, 0, page0)));
   EXPECT_EQ(&(subcube.getValueValarray()), &(cube.getValueValarray()));
 
   for ( auto i = 0; i < nrow; ++i ) {

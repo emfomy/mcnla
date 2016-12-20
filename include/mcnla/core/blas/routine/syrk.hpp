@@ -38,7 +38,7 @@ inline void syrk(
   mcnla_assert_eq(c.getNrow(), a.template getNrow<_trans>());
 
   detail::syrk(toUploChar(_uplo, _layout), toTransChar<_Scalar>(trans), c.getNrow(), a.template getNcol<_trans>(),
-               alpha, a.getValue(), a.getPitch(), beta, c.getValue(), c.getPitch());
+               alpha, a.getValuePtr(), a.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
