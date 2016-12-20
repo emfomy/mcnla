@@ -68,22 +68,6 @@ typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived
   return ConstIteratorType::getEnd(&(this->derived()));
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
-///
-template <class _Derived>
-_Derived& ContainerWrapper<_Derived>::derived() noexcept {
-  return static_cast<_Derived&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  derived
-///
-template <class _Derived>
-const _Derived& ContainerWrapper<_Derived>::derived() const noexcept {
-  return static_cast<const _Derived&>(*this);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla

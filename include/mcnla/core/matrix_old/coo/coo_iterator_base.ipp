@@ -331,7 +331,7 @@ _Derived CooIteratorBase<_Derived>::getEnd( ContainerType *container ) noexcept 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& CooIteratorBase<_Derived>::derived() noexcept {

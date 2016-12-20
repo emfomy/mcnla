@@ -146,7 +146,7 @@ std::tuple<index_t, index_t, index_t> CubeBase<_Derived>::getSizes() const noexc
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& CubeBase<_Derived>::derived() noexcept {

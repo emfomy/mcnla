@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_vector_storage.ipp
-/// @brief   The implementation of dense vector storage.
+/// @file    include/mcnla/core/matrix/dense/dense_vector.ipp
+/// @brief   The implementation of dense vector.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_IPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_IPP_
+#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_IPP_
+#define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_IPP_
 
-#include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,58 +25,41 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>::DenseVectorStorage() noexcept
-  : BaseType(),
-    size0_(0),
-    stride_(1) {}
+DenseVector<_Scalar>::DenseVector() noexcept
+  : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>::DenseVectorStorage(
-    const index_t size0,
+DenseVector<_Scalar>::DenseVector(
+    const index_t length,
     const index_t stride
 ) noexcept
-  : BaseType(size0 * stride),
-    size0_(size0),
-    stride_(stride) {
-  mcnla_assert_gt(size0_, 0);
-  mcnla_assert_gt(stride_, 0);
-}
+  : BaseType(length, stride) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>::DenseVectorStorage(
-    const index_t size0,
+DenseVector<_Scalar>::DenseVector(
+    const index_t length,
     const index_t stride,
     const index_t capacity
 ) noexcept
-  : BaseType(capacity),
-    size0_(size0),
-    stride_(stride) {
-  mcnla_assert_gt(stride_, 0);
-  mcnla_assert_ge(value_.getCapacity(), stride_ * (size0_-1) + 1);
-}
+  : BaseType(length, stride, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>::DenseVectorStorage(
-    const index_t size0,
+DenseVector<_Scalar>::DenseVector(
+    const index_t length,
     const index_t stride,
     const ValueArrayType &value,
     const index_t offset
 ) noexcept
-  : BaseType(value >> offset),
-    size0_(size0),
-    stride_(stride) {
-  mcnla_assert_gt(stride_, 0);
-  mcnla_assert_ge(value_.getCapacity(), stride_ * (size0_-1) + 1);
-}
+  : BaseType(length, stride, value, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -84,26 +67,15 @@ DenseVectorStorage<_Scalar>::DenseVectorStorage(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>::DenseVectorStorage(
-    const DenseVectorStorage &other
-) noexcept
-  : BaseType(other.value_),
-    size0_(other.size0_),
-    stride_(other.stride_) {}
+DenseVector<_Scalar>::DenseVector( const DenseVector &other ) noexcept
+  : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>::DenseVectorStorage(
-  DenseVectorStorage &&other
-) noexcept
-  : BaseType(std::move(other.value_)),
-    size0_(other.size0_),
-    stride_(other.stride_) {
-  other.size0_  = 0;
-  other.stride_ = 1;
-}
+DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
+  : BaseType(std::move(other)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
@@ -111,12 +83,8 @@ DenseVectorStorage<_Scalar>::DenseVectorStorage(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>& DenseVectorStorage<_Scalar>::operator=(
-    const DenseVectorStorage &other
-) noexcept {
+DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other ) noexcept {
   BaseType::operator=(other);
-  size0_  = other.size0_;
-  stride_ = other.stride_;
   return *this;
 }
 
@@ -124,93 +92,120 @@ DenseVectorStorage<_Scalar>& DenseVectorStorage<_Scalar>::operator=(
 /// @brief  Move assignment operator.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>& DenseVectorStorage<_Scalar>::operator=(
-    DenseVectorStorage &&other
-) noexcept {
+DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noexcept {
   BaseType::operator=(std::move(other));
-  size0_  = other.size0_;  other.size0_  = 0;
-  stride_ = other.stride_; other.stride_ = 1;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Determines if the dimensions are equal to the sizes.
+/// @brief  Print to stream.
 ///
-template <typename _Scalar>
-bool DenseVectorStorage<_Scalar>::isShrunk() const noexcept {
-  return (stride_ == 1);
+template <typename __Scalar>
+std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vector ) {
+  for ( index_t i = 0; i < vector.size0_; ++i ) {
+    out << std::setw(ios_width) << vector(i) << "  ";
+  }
+  return out << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size of the first dimension.
+/// @brief  Finds the iterator to element
 ///
 template <typename _Scalar>
-index_t DenseVectorStorage<_Scalar>::getSize0() const noexcept {
+typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::find(
+    const index_t idx
+) noexcept {
+  mcnla_assert_gelt(idx, 0, size0_);
+  return IteratorType(this, idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::find(
+    const index_t idx
+) const noexcept {
+  mcnla_assert_gelt(idx, 0, size0_);
+  return ConstIteratorType(this, idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar>
+typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::cfind(
+    const index_t idx
+) const noexcept {
+  return find(idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Resizes the vector.
+///
+/// @attention  The new space is not initialized.
+///
+template <typename _Scalar>
+void DenseVector<_Scalar>::resize(
+    const index_t length,
+    const index_t stride
+) noexcept {
+  mcnla_assert_ge(length, 0);
+  mcnla_assert_gt(stride, 0);
+  mcnla_assert_true(length != 0 || stride != 0);
+  mcnla_assert_ge(this->getCapacity(), stride * (length-1) + 1);
+  size0_ = length;
+  stride_ = stride;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the vector segment.
+///
+template <typename _Scalar>
+DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
+    const IdxRange range
+) noexcept {
+  mcnla_assert_ge(range.begin, 0); mcnla_assert_le(range.end, size0_); mcnla_assert_ge(range.getLength(), 0);
+  return VectorType(range.getLength(), stride_, value_, this->getPos(range.begin));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getSegment
+///
+template <typename _Scalar>
+const DenseVector<_Scalar> DenseVector<_Scalar>::getSegment(
+    const IdxRange range
+) const noexcept {
+  mcnla_assert_ge(range.begin, 0); mcnla_assert_le(range.end, size0_); mcnla_assert_ge(range.getLength(), 0);
+  return VectorType(range.getLength(), stride_, value_, this->getPos(range.begin));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to base class.
+///
+template <typename _Scalar>
+DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() noexcept {
+  return static_cast<BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  storage
+///
+template <typename _Scalar>
+const DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() const noexcept {
+  return static_cast<const BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::VectorWrapper::getLength
+///
+template <typename _Scalar>
+index_t DenseVector<_Scalar>::getLengthImpl() const noexcept {
   return size0_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the stride.
-///
-template <typename _Scalar>
-index_t DenseVectorStorage<_Scalar>::getStride() const noexcept {
-  return stride_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the element of given index.
-///
-template <typename _Scalar>
-_Scalar& DenseVectorStorage<_Scalar>::getElem(
-    const index_t idx0
-) noexcept {
-  mcnla_assert_gelt(idx0, 0, size0_);
-  return this->getValuePtr()[getPos(idx0)];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElem
-///
-template <typename _Scalar>
-const _Scalar& DenseVectorStorage<_Scalar>::getElem(
-    const index_t idx0
-) const noexcept {
-  mcnla_assert_gelt(idx0, 0, size0_);
-  return this->getValuePtr()[getPos(idx0)];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElem
-///
-template <typename _Scalar>
-_Scalar& DenseVectorStorage<_Scalar>::operator()(
-    const index_t idx0
-) noexcept {
-  return getElem(idx0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElem
-///
-template <typename _Scalar>
-const _Scalar& DenseVectorStorage<_Scalar>::operator()(
-    const index_t idx0
-) const noexcept {
-  return getElem(idx0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the internal position of given index.
-///
-template <typename _Scalar>
-index_t DenseVectorStorage<_Scalar>::getPos(
-    const index_t idx0
-) const noexcept {
-  return idx0 * stride_;
 }
 
 }  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_IPP_
+#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_IPP_

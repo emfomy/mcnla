@@ -11,4 +11,9 @@
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
 #include <mcnla/core/matrix/base/container_wrapper.ipp>
 
+#include <mcnla/core/matrix/base/vector_wrapper.hpp>
+#include <mcnla/core/matrix/base/vector_wrapper.ipp>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_wrapper.ipp>
+
 #endif  // MCNLA_CORE_MATRIX_BASE_HPP_

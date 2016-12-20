@@ -67,7 +67,7 @@ _Derived& DenseIteratorBase<_Derived>::operator=(
 ///
 template <class _Derived>
 typename DenseIteratorBase<_Derived>::ScalarType& DenseIteratorBase<_Derived>::operator*() const noexcept {
-  return derived().getValuePtr();
+  return derived().getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ typename DenseIteratorBase<_Derived>::ScalarType& DenseIteratorBase<_Derived>::o
 ///
 template <class _Derived>
 typename DenseIteratorBase<_Derived>::ScalarType* DenseIteratorBase<_Derived>::operator->() const noexcept {
-  return &(derived().getValuePtr());
+  return &(derived().getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

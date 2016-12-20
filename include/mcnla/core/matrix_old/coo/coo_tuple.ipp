@@ -248,7 +248,7 @@ void CooTuple<_ndim, _Scalar, _Index>::setTuple( const _Scalar value, const _Arg
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @brief  Gets the raw value pointer.
 ///
 template <index_t _ndim, typename _Scalar, typename _Index>
 _Scalar& CooTuple<_ndim, _Scalar, _Index>::getValuePtr() noexcept { return std::get<_ndim>(*this); }

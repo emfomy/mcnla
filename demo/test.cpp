@@ -17,7 +17,15 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseVectorStorage<double> vecs;
+  mcnla::matrix::DenseVector<double> vec(10, 2);
+
+  std::cout << vec << std::endl;
+
+  for ( auto &i : vec ) {
+    i = 3;
+  }
+
+  std::cout << vec << std::endl;
 
   return 0;
 }

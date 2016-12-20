@@ -208,7 +208,7 @@ const CooData<_ndim, _Scalar> CooData<_ndim, _Scalar>::operator<<( const index_t
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array array.
+/// @brief  Gets the raw value pointer array.
 ///
 template <index_t _ndim, typename _Scalar>
 Array<_Scalar>& CooData<_ndim, _Scalar>::getValueArray() noexcept { return value_; }

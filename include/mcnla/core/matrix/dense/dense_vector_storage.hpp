@@ -5,13 +5,12 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HPP_
+#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_HPP_
+#define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
-#include <tuple>
-#include <mcnla/core/matrix/kit/array.hpp>
+#include <mcnla/core/matrix/dense/dense_storage.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -30,14 +29,16 @@ namespace matrix {
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class DenseVectorStorage {
+class DenseVectorStorage : public DenseStorage<_Scalar> {
 
- public:
-
-  static constexpr index_t ndim = 1;
+ private:
 
   using ScalarType     = _Scalar;
   using ValueArrayType = Array<ScalarType>;
+
+ private:
+
+  using BaseType       = DenseStorage<_Scalar>;
 
  protected:
 
@@ -47,8 +48,7 @@ class DenseVectorStorage {
   /// The stride.
   index_t stride_;
 
-  /// The data storage
-  ValueArrayType value_;
+  using BaseType::value_;
 
  public:
 
@@ -66,27 +66,18 @@ class DenseVectorStorage {
   inline DenseVectorStorage& operator=( DenseVectorStorage &&other ) noexcept;
 
   // Gets information
-  inline bool    isEmpty() const noexcept;
   inline bool    isShrunk() const noexcept;
   inline index_t getSize0() const noexcept;
   inline index_t getStride() const noexcept;
-  inline index_t getNelem() const noexcept;
-  inline std::tuple<index_t> getSizes() const noexcept;
-
-  // Gets data
-  inline       ScalarType* getValuePtr() noexcept;
-  inline const ScalarType* getValuePtr() const noexcept;
-  inline       ValueArrayType& getValue() noexcept;
-  inline const ValueArrayType& getValue() const noexcept;
 
   // Gets element
-  inline       ScalarType& getElem( const index_t idx ) noexcept;
-  inline const ScalarType& getElem( const index_t idx ) const noexcept;
-  inline       ScalarType& operator()( const index_t idx ) noexcept;
-  inline const ScalarType& operator()( const index_t idx ) const noexcept;
+  inline       ScalarType& getElem( const index_t idx0 ) noexcept;
+  inline const ScalarType& getElem( const index_t idx0 ) const noexcept;
+  inline       ScalarType& operator()( const index_t idx0 ) noexcept;
+  inline const ScalarType& operator()( const index_t idx0 ) const noexcept;
 
   // Gets internal position
-  inline index_t getPos( const index_t idx ) const noexcept;
+  inline index_t getPos( const index_t idx0 ) const noexcept;
 
 };
 
@@ -94,4 +85,4 @@ class DenseVectorStorage {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HPP_
+#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_HPP_

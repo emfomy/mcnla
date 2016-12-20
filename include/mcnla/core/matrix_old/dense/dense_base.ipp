@@ -121,7 +121,7 @@ template <class _Derived>
 index_t DenseBase<_Derived>::getOffset() const noexcept { return getValueArray().getOffset(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @brief  Gets the raw value pointer.
 ///
 template <class _Derived>
 typename DenseBase<_Derived>::ScalarType* DenseBase<_Derived>::getValuePtr() noexcept {
@@ -169,7 +169,7 @@ const typename DenseBase<_Derived>::ValueValarrayType& DenseBase<_Derived>::getV
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& DenseBase<_Derived>::derived() noexcept {

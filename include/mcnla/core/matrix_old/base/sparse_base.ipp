@@ -89,7 +89,7 @@ template <class _Derived>
 void SparseBase<_Derived>::setNnz( const index_t nnz ) noexcept { nnz_ = nnz; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& SparseBase<_Derived>::derived() noexcept {

@@ -102,7 +102,7 @@ template <class _Derived>
 index_t VectorBase<_Derived>::getSizes() const noexcept { return length_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& VectorBase<_Derived>::derived() noexcept {

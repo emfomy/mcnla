@@ -175,7 +175,7 @@ template <class _Derived> template <index_t _dim>
 index_t CooBase<_Derived>::getIdxOffset() const noexcept { return getIdxArray<_dim>().getOffset(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @brief  Gets the raw value pointer.
 ///
 template <class _Derived>
 typename CooBase<_Derived>::ScalarType* CooBase<_Derived>::getValuePtr() noexcept {
@@ -223,7 +223,7 @@ const typename CooBase<_Derived>::ValueValarrayType& CooBase<_Derived>::getValue
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @brief  Gets the raw value pointer.
 ///
 template <class _Derived>
 index_t* CooBase<_Derived>::getIdx( const index_t dim ) noexcept {
@@ -271,7 +271,7 @@ const typename CooBase<_Derived>::IdxValarrayType& CooBase<_Derived>::getIdxVala
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value array.
+/// @brief  Gets the raw value pointer.
 ///
 template <class _Derived> template <index_t _dim>
 index_t* CooBase<_Derived>::getIdx() noexcept {
@@ -335,7 +335,7 @@ typename CooBase<_Derived>::ConstTupleType CooBase<_Derived>::getTuple( const in
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& CooBase<_Derived>::derived() noexcept {

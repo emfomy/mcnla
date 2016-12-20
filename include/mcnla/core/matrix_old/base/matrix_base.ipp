@@ -126,7 +126,7 @@ template <class _Derived>
 std::pair<index_t, index_t> MatrixBase<_Derived>::getSizes() const noexcept { return std::make_pair(nrow_, ncol_); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& MatrixBase<_Derived>::derived() noexcept {

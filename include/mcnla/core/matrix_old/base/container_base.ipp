@@ -69,7 +69,7 @@ typename ContainerBase<_Derived>::ConstIteratorType ContainerBase<_Derived>::cen
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Change to derived class.
+/// @brief  Convert to derived class.
 ///
 template <class _Derived>
 _Derived& ContainerBase<_Derived>::derived() noexcept {
