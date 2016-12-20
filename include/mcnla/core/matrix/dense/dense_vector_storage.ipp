@@ -41,7 +41,7 @@ DenseVectorStorage<_Scalar>::DenseVectorStorage(
   : BaseType(size0 * stride),
     size0_(size0),
     stride_(stride) {
-  mcnla_assert_gt(size0_, 0);
+  mcnla_assert_ge(size0_, 0);
   mcnla_assert_gt(stride_, 0);
 }
 
@@ -57,6 +57,7 @@ DenseVectorStorage<_Scalar>::DenseVectorStorage(
   : BaseType(capacity),
     size0_(size0),
     stride_(stride) {
+  mcnla_assert_ge(size0_, 0);
   mcnla_assert_gt(stride_, 0);
   mcnla_assert_ge(value_.getCapacity(), stride_ * (size0_-1) + 1);
 }
@@ -74,6 +75,7 @@ DenseVectorStorage<_Scalar>::DenseVectorStorage(
   : BaseType(value >> offset),
     size0_(size0),
     stride_(stride) {
+  mcnla_assert_ge(size0_, 0);
   mcnla_assert_gt(stride_, 0);
   mcnla_assert_ge(value_.getCapacity(), stride_ * (size0_-1) + 1);
 }
@@ -87,7 +89,7 @@ template <typename _Scalar>
 DenseVectorStorage<_Scalar>::DenseVectorStorage(
     const DenseVectorStorage &other
 ) noexcept
-  : BaseType(other.value_),
+  : BaseType(other),
     size0_(other.size0_),
     stride_(other.stride_) {}
 
@@ -98,7 +100,7 @@ template <typename _Scalar>
 DenseVectorStorage<_Scalar>::DenseVectorStorage(
   DenseVectorStorage &&other
 ) noexcept
-  : BaseType(std::move(other.value_)),
+  : BaseType(std::move(other)),
     size0_(other.size0_),
     stride_(other.stride_) {
   other.size0_  = 0;

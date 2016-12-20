@@ -58,7 +58,9 @@ Array<_Type>::Array(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Type>
-Array<_Type>::Array( const Array &other ) noexcept
+Array<_Type>::Array(
+    const Array &other
+) noexcept
   : BaseType(other),
     offset_(other.offset_) {}
 
@@ -66,10 +68,13 @@ Array<_Type>::Array( const Array &other ) noexcept
 /// @brief  Move constructor.
 ///
 template <typename _Type>
-Array<_Type>::Array( Array &&other ) noexcept
+Array<_Type>::Array(
+    Array &&other
+) noexcept
   : BaseType(std::move(other)),
     offset_(other.offset_) {
-  static_cast<BaseType&>(other) = kNullPtr; other.offset_ = 0;
+  static_cast<BaseType&>(other) = kNullPtr;
+  other.offset_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,8 +83,11 @@ Array<_Type>::Array( Array &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Type>
-Array<_Type>& Array<_Type>::operator=( const Array &other ) noexcept {
-  BaseType::operator=(other); offset_ = other.offset_;
+Array<_Type>& Array<_Type>::operator=(
+    const Array &other
+) noexcept {
+  BaseType::operator=(other);
+  offset_ = other.offset_;
   return *this;
 }
 
@@ -87,9 +95,11 @@ Array<_Type>& Array<_Type>::operator=( const Array &other ) noexcept {
 /// @brief  Move assignment operator.
 ///
 template <typename _Type>
-Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
-  BaseType::operator=(std::move(other)); offset_ = other.offset_;
-  static_cast<BaseType&>(other) = kNullPtr; other.offset_ = 0;
+Array<_Type>& Array<_Type>::operator=(
+    Array &&other
+) noexcept {
+  BaseType::operator=(std::move(other)); static_cast<BaseType&>(other) = kNullPtr;
+  offset_ = other.offset_; other.offset_ = 0;
   return *this;
 }
 
@@ -98,7 +108,9 @@ Array<_Type>& Array<_Type>::operator=( Array &&other ) noexcept {
 /// Add the #offset_ to @a offset.
 ///
 template <typename _Type>
-void Array<_Type>::operator>>=( const index_t offset ) noexcept {
+void Array<_Type>::operator>>=(
+    const index_t offset
+) noexcept {
   offset_ += offset;
   mcnla_assert_gele(offset_, 0, getSize());
 }
@@ -108,7 +120,9 @@ void Array<_Type>::operator>>=( const index_t offset ) noexcept {
 /// Subtract #offset_ from @a offset.
 ///
 template <typename _Type>
-void Array<_Type>::operator<<=( const index_t offset ) noexcept {
+void Array<_Type>::operator<<=(
+    const index_t offset
+) noexcept {
   offset_ -= offset;
   mcnla_assert_gele(offset_, 0, getSize());
 }
@@ -118,8 +132,12 @@ void Array<_Type>::operator<<=( const index_t offset ) noexcept {
 /// Add the #offset_ to @a offset.
 ///
 template <typename _Type>
-Array<_Type> Array<_Type>::operator>>( const index_t offset ) noexcept {
-  Array retval = *this; retval >>= offset; return retval;
+Array<_Type> Array<_Type>::operator>>(
+    const index_t offset
+) noexcept {
+  Array retval = *this;
+  retval >>= offset;
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,8 +145,12 @@ Array<_Type> Array<_Type>::operator>>( const index_t offset ) noexcept {
 /// Add the #offset_ to @a offset.
 ///
 template <typename _Type>
-const Array<_Type> Array<_Type>::operator>>( const index_t offset ) const noexcept {
-  Array retval = *this; retval >>= offset; return retval;
+const Array<_Type> Array<_Type>::operator>>(
+    const index_t offset
+) const noexcept {
+  Array retval = *this;
+  retval >>= offset;
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,8 +158,12 @@ const Array<_Type> Array<_Type>::operator>>( const index_t offset ) const noexce
 /// Subtract #offset_ from @a offset.
 ///
 template <typename _Type>
-Array<_Type> Array<_Type>::operator<<( const index_t offset ) noexcept {
-  Array retval = *this; retval <<= offset; return retval;
+Array<_Type> Array<_Type>::operator<<(
+    const index_t offset
+) noexcept {
+  Array retval = *this;
+  retval <<= offset;
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,15 +171,21 @@ Array<_Type> Array<_Type>::operator<<( const index_t offset ) noexcept {
 /// Subtract #offset_ from @a offset.
 ///
 template <typename _Type>
-const Array<_Type> Array<_Type>::operator<<( const index_t offset ) const noexcept {
-  Array retval = *this; retval <<= offset; return retval;
+const Array<_Type> Array<_Type>::operator<<(
+    const index_t offset
+) const noexcept {
+  Array retval = *this;
+  retval <<= offset;
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
 template <typename _Type>
-bool Array<_Type>::isEmpty() const noexcept { return (getSize() == 0); }
+bool Array<_Type>::isEmpty() const noexcept {
+  return (getSize() == 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the memory size.
@@ -205,7 +237,9 @@ const _Type* Array<_Type>::operator*() const noexcept {
 /// @brief  Gets the data of given index.
 ///
 template <typename _Type>
-_Type& Array<_Type>::operator[]( const index_t idx ) noexcept {
+_Type& Array<_Type>::operator[](
+    const index_t idx
+) noexcept {
   return this->getValarray()[idx+offset_];
 }
 
@@ -213,7 +247,9 @@ _Type& Array<_Type>::operator[]( const index_t idx ) noexcept {
 /// @brief  Gets the data of given index.
 ///
 template <typename _Type>
-const _Type& Array<_Type>::operator[]( const index_t idx ) const noexcept {
+const _Type& Array<_Type>::operator[](
+    const index_t idx
+) const noexcept {
   return this->getValarray()[idx+offset_];
 }
 

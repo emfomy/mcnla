@@ -11,7 +11,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -21,7 +21,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec2.getLength(), 0);
     EXPECT_EQ(vec2.getNelem(),  0);
-    EXPECT_EQ(vec2.getSizes(),  0);
+    EXPECT_EQ(vec2.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec2.getStride(), 1);
 
     EXPECT_TRUE(vec2.isShrunk());
@@ -42,8 +42,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec1.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec1.getValuePtr(), vec.getValuePtr());
 
 
     SCOPED_TRACE("Move Assignment");
@@ -51,7 +50,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -70,8 +69,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec2.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec2.getValuePtr(), vec.getValuePtr());
   }
 }
 
@@ -88,7 +86,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -98,7 +96,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec2.getLength(), 0);
     EXPECT_EQ(vec2.getNelem(),  0);
-    EXPECT_EQ(vec2.getSizes(),  0);
+    EXPECT_EQ(vec2.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec2.getStride(), 1);
 
     EXPECT_TRUE(vec2.isShrunk());
@@ -119,8 +117,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec1.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec1.getValuePtr(), vec.getValuePtr());
 
 
     SCOPED_TRACE("Move Assignment");
@@ -128,7 +125,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -147,7 +144,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec2.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec2.getValuePtr(), vec.getValuePtr());
   }
 }

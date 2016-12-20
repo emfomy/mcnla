@@ -11,8 +11,9 @@ TYPED_TEST(DenseVectorTest, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
     EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -26,8 +27,9 @@ TYPED_TEST(DenseVectorTest, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
     EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -41,8 +43,9 @@ TYPED_TEST(DenseVectorTest, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
     EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -56,8 +59,9 @@ TYPED_TEST(DenseVectorTest, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), length);
     EXPECT_EQ(vec1.getNelem(),  length);
-    EXPECT_EQ(vec1.getSizes(),  length);
     EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -81,8 +85,9 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), length);
     EXPECT_EQ(vec1.getNelem(),  length);
-    EXPECT_EQ(vec1.getSizes(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -96,8 +101,9 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), length);
     EXPECT_EQ(vec1.getNelem(),  length);
-    EXPECT_EQ(vec1.getSizes(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -111,16 +117,16 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), vec.getLength());
     EXPECT_EQ(vec1.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec1.getStride(), vec.getStride());
 
-    EXPECT_EQ(vec1.isShrunk(), vec.isShrunk());
+    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
+
+    EXPECT_EQ(vec1.isShrunk(),  vec.isShrunk());
 
     EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec1.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec1.getValuePtr(), vec.getValuePtr());
 
 
     SCOPED_TRACE("Move Constructor");
@@ -128,8 +134,9 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
     EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -142,13 +149,12 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
     EXPECT_EQ(vec2.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec2.getStride(), vec.getStride());
 
-    EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());
+    EXPECT_EQ(vec2.isShrunk(),  vec.isShrunk());
 
     EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec2.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec2.getValuePtr(), vec.getValuePtr());
   }
 }
 
@@ -167,8 +173,9 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), length);
     EXPECT_EQ(vec1.getNelem(),  length);
-    EXPECT_EQ(vec1.getSizes(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
 
     EXPECT_FALSE(vec1.isShrunk());
 
@@ -182,8 +189,9 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), length);
     EXPECT_EQ(vec1.getNelem(),  length);
-    EXPECT_EQ(vec1.getSizes(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
 
     EXPECT_FALSE(vec1.isShrunk());
 
@@ -197,16 +205,16 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), vec.getLength());
     EXPECT_EQ(vec1.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec1.getStride(), vec.getStride());
 
-    EXPECT_EQ(vec1.isShrunk(), vec.isShrunk());
+    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
+
+    EXPECT_EQ(vec1.isShrunk(),  vec.isShrunk());
 
     EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec1.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec1.getValuePtr(), vec.getValuePtr());
 
 
     SCOPED_TRACE("Move Constructor");
@@ -214,8 +222,9 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
     EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -225,15 +234,15 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
 
     EXPECT_EQ(vec2.getLength(), vec.getLength());
     EXPECT_EQ(vec2.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec2.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec2.getStride(), vec.getStride());
 
-    EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());
+    EXPECT_EQ(vec2.getSizes(),  vec.getSizes());
+
+    EXPECT_EQ(vec2.isShrunk(),  vec.isShrunk());
 
     EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
     EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
 
-    EXPECT_EQ(vec2.getValuePtr(),            vec.getValuePtr());
-    EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec2.getValuePtr(), vec.getValuePtr());
   }
 }

@@ -8,8 +8,9 @@
 #ifndef MCNLA_CORE_LAPACK_ROUTINE_HPP_
 #define MCNLA_CORE_LAPACK_ROUTINE_HPP_
 
-#include <mcnla/core/lapack/routine/syev.hpp>
-#include <mcnla/core/lapack/routine/gesvd.hpp>
+#pragma warning
+// #include <mcnla/core/lapack/routine/syev.hpp>
+// #include <mcnla/core/lapack/routine/gesvd.hpp>
 
 #include <mcnla/core/lapack/routine/larnv.hpp>
 

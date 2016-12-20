@@ -23,45 +23,63 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-bool IdxRange::operator==( const IdxRange& other ) const noexcept { return (begin == other.begin && end == other.end); }
+bool IdxRange::operator==(
+    const IdxRange& other
+) const noexcept {
+  return (begin == other.begin && end == other.end);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
-bool IdxRange::operator!=( const IdxRange& other ) const noexcept { return !(*this == other); }
+bool IdxRange::operator!=(
+    const IdxRange& other
+) const noexcept {
+  return !(*this == other);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition operator.
 ///
-IdxRange IdxRange::operator+( const index_t scalar ) const noexcept {
+IdxRange IdxRange::operator+(
+    const index_t scalar
+) const noexcept {
   return {this->begin + scalar, this->end + scalar};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction operator.
 ///
-IdxRange IdxRange::operator-( const index_t scalar ) const noexcept {
+IdxRange IdxRange::operator-(
+    const index_t scalar
+) const noexcept {
   return {this->begin - scalar, this->end - scalar};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Multiplication operator.
 ///
-IdxRange IdxRange::operator*( const index_t scalar ) const noexcept {
+IdxRange IdxRange::operator*(
+    const index_t scalar
+) const noexcept {
   return {this->begin * scalar, this->end * scalar};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Division operator.
 ///
-IdxRange IdxRange::operator/( const index_t scalar ) const noexcept {
+IdxRange IdxRange::operator/(
+    const index_t scalar
+) const noexcept {
   return {this->begin / scalar, this->end / scalar};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of the range.
 ///
-index_t IdxRange::getLength() const noexcept { return (end-begin); }
+index_t IdxRange::getLength() const noexcept {
+  return (end-begin);
+}
 
 }  // namespace matrix
 
