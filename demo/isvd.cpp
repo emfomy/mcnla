@@ -21,6 +21,10 @@ void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_a,
             const mcnla::matrix::DenseVector<ScalarType> &vector_s,
             ScalarType &frerr ) noexcept;
 
+void check_s( const mcnla::matrix::DenseVector<ScalarType> &vector_s,
+              const mcnla::matrix::DenseVector<ScalarType> &vector_s_true,
+              ScalarType &smax, ScalarType &smin, ScalarType &smean ) noexcept;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
@@ -46,7 +50,7 @@ int main( int argc, char **argv ) {
   // Check input
   if ( argc < 2 && mpi_rank == mpi_root ) {
     std::cout << "Usage: " << argv[0]
-              << " <mtx-file> <#sketch-per-node> <rank> <over-sampling-rank> <#test>"
+              << " <mtx-file> [#sketch-per-node [rank] [over-sampling-rank] [#test] [#skip-test] [solution-file]"
               << std::endl << std::endl;
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
@@ -67,7 +71,6 @@ int main( int argc, char **argv ) {
     matrix_a = mcnla::matrix::DenseMatrix<ScalarType>(asize0, asize1);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
-
 
   // ====================================================================================================================== //
   // Initialize random seed
@@ -96,8 +99,20 @@ int main( int argc, char **argv ) {
   }
 
   // ====================================================================================================================== //
+  // Load solution
+  mcnla::matrix::DenseVector<ScalarType> vector_s_true;
+  bool do_check_s = false;
+  if ( argc > ++argi ) {
+    do_check_s = true;
+    if ( mpi_rank == mpi_root ) {
+      std::cout << "Load S from " << argv[argi] << "." << std::endl << std::endl;
+      mcnla::io::loadMatrixMarket(vector_s_true, argv[argi]);
+    }
+  }
+
+  // ====================================================================================================================== //
   // Create statistics collector
-  StatisticsSet set_frerr(num_test), set_iter(num_test),
+  StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frerr(num_test), set_iter(num_test),
                 set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test);
 
   // ====================================================================================================================== //
@@ -131,7 +146,10 @@ int main( int argc, char **argv ) {
 
     // Check result
     if ( mpi_rank == mpi_root  ) {
-      ScalarType frerr;
+      ScalarType smax, smin, smean, frerr;
+      if ( do_check_s ) {
+        check_s(solver.getSingularValues(), vector_s_true, smax, smin, smean);
+      }
       check(matrix_a, solver.getLeftSingularVectors(), solver.getRightSingularVectors(), solver.getSingularValues(), frerr);
       auto iter    = solver.getIntegratorIter();
       auto maxiter = solver.getParameters().getMaxIteration();
@@ -139,11 +157,17 @@ int main( int argc, char **argv ) {
       auto time_i = solver.getIntegratorTime();
       auto time_r = solver.getReconstructorTime();
       auto time = time_s + time_i + time_r;
-      std::cout << std::setw(log10(num_test)+1) << t
-                << " | error: " << frerr
+      std::cout << std::setw(log10(num_test)+1) << t;
+      if ( do_check_s ) {
+        std::cout << " | error_s: " << smax << " / " << smean << " / " << smin;
+      }
+      std::cout << " | error: " << frerr
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
                 << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")" << std::endl;
       if ( t >= 0 ) {
+        if ( do_check_s ) {
+          set_smax(smax); set_smean(smean); set_smin(smin);
+        }
         set_frerr(frerr); set_iter(iter); set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i);
       }
     }
@@ -156,13 +180,46 @@ int main( int argc, char **argv ) {
     std::cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << std::endl;
     std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
     std::cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << std::endl;
+    std::cout << std::scientific;
+    if ( do_check_s ) {
+      std::cout << "mean(error_s): max = " << set_smax.mean()
+                            << ", mean = " << set_smean.mean()
+                             << ", min = " << set_smin.mean() << std::endl;
+      std::cout << "sd(error_s):   max = " << set_smax.sd()
+                            << ", mean = " << set_smean.sd()
+                             << ", min = " << set_smin.sd() << std::endl;
+    }
     std::cout << "error: \tmean = " << set_frerr.mean() << ", \tsd = " << set_frerr.sd() << std::endl;
     std::cout << "iter:  \tmean = " << set_iter.mean()  << ", \tsd = " << set_iter.sd() << std::endl;
     std::cout << std::endl;
-    std::cout << "error = norm(A-USV')_F/norm(A)_F" << std::endl;
+    if ( do_check_s ) {
+      std::cout << "error_s = abs(s - s_true)" << std::endl;
+    }
+    std::cout << "error   = norm(A-USV')_F/norm(A)_F" << std::endl;
   }
 
   MPI_Finalize();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Check the result (S)
+///
+void check_s(
+    const mcnla::matrix::DenseVector<ScalarType> &vector_s,
+    const mcnla::matrix::DenseVector<ScalarType> &vector_s_true,
+          ScalarType &smax,
+          ScalarType &smin,
+          ScalarType &smean
+) noexcept {
+  mcnla::matrix::DenseVector<ScalarType> vector_tmp(vector_s.getLength());
+
+  for ( auto i = 0; i < vector_s.getLength(); ++i ) {
+    vector_tmp(i) = vector_s(i) - vector_s_true(i);
+  }
+
+  smax  = mcnla::blas::amax(vector_tmp);
+  smin  = mcnla::blas::amin(vector_tmp);
+  smean = mcnla::blas::asum(vector_tmp) / vector_tmp.getLength();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
