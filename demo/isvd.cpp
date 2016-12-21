@@ -159,7 +159,9 @@ int main( int argc, char **argv ) {
       auto time = time_s + time_i + time_r;
       std::cout << std::setw(log10(num_test)+1) << t;
       if ( do_check_s ) {
+        std::cout << std::scientific;
         std::cout << " | error_s: " << smax << " / " << smean << " / " << smin;
+        std::cout << std::fixed;
       }
       std::cout << " | error: " << frerr
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
@@ -193,7 +195,7 @@ int main( int argc, char **argv ) {
     std::cout << "iter:  \tmean = " << set_iter.mean()  << ", \tsd = " << set_iter.sd() << std::endl;
     std::cout << std::endl;
     if ( do_check_s ) {
-      std::cout << "error_s = abs(s - s_true)" << std::endl;
+      std::cout << "error_s = abs(s-s_true)/abs(s_true)" << std::endl;
     }
     std::cout << "error   = norm(A-USV')_F/norm(A)_F" << std::endl;
   }
@@ -214,7 +216,7 @@ void check_s(
   mcnla::matrix::DenseVector<ScalarType> vector_tmp(vector_s.getLength());
 
   for ( auto i = 0; i < vector_s.getLength(); ++i ) {
-    vector_tmp(i) = vector_s(i) - vector_s_true(i);
+    vector_tmp(i) = (vector_s(i) - vector_s_true(i)) / vector_s_true(i);
   }
 
   smax  = mcnla::blas::amax(vector_tmp);
