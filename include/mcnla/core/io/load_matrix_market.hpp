@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/io/matrix_market.hpp
-/// @brief   The Matrix Market IO utilities.
+/// @brief   Load data from a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_IO_MATRIX_MARKET_HPP_
-#define MCNLA_CORE_IO_MATRIX_MARKET_HPP_
+#ifndef MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
+#define MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -51,8 +51,8 @@ void loadMatrixMarket(
   fin.unget();
 
   // Get size
-  index_t m;
-  fin >> m;
+  index_t m, n;
+  fin >> m >> n;
   if ( vector.isEmpty() ) {
     vector = matrix::DenseVector<_Scalar>(m);
   } else {
@@ -283,4 +283,4 @@ inline void loadMatrixMarket(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_IO_MATRIX_MARKET_HPP_
+#endif  // MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
