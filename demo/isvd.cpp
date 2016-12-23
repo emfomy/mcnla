@@ -54,17 +54,17 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load matrix
   mcnla::matrix::DenseMatrix<ScalarType> matrix_a;
-  mcnla::index_t asize0, asize1;
+  mcnla::index_t anrow, ancol;
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
     mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
-    asize0 = matrix_a.getNrow();
-    asize1 = matrix_a.getNcol();
+    anrow = matrix_a.getNrow();
+    ancol = matrix_a.getNcol();
   }
-  MPI_Bcast(&asize0, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
-  MPI_Bcast(&asize1, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
+  MPI_Bcast(&anrow, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
+  MPI_Bcast(&ancol, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
   if ( mpi_rank != mpi_root ) {
-    matrix_a = mcnla::matrix::DenseMatrix<ScalarType>(asize0, asize1);
+    matrix_a = mcnla::matrix::DenseMatrix<ScalarType>(anrow, ancol);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 

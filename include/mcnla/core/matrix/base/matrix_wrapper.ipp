@@ -45,7 +45,7 @@ index_t MatrixWrapper<_Derived>::getNelem() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the sizes.
+/// @brief  Gets the size of dimensions in interface order. [ nrow, ncol ]
 ///
 template <class _Derived>
 std::tuple<index_t, index_t> MatrixWrapper<_Derived>::getSizes() const noexcept {

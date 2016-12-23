@@ -33,6 +33,10 @@ namespace matrix {
 template <class _Derived>
 class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>> {
 
+ private:
+
+  using SizesType = std::tuple<index_t, index_t>;
+
  protected:
 
   // Constructors
@@ -41,10 +45,10 @@ class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>
  public:
 
   // Gets information
-  inline index_t getNrow() const noexcept;
-  inline index_t getNcol() const noexcept;
-  inline index_t getNelem() const noexcept;
-  inline std::tuple<index_t, index_t> getSizes() const noexcept;
+  inline index_t   getNrow() const noexcept;
+  inline index_t   getNcol() const noexcept;
+  inline index_t   getNelem() const noexcept;
+  inline SizesType getSizes() const noexcept;
 
 };
 

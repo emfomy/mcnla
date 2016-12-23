@@ -33,6 +33,10 @@ namespace matrix {
 template <class _Derived>
 class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>> {
 
+ private:
+
+  using SizesType = std::tuple<index_t>;
+
  protected:
 
   // Constructors
@@ -41,9 +45,9 @@ class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>
  public:
 
   // Gets information
-  inline index_t getLength() const noexcept;
-  inline index_t getNelem() const noexcept;
-  inline std::tuple<index_t> getSizes() const noexcept;
+  inline index_t   getLength() const noexcept;
+  inline index_t   getNelem() const noexcept;
+  inline SizesType getSizes() const noexcept;
 
 };
 

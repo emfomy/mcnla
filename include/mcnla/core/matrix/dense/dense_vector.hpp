@@ -15,7 +15,6 @@
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
-#include <mcnla/core/matrix/kit/idx_range.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,10 +49,7 @@ struct Traits<matrix::DenseVector<_Scalar>> {
 
   using ScalarType        = _Scalar;
   using RealScalarType    = RealType<_Scalar>;
-
   using VectorType        = matrix::DenseVector<ScalarType>;
-  using RealVectorType    = matrix::DenseVector<RealScalarType>;
-
   using IteratorType      = matrix::DenseVectorIterator<ScalarType>;
   using ConstIteratorType = matrix::DenseVectorConstIterator<ScalarType>;
 };
@@ -87,9 +83,9 @@ class DenseVector
   using ScalarType        = _Scalar;
   using RealScalarType    = RealType<_Scalar>;
   using ValueArrayType    = Array<ScalarType>;
+  using SizesType         = std::tuple<index_t>;
 
   using VectorType        = DenseVector<ScalarType>;
-  using RealVectorType    = DenseVector<RealScalarType>;
 
   using IteratorType      = DenseVectorIterator<ScalarType>;
   using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
@@ -98,18 +94,14 @@ class DenseVector
 
   using BaseType          = DenseVectorStorage<_Scalar>;
 
- protected:
-
-  using BaseType::size0_;
-  using BaseType::stride_;
-  using BaseType::value_;
-
  public:
 
   // Constructors
   inline DenseVector() noexcept;
   inline DenseVector( const index_t length, const index_t stride = 1 ) noexcept;
+  inline DenseVector( const SizesType sizes, const index_t stride = 1 ) noexcept;
   inline DenseVector( const index_t length, const index_t stride, const index_t capacity ) noexcept;
+  inline DenseVector( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
   inline DenseVector( const index_t length, const index_t stride,
                       const ValueArrayType &value, const index_t offset = 0 ) noexcept;
   inline DenseVector( const DenseVector &other ) noexcept;
@@ -121,6 +113,13 @@ class DenseVector
   template <typename __Scalar>
   friend inline std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
 
+  // Gets information
+  inline index_t getNidx() const noexcept;
+
+  // Gets element
+  inline       ScalarType& operator()( const index_t idx ) noexcept;
+  inline const ScalarType& operator()( const index_t idx ) const noexcept;
+
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;
   inline ConstIteratorType find( const index_t idx ) const noexcept;
@@ -130,17 +129,21 @@ class DenseVector
   inline void resize( const index_t length, const index_t stride ) noexcept;
 
   // Gets segment
-  inline       VectorType getSegment( const IdxRange range ) noexcept;
-  inline const VectorType getSegment( const IdxRange range ) const noexcept;
+  inline       VectorType operator()( const IdxRange range ) noexcept;
+  inline const VectorType operator()( const IdxRange range ) const noexcept;
 
  protected:
+
+  // Gets information
+  inline index_t getLengthImpl() const noexcept;
+
+  // Convert sizes to dims
+  inline index_t dim0( const SizesType sizes ) const noexcept;
+  inline index_t dim0( const index_t length ) const noexcept;
 
   // Gets base class
   inline       BaseType& base() noexcept;
   inline const BaseType& base() const noexcept;
-
-  // Gets information
-  inline index_t getLengthImpl() const noexcept;
 
 };
 

@@ -4,6 +4,7 @@ TYPED_TEST(DenseVectorTest, Constructor) {
   using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto length = 8;
+  const auto sizes  = std::make_tuple(length);
 
   {
     SCOPED_TRACE("Constructor()");
@@ -61,7 +62,23 @@ TYPED_TEST(DenseVectorTest, Constructor) {
     EXPECT_EQ(vec1.getNelem(),  length);
     EXPECT_EQ(vec1.getStride(), 1);
 
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
+    EXPECT_EQ(vec1.getSizes(),  sizes);
+
+    EXPECT_TRUE(vec1.isShrunk());
+
+    EXPECT_EQ(vec1.getCapacity(), length);
+    EXPECT_EQ(vec1.getOffset(),   0);
+  }
+
+  {
+    SCOPED_TRACE("Constructor({length})");
+    VectorType vec1(sizes);
+
+    EXPECT_EQ(vec1.getLength(), length);
+    EXPECT_EQ(vec1.getNelem(),  length);
+    EXPECT_EQ(vec1.getStride(), 1);
+
+    EXPECT_EQ(vec1.getSizes(),  sizes);
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -78,6 +95,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
   const auto stride  = this->stride_;
   const auto memsize = this->memsize_;
   const auto vec     = this->vec_;
+  const auto sizes   = std::make_tuple(length);
 
   {
     SCOPED_TRACE("Constructor(length, stride)");
@@ -87,7 +105,23 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
     EXPECT_EQ(vec1.getNelem(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
 
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
+    EXPECT_EQ(vec1.getSizes(),  sizes);
+
+    EXPECT_TRUE(vec1.isShrunk());
+
+    EXPECT_EQ(vec1.getCapacity(), length);
+    EXPECT_EQ(vec1.getOffset(),   0);
+  }
+
+  {
+    SCOPED_TRACE("Constructor({length}, stride)");
+    VectorType vec1(sizes, stride);
+
+    EXPECT_EQ(vec1.getLength(), length);
+    EXPECT_EQ(vec1.getNelem(),  length);
+    EXPECT_EQ(vec1.getStride(), stride);
+
+    EXPECT_EQ(vec1.getSizes(),  sizes);
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -103,7 +137,23 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
     EXPECT_EQ(vec1.getNelem(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
 
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
+    EXPECT_EQ(vec1.getSizes(),  sizes);
+
+    EXPECT_TRUE(vec1.isShrunk());
+
+    EXPECT_EQ(vec1.getCapacity(), memsize);
+    EXPECT_EQ(vec1.getOffset(),   0);
+  }
+
+  {
+    SCOPED_TRACE("Constructor({length}, stride, memsize)");
+    VectorType vec1(sizes, stride, memsize);
+
+    EXPECT_EQ(vec1.getLength(), length);
+    EXPECT_EQ(vec1.getNelem(),  length);
+    EXPECT_EQ(vec1.getStride(), stride);
+
+    EXPECT_EQ(vec1.getSizes(),  sizes);
 
     EXPECT_TRUE(vec1.isShrunk());
 
@@ -166,6 +216,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
   const auto stride  = this->stride_;
   const auto memsize = this->memsize_;
   const auto vec     = this->vec_;
+  const auto sizes   = std::make_tuple(length);
 
   {
     SCOPED_TRACE("Constructor(length, stride)");
@@ -175,7 +226,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
     EXPECT_EQ(vec1.getNelem(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
 
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
+    EXPECT_EQ(vec1.getSizes(),  sizes);
 
     EXPECT_FALSE(vec1.isShrunk());
 
@@ -191,7 +242,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
     EXPECT_EQ(vec1.getNelem(),  length);
     EXPECT_EQ(vec1.getStride(), stride);
 
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(length));
+    EXPECT_EQ(vec1.getSizes(),  sizes);
 
     EXPECT_FALSE(vec1.isShrunk());
 

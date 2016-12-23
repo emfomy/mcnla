@@ -27,24 +27,24 @@ namespace matrix {
 template <typename _Scalar>
 DenseMatrixStorage<_Scalar>::DenseMatrixStorage() noexcept
   : BaseType(),
-    size0_(0),
-    size1_(0),
-    pitch0_(0) {}
+    dim0_(0),
+    dim1_(0),
+    pitch_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
 DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
-    const index_t size0,
-    const index_t size1,
+    const index_t dim0,
+    const index_t dim1
 ) noexcept
-  : BaseType(size0 * size1),
-    size0_(size0),
-    size1_(size1),
-    pitch0_(size0) {
-  mcnla_assert_ge(size0_, 0);
-  mcnla_assert_ge(size1_, 0);
+  : BaseType(dim0 * dim1),
+    dim0_(dim0),
+    dim1_(dim1),
+    pitch_(dim0) {
+  mcnla_assert_ge(dim0_, 0);
+  mcnla_assert_ge(dim1_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,17 +52,17 @@ DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
 ///
 template <typename _Scalar>
 DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
-    const index_t size0,
-    const index_t size1,
-    const index_t pitch0
+    const index_t dim0,
+    const index_t dim1,
+    const index_t pitch
 ) noexcept
-  : BaseType(size0 * pitch0),
-    size0_(size0),
-    size1_(size1),
-    pitch0_(pitch0) {
-  mcnla_assert_ge(size0_, 0);
-  mcnla_assert_ge(size1_, 0);
-  mcnla_assert_ge(pitch_, size0_);
+  : BaseType(dim0 * pitch),
+    dim0_(dim0),
+    dim1_(dim1),
+    pitch_(pitch) {
+  mcnla_assert_ge(dim0_, 0);
+  mcnla_assert_ge(dim1_, 0);
+  mcnla_assert_ge(pitch_, dim0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,19 +70,19 @@ DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
 ///
 template <typename _Scalar>
 DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
-    const index_t size0,
-    const index_t size1,
-    const index_t pitch0,
+    const index_t dim0,
+    const index_t dim1,
+    const index_t pitch,
     const index_t capacity
 ) noexcept
   : BaseType(capacity),
-    size0_(size0),
-    size1_(size1),
-    pitch0_(pitch0) {
-  mcnla_assert_ge(size0_, 0);
-  mcnla_assert_ge(size1_, 0);
-  mcnla_assert_ge(pitch_, size0_);
-  mcnla_assert_ge(capacity, pitch_ * (size1_-1) + size0_);
+    dim0_(dim0),
+    dim1_(dim1),
+    pitch_(pitch) {
+  mcnla_assert_ge(dim0_, 0);
+  mcnla_assert_ge(dim1_, 0);
+  mcnla_assert_ge(pitch_, dim0_);
+  mcnla_assert_ge(capacity, pitch_ * (dim1_-1) + dim0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,20 +90,20 @@ DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
 ///
 template <typename _Scalar>
 DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
-    const index_t size0,
-    const index_t size1,
-    const index_t pitch0,
+    const index_t dim0,
+    const index_t dim1,
+    const index_t pitch,
     const ValueArrayType &value,
     const index_t offset
 ) noexcept
   : BaseType(value >> offset),
-    size0_(size0),
-    size1_(size1),
-    pitch0_(pitch0) {
-  mcnla_assert_ge(size0_, 0);
-  mcnla_assert_ge(size1_, 0);
-  mcnla_assert_ge(pitch_, size0_);
-  mcnla_assert_ge(this->getCapacity(), pitch_ * (size1_-1) + size0_);
+    dim0_(dim0),
+    dim1_(dim1),
+    pitch_(pitch) {
+  mcnla_assert_ge(dim0_, 0);
+  mcnla_assert_ge(dim1_, 0);
+  mcnla_assert_ge(pitch_, dim0_);
+  mcnla_assert_ge(this->getCapacity(), pitch_ * (dim1_-1) + dim0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,9 +116,9 @@ DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
     const DenseMatrixStorage &other
 ) noexcept
   : BaseType(other),
-    size0_(other.size0_),
-    size1_(other.size1_),
-    pitch0_(other.pitch0_) {}
+    dim0_(other.dim0_),
+    dim1_(other.dim1_),
+    pitch_(other.pitch_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
@@ -128,12 +128,12 @@ DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
   DenseMatrixStorage &&other
 ) noexcept
   : BaseType(std::move(other)),
-    size0_(other.size0_),
-    size1_(other.size1_),
-    pitch0_(other.pitch0_) {
-  other.size0_  = 0;
-  other.size1_  = 0;
-  other.pitch0_ = 0;
+    dim0_(other.dim0_),
+    dim1_(other.dim1_),
+    pitch_(other.pitch_) {
+  other.dim0_  = 0;
+  other.dim1_  = 0;
+  other.pitch_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,9 +146,9 @@ DenseMatrixStorage<_Scalar>& DenseMatrixStorage<_Scalar>::operator=(
     const DenseMatrixStorage &other
 ) noexcept {
   BaseType::operator=(other);
-  size0_  = other.size0_;
-  size1_  = other.size1_;
-  pitch0_ = other.pitch0_;
+  dim0_  = other.dim0_;
+  dim1_  = other.dim1_;
+  pitch_ = other.pitch_;
   return *this;
 }
 
@@ -160,9 +160,9 @@ DenseMatrixStorage<_Scalar>& DenseMatrixStorage<_Scalar>::operator=(
     DenseMatrixStorage &&other
 ) noexcept {
   BaseType::operator=(std::move(other));
-  size0_  = other.size0_;  other.size0_  = 0;
-  pitch0_ = other.size1_;  other.size1_ = 0;
-  pitch0_ = other.pitch0_; other.pitch0_ = 0;
+  dim0_  = other.dim0_;  other.dim0_  = 0;
+  dim1_  = other.dim1_;  other.dim1_  = 0;
+  pitch_ = other.pitch_; other.pitch_ = 0;
   return *this;
 }
 
@@ -171,7 +171,7 @@ DenseMatrixStorage<_Scalar>& DenseMatrixStorage<_Scalar>::operator=(
 ///
 template <typename _Scalar>
 bool DenseMatrixStorage<_Scalar>::isShrunk() const noexcept {
-  return (pitch0_ == pitch_);
+  return (dim0_ == pitch_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,31 +179,39 @@ bool DenseMatrixStorage<_Scalar>::isShrunk() const noexcept {
 ///
 template <typename _Scalar>
 bool DenseMatrixStorage<_Scalar>::isSquare() const noexcept {
-  return (size0_ == size1_);
+  return (dim0_ == dim1_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size of the first dimension.
+/// @brief  Gets the size in the first dimension.
 ///
 template <typename _Scalar>
-index_t DenseMatrixStorage<_Scalar>::getSize0() const noexcept {
-  return size0_;
+index_t DenseMatrixStorage<_Scalar>::getDim0() const noexcept {
+  return dim0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size of the second dimension.
+/// @brief  Gets the size in the second dimension.
 ///
 template <typename _Scalar>
-index_t DenseMatrixStorage<_Scalar>::getSize1() const noexcept {
-  return size1_;
+index_t DenseMatrixStorage<_Scalar>::getDim1() const noexcept {
+  return dim1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the leading dimension.
+/// @brief  Gets the size of dimensions in storage order. [ dim0, dim1 ]
 ///
 template <typename _Scalar>
-index_t DenseMatrixStorage<_Scalar>::getPitch0() const noexcept {
-  return pitch0_;
+std::tuple<index_t, index_t> DenseMatrixStorage<_Scalar>::getDims() const noexcept {
+  return std::make_tuple(dim0_, dim1_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum size in the first dimension.
+///
+template <typename _Scalar>
+index_t DenseMatrixStorage<_Scalar>::getPitch() const noexcept {
+  return pitch_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,8 +222,8 @@ _Scalar& DenseMatrixStorage<_Scalar>::getElem(
     const index_t idx0,
     const index_t idx1
 ) noexcept {
-  mcnla_assert_gelt(idx0, 0, size0_);
-  mcnla_assert_gelt(idx1, 0, size1_);
+  mcnla_assert_gelt(idx0, 0, dim0_);
+  mcnla_assert_gelt(idx1, 0, dim1_);
   return this->getValuePtr()[getPos(idx0, idx1)];
 }
 
@@ -227,8 +235,8 @@ const _Scalar& DenseMatrixStorage<_Scalar>::getElem(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
-  mcnla_assert_gelt(idx0, 0, size0_);
-  mcnla_assert_gelt(idx1, 0, size1_);
+  mcnla_assert_gelt(idx0, 0, dim0_);
+  mcnla_assert_gelt(idx1, 0, dim1_);
   return this->getValuePtr()[getPos(idx0, idx1)];
 }
 
@@ -262,7 +270,7 @@ index_t DenseMatrixStorage<_Scalar>::getPos(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
-  return idx0 + idx1 * pitch0_;
+  return idx0 + idx1 * pitch_;
 }
 
 }  // namespace matrix

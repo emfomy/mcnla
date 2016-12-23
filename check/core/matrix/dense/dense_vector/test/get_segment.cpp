@@ -10,7 +10,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
 
   const mcnla::index_t idx0 = 2, idxs = 5;
 
-  auto segment = vec.getSegment({idx0, idx0+idxs});
+  auto segment = vec({idx0, idx0+idxs});
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
@@ -53,7 +53,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
 
   const mcnla::index_t idx0 = 2, idxs = 5;
 
-  auto segment = vec.getSegment({idx0, idx0+idxs});
+  auto segment = vec({idx0, idx0+idxs});
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
