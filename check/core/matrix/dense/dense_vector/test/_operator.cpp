@@ -11,7 +11,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -21,7 +20,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec2.getLength(), 0);
     EXPECT_EQ(vec2.getNelem(),  0);
-    EXPECT_EQ(vec2.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec2.getStride(), 1);
 
     EXPECT_TRUE(vec2.isShrunk());
@@ -34,7 +32,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), vec.getLength());
     EXPECT_EQ(vec1.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec1.getStride(), vec.getStride());
 
     EXPECT_EQ(vec1.isShrunk(), vec.isShrunk());
@@ -50,7 +47,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -61,7 +57,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
     EXPECT_EQ(vec2.getLength(), vec.getLength());
     EXPECT_EQ(vec2.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec2.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec2.getStride(), vec.getStride());
 
     EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());
@@ -86,7 +81,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -96,7 +90,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec2.getLength(), 0);
     EXPECT_EQ(vec2.getNelem(),  0);
-    EXPECT_EQ(vec2.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec2.getStride(), 1);
 
     EXPECT_TRUE(vec2.isShrunk());
@@ -109,7 +102,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), vec.getLength());
     EXPECT_EQ(vec1.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec1.getStride(), vec.getStride());
 
     EXPECT_EQ(vec1.isShrunk(), vec.isShrunk());
@@ -125,7 +117,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec1.getLength(), 0);
     EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  std::make_tuple(0));
     EXPECT_EQ(vec1.getStride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
@@ -136,7 +127,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
 
     EXPECT_EQ(vec2.getLength(), vec.getLength());
     EXPECT_EQ(vec2.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec2.getSizes(),  vec.getSizes());
     EXPECT_EQ(vec2.getStride(), vec.getStride());
 
     EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());

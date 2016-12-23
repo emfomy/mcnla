@@ -18,7 +18,6 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -26,8 +25,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
   EXPECT_EQ(segment.getCapacity(), capacity);
   EXPECT_EQ(segment.getOffset(),   offset);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -79,7 +77,6 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -87,8 +84,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
   EXPECT_EQ(segment.getCapacity(), capacity);
   EXPECT_EQ(segment.getOffset(),   offset);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -142,7 +138,6 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -150,8 +145,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
   EXPECT_EQ(segment.getCapacity(), capacity);
   EXPECT_EQ(segment.getOffset(),   offset);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -203,7 +197,6 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
 
   EXPECT_EQ(segment.getLength(), idxs);
   EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -211,8 +204,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
   EXPECT_EQ(segment.getCapacity(), capacity);
   EXPECT_EQ(segment.getOffset(),   offset);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {

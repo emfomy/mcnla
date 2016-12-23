@@ -49,9 +49,9 @@ struct Traits<matrix::DenseVector<_Scalar>> {
 
   using ScalarType        = _Scalar;
   using RealScalarType    = RealType<_Scalar>;
-  using VectorType        = matrix::DenseVector<ScalarType>;
-  using IteratorType      = matrix::DenseVectorIterator<ScalarType>;
-  using ConstIteratorType = matrix::DenseVectorConstIterator<ScalarType>;
+  using VectorType        = matrix::DenseVector<_Scalar>;
+  using IteratorType      = matrix::DenseVectorIterator<_Scalar>;
+  using ConstIteratorType = matrix::DenseVectorConstIterator<_Scalar>;
 };
 
 }  // namespace traits
@@ -82,13 +82,13 @@ class DenseVector
 
   using ScalarType        = _Scalar;
   using RealScalarType    = RealType<_Scalar>;
-  using ValueArrayType    = Array<ScalarType>;
+  using ValueArrayType    = Array<_Scalar>;
   using SizesType         = std::tuple<index_t>;
 
-  using VectorType        = DenseVector<ScalarType>;
+  using VectorType        = DenseVector<_Scalar>;
 
-  using IteratorType      = DenseVectorIterator<ScalarType>;
-  using ConstIteratorType = DenseVectorConstIterator<ScalarType>;
+  using IteratorType      = DenseVectorIterator<_Scalar>;
+  using ConstIteratorType = DenseVectorConstIterator<_Scalar>;
 
  private:
 
@@ -119,6 +119,9 @@ class DenseVector
   // Gets element
   inline       ScalarType& operator()( const index_t idx ) noexcept;
   inline const ScalarType& operator()( const index_t idx ) const noexcept;
+
+  // Gets internal position
+  inline index_t getPos( const index_t idx ) const noexcept;
 
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;

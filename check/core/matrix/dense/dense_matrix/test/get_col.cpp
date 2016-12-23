@@ -11,11 +11,10 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCol) {
 
   const mcnla::index_t colidx = 2;
 
-  auto segment = mat.getCol(colidx);
+  auto segment = mat("", colidx);
 
   EXPECT_EQ(segment.getLength(), nrow);
   EXPECT_EQ(segment.getNelem(),  nrow);
-  EXPECT_EQ(segment.getSizes(),  nrow);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -23,8 +22,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCol) {
   EXPECT_EQ(segment.getCapacity(), capacity - colidx*pitch);
   EXPECT_EQ(segment.getOffset(),   offset + colidx*pitch);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, colidx)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));
@@ -56,11 +54,10 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCol) {
 
   const mcnla::index_t colidx = 2;
 
-  auto segment = mat.getCol(colidx);
+  auto segment = mat("", colidx);
 
   EXPECT_EQ(segment.getLength(), nrow);
   EXPECT_EQ(segment.getNelem(),  nrow);
-  EXPECT_EQ(segment.getSizes(),  nrow);
   EXPECT_EQ(segment.getStride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
@@ -68,8 +65,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCol) {
   EXPECT_EQ(segment.getCapacity(), capacity - colidx*pitch);
   EXPECT_EQ(segment.getOffset(),   offset + colidx*pitch);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, colidx)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));
@@ -101,11 +97,10 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCol) {
 
   const mcnla::index_t colidx = 2;
 
-  auto segment = mat.getCol(colidx);
+  auto segment = mat("", colidx);
 
   EXPECT_EQ(segment.getLength(), nrow);
   EXPECT_EQ(segment.getNelem(),  nrow);
-  EXPECT_EQ(segment.getSizes(),  nrow);
   EXPECT_EQ(segment.getStride(), pitch);
 
   EXPECT_FALSE(segment.isShrunk());
@@ -113,8 +108,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCol) {
   EXPECT_EQ(segment.getCapacity(), capacity - colidx);
   EXPECT_EQ(segment.getOffset(),   offset + colidx);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, colidx)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));
@@ -146,11 +140,10 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCol) {
 
   const mcnla::index_t colidx = 2;
 
-  auto segment = mat.getCol(colidx);
+  auto segment = mat("", colidx);
 
   EXPECT_EQ(segment.getLength(), nrow);
   EXPECT_EQ(segment.getNelem(),  nrow);
-  EXPECT_EQ(segment.getSizes(),  nrow);
   EXPECT_EQ(segment.getStride(), pitch);
 
   EXPECT_FALSE(segment.isShrunk());
@@ -158,8 +151,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCol) {
   EXPECT_EQ(segment.getCapacity(), capacity - colidx);
   EXPECT_EQ(segment.getOffset(),   offset + colidx);
 
-  EXPECT_EQ(segment.getValuePtr(),            &(mat(0, colidx)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.getValuePtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));

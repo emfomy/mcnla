@@ -11,12 +11,11 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCols) {
 
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getCols({col0, col0+cols});
+  auto block = mat("", {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_TRUE(block.isShrunk());
@@ -25,8 +24,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCols) {
   EXPECT_EQ(block.getCapacity(), capacity - col0*pitch);
   EXPECT_EQ(block.getOffset(),   offset + col0*pitch);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(0, col0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -64,12 +62,11 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCols) {
 
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getCols({col0, col0+cols});
+  auto block = mat("", {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
@@ -78,8 +75,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCols) {
   EXPECT_EQ(block.getCapacity(), capacity - col0*pitch);
   EXPECT_EQ(block.getOffset(),   offset + col0*pitch);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(0, col0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -117,12 +113,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCols) {
 
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getCols({col0, col0+cols});
+  auto block = mat("", {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
@@ -131,8 +126,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCols) {
   EXPECT_EQ(block.getCapacity(), capacity - col0);
   EXPECT_EQ(block.getOffset(),   offset + col0);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(0, col0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -170,12 +164,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCols) {
 
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getCols({col0, col0+cols});
+  auto block = mat("", {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  nrow);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), nrow * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(nrow, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
@@ -184,8 +177,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCols) {
   EXPECT_EQ(block.getCapacity(), capacity - col0);
   EXPECT_EQ(block.getOffset(),   offset + col0);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(0, col0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {

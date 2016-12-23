@@ -11,12 +11,11 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetBlock) {
   const mcnla::index_t row0 = 3, rows = 5;
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getBlock({row0, row0+rows}, {col0, col0+cols});
+  auto block = mat({row0, row0+rows}, {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), rows * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(rows, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
@@ -25,8 +24,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0 + col0*pitch));
   EXPECT_EQ(block.getOffset(),   offset + row0 + col0*pitch);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(row0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(row0, col0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -64,12 +62,11 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetBlock) {
   const mcnla::index_t row0 = 3, rows = 5;
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getBlock({row0, row0+rows}, {col0, col0+cols});
+  auto block = mat({row0, row0+rows}, {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), rows * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(rows, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
@@ -78,8 +75,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0 + col0*pitch));
   EXPECT_EQ(block.getOffset(),   offset + row0 + col0*pitch);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(row0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(row0, col0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -117,12 +113,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetBlock) {
   const mcnla::index_t row0 = 3, rows = 5;
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getBlock({row0, row0+rows}, {col0, col0+cols});
+  auto block = mat({row0, row0+rows}, {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), rows * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(rows, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
@@ -131,8 +126,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0*pitch + col0));
   EXPECT_EQ(block.getOffset(),   offset + row0*pitch + col0);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(row0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(row0, col0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {
@@ -170,12 +164,11 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetBlock) {
   const mcnla::index_t row0 = 3, rows = 5;
   const mcnla::index_t col0 = 2, cols = 3;
 
-  auto block = mat.getBlock({row0, row0+rows}, {col0, col0+cols});
+  auto block = mat({row0, row0+rows}, {col0, col0+cols});
 
   EXPECT_EQ(block.getNrow(),  rows);
   EXPECT_EQ(block.getNcol(),  cols);
   EXPECT_EQ(block.getNelem(), rows * cols);
-  EXPECT_EQ(block.getSizes(), std::make_pair(rows, cols));
   EXPECT_EQ(block.getPitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
@@ -184,8 +177,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetBlock) {
   EXPECT_EQ(block.getCapacity(), capacity - (row0*pitch + col0));
   EXPECT_EQ(block.getOffset(),   offset + row0*pitch + col0);
 
-  EXPECT_EQ(block.getValuePtr(),            &(mat(row0, col0)));
-  EXPECT_EQ(&(block.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(block.getValuePtr(), &(mat(row0, col0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < cols; ++j ) {

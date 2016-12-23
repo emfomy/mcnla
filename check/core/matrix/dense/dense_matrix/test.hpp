@@ -27,7 +27,7 @@ class DenseMatrixTestBase : public testing::Test {
     mcnla::matrix::Array<_Scalar> array(memsize_, offset_);
     mat_ = mcnla::matrix::DenseMatrix<_Scalar, _layout>(nrow_, ncol_, pitch_, array);
     mcnla::lapack::larnv<3>(mat_.vectorize(), iseed);
-    valarray_ = mat_.getValueValarray();
+    valarray_ = mat_.getValue().getValarray();
   }
 
   virtual void TearDown() {}

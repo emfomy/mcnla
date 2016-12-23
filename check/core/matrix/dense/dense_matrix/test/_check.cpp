@@ -20,8 +20,9 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Check) {
   EXPECT_EQ(mat.getNrow(),  nrow);
   EXPECT_EQ(mat.getNcol(),  ncol);
   EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
   EXPECT_EQ(mat.getPitch(), pitch);
+
+  EXPECT_EQ(mat.getSizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_TRUE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());
@@ -68,8 +69,9 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Check) {
   EXPECT_EQ(mat.getNrow(),  nrow);
   EXPECT_EQ(mat.getNcol(),  ncol);
   EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
   EXPECT_EQ(mat.getPitch(), pitch);
+
+  EXPECT_EQ(mat.getSizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_FALSE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());
@@ -116,8 +118,9 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Check) {
   EXPECT_EQ(mat.getNrow(),  nrow);
   EXPECT_EQ(mat.getNcol(),  ncol);
   EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
   EXPECT_EQ(mat.getPitch(), pitch);
+
+  EXPECT_EQ(mat.getSizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_TRUE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());
@@ -164,8 +167,9 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Check) {
   EXPECT_EQ(mat.getNrow(),  nrow);
   EXPECT_EQ(mat.getNcol(),  ncol);
   EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
   EXPECT_EQ(mat.getPitch(), pitch);
+
+  EXPECT_EQ(mat.getSizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_FALSE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());

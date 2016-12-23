@@ -24,6 +24,10 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar> class DenseMatrixStorage;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_dense_module
 /// The dense vector storage class.
@@ -33,13 +37,15 @@ namespace matrix {
 template <typename _Scalar>
 class DenseVectorStorage : public DenseStorage<_Scalar> {
 
+  friend class DenseMatrixStorage<_Scalar>;
+
  private:
 
   using ScalarType        = _Scalar;
-  using ValueArrayType    = Array<ScalarType>;
+  using ValueArrayType    = Array<_Scalar>;
   using DimsType          = std::tuple<index_t>;
 
-  using VectorStorageType = DenseVectorStorage<ScalarType>;
+  using VectorStorageType = DenseVectorStorage<_Scalar>;
 
   using BaseType          = DenseStorage<_Scalar>;
 
@@ -76,14 +82,14 @@ class DenseVectorStorage : public DenseStorage<_Scalar> {
   inline DimsType getDims() const noexcept;
   inline index_t  getStride() const noexcept;
 
-  // Gets internal position
-  inline index_t getPos( const index_t idx0 ) const noexcept;
-
  protected:
 
   // Gets element
   inline       ScalarType& getElemImpl( const index_t idx0 ) noexcept;
   inline const ScalarType& getElemImpl( const index_t idx0 ) const noexcept;
+
+  // Gets internal position
+  inline index_t getPosImpl( const index_t idx0 ) const noexcept;
 
   // Resizes
   inline void resizeImpl( const index_t dim0, const index_t stride ) noexcept;

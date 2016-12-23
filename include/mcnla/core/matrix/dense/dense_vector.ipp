@@ -158,6 +158,16 @@ const _Scalar& DenseVector<_Scalar>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseVectorStorage::getPosImpl
+///
+template <typename _Scalar>
+index_t DenseVector<_Scalar>::getPos(
+    const index_t idx
+) const noexcept {
+  return this->getPosImpl(idx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Finds the iterator to element
 ///
 template <typename _Scalar>
@@ -203,7 +213,7 @@ void DenseVector<_Scalar>::resize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::getSegmentImpl
+/// @brief  Gets a vector segment.
 ///
 template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
@@ -213,7 +223,7 @@ DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::getSegmentImpl
+/// @brief  Gets a vector segment.
 ///
 template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
@@ -231,7 +241,7 @@ index_t DenseVector<_Scalar>::getLengthImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Change size order.
+/// Gets the first dimension from sizes.
 ///
 template <typename _Scalar>
 index_t DenseVector<_Scalar>::dim0( const SizesType sizes ) const noexcept {
@@ -255,7 +265,7 @@ DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  storage
+/// @copydoc  base
 ///
 template <typename _Scalar>
 const DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() const noexcept {

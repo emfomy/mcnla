@@ -10,9 +10,9 @@
 
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#pragma warning
 #include <mcnla/core/blas.hpp>
 #include <mcnla/core/lapack.hpp>
+#pragma warning
 // #include <mcnla/core/mpi.hpp>
 // #include <mcnla/core/io.hpp>
 #include <mcnla/core/utility.hpp>

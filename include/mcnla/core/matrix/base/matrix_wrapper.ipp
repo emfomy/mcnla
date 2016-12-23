@@ -49,7 +49,7 @@ index_t MatrixWrapper<_Derived>::getNelem() const noexcept {
 ///
 template <class _Derived>
 std::tuple<index_t, index_t> MatrixWrapper<_Derived>::getSizes() const noexcept {
-  return std::make_tuple(getNrow());
+  return std::make_tuple(getNrow(), getNcol());
 }
 
 }  // namespace matrix

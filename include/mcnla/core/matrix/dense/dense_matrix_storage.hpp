@@ -86,14 +86,14 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   inline DimsType getDims() const noexcept;
   inline index_t  getPitch() const noexcept;
 
-  // Gets internal position
-  inline index_t getPos( const index_t idx0, const index_t idx1 ) const noexcept;
-
  protected:
 
   // Gets element
   inline       ScalarType& getElemImpl( const index_t idx0, const index_t idx1 ) noexcept;
   inline const ScalarType& getElemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
+
+  // Gets internal position
+  inline index_t getPosImpl( const index_t idx0, const index_t idx1 ) const noexcept;
 
   // Resizes
   inline void resizeImpl( const index_t nrow, const index_t ncol ) noexcept;
