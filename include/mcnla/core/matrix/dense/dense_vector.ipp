@@ -219,7 +219,7 @@ template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
     const IdxRange range
 ) noexcept {
-  return static_cast<VectorType&&>(this->getSegmentImpl(range));
+  return static_cast<VectorType&&>(this->getVectorImpl(range));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,7 +229,7 @@ template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
     const IdxRange range
 ) const noexcept {
-  return static_cast<const VectorType&&>(this->getSegmentImpl(range));
+  return static_cast<const VectorType&&>(this->getVectorImpl(range));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

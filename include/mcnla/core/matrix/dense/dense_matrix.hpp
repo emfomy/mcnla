@@ -150,14 +150,14 @@ class DenseMatrix
   inline const MatrixType operator()( const IdxRange rowrange, const char*             ) const noexcept;
 
   // Gets vector segment
-  inline       VectorType operator()( const char*,             const index_t colidx    ) noexcept;
-  inline const VectorType operator()( const char*,             const index_t colidx    ) const noexcept;
   inline       VectorType operator()( const IdxRange rowrange, const index_t colidx    ) noexcept;
   inline const VectorType operator()( const IdxRange rowrange, const index_t colidx    ) const noexcept;
-  inline       VectorType operator()( const index_t rowidx,    const char*             ) noexcept;
-  inline const VectorType operator()( const index_t rowidx,    const char*             ) const noexcept;
+  inline       VectorType operator()( const char*,             const index_t colidx    ) noexcept;
+  inline const VectorType operator()( const char*,             const index_t colidx    ) const noexcept;
   inline       VectorType operator()( const index_t rowidx,    const IdxRange colrange ) noexcept;
   inline const VectorType operator()( const index_t rowidx,    const IdxRange colrange ) const noexcept;
+  inline       VectorType operator()( const index_t rowidx,    const char*             ) noexcept;
+  inline const VectorType operator()( const index_t rowidx,    const char*             ) const noexcept;
 
   inline       VectorType getDiagonal( const index_t idx = 0 ) noexcept;
   inline const VectorType getDiagonal( const index_t idx = 0 ) const noexcept;
@@ -175,6 +175,10 @@ class DenseMatrix
   inline index_t dim0( const index_t nrow, const index_t ncol ) const noexcept;
   inline index_t dim1( const SizesType sizes ) const noexcept;
   inline index_t dim1( const index_t nrow, const index_t ncol ) const noexcept;
+
+  // Create full index range
+  inline const IdxRange colfullrange() const noexcept;
+  inline const IdxRange rowfullrange() const noexcept;
 
   // Gets base class
   inline       BaseType& base() noexcept;

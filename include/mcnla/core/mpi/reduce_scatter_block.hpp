@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/reducescatterblock.hpp
+/// @file    include/mcnla/core/mpi/reduce_scatter_block.hpp
 /// @brief   The MPI RECUDESCATTER routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>

@@ -262,7 +262,7 @@ void DenseMatrix<_Scalar, _layout>::resize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getBlockImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
@@ -270,12 +270,12 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const IdxRange colrange
 ) noexcept {
   return static_cast<MatrixType&&>(
-      isColMajor(_layout) ? this->getBlockImpl(rowrange, colrange) : this->getBlockImpl(colrange, rowrange)
+      isColMajor(_layout) ? this->getMatrixImpl(rowrange, colrange) : this->getMatrixImpl(colrange, rowrange)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getBlockImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
 ///
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
@@ -283,12 +283,12 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const IdxRange colrange
 ) const noexcept {
   return static_cast<const MatrixType&&>(
-      isColMajor(_layout) ? this->getBlockImpl(rowrange, colrange) : this->getBlockImpl(colrange, rowrange)
+      isColMajor(_layout) ? this->getMatrixImpl(rowrange, colrange) : this->getMatrixImpl(colrange, rowrange)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getBlockImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
@@ -296,12 +296,12 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const IdxRange colrange
 ) noexcept {
   return static_cast<MatrixType&&>(
-      isColMajor(_layout) ? this->getVec0sImpl(colrange) : this->getVec1sImpl(colrange)
+      isColMajor(_layout) ? this->getMatrixImpl(rowfullrange(), colrange) : this->getMatrixImpl(colrange, rowfullrange())
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getBlockImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
 ///
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
@@ -309,12 +309,12 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const IdxRange colrange
 ) const noexcept {
   return static_cast<const MatrixType&&>(
-      isColMajor(_layout) ? this->getVec0sImpl(colrange) : this->getVec1sImpl(colrange)
+      isColMajor(_layout) ? this->getMatrixImpl(rowfullrange(), colrange) : this->getMatrixImpl(colrange, rowfullrange())
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getBlockImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
@@ -322,12 +322,12 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const char*
 ) noexcept {
   return static_cast<MatrixType&&>(
-      isColMajor(_layout) ? this->getVec1sImpl(rowrange) : this->getVec0sImpl(rowrange)
+      isColMajor(_layout) ? this->getMatrixImpl(rowrange, colfullrange()) : this->getMatrixImpl(colfullrange(), rowrange)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getBlockImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
 ///
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
@@ -335,38 +335,12 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const char*
 ) const noexcept {
   return static_cast<const MatrixType&&>(
-      isColMajor(_layout) ? this->getVec1sImpl(rowrange) : this->getVec0sImpl(rowrange)
+      isColMajor(_layout) ? this->getMatrixImpl(rowrange, colfullrange()) : this->getMatrixImpl(colfullrange(), rowrange)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
-///
-template <typename _Scalar, Layout _layout>
-DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
-    const char*,
-    const index_t colidx
-) noexcept {
-  return static_cast<VectorType&&>(
-      isColMajor(_layout) ? this->getVec0Impl(colidx) : this->getVec1Impl(colidx)
-  );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
-///
-template <typename _Scalar, Layout _layout>
-const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
-    const char*,
-    const index_t colidx
-) const noexcept {
-  return static_cast<const VectorType&&>(
-      isColMajor(_layout) ? this->getVec0Impl(colidx) : this->getVec1Impl(colidx)
-  );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
@@ -374,12 +348,12 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
     const index_t colidx
 ) noexcept {
   return static_cast<VectorType&&>(
-      isColMajor(_layout) ? this->getVec0SegmentImpl(rowrange, colidx) : this->getVec1SegmentImpl(colidx, rowrange)
+      isColMajor(_layout) ? this->getVector0Impl(rowrange, colidx) : this->getVector1Impl(colidx, rowrange)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
@@ -387,38 +361,38 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
     const index_t colidx
 ) const noexcept {
   return static_cast<const VectorType&&>(
-      isColMajor(_layout) ? this->getVec0SegmentImpl(rowrange, colidx) : this->getVec1SegmentImpl(colidx, rowrange)
+      isColMajor(_layout) ? this->getVector0Impl(rowrange, colidx) : this->getVector1Impl(colidx, rowrange)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
-    const index_t rowidx,
-    const char*
+    const char*,
+    const index_t colidx
 ) noexcept {
   return static_cast<VectorType&&>(
-      isColMajor(_layout) ? this->getVec1Impl(rowidx) : this->getVec0Impl(rowidx)
+      isColMajor(_layout) ? this->getVector0Impl(rowfullrange(), colidx) : this->getVector1Impl(colidx, rowfullrange())
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
-    const index_t rowidx,
-    const char*
+    const char*,
+    const index_t colidx
 ) const noexcept {
   return static_cast<const VectorType&&>(
-      isColMajor(_layout) ? this->getVec1Impl(rowidx) : this->getVec0Impl(rowidx)
+      isColMajor(_layout) ? this->getVector0Impl(rowfullrange(), colidx) : this->getVector1Impl(colidx, rowfullrange())
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
@@ -426,12 +400,12 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
     const IdxRange colrange
 ) noexcept {
   return static_cast<VectorType&&>(
-      isColMajor(_layout) ? this->getVec1SegmentImpl(rowidx, colrange) : this->getVec0SegmentImpl(colrange, rowidx)
+      isColMajor(_layout) ? this->getVector1Impl(rowidx, colrange) : this->getVector0Impl(colrange, rowidx)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVec0Impl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
@@ -439,7 +413,33 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
     const IdxRange colrange
 ) const noexcept {
   return static_cast<const VectorType&&>(
-      isColMajor(_layout) ? this->getVec1SegmentImpl(rowidx, colrange) : this->getVec0SegmentImpl(colrange, rowidx)
+      isColMajor(_layout) ? this->getVector1Impl(rowidx, colrange) : this->getVector0Impl(colrange, rowidx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+///
+template <typename _Scalar, Layout _layout>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
+    const index_t rowidx,
+    const char*
+) noexcept {
+  return static_cast<VectorType&&>(
+      isColMajor(_layout) ? this->getVector1Impl(rowidx, colfullrange()) : this->getVector0Impl(colfullrange(), rowidx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+///
+template <typename _Scalar, Layout _layout>
+const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
+    const index_t rowidx,
+    const char*
+) const noexcept {
+  return static_cast<const VectorType&&>(
+      isColMajor(_layout) ? this->getVector1Impl(rowidx, colfullrange()) : this->getVector0Impl(colfullrange(), rowidx)
   );
 }
 
@@ -529,6 +529,22 @@ index_t DenseMatrix<_Scalar, _layout>::dim1( const SizesType sizes ) const noexc
 template <typename _Scalar, Layout _layout>
 index_t DenseMatrix<_Scalar, _layout>::dim1( const index_t nrow, const index_t ncol ) const noexcept {
   return isColMajor(_layout) ? ncol : nrow;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Create a full row index range.
+///
+template <typename _Scalar, Layout _layout>
+const IdxRange DenseMatrix<_Scalar, _layout>::rowfullrange() const noexcept {
+  return {0, this->getNrow()};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Create a full column index range.
+///
+template <typename _Scalar, Layout _layout>
+const IdxRange DenseMatrix<_Scalar, _layout>::colfullrange() const noexcept {
+  return {0, this->getNcol()};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

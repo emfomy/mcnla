@@ -33,7 +33,7 @@ class CrtpBase {
 
  protected:
 
-  inline CrtpBase() noexcept {};
+  inline CrtpBase() noexcept = default;
 
  public:
 
