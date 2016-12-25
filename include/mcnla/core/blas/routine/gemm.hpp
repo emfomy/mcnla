@@ -26,53 +26,54 @@ namespace blas {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes a matrix-matrix product with general matrices.
-///
-//@{
-template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
-          typename _Scalar, Layout _layouta, Layout _layoutb>
-inline void gemm(
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl2(
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
-    const DenseMatrix<_Scalar, _layouta> &a,
-    const DenseMatrix<_Scalar, _layoutb> &b,
-    const _Scalar beta,
-          DenseMatrix<_Scalar, Layout::COLMAJOR> &c
+    const _Scalar beta
 ) noexcept {
-  constexpr Trans transa = isColMajor(_layouta) ? _transa : _transa ^ Trans::TRANS;
-  constexpr Trans transb = isColMajor(_layoutb) ? _transb : _transb ^ Trans::TRANS;
+  mcnla_assert_eq(c.getNrow(), a.getNrow());
+  mcnla_assert_eq(c.getNcol(), b.getNcol());
+  mcnla_assert_eq(a.getNcol(), b.getNrow());
 
-  mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
-  mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
-  mcnla_assert_eq(a.template getNcol<_transa>(), b.template getNrow<_transb>());
-
-  gemm(toTransChar<_Scalar>(transa), toTransChar<_Scalar>(transb),
-       c.getNrow(), c.getNcol(), a.template getNcol<_transa>(),
+  gemm(toTransChar<_Scalar>(_transa), toTransChar<_Scalar>(_transb), c.getNrow(), c.getNcol(), a.getNcol(),
        alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
 
-template <Trans _transa = Trans::NORMAL,
-          Trans _transb = Trans::NORMAL,
-          typename _Scalar, Layout _layouta, Layout _layoutb>
-inline void gemm(
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl1(
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
-    const DenseMatrix<_Scalar, _layouta> &a,
-    const DenseMatrix<_Scalar, _layoutb> &b,
-    const _Scalar beta,
-          DenseMatrix<_Scalar, Layout::ROWMAJOR> &c
+    const _Scalar beta
 ) noexcept {
-  constexpr Trans transa = isRowMajor(_layouta) ? _transa : _transa ^ Trans::TRANS;
-  constexpr Trans transb = isRowMajor(_layoutb) ? _transb : _transb ^ Trans::TRANS;
-
-  mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
-  mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
-  mcnla_assert_eq(a.template getNcol<_transa>(), b.template getNrow<_transb>());
-
-  gemm(toTransChar<_Scalar>(transb), toTransChar<_Scalar>(transa),
-       c.getNcol(), c.getNrow(), a.template getNcol<_transa>(),
-       alpha, b.getValuePtr(), b.getPitch(), a.getValuePtr(), a.getPitch(), beta, c.getValuePtr(), c.getPitch());
+  gemmImpl2(a, b, c, alpha, beta);
 }
-//@}
+
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl1(
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, Trans::TRANS> &c,
+    const _Scalar alpha,
+    const _Scalar beta
+) noexcept {
+  gemmImpl2(b.transpose(), a.transpose(), c.transpose(), alpha, beta);
+}
+
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void gemmImpl1(
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, _transc> &c,
+    const _Scalar alpha,
+    const _Scalar beta
+) noexcept {
+  static_assert(!isConj(_transc), "Conjugate version of GEMM is not supported!");
+}
 
 }  // namespace detail
 
@@ -80,29 +81,27 @@ inline void gemm(
 /// @ingroup  blas3_module
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
-template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
-          typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
-    const DenseMatrix<_Scalar, _layouta> &a,
-    const DenseMatrix<_Scalar, _layoutb> &b,
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
-          DenseMatrix<_Scalar, _layoutc> &c
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, _transc> &c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
 ) noexcept {
-  detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
+  detail::gemmImpl1(a, b, c, alpha, beta);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
-          typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
-    const DenseMatrix<_Scalar, _layouta> &a,
-    const DenseMatrix<_Scalar, _layoutb> &b,
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
-          DenseMatrix<_Scalar, _layoutc> &&c
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, _transc> &&c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
 ) noexcept {
-  detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
+  detail::gemmImpl1(a, b, c, alpha, beta);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

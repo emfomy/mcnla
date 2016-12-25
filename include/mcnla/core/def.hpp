@@ -21,7 +21,7 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The enumeration of matrix storage layout.
+/// The enumeration of matrix transpose storage.
 ///
 enum class Trans {
   NORMAL    = 0x0,           ///< No-transpose.

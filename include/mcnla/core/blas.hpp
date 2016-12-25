@@ -9,8 +9,7 @@
 #define MCNLA_CORE_BLAS_HPP_
 
 #include <mcnla/core/blas/def.hpp>
-#pragma warning
-// #include <mcnla/core/blas/routine.hpp>
-// #include <mcnla/core/blas/driver.hpp>
+#include <mcnla/core/blas/routine.hpp>
+#include <mcnla/core/blas/engine.hpp>
 
 #endif  // MCNLA_CORE_BLAS_HPP_
