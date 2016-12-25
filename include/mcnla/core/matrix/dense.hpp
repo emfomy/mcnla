@@ -32,4 +32,7 @@
 #include <mcnla/core/matrix/dense/dense_symmetric_matrix.hpp>
 #include <mcnla/core/matrix/dense/dense_symmetric_matrix.ipp>
 
+#include <mcnla/core/matrix/dense/dense_triangular_matrix.hpp>
+#include <mcnla/core/matrix/dense/dense_triangular_matrix.ipp>
+
 #endif  // MCNLA_CORE_MATRIX_DENSE_HPP_

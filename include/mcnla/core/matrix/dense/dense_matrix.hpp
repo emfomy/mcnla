@@ -16,6 +16,7 @@
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_symmetric_matrix.hpp>
+#include <mcnla/core/matrix/dense/dense_triangular_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +33,7 @@ namespace matrix {
 template <typename _Scalar> class DenseVector;
 template <typename _Scalar, Layout _layout> class DenseMatrix;
 template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseSymmetricMatrix;
+template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseTriangularMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -92,6 +94,8 @@ class DenseMatrix
   using TransposeType     = DenseMatrix<_Scalar, changeLayout(_layout)>;
   template <Uplo _uplo>
   using SymmetricType     = DenseSymmetricMatrix<_Scalar, _layout, _uplo>;
+  template <Uplo _uplo>
+  using TriangularType     = DenseTriangularMatrix<_Scalar, _layout, _uplo>;
 
   using IteratorType      = DenseMatrixIterator<_Scalar, _layout>;
   using ConstIteratorType = DenseMatrixConstIterator<_Scalar, _layout>;
@@ -146,6 +150,11 @@ class DenseMatrix
   inline       SymmetricType<_uplo>& viewSymmetric() noexcept;
   template <Uplo _uplo = Uplo::UPPER>
   inline const SymmetricType<_uplo>& viewSymmetric() const noexcept;
+
+  template <Uplo _uplo = Uplo::UPPER>
+  inline       TriangularType<_uplo>& viewTriangular() noexcept;
+  template <Uplo _uplo = Uplo::UPPER>
+  inline const TriangularType<_uplo>& viewTriangular() const noexcept;
 
   // Gets matrix block
   inline       MatrixType operator()( const IdxRange &rowrange, const IdxRange &colrange ) noexcept;

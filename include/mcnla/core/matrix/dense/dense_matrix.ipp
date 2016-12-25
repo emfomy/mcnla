@@ -265,6 +265,24 @@ const DenseSymmetricMatrix<_Scalar, _layout, _uplo>& DenseMatrix<_Scalar, _layou
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the triangular view of the matrix.
+///
+template <typename _Scalar, Layout _layout> template <Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseMatrix<_Scalar, _layout>::viewTriangular() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<TriangularType<_uplo>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewTriangular
+///
+template <typename _Scalar, Layout _layout> template <Uplo _uplo>
+const DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseMatrix<_Scalar, _layout>::viewTriangular() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const TriangularType<_uplo>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
 ///
 template <typename _Scalar, Layout _layout>

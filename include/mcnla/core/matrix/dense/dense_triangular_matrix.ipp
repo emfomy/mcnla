@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_symmetric_matrix.ipp
-/// @brief   The implementation of dense symmetric matrix.
+/// @file    include/mcnla/core/matrix/dense/dense_triangular_matrix.ipp
+/// @brief   The implementation of dense triangular matrix.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_IPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_IPP_
+#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_IPP_
+#define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_IPP_
 
-#include <mcnla/core/matrix/dense/dense_symmetric_matrix.hpp>
+#include <mcnla/core/matrix/dense/dense_triangular_matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,14 +24,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix() noexcept
+DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
+DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
     const index_t size
 ) noexcept
   : BaseType(size, size) {
@@ -41,7 +41,7 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
+DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -51,7 +51,7 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
+DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -62,7 +62,7 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
+DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
     const index_t size,
     const index_t pitch,
     const ValueArrayType &value,
@@ -76,8 +76,8 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
-    const DenseSymmetricMatrix &other
+DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+    const DenseTriangularMatrix &other
 ) noexcept
   : BaseType(other) {}
 
@@ -85,8 +85,8 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
 /// @brief  Move constructor.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
-    DenseSymmetricMatrix &&other
+DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+    DenseTriangularMatrix &&other
 ) noexcept
   : BaseType(std::move(other)) {}
 
@@ -96,8 +96,8 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>::DenseSymmetricMatrix(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>& DenseSymmetricMatrix<_Scalar, _layout, _uplo>::operator=(
-    const DenseSymmetricMatrix &other
+DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator=(
+    const DenseTriangularMatrix &other
 ) noexcept {
   BaseType::operator=(other);
   return *this;
@@ -107,8 +107,8 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>& DenseSymmetricMatrix<_Scalar, _la
 /// @brief  Move assignment operator.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _layout, _uplo>& DenseSymmetricMatrix<_Scalar, _layout, _uplo>::operator=(
-    DenseSymmetricMatrix &&other
+DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator=(
+    DenseTriangularMatrix &&other
 ) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
@@ -118,24 +118,34 @@ DenseSymmetricMatrix<_Scalar, _layout, _uplo>& DenseSymmetricMatrix<_Scalar, _la
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-_Scalar DenseSymmetricMatrix<_Scalar, _layout, _uplo>::operator()(
+_Scalar DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
-  return ( isColMajor(_layout) ^ isUpper(_uplo) ^ (rowidx <= colidx) )
-      ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx);
+  if ( rowidx == colidx ) {
+    return isUnitDiag(_uplo) ? 1 : this->getElemImpl(rowidx, colidx);
+  } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
+    return (isColMajor(_layout) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
+  } else {
+    return 0;
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-const _Scalar DenseSymmetricMatrix<_Scalar, _layout, _uplo>::operator()(
+const _Scalar DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  return ( isColMajor(_layout) ^ isUpper(_uplo) ^ (rowidx <= colidx) )
-      ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx);
+  if ( rowidx == colidx ) {
+    return isUnitDiag(_uplo) ? 1 : this->getElemImpl(rowidx, colidx);
+  } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
+    return (isColMajor(_layout) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
+  } else {
+    return 0;
+  }
 }
 
 
@@ -145,8 +155,8 @@ const _Scalar DenseSymmetricMatrix<_Scalar, _layout, _uplo>::operator()(
 /// @attention  The storage layout is also changed.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, changeLayout(_layout), _uplo>&
-    DenseSymmetricMatrix<_Scalar, _layout, _uplo>::transpose() noexcept {
+DenseTriangularMatrix<_Scalar, changeLayout(_layout), _uplo>&
+    DenseTriangularMatrix<_Scalar, _layout, _uplo>::transpose() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
@@ -154,8 +164,8 @@ DenseSymmetricMatrix<_Scalar, changeLayout(_layout), _uplo>&
 /// @copydoc  transpose
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-const DenseSymmetricMatrix<_Scalar, changeLayout(_layout), _uplo>&
-    DenseSymmetricMatrix<_Scalar, _layout, _uplo>::transpose() const noexcept {
+const DenseTriangularMatrix<_Scalar, changeLayout(_layout), _uplo>&
+    DenseTriangularMatrix<_Scalar, _layout, _uplo>::transpose() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 
@@ -163,7 +173,7 @@ const DenseSymmetricMatrix<_Scalar, changeLayout(_layout), _uplo>&
 /// @copydoc  mcnla::matrix::MatrixWrapper::getNrow
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _layout, _uplo>::getNrowImpl() const noexcept {
+index_t DenseTriangularMatrix<_Scalar, _layout, _uplo>::getNrowImpl() const noexcept {
   return isColMajor(_layout) ? this->getDim0() : this->getDim1();
 }
 
@@ -171,7 +181,7 @@ index_t DenseSymmetricMatrix<_Scalar, _layout, _uplo>::getNrowImpl() const noexc
 /// @copydoc  mcnla::matrix::MatrixWrapper::getNcol
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _layout, _uplo>::getNcolImpl() const noexcept {
+index_t DenseTriangularMatrix<_Scalar, _layout, _uplo>::getNcolImpl() const noexcept {
   return isColMajor(_layout) ? this->getDim1() : this->getDim0();
 }
 
@@ -179,7 +189,7 @@ index_t DenseSymmetricMatrix<_Scalar, _layout, _uplo>::getNcolImpl() const noexc
 /// @brief  Convert to base class.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseMatrixStorage<_Scalar>& DenseSymmetricMatrix<_Scalar, _layout, _uplo>::base() noexcept {
+DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
@@ -187,7 +197,7 @@ DenseMatrixStorage<_Scalar>& DenseSymmetricMatrix<_Scalar, _layout, _uplo>::base
 /// @copydoc  base
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-const DenseMatrixStorage<_Scalar>& DenseSymmetricMatrix<_Scalar, _layout, _uplo>::base() const noexcept {
+const DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 
@@ -195,4 +205,4 @@ const DenseMatrixStorage<_Scalar>& DenseSymmetricMatrix<_Scalar, _layout, _uplo>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_IPP_
+#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_IPP_

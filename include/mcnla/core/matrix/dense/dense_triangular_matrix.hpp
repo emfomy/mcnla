@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_symmetric_matrix.hpp
-/// @brief   The dense symmetric matrix class.
+/// @file    include/mcnla/core/matrix/dense/dense_triangular_matrix.hpp
+/// @brief   The dense triangular matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HPP_
+#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_
+#define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -26,7 +26,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseSymmetricMatrix;
+template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseTriangularMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -37,12 +37,12 @@ template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseSymmetricMatr
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense symmetric matrix traits.
+/// The dense triangular matrix traits.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar, Layout _layout, Uplo _uplo>
-struct Traits<matrix::DenseSymmetricMatrix<_Scalar, _layout, _uplo>> {
+struct Traits<matrix::DenseTriangularMatrix<_Scalar, _layout, _uplo>> {
   static constexpr index_t ndim = 2;
 
   using ScalarType = _Scalar;
@@ -57,18 +57,16 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_dense_module
-/// The dense symmetric matrix class.
+/// The dense triangular matrix class.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar, Layout _layout = Layout::COLMAJOR, Uplo _uplo = Uplo::UPPER>
-class DenseSymmetricMatrix
+class DenseTriangularMatrix
   : public DenseMatrixStorage<_Scalar>,
-    public MatrixWrapper<DenseSymmetricMatrix<_Scalar, _layout, _uplo>> {
+    public MatrixWrapper<DenseTriangularMatrix<_Scalar, _layout, _uplo>> {
 
-  static_assert(!isUnitDiag(_uplo), "Unit-diagonal symmetric matrix is not supported!");
-
-  friend MatrixWrapper<DenseSymmetricMatrix<_Scalar, _layout, _uplo>>;
+  friend MatrixWrapper<DenseTriangularMatrix<_Scalar, _layout, _uplo>>;
 
  public:
 
@@ -78,7 +76,7 @@ class DenseSymmetricMatrix
   using RealScalarType = RealType<_Scalar>;
   using ValueArrayType = Array<_Scalar>;
 
-  using TransposeType  = DenseSymmetricMatrix<_Scalar, changeLayout(_layout), _uplo>;
+  using TransposeType  = DenseTriangularMatrix<_Scalar, changeLayout(_layout), _uplo>;
 
  private:
 
@@ -87,18 +85,18 @@ class DenseSymmetricMatrix
  public:
 
   // Constructors
-  inline DenseSymmetricMatrix() noexcept;
-  inline DenseSymmetricMatrix( const index_t size ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch,
-                               const ValueArrayType &value, const index_t offset = 0 ) noexcept;
-  inline DenseSymmetricMatrix( const DenseSymmetricMatrix &other ) noexcept;
-  inline DenseSymmetricMatrix( DenseSymmetricMatrix &&other ) noexcept;
+  inline DenseTriangularMatrix() noexcept;
+  inline DenseTriangularMatrix( const index_t size ) noexcept;
+  inline DenseTriangularMatrix( const index_t size, const index_t pitch ) noexcept;
+  inline DenseTriangularMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
+  inline DenseTriangularMatrix( const index_t size, const index_t pitch,
+                                const ValueArrayType &value, const index_t offset = 0 ) noexcept;
+  inline DenseTriangularMatrix( const DenseTriangularMatrix &other ) noexcept;
+  inline DenseTriangularMatrix( DenseTriangularMatrix &&other ) noexcept;
 
   // Operators
-  inline DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other ) noexcept;
-  inline DenseSymmetricMatrix& operator=( DenseSymmetricMatrix &&other ) noexcept;
+  inline DenseTriangularMatrix& operator=( const DenseTriangularMatrix &other ) noexcept;
+  inline DenseTriangularMatrix& operator=( DenseTriangularMatrix &&other ) noexcept;
 
   // Gets element
   inline       ScalarType operator()( const index_t rowidx, const index_t colidx ) noexcept;
@@ -124,4 +122,4 @@ class DenseSymmetricMatrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HPP_
+#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_

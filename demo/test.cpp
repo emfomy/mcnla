@@ -30,9 +30,19 @@ int main( int argc, char **argv ) {
 
   std::cout << mat({1, 2}, "") << std::endl;
 
+  std::cout << "Symmetric" << std::endl;
+
   std::cout << mat.viewSymmetric() << std::endl;
   std::cout << mat.viewSymmetric<mcnla::Uplo::UPPER>() << std::endl;
   std::cout << mat.viewSymmetric<mcnla::Uplo::LOWER>() << std::endl;
+
+  std::cout << "Triangular" << std::endl;
+
+  std::cout << mat.viewTriangular() << std::endl;
+  std::cout << mat.viewTriangular<mcnla::Uplo::UPPER>() << std::endl;
+  std::cout << mat.viewTriangular<mcnla::Uplo::LOWER>() << std::endl;
+  std::cout << mat.viewTriangular<mcnla::Uplo::UNITUPPER>() << std::endl;
+  std::cout << mat.viewTriangular<mcnla::Uplo::UNITLOWER>() << std::endl;
 
   return 0;
 }
