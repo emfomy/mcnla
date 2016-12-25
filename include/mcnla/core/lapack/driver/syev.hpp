@@ -33,7 +33,7 @@ namespace lapack {
 ///
 /// @see mcnla::lapack::syev
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo = UploOption::LOWER>
+template <class _Matrix, JobOption _jobz, Uplo _uplo = Uplo::LOWER>
 class SyevDriver {
 
   static_assert(_jobz == 'N' || _jobz == 'V', "Job undefined!");

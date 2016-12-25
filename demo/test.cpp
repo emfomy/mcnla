@@ -17,7 +17,7 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrix<double> mat(3, 5);
+  mcnla::matrix::DenseMatrix<double> mat(3, 3);
 
   std::cout << mat << std::endl;
 
@@ -29,6 +29,10 @@ int main( int argc, char **argv ) {
   std::cout << mat << std::endl;
 
   std::cout << mat({1, 2}, "") << std::endl;
+
+  std::cout << mat.viewSymmetric() << std::endl;
+  std::cout << mat.viewSymmetric<mcnla::Uplo::UPPER>() << std::endl;
+  std::cout << mat.viewSymmetric<mcnla::Uplo::LOWER>() << std::endl;
 
   return 0;
 }

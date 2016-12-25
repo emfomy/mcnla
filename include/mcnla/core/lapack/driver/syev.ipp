@@ -23,7 +23,7 @@ namespace lapack {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver() noexcept
   : dim_(0),
     work_(),
@@ -32,7 +32,7 @@ SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
     const index_t dim
 ) noexcept
@@ -45,7 +45,7 @@ SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
     const _Matrix &a
 ) noexcept
@@ -56,7 +56,7 @@ SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo> template <class _TypeA, class _TypeW>
+template <class _Matrix, JobOption _jobz, Uplo _uplo> template <class _TypeA, class _TypeW>
 void SyevDriver<_Matrix, _jobz, _uplo>::operator()( _TypeA &&a, _TypeW &&w ) noexcept {
   compute(a, w);
 }
@@ -64,7 +64,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::operator()( _TypeA &&a, _TypeW &&w ) noe
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes eigenvalues only.
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo> template <class _TypeA, class _TypeW>
+template <class _Matrix, JobOption _jobz, Uplo _uplo> template <class _TypeA, class _TypeW>
 void SyevDriver<_Matrix, _jobz, _uplo>::computeValues( _TypeA &&a, _TypeW &&w ) noexcept {
   compute<'N'>(a, w);
 }
@@ -72,7 +72,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::computeValues( _TypeA &&a, _TypeW &&w ) 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the driver
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 void SyevDriver<_Matrix, _jobz, _uplo>::resize(
     const index_t dim
 ) noexcept {
@@ -87,7 +87,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::resize(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  resize
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 void SyevDriver<_Matrix, _jobz, _uplo>::resize(
     const _Matrix &a
 ) noexcept {
@@ -98,13 +98,13 @@ void SyevDriver<_Matrix, _jobz, _uplo>::resize(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 index_t SyevDriver<_Matrix, _jobz, _uplo>::getSizes() const noexcept { return dim_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the workspace
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 typename SyevDriver<_Matrix, _jobz, _uplo>::VectorType& SyevDriver<_Matrix, _jobz, _uplo>::getWork() noexcept {
   return work_;
 }
@@ -112,7 +112,7 @@ typename SyevDriver<_Matrix, _jobz, _uplo>::VectorType& SyevDriver<_Matrix, _job
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getWork
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 const typename SyevDriver<_Matrix, _jobz, _uplo>::VectorType& SyevDriver<_Matrix, _jobz, _uplo>::getWork() const noexcept {
   return work_;
 }
@@ -120,7 +120,7 @@ const typename SyevDriver<_Matrix, _jobz, _uplo>::VectorType& SyevDriver<_Matrix
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the real workspace
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Matrix, _jobz, _uplo>::getRwork() noexcept {
   return rwork_;
 }
@@ -128,7 +128,7 @@ typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Matrix, 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getRwork
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Matrix, _jobz, _uplo>::getRwork() const noexcept {
   return rwork_;
 }
@@ -139,7 +139,7 @@ const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Ma
 /// @attention  The eigenvectors are Stored in columnwise for column-major storage, in rowwise for row-major storage.
 /// @attention  Matrix @a a will be destroyed!
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo> template <JobOption __jobz>
+template <class _Matrix, JobOption _jobz, Uplo _uplo> template <JobOption __jobz>
 void SyevDriver<_Matrix, _jobz, _uplo>::compute(
     _Matrix &a,
     RealVectorType &w
@@ -154,7 +154,7 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Query the optimal workspace size.
 ///
-template <class _Matrix, JobOption _jobz, UploOption _uplo>
+template <class _Matrix, JobOption _jobz, Uplo _uplo>
 index_t SyevDriver<_Matrix, _jobz, _uplo>::query(
     const index_t dim
 ) const noexcept {

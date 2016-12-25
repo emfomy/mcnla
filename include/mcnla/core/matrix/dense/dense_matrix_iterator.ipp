@@ -24,7 +24,10 @@ namespace matrix {
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, Layout __layout, class __Matrix>
-std::ostream& operator<< ( std::ostream &out, const DenseMatrixIteratorBase<__Scalar, __layout, __Matrix> &iterator ) {
+std::ostream& operator<< (
+    std::ostream &out,
+    const DenseMatrixIteratorBase<__Scalar, __layout, __Matrix> &iterator
+) {
   const index_t width_r = log10(iterator.container_->getNrow())+1;
   const index_t width_c = log10(iterator.container_->getNcol())+1;
   const index_t width   = std::max(width_r, width_c);

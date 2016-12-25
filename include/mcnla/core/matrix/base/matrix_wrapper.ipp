@@ -9,6 +9,7 @@
 #define MCNLA_CORE_MATRIX_BASE_MATRIX_WRAPPER_IPP_
 
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
+#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -19,6 +20,24 @@ namespace mcnla {
 //  The matrix namespace.
 //
 namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Print to stream.
+///
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &out,
+    const MatrixWrapper<__Derived> &wrapper
+) {
+  auto &matrix = wrapper.derived();
+  for ( index_t i = 0; i < matrix.getNrow(); ++i ) {
+    for ( index_t j = 0; j < matrix.getNcol(); ++j ) {
+      out << std::setw(ios_width) << matrix(i, j) << "  ";
+    }
+    out << std::endl;
+  }
+  return out;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.

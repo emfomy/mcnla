@@ -147,23 +147,23 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
     // Bs := sum( Qcj' * Qjs )
-    blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qcj_, matrix_qjs_, 0.0, matrix_bs_);
+    blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_qcj_, matrix_qjs_, 0.0, matrix_bs_);
     mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
 
     // D  := Bs * Bs'
-    blas::syrk<TransOption::NORMAL>(1.0, matrix_bs_, 0.0, matrix_d_);
+    blas::syrk<Trans::NORMAL>(1.0, matrix_bs_, 0.0, matrix_d_);
 
     // Xj := 1/N * Qjs * Bs'
-    blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0/num_sketch, matrix_qjs_, matrix_bs_, 0.0, matrix_xj_);
+    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0/num_sketch, matrix_qjs_, matrix_bs_, 0.0, matrix_xj_);
 
     // Xj -= 1/N * Qcj * D
-    blas::symm<SideOption::RIGHT>(-1.0/num_sketch, matrix_d_, matrix_qcj_, 1.0, matrix_xj_);
+    blas::symm<Side::RIGHT>(-1.0/num_sketch, matrix_d_, matrix_qcj_, 1.0, matrix_xj_);
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // D := I/4 - sum(Xj' * Xj)
-    blas::syrk<TransOption::TRANS>(-1.0, matrix_xj_, 0.0, matrix_d_);
+    blas::syrk<Trans::TRANS>(-1.0, matrix_xj_, 0.0, matrix_d_);
     mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm);
     for ( index_t i = 0; i < dim_sketch; ++i ) {
       matrix_d_(i, i) += 0.25;
@@ -178,7 +178,7 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
     }
 
     // F := I/2 + D' * D
-    blas::syrk<TransOption::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
+    blas::syrk<Trans::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
     for ( index_t i = 0; i < dim_sketch; ++i ) {
       matrix_f_(i, i) += 0.5;
     }
@@ -196,20 +196,20 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
     }
 
     // C := F' * F
-    blas::syrk<TransOption::TRANS>(1.0, matrix_f_, 0.0, matrix_c_);
+    blas::syrk<Trans::TRANS>(1.0, matrix_f_, 0.0, matrix_c_);
 
     // inv(C) := D' * D
-    blas::syrk<TransOption::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
+    blas::syrk<Trans::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
 
     // Qcj := Qcj * C
     blas::copy(matrix_qcj_, matrix_tmp_);
-    blas::symm<SideOption::RIGHT>(1.0, matrix_c_, matrix_tmp_, 0.0, matrix_qcj_);
+    blas::symm<Side::RIGHT>(1.0, matrix_c_, matrix_tmp_, 0.0, matrix_qcj_);
 
     // Qcj += Xj * inv(C)
-    blas::symm<SideOption::RIGHT>(1.0, matrix_f_, matrix_xj_, 1.0, matrix_qcj_);
+    blas::symm<Side::RIGHT>(1.0, matrix_f_, matrix_xj_, 1.0, matrix_qcj_);
 
     // ================================================================================================================== //
     // Check convergence

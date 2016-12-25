@@ -71,7 +71,7 @@ static constexpr char toLayoutChar( Layout layout ) {
 /// @brief  Convert transpose option to char.
 ///
 template<typename _Scalar>
-static constexpr char toTransChar( const TransOption trans ) {
+static constexpr char toTransChar( const Trans trans ) {
   return !isTranspose(trans) ? ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'R' : 'N')
                              : ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
 }
@@ -79,21 +79,21 @@ static constexpr char toTransChar( const TransOption trans ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert upper/lower option to char.
 ///
-static constexpr char toUploChar( UploOption uplo, Layout layout ) {
+static constexpr char toUploChar( Uplo uplo, Layout layout ) {
   return (isLower(uplo) ^ isRowMajor(layout)) ? 'L' : 'U';
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert diagonal option to char.
 ///
-static constexpr char toDiagChar( UploOption uplo ) {
+static constexpr char toDiagChar( Uplo uplo ) {
   return !isUnitDiag(uplo) ? 'N' : 'U';
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert side option to char.
 ///
-static constexpr char toSideChar( SideOption side, Layout layout ) {
+static constexpr char toSideChar( Side side, Layout layout ) {
   return (isLeftSide(side) ^ isRowMajor(layout)) ? 'L' : 'R';
 }
 

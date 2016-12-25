@@ -24,7 +24,10 @@ namespace matrix {
 /// @brief  Print to stream.
 ///
 template <typename __Scalar, class __Vector>
-std::ostream& operator<< ( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator ) {
+std::ostream& operator<< (
+    std::ostream &out,
+    const DenseVectorIteratorBase<__Scalar, __Vector> &iterator
+) {
   const index_t width = log10(iterator.container_->getLength())+1;
   return out << "(" << std::setw(width) << iterator.getIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
 }

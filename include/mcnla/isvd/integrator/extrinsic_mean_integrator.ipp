@@ -140,7 +140,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   time1_ = MPI_Wtime();
 
   // Bs := sum( Qjs' * Qjs )
-  blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qjs_, matrix_qjs_, 0.0, matrix_bjs_);
+  blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_qjs_, matrix_qjs_, 0.0, matrix_bjs_);
   mpi::reduceScatterBlock(matrix_bjs_, matrix_bis_, MPI_SUM, mpi_comm);
 
   time2_ = MPI_Wtime();
@@ -148,7 +148,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
     // Gi := Bis * Bis'
-    blas::syrk<TransOption::NORMAL>(1.0, matrix_bis_.getRows(IdxRange{i, i+1}*dim_sketch), 0.0, set_g_(i));
+    blas::syrk<Trans::NORMAL>(1.0, matrix_bis_.getRows(IdxRange{i, i+1}*dim_sketch), 0.0, set_g_(i));
 
     // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
     syev_driver_(set_g_(i), vector_s_);
@@ -170,7 +170,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
 
     // Inverse Gi(j-row) if Gi(j-row) * Bi0 * G0(j-row)' < 0
     auto matirx_bi0 = matrix_bis_.getBlock(IdxRange{i, i+1}*dim_sketch, {0, dim_sketch});
-    blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, matrix_g0_, matirx_bi0, 0.0, matrix_gb_);
+    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, matrix_g0_, matirx_bi0, 0.0, matrix_gb_);
     for ( index_t j = 0; j < dim_sketch; ++j ) {
       if ( blas::dot(set_g_(i).getRow(j), matrix_gb_.getRow(j)) < 0 ) {
         blas::scal(-1.0, set_g_(i).getRow(j));
@@ -178,7 +178,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
     }
 
     // Qbar += Qi * Gi'
-    blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, set_q_cut_(i), set_g_(i), 1.0, matrix_qbar_);
+    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, set_q_cut_(i), set_g_(i), 1.0, matrix_qbar_);
 
   }
 

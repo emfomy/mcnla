@@ -25,7 +25,7 @@ namespace blas {
 /// @ingroup  blas0_module
 /// @brief  Performs scaling and out-place transposition/copying of matrices.
 ///
-template <TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
+template <Trans _trans = Trans::NORMAL, typename _Scalar, Layout _layout>
 inline void omatcopy(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
@@ -36,7 +36,7 @@ inline void omatcopy(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <TransOption _trans = TransOption::NORMAL, typename _Scalar, Layout _layout>
+template <Trans _trans = Trans::NORMAL, typename _Scalar, Layout _layout>
 inline void omatcopy(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,

@@ -187,7 +187,7 @@ void check(
   for ( auto i = 0; i < vector_s.getLength(); ++i ) {
     mcnla::blas::scal(vector_s(i), matrix_u_tmp.getCol(i));
   }
-  mcnla::blas::gemm<mcnla::TransOption::NORMAL, mcnla::TransOption::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
+  mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
   frerr = mcnla::blas::nrm2(matrix_a_tmp.vectorize()) / mcnla::blas::nrm2(matrix_a.vectorize());

@@ -98,15 +98,15 @@ void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
     for ( index_t i = 0; i < num_sketch_each; i += 2*j ) {
 
       // U := Q(i)' * Q(i+j)
-      blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, set_q_.getPage(i), set_q_.getPage(i+j), 0.0, matrix_u_);
+      blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, set_q_.getPage(i), set_q_.getPage(i+j), 0.0, matrix_u_);
 
       // Compute the SVD of U -> U * S * Vt
       gesvd_driver_(matrix_u_, vector_s_, matrix_empty_, matrix_vt_);
 
       // Q(i) := Q(i) * U + Q(i+j) * V
       blas::copy(set_q_.getPage(i), matrix_buffer_);
-      blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, set_q_.getPage(i));
-      blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, set_q_.getPage(i+j), matrix_vt_, 1.0, set_q_.getPage(i));
+      blas::gemm<Trans::NORMAL, Trans::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, set_q_.getPage(i));
+      blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, set_q_.getPage(i+j), matrix_vt_, 1.0, set_q_.getPage(i));
 
       // Q(i) /= sqrt(2(I+S))
       for ( index_t k = 0; k < dim_sketch; ++k ) {
@@ -131,15 +131,15 @@ void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
     }
 
     // U := Qbar' * Qtmp
-    blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_q_bar_, matrix_q_tmp_, 0.0, matrix_u_);
+    blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_q_bar_, matrix_q_tmp_, 0.0, matrix_u_);
 
     // Compute the SVD of U -> U * S * Vt
     gesvd_driver_(matrix_u_, vector_s_, matrix_empty_, matrix_vt_);
 
     // Q(i) := Q(i) * U + Q(i+j) * V
     blas::copy(matrix_q_bar_, matrix_buffer_);
-    blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, matrix_q_bar_);
-    blas::gemm<TransOption::NORMAL, TransOption::TRANS>(1.0, matrix_q_tmp_, matrix_vt_, 1.0, matrix_q_bar_);
+    blas::gemm<Trans::NORMAL, Trans::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, matrix_q_bar_);
+    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, matrix_q_tmp_, matrix_vt_, 1.0, matrix_q_bar_);
 
     // Q(i) /= sqrt(2(I+S))
     for ( index_t k = 0; k < dim_sketch; ++k ) {

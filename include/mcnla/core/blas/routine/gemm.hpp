@@ -30,7 +30,7 @@ namespace detail {
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
 //@{
-template <TransOption _transa = TransOption::NORMAL, TransOption _transb = TransOption::NORMAL,
+template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb>
 inline void gemm(
     const _Scalar alpha,
@@ -39,8 +39,8 @@ inline void gemm(
     const _Scalar beta,
           DenseMatrix<_Scalar, Layout::COLMAJOR> &c
 ) noexcept {
-  constexpr TransOption transa = isColMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
-  constexpr TransOption transb = isColMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
+  constexpr Trans transa = isColMajor(_layouta) ? _transa : _transa ^ Trans::TRANS;
+  constexpr Trans transb = isColMajor(_layoutb) ? _transb : _transb ^ Trans::TRANS;
 
   mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
   mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
@@ -51,8 +51,8 @@ inline void gemm(
        alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
 
-template <TransOption _transa = TransOption::NORMAL,
-          TransOption _transb = TransOption::NORMAL,
+template <Trans _transa = Trans::NORMAL,
+          Trans _transb = Trans::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb>
 inline void gemm(
     const _Scalar alpha,
@@ -61,8 +61,8 @@ inline void gemm(
     const _Scalar beta,
           DenseMatrix<_Scalar, Layout::ROWMAJOR> &c
 ) noexcept {
-  constexpr TransOption transa = isRowMajor(_layouta) ? _transa : _transa ^ TransOption::TRANS;
-  constexpr TransOption transb = isRowMajor(_layoutb) ? _transb : _transb ^ TransOption::TRANS;
+  constexpr Trans transa = isRowMajor(_layouta) ? _transa : _transa ^ Trans::TRANS;
+  constexpr Trans transb = isRowMajor(_layoutb) ? _transb : _transb ^ Trans::TRANS;
 
   mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
   mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
@@ -80,7 +80,7 @@ inline void gemm(
 /// @ingroup  blas3_module
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
-template <TransOption _transa = TransOption::NORMAL, TransOption _transb = TransOption::NORMAL,
+template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
@@ -93,7 +93,7 @@ inline void gemm(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <TransOption _transa = TransOption::NORMAL, TransOption _transb = TransOption::NORMAL,
+template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,

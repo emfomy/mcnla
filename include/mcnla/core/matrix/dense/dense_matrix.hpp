@@ -10,12 +10,12 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
-#include <iostream>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
+#include <mcnla/core/matrix/dense/dense_symmetric_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,8 +29,9 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout> class DenseMatrix;
 template <typename _Scalar> class DenseVector;
+template <typename _Scalar, Layout _layout> class DenseMatrix;
+template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseSymmetricMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -50,8 +51,6 @@ struct Traits<matrix::DenseMatrix<_Scalar, _layout>> {
   static constexpr index_t ndim = 2;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-  using MatrixType        = matrix::DenseMatrix<_Scalar, _layout>;
   using IteratorType      = matrix::DenseMatrixIterator<_Scalar, _layout>;
   using ConstIteratorType = matrix::DenseMatrixConstIterator<_Scalar, _layout>;
 };
@@ -89,7 +88,10 @@ class DenseMatrix
 
   using VectorType        = DenseVector<_Scalar>;
   using MatrixType        = DenseMatrix<_Scalar, _layout>;
+
   using TransposeType     = DenseMatrix<_Scalar, changeLayout(_layout)>;
+  template <Uplo _uplo>
+  using SymmetricType     = DenseSymmetricMatrix<_Scalar, _layout, _uplo>;
 
   using IteratorType      = DenseMatrixIterator<_Scalar, _layout>;
   using ConstIteratorType = DenseMatrixConstIterator<_Scalar, _layout>;
@@ -116,8 +118,6 @@ class DenseMatrix
   // Operators
   inline DenseMatrix& operator=( const DenseMatrix &other ) noexcept;
   inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
-  template <typename __Scalar, Layout __layout>
-  friend inline std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
 
   // Gets information
   inline index_t getNidx() const noexcept;
@@ -140,6 +140,12 @@ class DenseMatrix
   // Transpose
   inline       TransposeType& transpose() noexcept;
   inline const TransposeType& transpose() const noexcept;
+
+  // Change view
+  template <Uplo _uplo = Uplo::UPPER>
+  inline       SymmetricType<_uplo>& viewSymmetric() noexcept;
+  template <Uplo _uplo = Uplo::UPPER>
+  inline const SymmetricType<_uplo>& viewSymmetric() const noexcept;
 
   // Gets matrix block
   inline       MatrixType operator()( const IdxRange &rowrange, const IdxRange &colrange ) noexcept;

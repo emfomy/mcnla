@@ -9,6 +9,7 @@
 #define MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_IPP_
 
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
+#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -19,6 +20,21 @@ namespace mcnla {
 //  The matrix namespace.
 //
 namespace matrix {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Print to stream.
+///
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &out,
+    const VectorWrapper<__Derived> &wrapper
+) {
+  auto &vector = wrapper.derived();
+  for ( index_t i = 0; i < vector.getLength(); ++i ) {
+    out << std::setw(ios_width) << vector(i) << "  ";
+  }
+  return out << std::endl;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length.

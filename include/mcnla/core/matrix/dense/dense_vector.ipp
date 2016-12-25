@@ -119,17 +119,6 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noe
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
-///
-template <typename __Scalar>
-std::ostream& operator<< ( std::ostream &out, const DenseVector<__Scalar> &vector ) {
-  for ( index_t i = 0; i < vector.getLength(); ++i ) {
-    out << std::setw(ios_width) << vector(i) << "  ";
-  }
-  return out << std::endl;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of internal index.
 ///
 template <typename _Scalar>
@@ -244,7 +233,9 @@ index_t DenseVector<_Scalar>::getLengthImpl() const noexcept {
 /// Gets the first dimension from sizes.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::dim0( const SizesType sizes ) const noexcept {
+index_t DenseVector<_Scalar>::dim0(
+    const SizesType sizes
+) const noexcept {
   return std::get<0>(sizes);
 }
 
@@ -252,7 +243,9 @@ index_t DenseVector<_Scalar>::dim0( const SizesType sizes ) const noexcept {
 /// @copydoc  dim0
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::dim0( const index_t length ) const noexcept {
+index_t DenseVector<_Scalar>::dim0(
+    const index_t length
+) const noexcept {
   return length;
 }
 

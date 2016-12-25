@@ -54,8 +54,8 @@ TEST(ReductionIntegratorTest, Test) {
   mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2_true(m, m);
   mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2(m, m);
   auto matrix_qbar = integrator.getMatrixQbar();
-  mcnla::blas::syrk<mcnla::TransOption::NORMAL>(1.0, matrix_qbar_true, 0.0, matrix_qbar2_true);
-  mcnla::blas::syrk<mcnla::TransOption::NORMAL>(1.0, matrix_qbar,      0.0, matrix_qbar2);
+  mcnla::blas::syrk<mcnla::Trans::NORMAL>(1.0, matrix_qbar_true, 0.0, matrix_qbar2_true);
+  mcnla::blas::syrk<mcnla::Trans::NORMAL>(1.0, matrix_qbar,      0.0, matrix_qbar2);
   if ( mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
     ASSERT_EQ(matrix_qbar.getSizes(), matrix_qbar_true.getSizes());
     ASSERT_EQ(integrator.getIter(), -1);

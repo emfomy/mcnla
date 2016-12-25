@@ -25,14 +25,14 @@ namespace blas {
 /// @ingroup  blas3_module
 /// @brief  Performs a symmetric/Hermitian rank-k update.
 ///
-template <TransOption _trans = TransOption::NORMAL, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
     const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
           DenseMatrix<_Scalar, _layout> &c
 ) noexcept {
-  constexpr TransOption trans = isColMajor(_layout) ? _trans : _trans ^ TransOption::TRANS;
+  constexpr Trans trans = isColMajor(_layout) ? _trans : _trans ^ Trans::TRANS;
 
   mcnla_assert_eq(c.getNrow(), c.getNcol());
   mcnla_assert_eq(c.getNrow(), a.template getNrow<_trans>());
@@ -42,7 +42,7 @@ inline void syrk(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <TransOption _trans = TransOption::NORMAL, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
 inline void syrk(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,

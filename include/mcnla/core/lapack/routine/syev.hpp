@@ -30,7 +30,7 @@ namespace lapack {
 ///
 /// @see  mcnla::lapack::SyevDriver
 ///
-template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <JobOption _jobz, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
 inline void syev(
     DenseMatrix<_Scalar, _layout> &a,
     DenseVector<RealType<_Scalar>> &w
@@ -40,7 +40,7 @@ inline void syev(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <JobOption _jobz, UploOption _uplo = UploOption::LOWER, class _TypeA, class _TypeW>
+template <JobOption _jobz, Uplo _uplo = Uplo::LOWER, class _TypeA, class _TypeW>
 inline void syev( _TypeA &&a, _TypeW &&w ) noexcept {
   syev<_jobz, _uplo>(a, w);
 }

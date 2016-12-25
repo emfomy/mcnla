@@ -9,7 +9,6 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_IPP_
 
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
-#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -111,14 +110,18 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>::DenseMatrix( const DenseMatrix &other ) noexcept
+DenseMatrix<_Scalar, _layout>::DenseMatrix(
+    const DenseMatrix &other
+) noexcept
   : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>::DenseMatrix( DenseMatrix &&other ) noexcept
+DenseMatrix<_Scalar, _layout>::DenseMatrix(
+    DenseMatrix &&other
+) noexcept
   : BaseType(std::move(other)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +130,9 @@ DenseMatrix<_Scalar, _layout>::DenseMatrix( DenseMatrix &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
 template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( const DenseMatrix &other ) noexcept {
+DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=(
+    const DenseMatrix &other
+) noexcept {
   BaseType::operator=(other);
   return *this;
 }
@@ -136,20 +141,11 @@ DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( const D
 /// @brief  Move assignment operator.
 ///
 template <typename _Scalar, Layout _layout>
-DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=( DenseMatrix &&other ) noexcept {
+DenseMatrix<_Scalar, _layout>& DenseMatrix<_Scalar, _layout>::operator=(
+    DenseMatrix &&other
+) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
-///
-template <typename __Scalar, Layout __layout>
-std::ostream& operator<< ( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix ) {
-  for ( index_t i = 0; i < matrix.getNrow(); ++i ) {
-    out << matrix(i, "");
-  }
-  return out;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,6 +244,24 @@ DenseMatrix<_Scalar, changeLayout(_layout)>& DenseMatrix<_Scalar, _layout>::tran
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, changeLayout(_layout)>& DenseMatrix<_Scalar, _layout>::transpose() const noexcept {
   return static_cast<const TransposeType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the symmetric view of the matrix.
+///
+template <typename _Scalar, Layout _layout> template <Uplo _uplo>
+DenseSymmetricMatrix<_Scalar, _layout, _uplo>& DenseMatrix<_Scalar, _layout>::viewSymmetric() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<SymmetricType<_uplo>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewSymmetric
+///
+template <typename _Scalar, Layout _layout> template <Uplo _uplo>
+const DenseSymmetricMatrix<_Scalar, _layout, _uplo>& DenseMatrix<_Scalar, _layout>::viewSymmetric() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const SymmetricType<_uplo>&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -503,7 +517,9 @@ index_t DenseMatrix<_Scalar, _layout>::getNcolImpl() const noexcept {
 /// Gets the first dimension from sizes.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseMatrix<_Scalar, _layout>::dim0( const SizesType sizes ) const noexcept {
+index_t DenseMatrix<_Scalar, _layout>::dim0(
+    const SizesType sizes
+) const noexcept {
   return isColMajor(_layout) ? std::get<0>(sizes) : std::get<1>(sizes);
 }
 
@@ -511,7 +527,10 @@ index_t DenseMatrix<_Scalar, _layout>::dim0( const SizesType sizes ) const noexc
 /// @copydoc  dim0
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseMatrix<_Scalar, _layout>::dim0( const index_t nrow, const index_t ncol ) const noexcept {
+index_t DenseMatrix<_Scalar, _layout>::dim0(
+    const index_t nrow,
+    const index_t ncol
+) const noexcept {
   return isColMajor(_layout) ? nrow : ncol;
 }
 
@@ -519,7 +538,9 @@ index_t DenseMatrix<_Scalar, _layout>::dim0( const index_t nrow, const index_t n
 /// Gets the second dimension from sizes.
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseMatrix<_Scalar, _layout>::dim1( const SizesType sizes ) const noexcept {
+index_t DenseMatrix<_Scalar, _layout>::dim1(
+    const SizesType sizes
+) const noexcept {
   return isColMajor(_layout) ? std::get<1>(sizes) : std::get<0>(sizes);
 }
 
@@ -527,7 +548,10 @@ index_t DenseMatrix<_Scalar, _layout>::dim1( const SizesType sizes ) const noexc
 /// @copydoc  dim1
 ///
 template <typename _Scalar, Layout _layout>
-index_t DenseMatrix<_Scalar, _layout>::dim1( const index_t nrow, const index_t ncol ) const noexcept {
+index_t DenseMatrix<_Scalar, _layout>::dim1(
+    const index_t nrow,
+    const index_t ncol
+) const noexcept {
   return isColMajor(_layout) ? ncol : nrow;
 }
 

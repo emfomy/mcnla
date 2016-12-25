@@ -97,7 +97,7 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
   time0_ = MPI_Wtime();
 
   // Vt := Q' * A
-  blas::gemm<TransOption::TRANS, TransOption::NORMAL>(1.0, matrix_qc, matrix_a, 0.0, matrix_vt_);
+  blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_qc, matrix_a, 0.0, matrix_vt_);
   time1_ = MPI_Wtime();
 
   // Compute the SVD of Vt -> W * S * Vt
@@ -105,7 +105,7 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
   time2_ = MPI_Wtime();
 
   // U := Q * W
-  blas::gemm<TransOption::NORMAL, TransOption::NORMAL>(1.0, matrix_qc, matrix_w_, 0.0, matrix_u_);
+  blas::gemm<Trans::NORMAL, Trans::NORMAL>(1.0, matrix_qc, matrix_w_, 0.0, matrix_u_);
   time3_ = MPI_Wtime();
 }
 

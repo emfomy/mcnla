@@ -204,7 +204,7 @@ void create(
   for ( mcnla::index_t i = rank; i < matrix_a.getNrow(); ++i ) {
     mcnla::blas::scal(1e-2/(i+1), matrix_u.getCol(i));
   }
-  mcnla::blas::gemm<mcnla::TransOption::NORMAL, mcnla::TransOption::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
+  mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@ void check_u(
   mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
 
   // U2 := Utrue' * U
-  mcnla::blas::gemm<mcnla::TransOption::TRANS, mcnla::TransOption::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);
+  mcnla::blas::gemm<mcnla::Trans::TRANS, mcnla::Trans::NORMAL>(1.0, matrix_u_true, matrix_u, 0.0, matrix_u2);
 
   // Compute the SVD of U2
   mcnla::lapack::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
@@ -254,7 +254,7 @@ void check(
   for ( auto i = 0; i < vector_s.getLength(); ++i ) {
     mcnla::blas::scal(vector_s(i), matrix_u_tmp.getCol(i));
   }
-  mcnla::blas::gemm<mcnla::TransOption::NORMAL, mcnla::TransOption::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
+  mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
   frerr = mcnla::blas::nrm2(matrix_a_tmp.vectorize()) / mcnla::blas::nrm2(matrix_a.vectorize());

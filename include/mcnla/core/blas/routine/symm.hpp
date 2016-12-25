@@ -25,7 +25,7 @@ namespace blas {
 /// @ingroup  blas3_module
 /// @brief  Computes a matrix-matrix product where one input matrix is symmetric/Hermitian.
 ///
-template <SideOption _side, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <Side _side, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,
@@ -46,7 +46,7 @@ inline void symm(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <SideOption _side, UploOption _uplo = UploOption::LOWER, typename _Scalar, Layout _layout>
+template <Side _side, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
 inline void symm(
     const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
     const DenseMatrix<_Scalar, _layout> &a,

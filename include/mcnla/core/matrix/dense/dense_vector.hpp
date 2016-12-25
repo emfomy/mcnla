@@ -10,7 +10,6 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
-#include <iostream>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -48,8 +47,6 @@ struct Traits<matrix::DenseVector<_Scalar>> {
   static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-  using VectorType        = matrix::DenseVector<_Scalar>;
   using IteratorType      = matrix::DenseVectorIterator<_Scalar>;
   using ConstIteratorType = matrix::DenseVectorConstIterator<_Scalar>;
 };
@@ -110,8 +107,6 @@ class DenseVector
   // Operators
   inline DenseVector& operator=( const DenseVector &other ) noexcept;
   inline DenseVector& operator=( DenseVector &&other ) noexcept;
-  template <typename __Scalar>
-  friend inline std::ostream& operator<<( std::ostream &out, const DenseVector<__Scalar> &vector );
 
   // Gets information
   inline index_t getNidx() const noexcept;

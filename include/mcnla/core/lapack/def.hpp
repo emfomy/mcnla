@@ -58,28 +58,28 @@ using JobOption = char;
 /// @copydoc  mcnla::blas::toTransChar
 ///
 template<typename _Scalar>
-static constexpr char toTransChar( const TransOption trans ) {
+static constexpr char toTransChar( const Trans trans ) {
   return blas::toTransChar<_Scalar>(trans);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::blas::toUploChar
 ///
-static constexpr char toUploChar( UploOption uplo, Layout layout ) {
+static constexpr char toUploChar( Uplo uplo, Layout layout ) {
   return blas::toUploChar(uplo, layout);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::blas::toDiagChar
 ///
-static constexpr char toDiagChar( UploOption uplo ) {
+static constexpr char toDiagChar( Uplo uplo ) {
   return blas::toDiagChar(uplo);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::blas::toSideChar
 ///
-static constexpr char toSideChar( SideOption uplo, Layout layout ) {
+static constexpr char toSideChar( Side uplo, Layout layout ) {
   return blas::toSideChar(uplo, layout);
 }
 
