@@ -214,6 +214,14 @@ class DenseMatrix
 
 };
 
+/// @ingroup  matrix_dense_module
+template <typename _Scalar>
+using DenseMatrixColMajor = DenseMatrix<_Scalar, Trans::NORMAL>;
+
+/// @ingroup  matrix_dense_module
+template <typename _Scalar>
+using DenseMatrixRowMajor = DenseMatrix<_Scalar, Trans::TRANS>;
+
 }  // namespace matrix
 
 }  // namespace mcnla

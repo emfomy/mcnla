@@ -127,6 +127,14 @@ class DenseTriangularMatrix
 
 };
 
+/// @ingroup  matrix_dense_module
+template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
+using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Scalar, Trans::NORMAL, _uplo>;
+
+/// @ingroup  matrix_dense_module
+template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
+using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Scalar, Trans::TRANS, _uplo>;
+
 }  // namespace matrix
 
 }  // namespace mcnla

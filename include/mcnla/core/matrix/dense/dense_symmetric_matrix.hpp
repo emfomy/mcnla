@@ -129,6 +129,14 @@ class DenseSymmetricMatrix
 
 };
 
+/// @ingroup  matrix_dense_module
+template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
+using DenseSymmetricMatrixColMajor = DenseSymmetricMatrix<_Scalar, Trans::NORMAL, _uplo>;
+
+/// @ingroup  matrix_dense_module
+template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
+using DenseSymmetricMatrixRowMajor = DenseSymmetricMatrix<_Scalar, Trans::TRANS, _uplo>;
+
 }  // namespace matrix
 
 }  // namespace mcnla
