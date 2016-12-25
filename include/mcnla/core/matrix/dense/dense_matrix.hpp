@@ -96,6 +96,8 @@ class DenseMatrix
   using MatrixType        = DenseMatrix<_Scalar, _trans>;
 
   using TransposeType     = DenseMatrix<_Scalar, changeTrans(_trans)>;
+  using ConjugateType     = DenseMatrix<_Scalar, changeConj(_trans)>;
+  using HermitianType     = DenseMatrix<_Scalar, changeHerm(_trans)>;
 
   template <Uplo _uplo>
   using SymmetricType     = DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
@@ -152,8 +154,12 @@ class DenseMatrix
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
   // Transpose
-  inline       TransposeType& transpose() noexcept;
-  inline const TransposeType& transpose() const noexcept;
+  inline       TransposeType& t() noexcept;
+  inline const TransposeType& t() const noexcept;
+  inline       ConjugateType& c() noexcept;
+  inline const ConjugateType& c() const noexcept;
+  inline       HermitianType& h() noexcept;
+  inline const HermitianType& h() const noexcept;
 
   // Change view
   template <Uplo _uplo = Uplo::UPPER>

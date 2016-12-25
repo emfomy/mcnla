@@ -176,7 +176,7 @@ void DenseSymmetricMatrix<_Scalar, _trans, _uplo>::resize(
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 DenseSymmetricMatrix<_Scalar, changeTrans(_trans), _uplo>&
-    DenseSymmetricMatrix<_Scalar, _trans, _uplo>::transpose() noexcept {
+    DenseSymmetricMatrix<_Scalar, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
@@ -185,7 +185,7 @@ DenseSymmetricMatrix<_Scalar, changeTrans(_trans), _uplo>&
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 const DenseSymmetricMatrix<_Scalar, changeTrans(_trans), _uplo>&
-    DenseSymmetricMatrix<_Scalar, _trans, _uplo>::transpose() const noexcept {
+    DenseSymmetricMatrix<_Scalar, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 

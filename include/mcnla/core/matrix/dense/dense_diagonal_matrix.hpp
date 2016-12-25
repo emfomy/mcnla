@@ -110,8 +110,8 @@ class DenseDiagonalMatrix
   inline void reconstruct( Args... args ) noexcept;
 
   // Transpose
-  inline       TransposeType& transpose() noexcept;
-  inline const TransposeType& transpose() const noexcept;
+  inline       TransposeType& t() noexcept;
+  inline const TransposeType& t() const noexcept;
 
  protected:
 

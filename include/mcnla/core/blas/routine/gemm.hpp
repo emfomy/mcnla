@@ -70,7 +70,7 @@ inline void gemmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  gemmImpl2(b.transpose(), a.transpose(), c.transpose(), alpha, beta);
+  gemmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>

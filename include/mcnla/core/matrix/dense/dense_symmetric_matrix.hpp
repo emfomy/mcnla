@@ -114,8 +114,8 @@ class DenseSymmetricMatrix
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
   // Transpose
-  inline       TransposeType& transpose() noexcept;
-  inline const TransposeType& transpose() const noexcept;
+  inline       TransposeType& t() noexcept;
+  inline const TransposeType& t() const noexcept;
 
  protected:
 

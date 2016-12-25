@@ -163,7 +163,7 @@ void DenseDiagonalMatrix<_Scalar>::reconstruct(
 ///
 template <typename _Scalar>
 DenseDiagonalMatrix<_Scalar>&
-    DenseDiagonalMatrix<_Scalar>::transpose() noexcept {
+    DenseDiagonalMatrix<_Scalar>::t() noexcept {
   return *this;
 }
 
@@ -172,7 +172,7 @@ DenseDiagonalMatrix<_Scalar>&
 ///
 template <typename _Scalar>
 const DenseDiagonalMatrix<_Scalar>&
-    DenseDiagonalMatrix<_Scalar>::transpose() const noexcept {
+    DenseDiagonalMatrix<_Scalar>::t() const noexcept {
   return *this;
 }
 

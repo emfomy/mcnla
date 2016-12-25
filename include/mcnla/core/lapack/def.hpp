@@ -66,7 +66,7 @@ static constexpr char toTransChar( const Trans trans ) {
 /// @copydoc  mcnla::blas::toUploChar
 ///
 static constexpr char toUploChar( Uplo uplo, Trans trans = Trans::NORMAL ) {
-  return blas::toUploChar(uplo);
+  return blas::toUploChar(uplo, trans);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

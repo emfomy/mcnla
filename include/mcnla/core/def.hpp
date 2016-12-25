@@ -24,10 +24,10 @@ namespace mcnla {
 /// The enumeration of matrix transpose storage.
 ///
 enum class Trans {
-  NORMAL    = 0x0,           ///< No-transpose.
-  TRANS     = 0x1,           ///< Transpose.
-  CONJ      = 0x2,           ///< Conjugate.
-  CONJTRANS = TRANS | CONJ,  ///< Conjugate transpose.
+  NORMAL = 0x0,           ///< No-transpose.
+  TRANS  = 0x1,           ///< Transpose.
+  CONJ   = 0x2,           ///< Conjugate.
+  HERM   = TRANS | CONJ,  ///< Conjugate transpose.
 };
 
 static constexpr bool operator !( const Trans trans ) noexcept {
@@ -60,6 +60,10 @@ static constexpr Trans changeTrans( const Trans trans ) noexcept {
 
 static constexpr Trans changeConj( const Trans trans ) noexcept {
   return trans ^ Trans::CONJ;
+}
+
+static constexpr Trans changeHerm( const Trans trans ) noexcept {
+  return trans ^ Trans::HERM;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

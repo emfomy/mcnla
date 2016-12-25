@@ -73,7 +73,7 @@ static constexpr char toTransChar( const Trans trans ) {
 /// @brief  Convert upper/lower option to char.
 ///
 static constexpr char toUploChar( Uplo uplo, Trans trans = Trans::NORMAL ) {
-  return isLower(uplo) ? 'L' : 'U';
+  return (isLower(uplo) ^ isTrans(trans)) ? 'L' : 'U';
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

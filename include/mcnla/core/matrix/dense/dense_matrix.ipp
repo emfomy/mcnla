@@ -234,7 +234,7 @@ typename DenseMatrix<_Scalar, _trans>::ConstIteratorType DenseMatrix<_Scalar, _t
 /// @attention  The storage layout is also changed.
 ///
 template <typename _Scalar, Trans _trans>
-DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::transpose() noexcept {
+DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
@@ -242,7 +242,7 @@ DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::transpo
 /// @copydoc  transpose
 ///
 template <typename _Scalar, Trans _trans>
-const DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::transpose() const noexcept {
+const DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 

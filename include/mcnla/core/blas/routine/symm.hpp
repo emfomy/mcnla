@@ -147,7 +147,7 @@ inline void symmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl2(b.transpose(), a.transpose(), c.transpose(), alpha, beta);
+  symmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
@@ -189,7 +189,7 @@ inline void symmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl2(a.transpose(), b.transpose(), c.transpose(), alpha, beta);
+  symmImpl2(a.t(), b.t(), c.t(), alpha, beta);
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>

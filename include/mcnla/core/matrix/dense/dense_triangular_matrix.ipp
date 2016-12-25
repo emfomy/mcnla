@@ -186,7 +186,7 @@ void DenseTriangularMatrix<_Scalar, _trans, _uplo>::resize(
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
-    DenseTriangularMatrix<_Scalar, _trans, _uplo>::transpose() noexcept {
+    DenseTriangularMatrix<_Scalar, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
@@ -195,7 +195,7 @@ DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 const DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
-    DenseTriangularMatrix<_Scalar, _trans, _uplo>::transpose() const noexcept {
+    DenseTriangularMatrix<_Scalar, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 
