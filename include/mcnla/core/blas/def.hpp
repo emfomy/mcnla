@@ -72,7 +72,7 @@ static constexpr char toTransChar( const Trans trans ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert upper/lower option to char.
 ///
-static constexpr char toUploChar( Uplo uplo ) {
+static constexpr char toUploChar( Uplo uplo, Trans trans = Trans::NORMAL ) {
   return isLower(uplo) ? 'L' : 'U';
 }
 
@@ -81,13 +81,6 @@ static constexpr char toUploChar( Uplo uplo ) {
 ///
 static constexpr char toDiagChar( Uplo uplo ) {
   return !isUnitDiag(uplo) ? 'N' : 'U';
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert side option to char.
-///
-static constexpr char toSideChar( Side side ) {
-  return isLeftSide(side) ? 'L' : 'R';
 }
 
 }  // namespace blas

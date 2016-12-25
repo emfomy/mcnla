@@ -17,10 +17,10 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  int m = 3, n = 4, k = 5;
+  int m = 3, n = 4;
 
-  mcnla::matrix::DenseMatrixRowMajor<double> matA(m, k);
-  mcnla::matrix::DenseMatrixRowMajor<double> matB(k, n);
+  mcnla::matrix::DenseMatrixColMajor<double> matA(m, m);
+  mcnla::matrix::DenseMatrixRowMajor<double> matB(m, n);
   mcnla::matrix::DenseMatrixRowMajor<double> matC(m, n);
 
   {
@@ -37,7 +37,7 @@ int main( int argc, char **argv ) {
     }
   }
 
-  mcnla::blas::gemm(matA, matB, matC);
+  mcnla::blas::symm(matA.viewSymmetric(), matB, matC);
 
   std::cout << matA << std::endl;
   std::cout << matB << std::endl;

@@ -26,6 +26,10 @@ namespace blas {
 //
 namespace detail {
 
+// ========================================================================================================================== //
+// Impl2
+//
+
 template <typename _Scalar, Trans _transa, Trans _transb>
 inline void gemmImpl2(
     const DenseMatrix<_Scalar, _transa> &a,
@@ -41,6 +45,10 @@ inline void gemmImpl2(
   gemm(toTransChar<_Scalar>(_transa), toTransChar<_Scalar>(_transb), c.getNrow(), c.getNcol(), a.getNcol(),
        alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
+
+// ========================================================================================================================== //
+// Impl1
+//
 
 template <typename _Scalar, Trans _transa, Trans _transb>
 inline void gemmImpl1(
@@ -72,6 +80,11 @@ inline void gemmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
+  static_cast<void>(a);
+  static_cast<void>(b);
+  static_cast<void>(c);
+  static_cast<void>(alpha);
+  static_cast<void>(beta);
   static_assert(!isConj(_transc), "Conjugate version of GEMM is not supported!");
 }
 

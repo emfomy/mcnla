@@ -108,42 +108,6 @@ static constexpr Uplo changeDiag( const Uplo uplo ) noexcept {
   return uplo ^ Uplo::UNITUPPER;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The enumeration of matrix operation side.
-///
-enum class Side {
-  LEFT  = 0x0,  ///< Left-hand side.
-  RIGHT = 0x1,  ///< Right-hand side.
-};
-
-static constexpr bool operator!( const Side side ) noexcept {
-  return !static_cast<bool>(side);
-}
-
-static constexpr Side operator|( const Side a, const Side b ) noexcept {
-  return static_cast<Side>(static_cast<int>(a) | static_cast<int>(b));
-}
-
-static constexpr Side operator&( const Side a, const Side b ) noexcept {
-  return static_cast<Side>(static_cast<int>(a) & static_cast<int>(b));
-}
-
-static constexpr Side operator^( const Side a, const Side b ) noexcept {
-  return static_cast<Side>(static_cast<int>(a) ^ static_cast<int>(b));
-}
-
-static constexpr bool isLeftSide( const Side side ) noexcept {
-  return !(side & Side::RIGHT);
-}
-
-static constexpr bool isRightSide( const Side side ) noexcept {
-  return !!(side & Side::RIGHT);
-}
-
-static constexpr Side changeSide( const Side side ) noexcept {
-  return side ^ Side::RIGHT;
-}
-
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_DEF_HPP_
