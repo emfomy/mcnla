@@ -26,6 +26,8 @@ namespace blas {
 //
 namespace detail {
 
+//@{
+
 // ========================================================================================================================== //
 // Impl3
 //
@@ -205,6 +207,8 @@ inline void symmImpl1(
   static_cast<void>(beta);
   static_assert(!isConj(_transc), "Conjugate version of SYMM is not supported!");
 }
+
+//@}
 
 }  // namespace detail
 

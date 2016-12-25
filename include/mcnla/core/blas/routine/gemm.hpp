@@ -26,10 +26,11 @@ namespace blas {
 //
 namespace detail {
 
+//@{
+
 // ========================================================================================================================== //
 // Impl2
 //
-
 template <typename _Scalar, Trans _transa, Trans _transb>
 inline void gemmImpl2(
     const DenseMatrix<_Scalar, _transa> &a,
@@ -87,6 +88,8 @@ inline void gemmImpl1(
   static_cast<void>(beta);
   static_assert(!isConj(_transc), "Conjugate version of GEMM is not supported!");
 }
+
+//@}
 
 }  // namespace detail
 

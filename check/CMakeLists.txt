@@ -11,6 +11,9 @@ if(GTEST_FOUND)
   list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")
 endif()
 
+# Set the data path
+list(APPEND DEFS "-DMCNLA_DATA_PATH=\"${PROJECT_SOURCE_DIR}/data\"")
+
 # Add check folders
 include(check.cmake)
 add_check_test(core/matrix/dense/dense_vector  "Dense Vector test")
