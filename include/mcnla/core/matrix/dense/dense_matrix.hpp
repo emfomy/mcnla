@@ -17,6 +17,7 @@
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_symmetric_matrix.hpp>
 #include <mcnla/core/matrix/dense/dense_triangular_matrix.hpp>
+#include <mcnla/core/matrix/dense/dense_diagonal_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,10 +31,11 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseVector;
 template <typename _Scalar, Layout _layout> class DenseMatrix;
+template <typename _Scalar> class DenseVector;
 template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseSymmetricMatrix;
 template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseTriangularMatrix;
+template <typename _Scalar> class DenseDiagonalMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -92,10 +94,14 @@ class DenseMatrix
   using MatrixType        = DenseMatrix<_Scalar, _layout>;
 
   using TransposeType     = DenseMatrix<_Scalar, changeLayout(_layout)>;
+
   template <Uplo _uplo>
   using SymmetricType     = DenseSymmetricMatrix<_Scalar, _layout, _uplo>;
+
   template <Uplo _uplo>
-  using TriangularType     = DenseTriangularMatrix<_Scalar, _layout, _uplo>;
+  using TriangularType    = DenseTriangularMatrix<_Scalar, _layout, _uplo>;
+
+  using DiagonalType      = DenseDiagonalMatrix<_Scalar>;
 
   using IteratorType      = DenseMatrixIterator<_Scalar, _layout>;
   using ConstIteratorType = DenseMatrixConstIterator<_Scalar, _layout>;
@@ -155,6 +161,9 @@ class DenseMatrix
   inline       TriangularType<_uplo>& viewTriangular() noexcept;
   template <Uplo _uplo = Uplo::UPPER>
   inline const TriangularType<_uplo>& viewTriangular() const noexcept;
+
+  inline       DiagonalType viewDiagonal() noexcept;
+  inline const DiagonalType viewDiagonal() const noexcept;
 
   // Gets matrix block
   inline       MatrixType operator()( const IdxRange &rowrange, const IdxRange &colrange ) noexcept;

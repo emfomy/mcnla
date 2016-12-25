@@ -35,7 +35,6 @@ struct IdxRange {
 
   // Constructors
   inline IdxRange( const index_t begin, const index_t end ) noexcept;
-  inline IdxRange( const index_t idx ) noexcept;
 
   // Operators
   inline bool operator==( const IdxRange& other ) const noexcept;

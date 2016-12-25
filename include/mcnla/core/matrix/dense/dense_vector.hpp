@@ -14,6 +14,7 @@
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
+#include <mcnla/core/matrix/dense/dense_diagonal_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,6 +29,7 @@ namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar> class DenseVector;
+template <typename _Scalar> class DenseDiagonalMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -84,6 +86,8 @@ class DenseVector
 
   using VectorType        = DenseVector<_Scalar>;
 
+  using DiagonalType      = DenseDiagonalMatrix<_Scalar>;
+
   using IteratorType      = DenseVectorIterator<_Scalar>;
   using ConstIteratorType = DenseVectorConstIterator<_Scalar>;
 
@@ -125,6 +129,9 @@ class DenseVector
 
   // Resizes
   inline void resize( const index_t length, const index_t stride ) noexcept;
+
+  inline       DiagonalType& viewDiagonal() noexcept;
+  inline const DiagonalType& viewDiagonal() const noexcept;
 
   // Gets segment
   inline       VectorType operator()( const IdxRange &range ) noexcept;

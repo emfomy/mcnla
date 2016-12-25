@@ -283,6 +283,23 @@ const DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseMatrix<_Scalar, _layo
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the diagonal view of the matrix.
+///
+template <typename _Scalar, Layout _layout>
+DenseDiagonalMatrix<_Scalar> DenseMatrix<_Scalar, _layout>::viewDiagonal() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return getDiagonal().viewDiagonal();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewDiagonal
+///
+template <typename _Scalar, Layout _layout>
+const DenseDiagonalMatrix<_Scalar> DenseMatrix<_Scalar, _layout>::viewDiagonal() const noexcept {
+  return getDiagonal().viewDiagonal();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
 ///
 template <typename _Scalar, Layout _layout>

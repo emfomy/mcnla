@@ -28,21 +28,25 @@ int main( int argc, char **argv ) {
 
   std::cout << mat << std::endl;
 
-  std::cout << mat({1, 2}, "") << std::endl;
-
   std::cout << "Symmetric" << std::endl;
-
   std::cout << mat.viewSymmetric() << std::endl;
   std::cout << mat.viewSymmetric<mcnla::Uplo::UPPER>() << std::endl;
   std::cout << mat.viewSymmetric<mcnla::Uplo::LOWER>() << std::endl;
 
   std::cout << "Triangular" << std::endl;
-
   std::cout << mat.viewTriangular() << std::endl;
   std::cout << mat.viewTriangular<mcnla::Uplo::UPPER>() << std::endl;
   std::cout << mat.viewTriangular<mcnla::Uplo::LOWER>() << std::endl;
   std::cout << mat.viewTriangular<mcnla::Uplo::UNITUPPER>() << std::endl;
   std::cout << mat.viewTriangular<mcnla::Uplo::UNITLOWER>() << std::endl;
+
+  std::cout << "Diagonal" << std::endl;
+  std::cout << mat.viewDiagonal() << std::endl;
+
+  std::cout << "Vector" << std::endl;
+  auto vec = mat(1, "");
+  std::cout << vec << std::endl;
+  std::cout << vec.viewDiagonal() << std::endl;
 
   return 0;
 }
