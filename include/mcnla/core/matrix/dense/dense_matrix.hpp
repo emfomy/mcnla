@@ -31,10 +31,10 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout> class DenseMatrix;
+template <typename _Scalar, Trans _trans> class DenseMatrix;
 template <typename _Scalar> class DenseVector;
-template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseSymmetricMatrix;
-template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseTriangularMatrix;
+template <typename _Scalar, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
+template <typename _Scalar, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
 template <typename _Scalar> class DenseDiagonalMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -50,13 +50,13 @@ namespace traits {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar, Layout _layout>
-struct Traits<matrix::DenseMatrix<_Scalar, _layout>> {
+template <typename _Scalar, Trans _trans>
+struct Traits<matrix::DenseMatrix<_Scalar, _trans>> {
   static constexpr index_t ndim = 2;
 
   using ScalarType        = _Scalar;
-  using IteratorType      = matrix::DenseMatrixIterator<_Scalar, _layout>;
-  using ConstIteratorType = matrix::DenseMatrixConstIterator<_Scalar, _layout>;
+  using IteratorType      = matrix::DenseMatrixIterator<_Scalar, _trans>;
+  using ConstIteratorType = matrix::DenseMatrixConstIterator<_Scalar, _trans>;
 };
 
 }  // namespace traits
@@ -72,14 +72,16 @@ namespace matrix {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
+template <typename _Scalar, Trans _trans = Trans::NORMAL>
 class DenseMatrix
   : public DenseMatrixStorage<_Scalar>,
-    public MatrixWrapper<DenseMatrix<_Scalar, _layout>>,
-    public ContainerWrapper<DenseMatrix<_Scalar, _layout>> {
+    public MatrixWrapper<DenseMatrix<_Scalar, _trans>>,
+    public ContainerWrapper<DenseMatrix<_Scalar, _trans>> {
 
-  friend MatrixWrapper<DenseMatrix<_Scalar, _layout>>;
-  friend ContainerWrapper<DenseMatrix<_Scalar, _layout>>;
+  static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
+
+  friend MatrixWrapper<DenseMatrix<_Scalar, _trans>>;
+  friend ContainerWrapper<DenseMatrix<_Scalar, _trans>>;
 
  public:
 
@@ -91,20 +93,20 @@ class DenseMatrix
   using SizesType         = std::tuple<index_t, index_t>;
 
   using VectorType        = DenseVector<_Scalar>;
-  using MatrixType        = DenseMatrix<_Scalar, _layout>;
+  using MatrixType        = DenseMatrix<_Scalar, _trans>;
 
-  using TransposeType     = DenseMatrix<_Scalar, changeLayout(_layout)>;
-
-  template <Uplo _uplo>
-  using SymmetricType     = DenseSymmetricMatrix<_Scalar, _layout, _uplo>;
+  using TransposeType     = DenseMatrix<_Scalar, changeTrans(_trans)>;
 
   template <Uplo _uplo>
-  using TriangularType    = DenseTriangularMatrix<_Scalar, _layout, _uplo>;
+  using SymmetricType     = DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
+
+  template <Uplo _uplo>
+  using TriangularType    = DenseTriangularMatrix<_Scalar, _trans, _uplo>;
 
   using DiagonalType      = DenseDiagonalMatrix<_Scalar>;
 
-  using IteratorType      = DenseMatrixIterator<_Scalar, _layout>;
-  using ConstIteratorType = DenseMatrixConstIterator<_Scalar, _layout>;
+  using IteratorType      = DenseMatrixIterator<_Scalar, _trans>;
+  using ConstIteratorType = DenseMatrixConstIterator<_Scalar, _trans>;
 
  private:
 

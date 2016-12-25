@@ -23,15 +23,15 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix() noexcept
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
     const index_t size
 ) noexcept
   : BaseType(size, size) {
@@ -40,8 +40,8 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -50,8 +50,8 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -61,8 +61,8 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
     const index_t size,
     const index_t pitch,
     const ValueArrayType &value,
@@ -75,8 +75,8 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
     const DenseTriangularMatrix &other
 ) noexcept
   : BaseType(other) {}
@@ -84,8 +84,8 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
     DenseTriangularMatrix &&other
 ) noexcept
   : BaseType(std::move(other)) {}
@@ -95,8 +95,8 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>::DenseTriangularMatrix(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator=(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator=(
     const DenseTriangularMatrix &other
 ) noexcept {
   BaseType::operator=(other);
@@ -106,8 +106,8 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseTriangularMatrix<_Scalar, _
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator=(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator=(
     DenseTriangularMatrix &&other
 ) noexcept {
   BaseType::operator=(std::move(other));
@@ -115,17 +115,25 @@ DenseTriangularMatrix<_Scalar, _layout, _uplo>& DenseTriangularMatrix<_Scalar, _
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the size.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::getSize() const noexcept {
+  return this->getDim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-_Scalar DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator()(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+_Scalar DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
   if ( rowidx == colidx ) {
     return isUnitDiag(_uplo) ? 1 : this->getElemImpl(rowidx, colidx);
   } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
-    return (isColMajor(_layout) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
+    return (!isTrans(_trans) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
   } else {
     return 0;
   }
@@ -134,15 +142,15 @@ _Scalar DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-const _Scalar DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator()(
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const _Scalar DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
   if ( rowidx == colidx ) {
     return isUnitDiag(_uplo) ? 1 : this->getElemImpl(rowidx, colidx);
   } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
-    return (isColMajor(_layout) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
+    return (!isTrans(_trans) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
   } else {
     return 0;
   }
@@ -154,50 +162,50 @@ const _Scalar DenseTriangularMatrix<_Scalar, _layout, _uplo>::operator()(
 ///
 /// @attention  The storage layout is also changed.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseTriangularMatrix<_Scalar, changeLayout(_layout), _uplo>&
-    DenseTriangularMatrix<_Scalar, _layout, _uplo>::transpose() noexcept {
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
+    DenseTriangularMatrix<_Scalar, _trans, _uplo>::transpose() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  transpose
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-const DenseTriangularMatrix<_Scalar, changeLayout(_layout), _uplo>&
-    DenseTriangularMatrix<_Scalar, _layout, _uplo>::transpose() const noexcept {
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
+    DenseTriangularMatrix<_Scalar, _trans, _uplo>::transpose() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::getNrow
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-index_t DenseTriangularMatrix<_Scalar, _layout, _uplo>::getNrowImpl() const noexcept {
-  return isColMajor(_layout) ? this->getDim0() : this->getDim1();
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::getNrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->getDim0() : this->getDim1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::getNcol
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-index_t DenseTriangularMatrix<_Scalar, _layout, _uplo>::getNcolImpl() const noexcept {
-  return isColMajor(_layout) ? this->getDim1() : this->getDim0();
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::getNcolImpl() const noexcept {
+  return !isTrans(_trans) ? this->getDim1() : this->getDim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert to base class.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::base() noexcept {
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  base
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-const DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _layout, _uplo>::base() const noexcept {
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 

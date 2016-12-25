@@ -36,17 +36,17 @@ inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
           DenseMatrix<_Scalar, _layoutc> &c
 ) noexcept {
-  static_assert(!isConjugate(_transa) && !isConjugate(_transb), "Conjugate version is not supported!");
+  static_assert(!isConj(_transa) && !isConj(_transb), "Conjugate version is not supported!");
 
-  constexpr int dimb = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 1 : 0;
-  constexpr int dimc = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 0 : 1;
+  constexpr int dimb = (isColMajor(_layouta) ^ isTrans(_transa)) ? 1 : 0;
+  constexpr int dimc = (isColMajor(_layouta) ^ isTrans(_transa)) ? 0 : 1;
 
   mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
   mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
   mcnla_assert_eq(a.template getNcol<_transa>(), b.template getNrow<_transb>());
 
   blas::memset0(c);
-  if ( !isTranspose(_transb) ) {
+  if ( !isTrans(_transb) ) {
     for ( auto tuple : a ) {
       axpby(alpha * tuple.getValuePtr(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
     }
@@ -66,17 +66,17 @@ inline void gemm(
     const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
           DenseMatrix<_Scalar, _layoutc> &c
 ) noexcept {
-  static_assert(!isConjugate(_transa) && !isConjugate(_transb), "Conjugate version is not supported!");
+  static_assert(!isConj(_transa) && !isConj(_transb), "Conjugate version is not supported!");
 
-  constexpr int dimb = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 0 : 1;
-  constexpr int dimc = (isColMajor(_layouta) ^ isTranspose(_transa)) ? 1 : 0;
+  constexpr int dimb = (isColMajor(_layouta) ^ isTrans(_transa)) ? 0 : 1;
+  constexpr int dimc = (isColMajor(_layouta) ^ isTrans(_transa)) ? 1 : 0;
 
   mcnla_assert_eq(c.getNcol(),                   a.template getNcol<_transb>());
   mcnla_assert_eq(c.getNrow(),                   b.template getNrow<_transa>());
   mcnla_assert_eq(a.template getNrow<_transb>(), b.template getNcol<_transa>());
 
   blas::memset0(c);
-  if ( !isTranspose(_transb) ) {
+  if ( !isTrans(_transb) ) {
     for ( auto tuple : a ) {
       axpby(alpha * tuple.getValuePtr(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));
     }

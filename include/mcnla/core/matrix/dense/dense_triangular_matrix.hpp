@@ -26,7 +26,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout, Uplo _uplo> class DenseTriangularMatrix;
+template <typename _Scalar, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -41,8 +41,8 @@ namespace traits {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar, Layout _layout, Uplo _uplo>
-struct Traits<matrix::DenseTriangularMatrix<_Scalar, _layout, _uplo>> {
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+struct Traits<matrix::DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
   static constexpr index_t ndim = 2;
 
   using ScalarType = _Scalar;
@@ -61,12 +61,13 @@ namespace matrix {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar, Layout _layout = Layout::COLMAJOR, Uplo _uplo = Uplo::UPPER>
+template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER>
 class DenseTriangularMatrix
   : public DenseMatrixStorage<_Scalar>,
-    public MatrixWrapper<DenseTriangularMatrix<_Scalar, _layout, _uplo>> {
+    public MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
 
-  friend MatrixWrapper<DenseTriangularMatrix<_Scalar, _layout, _uplo>>;
+  static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
+  friend MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>;
 
  public:
 
@@ -76,7 +77,7 @@ class DenseTriangularMatrix
   using RealScalarType = RealType<_Scalar>;
   using ValueArrayType = Array<_Scalar>;
 
-  using TransposeType  = DenseTriangularMatrix<_Scalar, changeLayout(_layout), _uplo>;
+  using TransposeType  = DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>;
 
  private:
 
@@ -97,6 +98,9 @@ class DenseTriangularMatrix
   // Operators
   inline DenseTriangularMatrix& operator=( const DenseTriangularMatrix &other ) noexcept;
   inline DenseTriangularMatrix& operator=( DenseTriangularMatrix &&other ) noexcept;
+
+  // Gets information
+  inline index_t getSize() const noexcept;
 
   // Gets element
   inline       ScalarType operator()( const index_t rowidx, const index_t colidx ) noexcept;

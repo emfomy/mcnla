@@ -61,26 +61,19 @@ using namespace matrix;
 namespace detail {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert layout to char.
-///
-static constexpr char toLayoutChar( Layout layout ) {
-  return isColMajor(layout) ? 'C' : 'R';
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
 ///
 template<typename _Scalar>
 static constexpr char toTransChar( const Trans trans ) {
-  return !isTranspose(trans) ? ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'R' : 'N')
-                             : ((!!isConjugate(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+  return !isTrans(trans) ? ((isConj(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'R' : 'N')
+                         : ((isConj(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert upper/lower option to char.
 ///
-static constexpr char toUploChar( Uplo uplo, Layout layout ) {
-  return (isLower(uplo) ^ isRowMajor(layout)) ? 'L' : 'U';
+static constexpr char toUploChar( Uplo uplo ) {
+  return isLower(uplo) ? 'L' : 'U';
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,8 +86,8 @@ static constexpr char toDiagChar( Uplo uplo ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert side option to char.
 ///
-static constexpr char toSideChar( Side side, Layout layout ) {
-  return (isLeftSide(side) ^ isRowMajor(layout)) ? 'L' : 'R';
+static constexpr char toSideChar( Side side ) {
+  return isLeftSide(side) ? 'L' : 'R';
 }
 
 }  // namespace blas

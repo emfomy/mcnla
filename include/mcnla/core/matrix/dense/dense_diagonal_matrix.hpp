@@ -98,6 +98,9 @@ class DenseDiagonalMatrix
   inline DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other ) noexcept;
   inline DenseDiagonalMatrix& operator=( DenseDiagonalMatrix &&other ) noexcept;
 
+  // Gets information
+  inline index_t getSize() const noexcept;
+
   // Gets element
   inline       ScalarType operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;

@@ -65,8 +65,8 @@ static constexpr char toTransChar( const Trans trans ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::blas::toUploChar
 ///
-static constexpr char toUploChar( Uplo uplo, Layout layout ) {
-  return blas::toUploChar(uplo, layout);
+static constexpr char toUploChar( Uplo uplo ) {
+  return blas::toUploChar(uplo);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,8 +79,8 @@ static constexpr char toDiagChar( Uplo uplo ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::blas::toSideChar
 ///
-static constexpr char toSideChar( Side uplo, Layout layout ) {
-  return blas::toSideChar(uplo, layout);
+static constexpr char toSideChar( Side uplo ) {
+  return blas::toSideChar(uplo);
 }
 
 }  // namespace lapack

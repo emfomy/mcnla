@@ -23,42 +23,6 @@ namespace mcnla {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The enumeration of matrix storage layout.
 ///
-enum class Layout {
-  COLMAJOR = 0x0,  ///< Column-major order.
-  ROWMAJOR = 0x1,  ///< Row-major order.
-};
-
-static constexpr bool operator !( const Layout layout ) noexcept {
-  return !static_cast<bool>(layout);
-}
-
-static constexpr Layout operator|( const Layout a, const Layout b ) noexcept {
-  return static_cast<Layout>(static_cast<int>(a) | static_cast<int>(b));
-}
-
-static constexpr Layout operator&( const Layout a, const Layout b ) noexcept {
-  return static_cast<Layout>(static_cast<int>(a) & static_cast<int>(b));
-}
-
-static constexpr Layout operator^( const Layout a, const Layout b ) noexcept {
-  return static_cast<Layout>(static_cast<int>(a) ^ static_cast<int>(b));
-}
-
-static constexpr bool isColMajor( const Layout layout ) noexcept {
-  return !(layout & Layout::ROWMAJOR);
-}
-
-static constexpr bool isRowMajor( const Layout layout ) noexcept {
-  return !!(layout & Layout::ROWMAJOR);
-}
-
-static constexpr Layout changeLayout( const Layout layout ) noexcept {
-  return layout ^ Layout::ROWMAJOR;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The enumeration of matrix storage layout.
-///
 enum class Trans {
   NORMAL    = 0x0,           ///< No-transpose.
   TRANS     = 0x1,           ///< Transpose.
@@ -82,12 +46,20 @@ static constexpr Trans operator^( const Trans a, const Trans b ) noexcept {
   return static_cast<Trans>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
-static constexpr bool isTranspose( const Trans trans ) noexcept {
+static constexpr bool isTrans( const Trans trans ) noexcept {
   return !!(trans & Trans::TRANS);
 }
 
-static constexpr bool isConjugate( const Trans trans ) noexcept {
+static constexpr bool isConj( const Trans trans ) noexcept {
   return !!(trans & Trans::CONJ);
+}
+
+static constexpr Trans changeTrans( const Trans trans ) noexcept {
+  return trans ^ Trans::TRANS;
+}
+
+static constexpr Trans changeConj( const Trans trans ) noexcept {
+  return trans ^ Trans::CONJ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +102,10 @@ static constexpr bool isUnitDiag( const Uplo uplo ) noexcept {
 
 static constexpr Uplo changeUplo( const Uplo uplo ) noexcept {
   return uplo ^ Uplo::LOWER;
+}
+
+static constexpr Uplo changeDiag( const Uplo uplo ) noexcept {
+  return uplo ^ Uplo::UNITUPPER;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

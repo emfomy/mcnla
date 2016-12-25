@@ -23,10 +23,10 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Print to stream.
 ///
-template <typename __Scalar, Layout __layout, class __Matrix>
+template <typename __Scalar, Trans __trans, class __Matrix>
 std::ostream& operator<< (
     std::ostream &out,
-    const DenseMatrixIteratorBase<__Scalar, __layout, __Matrix> &iterator
+    const DenseMatrixIteratorBase<__Scalar, __trans, __Matrix> &iterator
 ) {
   const index_t width_r = log10(iterator.container_->getNrow())+1;
   const index_t width_c = log10(iterator.container_->getNcol())+1;
@@ -41,8 +41,8 @@ std::ostream& operator<< (
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
-template <typename _Scalar, Layout _layout, class _Matrix>
-_Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const noexcept {
+template <typename _Scalar, Trans _trans, class _Matrix>
+_Scalar& DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::getValue() const noexcept {
   mcnla_assert_gelt(itidx_, 0, container_->getNelem());
   return container_->getValuePtr()[getPos()];
 }
@@ -50,17 +50,17 @@ _Scalar& DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getValue() const no
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the row index.
 ///
-template <typename _Scalar, Layout _layout, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getRowIdx() const noexcept {
-  return isColMajor(_layout) ? itidx_ % container_->getDim0() : itidx_ / container_->getDim0();
+template <typename _Scalar, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::getRowIdx() const noexcept {
+  return !isTrans(_trans) ? itidx_ % container_->getDim0() : itidx_ / container_->getDim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the column index.
 ///
-template <typename _Scalar, Layout _layout, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getColIdx() const noexcept {
-  return isColMajor(_layout) ? itidx_ / container_->getDim0() : itidx_ % container_->getDim0();
+template <typename _Scalar, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::getColIdx() const noexcept {
+  return !isTrans(_trans) ? itidx_ / container_->getDim0() : itidx_ % container_->getDim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +68,8 @@ index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getColIdx() const no
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
-template <typename _Scalar, Layout _layout, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _layout, _Matrix>::getPos() const noexcept {
+template <typename _Scalar, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::getPos() const noexcept {
   return container_->getPos(getRowIdx(), getColIdx());
 }
 
