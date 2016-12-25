@@ -108,6 +108,11 @@ class DenseSymmetricMatrix
   inline       ScalarType operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
+  // Resizes
+  template <typename... Args>
+  inline void reconstruct( Args... args ) noexcept;
+  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
+
   // Transpose
   inline       TransposeType& transpose() noexcept;
   inline const TransposeType& transpose() const noexcept;

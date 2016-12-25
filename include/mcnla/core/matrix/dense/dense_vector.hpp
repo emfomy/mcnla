@@ -128,7 +128,9 @@ class DenseVector
   inline ConstIteratorType cfind( const index_t idx ) const noexcept;
 
   // Resizes
-  inline void resize( const index_t length, const index_t stride ) noexcept;
+  template <typename... Args>
+  inline void reconstruct( Args... args ) noexcept;
+  inline void resize( const index_t length, const index_t stride = 1 ) noexcept;
 
   inline       DiagonalType& viewDiagonal() noexcept;
   inline const DiagonalType& viewDiagonal() const noexcept;

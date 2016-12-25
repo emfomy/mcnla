@@ -300,6 +300,18 @@ const DenseDiagonalMatrix<_Scalar> DenseMatrix<_Scalar, _trans>::viewDiagonal() 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the matrix.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar, Trans _trans> template <typename... Args>
+void DenseMatrix<_Scalar, _trans>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseMatrix<_Scalar, _trans>(args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
 ///
 template <typename _Scalar, Trans _trans>

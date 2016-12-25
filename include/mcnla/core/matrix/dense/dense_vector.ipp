@@ -188,9 +188,19 @@ typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::cfind(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resizes the vector.
+/// @brief  Reconstruct the vector.
 ///
-/// @attention  The new space is not initialized.
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar> template <typename... Args>
+void DenseVector<_Scalar>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseVector<_Scalar>(args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseVectorStorage::resizeImpl
 ///
 template <typename _Scalar>
 void DenseVector<_Scalar>::resize(

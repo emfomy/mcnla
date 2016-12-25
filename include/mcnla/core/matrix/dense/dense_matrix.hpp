@@ -147,6 +147,8 @@ class DenseMatrix
   inline ConstIteratorType cfind( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
+  template <typename... Args>
+  inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
 
   // Transpose

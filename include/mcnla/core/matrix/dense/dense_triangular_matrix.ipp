@@ -156,6 +156,28 @@ const _Scalar DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator()(
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the matrix.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo> template <typename... Args>
+void DenseTriangularMatrix<_Scalar, _trans, _uplo>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseTriangularMatrix<_Scalar, _trans, _uplo>(args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+void DenseTriangularMatrix<_Scalar, _trans, _uplo>::resize(
+    const index_t nrow,
+    const index_t ncol
+) noexcept {
+  !isTrans(_trans) ? this->resizeImpl(nrow, ncol) : this->resizeImpl(ncol, nrow);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the transpose of the matrix.

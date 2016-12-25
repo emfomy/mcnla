@@ -144,6 +144,17 @@ const _Scalar DenseDiagonalMatrix<_Scalar>::operator()(
   return (rowidx == colidx) ? this->getElemImpl(rowidx) : 0;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the matrix.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar> template <typename... Args>
+void DenseDiagonalMatrix<_Scalar>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseDiagonalMatrix<_Scalar>(args...);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the transpose of the matrix.

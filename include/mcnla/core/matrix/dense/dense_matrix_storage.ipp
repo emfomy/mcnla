@@ -253,7 +253,7 @@ index_t DenseMatrixStorage<_Scalar>::getPosImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Resizes the matrix.
 ///
-/// @attention  The new space is not initialized.
+/// @attention  The new space is kept but not initialized.
 ///
 template <typename _Scalar>
 void DenseMatrixStorage<_Scalar>::resizeImpl(
