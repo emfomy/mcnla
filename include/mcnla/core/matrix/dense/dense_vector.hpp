@@ -132,8 +132,8 @@ class DenseVector
   inline void resize( const index_t length, const index_t stride ) noexcept;
 
   // Gets segment
-  inline       VectorType operator()( const IdxRange range ) noexcept;
-  inline const VectorType operator()( const IdxRange range ) const noexcept;
+  inline       VectorType operator()( const IdxRange &range ) noexcept;
+  inline const VectorType operator()( const IdxRange &range ) const noexcept;
 
  protected:
 

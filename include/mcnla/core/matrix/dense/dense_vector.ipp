@@ -217,7 +217,7 @@ void DenseVector<_Scalar>::resize(
 ///
 template <typename _Scalar>
 DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
-    const IdxRange range
+    const IdxRange &range
 ) noexcept {
   return static_cast<VectorType&&>(this->getVectorImpl(range));
 }
@@ -227,7 +227,7 @@ DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
 ///
 template <typename _Scalar>
 const DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
-    const IdxRange range
+    const IdxRange &range
 ) const noexcept {
   return static_cast<const VectorType&&>(this->getVectorImpl(range));
 }

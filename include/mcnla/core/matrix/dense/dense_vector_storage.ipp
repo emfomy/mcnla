@@ -222,7 +222,7 @@ void DenseVectorStorage<_Scalar>::resizeImpl(
 ///
 template <typename _Scalar>
 DenseVectorStorage<_Scalar> DenseVectorStorage<_Scalar>::getVectorImpl(
-    const IdxRange range0
+    const IdxRange &range0
 ) noexcept {
   mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
   return VectorStorageType(range0.getLength(), stride_, value_, this->getPosImpl(range0.begin));
@@ -233,7 +233,7 @@ DenseVectorStorage<_Scalar> DenseVectorStorage<_Scalar>::getVectorImpl(
 ///
 template <typename _Scalar>
 const DenseVectorStorage<_Scalar> DenseVectorStorage<_Scalar>::getVectorImpl(
-    const IdxRange range0
+    const IdxRange &range0
 ) const noexcept {
   mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
   return VectorStorageType(range0.getLength(), stride_, value_, this->getPosImpl(range0.begin));

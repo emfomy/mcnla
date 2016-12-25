@@ -274,8 +274,8 @@ void DenseMatrixStorage<_Scalar>::resizeImpl(
 ///
 template <typename _Scalar>
 DenseMatrixStorage<_Scalar> DenseMatrixStorage<_Scalar>::getMatrixImpl(
-    const IdxRange range0,
-    const IdxRange range1
+    const IdxRange &range0,
+    const IdxRange &range1
 ) noexcept {
   mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
   mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);
@@ -287,8 +287,8 @@ DenseMatrixStorage<_Scalar> DenseMatrixStorage<_Scalar>::getMatrixImpl(
 ///
 template <typename _Scalar>
 const DenseMatrixStorage<_Scalar> DenseMatrixStorage<_Scalar>::getMatrixImpl(
-    const IdxRange range0,
-    const IdxRange range1
+    const IdxRange &range0,
+    const IdxRange &range1
 ) const noexcept {
   mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
   mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);
@@ -300,7 +300,7 @@ const DenseMatrixStorage<_Scalar> DenseMatrixStorage<_Scalar>::getMatrixImpl(
 ///
 template <typename _Scalar>
 DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector0Impl(
-    const IdxRange range0,
+    const IdxRange &range0,
     const index_t idx1
 ) noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);
@@ -313,7 +313,7 @@ DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector0Impl(
 ///
 template <typename _Scalar>
 const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector0Impl(
-    const IdxRange range0,
+    const IdxRange &range0,
     const index_t idx1
 ) const noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);
@@ -322,12 +322,12 @@ const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector0Impl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a vector segment.
+/// @copydoc  getVector0Impl
 ///
 template <typename _Scalar>
 DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector1Impl(
     const index_t idx0,
-    const IdxRange range1
+    const IdxRange &range1
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
   mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);
@@ -335,12 +335,12 @@ DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector1Impl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getVector1Impl
+/// @copydoc  getVector0Impl
 ///
 template <typename _Scalar>
 const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector1Impl(
     const index_t idx0,
-    const IdxRange range1
+    const IdxRange &range1
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
   mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);

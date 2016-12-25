@@ -99,14 +99,14 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   inline void resizeImpl( const index_t nrow, const index_t ncol ) noexcept;
 
   // Gets matrix block
-  inline       MatrixStorageType getMatrixImpl( const IdxRange range0, const IdxRange range1 ) noexcept;
-  inline const MatrixStorageType getMatrixImpl( const IdxRange range0, const IdxRange range1 ) const noexcept;
+  inline       MatrixStorageType getMatrixImpl( const IdxRange &range0, const IdxRange &range1 ) noexcept;
+  inline const MatrixStorageType getMatrixImpl( const IdxRange &range0, const IdxRange &range1 ) const noexcept;
 
   // Gets vector segment
-  inline       VectorStorageType getVector0Impl( const IdxRange range0, const index_t idx1 ) noexcept;
-  inline const VectorStorageType getVector0Impl( const IdxRange range0, const index_t idx1 ) const noexcept;
-  inline       VectorStorageType getVector1Impl( const index_t idx0, const IdxRange range1 ) noexcept;
-  inline const VectorStorageType getVector1Impl( const index_t idx0, const IdxRange range1 ) const noexcept;
+  inline       VectorStorageType getVector0Impl( const IdxRange &range0, const index_t idx1 ) noexcept;
+  inline const VectorStorageType getVector0Impl( const IdxRange &range0, const index_t idx1 ) const noexcept;
+  inline       VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) noexcept;
+  inline const VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) const noexcept;
   inline       VectorStorageType getDiagonalImpl( const index_t idx ) noexcept;
   inline const VectorStorageType getDiagonalImpl( const index_t idx ) const noexcept;
   inline       VectorStorageType vectorizeImpl() noexcept;

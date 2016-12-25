@@ -266,8 +266,8 @@ void DenseMatrix<_Scalar, _layout>::resize(
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
-    const IdxRange rowrange,
-    const IdxRange colrange
+    const IdxRange &rowrange,
+    const IdxRange &colrange
 ) noexcept {
   return static_cast<MatrixType&&>(
       isColMajor(_layout) ? this->getMatrixImpl(rowrange, colrange) : this->getMatrixImpl(colrange, rowrange)
@@ -279,8 +279,8 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
 ///
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
-    const IdxRange rowrange,
-    const IdxRange colrange
+    const IdxRange &rowrange,
+    const IdxRange &colrange
 ) const noexcept {
   return static_cast<const MatrixType&&>(
       isColMajor(_layout) ? this->getMatrixImpl(rowrange, colrange) : this->getMatrixImpl(colrange, rowrange)
@@ -293,7 +293,7 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const char*,
-    const IdxRange colrange
+    const IdxRange &colrange
 ) noexcept {
   return static_cast<MatrixType&&>(
       isColMajor(_layout) ? this->getMatrixImpl(rowfullrange(), colrange) : this->getMatrixImpl(colrange, rowfullrange())
@@ -306,7 +306,7 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
     const char*,
-    const IdxRange colrange
+    const IdxRange &colrange
 ) const noexcept {
   return static_cast<const MatrixType&&>(
       isColMajor(_layout) ? this->getMatrixImpl(rowfullrange(), colrange) : this->getMatrixImpl(colrange, rowfullrange())
@@ -318,7 +318,7 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
 ///
 template <typename _Scalar, Layout _layout>
 DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
-    const IdxRange rowrange,
+    const IdxRange &rowrange,
     const char*
 ) noexcept {
   return static_cast<MatrixType&&>(
@@ -331,7 +331,7 @@ DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
 ///
 template <typename _Scalar, Layout _layout>
 const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
-    const IdxRange rowrange,
+    const IdxRange &rowrange,
     const char*
 ) const noexcept {
   return static_cast<const MatrixType&&>(
@@ -344,7 +344,7 @@ const DenseMatrix<_Scalar, _layout> DenseMatrix<_Scalar, _layout>::operator()(
 ///
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
-    const IdxRange rowrange,
+    const IdxRange &rowrange,
     const index_t colidx
 ) noexcept {
   return static_cast<VectorType&&>(
@@ -357,7 +357,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
 ///
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
-    const IdxRange rowrange,
+    const IdxRange &rowrange,
     const index_t colidx
 ) const noexcept {
   return static_cast<const VectorType&&>(
@@ -397,7 +397,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
 template <typename _Scalar, Layout _layout>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
     const index_t rowidx,
-    const IdxRange colrange
+    const IdxRange &colrange
 ) noexcept {
   return static_cast<VectorType&&>(
       isColMajor(_layout) ? this->getVector1Impl(rowidx, colrange) : this->getVector0Impl(colrange, rowidx)
@@ -410,7 +410,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
 template <typename _Scalar, Layout _layout>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _layout>::operator()(
     const index_t rowidx,
-    const IdxRange colrange
+    const IdxRange &colrange
 ) const noexcept {
   return static_cast<const VectorType&&>(
       isColMajor(_layout) ? this->getVector1Impl(rowidx, colrange) : this->getVector0Impl(colrange, rowidx)

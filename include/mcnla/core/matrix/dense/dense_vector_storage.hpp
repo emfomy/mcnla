@@ -95,8 +95,8 @@ class DenseVectorStorage : public DenseStorage<_Scalar> {
   inline void resizeImpl( const index_t dim0, const index_t stride ) noexcept;
 
   // Gets segment
-  inline       VectorStorageType getVectorImpl( const IdxRange range0 ) noexcept;
-  inline const VectorStorageType getVectorImpl( const IdxRange range0 ) const noexcept;
+  inline       VectorStorageType getVectorImpl( const IdxRange &range0 ) noexcept;
+  inline const VectorStorageType getVectorImpl( const IdxRange &range0 ) const noexcept;
 
 };
 
