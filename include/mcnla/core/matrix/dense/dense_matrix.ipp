@@ -357,7 +357,7 @@ void DenseMatrix<_Scalar, _trans>::resize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
+/// @brief  Gets a matrix block.
 ///
 template <typename _Scalar, Trans _trans>
 DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
@@ -370,7 +370,7 @@ DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
@@ -383,7 +383,7 @@ const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
@@ -396,7 +396,7 @@ DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
@@ -409,7 +409,7 @@ const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
@@ -422,7 +422,7 @@ DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getMatrixImpl
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
@@ -435,7 +435,7 @@ const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @brief  Gets a column vector segment.
 ///
 template <typename _Scalar, Trans _trans>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
@@ -448,7 +448,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @copydoc  operator()( const IdxRange&, const index_t )
 ///
 template <typename _Scalar, Trans _trans>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
@@ -461,7 +461,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @copydoc  operator()( const IdxRange&, const index_t )
 ///
 template <typename _Scalar, Trans _trans>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
@@ -474,7 +474,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @copydoc  operator()( const IdxRange&, const index_t )
 ///
 template <typename _Scalar, Trans _trans>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
@@ -487,7 +487,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @brief  Gets a row vector segment.
 ///
 template <typename _Scalar, Trans _trans>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
@@ -500,7 +500,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @copydoc  operator()( const index_t, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
@@ -513,7 +513,7 @@ const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @copydoc  operator()( const index_t, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
@@ -526,7 +526,7 @@ DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getVector0Impl
+/// @copydoc  operator()( const index_t, const IdxRange& )
 ///
 template <typename _Scalar, Trans _trans>
 const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(

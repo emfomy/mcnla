@@ -17,32 +17,26 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  int n = 3, k = 4;
+  mcnla::matrix::DenseMatrixSet120<double> set(5, 2, 4);
+  int i = 0;
+  for ( auto &v : set.getData() ) {
+    v = ++i;
+  }
+  std::cout << set.unfold() << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrixRowMajor<double> gematA(n, k);
-  mcnla::matrix::DenseMatrixColMajor<double> gematB(n, k);
-  mcnla::matrix::DenseMatrixRowMajor<double> gematC(k, n);
-
-  {
-    int i = 0;
-    for ( auto &v : gematA ) {
-      v = ++i;
-    }
+  for ( auto i = 0; i < set.getNmat(); ++i ) {
+    std::cout << set(i) << std::endl << std::endl;
   }
 
-  // {
-  //   int i = 0;
-  //   for ( auto &v : gematB ) {
-  //     v = i+=2;
-  //   }
-  // }
+  std::cout << set({1, 3}, "", "").unfold() << std::endl << std::endl;
 
-  mcnla::blas::copy(gematA, gematB);
-  mcnla::blas::copy(gematA.t(), gematC);
+  auto subset = set({1, 3}, "", "");
 
-  std::cout << gematA << std::endl;
-  std::cout << gematB << std::endl;
-  std::cout << gematC << std::endl;
+  std::cout << subset.unfold() << std::endl << std::endl;
+
+  for ( auto i = 0; i < subset.getNmat(); ++i ) {
+    std::cout << subset(i) << std::endl << std::endl;
+  }
 
   return 0;
 }

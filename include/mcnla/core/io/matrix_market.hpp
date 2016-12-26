@@ -150,7 +150,7 @@ inline void loadMatrixMarket(
 ///
 template <class _Derived>
 void loadMatrixMarket(
-    matrix::VectorSetBase<_Derived> &set,
+    matrix::VectorSetWrapper<_Derived> &set,
     const char *file
 ) noexcept {
 
@@ -198,7 +198,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
 inline void loadMatrixMarket(
-    matrix::VectorSetBase<_Derived> &&set,
+    matrix::VectorSetWrapper<_Derived> &&set,
     const char *file
 ) noexcept {
   loadMatrixMarket(set, file);
@@ -215,7 +215,7 @@ inline void loadMatrixMarket(
 ///
 template <class _Derived>
 void loadMatrixMarket(
-    matrix::MatrixSetBase<_Derived> &set,
+    matrix::MatrixSetWrapper<_Derived> &set,
     const char *file
 ) noexcept {
 
@@ -272,7 +272,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
 inline void loadMatrixMarket(
-    matrix::MatrixSetBase<_Derived> &&set,
+    matrix::MatrixSetWrapper<_Derived> &&set,
     const char *file
 ) noexcept {
   loadMatrixMarket(set, file);
