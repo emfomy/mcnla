@@ -24,32 +24,85 @@ namespace mcnla {
 namespace mpi {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The detail namespace
+//
+namespace detail {
+
+template <typename _Scalar>
+inline void allreduceImpl(
+    const DenseStorage<_Scalar> &send,
+          DenseStorage<_Scalar> &recv,
+    const MPI_Op op,
+    const MPI_Comm comm,
+    const index_t count
+) noexcept {
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  MPI_Allreduce(send.valuePtr(), recv.valuePtr(), count, datatype, op, comm);
+}
+
+template <typename _Scalar>
+inline void allreduceImpl(
+          DenseStorage<_Scalar> &buffer,
+    const MPI_Op op,
+    const MPI_Comm comm,
+    const index_t count
+) noexcept {
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  MPI_Allreduce(MPI_IN_PLACE, buffer.valuePtr(), count, datatype, op, comm);
+}
+
+}  // namespace detail
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
 /// @brief  Combines values from all processes and distributes the result back to all processes.
 ///
 /// @attention  The size of @a send and @a recv should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
-template <class _Derived>
+//@{
+template <typename _Scalar>
 inline void allreduce(
-    const DenseBase<_Derived> &send,
-          DenseBase<_Derived> &recv,
+    const DenseVector<_Scalar> &send,
+          DenseVector<_Scalar> &recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
-  mcnla_assert_true(send.derived().isShrunk());
-  mcnla_assert_true(recv.derived().isShrunk());
-  mcnla_assert_eq(send.derived().sizes(), recv.derived().sizes());
-  mpi_int_t count = recv.derived().nelem();
-  MPI_Allreduce(send.valuePtr(), recv.valuePtr(), count, datatype, op, comm);
+  mcnla_assert_true(send.isShrunk());
+  mcnla_assert_true(recv.isShrunk());
+  mcnla_assert_eq(send.dims(), recv.dims());
+  detail::allreduceImpl(send, recv, op, comm, recv.nelem());
 }
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Derived>
+template <typename _Scalar, Trans _transa, Trans _transb>
 inline void allreduce(
-    const DenseBase<_Derived> &send,
-          DenseBase<_Derived> &&recv,
+    const DenseMatrix<_Scalar, _transa> &send,
+          DenseMatrix<_Scalar, _transb> &recv,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  mcnla_assert_true(send.isShrunk());
+  mcnla_assert_true(recv.isShrunk());
+  mcnla_assert_eq(send.dims(), recv.dims());
+  detail::allreduceImpl(send, recv, op, comm, recv.nelem());
+}
+//@}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar>
+inline void allreduce(
+    const DenseVector<_Scalar> &send,
+          DenseVector<_Scalar> &&recv,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  allreduce(send, recv, op, comm);
+}
+
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void allreduce(
+    const DenseMatrix<_Scalar, _transa> &send,
+          DenseMatrix<_Scalar, _transb> &&recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
@@ -64,22 +117,41 @@ inline void allreduce(
 /// @attention  The size of @a buffer should be the same for all MPI nodes.
 /// @attention  @a buffer should be shrunk.
 ///
-template <class _Derived>
+//@{
+template <typename _Scalar>
 inline void allreduce(
-          DenseBase<_Derived> &buffer,
+          DenseVector<_Scalar> &buffer,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
-  mcnla_assert_true(buffer.derived().isShrunk());
-  mpi_int_t count = buffer.derived().nelem();
-  MPI_Allreduce(MPI_IN_PLACE, buffer.valuePtr(), count, datatype, op, comm);
+  mcnla_assert_true(buffer.isShrunk());
+  detail::allreduceImpl(buffer, op, comm, buffer.nelem());
 }
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Derived>
+template <typename _Scalar, Trans _trans>
 inline void allreduce(
-          DenseBase<_Derived> &&buffer,
+          DenseMatrix<_Scalar, _trans> &buffer,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  mcnla_assert_true(buffer.isShrunk());
+  detail::allreduceImpl(buffer, op, comm, buffer.nelem());
+}
+//@}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar>
+inline void allreduce(
+          DenseVector<_Scalar> &&buffer,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  allreduce(buffer, op, comm);
+}
+
+template <typename _Scalar, Trans _trans>
+inline void allreduce(
+          DenseMatrix<_Scalar, _trans> &&buffer,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
