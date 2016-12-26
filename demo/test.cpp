@@ -24,7 +24,7 @@ int main( int argc, char **argv ) {
   mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
   mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
 
-  int m = 3, n = 4;
+  int m = 3, n = 8;
 
   // {
   //   mcnla::matrix::DenseVector<double> vec1(m);
@@ -57,11 +57,11 @@ int main( int argc, char **argv ) {
 
   //   std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
 
-  //   mcnla::mpi::allreduce(mat1, mat2, MPI_SUM, MPI_COMM_WORLD);
+  //   mcnla::mpi::alltoall(mat1, mat2, MPI_COMM_WORLD);
 
   //   std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
 
-  //   mcnla::mpi::allreduce(mat1, MPI_SUM, MPI_COMM_WORLD);
+  //   mcnla::mpi::alltoall(mat1, MPI_COMM_WORLD);
 
   //   std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
   // }
@@ -75,13 +75,16 @@ int main( int argc, char **argv ) {
       v = 100 * mpi_rank + (++i);
     }
 
+
     std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
 
     mcnla::mpi::allreduce(mat1, mat2, MPI_SUM, MPI_COMM_WORLD);
 
+
     std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
 
     mcnla::mpi::allreduce(mat1, MPI_SUM, MPI_COMM_WORLD);
+
 
     std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
   }

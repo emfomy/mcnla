@@ -11,7 +11,7 @@
 #include <mcnla/core/mpi/def.hpp>
 #pragma warning
 #include <mcnla/core/mpi/allreduce.hpp>
-// #include <mcnla/core/mpi/alltoall.hpp>
+#include <mcnla/core/mpi/alltoall.hpp>
 // #include <mcnla/core/mpi/bcast.hpp>
 // #include <mcnla/core/mpi/gather.hpp>
 // #include <mcnla/core/mpi/recv.hpp>

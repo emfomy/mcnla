@@ -57,7 +57,7 @@ inline void allreduceImpl(
 /// @ingroup  mpi_module
 /// @brief  Combines values from all processes and distributes the result back to all processes.
 ///
-/// @attention  The size of @a send and @a recv should be the same for all MPI nodes.
+/// @attention  The dimension of @a send and @a recv should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
@@ -74,10 +74,10 @@ inline void allreduce(
   detail::allreduceImpl(send, recv, op, comm, recv.nelem());
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Scalar, Trans _transs, Trans _transr>
 inline void allreduce(
-    const DenseMatrix<_Scalar, _transa> &send,
-          DenseMatrix<_Scalar, _transb> &recv,
+    const DenseMatrix<_Scalar, _transs> &send,
+          DenseMatrix<_Scalar, _transr> &recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
@@ -99,10 +99,10 @@ inline void allreduce(
   allreduce(send, recv, op, comm);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Scalar, Trans _transs, Trans _transr>
 inline void allreduce(
-    const DenseMatrix<_Scalar, _transa> &send,
-          DenseMatrix<_Scalar, _transb> &&recv,
+    const DenseMatrix<_Scalar, _transs> &send,
+          DenseMatrix<_Scalar, _transr> &&recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
@@ -114,7 +114,7 @@ inline void allreduce(
 /// @ingroup  mpi_module
 /// @brief  Combines values from all processes and distributes the result back to all processes (in-place version).
 ///
-/// @attention  The size of @a buffer should be the same for all MPI nodes.
+/// @attention  The dimension of @a buffer should be the same for all MPI nodes.
 /// @attention  @a buffer should be shrunk.
 ///
 //@{
