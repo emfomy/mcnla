@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/mpi/reduce_scatter_block.hpp
-/// @brief   The MPI RECUDESCATTER routine.
+/// @brief   The MPI RECUDE_SCATTER_BLOCK routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -26,34 +26,74 @@ namespace mcnla {
 namespace mpi {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The detail namespace
+//
+namespace detail {
+
+template <typename _Scalar>
+inline void reduceScatterBlockImpl(
+    const DenseStorage<_Scalar> &send,
+          DenseStorage<_Scalar> &recv,
+    const MPI_Op op,
+    const MPI_Comm comm,
+    const index_t count
+) noexcept {
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  MPI_Reduce_scatter_block(send.valuePtr(), recv.valuePtr(), count, datatype, op, comm);
+}
+
+}  // namespace detail
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
 /// @brief  Combines values and scatters the results (same-size version).
 ///
 /// @attention  The size of @a send should be equal to the size of @a recv &times the number of MPI rank.
 /// @attention  @a send and @a recv should be shrunk.
 ///
-template <class _Derived>
+//@{
+template <typename _Scalar>
 inline void reduceScatterBlock(
-    const DenseBase<_Derived> &send,
-          DenseBase<_Derived> &recv,
+    const DenseVector<_Scalar> &send,
+          DenseVector<_Scalar> &recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
-  using ScalarType = typename traits::Traits<_Derived>::ScalarType;
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<ScalarType>::datatype;
-  const auto mpi_size = getCommSize(comm);
-  mcnla_assert_true(send.derived().isShrunk());
-  mcnla_assert_true(recv.derived().isShrunk());
-  mcnla_assert_eq(send.derived().nelem(), recv.derived().nelem() * mpi_size);
-  mpi_int_t count = recv.derived().nelem();
-  MPI_Reduce_scatter_block(send.valuePtr(), recv.valuePtr(), count, datatype, op, comm);
+  mcnla_assert_true(send.isShrunk());
+  mcnla_assert_true(recv.isShrunk());
+  mcnla_assert_eq(send.nelem(), recv.nelem() * getCommSize(comm));
+  detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
 }
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Derived>
+template <typename _Scalar, Trans _transs, Trans _transr>
 inline void reduceScatterBlock(
-    const DenseBase<_Derived> &send,
-          DenseBase<_Derived> &&recv,
+    const DenseMatrix<_Scalar, _transs> &send,
+          DenseMatrix<_Scalar, _transr> &recv,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  mcnla_assert_true(send.isShrunk());
+  mcnla_assert_true(recv.isShrunk());
+  mcnla_assert_eq(send.nelem(), recv.nelem() * getCommSize(comm));
+  detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
+}
+//@}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar>
+inline void reduceScatterBlock(
+    const DenseVector<_Scalar> &send,
+          DenseVector<_Scalar> &&recv,
+    const MPI_Op op,
+    const MPI_Comm comm
+) noexcept {
+  reduceScatterBlock(send, recv, op, comm);
+}
+
+template <typename _Scalar, Trans _transs, Trans _transr>
+inline void reduceScatterBlock(
+    const DenseMatrix<_Scalar, _transs> &send,
+          DenseMatrix<_Scalar, _transr> &&recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {

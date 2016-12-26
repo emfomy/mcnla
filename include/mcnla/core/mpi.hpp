@@ -15,7 +15,7 @@
 #include <mcnla/core/mpi/gather.hpp>
 #include <mcnla/core/mpi/recv.hpp>
 #include <mcnla/core/mpi/reduce.hpp>
-// #include <mcnla/core/mpi/reduce_scatter_block.hpp>
+#include <mcnla/core/mpi/reduce_scatter_block.hpp>
 #include <mcnla/core/mpi/send.hpp>
 
 #endif  // MCNLA_CORE_MPI_HPP_

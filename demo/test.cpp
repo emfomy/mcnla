@@ -25,12 +25,12 @@ int main( int argc, char **argv ) {
   mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
   mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
 
-  int m = 3, n = 8, K = mpi_size;
+  int m = 3, n = 2, K = mpi_size;
 
   bool tmp;
 
   // {
-  //   mcnla::matrix::DenseVector<double> vec1(n);
+  //   mcnla::matrix::DenseVector<double> vec1(n*K);
   //   mcnla::matrix::DenseVector<double> vec2(n);
 
   //   int i = 0;
@@ -40,15 +40,12 @@ int main( int argc, char **argv ) {
 
   //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
 
-  //   mcnla::mpi::reduce(vec1, vec2, MPI_SUM, mpi_root, MPI_COMM_WORLD);
-  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
-
-  //   mcnla::mpi::reduce(vec1, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+  //   mcnla::mpi::reduceScatterBlock(vec1, vec2, MPI_SUM, MPI_COMM_WORLD);
   //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
   // }
 
   // {
-  //   mcnla::matrix::DenseMatrix<double> mat1(m, n);
+  //   mcnla::matrix::DenseMatrix<double> mat1(m, n*K);
   //   mcnla::matrix::DenseMatrix<double> mat2(m, n);
 
   //   int i = 0;
@@ -58,15 +55,12 @@ int main( int argc, char **argv ) {
 
   //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
 
-  //   mcnla::mpi::reduce(mat1, mat2, MPI_SUM, mpi_root, MPI_COMM_WORLD);
-  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
-
-  //   mcnla::mpi::reduce(mat1, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+  //   mcnla::mpi::reduceScatterBlock(mat1, mat2, MPI_SUM, MPI_COMM_WORLD);
   //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
   // }
 
   {
-    mcnla::matrix::DenseMatrixColMajor<double> mat1(m, n);
+    mcnla::matrix::DenseMatrixColMajor<double> mat1(m, n*K);
     mcnla::matrix::DenseMatrixRowMajor<double> mat2(n, m);
 
     int i = 0;
@@ -76,10 +70,7 @@ int main( int argc, char **argv ) {
 
     usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl; MPI_Barrier(MPI_COMM_WORLD);
 
-    mcnla::mpi::reduce(mat1, mat2, MPI_SUM, mpi_root, MPI_COMM_WORLD);
-    usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl; MPI_Barrier(MPI_COMM_WORLD);
-
-    mcnla::mpi::reduce(mat1, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+    mcnla::mpi::reduceScatterBlock(mat1, mat2, MPI_SUM, MPI_COMM_WORLD);
     usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl; MPI_Barrier(MPI_COMM_WORLD);
   }
 
