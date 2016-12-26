@@ -13,7 +13,7 @@
 #include <mcnla/core/mpi/allreduce.hpp>
 #include <mcnla/core/mpi/alltoall.hpp>
 #include <mcnla/core/mpi/bcast.hpp>
-// #include <mcnla/core/mpi/gather.hpp>
+#include <mcnla/core/mpi/gather.hpp>
 // #include <mcnla/core/mpi/recv.hpp>
 // #include <mcnla/core/mpi/reduce.hpp>
 // #include <mcnla/core/mpi/reduce_scatter_block.hpp>

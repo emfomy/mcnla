@@ -24,11 +24,11 @@ int main( int argc, char **argv ) {
   mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
   mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
 
-  int m = 3, n = 8;
+  int m = 3, n = 8, K = mpi_size;
 
   // {
-  //   mcnla::matrix::DenseVector<double> vec1(m);
-  //   mcnla::matrix::DenseVector<double> vec2(m);
+  //   mcnla::matrix::DenseVector<double> vec1(n);
+  //   mcnla::matrix::DenseVector<double> vec2(n*K);
 
   //   int i = 0;
   //   for ( auto &v : vec1 ) {
@@ -37,57 +37,48 @@ int main( int argc, char **argv ) {
 
   //   std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl;
 
-  //   mcnla::mpi::bcast(vec1, vec2, mpi_root, MPI_COMM_WORLD);
-
+  //   mcnla::mpi::gather(vec1, vec2, mpi_root, MPI_COMM_WORLD);
   //   std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl;
 
-  //   mcnla::mpi::bcast(vec1, mpi_root, MPI_COMM_WORLD);
-
+  //   mcnla::mpi::gather(vec1, mpi_root, MPI_COMM_WORLD);
   //   std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl;
   // }
 
-  {
-    mcnla::matrix::DenseMatrix<double> mat1(m, n);
-    mcnla::matrix::DenseMatrix<double> mat2(m, n);
-
-    int i = 0;
-    for ( auto &v : mat1 ) {
-      v = 100 * mpi_rank + (++i);
-    }
-
-    // std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
-
-    // mcnla::mpi::bcast(mat1, mat2, mpi_root, MPI_COMM_WORLD);
-
-    std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
-
-    mcnla::mpi::bcast(mat1, mpi_root, MPI_COMM_WORLD);
-
-    std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
-  }
-
   // {
-  //   mcnla::matrix::DenseMatrixColMajor<double> mat1(m, n);
-  //   mcnla::matrix::DenseMatrixRowMajor<double> mat2(n, m);
+  //   mcnla::matrix::DenseMatrix<double> mat1(m, n);
+  //   mcnla::matrix::DenseMatrix<double> mat2(m, n*K);
 
   //   int i = 0;
   //   for ( auto &v : mat1 ) {
   //     v = 100 * mpi_rank + (++i);
   //   }
 
+  //   std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
 
-  //   std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
+  //   mcnla::mpi::gather(mat1, mat2, mpi_root, MPI_COMM_WORLD);
+  //   std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
 
-  //   mcnla::mpi::bcast(mat1, mat2, mpi_root, MPI_COMM_WORLD);
-
-
-  //   std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
-
-  //   mcnla::mpi::bcast(mat1, mpi_root, MPI_COMM_WORLD);
-
-
-  //   std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
+  //   mcnla::mpi::gather(mat1, mpi_root, MPI_COMM_WORLD);
+  //   std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
   // }
+
+  {
+    mcnla::matrix::DenseMatrixColMajor<double> mat1(m, n);
+    mcnla::matrix::DenseMatrixRowMajor<double> mat2(n*K, m);
+
+    int i = 0;
+    for ( auto &v : mat1 ) {
+      v = 100 * mpi_rank + (++i);
+    }
+
+    // std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
+
+    mcnla::mpi::gather(mat1, mat2, mpi_root, MPI_COMM_WORLD);
+if ( mpi_rank == mpi_root )    std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
+
+    // mcnla::mpi::gather(mat1, mpi_root, MPI_COMM_WORLD);
+    // std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl;
+  }
 
   MPI_Finalize();
 

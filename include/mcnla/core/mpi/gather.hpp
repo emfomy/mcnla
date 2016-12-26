@@ -24,35 +24,79 @@ namespace mcnla {
 namespace mpi {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The detail namespace
+//
+namespace detail {
+
+template <typename _Scalar>
+inline void gatherImpl(
+    const DenseStorage<_Scalar> &send,
+          DenseStorage<_Scalar> &recv,
+    const mpi_int_t root,
+    const MPI_Comm comm,
+    const index_t count
+) noexcept {
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  MPI_Gather(send.valuePtr(), count, datatype, recv.valuePtr(), count, datatype, root, comm);
+}
+
+}  // namespace detail
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
 /// @brief  Gathers values from a group of processes.
 ///
 /// @attention  The size of @a send should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
-template <typename _Scalar, Layout _layout>
+//@{
+template <typename _Scalar>
 inline void gather(
-    const DenseMatrix<_Scalar, _layout> &send,
-          DenseMatrix<_Scalar, _layout> &recv,
+    const DenseVector<_Scalar> &send,
+          DenseVector<_Scalar> &recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   if ( isCommRoot(root, comm) ) {
-    mcnla_assert_eq(send.template size<0>(),                     recv.template size<0>());
-    mcnla_assert_eq(send.template size<1>() * getCommSize(comm), recv.template size<1>());
+    mcnla_assert_eq(send.dim0() * getCommSize(comm), recv.dim0());
   }
-  mpi_int_t count = send.nelem();
-  MPI_Gather(send.valuePtr(), count, datatype, recv.valuePtr(), count, datatype, root, comm);
+  detail::gatherImpl(send, recv, root, comm, send.nelem());
 }
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Trans _transs, Trans _transr>
 inline void gather(
-    const DenseMatrix<_Scalar, _layout> &send,
-          DenseMatrix<_Scalar, _layout> &&recv,
+    const DenseMatrix<_Scalar, _transs> &send,
+          DenseMatrix<_Scalar, _transr> &recv,
+    const mpi_int_t root,
+    const MPI_Comm comm
+) noexcept {
+  mcnla_assert_true(send.isShrunk());
+  mcnla_assert_true(recv.isShrunk());
+  if ( isCommRoot(root, comm) ) {
+    mcnla_assert_eq(send.dim0(),                     recv.dim0());
+    mcnla_assert_eq(send.dim1() * getCommSize(comm), recv.dim1());
+  }
+  detail::gatherImpl(send, recv, root, comm, send.nelem());
+}
+//@}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar>
+inline void gather(
+    const DenseVector<_Scalar> &send,
+          DenseVector<_Scalar> &&recv,
+    const mpi_int_t root,
+    const MPI_Comm comm
+) noexcept {
+  gather(send, recv, root, comm);
+}
+
+template <typename _Scalar, Trans _transs, Trans _transr>
+inline void gather(
+    const DenseMatrix<_Scalar, _transs> &send,
+          DenseMatrix<_Scalar, _transr> &&recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
