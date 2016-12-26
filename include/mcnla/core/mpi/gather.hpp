@@ -46,7 +46,7 @@ inline void gatherImpl(
 /// @ingroup  mpi_module
 /// @brief  Gathers values from a group of processes.
 ///
-/// @attention  The size of @a send should be the same for all MPI nodes.
+/// @attention  The dimensions of @a send should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{

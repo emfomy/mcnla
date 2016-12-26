@@ -45,7 +45,7 @@ inline void bcastImpl(
 /// @ingroup  mpi_module
 /// @brief  Broadcasts a message from the process with rank root to all other processes of the group.
 ///
-/// @attention  The size of @a buffer should be the same for all MPI nodes.
+/// @attention  The dimensions of @a buffer should be the same for all MPI nodes.
 /// @attention  @a buffer should be shrunk.
 ///
 //@{

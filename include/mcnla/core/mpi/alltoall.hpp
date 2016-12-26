@@ -55,8 +55,8 @@ inline void alltoallImpl(
 /// @ingroup  mpi_module
 /// @brief  All processes send data to all.
 ///
-/// @attention  The dimension of @a send should be the same for all MPI nodes.
-/// @attention  The dimension of @a recv should be the same for all MPI nodes.
+/// @attention  The dimensions of @a send should be the same for all MPI nodes.
+/// @attention  The dimensions of @a recv should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{

@@ -57,7 +57,7 @@ inline void allreduceImpl(
 /// @ingroup  mpi_module
 /// @brief  Combines values from all processes and distributes the result back to all processes.
 ///
-/// @attention  The dimension of @a send and @a recv should be the same for all MPI nodes.
+/// @attention  The dimensions of @a send and @a recv should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
