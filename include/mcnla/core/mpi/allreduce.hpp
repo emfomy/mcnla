@@ -71,7 +71,7 @@ inline void allreduce(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  detail::allreduceImpl(send, recv, op, comm, recv.nelem());
+  detail::allreduceImpl(send, recv, op, comm, send.nelem());
 }
 
 template <typename _Scalar, Trans _transs, Trans _transr>
@@ -84,7 +84,7 @@ inline void allreduce(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  detail::allreduceImpl(send, recv, op, comm, recv.nelem());
+  detail::allreduceImpl(send, recv, op, comm, send.nelem());
 }
 //@}
 

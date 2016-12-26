@@ -33,7 +33,7 @@ std::ostream& operator<< (
   for ( index_t i = 0; i < vector.length(); ++i ) {
     out << std::setw(ios_width) << vector(i) << "  ";
   }
-  return out << std::endl;
+  return out << '\n';
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <mcnla.hpp>
+#include <unistd.h>
 
 #define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
 
@@ -26,6 +27,8 @@ int main( int argc, char **argv ) {
 
   int m = 3, n = 8, K = mpi_size;
 
+  bool tmp;
+
   // {
   //   mcnla::matrix::DenseVector<double> vec1(n);
   //   mcnla::matrix::DenseVector<double> vec2(n);
@@ -35,16 +38,13 @@ int main( int argc, char **argv ) {
   //     v = 100 * mpi_rank + (++i);
   //   }
 
-  //   if ( mpi_rank < 2 )
-  //   std::cout << mpi_rank << '\n' << vec1 << std::endl;
+  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
 
-  //   MPI_Status status;
-  //   if ( mpi_rank == 0 )
-  //     mcnla::mpi::send(vec1, 1, 0, MPI_COMM_WORLD);
-  //   if ( mpi_rank == 1 )
-  //     mcnla::mpi::recv(vec1, 0, 0, MPI_COMM_WORLD, status);
-  //   if ( mpi_rank < 2 )
-  //   std::cout << mpi_rank << '\n' << vec1 << std::endl;
+  //   mcnla::mpi::reduce(vec1, vec2, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
+
+  //   mcnla::mpi::reduce(vec1, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << vec1 << vec2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
   // }
 
   // {
@@ -56,16 +56,13 @@ int main( int argc, char **argv ) {
   //     v = 100 * mpi_rank + (++i);
   //   }
 
-  //   if ( mpi_rank < 2 )
-  //   std::cout << mpi_rank << '\n' << mat1 << std::endl;
+  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
 
-  //   MPI_Status status;
-  //   if ( mpi_rank == 0 )
-  //     mcnla::mpi::send(mat1, 1, 0, MPI_COMM_WORLD);
-  //   if ( mpi_rank == 1 )
-  //     mcnla::mpi::recv(mat1, 0, 0, MPI_COMM_WORLD, status);
-  //   if ( mpi_rank < 2 )
-  //   std::cout << mpi_rank << '\n' << mat1 << std::endl;
+  //   mcnla::mpi::reduce(mat1, mat2, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
+
+  //   mcnla::mpi::reduce(mat1, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+  //   usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl; MPI_Barrier(MPI_COMM_WORLD);
   // }
 
   {
@@ -77,16 +74,13 @@ int main( int argc, char **argv ) {
       v = 100 * mpi_rank + (++i);
     }
 
-    if ( mpi_rank < 2 )
-    std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
+    usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl; MPI_Barrier(MPI_COMM_WORLD);
 
-    MPI_Status status;
-    if ( mpi_rank == 0 )
-      mcnla::mpi::send(mat1, 1, 0, MPI_COMM_WORLD);
-    if ( mpi_rank == 1 )
-      mcnla::mpi::recv(mat2, 0, 0, MPI_COMM_WORLD, status);
-    if ( mpi_rank < 2 )
-    std::cout << mpi_rank << '\n' << mat1 << mat2 << std::endl;
+    mcnla::mpi::reduce(mat1, mat2, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+    usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl; MPI_Barrier(MPI_COMM_WORLD);
+
+    mcnla::mpi::reduce(mat1, MPI_SUM, mpi_root, MPI_COMM_WORLD);
+    usleep(1000*mpi_rank); std::cout << mpi_rank << '\n' << mat1 << mat2.t() << std::endl; MPI_Barrier(MPI_COMM_WORLD);
   }
 
   MPI_Finalize();

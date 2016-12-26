@@ -34,7 +34,7 @@ std::ostream& operator<< (
     for ( index_t j = 0; j < matrix.ncol(); ++j ) {
       out << std::setw(ios_width) << matrix(i, j) << "  ";
     }
-    out << std::endl;
+    out << '\n';
   }
   return out;
 }
