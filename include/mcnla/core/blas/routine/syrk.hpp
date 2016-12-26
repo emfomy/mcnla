@@ -22,34 +22,120 @@ namespace mcnla {
 namespace blas {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  blas3_module
-/// @brief  Performs a symmetric/Hermitian rank-k update.
-///
-template <Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
-inline void syrk(
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
-    const DenseMatrix<_Scalar, _layout> &a,
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &c
+//  The detail namespace
+//
+namespace detail {
+
+//@{
+
+// ========================================================================================================================== //
+// Impl2
+//
+
+template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+inline void syrkImpl2(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
+    const _Scalar alpha,
+    const _Scalar beta
 ) noexcept {
-  constexpr Trans trans = isColMajor(_layout) ? _trans : _trans ^ Trans::TRANS;
+  mcnla_assert_eq(c.getNrow(), a.getNrow());
 
-  mcnla_assert_eq(c.getNrow(), c.getNcol());
-  mcnla_assert_eq(c.getNrow(), a.template getNrow<_trans>());
-
-  detail::syrk(toUploChar(_uplo, _layout), toTransChar<_Scalar>(trans), c.getNrow(), a.template getNcol<_trans>(),
+  detail::syrk(toUploChar(_uplo, _transc), toTransChar<_Scalar>(_transa), c.getNrow(), a.getNcol(),
                alpha, a.getValuePtr(), a.getPitch(), beta, c.getValuePtr(), c.getPitch());
 }
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
-inline void syrk(
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType alpha,
-    const DenseMatrix<_Scalar, _layout> &a,
-    const typename DenseMatrix<_Scalar, _layout>::ScalarType beta,
-          DenseMatrix<_Scalar, _layout> &&c
+// ========================================================================================================================== //
+// Impl1
+//
+
+template <typename _Scalar, Trans _transa, Uplo _uplo>
+inline void syrkImpl1(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, Trans::NORMAL, _uplo> &c,
+    const _Scalar alpha,
+    const _Scalar beta
 ) noexcept {
-  syrk<_trans, _uplo>(alpha, a, beta, c);
+  syrkImpl2(a, c, alpha, beta);
+}
+
+template <typename _Scalar, Trans _transa, Uplo _uplo>
+inline void syrkImpl1(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, Trans::TRANS, _uplo> &c,
+    const _Scalar alpha,
+    const _Scalar beta
+) noexcept {
+  syrkImpl2(a, c, alpha, beta);
+}
+
+template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+inline void syrkImpl1(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
+    const _Scalar alpha,
+    const _Scalar beta
+) noexcept {
+  static_cast<void>(a);
+  static_cast<void>(c);
+  static_cast<void>(alpha);
+  static_cast<void>(beta);
+  static_assert(!isConj(_transc), "Conjugate version of SYRK is not supported!");
+}
+
+//@}
+
+}  // namespace detail
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  blas3_module
+/// @brief  Performs a symmetric/Hermitian rank-k update.
+///
+template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+inline void syrk(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+) noexcept {
+  detail::syrkImpl1(a, c, alpha, beta);
+}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+inline void syrk(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+) noexcept {
+  detail::syrkImpl1(a, c, alpha, beta);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  blas3_module
+/// @brief  Performs a rank-k update.
+///
+template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+inline void rk(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+) noexcept {
+  syrk(a, c, alpha, beta);
+}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+inline void rk(
+    const DenseMatrix<_Scalar, _transa> &a,
+          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
+    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+) noexcept {
+  syrk(a, c, alpha, beta);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

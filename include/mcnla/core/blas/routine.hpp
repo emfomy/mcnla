@@ -24,7 +24,7 @@
 #include <mcnla/core/blas/routine/gemm.hpp>
 // #include <mcnla/core/blas/routine/gemm_coo.hpp>
 #include <mcnla/core/blas/routine/symm.hpp>
-// #include <mcnla/core/blas/routine/syrk.hpp>
+#include <mcnla/core/blas/routine/syrk.hpp>
 
 // #include <mcnla/core/blas/routine/omatcopy.hpp>
 

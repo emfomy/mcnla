@@ -247,6 +247,40 @@ const DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::t
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the conjugate of the matrix.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, changeConj(_trans)>& DenseMatrix<_Scalar, _trans>::c() noexcept {
+  return static_cast<ConjugateType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  c
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, changeConj(_trans)>& DenseMatrix<_Scalar, _trans>::c() const noexcept {
+  return static_cast<const ConjugateType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the conjugate transpose of the matrix.
+///
+/// @attention  The storage layout is also changed.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, changeHerm(_trans)>& DenseMatrix<_Scalar, _trans>::h() noexcept {
+  return static_cast<HermitianType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  t
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, changeHerm(_trans)>& DenseMatrix<_Scalar, _trans>::h() const noexcept {
+  return static_cast<const HermitianType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the symmetric view of the matrix.
 ///
 template <typename _Scalar, Trans _trans> template <Uplo _uplo>
