@@ -121,6 +121,34 @@ inline void gemm(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  blas3_module
+/// @brief  Computes a matrix-matrix product.
+///
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void mm(
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, _transc> &c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+) noexcept {
+  gemm(a, b, c, alpha, beta);
+}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void mm(
+    const DenseMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, _transc> &&c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+) noexcept {
+  gemm(a, b, c, alpha, beta);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 }  // namespace blas
 
 }  // namespace mcnla

@@ -191,7 +191,7 @@ DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  transpose
+/// @copydoc  t
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 const DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&

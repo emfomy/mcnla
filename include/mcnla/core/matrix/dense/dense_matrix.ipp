@@ -239,7 +239,7 @@ DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::t() noe
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  transpose
+/// @copydoc  t
 ///
 template <typename _Scalar, Trans _trans>
 const DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::t() const noexcept {

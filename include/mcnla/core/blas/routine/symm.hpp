@@ -264,6 +264,58 @@ inline void symm(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  blas3_module
+/// @copydoc  mm
+///
+//@{
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+inline void mm(
+    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, _transc> &c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+) noexcept {
+  symm(a, b, c, alpha, beta);
+}
+
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+inline void mm(
+    const DenseMatrix<_Scalar, _transb> &b,
+    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+          DenseMatrix<_Scalar, _transc> &c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+) noexcept {
+  symm(b, a, c, alpha, beta);
+}
+//@}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+inline void mm(
+    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const DenseMatrix<_Scalar, _transb> &b,
+          DenseMatrix<_Scalar, _transc> &&c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+) noexcept {
+  symm(a, b, c, alpha, beta);
+}
+
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+inline void mm(
+    const DenseMatrix<_Scalar, _transb> &b,
+    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+          DenseMatrix<_Scalar, _transc> &&c,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
+    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+) noexcept {
+  symm(b, a, c, alpha, beta);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 }  // namespace blas
 
 }  // namespace mcnla
