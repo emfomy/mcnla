@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_market.hpp
-/// @brief   The Matrix Market IO utilities.
+/// @file    include/mcnla/core/io/load_matrix_market.hpp
+/// @brief   Load data from a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_IO_MATRIX_MARKET_HPP_
-#define MCNLA_CORE_IO_MATRIX_MARKET_HPP_
+#ifndef MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
+#define MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -34,7 +34,7 @@ namespace io {
 ///
 template <typename _Scalar>
 void loadMatrixMarket(
-    matrix::DenseVector<_Scalar> &vector,
+    DenseVector<_Scalar> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -51,12 +51,12 @@ void loadMatrixMarket(
   fin.unget();
 
   // Get size
-  index_t m;
-  fin >> m;
+  index_t m, n;
+  fin >> m >> n;
   if ( vector.isEmpty() ) {
-    vector = matrix::DenseVector<_Scalar>(m);
+    vector.reconstruct(m);
   } else {
-    mcnla_assert_eq(vector.sizes(), m);
+    mcnla_assert_eq(vector.dims(), std::make_tuple(m));
   }
 
   // Read values
@@ -71,7 +71,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void loadMatrixMarket(
-    matrix::DenseVector<_Scalar> &&vector,
+    DenseVector<_Scalar> &&vector,
     const char *file
 ) noexcept {
   loadMatrixMarket(vector, file);
@@ -86,9 +86,9 @@ inline void loadMatrixMarket(
 ///
 /// @todo  Read banner
 ///
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Trans _trans>
 void loadMatrixMarket(
-    matrix::DenseMatrix<_Scalar, _layout> &matrix,
+    DenseMatrix<_Scalar, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
@@ -108,17 +108,13 @@ void loadMatrixMarket(
   index_t m, n;
   fin >> m >> n;
   if ( matrix.isEmpty() ) {
-    if ( isColMajor(_layout) ) {
-      matrix = matrix::DenseMatrix<_Scalar, _layout>(m, n);
+    if ( isTrans(_trans) ) {
+      matrix.reconstruct(m, n);
     } else {
-      matrix = matrix::DenseMatrix<_Scalar, _layout>(n, m);
+      matrix.reconstruct(n, m);
     }
   } else {
-    if ( isColMajor(_layout) ) {
-      mcnla_assert_eq(matrix.sizes(), std::make_pair(m, n));
-    } else {
-      mcnla_assert_eq(matrix.sizes(), std::make_pair(n, m));
-    }
+    mcnla_assert_eq(matrix.dims(), std::make_tuple(m, n));
   }
 
   // Read values
@@ -131,9 +127,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Trans _trans>
 inline void loadMatrixMarket(
-    matrix::DenseMatrix<_Scalar> &&matrix,
+    DenseMatrix<_Scalar> &&matrix,
     const char *file
 ) noexcept {
   loadMatrixMarket(matrix, file);
@@ -150,14 +146,13 @@ inline void loadMatrixMarket(
 ///
 template <class _Derived>
 void loadMatrixMarket(
-    matrix::VectorSetWrapper<_Derived> &set,
+    VectorSetWrapper<_Derived> &set,
     const char *file
 ) noexcept {
+  using VectorType = typename _Derived::VectorType;
+  using ScalarType = typename VectorType::ScalarType;
 
-  static_assert(std::is_base_of<matrix::VectorBase<typename _Derived::VectorType>, typename _Derived::VectorType>::value,
-                "'_Derived' is not a vector set!");
-  static_assert(std::is_base_of<matrix::DenseBase<typename _Derived::VectorType>, typename _Derived::VectorType>::value,
-                "'_Derived' is not a dense vector set!");
+  static_assert(std::is_base_of<DenseVector<ScalarType>, VectorType>::value, "'_Derived' is not a dense vector!");
 
   auto &derived = set.derived();
 
@@ -178,14 +173,15 @@ void loadMatrixMarket(
   index_t m, n;
   fin >> m >> n;
   if ( derived.unfold().isEmpty() ) {
-    derived = _Derived(m, n);
+    derived.reconstruct(m, n);
   } else {
-    mcnla_assert_eq(derived.sizes(), std::make_pair(m, n));
+    mcnla_assert_eq(set.vec(), n);
+    mcnla_assert_eq(set(0).dims(), std::make_tuple(m));
   }
 
   // Read values
   for ( auto i = 0; i < n; ++i ) {
-    auto vector = derived(i);
+    auto vector = set(i);
     for ( auto &value : vector ) {
       fin >> value;
     }
@@ -198,7 +194,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
 inline void loadMatrixMarket(
-    matrix::VectorSetWrapper<_Derived> &&set,
+    VectorSetWrapper<_Derived> &&set,
     const char *file
 ) noexcept {
   loadMatrixMarket(set, file);
@@ -215,16 +211,15 @@ inline void loadMatrixMarket(
 ///
 template <class _Derived>
 void loadMatrixMarket(
-    matrix::MatrixSetWrapper<_Derived> &set,
+    MatrixSetWrapper<_Derived> &set,
     const char *file
 ) noexcept {
+  using MatrixType = typename _Derived::MatrixType;
+  using ScalarType = typename MatrixType::ScalarType;
+  constexpr Trans trans = MatrixType::trans;
 
-  static_assert(std::is_base_of<matrix::MatrixBase<typename _Derived::MatrixType>, typename _Derived::MatrixType>::value,
-                "'_Derived' is not a matrix set!");
-  static_assert(std::is_base_of<matrix::DenseBase<typename _Derived::MatrixType>, typename _Derived::MatrixType>::value,
-                "'_Derived' is not a dense matrix set!");
+  static_assert(std::is_base_of<DenseMatrix<ScalarType, trans>, MatrixType>::value, "'_Derived' is not a dense matrix!");
 
-  constexpr auto layout = _Derived::MatrixType::layout;
   auto &derived = set.derived();
 
   // Open file
@@ -244,22 +239,19 @@ void loadMatrixMarket(
   index_t m, n, k;
   fin >> m >> n >> k;
   if ( derived.unfold().isEmpty() ) {
-    if ( !isTrans(trans) ) {
-      derived = _Derived(m, n, k);
+    if ( isTrans(trans) ) {
+      derived.reconstruct(m, n, k);
     } else {
-      derived = _Derived(n, m, k);
+      derived.reconstruct(n, m, k);
     }
   } else {
-    if ( !isTrans(trans) ) {
-      mcnla_assert_eq(derived.sizes(), std::make_tuple(m, n, k));
-    } else {
-      mcnla_assert_eq(derived.sizes(), std::make_tuple(n, m, k));
-    }
+    mcnla_assert_eq(set.nmat(), k);
+    mcnla_assert_eq(set(0).dims(), std::make_tuple(m, n));
   }
 
   // Read values
   for ( auto i = 0; i < k; ++i ) {
-    auto matrix = derived(i);
+    auto matrix = set(i);
     for ( auto &value : matrix ) {
       fin >> value;
     }
@@ -272,7 +264,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
 inline void loadMatrixMarket(
-    matrix::MatrixSetWrapper<_Derived> &&set,
+    MatrixSetWrapper<_Derived> &&set,
     const char *file
 ) noexcept {
   loadMatrixMarket(set, file);
@@ -283,4 +275,4 @@ inline void loadMatrixMarket(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_IO_MATRIX_MARKET_HPP_
+#endif  // MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_

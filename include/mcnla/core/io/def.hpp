@@ -26,7 +26,11 @@ namespace mcnla {
 /// The I/O namespace.
 /// @ingroup  io_module
 ///
-namespace io {}
+namespace io {
+
+using namespace matrix;
+
+}
 
 }  // namespace mcnla
 

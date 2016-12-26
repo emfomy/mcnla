@@ -102,6 +102,10 @@ class DenseMatrixSet120
   inline       MatrixType& data() noexcept;
   inline const MatrixType& data() const noexcept;
 
+  // Resizes
+  template <typename... Args>
+  inline void reconstruct( Args... args ) noexcept;
+
   // Gets set
   using BaseType::operator();
   inline       SetType operator()( const IdxRange &idxrange ) noexcept;

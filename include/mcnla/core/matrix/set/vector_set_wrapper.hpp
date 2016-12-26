@@ -46,7 +46,7 @@ class VectorSetWrapper : public utility::CrtpBase<_Derived, VectorSetWrapper<_De
 
   // Gets information
   inline index_t length() const noexcept;
-  inline index_t nvecvec() const noexcept;
+  inline index_t nvec() const noexcept;
   inline std::pair<index_t, index_t> sizes() const noexcept;
 
   // Gets vector

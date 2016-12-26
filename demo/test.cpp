@@ -8,6 +8,8 @@
 #include <iostream>
 #include <mcnla.hpp>
 
+#define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
@@ -17,27 +19,14 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  int m = 4, n = 5;
+  mcnla::matrix::DenseMatrixSet120<double> set;
+  mcnla::io::loadMatrixMarket(set, MTX_PATH);
 
-  mcnla::matrix::DenseMatrixColMajor<double> gematA(m, n);
-  mcnla::matrix::DenseMatrixColMajor<double> gematU(m, m);
-  mcnla::matrix::DenseMatrixColMajor<double> gematVt(m, n);
-  mcnla::matrix::DenseVector<double>         vecS(m);
-
-  int i = 0;
-  for ( auto &v : gematA ) {
-    v = ++i;
+  for ( auto i = 0; i < set.nmat(); ++i ) {
+    std::cout << set(i) << std::endl;
   }
 
-  std::cout << gematA << std::endl;
-
-  mcnla::lapack::gesvd<'S', 'S'>(gematA, vecS, gematU, gematVt);
-
-  std::cout << gematU << std::endl;
-  std::cout << gematVt << std::endl;
-  std::cout << gematVt.t() << std::endl;
-  std::cout << vecS << std::endl;
-  std::cout << vecS.viewDiagonal() << std::endl;
+  std::cout << set.unfold() << std::endl;
 
   return 0;
 }

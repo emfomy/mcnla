@@ -38,8 +38,8 @@ index_t VectorSetWrapper<_Derived>::length() const noexcept {
 /// @brief  Gets the number of vectors.
 ///
 template <class _Derived>
-index_t VectorSetWrapper<_Derived>::nvecvec() const noexcept {
-  return this->derived().nvecvec();
+index_t VectorSetWrapper<_Derived>::nvec() const noexcept {
+  return this->derived().nvec();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ index_t VectorSetWrapper<_Derived>::nvecvec() const noexcept {
 ///
 template <class _Derived>
 std::pair<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept {
-  return std::make_tuple(length()(), nvecvec());
+  return std::make_tuple(length()(), nvec());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

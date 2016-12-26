@@ -146,6 +146,18 @@ const DenseMatrixRowMajor<_Scalar>& DenseMatrixSet120<_Scalar>::data() const noe
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the set.
+///
+/// @attention  The data is also reallocated.
+///
+template <class _Scalar> template <typename... Args>
+void DenseMatrixSet120<_Scalar>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseMatrixSet120<_Scalar>(args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a set of rows.
 ///
 template <class _Scalar>
