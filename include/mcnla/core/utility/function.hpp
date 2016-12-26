@@ -21,6 +21,7 @@ namespace mcnla {
 //
 namespace utility {
 
+/// @ingroup  utility_module
 static inline bool isPowerOf2( const index_t num ) {
   return ( num > 0 ) && ( (num & (num-1)) == 0 );
 }

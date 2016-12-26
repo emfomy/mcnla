@@ -108,7 +108,7 @@ void loadMatrixMarket(
   index_t m, n;
   fin >> m >> n;
   if ( matrix.isEmpty() ) {
-    if ( isTrans(_trans) ) {
+    if ( !isTrans(_trans) ) {
       matrix.reconstruct(m, n);
     } else {
       matrix.reconstruct(n, m);
@@ -129,7 +129,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _trans>
 inline void loadMatrixMarket(
-    DenseMatrix<_Scalar> &&matrix,
+    DenseMatrix<_Scalar, _trans> &&matrix,
     const char *file
 ) noexcept {
   loadMatrixMarket(matrix, file);
@@ -239,7 +239,7 @@ void loadMatrixMarket(
   index_t m, n, k;
   fin >> m >> n >> k;
   if ( derived.unfold().isEmpty() ) {
-    if ( isTrans(trans) ) {
+    if ( !isTrans(trans) ) {
       derived.reconstruct(m, n, k);
     } else {
       derived.reconstruct(n, m, k);
