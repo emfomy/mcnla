@@ -41,9 +41,9 @@ inline void reduce(
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(send.derived().isShrunk());
   mcnla_assert_true(recv.derived().isShrunk());
-  mcnla_assert_eq(send.derived().getSizes(), recv.derived().getSizes());
-  mpi_int_t size = send.derived().getNelem();
-  MPI_Reduce(send.getValuePtr(), recv.getValuePtr(), size, datatype, op, root, comm);
+  mcnla_assert_eq(send.derived().sizes(), recv.derived().sizes());
+  mpi_int_t size = send.derived().nelem();
+  MPI_Reduce(send.valuePtr(), recv.valuePtr(), size, datatype, op, root, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -75,11 +75,11 @@ inline void reduce(
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
   mcnla_assert_true(buffer.derived().isShrunk());
-  mpi_int_t count = buffer.derived().getNelem();
+  mpi_int_t count = buffer.derived().nelem();
   if ( isCommRoot(root, comm) ) {
-    MPI_Reduce(MPI_IN_PLACE, buffer.getValuePtr(), count, datatype, op, root, comm);
+    MPI_Reduce(MPI_IN_PLACE, buffer.valuePtr(), count, datatype, op, root, comm);
   } else {
-    MPI_Reduce(buffer.getValuePtr(), buffer.getValuePtr(), count, datatype, op, root, comm);
+    MPI_Reduce(buffer.valuePtr(), buffer.valuePtr(), count, datatype, op, root, comm);
   }
 }
 

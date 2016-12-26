@@ -140,7 +140,7 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
-  inline constexpr const char* getNameImpl() const noexcept;
+  inline constexpr const char* nvecameImpl() const noexcept;
 
   // Gets time
   inline double getTimeImpl() const noexcept;

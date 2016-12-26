@@ -122,7 +122,7 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
 
   // Gets name
-  inline constexpr const char* getNameImpl() const noexcept;
+  inline constexpr const char* nvecameImpl() const noexcept;
 
   // Gets time
   inline double getTimeImpl() const noexcept;

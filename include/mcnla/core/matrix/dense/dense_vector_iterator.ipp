@@ -28,8 +28,8 @@ std::ostream& operator<< (
     std::ostream &out,
     const DenseVectorIteratorBase<__Scalar, __Vector> &iterator
 ) {
-  const index_t width = log10(iterator.container_->getLength())+1;
-  return out << "(" << std::setw(width) << iterator.getIdx() << ")  " << std::setw(ios_width) << iterator.getValue();
+  const index_t width = log10(iterator.container_->length())+1;
+  return out << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,16 +38,16 @@ std::ostream& operator<< (
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, class _Vector>
-_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::getValue() const noexcept {
-  mcnla_assert_gelt(itidx_, 0, container_->getNelem());
-  return container_->getValuePtr()[getPos()];
+_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::value() const noexcept {
+  mcnla_assert_gelt(itidx_, 0, container_->nelem());
+  return container_->valuePtr()[pos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the index.
 ///
 template <typename _Scalar, class _Vector>
-index_t DenseVectorIteratorBase<_Scalar, _Vector>::getIdx() const noexcept {
+index_t DenseVectorIteratorBase<_Scalar, _Vector>::idx() const noexcept {
   return itidx_;
 }
 
@@ -57,8 +57,8 @@ index_t DenseVectorIteratorBase<_Scalar, _Vector>::getIdx() const noexcept {
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, class _Vector>
-index_t DenseVectorIteratorBase<_Scalar, _Vector>::getPos() const noexcept {
-  return container_->getPos(itidx_);
+index_t DenseVectorIteratorBase<_Scalar, _Vector>::pos() const noexcept {
+  return container_->pos(itidx_);
 }
 
 }  // namespace matrix

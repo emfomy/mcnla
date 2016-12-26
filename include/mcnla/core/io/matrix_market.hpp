@@ -56,7 +56,7 @@ void loadMatrixMarket(
   if ( vector.isEmpty() ) {
     vector = matrix::DenseVector<_Scalar>(m);
   } else {
-    mcnla_assert_eq(vector.getSizes(), m);
+    mcnla_assert_eq(vector.sizes(), m);
   }
 
   // Read values
@@ -115,9 +115,9 @@ void loadMatrixMarket(
     }
   } else {
     if ( isColMajor(_layout) ) {
-      mcnla_assert_eq(matrix.getSizes(), std::make_pair(m, n));
+      mcnla_assert_eq(matrix.sizes(), std::make_pair(m, n));
     } else {
-      mcnla_assert_eq(matrix.getSizes(), std::make_pair(n, m));
+      mcnla_assert_eq(matrix.sizes(), std::make_pair(n, m));
     }
   }
 
@@ -180,7 +180,7 @@ void loadMatrixMarket(
   if ( derived.unfold().isEmpty() ) {
     derived = _Derived(m, n);
   } else {
-    mcnla_assert_eq(derived.getSizes(), std::make_pair(m, n));
+    mcnla_assert_eq(derived.sizes(), std::make_pair(m, n));
   }
 
   // Read values
@@ -251,9 +251,9 @@ void loadMatrixMarket(
     }
   } else {
     if ( isColMajor(layout) ) {
-      mcnla_assert_eq(derived.getSizes(), std::make_tuple(m, n, k));
+      mcnla_assert_eq(derived.sizes(), std::make_tuple(m, n, k));
     } else {
-      mcnla_assert_eq(derived.getSizes(), std::make_tuple(n, m, k));
+      mcnla_assert_eq(derived.sizes(), std::make_tuple(n, m, k));
     }
   }
 

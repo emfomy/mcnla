@@ -67,7 +67,7 @@ _Derived& DenseIteratorBase<_Derived>::operator=(
 ///
 template <class _Derived>
 typename DenseIteratorBase<_Derived>::ScalarType& DenseIteratorBase<_Derived>::operator*() const noexcept {
-  return derived().getValue();
+  return derived().value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ typename DenseIteratorBase<_Derived>::ScalarType& DenseIteratorBase<_Derived>::o
 ///
 template <class _Derived>
 typename DenseIteratorBase<_Derived>::ScalarType* DenseIteratorBase<_Derived>::operator->() const noexcept {
-  return &(derived().getValue());
+  return &(derived().value());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +150,7 @@ template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator++() noexcept {
   mcnla_assert_ne(container_, nullptr);
 
-  const auto nidx = container_->getNidx();
+  const auto nidx = container_->nidx();
   if ( ++itidx_ > nidx ) {
     itidx_ = nidx;
   }
@@ -200,7 +200,7 @@ _Derived& DenseIteratorBase<_Derived>::operator+=(
   mcnla_assert_ne(container_, nullptr);
   mcnla_assert_ge(num, 0);
 
-  const auto nidx = container_->getNidx();
+  const auto nidx = container_->nidx();
   if ( (itidx_+=num) > nidx ) {
     itidx_ = nidx;
   }
@@ -271,7 +271,7 @@ __Derived operator+(
 /// @brief  Gets the iterator index.
 ///
 template <class _Derived>
-index_t DenseIteratorBase<_Derived>::getItIdx() const noexcept {
+index_t DenseIteratorBase<_Derived>::itidx() const noexcept {
   return itidx_;
 }
 
@@ -279,7 +279,7 @@ index_t DenseIteratorBase<_Derived>::getItIdx() const noexcept {
 /// @brief  Gets the container.
 ///
 template <class _Derived>
-typename DenseIteratorBase<_Derived>::ContainerType* DenseIteratorBase<_Derived>::getContainer() const noexcept {
+typename DenseIteratorBase<_Derived>::ContainerType* DenseIteratorBase<_Derived>::container() const noexcept {
   return container_;
 }
 
@@ -297,7 +297,7 @@ _Derived& DenseIteratorBase<_Derived>::setBegin() noexcept {
 ///
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::setEnd() noexcept {
-  itidx_ = (container_ != nullptr) ? container_->getNidx() : 0;
+  itidx_ = (container_ != nullptr) ? container_->nidx() : 0;
   return derived();
 }
 
@@ -305,7 +305,7 @@ _Derived& DenseIteratorBase<_Derived>::setEnd() noexcept {
 /// @brief  Gets the to beginning iterator.
 ///
 template <class _Derived>
-_Derived DenseIteratorBase<_Derived>::getBegin(
+_Derived DenseIteratorBase<_Derived>::beginImpl(
     ContainerType *container
 ) noexcept {
   _Derived retval(container); retval.setBegin(); return retval;
@@ -315,7 +315,7 @@ _Derived DenseIteratorBase<_Derived>::getBegin(
 /// @brief  Gets the to end iterator.
 ///
 template <class _Derived>
-_Derived DenseIteratorBase<_Derived>::getEnd(
+_Derived DenseIteratorBase<_Derived>::endImpl(
     ContainerType *container
 ) noexcept {
   _Derived retval(container); retval.setEnd(); return retval;

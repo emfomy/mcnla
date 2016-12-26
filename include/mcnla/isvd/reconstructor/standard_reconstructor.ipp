@@ -34,9 +34,9 @@ StandardReconstructor<_Matrix>::StandardReconstructor(
 template <class _Matrix>
 void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
 
-  const auto nrow            = parameters_.getNrow();
-  const auto ncol            = parameters_.getNcol();
-  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto dim_sketch      = parameters_.dimSketch();
 
   time0_ = 0;
   time1_ = 0;
@@ -44,27 +44,27 @@ void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
   time3_ = 0;
 
   const auto matrix_w_sizes = std::make_pair(dim_sketch, dim_sketch);
-  if ( matrix_w_.getSizes() != matrix_w_sizes ) {
+  if ( matrix_w_.sizes() != matrix_w_sizes ) {
     matrix_w_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_w_sizes);
   }
 
   const auto vector_s_sizes = dim_sketch;
-  if ( vector_s_.getSizes() != vector_s_sizes ) {
+  if ( vector_s_.sizes() != vector_s_sizes ) {
     vector_s_ = DenseVector<ScalarType>(vector_s_sizes);
   }
 
   const auto matrix_u_sizes = std::make_pair(nrow, dim_sketch);
-  if ( matrix_u_.getSizes() != matrix_u_sizes ) {
+  if ( matrix_u_.sizes() != matrix_u_sizes ) {
     matrix_u_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_u_sizes);
   }
 
   const auto matrix_vt_sizes = std::make_pair(dim_sketch, ncol);
-  if ( matrix_vt_.getSizes() != matrix_vt_sizes ) {
+  if ( matrix_vt_.sizes() != matrix_vt_sizes ) {
     matrix_vt_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_vt_sizes);
   }
 
   const auto gesvd_sizes = std::make_pair(dim_sketch, ncol);
-  if ( gesvd_driver_.getSizes() != gesvd_sizes ) {
+  if ( gesvd_driver_.sizes() != gesvd_sizes ) {
     gesvd_driver_.resize(gesvd_sizes);
   }
 
@@ -87,12 +87,12 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
 
   mcnla_assert_true(parameters_.isInitialized());
 
-  const auto nrow            = parameters_.getNrow();
-  const auto ncol            = parameters_.getNcol();
-  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto dim_sketch      = parameters_.dimSketch();
 
-  mcnla_assert_eq(matrix_a.getSizes(),  std::make_pair(nrow, ncol));
-  mcnla_assert_eq(matrix_qc.getSizes(), std::make_pair(nrow, dim_sketch));
+  mcnla_assert_eq(matrix_a.sizes(),  std::make_pair(nrow, ncol));
+  mcnla_assert_eq(matrix_qc.sizes(), std::make_pair(nrow, dim_sketch));
 
   time0_ = MPI_Wtime();
 
@@ -110,10 +110,10 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getName
+/// @copydoc  mcnla::isvd::ReconstructorBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* StandardReconstructor<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* StandardReconstructor<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 

@@ -41,11 +41,11 @@ inline void gather(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   if ( isCommRoot(root, comm) ) {
-    mcnla_assert_eq(send.template getSize<0>(),                     recv.template getSize<0>());
-    mcnla_assert_eq(send.template getSize<1>() * getCommSize(comm), recv.template getSize<1>());
+    mcnla_assert_eq(send.template size<0>(),                     recv.template size<0>());
+    mcnla_assert_eq(send.template size<1>() * getCommSize(comm), recv.template size<1>());
   }
-  mpi_int_t count = send.getNelem();
-  MPI_Gather(send.getValuePtr(), count, datatype, recv.getValuePtr(), count, datatype, root, comm);
+  mpi_int_t count = send.nelem();
+  MPI_Gather(send.valuePtr(), count, datatype, recv.valuePtr(), count, datatype, root, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

@@ -30,11 +30,11 @@ inline void copy(
     const CooVector<_Scalar> &x,
           DenseVector<_Scalar> &y
 ) noexcept {
-  mcnla_assert_eq(x.getSizes(), y.getSizes());
-  mcnla_assert_eq(y.getStride(), 1);
+  mcnla_assert_eq(x.sizes(), y.sizes());
+  mcnla_assert_eq(y.stride(), 1);
   blas::memset0(y);
   for ( auto tuple : x ) {
-    y(tuple.template getIdx<0>()) = tuple.getValuePtr();
+    y(tuple.template idx<0>()) = tuple.valuePtr();
   }
 }
 

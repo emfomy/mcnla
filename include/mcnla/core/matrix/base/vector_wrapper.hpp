@@ -50,9 +50,9 @@ class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>
   friend inline std::ostream& operator<<( std::ostream &out, const VectorWrapper<__Derived> &wrapper );
 
   // Gets information
-  inline index_t   getLength() const noexcept;
-  inline index_t   getNelem() const noexcept;
-  inline SizesType getSizes() const noexcept;
+  inline index_t   length() const noexcept;
+  inline index_t   nelem() const noexcept;
+  inline SizesType sizes() const noexcept;
 
 };
 

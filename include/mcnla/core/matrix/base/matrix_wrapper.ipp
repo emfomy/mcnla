@@ -30,8 +30,8 @@ std::ostream& operator<< (
     const MatrixWrapper<__Derived> &wrapper
 ) {
   auto &matrix = wrapper.derived();
-  for ( index_t i = 0; i < matrix.getNrow(); ++i ) {
-    for ( index_t j = 0; j < matrix.getNcol(); ++j ) {
+  for ( index_t i = 0; i < matrix.nrow(); ++i ) {
+    for ( index_t j = 0; j < matrix.ncol(); ++j ) {
       out << std::setw(ios_width) << matrix(i, j) << "  ";
     }
     out << std::endl;
@@ -43,32 +43,32 @@ std::ostream& operator<< (
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived>
-index_t MatrixWrapper<_Derived>::getNrow() const noexcept {
-  return this->derived().getNrowImpl();
+index_t MatrixWrapper<_Derived>::nrow() const noexcept {
+  return this->derived().nrowImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of columns.
 ///
 template <class _Derived>
-index_t MatrixWrapper<_Derived>::getNcol() const noexcept {
-  return this->derived().getNcolImpl();
+index_t MatrixWrapper<_Derived>::ncol() const noexcept {
+  return this->derived().ncolImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of elements.
 ///
 template <class _Derived>
-index_t MatrixWrapper<_Derived>::getNelem() const noexcept {
-  return getNrow() * getNcol();
+index_t MatrixWrapper<_Derived>::nelem() const noexcept {
+  return nrow() * ncol();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size of dimensions in interface order. [ nrow, ncol ]
 ///
 template <class _Derived>
-std::tuple<index_t, index_t> MatrixWrapper<_Derived>::getSizes() const noexcept {
-  return std::make_tuple(getNrow(), getNcol());
+std::tuple<index_t, index_t> MatrixWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(nrow(), ncol());
 }
 
 }  // namespace matrix

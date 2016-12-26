@@ -59,14 +59,14 @@ class DenseStorage {
 
   // Gets information
   inline bool    isEmpty() const noexcept;
-  inline index_t getCapacity() const noexcept;
-  inline index_t getOffset() const noexcept;
+  inline index_t capacity() const noexcept;
+  inline index_t offset() const noexcept;
 
   // Gets array
-  inline       ValueArrayType& getValue() noexcept;
-  inline const ValueArrayType& getValue() const noexcept;
-  inline       ScalarType* getValuePtr() noexcept;
-  inline const ScalarType* getValuePtr() const noexcept;
+  inline       ValueArrayType& value() noexcept;
+  inline const ValueArrayType& value() const noexcept;
+  inline       ScalarType* valuePtr() noexcept;
+  inline const ScalarType* valuePtr() const noexcept;
 
 };
 

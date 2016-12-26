@@ -87,7 +87,7 @@ IdxRange IdxRange::operator/(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of the range.
 ///
-index_t IdxRange::getLength() const noexcept {
+index_t IdxRange::length() const noexcept {
   return (end-begin);
 }
 

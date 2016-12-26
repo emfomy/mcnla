@@ -42,11 +42,11 @@ inline void syr2kImpl2(
 ) noexcept {
   static_assert(_transa == _transb, "The layout of A and B must be the same!");
 
-  mcnla_assert_eq(c.getSize(), a.getNrow());
-  mcnla_assert_eq(a.getSizes(), b.getSizes());
+  mcnla_assert_eq(c.size(), a.nrow());
+  mcnla_assert_eq(a.sizes(), b.sizes());
 
-  detail::syr2k(toUploChar(_uplo, _transc), toTransChar<_Scalar>(_transa), c.getNrow(), a.getNcol(),
-                alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
+  detail::syr2k(toUploChar(_uplo, _transc), toTransChar<_Scalar>(_transa), c.nrow(), a.ncol(),
+                alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

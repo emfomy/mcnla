@@ -47,8 +47,8 @@ void ReconstructorBase<_Derived>::reconstruct(
 /// @copydoc  mcnla::isvd::Solver::getReconstructorName
 ///
 template <class _Derived>
-constexpr const char* ReconstructorBase<_Derived>::getName() const noexcept {
-  return this->derived().getNameImpl();
+constexpr const char* ReconstructorBase<_Derived>::nvecame() const noexcept {
+  return this->derived().nvecameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ inline void scal(
     const typename DenseVector<_Scalar>::ScalarType alpha,
           DenseVector<_Scalar> &x
 ) noexcept {
-  detail::scal(x.getLength(), alpha, x.getValuePtr(), x.getStride());
+  detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
 }
 
 template <typename _Scalar>
@@ -38,7 +38,7 @@ inline void scal(
     const typename DenseVector<std::complex<_Scalar>>::RealScalarType alpha,
           DenseVector<std::complex<_Scalar>> &x
 ) noexcept {
-  detail::scal(x.getLength(), alpha, x.getValuePtr(), x.getStride());
+  detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

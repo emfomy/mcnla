@@ -41,9 +41,9 @@ DenseMatrixSet120<_Scalar>::DenseMatrixSet120(
   : BaseType(),
     data_(nrow, ncol*nmat),
     ncol_(ncol) {
-  mcnla_assert_ge(this->getNrow(), 0);
-  mcnla_assert_ge(this->getNcol(), 0);
-  mcnla_assert_ge(this->getNmat(), 0);
+  mcnla_assert_ge(this->nrow(), 0);
+  mcnla_assert_ge(this->ncol(), 0);
+  mcnla_assert_ge(this->nmat(), 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,9 +66,9 @@ DenseMatrixSet120<_Scalar>::DenseMatrixSet120(
   : BaseType(),
     data_(data),
     ncol_(ncol) {
-  mcnla_assert_ge(this->getNrow(), 0);
-  mcnla_assert_ge(this->getNcol(), 0);
-  mcnla_assert_ge(this->getNmat(), 0);
+  mcnla_assert_ge(this->nrow(), 0);
+  mcnla_assert_ge(this->ncol(), 0);
+  mcnla_assert_ge(this->nmat(), 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,22 +126,22 @@ DenseMatrixSet120<_Scalar>& DenseMatrixSet120<_Scalar>::operator=( DenseMatrixSe
 ///
 template <class _Scalar>
 bool DenseMatrixSet120<_Scalar>::isShrunk() const noexcept {
-  return (data_.getNcol() % ncol_ == 0) && data_.isShrunk();
+  return (data_.ncol() % ncol_ == 0) && data_.isShrunk();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw data.
 ///
 template <class _Scalar>
-DenseMatrixRowMajor<_Scalar>& DenseMatrixSet120<_Scalar>::getData() noexcept {
+DenseMatrixRowMajor<_Scalar>& DenseMatrixSet120<_Scalar>::data() noexcept {
   return data_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getData
+/// @copydoc  data
 ///
 template <class _Scalar>
-const DenseMatrixRowMajor<_Scalar>& DenseMatrixSet120<_Scalar>::getData() const noexcept {
+const DenseMatrixRowMajor<_Scalar>& DenseMatrixSet120<_Scalar>::data() const noexcept {
   return data_;
 }
 
@@ -206,27 +206,27 @@ const DenseMatrixRowMajor<_Scalar> DenseMatrixSet120<_Scalar>::unfold() const no
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixSetWrapper::getNrow
+/// @copydoc  mcnla::matrix::MatrixSetWrapper::nrow
 ///
 template <class _Scalar>
-index_t DenseMatrixSet120<_Scalar>::getNrowImpl() const noexcept {
-  return data_.getNrow();
+index_t DenseMatrixSet120<_Scalar>::nrowImpl() const noexcept {
+  return data_.nrow();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixSetWrapper::getNcol
+/// @copydoc  mcnla::matrix::MatrixSetWrapper::ncol
 ///
 template <class _Scalar>
-index_t DenseMatrixSet120<_Scalar>::getNcolImpl() const noexcept {
+index_t DenseMatrixSet120<_Scalar>::ncolImpl() const noexcept {
   return ncol_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixSetWrapper::getNmat
+/// @copydoc  mcnla::matrix::MatrixSetWrapper::nmat
 ///
 template <class _Scalar>
-index_t DenseMatrixSet120<_Scalar>::getNmatImpl() const noexcept {
-  return ncol_ ? (data_.getNcol() / ncol_) : 0;
+index_t DenseMatrixSet120<_Scalar>::nmatImpl() const noexcept {
+  return ncol_ ? (data_.ncol() / ncol_) : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@ template <class _Scalar>
 DenseMatrixRowMajor<_Scalar> DenseMatrixSet120<_Scalar>::getMatrixImpl(
     const index_t idx
 ) noexcept {
-  mcnla_assert_gelt(idx, 0, this->getNmat());
+  mcnla_assert_gelt(idx, 0, this->nmat());
   return data_("", {idx*ncol_, (idx+1)*ncol_});
 }
 
@@ -247,7 +247,7 @@ template <class _Scalar>
 const DenseMatrixRowMajor<_Scalar> DenseMatrixSet120<_Scalar>::getMatrixImpl(
     const index_t idx
 ) const noexcept {
-  mcnla_assert_gelt(idx, 0, this->getNmat());
+  mcnla_assert_gelt(idx, 0, this->nmat());
   return data_("", {idx*ncol_, (idx+1)*ncol_});
 }
 

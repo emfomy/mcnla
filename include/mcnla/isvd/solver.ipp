@@ -41,14 +41,14 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexcept {
   MPI_Bcast(&parameters_, sizeof(parameters_), MPI_BYTE, mpi_root_, mpi_comm_);
 
-  mcnla_assert_ge(parameters_.getNcol(), parameters_.getNrow());
-  mcnla_assert_gt(parameters_.getNrow(), 0);
-  mcnla_assert_ge(parameters_.getNrow(), parameters_.getDimSketch());
+  mcnla_assert_ge(parameters_.ncol(), parameters_.nrow());
+  mcnla_assert_gt(parameters_.nrow(), 0);
+  mcnla_assert_ge(parameters_.nrow(), parameters_.dimSketch());
 
   mcnla_assert_gt(parameters_.getRank(), 0);
   mcnla_assert_ge(parameters_.getOverRank(), 0);
 
-  mcnla_assert_gt(parameters_.getNumSketchEach(), 0);
+  mcnla_assert_gt(parameters_.nvecumSketchEach(), 0);
 
   sketcher_.initialize();
   integrator_.initialize();
@@ -66,7 +66,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Matrix &matrix_a ) noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
+  mcnla_assert_eq(matrix_a.sizes(), std::make_pair(parameters_.nrow(), parameters_.ncol()));
 
   sketcher_.sketch(matrix_a, integrator_.getSetQ());
 
@@ -82,7 +82,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherName() const noexcept {
-  return sketcher_.getName();
+  return sketcher_.nvecame();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::g
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorName() const noexcept {
-  return integrator_.getName();
+  return integrator_.nvecame();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::g
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
 constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorName() const noexcept {
-  return reconstructor_.getName();
+  return reconstructor_.nvecame();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,7 +246,7 @@ template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructo
 Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
     Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSize( const _Matrix &matrix ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
-  return setSize(matrix.getNrow(), matrix.getNcol());
+  return setSize(matrix.nrow(), matrix.ncol());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

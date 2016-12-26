@@ -102,7 +102,7 @@ DenseMatrixStorage<_Scalar>::DenseMatrixStorage(
   mcnla_assert_ge(dim0_, 0);
   mcnla_assert_ge(dim1_, 0);
   mcnla_assert_ge(pitch_, dim0_);
-  mcnla_assert_ge(this->getCapacity(), pitch_ * (dim1_-1) + dim0_);
+  mcnla_assert_ge(this->capacity(), pitch_ * (dim1_-1) + dim0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +185,7 @@ bool DenseMatrixStorage<_Scalar>::isSquare() const noexcept {
 /// @brief  Gets the size in the first dimension.
 ///
 template <typename _Scalar>
-index_t DenseMatrixStorage<_Scalar>::getDim0() const noexcept {
+index_t DenseMatrixStorage<_Scalar>::dim0() const noexcept {
   return dim0_;
 }
 
@@ -193,7 +193,7 @@ index_t DenseMatrixStorage<_Scalar>::getDim0() const noexcept {
 /// @brief  Gets the size in the second dimension.
 ///
 template <typename _Scalar>
-index_t DenseMatrixStorage<_Scalar>::getDim1() const noexcept {
+index_t DenseMatrixStorage<_Scalar>::dim1() const noexcept {
   return dim1_;
 }
 
@@ -201,7 +201,7 @@ index_t DenseMatrixStorage<_Scalar>::getDim1() const noexcept {
 /// @brief  Gets the size of dimensions in storage order. [ dim0, dim1 ]
 ///
 template <typename _Scalar>
-std::tuple<index_t, index_t> DenseMatrixStorage<_Scalar>::getDims() const noexcept {
+std::tuple<index_t, index_t> DenseMatrixStorage<_Scalar>::dims() const noexcept {
   return std::make_tuple(dim0_, dim1_);
 }
 
@@ -209,7 +209,7 @@ std::tuple<index_t, index_t> DenseMatrixStorage<_Scalar>::getDims() const noexce
 /// @brief  Gets the maximum size in the first dimension.
 ///
 template <typename _Scalar>
-index_t DenseMatrixStorage<_Scalar>::getPitch() const noexcept {
+index_t DenseMatrixStorage<_Scalar>::pitch() const noexcept {
   return pitch_;
 }
 
@@ -223,7 +223,7 @@ _Scalar& DenseMatrixStorage<_Scalar>::getElemImpl(
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
   mcnla_assert_gelt(idx1, 0, dim1_);
-  return this->getValuePtr()[getPosImpl(idx0, idx1)];
+  return this->valuePtr()[posImpl(idx0, idx1)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,14 +236,14 @@ const _Scalar& DenseMatrixStorage<_Scalar>::getElemImpl(
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
   mcnla_assert_gelt(idx1, 0, dim1_);
-  return this->getValuePtr()[getPosImpl(idx0, idx1)];
+  return this->valuePtr()[posImpl(idx0, idx1)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
 ///
 template <typename _Scalar>
-index_t DenseMatrixStorage<_Scalar>::getPosImpl(
+index_t DenseMatrixStorage<_Scalar>::posImpl(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
@@ -263,7 +263,7 @@ void DenseMatrixStorage<_Scalar>::resizeImpl(
   mcnla_assert_ge(dim0, 0);
   mcnla_assert_ge(dim1, 0);
   mcnla_assert_ge(pitch_, dim0);
-  mcnla_assert_ge(this->getCapacity(), pitch_ * (dim1-1) + dim0);
+  mcnla_assert_ge(this->capacity(), pitch_ * (dim1-1) + dim0);
   dim0_ = dim0;
   dim1_ = dim1;
 }
@@ -276,9 +276,9 @@ DenseMatrixStorage<_Scalar> DenseMatrixStorage<_Scalar>::getMatrixImpl(
     const IdxRange &range0,
     const IdxRange &range1
 ) noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);
-  return MatrixStorageType(range0.getLength(), range1.getLength(), pitch_, value_, getPosImpl(range0.begin, range1.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
+  return MatrixStorageType(range0.length(), range1.length(), pitch_, value_, posImpl(range0.begin, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,9 +289,9 @@ const DenseMatrixStorage<_Scalar> DenseMatrixStorage<_Scalar>::getMatrixImpl(
     const IdxRange &range0,
     const IdxRange &range1
 ) const noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);
-  return MatrixStorageType(range0.getLength(), range1.getLength(), pitch_, value_, getPosImpl(range0.begin, range1.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
+  return MatrixStorageType(range0.length(), range1.length(), pitch_, value_, posImpl(range0.begin, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -303,8 +303,8 @@ DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector0Impl(
     const index_t idx1
 ) noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
-  return VectorStorageType(range0.getLength(), 1, value_, getPosImpl(range0.begin, idx1));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
+  return VectorStorageType(range0.length(), 1, value_, posImpl(range0.begin, idx1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,8 +316,8 @@ const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector0Impl(
     const index_t idx1
 ) const noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
-  return VectorStorageType(range0.getLength(), 1, value_, getPosImpl(range0.begin, idx1));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
+  return VectorStorageType(range0.length(), 1, value_, posImpl(range0.begin, idx1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -329,8 +329,8 @@ DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector1Impl(
     const IdxRange &range1
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);
-  return VectorStorageType(range1.getLength(), pitch_, value_, getPosImpl(idx0, range1.begin));
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
+  return VectorStorageType(range1.length(), pitch_, value_, posImpl(idx0, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -342,8 +342,8 @@ const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getVector1Impl(
     const IdxRange &range1
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.getLength(), 0);
-  return VectorStorageType(range1.getLength(), pitch_, value_, getPosImpl(idx0, range1.begin));
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
+  return VectorStorageType(range1.length(), pitch_, value_, posImpl(idx0, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -359,14 +359,14 @@ DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getDiagonalImpl(
   index_t length;
   index_t pos;
   if ( idx < 0 ) {
-    pos = getPosImpl(-idx, 0);
+    pos = posImpl(-idx, 0);
     if ( dim0_ + idx > dim1_ && dim0_ > dim1_ ) {
       length = dim1_;
     } else {
       length = dim0_ + idx;
     }
   } else {
-    pos = getPosImpl(0, idx);
+    pos = posImpl(0, idx);
     if ( dim1_ - idx > dim0_ && dim1_ > dim0_ ) {
       length = dim0_;
     } else {
@@ -387,14 +387,14 @@ const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getDiagonalImpl(
   index_t length;
   index_t pos;
   if ( idx < 0 ) {
-    pos = getPosImpl(-idx, 0);
+    pos = posImpl(-idx, 0);
     if ( dim0_ + idx > dim1_ && dim0_ > dim1_ ) {
       length = dim1_;
     } else {
       length = dim0_ + idx;
     }
   } else {
-    pos = getPosImpl(0, idx);
+    pos = posImpl(0, idx);
     if ( dim1_ - idx > dim0_ && dim1_ > dim0_ ) {
       length = dim0_;
     } else {
@@ -414,7 +414,7 @@ const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::getDiagonalImpl(
 ///
 template <typename _Scalar>
 DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::vectorizeImpl() noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, value_, getPosImpl(0, 0));
+  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, value_, posImpl(0, 0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,7 +422,7 @@ DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::vectorizeImpl() noexcep
 ///
 template <typename _Scalar>
 const DenseVectorStorage<_Scalar> DenseMatrixStorage<_Scalar>::vectorizeImpl() const noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, value_, getPosImpl(0, 0));
+  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, value_, posImpl(0, 0));
 }
 
 }  // namespace matrix

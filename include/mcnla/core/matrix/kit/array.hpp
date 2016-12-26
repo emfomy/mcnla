@@ -63,9 +63,9 @@ class Array : public std::shared_ptr<std::valarray<_Type>> {
 
   // Gets information
   inline bool    isEmpty() const noexcept;
-  inline index_t getSize() const noexcept;
-  inline index_t getCapacity() const noexcept;
-  inline index_t getOffset() const noexcept;
+  inline index_t size() const noexcept;
+  inline index_t capacity() const noexcept;
+  inline index_t offset() const noexcept;
 
   // Gets data
   inline       _Type* operator*() noexcept;
@@ -74,8 +74,8 @@ class Array : public std::shared_ptr<std::valarray<_Type>> {
   inline const _Type& operator[]( const index_t idx ) const noexcept;
 
   // Gets Valarray
-  inline       std::valarray<_Type>& getValarray() noexcept;
-  inline const std::valarray<_Type>& getValarray() const noexcept;
+  inline       std::valarray<_Type>& valarray() noexcept;
+  inline const std::valarray<_Type>& valarray() const noexcept;
 
 };
 

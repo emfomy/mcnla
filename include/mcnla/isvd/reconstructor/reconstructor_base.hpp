@@ -58,7 +58,7 @@ class ReconstructorBase : public utility::CrtpBase<_Derived, ReconstructorBase<_
   inline void reconstruct( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
-  inline constexpr const char* getName() const noexcept;
+  inline constexpr const char* nvecame() const noexcept;
 
   // Gets compute time
   inline double getTime() const noexcept;

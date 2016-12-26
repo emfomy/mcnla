@@ -49,7 +49,7 @@ Array<_Type>::Array(
 ) noexcept
   : BaseType(value),
     offset_(offset) {
-  mcnla_assert_gele(offset_, 0, getSize());
+  mcnla_assert_gele(offset_, 0, size());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ void Array<_Type>::operator>>=(
     const index_t offset
 ) noexcept {
   offset_ += offset;
-  mcnla_assert_gele(offset_, 0, getSize());
+  mcnla_assert_gele(offset_, 0, size());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ void Array<_Type>::operator<<=(
     const index_t offset
 ) noexcept {
   offset_ -= offset;
-  mcnla_assert_gele(offset_, 0, getSize());
+  mcnla_assert_gele(offset_, 0, size());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,36 +184,36 @@ const Array<_Type> Array<_Type>::operator<<(
 ///
 template <typename _Type>
 bool Array<_Type>::isEmpty() const noexcept {
-  return (getSize() == 0);
+  return (size() == 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the memory size.
 ///
-/// @note  @link getCapacity() capacity@endlink + @link getOffset() offset@endlink = @link getSize() memory size@endlink.
+/// @note  @link capacity() capacity@endlink + @link offset() offset@endlink = @link size() memory size@endlink.
 ///
 template <typename _Type>
-index_t Array<_Type>::getSize() const noexcept {
-  return this->getValarray().size();
+index_t Array<_Type>::size() const noexcept {
+  return this->valarray().size();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity.
 ///
-/// @note  @link getCapacity() capacity@endlink + @link getOffset() offset@endlink = @link getSize() memory size@endlink.
+/// @note  @link capacity() capacity@endlink + @link offset() offset@endlink = @link size() memory size@endlink.
 ///
 template <typename _Type>
-index_t Array<_Type>::getCapacity() const noexcept {
-  return getSize() - getOffset();
+index_t Array<_Type>::capacity() const noexcept {
+  return size() - offset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset.
 ///
-/// @note  @link getCapacity() capacity@endlink + @link getOffset() offset@endlink = @link getSize() memory size@endlink.
+/// @note  @link capacity() capacity@endlink + @link offset() offset@endlink = @link size() memory size@endlink.
 ///
 template <typename _Type>
-index_t Array<_Type>::getOffset() const noexcept {
+index_t Array<_Type>::offset() const noexcept {
   return offset_;
 }
 
@@ -222,7 +222,7 @@ index_t Array<_Type>::getOffset() const noexcept {
 ///
 template <typename _Type>
 _Type* Array<_Type>::operator*() noexcept {
-  return &(this->getValarray()[offset_]);
+  return &(this->valarray()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,7 +230,7 @@ _Type* Array<_Type>::operator*() noexcept {
 ///
 template <typename _Type>
 const _Type* Array<_Type>::operator*() const noexcept {
-  return &(this->getValarray()[offset_]);
+  return &(this->valarray()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ template <typename _Type>
 _Type& Array<_Type>::operator[](
     const index_t idx
 ) noexcept {
-  return this->getValarray()[idx+offset_];
+  return this->valarray()[idx+offset_];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,14 +250,14 @@ template <typename _Type>
 const _Type& Array<_Type>::operator[](
     const index_t idx
 ) const noexcept {
-  return this->getValarray()[idx+offset_];
+  return this->valarray()[idx+offset_];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the valarray.
 ///
 template <typename _Type>
-std::valarray<_Type>& Array<_Type>::getValarray() noexcept {
+std::valarray<_Type>& Array<_Type>::valarray() noexcept {
   return *(this->get());
 }
 
@@ -265,7 +265,7 @@ std::valarray<_Type>& Array<_Type>::getValarray() noexcept {
 /// @brief  Gets the valarray.
 ///
 template <typename _Type>
-const std::valarray<_Type>& Array<_Type>::getValarray() const noexcept {
+const std::valarray<_Type>& Array<_Type>::valarray() const noexcept {
   return *(this->get());
 }
 

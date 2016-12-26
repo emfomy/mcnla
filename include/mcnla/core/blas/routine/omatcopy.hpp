@@ -37,10 +37,10 @@ inline void omatcopyImpl2(
           DenseMatrix<_Scalar, _transb> &b,
     const _Scalar alpha
 ) noexcept {
-  mcnla_assert_eq(a.getSizes(), b.getSizes());
+  mcnla_assert_eq(a.sizes(), b.sizes());
 
-  omatcopy('C', toTransChar<_Scalar>(_transb), a.getNrow(), a.getNcol(),
-           alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch());
+  omatcopy('C', toTransChar<_Scalar>(_transb), a.nrow(), a.ncol(),
+           alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch());
 }
 
 // ========================================================================================================================== //

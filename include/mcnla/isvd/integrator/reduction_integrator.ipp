@@ -36,41 +36,41 @@ ReductionIntegrator<_Matrix>::ReductionIntegrator(
 template <class _Matrix>
 void ReductionIntegrator<_Matrix>::initializeImpl() noexcept {
 
-  const auto nrow            = parameters_.getNrow();
-  const auto num_sketch_each = parameters_.getNumSketchEach();
-  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
   mcnla_assert_true(utility::isPowerOf2(parameters_.mpi_size));
   mcnla_assert_true(utility::isPowerOf2(num_sketch_each));
   mcnla_assert_eq(parameters_.mpi_root, 0);
 
   const auto set_q_sizes = std::make_tuple(nrow, dim_sketch, num_sketch_each);
-  if ( set_q_.getSizes() != set_q_sizes ) {
+  if ( set_q_.sizes() != set_q_sizes ) {
     set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
   }
 
   const auto matrix_q_sizes = std::make_pair(nrow, dim_sketch);
-  if ( matrix_q_tmp_.getSizes() != matrix_q_sizes ) {
+  if ( matrix_q_tmp_.sizes() != matrix_q_sizes ) {
     matrix_q_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_q_sizes);
   }
-  if ( matrix_buffer_.getSizes() != matrix_q_sizes ) {
+  if ( matrix_buffer_.sizes() != matrix_q_sizes ) {
     matrix_buffer_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_q_sizes);
   }
 
   const auto matrix_u_sizes = std::make_pair(dim_sketch, dim_sketch);
-  if ( matrix_u_.getSizes() != matrix_u_sizes ) {
+  if ( matrix_u_.sizes() != matrix_u_sizes ) {
     matrix_u_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_u_sizes);
   }
-  if ( matrix_vt_.getSizes() != matrix_u_sizes ) {
+  if ( matrix_vt_.sizes() != matrix_u_sizes ) {
     matrix_vt_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_u_sizes);
   }
 
   const auto vector_s_sizes = dim_sketch;
-  if ( vector_s_.getSizes() != vector_s_sizes ) {
+  if ( vector_s_.sizes() != vector_s_sizes ) {
     vector_s_ = DenseVector<ScalarType>(vector_s_sizes);
   }
 
-  if ( gesvd_driver_.getSizes() != matrix_u_sizes ) {
+  if ( gesvd_driver_.sizes() != matrix_u_sizes ) {
     gesvd_driver_.resize(matrix_u_sizes);
   }
 
@@ -87,8 +87,8 @@ void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto mpi_comm        = parameters_.mpi_comm;
   const auto mpi_size        = parameters_.mpi_size;
   const auto mpi_rank        = mpi::getCommRank(mpi_comm);
-  const auto num_sketch_each = parameters_.getNumSketchEach();
-  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
   /// @todo  Uses column major.
   /// @todo  Uses computational routines of gesvd (applying U & V instead of generating)
@@ -150,10 +150,10 @@ void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getName
+/// @copydoc  mcnla::isvd::IntegratorBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* ReductionIntegrator<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* ReductionIntegrator<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 

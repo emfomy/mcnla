@@ -177,8 +177,8 @@ void create(
     const mcnla::index_t rank,
           mcnla::index_t seed[4]
 ) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), rank);
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), rank);
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.nrow(), rank);
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.ncol(), rank);
   mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
   mcnla::matrix::DenseVector<ScalarType> vector_s(rank);
 
@@ -210,15 +210,15 @@ void check(
     const mcnla::matrix::DenseVector<ScalarType>          &vector_s,
           ScalarType &frerr
 ) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.getSizes());
-  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.getSizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.sizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.sizes());
 
   // A_tmp := A, U_tmp = U
   mcnla::blas::copy(matrix_a, matrix_a_tmp);
   mcnla::blas::copy(matrix_u, matrix_u_tmp);
 
   // A_tmp -= U * S * V'
-  for ( auto i = 0; i < vector_s.getLength(); ++i ) {
+  for ( auto i = 0; i < vector_s.length(); ++i ) {
     mcnla::blas::scal(vector_s(i), matrix_u_tmp.getCol(i));
   }
   mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);

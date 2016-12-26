@@ -35,7 +35,7 @@ DenseVector<_Scalar>::DenseVector(
     const index_t length,
     const index_t stride
 ) noexcept
-  : BaseType(dim0(length), stride) {}
+  : BaseType(toDim0(length), stride) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -45,7 +45,7 @@ DenseVector<_Scalar>::DenseVector(
     const SizesType sizes,
     const index_t stride
 ) noexcept
-  : BaseType(dim0(sizes), stride) {}
+  : BaseType(toDim0(sizes), stride) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -56,7 +56,7 @@ DenseVector<_Scalar>::DenseVector(
     const index_t stride,
     const index_t capacity
 ) noexcept
-  : BaseType(dim0(length), stride, capacity) {}
+  : BaseType(toDim0(length), stride, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -67,7 +67,7 @@ DenseVector<_Scalar>::DenseVector(
     const index_t stride,
     const index_t capacity
 ) noexcept
-  : BaseType(dim0(sizes), stride, capacity) {}
+  : BaseType(toDim0(sizes), stride, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
@@ -79,7 +79,7 @@ DenseVector<_Scalar>::DenseVector(
     const ValueArrayType &value,
     const index_t offset
 ) noexcept
-  : BaseType(dim0(length), stride, value, offset) {}
+  : BaseType(toDim0(length), stride, value, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -121,8 +121,8 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noe
 /// @brief  Gets the number of internal index.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getNidx() const noexcept {
-  return this->getNelem();
+index_t DenseVector<_Scalar>::nidx() const noexcept {
+  return this->nelem();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,13 +146,13 @@ const _Scalar& DenseVector<_Scalar>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::getPosImpl
+/// @copydoc  mcnla::matrix::DenseVectorStorage::posImpl
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getPos(
+index_t DenseVector<_Scalar>::pos(
     const index_t idx
 ) const noexcept {
-  return this->getPosImpl(idx);
+  return this->posImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ template <typename _Scalar>
 typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::find(
     const index_t idx
 ) noexcept {
-  mcnla_assert_gelt(idx, 0, this->getLength());
+  mcnla_assert_gelt(idx, 0, this->length());
   return IteratorType(this, idx);
 }
 
@@ -173,7 +173,7 @@ template <typename _Scalar>
 typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::find(
     const index_t idx
 ) const noexcept {
-  mcnla_assert_gelt(idx, 0, this->getLength());
+  mcnla_assert_gelt(idx, 0, this->length());
   return ConstIteratorType(this, idx);
 }
 
@@ -247,28 +247,28 @@ const DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::VectorWrapper::getLength
+/// @copydoc  mcnla::matrix::VectorWrapper::length
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::getLengthImpl() const noexcept {
-  return this->getDim0();
+index_t DenseVector<_Scalar>::lengthImpl() const noexcept {
+  return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the first dimension from sizes.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::dim0(
+index_t DenseVector<_Scalar>::toDim0(
     const SizesType sizes
 ) const noexcept {
   return std::get<0>(sizes);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  dim0
+/// @copydoc  toDim0
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::dim0(
+index_t DenseVector<_Scalar>::toDim0(
     const index_t length
 ) const noexcept {
   return length;

@@ -12,16 +12,16 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
 
   auto segment = vec({idx0, idx0+idxs});
 
-  EXPECT_EQ(segment.getLength(), idxs);
-  EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getStride(), stride);
+  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.nelem(),  idxs);
+  EXPECT_EQ(segment.stride(), stride);
 
   EXPECT_TRUE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity - idx0);
-  EXPECT_EQ(segment.getOffset(),   offset + idx0);
+  EXPECT_EQ(segment.capacity(), capacity - idx0);
+  EXPECT_EQ(segment.offset(),   offset + idx0);
 
-  EXPECT_EQ(segment.getValuePtr(), &(vec(idx0)));
+  EXPECT_EQ(segment.valuePtr(), &(vec(idx0)));
 
   for ( auto i = 0; i < idxs; ++i ) {
     EXPECT_EQ(segment(i), vec(i+idx0));
@@ -54,16 +54,16 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
 
   auto segment = vec({idx0, idx0+idxs});
 
-  EXPECT_EQ(segment.getLength(), idxs);
-  EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getStride(), stride);
+  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.nelem(),  idxs);
+  EXPECT_EQ(segment.stride(), stride);
 
   EXPECT_FALSE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity - idx0 * stride);
-  EXPECT_EQ(segment.getOffset(),   offset + idx0 * stride);
+  EXPECT_EQ(segment.capacity(), capacity - idx0 * stride);
+  EXPECT_EQ(segment.offset(),   offset + idx0 * stride);
 
-  EXPECT_EQ(segment.getValuePtr(), &(vec(idx0)));
+  EXPECT_EQ(segment.valuePtr(), &(vec(idx0)));
 
   for ( auto i = 0; i < idxs; ++i ) {
     EXPECT_EQ(segment(i), vec(i+idx0));

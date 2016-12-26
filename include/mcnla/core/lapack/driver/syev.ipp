@@ -49,8 +49,8 @@ template <class _Matrix, JobOption _jobz, Uplo _uplo>
 SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
     const _Matrix &a
 ) noexcept
-  : SyevDriver(a.getNrow()) {
-  mcnla_assert_eq(a.getNrow(), a.getNcol());
+  : SyevDriver(a.nrow()) {
+  mcnla_assert_eq(a.nrow(), a.ncol());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,15 +91,15 @@ template <class _Matrix, JobOption _jobz, Uplo _uplo>
 void SyevDriver<_Matrix, _jobz, _uplo>::resize(
     const _Matrix &a
 ) noexcept {
-  mcnla_assert_eq(a.getNrow(), a.getNcol());
-  resize(a.getNrow());
+  mcnla_assert_eq(a.nrow(), a.ncol());
+  resize(a.nrow());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Matrix, JobOption _jobz, Uplo _uplo>
-index_t SyevDriver<_Matrix, _jobz, _uplo>::getSizes() const noexcept { return dim_; }
+index_t SyevDriver<_Matrix, _jobz, _uplo>::sizes() const noexcept { return dim_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the workspace
@@ -145,10 +145,10 @@ void SyevDriver<_Matrix, _jobz, _uplo>::compute(
     RealVectorType &w
 ) noexcept {
   mcnla_assert_gt(dim_, 0);
-  mcnla_assert_eq(a.getSizes(), std::make_pair(dim_, dim_));
-  mcnla_assert_eq(w.getLength(), a.getNrow());
-  mcnla_assert_eq(detail::syev(__jobz, toUploChar(_uplo, layout), a.getNrow(), a.getValuePtr(), a.getPitch(),
-                               w.getValuePtr(), work_.getValuePtr(), work_.getLength(), rwork_.getValuePtr()), 0);
+  mcnla_assert_eq(a.sizes(), std::make_pair(dim_, dim_));
+  mcnla_assert_eq(w.length(), a.nrow());
+  mcnla_assert_eq(detail::syev(__jobz, toUploChar(_uplo, layout), a.nrow(), a.valuePtr(), a.pitch(),
+                               w.valuePtr(), work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

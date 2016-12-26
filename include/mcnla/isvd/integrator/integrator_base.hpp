@@ -61,7 +61,7 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
   inline void integrate() noexcept;
 
   // Gets name
-  inline constexpr const char* getName() const noexcept;
+  inline constexpr const char* nvecame() const noexcept;
 
   // Gets compute time
   inline double getTime() const noexcept;

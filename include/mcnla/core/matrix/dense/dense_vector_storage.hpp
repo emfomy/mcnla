@@ -78,9 +78,9 @@ class DenseVectorStorage : public DenseStorage<_Scalar> {
 
   // Gets information
   inline bool     isShrunk() const noexcept;
-  inline index_t  getDim0() const noexcept;
-  inline DimsType getDims() const noexcept;
-  inline index_t  getStride() const noexcept;
+  inline index_t  dim0() const noexcept;
+  inline DimsType dims() const noexcept;
+  inline index_t  stride() const noexcept;
 
  protected:
 
@@ -89,7 +89,7 @@ class DenseVectorStorage : public DenseStorage<_Scalar> {
   inline const ScalarType& getElemImpl( const index_t idx0 ) const noexcept;
 
   // Gets internal position
-  inline index_t getPosImpl( const index_t idx0 ) const noexcept;
+  inline index_t posImpl( const index_t idx0 ) const noexcept;
 
   // Resizes
   inline void resizeImpl( const index_t dim0, const index_t stride = 1 ) noexcept;

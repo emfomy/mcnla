@@ -81,10 +81,10 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   // Gets information
   inline bool     isShrunk() const noexcept;
   inline bool     isSquare() const noexcept;
-  inline index_t  getDim0() const noexcept;
-  inline index_t  getDim1() const noexcept;
-  inline DimsType getDims() const noexcept;
-  inline index_t  getPitch() const noexcept;
+  inline index_t  dim0() const noexcept;
+  inline index_t  dim1() const noexcept;
+  inline DimsType dims() const noexcept;
+  inline index_t  pitch() const noexcept;
 
  protected:
 
@@ -93,7 +93,7 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   inline const ScalarType& getElemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
 
   // Gets internal position
-  inline index_t getPosImpl( const index_t idx0, const index_t idx1 ) const noexcept;
+  inline index_t posImpl( const index_t idx0, const index_t idx1 ) const noexcept;
 
   // Resizes
   inline void resizeImpl( const index_t nrow, const index_t ncol ) noexcept;

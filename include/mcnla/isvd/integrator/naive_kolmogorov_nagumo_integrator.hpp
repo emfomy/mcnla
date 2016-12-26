@@ -129,7 +129,7 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   void integrateImpl() noexcept;
 
   // Gets name
-  inline constexpr const char* getNameImpl() const noexcept;
+  inline constexpr const char* nvecameImpl() const noexcept;
 
   // Gets name
   inline index_t getIterImpl() const noexcept;

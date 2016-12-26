@@ -58,8 +58,8 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
     mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
-    anrow = matrix_a.getNrow();
-    ancol = matrix_a.getNcol();
+    anrow = matrix_a.nrow();
+    ancol = matrix_a.ncol();
   }
   MPI_Bcast(&anrow, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
   MPI_Bcast(&ancol, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
@@ -79,8 +79,8 @@ int main( int argc, char **argv ) {
   // Set parameters
   int argi = 1;
   mcnla::index_t Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m         = matrix_a.getNrow();
-  mcnla::index_t n         = matrix_a.getNcol();
+  mcnla::index_t m         = matrix_a.nrow();
+  mcnla::index_t n         = matrix_a.ncol();
   mcnla::index_t k         = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
   mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
@@ -176,15 +176,15 @@ void check(
     const mcnla::matrix::DenseVector<ScalarType>          &vector_s,
           ScalarType &frerr
 ) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.getSizes());
-  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.getSizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.sizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.sizes());
 
   // A_tmp := A, U_tmp = U
   mcnla::blas::copy(matrix_a, matrix_a_tmp);
   mcnla::blas::copy(matrix_u, matrix_u_tmp);
 
   // A_tmp -= U * S * V'
-  for ( auto i = 0; i < vector_s.getLength(); ++i ) {
+  for ( auto i = 0; i < vector_s.length(); ++i ) {
     mcnla::blas::scal(vector_s(i), matrix_u_tmp.getCol(i));
   }
   mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);

@@ -52,7 +52,7 @@ template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
     const _Matrix &a
 ) noexcept
-  : GesvdDriver(a.getNrow(), a.getNcol()) {
+  : GesvdDriver(a.nrow(), a.ncol()) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,14 +95,14 @@ template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::resize(
     const _Matrix &a
 ) noexcept {
-  resize(a.getNrow(), a.getNcol());
+  resize(a.nrow(), a.ncol());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-std::pair<index_t, index_t> GesvdDriver<_Matrix, _jobu, _jobvt>::getSizes() const noexcept {
+std::pair<index_t, index_t> GesvdDriver<_Matrix, _jobu, _jobvt>::sizes() const noexcept {
   return std::make_pair(nrow_, ncol_);
 }
 
@@ -156,31 +156,31 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
 ) noexcept {
   mcnla_assert_gt(nrow_, 0);
   mcnla_assert_gt(ncol_, 0);
-  mcnla_assert_eq(a.getSizes(), std::make_pair(nrow_, ncol_));
+  mcnla_assert_eq(a.sizes(), std::make_pair(nrow_, ncol_));
 
   if ( __jobu == 'A' ) {
-    mcnla_assert_eq(u.getSizes(), std::make_pair(nrow_, nrow_));
+    mcnla_assert_eq(u.sizes(), std::make_pair(nrow_, nrow_));
   } else if ( __jobu == 'S' ) {
-    mcnla_assert_eq(u.getSizes(), std::make_pair(nrow_, std::min(nrow_, ncol_)));
+    mcnla_assert_eq(u.sizes(), std::make_pair(nrow_, std::min(nrow_, ncol_)));
   }
 
   if ( __jobvt == 'A' ) {
-    mcnla_assert_eq(u.getSizes(), std::make_pair(ncol_, ncol_));
+    mcnla_assert_eq(u.sizes(), std::make_pair(ncol_, ncol_));
   } else if ( __jobvt == 'S' ) {
-    mcnla_assert_eq(vt.getSizes(), std::make_pair(std::min(nrow_, ncol_), ncol_));
+    mcnla_assert_eq(vt.sizes(), std::make_pair(std::min(nrow_, ncol_), ncol_));
   }
 
-  auto u_pitch  = (u.getPitch()  > 0) ? u.getPitch()  : 1;
-  auto vt_pitch = (vt.getPitch() > 0) ? vt.getPitch() : 1;
+  auto u_pitch  = (u.pitch()  > 0) ? u.pitch()  : 1;
+  auto vt_pitch = (vt.pitch() > 0) ? vt.pitch() : 1;
 
   if ( isColMajor(layout) ) {
-    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.getNrow(), a.getNcol(), a.getValuePtr(), a.getPitch(),
-                                  s.getValuePtr(), u.getValuePtr(), u_pitch, vt.getValuePtr(), vt_pitch,
-                                  work_.getValuePtr(), work_.getLength(), rwork_.getValuePtr()), 0);
+    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.nrow(), a.ncol(), a.valuePtr(), a.pitch(),
+                                  s.valuePtr(), u.valuePtr(), u_pitch, vt.valuePtr(), vt_pitch,
+                                  work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
   } else {
-    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.getNcol(), a.getNrow(), a.getValuePtr(), a.getPitch(),
-                                  s.getValuePtr(), vt.getValuePtr(), vt_pitch, u.getValuePtr(), u_pitch,
-                                  work_.getValuePtr(), work_.getLength(), rwork_.getValuePtr()), 0);
+    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.ncol(), a.nrow(), a.valuePtr(), a.pitch(),
+                                  s.valuePtr(), vt.valuePtr(), vt_pitch, u.valuePtr(), u_pitch,
+                                  work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
   }
 }
 

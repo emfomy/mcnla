@@ -164,7 +164,7 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   void integrateImpl() noexcept;
 
   // Gets name
-  inline constexpr const char* getNameImpl() const noexcept;
+  inline constexpr const char* nvecameImpl() const noexcept;
 
   // Gets time
   inline double getTimeImpl() const noexcept;

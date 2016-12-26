@@ -48,8 +48,8 @@ void IntegratorBase<_Derived>::integrate() noexcept {
 /// @copydoc  mcnla::isvd::Solver::getIntegratorName
 ///
 template <class _Derived>
-constexpr const char* IntegratorBase<_Derived>::getName() const noexcept {
-  return this->derived().getNameImpl();
+constexpr const char* IntegratorBase<_Derived>::nvecame() const noexcept {
+  return this->derived().nvecameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

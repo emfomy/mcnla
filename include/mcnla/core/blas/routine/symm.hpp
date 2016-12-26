@@ -40,11 +40,11 @@ inline void symmImpl3(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  mcnla_assert_eq(a.getSize(), c.getNrow());
-  mcnla_assert_eq(b.getSizes(), c.getSizes());
+  mcnla_assert_eq(a.size(), c.nrow());
+  mcnla_assert_eq(b.sizes(), c.sizes());
 
-  detail::symm('L', toUploChar(_uplo, _transa), c.getNrow(), c.getNcol(),
-               alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
+  detail::symm('L', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
+               alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
@@ -55,11 +55,11 @@ inline void symmImpl3(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  mcnla_assert_eq(a.getSize(), c.getNcol());
-  mcnla_assert_eq(b.getSizes(), c.getSizes());
+  mcnla_assert_eq(a.size(), c.ncol());
+  mcnla_assert_eq(b.sizes(), c.sizes());
 
-  detail::symm('R', toUploChar(_uplo, _transa), c.getNrow(), c.getNcol(),
-               alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
+  detail::symm('R', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
+               alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

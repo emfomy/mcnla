@@ -32,7 +32,7 @@ inline void axpby(
     const typename DenseVector<_Scalar>::ScalarType beta,
           DenseVector<_Scalar> &y
 ) noexcept {
-  detail::axpby(x.getLength(), alpha, x.getValuePtr(), x.getStride(), beta, y.getValuePtr(), y.getStride());
+  detail::axpby(x.length(), alpha, x.valuePtr(), x.stride(), beta, y.valuePtr(), y.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

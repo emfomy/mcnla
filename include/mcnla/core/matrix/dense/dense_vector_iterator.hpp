@@ -90,9 +90,9 @@ class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase
   friend inline std::ostream& operator<<( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
 
   // Gets value
-  inline ScalarType& getValue() const noexcept;
-  inline index_t     getIdx() const noexcept;
-  inline index_t     getPos() const noexcept;
+  inline ScalarType& value() const noexcept;
+  inline index_t     idx() const noexcept;
+  inline index_t     pos() const noexcept;
 
 };
 

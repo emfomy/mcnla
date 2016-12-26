@@ -44,10 +44,10 @@ void DummyReconstructor<_Matrix>::reconstructImpl(
 ) noexcept { static_cast<void>(matrix_a); static_cast<void>(matrix_qc); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getName
+/// @copydoc  mcnla::isvd::ReconstructorBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* DummyReconstructor<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* DummyReconstructor<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 

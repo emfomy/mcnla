@@ -134,14 +134,14 @@ class DenseMatrix
   inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
 
   // Gets information
-  inline index_t getNidx() const noexcept;
+  inline index_t nidx() const noexcept;
 
   // Gets element
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;
   inline const ScalarType& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Gets internal position
-  inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline index_t pos( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Finds the iterator
   inline IteratorType      find( const index_t rowidx, const index_t colidx ) noexcept;
@@ -201,14 +201,14 @@ class DenseMatrix
  protected:
 
   // Gets information
-  inline index_t getNrowImpl() const noexcept;
-  inline index_t getNcolImpl() const noexcept;
+  inline index_t nrowImpl() const noexcept;
+  inline index_t ncolImpl() const noexcept;
 
   // Convert sizes to dims
-  inline index_t dim0( const SizesType sizes ) const noexcept;
-  inline index_t dim0( const index_t nrow, const index_t ncol ) const noexcept;
-  inline index_t dim1( const SizesType sizes ) const noexcept;
-  inline index_t dim1( const index_t nrow, const index_t ncol ) const noexcept;
+  inline index_t toDim0( const SizesType sizes ) const noexcept;
+  inline index_t toDim0( const index_t nrow, const index_t ncol ) const noexcept;
+  inline index_t toDim1( const SizesType sizes ) const noexcept;
+  inline index_t toDim1( const index_t nrow, const index_t ncol ) const noexcept;
 
   // Create full index range
   inline const IdxRange colfullrange() const noexcept;

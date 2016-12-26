@@ -89,13 +89,13 @@ class Parameters {
   // Gets parameter
   inline bool isInitialized() const noexcept;
   inline bool isComputed() const noexcept;
-  inline index_t getNrow() const noexcept;
-  inline index_t getNcol() const noexcept;
+  inline index_t nrow() const noexcept;
+  inline index_t ncol() const noexcept;
   inline index_t getRank() const noexcept;
   inline index_t getOverRank() const noexcept;
-  inline index_t getDimSketch() const noexcept;
-  inline index_t getNumSketch() const noexcept;
-  inline index_t getNumSketchEach() const noexcept;
+  inline index_t dimSketch() const noexcept;
+  inline index_t nvecumSketch() const noexcept;
+  inline index_t nvecumSketchEach() const noexcept;
   inline index_t getMaxIteration() const noexcept;
   inline RealScalar getTolerance() const noexcept;
 };

@@ -13,18 +13,18 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetRows) {
 
   auto block = mat({row0, row0+rows}, "");
 
-  EXPECT_EQ(block.getNrow(),  rows);
-  EXPECT_EQ(block.getNcol(),  ncol);
-  EXPECT_EQ(block.getNelem(), rows * ncol);
-  EXPECT_EQ(block.getPitch(), pitch);
+  EXPECT_EQ(block.nrow(),  rows);
+  EXPECT_EQ(block.ncol(),  ncol);
+  EXPECT_EQ(block.nelem(), rows * ncol);
+  EXPECT_EQ(block.pitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
   EXPECT_TRUE(block.isSquare());
 
-  EXPECT_EQ(block.getCapacity(), capacity - row0);
-  EXPECT_EQ(block.getOffset(),   offset + row0);
+  EXPECT_EQ(block.capacity(), capacity - row0);
+  EXPECT_EQ(block.offset(),   offset + row0);
 
-  EXPECT_EQ(block.getValuePtr(), &(mat(row0, 0)));
+  EXPECT_EQ(block.valuePtr(), &(mat(row0, 0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -64,18 +64,18 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetRows) {
 
   auto block = mat({row0, row0+rows}, "");
 
-  EXPECT_EQ(block.getNrow(),  rows);
-  EXPECT_EQ(block.getNcol(),  ncol);
-  EXPECT_EQ(block.getNelem(), rows * ncol);
-  EXPECT_EQ(block.getPitch(), pitch);
+  EXPECT_EQ(block.nrow(),  rows);
+  EXPECT_EQ(block.ncol(),  ncol);
+  EXPECT_EQ(block.nelem(), rows * ncol);
+  EXPECT_EQ(block.pitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
   EXPECT_TRUE(block.isSquare());
 
-  EXPECT_EQ(block.getCapacity(), capacity - row0);
-  EXPECT_EQ(block.getOffset(),   offset + row0);
+  EXPECT_EQ(block.capacity(), capacity - row0);
+  EXPECT_EQ(block.offset(),   offset + row0);
 
-  EXPECT_EQ(block.getValuePtr(), &(mat(row0, 0)));
+  EXPECT_EQ(block.valuePtr(), &(mat(row0, 0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -115,18 +115,18 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetRows) {
 
   auto block = mat({row0, row0+rows}, "");
 
-  EXPECT_EQ(block.getNrow(),  rows);
-  EXPECT_EQ(block.getNcol(),  ncol);
-  EXPECT_EQ(block.getNelem(), rows * ncol);
-  EXPECT_EQ(block.getPitch(), pitch);
+  EXPECT_EQ(block.nrow(),  rows);
+  EXPECT_EQ(block.ncol(),  ncol);
+  EXPECT_EQ(block.nelem(), rows * ncol);
+  EXPECT_EQ(block.pitch(), pitch);
 
   EXPECT_TRUE(block.isShrunk());
   EXPECT_TRUE(block.isSquare());
 
-  EXPECT_EQ(block.getCapacity(), capacity - row0*pitch);
-  EXPECT_EQ(block.getOffset(),   offset + row0*pitch);
+  EXPECT_EQ(block.capacity(), capacity - row0*pitch);
+  EXPECT_EQ(block.offset(),   offset + row0*pitch);
 
-  EXPECT_EQ(block.getValuePtr(), &(mat(row0, 0)));
+  EXPECT_EQ(block.valuePtr(), &(mat(row0, 0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -166,18 +166,18 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetRows) {
 
   auto block = mat({row0, row0+rows}, "");
 
-  EXPECT_EQ(block.getNrow(),  rows);
-  EXPECT_EQ(block.getNcol(),  ncol);
-  EXPECT_EQ(block.getNelem(), rows * ncol);
-  EXPECT_EQ(block.getPitch(), pitch);
+  EXPECT_EQ(block.nrow(),  rows);
+  EXPECT_EQ(block.ncol(),  ncol);
+  EXPECT_EQ(block.nelem(), rows * ncol);
+  EXPECT_EQ(block.pitch(), pitch);
 
   EXPECT_FALSE(block.isShrunk());
   EXPECT_TRUE(block.isSquare());
 
-  EXPECT_EQ(block.getCapacity(), capacity - row0*pitch);
-  EXPECT_EQ(block.getOffset(),   offset + row0*pitch);
+  EXPECT_EQ(block.capacity(), capacity - row0*pitch);
+  EXPECT_EQ(block.offset(),   offset + row0*pitch);
 
-  EXPECT_EQ(block.getValuePtr(), &(mat(row0, 0)));
+  EXPECT_EQ(block.valuePtr(), &(mat(row0, 0)));
 
   for ( auto i = 0; i < rows; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {

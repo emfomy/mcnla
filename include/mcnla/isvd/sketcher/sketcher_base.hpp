@@ -60,7 +60,7 @@ class SketcherBase : public utility::CrtpBase<_Derived, SketcherBase<_Derived>> 
   inline void sketch( const MatrixType &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
 
   // Gets name
-  inline constexpr const char* getName() const noexcept;
+  inline constexpr const char* nvecame() const noexcept;
 
   // Gets compute time
   inline double getTime() const noexcept;

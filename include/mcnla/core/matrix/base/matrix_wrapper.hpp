@@ -50,10 +50,10 @@ class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>
   friend inline std::ostream& operator<<( std::ostream &out, const MatrixWrapper<__Derived> &wrapper );
 
   // Gets information
-  inline index_t   getNrow() const noexcept;
-  inline index_t   getNcol() const noexcept;
-  inline index_t   getNelem() const noexcept;
-  inline SizesType getSizes() const noexcept;
+  inline index_t   nrow() const noexcept;
+  inline index_t   ncol() const noexcept;
+  inline index_t   nelem() const noexcept;
+  inline SizesType sizes() const noexcept;
 
 };
 

@@ -45,13 +45,13 @@ bool Parameters<_Scalar>::isComputed() const noexcept { return computed_; }
 /// @brief  Gets the number of rows of the matrix.
 ///
 template <typename _Scalar>
-index_t Parameters<_Scalar>::getNrow() const noexcept { return nrow_; }
+index_t Parameters<_Scalar>::nrow() const noexcept { return nrow_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of column of the matrix.
 ///
 template <typename _Scalar>
-index_t Parameters<_Scalar>::getNcol() const noexcept { return ncol_; }
+index_t Parameters<_Scalar>::ncol() const noexcept { return ncol_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the desired rank of approximate SVD.
@@ -69,19 +69,19 @@ index_t Parameters<_Scalar>::getOverRank() const noexcept { return over_rank_; }
 /// @brief  Gets the dimension of random sketches.
 ///
 template <typename _Scalar>
-index_t Parameters<_Scalar>::getDimSketch() const noexcept { return rank_ + over_rank_; }
+index_t Parameters<_Scalar>::dimSketch() const noexcept { return rank_ + over_rank_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches of all MPI nodes.
 ///
 template <typename _Scalar>
-index_t Parameters<_Scalar>::getNumSketch() const noexcept { return num_sketch_each_ * mpi_size; }
+index_t Parameters<_Scalar>::nvecumSketch() const noexcept { return num_sketch_each_ * mpi_size; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches per MPI node.
 ///
 template <typename _Scalar>
-index_t Parameters<_Scalar>::getNumSketchEach() const noexcept { return num_sketch_each_; }
+index_t Parameters<_Scalar>::nvecumSketchEach() const noexcept { return num_sketch_each_; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the maximum iteration

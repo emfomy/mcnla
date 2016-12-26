@@ -99,8 +99,8 @@ class DenseMatrixSet120
   inline bool isShrunk() const noexcept;
 
   // Gets data
-  inline       MatrixType& getData() noexcept;
-  inline const MatrixType& getData() const noexcept;
+  inline       MatrixType& data() noexcept;
+  inline const MatrixType& data() const noexcept;
 
   // Gets set
   using BaseType::operator();
@@ -116,9 +116,9 @@ class DenseMatrixSet120
  protected:
 
   // Gets information
-  inline index_t getNrowImpl() const noexcept;
-  inline index_t getNcolImpl() const noexcept;
-  inline index_t getNmatImpl() const noexcept;
+  inline index_t nrowImpl() const noexcept;
+  inline index_t ncolImpl() const noexcept;
+  inline index_t nmatImpl() const noexcept;
 
   // Gets matrix
   inline       MatrixType getMatrixImpl( const index_t idx ) noexcept;

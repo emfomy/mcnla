@@ -34,10 +34,10 @@ GaussianProjectionSketcher<_Matrix>::GaussianProjectionSketcher(
 template <class _Matrix>
 void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
 
-  const auto nrow            = parameters_.getNrow();
-  const auto ncol            = parameters_.getNcol();
-  const auto num_sketch_each = parameters_.getNumSketchEach();
-  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
   time0_ = 0;
   time1_ = 0;
@@ -45,17 +45,17 @@ void GaussianProjectionSketcher<_Matrix>::initializeImpl() noexcept {
   time3_ = 0;
 
   const auto set_omega_sizes = std::make_tuple(ncol, dim_sketch, num_sketch_each);
-  if ( set_omega_.getSizes() != set_omega_sizes ) {
+  if ( set_omega_.sizes() != set_omega_sizes ) {
     set_omega_ = DenseMatrixSet120<ScalarType>(set_omega_sizes);
   }
 
   const auto vector_s_sizes = dim_sketch;
-  if ( vector_s_.getSizes() != vector_s_sizes ) {
+  if ( vector_s_.sizes() != vector_s_sizes ) {
     vector_s_ = DenseVector<RealScalarType>(vector_s_sizes);
   }
 
   const auto gesvd_sizes = std::make_pair(nrow, dim_sketch);
-  if ( gesvd_driver_.getSizes() != gesvd_sizes ) {
+  if ( gesvd_driver_.sizes() != gesvd_sizes ) {
     gesvd_driver_.resize(gesvd_sizes);
   }
 
@@ -72,13 +72,13 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 
   mcnla_assert_true(parameters_.isInitialized());
 
-  const auto nrow            = parameters_.getNrow();
-  const auto ncol            = parameters_.getNcol();
-  const auto num_sketch_each = parameters_.getNumSketchEach();
-  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
-  mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(nrow, ncol));
-  mcnla_assert_eq(set_q.getSizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
+  mcnla_assert_eq(matrix_a.sizes(), std::make_pair(nrow, ncol));
+  mcnla_assert_eq(set_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   time0_ = MPI_Wtime();
 
@@ -98,10 +98,10 @@ void GaussianProjectionSketcher<_Matrix>::sketchImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherBase::getName
+/// @copydoc  mcnla::isvd::SketcherBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* GaussianProjectionSketcher<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* GaussianProjectionSketcher<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 

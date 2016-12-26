@@ -102,7 +102,7 @@ class DenseSymmetricMatrix
   inline DenseSymmetricMatrix& operator=( DenseSymmetricMatrix &&other ) noexcept;
 
   // Gets information
-  inline index_t getSize() const noexcept;
+  inline index_t size() const noexcept;
 
   // Gets element
   inline       ScalarType operator()( const index_t rowidx, const index_t colidx ) noexcept;
@@ -120,8 +120,8 @@ class DenseSymmetricMatrix
  protected:
 
   // Gets information
-  inline index_t getNrowImpl() const noexcept;
-  inline index_t getNcolImpl() const noexcept;
+  inline index_t nrowImpl() const noexcept;
+  inline index_t ncolImpl() const noexcept;
 
   // Gets base class
   inline       BaseType& base() noexcept;

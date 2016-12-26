@@ -118,8 +118,8 @@ DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::operator=(
 /// @brief  Gets the size.
 ///
 template <typename _Scalar>
-index_t DenseDiagonalMatrix<_Scalar>::getSize() const noexcept {
-  return this->getDim0();
+index_t DenseDiagonalMatrix<_Scalar>::size() const noexcept {
+  return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,8 +162,7 @@ void DenseDiagonalMatrix<_Scalar>::reconstruct(
 /// @attention  The storage layout is also changed.
 ///
 template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>&
-    DenseDiagonalMatrix<_Scalar>::t() noexcept {
+DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::t() noexcept {
   return *this;
 }
 
@@ -171,25 +170,24 @@ DenseDiagonalMatrix<_Scalar>&
 /// @copydoc  t
 ///
 template <typename _Scalar>
-const DenseDiagonalMatrix<_Scalar>&
-    DenseDiagonalMatrix<_Scalar>::t() const noexcept {
+const DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::t() const noexcept {
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::getNrow
+/// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
 template <typename _Scalar>
-index_t DenseDiagonalMatrix<_Scalar>::getNrowImpl() const noexcept {
-  return this->getDim0();
+index_t DenseDiagonalMatrix<_Scalar>::nrowImpl() const noexcept {
+  return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::getNcol
+/// @copydoc  mcnla::matrix::MatrixWrapper::ncol
 ///
 template <typename _Scalar>
-index_t DenseDiagonalMatrix<_Scalar>::getNcolImpl() const noexcept {
-  return this->getDim0();
+index_t DenseDiagonalMatrix<_Scalar>::ncolImpl() const noexcept {
+  return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

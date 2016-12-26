@@ -79,7 +79,7 @@ class SyevDriver {
   inline void resize( const _Matrix &a ) noexcept;
 
   // Get sizes
-  inline index_t getSizes() const noexcept;
+  inline index_t sizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;

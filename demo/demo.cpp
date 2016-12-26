@@ -179,12 +179,12 @@ void create(
     const mcnla::index_t rank,
           mcnla::index_t seed[4]
 ) noexcept {
-  matrix_u_true = mcnla::matrix::DenseMatrix<ScalarType>(matrix_a.getNrow(), rank);
+  matrix_u_true = mcnla::matrix::DenseMatrix<ScalarType>(matrix_a.nrow(), rank);
 
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.getNrow(), matrix_a.getNrow());
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.getNcol(), matrix_a.getNrow());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.nrow(), matrix_a.nrow());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.ncol(), matrix_a.nrow());
   mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
-  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_a.getNrow());
+  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_a.nrow());
 
   // Generate U & V using normal random
   mcnla::lapack::larnv<3>(matrix_u.vectorize(), seed);
@@ -201,7 +201,7 @@ void create(
   for ( mcnla::index_t i = 0; i < rank; ++i ) {
     mcnla::blas::scal(1.0/(i+1), matrix_u.getCol(i));
   }
-  for ( mcnla::index_t i = rank; i < matrix_a.getNrow(); ++i ) {
+  for ( mcnla::index_t i = rank; i < matrix_a.nrow(); ++i ) {
     mcnla::blas::scal(1e-2/(i+1), matrix_u.getCol(i));
   }
   mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::TRANS>(1.0, matrix_u, matrix_v, 0.0, matrix_a);
@@ -218,8 +218,8 @@ void check_u(
           ScalarType &smin,
           ScalarType &smean
 ) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_u2(matrix_u.getNcol(), matrix_u.getNcol());
-  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_u.getNcol());
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_u2(matrix_u.ncol(), matrix_u.ncol());
+  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_u.ncol());
   mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
 
   // U2 := Utrue' * U
@@ -229,7 +229,7 @@ void check_u(
   mcnla::lapack::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
   smax  = mcnla::blas::amax(vector_s);
   smin  = mcnla::blas::amin(vector_s);
-  smean = mcnla::blas::asum(vector_s) / vector_s.getLength();
+  smean = mcnla::blas::asum(vector_s) / vector_s.length();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,15 +243,15 @@ void check(
     const mcnla::matrix::DenseVector<ScalarType>          &vector_s,
           ScalarType &frerr
 ) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.getSizes());
-  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.getSizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.sizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.sizes());
 
   // A_tmp := A, U_tmp = U
   mcnla::blas::copy(matrix_a, matrix_a_tmp);
   mcnla::blas::copy(matrix_u, matrix_u_tmp);
 
   // A_tmp -= U * S * V'
-  for ( auto i = 0; i < vector_s.getLength(); ++i ) {
+  for ( auto i = 0; i < vector_s.length(); ++i ) {
     mcnla::blas::scal(vector_s(i), matrix_u_tmp.getCol(i));
   }
   mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);

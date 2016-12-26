@@ -30,24 +30,24 @@ VectorSetWrapper<_Derived>::VectorSetWrapper() noexcept {}
 /// @brief  Gets the length of vector.
 ///
 template <class _Derived>
-index_t VectorSetWrapper<_Derived>::getLength() const noexcept {
-  return this->derived().getLength();
+index_t VectorSetWrapper<_Derived>::length() const noexcept {
+  return this->derived().length();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of vectors.
 ///
 template <class _Derived>
-index_t VectorSetWrapper<_Derived>::getNvec() const noexcept {
-  return this->derived().getNvec();
+index_t VectorSetWrapper<_Derived>::nvecvec() const noexcept {
+  return this->derived().nvecvec();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Derived>
-std::pair<index_t, index_t> VectorSetWrapper<_Derived>::getSizes() const noexcept {
-  return std::make_tuple(getLength()(), getNvec());
+std::pair<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(length()(), nvecvec());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

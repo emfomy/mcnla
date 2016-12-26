@@ -84,16 +84,16 @@ class DenseIteratorBase
   friend inline __Derived operator+( const index_t num, const DenseIteratorBase<__Derived> iterator ) noexcept;
 
   // Gets data
-  inline ContainerType* getContainer() const noexcept;
-  inline index_t        getItIdx() const noexcept;
+  inline ContainerType* container() const noexcept;
+  inline index_t        itidx() const noexcept;
 
   // Sets to begin/end
   inline _Derived& setBegin() noexcept;
   inline _Derived& setEnd() noexcept;
 
   // Gets the begin/end iterator
-  static inline _Derived getBegin( ContainerType *container ) noexcept;
-  static inline _Derived getEnd( ContainerType *container ) noexcept;
+  static inline _Derived beginImpl( ContainerType *container ) noexcept;
+  static inline _Derived endImpl( ContainerType *container ) noexcept;
 
  protected:
 

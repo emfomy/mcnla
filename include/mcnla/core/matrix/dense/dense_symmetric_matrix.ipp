@@ -118,8 +118,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>& DenseSymmetricMatrix<_Scalar, _tra
 /// @brief  Gets the size.
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::getSize() const noexcept {
-  return this->getDim0();
+index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::size() const noexcept {
+  return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,19 +190,19 @@ const DenseSymmetricMatrix<_Scalar, changeTrans(_trans), _uplo>&
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::getNrow
+/// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::getNrowImpl() const noexcept {
-  return !isTrans(_trans) ? this->getDim0() : this->getDim1();
+index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::nrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim0() : this->dim1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::getNcol
+/// @copydoc  mcnla::matrix::MatrixWrapper::ncol
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::getNcolImpl() const noexcept {
-  return !isTrans(_trans) ? this->getDim1() : this->getDim0();
+index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::ncolImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim1() : this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

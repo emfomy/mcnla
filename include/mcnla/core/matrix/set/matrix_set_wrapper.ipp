@@ -30,32 +30,32 @@ MatrixSetWrapper<_Derived>::MatrixSetWrapper() noexcept {}
 /// @brief  Gets the number of rows of matrix.
 ///
 template <class _Derived>
-index_t MatrixSetWrapper<_Derived>::getNrow() const noexcept {
-  return this->derived().getNrowImpl();
+index_t MatrixSetWrapper<_Derived>::nrow() const noexcept {
+  return this->derived().nrowImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of column of matrix.
 ///
 template <class _Derived>
-index_t MatrixSetWrapper<_Derived>::getNcol() const noexcept {
-  return this->derived().getNcolImpl();
+index_t MatrixSetWrapper<_Derived>::ncol() const noexcept {
+  return this->derived().ncolImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of matrices.
 ///
 template <class _Derived>
-index_t MatrixSetWrapper<_Derived>::getNmat() const noexcept {
-  return this->derived().getNmatImpl();
+index_t MatrixSetWrapper<_Derived>::nmat() const noexcept {
+  return this->derived().nmatImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Derived>
-std::tuple<index_t, index_t, index_t> MatrixSetWrapper<_Derived>::getSizes() const noexcept {
-  return std::make_tuple(getNrow(), getNcol(), getNmat());
+std::tuple<index_t, index_t, index_t> MatrixSetWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(nrow(), ncol(), nmat());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

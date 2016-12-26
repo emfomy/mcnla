@@ -47,8 +47,8 @@ void SketcherBase<_Derived>::sketch(
 /// @copydoc  mcnla::isvd::Solver::getSketcherName
 ///
 template <class _Derived>
-constexpr const char* SketcherBase<_Derived>::getName() const noexcept {
-  return this->derived().getNameImpl();
+constexpr const char* SketcherBase<_Derived>::nvecame() const noexcept {
+  return this->derived().nvecameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

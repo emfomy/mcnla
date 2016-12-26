@@ -12,18 +12,18 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Check) {
   const auto vec      = this->vec_;
   const auto valarray = this->valarray_;
 
-  EXPECT_EQ(vec.getLength(), length);
-  EXPECT_EQ(vec.getNelem(),  length);
-  EXPECT_EQ(vec.getStride(), stride);
+  EXPECT_EQ(vec.length(), length);
+  EXPECT_EQ(vec.nelem(),  length);
+  EXPECT_EQ(vec.stride(), stride);
 
-  EXPECT_EQ(vec.getSizes(),  std::make_tuple(length));
+  EXPECT_EQ(vec.sizes(),  std::make_tuple(length));
 
   EXPECT_TRUE(vec.isShrunk());
 
-  EXPECT_EQ(vec.getCapacity(), capacity);
-  EXPECT_EQ(vec.getOffset(),   offset);
+  EXPECT_EQ(vec.capacity(), capacity);
+  EXPECT_EQ(vec.offset(),   offset);
 
-  EXPECT_EQ(vec.getCapacity(), length);
+  EXPECT_EQ(vec.capacity(), length);
 
   for ( auto i = 0; i < length; ++i ) {
     EXPECT_EQ(vec(i), valarray[offset + i]);
@@ -53,18 +53,18 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Check) {
   const auto vec      = this->vec_;
   const auto valarray = this->valarray_;
 
-  EXPECT_EQ(vec.getLength(), length);
-  EXPECT_EQ(vec.getNelem(),  length);
-  EXPECT_EQ(vec.getStride(), stride);
+  EXPECT_EQ(vec.length(), length);
+  EXPECT_EQ(vec.nelem(),  length);
+  EXPECT_EQ(vec.stride(), stride);
 
-  EXPECT_EQ(vec.getSizes(),  std::make_tuple(length));
+  EXPECT_EQ(vec.sizes(),  std::make_tuple(length));
 
   EXPECT_FALSE(vec.isShrunk());
 
-  EXPECT_EQ(vec.getCapacity(), capacity);
-  EXPECT_EQ(vec.getOffset(),   offset);
+  EXPECT_EQ(vec.capacity(), capacity);
+  EXPECT_EQ(vec.offset(),   offset);
 
-  EXPECT_EQ(vec.getCapacity(), length * stride - (stride-1));
+  EXPECT_EQ(vec.capacity(), length * stride - (stride-1));
 
   for ( auto i = 0; i < length; ++i ) {
     EXPECT_EQ(vec(i), valarray[offset + i*stride]);

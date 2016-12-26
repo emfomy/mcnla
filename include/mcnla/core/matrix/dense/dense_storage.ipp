@@ -101,31 +101,31 @@ bool DenseStorage<_Scalar>::isEmpty() const noexcept {
 /// @brief  Gets the capacity of the value array.
 ///
 template <class _Scalar>
-index_t DenseStorage<_Scalar>::getCapacity() const noexcept {
-  return value_.getCapacity();
+index_t DenseStorage<_Scalar>::capacity() const noexcept {
+  return value_.capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the value array.
 ///
 template <class _Scalar>
-index_t DenseStorage<_Scalar>::getOffset() const noexcept {
-  return value_.getOffset();
+index_t DenseStorage<_Scalar>::offset() const noexcept {
+  return value_.offset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value array.
 ///
 template <class _Scalar>
-Array<_Scalar>& DenseStorage<_Scalar>::getValue() noexcept {
+Array<_Scalar>& DenseStorage<_Scalar>::value() noexcept {
   return value_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValue
+/// @copydoc  value
 ///
 template <class _Scalar>
-const Array<_Scalar>& DenseStorage<_Scalar>::getValue() const noexcept {
+const Array<_Scalar>& DenseStorage<_Scalar>::value() const noexcept {
   return value_;
 }
 
@@ -133,15 +133,15 @@ const Array<_Scalar>& DenseStorage<_Scalar>::getValue() const noexcept {
 /// @brief  Gets the raw value pointer.
 ///
 template <class _Scalar>
-_Scalar* DenseStorage<_Scalar>::getValuePtr() noexcept {
+_Scalar* DenseStorage<_Scalar>::valuePtr() noexcept {
   return *value_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getValuePtr
+/// @copydoc  valuePtr
 ///
 template <class _Scalar>
-const _Scalar* DenseStorage<_Scalar>::getValuePtr() const noexcept {
+const _Scalar* DenseStorage<_Scalar>::valuePtr() const noexcept {
   return *value_;
 }
 

@@ -19,12 +19,12 @@ int main( int argc, char **argv ) {
 
   mcnla::matrix::DenseMatrixSet120<double> set(5, 2, 4);
   int i = 0;
-  for ( auto &v : set.getData() ) {
+  for ( auto &v : set.data() ) {
     v = ++i;
   }
   std::cout << set.unfold() << std::endl << std::endl;
 
-  for ( auto i = 0; i < set.getNmat(); ++i ) {
+  for ( auto i = 0; i < set.nmat(); ++i ) {
     std::cout << set(i) << std::endl << std::endl;
   }
 
@@ -34,7 +34,7 @@ int main( int argc, char **argv ) {
 
   std::cout << subset.unfold() << std::endl << std::endl;
 
-  for ( auto i = 0; i < subset.getNmat(); ++i ) {
+  for ( auto i = 0; i < subset.nmat(); ++i ) {
     std::cout << subset(i) << std::endl << std::endl;
   }
 

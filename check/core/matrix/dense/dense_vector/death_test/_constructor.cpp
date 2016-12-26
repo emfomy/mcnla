@@ -24,8 +24,8 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, Constructor) {
 
   EXPECT_DEATH(VectorType vec1(length, stride, array), "");
   EXPECT_DEATH(VectorType vec1(length, stride, capacity-1), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.getValue(), -(offset+1)), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.getValue(), 1), "");
+  EXPECT_DEATH(VectorType vec1(length, stride, vec.value(), -(offset+1)), "");
+  EXPECT_DEATH(VectorType vec1(length, stride, vec.value(), 1), "");
 }
 
 
@@ -44,6 +44,6 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride3, Constructor) {
 
   EXPECT_DEATH(VectorType vec1(length, stride, array), "");
   EXPECT_DEATH(VectorType vec1(length, stride, capacity-1), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.getValue(), -(offset+1)), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.getValue(), 1), "");
+  EXPECT_DEATH(VectorType vec1(length, stride, vec.value(), -(offset+1)), "");
+  EXPECT_DEATH(VectorType vec1(length, stride, vec.value(), 1), "");
 }

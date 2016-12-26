@@ -41,18 +41,18 @@ inline void gemm(
   constexpr int dimb = (isColMajor(_layouta) ^ isTrans(_transa)) ? 1 : 0;
   constexpr int dimc = (isColMajor(_layouta) ^ isTrans(_transa)) ? 0 : 1;
 
-  mcnla_assert_eq(c.getNrow(),                   a.template getNrow<_transa>());
-  mcnla_assert_eq(c.getNcol(),                   b.template getNcol<_transb>());
-  mcnla_assert_eq(a.template getNcol<_transa>(), b.template getNrow<_transb>());
+  mcnla_assert_eq(c.nrow(),                   a.template nrow<_transa>());
+  mcnla_assert_eq(c.ncol(),                   b.template ncol<_transb>());
+  mcnla_assert_eq(a.template ncol<_transa>(), b.template nrow<_transb>());
 
   blas::memset0(c);
   if ( !isTrans(_transb) ) {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValuePtr(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.valuePtr(), b.getRow(tuple.template idx<dimb>()), beta, c.getRow(tuple.template idx<dimc>()));
     }
   } else {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValuePtr(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getRow(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.valuePtr(), b.getCol(tuple.template idx<dimb>()), beta, c.getRow(tuple.template idx<dimc>()));
     }
   }
 }
@@ -71,18 +71,18 @@ inline void gemm(
   constexpr int dimb = (isColMajor(_layouta) ^ isTrans(_transa)) ? 0 : 1;
   constexpr int dimc = (isColMajor(_layouta) ^ isTrans(_transa)) ? 1 : 0;
 
-  mcnla_assert_eq(c.getNcol(),                   a.template getNcol<_transb>());
-  mcnla_assert_eq(c.getNrow(),                   b.template getNrow<_transa>());
-  mcnla_assert_eq(a.template getNrow<_transb>(), b.template getNcol<_transa>());
+  mcnla_assert_eq(c.ncol(),                   a.template ncol<_transb>());
+  mcnla_assert_eq(c.nrow(),                   b.template nrow<_transa>());
+  mcnla_assert_eq(a.template nrow<_transb>(), b.template ncol<_transa>());
 
   blas::memset0(c);
   if ( !isTrans(_transb) ) {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValuePtr(), b.getCol(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.valuePtr(), b.getCol(tuple.template idx<dimb>()), beta, c.getCol(tuple.template idx<dimc>()));
     }
   } else {
     for ( auto tuple : a ) {
-      axpby(alpha * tuple.getValuePtr(), b.getRow(tuple.template getIdx<dimb>()), beta, c.getCol(tuple.template getIdx<dimc>()));
+      axpby(alpha * tuple.valuePtr(), b.getRow(tuple.template idx<dimb>()), beta, c.getCol(tuple.template idx<dimc>()));
     }
   }
 }

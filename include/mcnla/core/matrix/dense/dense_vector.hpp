@@ -113,14 +113,14 @@ class DenseVector
   inline DenseVector& operator=( DenseVector &&other ) noexcept;
 
   // Gets information
-  inline index_t getNidx() const noexcept;
+  inline index_t nidx() const noexcept;
 
   // Gets element
   inline       ScalarType& operator()( const index_t idx ) noexcept;
   inline const ScalarType& operator()( const index_t idx ) const noexcept;
 
   // Gets internal position
-  inline index_t getPos( const index_t idx ) const noexcept;
+  inline index_t pos( const index_t idx ) const noexcept;
 
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;
@@ -142,11 +142,11 @@ class DenseVector
  protected:
 
   // Gets information
-  inline index_t getLengthImpl() const noexcept;
+  inline index_t lengthImpl() const noexcept;
 
   // Convert sizes to dims
-  inline index_t dim0( const SizesType sizes ) const noexcept;
-  inline index_t dim0( const index_t length ) const noexcept;
+  inline index_t toDim0( const SizesType sizes ) const noexcept;
+  inline index_t toDim0( const index_t length ) const noexcept;
 
   // Gets base class
   inline       BaseType& base() noexcept;

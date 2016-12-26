@@ -45,10 +45,10 @@ class MatrixSetWrapper : public utility::CrtpBase<_Derived, MatrixSetWrapper<_De
  public:
 
   // Gets information
-  inline index_t getNrow() const noexcept;
-  inline index_t getNcol() const noexcept;
-  inline index_t getNmat() const noexcept;
-  inline std::tuple<index_t, index_t, index_t> getSizes() const noexcept;
+  inline index_t nrow() const noexcept;
+  inline index_t ncol() const noexcept;
+  inline index_t nmat() const noexcept;
+  inline std::tuple<index_t, index_t, index_t> sizes() const noexcept;
 
   // Gets matrix
   inline       MatrixType operator()( const index_t idx ) noexcept;

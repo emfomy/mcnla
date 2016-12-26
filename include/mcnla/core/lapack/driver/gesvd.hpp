@@ -87,7 +87,7 @@ class GesvdDriver {
   inline void resize( const _Matrix &a ) noexcept;
 
   // Get sizes
-  inline std::pair<index_t, index_t> getSizes() const noexcept;
+  inline std::pair<index_t, index_t> sizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;

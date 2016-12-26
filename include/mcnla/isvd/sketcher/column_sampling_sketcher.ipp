@@ -34,18 +34,18 @@ ColumnSamplingSketcher<_Matrix>::ColumnSamplingSketcher(
 template <class _Matrix>
 void ColumnSamplingSketcher<_Matrix>::initializeImpl() noexcept {
 
-  const auto vector_s_sizes = parameters_.getDimSketch();
-  if ( vector_s_.getSizes() != vector_s_sizes ) {
+  const auto vector_s_sizes = parameters_.dimSketch();
+  if ( vector_s_.sizes() != vector_s_sizes ) {
     vector_s_ = DenseVector<RealScalarType>(vector_s_sizes);
   }
 
-  const auto gesvd_sizes = std::make_pair(parameters_.getNrow(), parameters_.getDimSketch());
-  if ( gesvd_driver_.getSizes() != gesvd_sizes ) {
+  const auto gesvd_sizes = std::make_pair(parameters_.nrow(), parameters_.dimSketch());
+  if ( gesvd_driver_.sizes() != gesvd_sizes ) {
     gesvd_driver_.resize(gesvd_sizes);
   }
 
   srand(this->seed_[0]);
-  random_distribution_ = std::uniform_int_distribution<index_t>(0, parameters_.getNcol()-1);
+  random_distribution_ = std::uniform_int_distribution<index_t>(0, parameters_.ncol()-1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,12 +57,12 @@ void ColumnSamplingSketcher<_Matrix>::sketchImpl(
           DenseMatrixSet120<ScalarType> &set_q
 ) noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  mcnla_assert_eq(matrix_a.getSizes(), std::make_pair(parameters_.getNrow(), parameters_.getNcol()));
-  mcnla_assert_eq(set_q.getSizes(),   std::make_tuple(parameters_.getNrow(), parameters_.getDimSketch(),
-                                                       parameters_.getNumSketchEach()));
+  mcnla_assert_eq(matrix_a.sizes(), std::make_pair(parameters_.nrow(), parameters_.ncol()));
+  mcnla_assert_eq(set_q.sizes(),   std::make_tuple(parameters_.nrow(), parameters_.dimSketch(),
+                                                       parameters_.nvecumSketchEach()));
 
-  for ( index_t i = 0; i < parameters_.getNumSketchEach(); ++i ) {
-    for ( index_t j = 0; j < parameters_.getDimSketch(); ++j ) {
+  for ( index_t i = 0; i < parameters_.nvecumSketchEach(); ++i ) {
+    for ( index_t j = 0; j < parameters_.dimSketch(); ++j ) {
       blas::copy(matrix_a.getCol(random_distribution_(random_generator_)), set_q.getCol(j, i));
     }
     gesvd_driver_(set_q.getPage(i), vector_s_, matrix_empty_, matrix_empty_);
@@ -70,10 +70,10 @@ void ColumnSamplingSketcher<_Matrix>::sketchImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherBase::getName
+/// @copydoc  mcnla::isvd::SketcherBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* ColumnSamplingSketcher<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* ColumnSamplingSketcher<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 

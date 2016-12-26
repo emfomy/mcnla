@@ -30,7 +30,7 @@ std::ostream& operator<< (
     const VectorWrapper<__Derived> &wrapper
 ) {
   auto &vector = wrapper.derived();
-  for ( index_t i = 0; i < vector.getLength(); ++i ) {
+  for ( index_t i = 0; i < vector.length(); ++i ) {
     out << std::setw(ios_width) << vector(i) << "  ";
   }
   return out << std::endl;
@@ -40,24 +40,24 @@ std::ostream& operator<< (
 /// @brief  Gets the length.
 ///
 template <class _Derived>
-index_t VectorWrapper<_Derived>::getLength() const noexcept {
-  return this->derived().getLengthImpl();
+index_t VectorWrapper<_Derived>::length() const noexcept {
+  return this->derived().lengthImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of elements.
 ///
 template <class _Derived>
-index_t VectorWrapper<_Derived>::getNelem() const noexcept {
-  return getLength();
+index_t VectorWrapper<_Derived>::nelem() const noexcept {
+  return length();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size of dimensions in interface order. [ length ]
 ///
 template <class _Derived>
-std::tuple<index_t> VectorWrapper<_Derived>::getSizes() const noexcept {
-  return std::make_tuple(getLength());
+std::tuple<index_t> VectorWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(length());
 }
 
 }  // namespace matrix

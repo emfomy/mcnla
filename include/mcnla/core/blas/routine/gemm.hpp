@@ -39,12 +39,12 @@ inline void gemmImpl2(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  mcnla_assert_eq(c.getNrow(), a.getNrow());
-  mcnla_assert_eq(c.getNcol(), b.getNcol());
-  mcnla_assert_eq(a.getNcol(), b.getNrow());
+  mcnla_assert_eq(c.nrow(), a.nrow());
+  mcnla_assert_eq(c.ncol(), b.ncol());
+  mcnla_assert_eq(a.ncol(), b.nrow());
 
-  gemm(toTransChar<_Scalar>(_transa), toTransChar<_Scalar>(_transb), c.getNrow(), c.getNcol(), a.getNcol(),
-       alpha, a.getValuePtr(), a.getPitch(), b.getValuePtr(), b.getPitch(), beta, c.getValuePtr(), c.getPitch());
+  gemm(toTransChar<_Scalar>(_transa), toTransChar<_Scalar>(_transb), c.nrow(), c.ncol(), a.ncol(),
+       alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

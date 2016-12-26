@@ -16,12 +16,12 @@ TEST(ReductionIntegratorTest, Test) {
   mcnla::io::loadMatrixMarket(matrix_qbar_true, MATRIX_QBAR_PATH);
 
   // Checks size
-  ASSERT_EQ(set_q_true.getNrow(), matrix_qbar_true.getNrow());
-  ASSERT_EQ(set_q_true.getNcol(), matrix_qbar_true.getNcol());
+  ASSERT_EQ(set_q_true.nrow(), matrix_qbar_true.nrow());
+  ASSERT_EQ(set_q_true.ncol(), matrix_qbar_true.ncol());
 
   // Gets size
-  const mcnla::index_t m  = set_q_true.getNrow();
-  const mcnla::index_t k  = set_q_true.getNcol();
+  const mcnla::index_t m  = set_q_true.nrow();
+  const mcnla::index_t k  = set_q_true.ncol();
   const mcnla::index_t p  = 0;
   const mcnla::index_t N  = 8;
   const mcnla::index_t K  = mpi_size;
@@ -57,7 +57,7 @@ TEST(ReductionIntegratorTest, Test) {
   mcnla::blas::syrk<mcnla::Trans::NORMAL>(1.0, matrix_qbar_true, 0.0, matrix_qbar2_true);
   mcnla::blas::syrk<mcnla::Trans::NORMAL>(1.0, matrix_qbar,      0.0, matrix_qbar2);
   if ( mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
-    ASSERT_EQ(matrix_qbar.getSizes(), matrix_qbar_true.getSizes());
+    ASSERT_EQ(matrix_qbar.sizes(), matrix_qbar_true.sizes());
     ASSERT_EQ(integrator.getIter(), -1);
     for ( auto i = 0; i < m; ++i ) {
       for ( auto j = i; j < m; ++j ) {

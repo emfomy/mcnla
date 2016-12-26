@@ -36,10 +36,10 @@ template <class _Matrix>
 void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
 
   const auto mpi_size        = parameters_.mpi_size;
-  const auto nrow            = parameters_.getNrow();
-  const auto num_sketch      = parameters_.getNumSketch();
-  const auto num_sketch_each = parameters_.getNumSketchEach();
-  const auto dim_sketch      = parameters_.getDimSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto num_sketch      = parameters_.nvecumSketch();
+  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
   time0_ = 0;
   time1_ = 0;
@@ -51,57 +51,57 @@ void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
   iter_      = -1;
 
   const auto set_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
-  if ( set_q_.getSizes() != set_q_sizes || !set_q_.isShrunk() ) {
+  if ( set_q_.sizes() != set_q_sizes || !set_q_.isShrunk() ) {
     set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
   }
   set_q_cut_ = set_q_.getMatrixRows({0, nrow});
   matrix_qs_ = set_q_.unfold();
 
   const auto matrix_qjs_sizes = std::make_pair(nrow_each_, dim_sketch * num_sketch);
-  if ( matrix_qjs_.getSizes() != matrix_qjs_sizes || !matrix_qjs_.isShrunk() ) {
+  if ( matrix_qjs_.sizes() != matrix_qjs_sizes || !matrix_qjs_.isShrunk() ) {
     matrix_qjs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qjs_sizes);
   }
 
   const auto matrix_qc_sizes = std::make_pair(nrow_all_, dim_sketch);
-  if ( matrix_qc_.getSizes() != matrix_qc_sizes || !matrix_qc_.isShrunk() ) {
+  if ( matrix_qc_.sizes() != matrix_qc_sizes || !matrix_qc_.isShrunk() ) {
     matrix_qc_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qc_sizes);
   }
   matrix_qc_cut_ = matrix_qc_.getRows({0, nrow});
 
   const auto matrix_qcj_sizes = std::make_pair(nrow_each_, dim_sketch);
-  if ( matrix_qcj_.getSizes() != matrix_qcj_sizes ) {
+  if ( matrix_qcj_.sizes() != matrix_qcj_sizes ) {
     matrix_qcj_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
   }
-  if ( matrix_xj_.getSizes() != matrix_qcj_sizes ) {
+  if ( matrix_xj_.sizes() != matrix_qcj_sizes ) {
     matrix_xj_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
   }
-  if ( matrix_tmp_.getSizes() != matrix_qcj_sizes ) {
+  if ( matrix_tmp_.sizes() != matrix_qcj_sizes ) {
     matrix_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
   }
 
   const auto matrix_bs_sizes = std::make_pair(dim_sketch, dim_sketch * num_sketch);
-  if ( matrix_bs_.getSizes() != matrix_bs_sizes || !matrix_bs_.isShrunk() ) {
+  if ( matrix_bs_.sizes() != matrix_bs_sizes || !matrix_bs_.isShrunk() ) {
     matrix_bs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_bs_sizes);
   }
 
   const auto matrix_c_sizes = std::make_pair(dim_sketch, dim_sketch);
-  if ( matrix_c_.getSizes() != matrix_c_sizes ) {
+  if ( matrix_c_.sizes() != matrix_c_sizes ) {
     matrix_c_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
   }
-  if ( matrix_d_.getSizes() != matrix_c_sizes ) {
+  if ( matrix_d_.sizes() != matrix_c_sizes ) {
     matrix_d_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
   }
-  if ( matrix_f_.getSizes() != matrix_c_sizes ) {
+  if ( matrix_f_.sizes() != matrix_c_sizes ) {
     matrix_f_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
   }
 
   const auto vector_e_sizes = dim_sketch;
-  if ( vector_e_.getSizes() != vector_e_sizes ) {
+  if ( vector_e_.sizes() != vector_e_sizes ) {
     vector_e_ = DenseVector<ScalarType>(vector_e_sizes);
   }
 
   const auto syev_sizes = dim_sketch;
-  if ( syev_driver_.getSizes() != syev_sizes ) {
+  if ( syev_driver_.sizes() != syev_sizes ) {
     syev_driver_.resize(syev_sizes);
   }
 }
@@ -116,10 +116,10 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
   const auto mpi_comm        = parameters_.mpi_comm;
   const auto mpi_size        = parameters_.mpi_size;
   const auto mpi_root        = parameters_.mpi_root;
-  const auto nrow            = parameters_.getNrow();
-  const auto dim_sketch      = parameters_.getDimSketch();
-  const auto num_sketch_each = parameters_.getNumSketchEach();
-  const auto num_sketch      = parameters_.getNumSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto dim_sketch      = parameters_.dimSketch();
+  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto num_sketch      = parameters_.nvecumSketch();
   const auto max_iteration   = parameters_.getMaxIteration();
   const auto tolerance       = parameters_.getTolerance();
 
@@ -228,10 +228,10 @@ void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getName
+/// @copydoc  mcnla::isvd::IntegratorBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* KolmogorovNagumoIntegrator<_Matrix>::getNameImpl() const noexcept {
+constexpr const char* KolmogorovNagumoIntegrator<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 

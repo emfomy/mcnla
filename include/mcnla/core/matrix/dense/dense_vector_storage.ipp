@@ -58,7 +58,7 @@ DenseVectorStorage<_Scalar>::DenseVectorStorage(
     stride_(stride) {
   mcnla_assert_ge(dim0_, 0);
   mcnla_assert_gt(stride_, 0);
-  mcnla_assert_ge(value_.getCapacity(), stride_ * (dim0_-1) + 1);
+  mcnla_assert_ge(value_.capacity(), stride_ * (dim0_-1) + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ DenseVectorStorage<_Scalar>::DenseVectorStorage(
     stride_(stride) {
   mcnla_assert_ge(dim0_, 0);
   mcnla_assert_gt(stride_, 0);
-  mcnla_assert_ge(value_.getCapacity(), stride_ * (dim0_-1) + 1);
+  mcnla_assert_ge(value_.capacity(), stride_ * (dim0_-1) + 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ bool DenseVectorStorage<_Scalar>::isShrunk() const noexcept {
 /// @brief  Gets the size in the first dimension.
 ///
 template <typename _Scalar>
-index_t DenseVectorStorage<_Scalar>::getDim0() const noexcept {
+index_t DenseVectorStorage<_Scalar>::dim0() const noexcept {
   return dim0_;
 }
 
@@ -154,7 +154,7 @@ index_t DenseVectorStorage<_Scalar>::getDim0() const noexcept {
 /// @brief  Gets the size of dimensions in storage order. [ dim0 ]
 ///
 template <typename _Scalar>
-std::tuple<index_t> DenseVectorStorage<_Scalar>::getDims() const noexcept {
+std::tuple<index_t> DenseVectorStorage<_Scalar>::dims() const noexcept {
   return std::make_tuple(dim0_);
 }
 
@@ -162,7 +162,7 @@ std::tuple<index_t> DenseVectorStorage<_Scalar>::getDims() const noexcept {
 /// @brief  Gets the stride.
 ///
 template <typename _Scalar>
-index_t DenseVectorStorage<_Scalar>::getStride() const noexcept {
+index_t DenseVectorStorage<_Scalar>::stride() const noexcept {
   return stride_;
 }
 
@@ -174,7 +174,7 @@ _Scalar& DenseVectorStorage<_Scalar>::getElemImpl(
     const index_t idx0
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
-  return this->getValuePtr()[getPosImpl(idx0)];
+  return this->valuePtr()[posImpl(idx0)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,14 +185,14 @@ const _Scalar& DenseVectorStorage<_Scalar>::getElemImpl(
     const index_t idx0
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
-  return this->getValuePtr()[getPosImpl(idx0)];
+  return this->valuePtr()[posImpl(idx0)];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
 ///
 template <typename _Scalar>
-index_t DenseVectorStorage<_Scalar>::getPosImpl(
+index_t DenseVectorStorage<_Scalar>::posImpl(
     const index_t idx0
 ) const noexcept {
   return idx0 * stride_;
@@ -211,7 +211,7 @@ void DenseVectorStorage<_Scalar>::resizeImpl(
   mcnla_assert_ge(dim0, 0);
   mcnla_assert_gt(stride, 0);
   mcnla_assert_true(dim0 != 0 || stride != 0);
-  mcnla_assert_ge(this->getCapacity(), stride * (dim0-1) + 1);
+  mcnla_assert_ge(this->capacity(), stride * (dim0-1) + 1);
   dim0_   = dim0;
   stride_ = stride;
 }
@@ -223,8 +223,8 @@ template <typename _Scalar>
 DenseVectorStorage<_Scalar> DenseVectorStorage<_Scalar>::getVectorImpl(
     const IdxRange &range0
 ) noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
-  return VectorStorageType(range0.getLength(), stride_, value_, this->getPosImpl(range0.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
+  return VectorStorageType(range0.length(), stride_, value_, this->posImpl(range0.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,8 +234,8 @@ template <typename _Scalar>
 const DenseVectorStorage<_Scalar> DenseVectorStorage<_Scalar>::getVectorImpl(
     const IdxRange &range0
 ) const noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.getLength(), 0);
-  return VectorStorageType(range0.getLength(), stride_, value_, this->getPosImpl(range0.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
+  return VectorStorageType(range0.length(), stride_, value_, this->posImpl(range0.begin));
 }
 
 }  // namespace matrix

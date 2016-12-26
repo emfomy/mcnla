@@ -44,9 +44,9 @@ inline void reduceScatterBlock(
   const auto mpi_size = getCommSize(comm);
   mcnla_assert_true(send.derived().isShrunk());
   mcnla_assert_true(recv.derived().isShrunk());
-  mcnla_assert_eq(send.derived().getNelem(), recv.derived().getNelem() * mpi_size);
-  mpi_int_t count = recv.derived().getNelem();
-  MPI_Reduce_scatter_block(send.getValuePtr(), recv.getValuePtr(), count, datatype, op, comm);
+  mcnla_assert_eq(send.derived().nelem(), recv.derived().nelem() * mpi_size);
+  mpi_int_t count = recv.derived().nelem();
+  MPI_Reduce_scatter_block(send.valuePtr(), recv.valuePtr(), count, datatype, op, comm);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
