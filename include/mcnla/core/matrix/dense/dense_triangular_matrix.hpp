@@ -43,9 +43,14 @@ namespace traits {
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 struct Traits<matrix::DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
+
   static constexpr index_t ndim = 2;
+  static constexpr Trans trans = _trans;
+  static constexpr Uplo uplo = _uplo;
 
   using ScalarType = _Scalar;
+  using RealType    = matrix::DenseTriangularMatrix<RealScalar<_Scalar>, _trans, _uplo>;
+  using ComplexType = matrix::DenseTriangularMatrix<ComplexScalar<_Scalar>, _trans, _uplo>;
 };
 
 }  // namespace traits
@@ -72,10 +77,14 @@ class DenseTriangularMatrix
  public:
 
   static constexpr index_t ndim = 2;
+  static constexpr Trans trans = _trans;
+  static constexpr Uplo uplo = _uplo;
 
   using ScalarType     = _Scalar;
-  using RealScalarType = RealType<_Scalar>;
   using ValueArrayType = Array<_Scalar>;
+
+  using RealType       = DenseTriangularMatrix<RealScalar<_Scalar>, _trans, _uplo>;
+  using ComplexType    = DenseTriangularMatrix<ComplexScalar<_Scalar>, _trans, _uplo>;
 
   using TransposeType  = DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>;
 

@@ -110,7 +110,7 @@ class ReductionIntegrator : public IntegratorBase<ReductionIntegrator<_Matrix>> 
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
 
   /// The GESVD driver.
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'S'> gesvd_driver_;
+  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'S'> gesvd_driver_;
 
  public:
 

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/lapack/driver/syev.ipp
-/// @brief   The implementation of LAPACK SYEV driver.
+/// @file    include/mcnla/core/lapack/engine/syev.ipp
+/// @brief   The implementation of LAPACK SYEV engine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LAPACK_DRIVER_SYEV_IPP_
-#define MCNLA_CORE_LAPACK_DRIVER_SYEV_IPP_
+#ifndef MCNLA_CORE_LAPACK_ENGINE_SYEV_IPP_
+#define MCNLA_CORE_LAPACK_ENGINE_SYEV_IPP_
 
-#include <mcnla/core/lapack/driver/syev.hpp>
+#include <mcnla/core/lapack/engine/syev.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -23,113 +23,99 @@ namespace lapack {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver() noexcept
-  : dim_(0),
+template <class _Matrix, JobOption _jobz>
+SyevEngine<_Matrix, _jobz>::SyevEngine() noexcept
+  : size_(0),
     work_(),
     rwork_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
-    const index_t dim
+template <class _Matrix, JobOption _jobz>
+SyevEngine<_Matrix, _jobz>::SyevEngine(
+    const index_t size
 ) noexcept
-  : dim_(dim),
-    work_(query(dim)),
-    rwork_(is_real ? RealVectorType() : RealVectorType(3*dim)) {
-  mcnla_assert_gt(dim_, 0);
+  : size_(size),
+    work_(query(size)),
+    rwork_(is_real ? RealVectorType() : RealVectorType(3*size)) {
+  mcnla_assert_gt(size_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-SyevDriver<_Matrix, _jobz, _uplo>::SyevDriver(
-    const _Matrix &a
+template <class _Matrix, JobOption _jobz>
+SyevEngine<_Matrix, _jobz>::SyevEngine(
+    const MatrixType &a
 ) noexcept
-  : SyevDriver(a.nrow()) {
+  : SyevEngine(a.nrow()) {
   mcnla_assert_eq(a.nrow(), a.ncol());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo> template <class _TypeA, class _TypeW>
-void SyevDriver<_Matrix, _jobz, _uplo>::operator()( _TypeA &&a, _TypeW &&w ) noexcept {
+template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
+void SyevEngine<_Matrix, _jobz>::operator()( _TypeA &&a, _TypeW &&w ) noexcept {
   compute(a, w);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes eigenvalues only.
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo> template <class _TypeA, class _TypeW>
-void SyevDriver<_Matrix, _jobz, _uplo>::computeValues( _TypeA &&a, _TypeW &&w ) noexcept {
+template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
+void SyevEngine<_Matrix, _jobz>::computeValues( _TypeA &&a, _TypeW &&w ) noexcept {
   compute<'N'>(a, w);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Resizes the driver
+/// @brief  Reconstruct the engine.
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-void SyevDriver<_Matrix, _jobz, _uplo>::resize(
-    const index_t dim
+template <class _Matrix, JobOption _jobz> template <typename... Args>
+void SyevEngine<_Matrix, _jobz>::reconstruct(
+    Args... args
 ) noexcept {
-  mcnla_assert_gt(dim, 0);
-  dim_ = dim;
-  work_ = VectorType(query(dim));
-  if ( is_real ) {
-    rwork_ = RealVectorType(3*dim);
-  }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  resize
-///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-void SyevDriver<_Matrix, _jobz, _uplo>::resize(
-    const _Matrix &a
-) noexcept {
-  mcnla_assert_eq(a.nrow(), a.ncol());
-  resize(a.nrow());
+  *this = SyevEngine<_Matrix, _jobz>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-index_t SyevDriver<_Matrix, _jobz, _uplo>::sizes() const noexcept { return dim_; }
+template <class _Matrix, JobOption _jobz>
+std::tuple<index_t> SyevEngine<_Matrix, _jobz>::sizes() const noexcept {
+  return std::make_tuple(size_);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the workspace
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-typename SyevDriver<_Matrix, _jobz, _uplo>::VectorType& SyevDriver<_Matrix, _jobz, _uplo>::getWork() noexcept {
+template <class _Matrix, JobOption _jobz>
+typename SyevEngine<_Matrix, _jobz>::VectorType& SyevEngine<_Matrix, _jobz>::getWork() noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getWork
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-const typename SyevDriver<_Matrix, _jobz, _uplo>::VectorType& SyevDriver<_Matrix, _jobz, _uplo>::getWork() const noexcept {
+template <class _Matrix, JobOption _jobz>
+const typename SyevEngine<_Matrix, _jobz>::VectorType& SyevEngine<_Matrix, _jobz>::getWork() const noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the real workspace
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Matrix, _jobz, _uplo>::getRwork() noexcept {
+template <class _Matrix, JobOption _jobz>
+typename SyevEngine<_Matrix, _jobz>::RealVectorType& SyevEngine<_Matrix, _jobz>::getRwork() noexcept {
   return rwork_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getRwork
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Matrix, _jobz, _uplo>::getRwork() const noexcept {
+template <class _Matrix, JobOption _jobz>
+const typename SyevEngine<_Matrix, _jobz>::RealVectorType& SyevEngine<_Matrix, _jobz>::getRwork() const noexcept {
   return rwork_;
 }
 
@@ -139,27 +125,27 @@ const typename SyevDriver<_Matrix, _jobz, _uplo>::RealVectorType& SyevDriver<_Ma
 /// @attention  The eigenvectors are Stored in columnwise for column-major storage, in rowwise for row-major storage.
 /// @attention  Matrix @a a will be destroyed!
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo> template <JobOption __jobz>
-void SyevDriver<_Matrix, _jobz, _uplo>::compute(
-    _Matrix &a,
+template <class _Matrix, JobOption _jobz> template <JobOption __jobz>
+void SyevEngine<_Matrix, _jobz>::compute(
+    MatrixType &a,
     RealVectorType &w
 ) noexcept {
-  mcnla_assert_gt(dim_, 0);
-  mcnla_assert_eq(a.sizes(), std::make_pair(dim_, dim_));
+  mcnla_assert_gt(size_, 0);
+  mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
   mcnla_assert_eq(w.length(), a.nrow());
-  mcnla_assert_eq(detail::syev(__jobz, toUploChar(_uplo, layout), a.nrow(), a.valuePtr(), a.pitch(),
+  mcnla_assert_eq(detail::syev(__jobz, toUploChar(uplo, trans), a.nrow(), a.valuePtr(), a.pitch(),
                                w.valuePtr(), work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Query the optimal workspace size.
 ///
-template <class _Matrix, JobOption _jobz, Uplo _uplo>
-index_t SyevDriver<_Matrix, _jobz, _uplo>::query(
-    const index_t dim
+template <class _Matrix, JobOption _jobz>
+index_t SyevEngine<_Matrix, _jobz>::query(
+    const index_t size
 ) const noexcept {
   ScalarType lwork;
-  mcnla_assert_eq(detail::syev(_jobz, toUploChar(_uplo, layout), dim, nullptr, dim, nullptr, &lwork, -1, nullptr), 0);
+  mcnla_assert_eq(detail::syev(_jobz, toUploChar(uplo, trans), size, nullptr, size, nullptr, &lwork, -1, nullptr), 0);
   return lwork;
 }
 
@@ -167,4 +153,4 @@ index_t SyevDriver<_Matrix, _jobz, _uplo>::query(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LAPACK_DRIVER_SYEV_IPP_
+#endif  // MCNLA_CORE_LAPACK_ENGINE_SYEV_IPP_

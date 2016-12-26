@@ -36,7 +36,7 @@ class Parameters {
 
  private:
 
-  using RealScalar = RealType<_Scalar>;
+  using RealScalar = RealScalar<_Scalar>;
 
  public:
 

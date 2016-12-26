@@ -244,13 +244,13 @@ void loadMatrixMarket(
   index_t m, n, k;
   fin >> m >> n >> k;
   if ( derived.unfold().isEmpty() ) {
-    if ( isColMajor(layout) ) {
+    if ( !isTrans(trans) ) {
       derived = _Derived(m, n, k);
     } else {
       derived = _Derived(n, m, k);
     }
   } else {
-    if ( isColMajor(layout) ) {
+    if ( !isTrans(trans) ) {
       mcnla_assert_eq(derived.sizes(), std::make_tuple(m, n, k));
     } else {
       mcnla_assert_eq(derived.sizes(), std::make_tuple(n, m, k));

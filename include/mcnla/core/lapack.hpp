@@ -10,6 +10,6 @@
 
 #include <mcnla/core/lapack/def.hpp>
 #include <mcnla/core/lapack/routine.hpp>
-#include <mcnla/core/lapack/driver.hpp>
+#include <mcnla/core/lapack/engine.hpp>
 
 #endif  // MCNLA_CORE_LAPACK_HPP_

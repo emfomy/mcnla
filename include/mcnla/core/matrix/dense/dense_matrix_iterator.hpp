@@ -43,7 +43,9 @@ namespace traits {
 ///
 template <typename _Scalar, Trans _trans, class _Matrix>
 struct Traits<matrix::DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>> {
+
   static constexpr index_t ndim = 2;
+  static constexpr Trans trans = _trans;
   using ScalarType    = _Scalar;
   using ContainerType = _Matrix;
 };
@@ -71,6 +73,7 @@ class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase
  private:
 
   static constexpr index_t ndim = 2;
+  static constexpr Trans trans = _trans;
   using ScalarType    = _Scalar;
   using ContainerType = _Matrix;
 

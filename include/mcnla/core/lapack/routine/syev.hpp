@@ -12,7 +12,7 @@
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/lapack/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <mcnla/core/lapack/driver/syev.hpp>
+#include <mcnla/core/lapack/engine/syev.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -26,17 +26,17 @@ namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  lapack_driver_module
-/// @copydoc  mcnla::lapack::SyevDriver::compute
+/// @copydoc  mcnla::lapack::SyevEngine::compute
 ///
-/// @see  mcnla::lapack::SyevDriver
+/// @see  mcnla::lapack::SyevEngine
 ///
-template <JobOption _jobz, Uplo _uplo = Uplo::LOWER, typename _Scalar, Layout _layout>
+template <JobOption _jobz, typename _Scalar, Trans _trans, Uplo _uplo>
 inline void syev(
-    DenseMatrix<_Scalar, _layout> &a,
-    DenseVector<RealType<_Scalar>> &w
+    DenseSymmetricMatrix<_Scalar, _trans, _uplo> &a,
+    DenseVector<RealScalar<_Scalar>> &w
 ) noexcept {
-  SyevDriver<DenseMatrix<_Scalar, _layout>, _jobz, _uplo> driver(a);
-  driver(a, w);
+  SyevEngine<DenseSymmetricMatrix<_Scalar, _trans, _uplo>, _jobz> engine(a);
+  engine(a, w);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

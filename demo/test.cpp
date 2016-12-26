@@ -17,26 +17,27 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrixSet120<double> set(5, 2, 4);
+  int m = 4, n = 5;
+
+  mcnla::matrix::DenseMatrixColMajor<double> gematA(m, n);
+  mcnla::matrix::DenseMatrixColMajor<double> gematU(m, m);
+  mcnla::matrix::DenseMatrixColMajor<double> gematVt(m, n);
+  mcnla::matrix::DenseVector<double>         vecS(m);
+
   int i = 0;
-  for ( auto &v : set.data() ) {
+  for ( auto &v : gematA ) {
     v = ++i;
   }
-  std::cout << set.unfold() << std::endl << std::endl;
 
-  for ( auto i = 0; i < set.nmat(); ++i ) {
-    std::cout << set(i) << std::endl << std::endl;
-  }
+  std::cout << gematA << std::endl;
 
-  std::cout << set({1, 3}, "", "").unfold() << std::endl << std::endl;
+  mcnla::lapack::gesvd<'S', 'S'>(gematA, vecS, gematU, gematVt);
 
-  auto subset = set({1, 3}, "", "");
-
-  std::cout << subset.unfold() << std::endl << std::endl;
-
-  for ( auto i = 0; i < subset.nmat(); ++i ) {
-    std::cout << subset(i) << std::endl << std::endl;
-  }
+  std::cout << gematU << std::endl;
+  std::cout << gematVt << std::endl;
+  std::cout << gematVt.t() << std::endl;
+  std::cout << vecS << std::endl;
+  std::cout << vecS.viewDiagonal() << std::endl;
 
   return 0;
 }

@@ -124,7 +124,7 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_empty_;
 
   /// The GESVD driver.
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::COLMAJOR>, 'S', 'O'> gesvd_driver_;
+  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::COLMAJOR>, 'S', 'O'> gesvd_driver_;
 
  public:
 

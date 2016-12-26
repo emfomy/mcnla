@@ -58,11 +58,17 @@ struct ScalarTraits<std::complex<_Scalar>> {
 
 }  // namespace traits
 
-template <typename _Scalar>
-using RealType = typename traits::ScalarTraits<_Scalar>::RealType;
+template <typename _Derived>
+using RealType = typename traits::Traits<_Derived>::RealType;
+
+template <typename _Derived>
+using ComplexType = typename traits::Traits<_Derived>::ComplexType;
 
 template <typename _Scalar>
-using ComplexType = typename traits::ScalarTraits<_Scalar>::ComplexType;
+using RealScalar = typename traits::ScalarTraits<_Scalar>::RealType;
+
+template <typename _Scalar>
+using ComplexScalar = typename traits::ScalarTraits<_Scalar>::ComplexType;
 
 }  // namespace mcnla
 

@@ -1,18 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/lapack/driver/gesvd.hpp
-/// @brief   The LAPACK GESVD driver.
+/// @file    include/mcnla/core/lapack/engine/gesvd.hpp
+/// @brief   The LAPACK GESVD engine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LAPACK_DRIVER_GESVD_DRIVER_HPP_
-#define MCNLA_CORE_LAPACK_DRIVER_GESVD_DRIVER_HPP_
+#ifndef MCNLA_CORE_LAPACK_ENGINE_GESVD_ENGINE_HPP_
+#define MCNLA_CORE_LAPACK_ENGINE_GESVD_ENGINE_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/lapack/def.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <tuple>
 #include <mcnla/core/matrix.hpp>
+#include <mcnla/core/utility/traits.hpp>
 #include <mcnla/core/lapack/lapack/gesvd.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,12 +30,10 @@ namespace lapack {
 /// @ingroup  lapack_driver_module
 /// @brief  The singular value solver of general rectangular matrices.
 ///
-/// @tparam  _Matrix  The matrix type.
-///
 /// @see mcnla::lapack::gesvd
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-class GesvdDriver {
+class GesvdEngine {
 
   static_assert(_jobu  == 'A' || _jobu  == 'S' || _jobu  == 'O' || _jobu  == 'N', "Job undefined!");
   static_assert(_jobvt == 'A' || _jobvt == 'S' || _jobvt == 'O' || _jobvt == 'N', "Job undefined!");
@@ -42,13 +41,16 @@ class GesvdDriver {
 
  private:
 
-  static constexpr Layout layout = _Matrix::layout;
+  static constexpr Trans trans = _Matrix::trans;
+
   using ScalarType     = typename _Matrix::ScalarType;
   using VectorType     = typename _Matrix::VectorType;
-  using RealVectorType = typename _Matrix::RealVectorType;
+  using RealVectorType = typename _Matrix::VectorType::RealType;
+  using MatrixType     = _Matrix;
+
   static constexpr bool is_real = traits::ScalarTraits<ScalarType>::is_real;
 
-  static_assert(std::is_same<DenseMatrix<ScalarType, layout>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
+  static_assert(std::is_same<DenseMatrix<ScalarType, trans>, _Matrix>::value, "'_Matrix' is not a dense matrix!");
 
  protected:
 
@@ -65,14 +67,14 @@ class GesvdDriver {
   RealVectorType rwork_;
 
   /// Empty matrix.
-  _Matrix matrix_empty_;
+  MatrixType matrix_empty_;
 
  public:
 
   // Constructors
-  inline GesvdDriver() noexcept;
-  inline GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
-  inline GesvdDriver( const _Matrix &a ) noexcept;
+  inline GesvdEngine() noexcept;
+  inline GesvdEngine( const index_t nrow, const index_t ncol ) noexcept;
+  inline GesvdEngine( const MatrixType &a ) noexcept;
 
   // Operators
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
@@ -83,11 +85,11 @@ class GesvdDriver {
   inline void computeValues( _TypeA &&a, _TypeS &&s ) noexcept;
 
   // Resizes
-  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
-  inline void resize( const _Matrix &a ) noexcept;
+  template <typename... Args>
+  inline void reconstruct( Args... args ) noexcept;
 
   // Get sizes
-  inline std::pair<index_t, index_t> sizes() const noexcept;
+  inline std::tuple<index_t, index_t> sizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;
@@ -99,7 +101,7 @@ class GesvdDriver {
 
   // Computes
   template <JobOption __jobu = _jobu, JobOption __jobvt = _jobvt>
-  inline void compute( _Matrix &a, RealVectorType &s, _Matrix &u, _Matrix &vt ) noexcept;
+  inline void compute( MatrixType &a, RealVectorType &s, MatrixType &u, MatrixType &vt ) noexcept;
 
   // Queries
   inline index_t query( const index_t nrow, const index_t ncol ) const noexcept;
@@ -110,4 +112,4 @@ class GesvdDriver {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LAPACK_DRIVER_GESVD_DRIVER_HPP_
+#endif  // MCNLA_CORE_LAPACK_ENGINE_GESVD_ENGINE_HPP_

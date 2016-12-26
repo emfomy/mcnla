@@ -92,7 +92,7 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
 
   /// The GESVD driver
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
+  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
 
   /// The random generator
   std::default_random_engine random_generator_;

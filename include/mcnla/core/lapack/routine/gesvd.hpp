@@ -12,7 +12,7 @@
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/lapack/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <mcnla/core/lapack/driver/gesvd.hpp>
+#include <mcnla/core/lapack/engine/gesvd.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -25,26 +25,43 @@ namespace mcnla {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  lapack_driver_module
-/// @copydoc  mcnla::lapack::GesvdDriver::compute
-///
-/// @see  mcnla::lapack::GesvdDriver
-///
-template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Layout _layout>
-inline void gesvd(
-    DenseMatrix<_Scalar, _layout> &a,
-    DenseVector<RealType<_Scalar>> &s,
-    DenseMatrix<_Scalar, _layout> &u,
-    DenseMatrix<_Scalar, _layout> &vt
+//  The detail namespace
+//
+namespace detail {
+
+template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Trans _trans>
+inline void gesvdImpl(
+    DenseMatrix<_Scalar, _trans> &a,
+    DenseVector<RealScalar<_Scalar>> &s,
+    DenseMatrix<_Scalar, _trans> &u,
+    DenseMatrix<_Scalar, _trans> &vt
 ) noexcept {
-  GesvdDriver<DenseMatrix<_Scalar, _layout>, _jobu, _jobvt> driver(a);
-  driver(a, s, u, vt);
+  GesvdEngine<DenseMatrix<_Scalar, _trans>, _jobu, _jobvt> engine(a);
+  engine(a, s, u, vt);
+}
+
+}  // namespace detail
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  lapack_driver_module
+/// @copydoc  mcnla::lapack::GesvdEngine::compute
+///
+/// @see  mcnla::lapack::GesvdEngine
+///
+template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Trans _trans>
+inline void gesvd(
+    DenseMatrix<_Scalar, _trans> &a,
+    DenseVector<RealScalar<_Scalar>> &s,
+    DenseMatrix<_Scalar, _trans> &u,
+    DenseMatrix<_Scalar, _trans> &vt
+) noexcept {
+  detail::gesvdImpl<_jobu, _jobvt>(a, s, u, vt);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <JobOption _jobu, JobOption _jobvt, class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
 inline void gesvd( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept {
-  gesvd<_jobu, _jobvt>(a, s, u, vt);
+  detail::gesvdImpl<_jobu, _jobvt>(a, s, u, vt);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

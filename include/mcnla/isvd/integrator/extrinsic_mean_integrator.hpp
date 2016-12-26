@@ -145,10 +145,10 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
 
   /// The SYEV driver.
-  lapack::SyevDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
+  lapack::SyevEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
 
   /// The GESVD driver.
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
+  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
 
  public:
 

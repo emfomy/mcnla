@@ -52,9 +52,13 @@ namespace traits {
 ///
 template <typename _Scalar, Trans _trans>
 struct Traits<matrix::DenseMatrix<_Scalar, _trans>> {
+
   static constexpr index_t ndim = 2;
+  static constexpr Trans trans = _trans;
 
   using ScalarType        = _Scalar;
+  using RealType          = matrix::DenseMatrix<RealScalar<_Scalar>, _trans>;
+  using ComplexType       = matrix::DenseMatrix<ComplexScalar<_Scalar>, _trans>;
   using IteratorType      = matrix::DenseMatrixIterator<_Scalar, _trans>;
   using ConstIteratorType = matrix::DenseMatrixConstIterator<_Scalar, _trans>;
 };
@@ -86,11 +90,14 @@ class DenseMatrix
  public:
 
   static constexpr index_t ndim = 2;
+  static constexpr Trans trans = _trans;
 
   using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
   using ValueArrayType    = Array<_Scalar>;
   using SizesType         = std::tuple<index_t, index_t>;
+
+  using RealType          = DenseMatrix<RealScalar<_Scalar>, _trans>;
+  using ComplexType       = DenseMatrix<ComplexScalar<_Scalar>, _trans>;
 
   using VectorType        = DenseVector<_Scalar>;
   using MatrixType        = DenseMatrix<_Scalar, _trans>;

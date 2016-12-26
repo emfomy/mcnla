@@ -148,7 +148,7 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   DenseVector<ScalarType> vector_e_;
 
   /// The SYEV driver.
-  lapack::SyevDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
+  lapack::SyevEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
 
  public:
 
