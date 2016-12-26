@@ -55,11 +55,11 @@ inline void scal0(
 ///
 /// @attention  It is inefficient if the pitch is different from the size.
 ///             Uses memset0 instead if the out-of-range spaces are useless.
-/// @attention  However, memset0 is slow if the pitch is vary large.
+/// @attention  However, memset0 is slow if the pitch much larger than the size.
 ///
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _layout> &x
+  DenseMatrix<_Scalar, _trans> &x
 ) noexcept {
   if ( x.isShrunk() ) {
     std::memset(x.getValuePtr(), 0, x.getNelem() * sizeof(_Scalar));
@@ -69,9 +69,9 @@ inline void scal0(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _layout> &&x
+  DenseMatrix<_Scalar, _trans> &&x
 ) noexcept {
   scal0(x);
 }

@@ -136,7 +136,7 @@ inline void omatcopy(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas_module
-/// @brief  Copies a container to another container.
+/// @brief  Copies a matrix to another matrix.
 ///
 template <typename _Scalar, Trans _transa, Trans _transb>
 inline void copy(

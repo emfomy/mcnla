@@ -49,17 +49,17 @@ inline void memset0(
 ///
 /// @attention  the out-of-range spaces are also changed.
 ///
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Trans _trans>
 inline void memset0(
-  DenseMatrix<_Scalar, _layout> &x
+  DenseMatrix<_Scalar, _trans> &x
 ) noexcept {
   std::memset(x.getValuePtr(), 0, x.getNelem() * sizeof(_Scalar));
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout>
+template <typename _Scalar, Trans _trans>
 inline void memset0(
-  DenseMatrix<_Scalar, _layout> &&x
+  DenseMatrix<_Scalar, _trans> &&x
 ) noexcept {
   memset0(x);
 }
