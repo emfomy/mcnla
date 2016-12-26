@@ -114,7 +114,7 @@ inline void syrk(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  blas3_module
+/// @ingroup  blas_module
 /// @brief  Performs a rank-k update.
 ///
 template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>

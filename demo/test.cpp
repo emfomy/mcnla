@@ -20,11 +20,8 @@ int main( int argc, char **argv ) {
   int n = 3, k = 4;
 
   mcnla::matrix::DenseMatrixRowMajor<double> gematA(n, k);
-  mcnla::matrix::DenseMatrixRowMajor<double> gematB(n, k);
-  mcnla::matrix::DenseMatrixRowMajor<double> gematC(n, n);
-  mcnla::matrix::DenseMatrixRowMajor<double> gematD(k, k);
-  auto symatC = gematC.viewSymmetric();
-  auto symatD = gematD.viewSymmetric();
+  mcnla::matrix::DenseMatrixColMajor<double> gematB(n, k);
+  mcnla::matrix::DenseMatrixRowMajor<double> gematC(k, n);
 
   {
     int i = 0;
@@ -33,20 +30,19 @@ int main( int argc, char **argv ) {
     }
   }
 
-  {
-    int i = 0;
-    for ( auto &v : gematB ) {
-      v = i+=2;
-    }
-  }
+  // {
+  //   int i = 0;
+  //   for ( auto &v : gematB ) {
+  //     v = i+=2;
+  //   }
+  // }
 
-  mcnla::blas::r2k(gematA, gematB, symatC);
-  mcnla::blas::r2k(gematA.t(), gematB.t(), symatD);
+  mcnla::blas::copy(gematA, gematB);
+  mcnla::blas::copy(gematA.t(), gematC);
 
   std::cout << gematA << std::endl;
   std::cout << gematB << std::endl;
-  std::cout << symatC << std::endl;
-  std::cout << symatD << std::endl;
+  std::cout << gematC << std::endl;
 
   return 0;
 }

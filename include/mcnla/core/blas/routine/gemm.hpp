@@ -122,7 +122,7 @@ inline void gemm(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  blas3_module
+/// @ingroup  blas_module
 /// @brief  Computes a matrix-matrix product.
 ///
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>

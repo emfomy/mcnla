@@ -27,6 +27,6 @@
 #include <mcnla/core/blas/routine/syrk.hpp>
 #include <mcnla/core/blas/routine/syr2k.hpp>
 
-// #include <mcnla/core/blas/routine/omatcopy.hpp>
+#include <mcnla/core/blas/routine/omatcopy.hpp>
 
 #endif  // MCNLA_CORE_BLAS_ROUTINE_HPP_
