@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/reconstructor/reconstructor_base.ipp
-/// @brief   The implementation of iSVD reconstructor interface.
+/// @file    include/mcnla/isvd/former/former_base.ipp
+/// @brief   The implementation of iSVD former interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_RECONSTRUCTOR_BASE_IPP_
-#define MCNLA_ISVD_RECONSTRUCTOR_BASE_IPP_
+#ifndef MCNLA_ISVD_FORMER_BASE_IPP_
+#define MCNLA_ISVD_FORMER_BASE_IPP_
 
-#include <mcnla/isvd/reconstructor/reconstructor_base.hpp>
+#include <mcnla/isvd/former/former_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,7 +24,7 @@ namespace isvd {
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-ReconstructorBase<_Derived>::ReconstructorBase(
+FormerBase<_Derived>::FormerBase(
     const Parameters<ScalarType> &parameters
 ) noexcept : parameters_(parameters) {}
 
@@ -32,38 +32,38 @@ ReconstructorBase<_Derived>::ReconstructorBase(
 /// @brief  Initializes.
 ///
 template <class _Derived>
-void ReconstructorBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
+void FormerBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Reconstructs SVD.
 ///
 template <class _Derived>
-void ReconstructorBase<_Derived>::reconstruct(
+void FormerBase<_Derived>::form(
     const MatrixType &matrix_a,
     const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
-) noexcept { this->derived().reconstructImpl(matrix_a, matrix_qc); }
+) noexcept { this->derived().formImpl(matrix_a, matrix_qc); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getReconstructorName
+/// @copydoc  mcnla::isvd::Solver::getFormerName
 ///
 template <class _Derived>
-constexpr const char* ReconstructorBase<_Derived>::nvecame() const noexcept {
+constexpr const char* FormerBase<_Derived>::nvecame() const noexcept {
   return this->derived().nvecameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getReconstructorTime
+/// @copydoc  mcnla::isvd::Solver::getFormerTime
 ///
 template <class _Derived>
-double ReconstructorBase<_Derived>::getTime() const noexcept {
+double FormerBase<_Derived>::getTime() const noexcept {
   return this->derived().getTimeImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getReconstructorTimes
+/// @copydoc  mcnla::isvd::Solver::getFormerTimes
 ///
 template <class _Derived>
-const std::vector<double> ReconstructorBase<_Derived>::getTimes() const noexcept {
+const std::vector<double> FormerBase<_Derived>::getTimes() const noexcept {
   return this->derived().getTimesImpl();
 }
 
@@ -71,8 +71,8 @@ const std::vector<double> ReconstructorBase<_Derived>::getTimes() const noexcept
 /// @brief  Gets the vector S.
 ///
 template <class _Derived>
-const DenseVector<typename ReconstructorBase<_Derived>::RealScalarType>&
-    ReconstructorBase<_Derived>::getVectorS() const noexcept {
+const DenseVector<typename FormerBase<_Derived>::RealScalarType>&
+    FormerBase<_Derived>::getVectorS() const noexcept {
   return this->derived().getVectorSImpl();
 }
 
@@ -80,8 +80,8 @@ const DenseVector<typename ReconstructorBase<_Derived>::RealScalarType>&
 /// @brief  Gets the matrix U.
 ///
 template <class _Derived>
-const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLMAJOR>&
-    ReconstructorBase<_Derived>::getMatrixU() const noexcept {
+const DenseMatrix<typename FormerBase<_Derived>::ScalarType, Layout::COLMAJOR>&
+    FormerBase<_Derived>::getMatrixU() const noexcept {
   return this->derived().getMatrixUImpl();
 }
 
@@ -89,8 +89,8 @@ const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLM
 /// @brief  Gets the transpose of the matrix V.
 ///
 template <class _Derived>
-const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLMAJOR>&
-    ReconstructorBase<_Derived>::getMatrixVt() const noexcept {
+const DenseMatrix<typename FormerBase<_Derived>::ScalarType, Layout::COLMAJOR>&
+    FormerBase<_Derived>::getMatrixVt() const noexcept {
   return this->derived().getMatrixVtImpl();
 }
 
@@ -98,4 +98,4 @@ const DenseMatrix<typename ReconstructorBase<_Derived>::ScalarType, Layout::COLM
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_RECONSTRUCTOR_BASE_IPP_
+#endif  // MCNLA_ISVD_FORMER_BASE_IPP_

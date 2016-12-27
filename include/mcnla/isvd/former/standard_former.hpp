@@ -1,18 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/reconstructor/standard_reconstructor.hpp
-/// @brief   The standard reconstructor.
+/// @file    include/mcnla/isvd/former/standard_former.hpp
+/// @brief   The standard former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
-#define MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
+#ifndef MCNLA_ISVD_FORMER_STANDARD_FORMER_HPP_
+#define MCNLA_ISVD_FORMER_STANDARD_FORMER_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/core/blas.hpp>
 #include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/reconstructor/reconstructor_base.hpp>
+#include <mcnla/isvd/former/former_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,7 +25,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class StandardReconstructor;
+template <class _Matrix> class StandardFormer;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -36,12 +36,12 @@ template <class _Matrix> class StandardReconstructor;
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The standard reconstructor traits.
+/// The standard former traits.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<isvd::StandardReconstructor<_Matrix>> {
+struct Traits<isvd::StandardFormer<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
@@ -53,22 +53,22 @@ struct Traits<isvd::StandardReconstructor<_Matrix>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_reconstructor_module
+/// @ingroup  isvd_former_module
 ///
-/// The standard reconstructor.
+/// The standard former.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Matrix>> {
+class StandardFormer : public FormerBase<StandardFormer<_Matrix>> {
 
   static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
-  friend ReconstructorBase<StandardReconstructor<_Matrix>>;
+  friend FormerBase<StandardFormer<_Matrix>>;
 
  private:
 
-  using BaseType = ReconstructorBase<StandardReconstructor<_Matrix>>;
+  using BaseType = FormerBase<StandardFormer<_Matrix>>;
 
  public:
 
@@ -79,7 +79,7 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Standard Reconstructor";
+  static constexpr const char* name_= "Standard Former";
 
   /// The parameters.
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
@@ -129,7 +129,7 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
  public:
 
   // Constructor
-  inline StandardReconstructor( const Parameters<ScalarType> &parameters ) noexcept;
+  inline StandardFormer( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 
@@ -137,7 +137,7 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
   void initializeImpl() noexcept;
 
   // Reconstructs
-  void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
+  void formImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
   inline constexpr const char* nvecameImpl() const noexcept;
@@ -157,4 +157,4 @@ class StandardReconstructor : public ReconstructorBase<StandardReconstructor<_Ma
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_HPP_
+#endif  // MCNLA_ISVD_FORMER_STANDARD_FORMER_HPP_

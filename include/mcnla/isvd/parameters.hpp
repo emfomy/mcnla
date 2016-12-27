@@ -32,7 +32,7 @@ namespace isvd {
 template <typename _Scalar>
 class Parameters {
 
-  template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor> friend class Solver;
+  template <class _Matrix, class _Sketcher, class _Integrator, class _Former> friend class Solver;
 
  private:
 

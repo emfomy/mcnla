@@ -82,7 +82,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Create statistics collector
   StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frerr(num_test),
-                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
+                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_f(num_test), set_iter(num_test);
 
   // ====================================================================================================================== //
   // Initialize solver
@@ -90,14 +90,14 @@ int main( int argc, char **argv ) {
   mcnla::isvd::Solver<mcnla::matrix::DenseMatrix<ScalarType>,
                       mcnla::isvd::GaussianProjectionSketcher<mcnla::matrix::DenseMatrix<ScalarType>>,
                       mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>>,
-                      mcnla::isvd::StandardReconstructor<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
+                      mcnla::isvd::StandardFormer<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeed(seed);
   solver.setTolerance(tolerance).setMaxIteration(maxiter);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << solver.getSketcherName() << "." << std::endl;
     std::cout << "Uses " << solver.getIntegratorName() << "." << std::endl;
-    std::cout << "Uses " << solver.getReconstructorName() << "." << std::endl << std::endl;
+    std::cout << "Uses " << solver.getFormerName() << "." << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -131,16 +131,16 @@ int main( int argc, char **argv ) {
       auto maxiter = solver.getParameters().getMaxIteration();
       auto time_s = solver.getSketcherTime();
       auto time_i = solver.getIntegratorTime();
-      auto time_r = solver.getReconstructorTime();
-      auto time = time_s + time_i + time_r;
+      auto time_f = solver.getFormerTime();
+      auto time = time_s + time_i + time_f;
       std::cout << std::setw(log10(num_test)+1) << t
                 << " | validity: " << smax << " / " << smean << " / " << smin
                 << " | error: " << frerr
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
-                << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")" << std::endl;
+                << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_f << ")" << std::endl;
       if ( t >= 0 ) {
         set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
-        set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
+        set_time(time); set_time_s(time_s); set_time_f(time_f); set_time_i(time_i); set_iter(iter);
       }
     }
   }
@@ -151,7 +151,7 @@ int main( int argc, char **argv ) {
     std::cout << "Average total computing time: " << set_time.mean() << " seconds." << std::endl;
     std::cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << std::endl;
     std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
-    std::cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << std::endl;
+    std::cout << "Average forming time:         " << set_time_f.mean() << " seconds." << std::endl;
     std::cout << "mean(validity): max = " << set_smax.mean()
                            << ", mean = " << set_smean.mean()
                             << ", min = " << set_smin.mean() << std::endl;

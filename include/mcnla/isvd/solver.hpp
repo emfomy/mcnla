@@ -16,7 +16,7 @@
 #include <mcnla/isvd/parameters.hpp>
 #include <mcnla/isvd/sketcher.hpp>
 #include <mcnla/isvd/integrator.hpp>
-#include <mcnla/isvd/reconstructor.hpp>
+#include <mcnla/isvd/former.hpp>
 #include <mpi.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ namespace isvd {
 /// @tparam  _Matrix         The matrix type.
 /// @tparam  _Sketcher       The sketcher type.
 /// @tparam  _Integrator     The integrator type.
-/// @tparam  _Reconstructor  The reconstructor type.
+/// @tparam  _Former  The former type.
 ///
 /// @attention  The solver should have been @link initialize() initialized@endlink before calling #compute.
 /// @attention  The solver should be @link initialize() re-initialized@endlink after changing parameters.
@@ -45,7 +45,7 @@ namespace isvd {
 template <class _Matrix,
           class _Sketcher = GaussianProjectionSketcher<_Matrix>,
           class _Integrator = KolmogorovNagumoIntegrator<_Matrix>,
-          class _Reconstructor = StandardReconstructor<_Matrix>>
+          class _Former = StandardFormer<_Matrix>>
 class Solver {
 
   static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value,
@@ -54,14 +54,14 @@ class Solver {
                 "'_Sketcher' is not a sketcher!");
   static_assert(std::is_base_of<IntegratorBase<_Integrator>, _Integrator>::value,
                 "'_Integrator' is not a integrator!");
-  static_assert(std::is_base_of<ReconstructorBase<_Reconstructor>, _Reconstructor>::value,
-                "'_Reconstructor' is not a reconstructor!");
+  static_assert(std::is_base_of<FormerBase<_Former>, _Former>::value,
+                "'_Former' is not a former!");
 
   static_assert(std::is_same<_Matrix, typename _Sketcher::MatrixType>::value,
                 "The matrix type does not fit!");
   static_assert(std::is_same<_Matrix, typename _Integrator::MatrixType>::value,
                 "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, typename _Reconstructor::MatrixType>::value,
+  static_assert(std::is_same<_Matrix, typename _Former::MatrixType>::value,
                 "The matrix type does not fit!");
 
  public:
@@ -94,8 +94,8 @@ class Solver {
   /// The integrator.
   _Integrator integrator_;
 
-  /// The reconstructor.
-  _Reconstructor reconstructor_;
+  /// The former.
+  _Former former_;
 
  public:
 
@@ -111,15 +111,15 @@ class Solver {
   // Gets name
   inline constexpr const char* getSketcherName() const noexcept;
   inline constexpr const char* getIntegratorName() const noexcept;
-  inline constexpr const char* getReconstructorName() const noexcept;
+  inline constexpr const char* getFormerName() const noexcept;
 
   // Gets compute time
   inline double getSketcherTime() const noexcept;
   inline double getIntegratorTime() const noexcept;
-  inline double getReconstructorTime() const noexcept;
+  inline double getFormerTime() const noexcept;
   inline const std::vector<double> getSketcherTimes() const noexcept;
   inline const std::vector<double> getIntegratorTimes() const noexcept;
-  inline const std::vector<double> getReconstructorTimes() const noexcept;
+  inline const std::vector<double> getFormerTimes() const noexcept;
 
   // Gets iterator number
   inline index_t getIntegratorIter() const noexcept;

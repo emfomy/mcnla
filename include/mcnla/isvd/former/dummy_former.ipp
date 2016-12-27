@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/reconstructor/dummy_reconstructor.ipp
-/// @brief   The implementation of dummy reconstructor.
+/// @file    include/mcnla/isvd/former/dummy_former.ipp
+/// @brief   The implementation of dummy former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_IPP_
-#define MCNLA_ISVD_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_IPP_
+#ifndef MCNLA_ISVD_FORMER_DUMMY_FORMER_IPP_
+#define MCNLA_ISVD_FORMER_DUMMY_FORMER_IPP_
 
-#include <mcnla/isvd/reconstructor/dummy_reconstructor.hpp>
+#include <mcnla/isvd/former/dummy_former.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -21,69 +21,69 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::ReconstructorBase
+/// @copydoc  mcnla::isvd::FormerBase::FormerBase
 ///
 template <class _Matrix>
-DummyReconstructor<_Matrix>::DummyReconstructor(
+DummyFormer<_Matrix>::DummyFormer(
     const Parameters<ScalarType> &parameters
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::initialize
+/// @copydoc  mcnla::isvd::FormerBase::initialize
 ///
 template <class _Matrix>
-void DummyReconstructor<_Matrix>::initializeImpl() noexcept {}
+void DummyFormer<_Matrix>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::reconstruct
+/// @copydoc  mcnla::isvd::FormerBase::form
 ///
 template <class _Matrix>
-void DummyReconstructor<_Matrix>::reconstructImpl(
+void DummyFormer<_Matrix>::formImpl(
     const _Matrix &matrix_a,
     const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
 ) noexcept { static_cast<void>(matrix_a); static_cast<void>(matrix_qc); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::nvecame
+/// @copydoc  mcnla::isvd::FormerBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* DummyReconstructor<_Matrix>::nvecameImpl() const noexcept {
+constexpr const char* DummyFormer<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getTime
+/// @copydoc  mcnla::isvd::FormerBase::getTime
 ///
 template <class _Matrix>
-double DummyReconstructor<_Matrix>::getTimeImpl() const noexcept {
+double DummyFormer<_Matrix>::getTimeImpl() const noexcept {
   return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getTimes
+/// @copydoc  mcnla::isvd::FormerBase::getTimes
 ///
 template <class _Matrix>
-const std::vector<double> DummyReconstructor<_Matrix>::getTimesImpl() const noexcept {
+const std::vector<double> DummyFormer<_Matrix>::getTimesImpl() const noexcept {
   return {};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  DummyReconstructor::getVectorSImpl
-/// @copydoc  mcnla::isvd::ReconstructorBase::getVectorS
+/// @fn  DummyFormer::getVectorSImpl
+/// @copydoc  mcnla::isvd::FormerBase::getVectorS
 ///
 /// @attention  This routine is not available.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  DummyReconstructor::getMatrixUImpl
-/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixU
+/// @fn  DummyFormer::getMatrixUImpl
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixU
 ///
 /// @attention  This routine is not available.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  DummyReconstructor::getMatrixVtImpl
-/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixVt
+/// @fn  DummyFormer::getMatrixVtImpl
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixVt
 ///
 /// @attention  This routine is not available.
 ///
@@ -92,4 +92,4 @@ const std::vector<double> DummyReconstructor<_Matrix>::getTimesImpl() const noex
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_IPP_
+#endif  // MCNLA_ISVD_FORMER_DUMMY_FORMER_IPP_

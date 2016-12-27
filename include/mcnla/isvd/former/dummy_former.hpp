@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/reconstructor/dummy_reconstructor.hpp
-/// @brief   The dummy reconstructor.
+/// @file    include/mcnla/isvd/former/dummy_former.hpp
+/// @brief   The dummy former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_HPP_
-#define MCNLA_ISVD_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_HPP_
+#ifndef MCNLA_ISVD_FORMER_DUMMY_FORMER_HPP_
+#define MCNLA_ISVD_FORMER_DUMMY_FORMER_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/reconstructor/reconstructor_base.hpp>
+#include <mcnla/isvd/former/former_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class DummyReconstructor;
+template <class _Matrix> class DummyFormer;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -34,12 +34,12 @@ template <class _Matrix> class DummyReconstructor;
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dummy reconstructor traits.
+/// The dummy former traits.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-struct Traits<isvd::DummyReconstructor<_Matrix>> {
+struct Traits<isvd::DummyFormer<_Matrix>> {
   using MatrixType = _Matrix;
 };
 
@@ -51,22 +51,22 @@ struct Traits<isvd::DummyReconstructor<_Matrix>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_reconstructor_module
+/// @ingroup  isvd_former_module
 ///
-/// The dummy reconstructor.
+/// The dummy former.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>> {
+class DummyFormer : public FormerBase<DummyFormer<_Matrix>> {
 
   static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
-  friend ReconstructorBase<DummyReconstructor<_Matrix>>;
+  friend FormerBase<DummyFormer<_Matrix>>;
 
  private:
 
-  using BaseType = ReconstructorBase<DummyReconstructor<_Matrix>>;
+  using BaseType = FormerBase<DummyFormer<_Matrix>>;
 
  public:
 
@@ -77,7 +77,7 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Dummy Reconstructor";
+  static constexpr const char* name_= "Dummy Former";
 
   /// The parameters.
   const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
@@ -85,7 +85,7 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
  public:
 
   // Constructor
-  inline DummyReconstructor( const Parameters<ScalarType> &parameters ) noexcept;
+  inline DummyFormer( const Parameters<ScalarType> &parameters ) noexcept;
 
  protected:
 
@@ -93,7 +93,7 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
   void initializeImpl() noexcept;
 
   // Reconstructs
-  void reconstructImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
+  void formImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
   inline constexpr const char* nvecameImpl() const noexcept;
@@ -113,4 +113,4 @@ class DummyReconstructor : public ReconstructorBase<DummyReconstructor<_Matrix>>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_RECONSTRUCTOR_DUMMY_RECONSTRUCTOR_HPP_
+#endif  // MCNLA_ISVD_FORMER_DUMMY_FORMER_HPP_

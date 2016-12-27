@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/reconstructor/standard_reconstructor.ipp
-/// @brief   The implementation of standard reconstructor.
+/// @file    include/mcnla/isvd/former/standard_former.ipp
+/// @brief   The implementation of standard former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_IPP_
-#define MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_IPP_
+#ifndef MCNLA_ISVD_FORMER_STANDARD_FORMER_IPP_
+#define MCNLA_ISVD_FORMER_STANDARD_FORMER_IPP_
 
-#include <mcnla/isvd/reconstructor/standard_reconstructor.hpp>
+#include <mcnla/isvd/former/standard_former.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -21,18 +21,18 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::ReconstructorBase
+/// @copydoc  mcnla::isvd::FormerBase::FormerBase
 ///
 template <class _Matrix>
-StandardReconstructor<_Matrix>::StandardReconstructor(
+StandardFormer<_Matrix>::StandardFormer(
     const Parameters<ScalarType> &parameters
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::initialize
+/// @copydoc  mcnla::isvd::FormerBase::initialize
 ///
 template <class _Matrix>
-void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
+void StandardFormer<_Matrix>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
@@ -74,10 +74,10 @@ void StandardReconstructor<_Matrix>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::reconstruct
+/// @copydoc  mcnla::isvd::FormerBase::form
 ///
 template <class _Matrix>
-void StandardReconstructor<_Matrix>::reconstructImpl(
+void StandardFormer<_Matrix>::formImpl(
     const _Matrix &matrix_a,
     const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
 ) noexcept {
@@ -110,55 +110,55 @@ void StandardReconstructor<_Matrix>::reconstructImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::nvecame
+/// @copydoc  mcnla::isvd::FormerBase::nvecame
 ///
 template <class _Matrix>
-constexpr const char* StandardReconstructor<_Matrix>::nvecameImpl() const noexcept {
+constexpr const char* StandardFormer<_Matrix>::nvecameImpl() const noexcept {
   return name_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getTime
+/// @copydoc  mcnla::isvd::FormerBase::getTime
 ///
 template <class _Matrix>
-double StandardReconstructor<_Matrix>::getTimeImpl() const noexcept {
+double StandardFormer<_Matrix>::getTimeImpl() const noexcept {
   return time3_-time0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getTimes
+/// @copydoc  mcnla::isvd::FormerBase::getTimes
 ///
 template <class _Matrix>
-const std::vector<double> StandardReconstructor<_Matrix>::getTimesImpl() const noexcept {
+const std::vector<double> StandardFormer<_Matrix>::getTimesImpl() const noexcept {
   return {time1_-time0_, time2_-time1_, time3_-time2_};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getVectorS
+/// @copydoc  mcnla::isvd::FormerBase::getVectorS
 ///
 template <class _Matrix>
-const DenseVector<typename StandardReconstructor<_Matrix>::RealScalarType>&
-    StandardReconstructor<_Matrix>::getVectorSImpl() const noexcept {
+const DenseVector<typename StandardFormer<_Matrix>::RealScalarType>&
+    StandardFormer<_Matrix>::getVectorSImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return vector_s_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixU
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixU
 ///
 template <class _Matrix>
-const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&
-    StandardReconstructor<_Matrix>::getMatrixUImpl() const noexcept {
+const DenseMatrix<typename StandardFormer<_Matrix>::ScalarType, Layout::COLMAJOR>&
+    StandardFormer<_Matrix>::getMatrixUImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return matrix_u_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ReconstructorBase::getMatrixVt
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixVt
 ///
 template <class _Matrix>
-const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::COLMAJOR>&
-    StandardReconstructor<_Matrix>::getMatrixVtImpl() const noexcept {
+const DenseMatrix<typename StandardFormer<_Matrix>::ScalarType, Layout::COLMAJOR>&
+    StandardFormer<_Matrix>::getMatrixVtImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return matrix_vt_cut_;
 }
@@ -167,4 +167,4 @@ const DenseMatrix<typename StandardReconstructor<_Matrix>::ScalarType, Layout::C
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_RECONSTRUCTOR_STANDARD_RECONSTRUCTOR_IPP_
+#endif  // MCNLA_ISVD_FORMER_STANDARD_FORMER_IPP_

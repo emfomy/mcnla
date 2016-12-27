@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/reconstructor/reconstructor_base.hpp
-/// @brief   The iSVD reconstructor interface.
+/// @file    include/mcnla/isvd/former/former_base.hpp
+/// @brief   The iSVD former interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_RECONSTRUCTOR_RECONSTRUCTOR_BASE_HPP_
-#define MCNLA_ISVD_RECONSTRUCTOR_RECONSTRUCTOR_BASE_HPP_
+#ifndef MCNLA_ISVD_FORMER_FORMER_BASE_HPP_
+#define MCNLA_ISVD_FORMER_FORMER_BASE_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
@@ -24,14 +24,14 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_reconstructor_module
+/// @ingroup  isvd_former_module
 ///
-/// The interface of iSVD reconstructor.
+/// The interface of iSVD former.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class ReconstructorBase : public utility::CrtpBase<_Derived, ReconstructorBase<_Derived>> {
+class FormerBase : public utility::CrtpBase<_Derived, FormerBase<_Derived>> {
 
  public:
 
@@ -47,7 +47,7 @@ class ReconstructorBase : public utility::CrtpBase<_Derived, ReconstructorBase<_
  protected:
 
   // Constructor
-  inline ReconstructorBase( const Parameters<ScalarType> &parameters ) noexcept;
+  inline FormerBase( const Parameters<ScalarType> &parameters ) noexcept;
 
  public:
 
@@ -55,7 +55,7 @@ class ReconstructorBase : public utility::CrtpBase<_Derived, ReconstructorBase<_
   inline void initialize() noexcept;
 
   // Reconstructs
-  inline void reconstruct( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
+  inline void form( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
   inline constexpr const char* nvecame() const noexcept;
@@ -75,4 +75,4 @@ class ReconstructorBase : public utility::CrtpBase<_Derived, ReconstructorBase<_
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_RECONSTRUCTOR_RECONSTRUCTOR_BASE_HPP_
+#endif  // MCNLA_ISVD_FORMER_FORMER_BASE_HPP_

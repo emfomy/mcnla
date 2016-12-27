@@ -25,7 +25,7 @@ void createA( const int m0, const int n, const int k, double *matrix_a, double *
 void sketch( const int Nj, const int m, const int m0, const int n, const int k, const int q,
              const double *matrix_a, double *matrices_qjt, int seed[4] );
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter );
-void reconstruct( const int m0, const int n, const int k,
+void form( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
 void check_u( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
               double &smax, double &smin, double &smean );
@@ -99,7 +99,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Create statistics collector
   StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frerr(num_test),
-                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_r(num_test), set_iter(num_test);
+                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_f(num_test), set_iter(num_test);
 
   // ====================================================================================================================== //
   // Generate matrix
@@ -118,7 +118,7 @@ int main( int argc, char **argv ) {
   }
 
   for ( auto t = -skip_test; t < num_test; ++t ) {
-    double smax, smin, smean, frerr, time, time_s = 0.0, time_i = 0.0, time_r = 0.0; int iter;
+    double smax, smin, smean, frerr, time, time_s = 0.0, time_i = 0.0, time_f = 0.0; int iter;
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -145,11 +145,11 @@ int main( int argc, char **argv ) {
 
     // ================================================================================================================== //
     // Reconstruct SVD
-    if ( verbose && mpi_rank == 0 ) { cout << "Reconstructing ................. " << flush; }
+    if ( verbose && mpi_rank == 0 ) { cout << "Forming ................. " << flush; }
     if ( mpi_rank == 0 ) {
-      time_r = MPI_Wtime();
-      reconstruct(m0, n, k, matrix_a, matrix_qt, matrix_u, matrix_vt, vector_s);
-      time_r = MPI_Wtime() - time_r;
+      time_f = MPI_Wtime();
+      form(m0, n, k, matrix_a, matrix_qt, matrix_u, matrix_vt, vector_s);
+      time_f = MPI_Wtime() - time_f;
     }
     if ( verbose && mpi_rank == 0 ) { cout << "done" << endl; }
 
@@ -161,15 +161,15 @@ int main( int argc, char **argv ) {
       check_u(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
       check(m0, n, k, matrix_a, matrix_u, matrix_vt, vector_s, frerr);
 
-      time = time_s + time_i + time_r;
+      time = time_s + time_i + time_f;
       cout << setw(log10(num_test)+1) << t
                 << " | validity: " << smax << " / " << smean << " / " << smin
                 << " | error: " << frerr
-                << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_r << ")"
+                << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_f << ")"
                 << " | iter: " << setw(log10(maxiter)+1) << iter << endl;
       if ( t >= 0 ) {
         set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
-        set_time(time); set_time_s(time_s); set_time_r(time_r); set_time_i(time_i); set_iter(iter);
+        set_time(time); set_time_s(time_s); set_time_f(time_f); set_time_i(time_i); set_iter(iter);
       }
     }
   }
@@ -180,7 +180,7 @@ int main( int argc, char **argv ) {
     cout << "Average total computing time: " << set_time.mean()   << " seconds." << endl;
     cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << endl;
     cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << endl;
-    cout << "Average reconstructing time:  " << set_time_r.mean() << " seconds." << endl;
+    cout << "Average forming time:         " << set_time_f.mean() << " seconds." << endl;
     cout << "mean(validity): max = " << set_smax.mean()
                       << ", mean = " << set_smean.mean()
                        << ", min = " << set_smin.mean() << endl;
@@ -390,7 +390,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
   free(vector_e);
 }
 
-void reconstruct( const int m0, const int n, const int k,
+void form( const int m0, const int n, const int k,
                   const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s ) {
   auto matrix_w   = static_cast<double*>(malloc(k * k * sizeof(double)));
   auto vector_tmp = static_cast<double*>(malloc(k     * sizeof(double)));

@@ -23,22 +23,22 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Solver(
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>::Solver(
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
   : parameters_(mpi_comm, mpi_root),
     sketcher_(parameters_, seed_),
     integrator_(parameters_),
-    reconstructor_(parameters_) {}
+    former_(parameters_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.
 /// Broadcasts the parameters to all MPI ranks and allocates the memories.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+void Solver<_Matrix, _Sketcher, _Integrator, _Former>::initialize() noexcept {
   MPI_Bcast(&parameters_, sizeof(parameters_), MPI_BYTE, mpi_root_, mpi_comm_);
 
   mcnla_assert_ge(parameters_.ncol(), parameters_.nrow());
@@ -52,7 +52,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 
   sketcher_.initialize();
   integrator_.initialize();
-  reconstructor_.initialize();
+  former_.initialize();
 
   parameters_.initialized_ = true;
 }
@@ -63,8 +63,8 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::initialize() noexc
 /// @attention  The solver should have be initialized.
 /// @attention  @a matrix_a should be the same in each MPI node.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Matrix &matrix_a ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+void Solver<_Matrix, _Sketcher, _Integrator, _Former>::compute( const _Matrix &matrix_a ) noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   mcnla_assert_eq(matrix_a.sizes(), std::make_pair(parameters_.nrow(), parameters_.ncol()));
 
@@ -72,7 +72,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
 
   integrator_.integrate();
 
-  reconstructor_.reconstruct(matrix_a, integrator_.getMatrixQbar());
+  former_.reconstruct(matrix_a, integrator_.getMatrixQbar());
 
   parameters_.computed_ = true;
 }
@@ -80,32 +80,32 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::compute( const _Ma
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the name of the sketcher.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherName() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getSketcherName() const noexcept {
   return sketcher_.nvecame();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the name of the integrator.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorName() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratorName() const noexcept {
   return integrator_.nvecame();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the name of the reconstructor.
+/// @brief  Gets the name of the former.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorName() const noexcept {
-  return reconstructor_.nvecame();
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getFormerName() const noexcept {
+  return former_.nvecame();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of running sketcher.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTime() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+double Solver<_Matrix, _Sketcher, _Integrator, _Former>::getSketcherTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return sketcher_.getTime();
 }
@@ -113,26 +113,26 @@ double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTime(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of running integrator.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTime() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+double Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratorTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.getTime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the time of running reconstructor.
+/// @brief  Gets the time of running former.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-double Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorTime() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+double Solver<_Matrix, _Sketcher, _Integrator, _Former>::getFormerTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return reconstructor_.getTime();
+  return former_.getTime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the times of running each steps of sketcher.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSketcherTimes() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Former>::getSketcherTimes() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return sketcher_.getTimes();
 }
@@ -140,19 +140,19 @@ const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the times of running each steps of integrator.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorTimes() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratorTimes() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.getTimes();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the times of running each steps of reconstructor.
+/// @brief  Gets the times of running each steps of former.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getReconstructorTimes() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Former>::getFormerTimes() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return reconstructor_.getTimes();
+  return former_.getTimes();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,8 +160,8 @@ const std::vector<double> Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor
 ///
 /// @attention  The solver should have be computed.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-index_t Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorIter() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+index_t Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratorIter() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.getIter();
 }
@@ -171,11 +171,11 @@ index_t Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratorIt
 ///
 /// @attention  The solver should have be computed.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::RealScalarType>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getSingularValues() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::RealScalarType>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::getSingularValues() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return reconstructor_.getVectorS();
+  return former_.getVectorS();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,11 +183,11 @@ const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 ///
 /// @attention  The solver should have be computed.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getLeftSingularVectors() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::ScalarType, Layout::COLMAJOR>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::getLeftSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return reconstructor_.getMatrixU();
+  return former_.getMatrixU();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,11 +195,11 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 ///
 /// @attention  The solver should have be computed.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::COLMAJOR>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getRightSingularVectors() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::ScalarType, Layout::COLMAJOR>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::getRightSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
-  return reconstructor_.getMatrixVt();
+  return former_.getMatrixVt();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,9 +207,9 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 ///
 /// @attention  The solver should have be computed.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ScalarType, Layout::ROWMAJOR>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getIntegratedOrthonormalBasis() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::ScalarType, Layout::ROWMAJOR>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratedOrthonormalBasis() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.getMatrixQbar();
 }
@@ -219,9 +219,9 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructo
 ///
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::ParametersType&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::getParameters() const noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+const typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::ParametersType&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::getParameters() const noexcept {
   mcnla_assert_true(mpi::isCommRoot(mpi_root_, mpi_comm_));
   return parameters_;
 }
@@ -231,9 +231,9 @@ const typename Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::Paramete
 ///
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSize( const index_t nrow, const index_t ncol ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setSize( const index_t nrow, const index_t ncol ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.nrow_ = nrow; parameters_.ncol_ = ncol;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
@@ -242,9 +242,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  setSize
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSize( const _Matrix &matrix ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setSize( const _Matrix &matrix ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   return setSize(matrix.nrow(), matrix.ncol());
 }
@@ -254,9 +254,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ///
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setRank( const index_t rank ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setRank( const index_t rank ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.rank_ = rank;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
@@ -267,9 +267,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ///
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setOverRank( const index_t over_rank ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setOverRank( const index_t over_rank ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.over_rank_ = over_rank;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
@@ -281,9 +281,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 /// @attention  @a num_sketch must be a multiple of #mpi_size_.
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketch( const index_t num_sketch ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setNumSketch( const index_t num_sketch ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.num_sketch_each_ = num_sketch / parameters_.mpi_rank_;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
@@ -294,9 +294,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ///
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setNumSketchEach( const index_t num_sketch_each ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setNumSketchEach( const index_t num_sketch_each ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.num_sketch_each_ = num_sketch_each;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
@@ -307,9 +307,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ///
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setMaxIteration( const index_t max_iteration ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setMaxIteration( const index_t max_iteration ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.max_iteration_ = max_iteration;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
@@ -320,9 +320,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ///
 /// @attention  Only affects on root rank.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setTolerance( const RealScalarType tolerance ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setTolerance( const RealScalarType tolerance ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.tolerance_ = tolerance;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
@@ -331,9 +331,9 @@ Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the random seed.
 ///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor>
-Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Reconstructor>::setSeed( const index_t seed[4] ) noexcept {
+template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
+Solver<_Matrix, _Sketcher, _Integrator, _Former>&
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setSeed( const index_t seed[4] ) noexcept {
   for ( index_t i = 0; i < 4; ++i ) {
     seed_[i] = seed[i];
   }

@@ -18,6 +18,6 @@
 
 #include <mcnla/isvd/sketcher.hpp>
 #include <mcnla/isvd/integrator.hpp>
-#include <mcnla/isvd/reconstructor.hpp>
+#include <mcnla/isvd/former.hpp>
 
 #endif  // MCNLA_ISVD_HPP_
