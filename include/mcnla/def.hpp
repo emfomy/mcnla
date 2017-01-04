@@ -74,11 +74,7 @@ using index_t = std::int64_t;
 #endif
 
 /// The type of size.
-#ifndef MCNLA_USE_ILP64
-using size_t = std::uint32_t;
-#else
-using size_t = std::uint64_t;
-#endif
+using size_t = std::size_t;
 
 /// The format width
 static constexpr size_t ios_width = 14;

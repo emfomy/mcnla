@@ -13,6 +13,8 @@
 #include <mcnla/core/matrix/set/matrix_set_wrapper.hpp>
 #include <mcnla/core/matrix/set/matrix_set_wrapper.ipp>
 
+#include <mcnla/core/matrix/set/dense_matrix_set_102.hpp>
+#include <mcnla/core/matrix/set/dense_matrix_set_102.ipp>
 #include <mcnla/core/matrix/set/dense_matrix_set_120.hpp>
 #include <mcnla/core/matrix/set/dense_matrix_set_120.ipp>
 

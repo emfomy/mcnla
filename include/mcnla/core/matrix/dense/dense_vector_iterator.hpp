@@ -38,9 +38,6 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator traits.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Vector  The vector type.
-///
 template <typename _Scalar, class _Vector>
 struct Traits<matrix::DenseVectorIteratorBase<_Scalar, _Vector>> {
   static constexpr index_t ndim = 1;

@@ -190,6 +190,22 @@ const DenseSymmetricMatrix<_Scalar, changeTrans(_trans), _uplo>&
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the general view of the matrix.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseMatrix<_Scalar, _trans>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::viewGeneral() noexcept {
+  return static_cast<GeneralType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewGeneral
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const DenseMatrix<_Scalar, _trans>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::viewGeneral() const noexcept {
+  return static_cast<const GeneralType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>

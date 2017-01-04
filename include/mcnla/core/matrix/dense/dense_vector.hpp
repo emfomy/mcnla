@@ -42,8 +42,6 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector traits.
 ///
-/// @tparam  _Scalar  The scalar type.
-///
 template <typename _Scalar>
 struct Traits<matrix::DenseVector<_Scalar>> {
   static constexpr index_t ndim = 1;

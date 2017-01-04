@@ -38,7 +38,7 @@ namespace traits {
 /// The dense matrix iterator traits.
 ///
 /// @tparam  _Scalar  The scalar type.
-/// @tparam  _trans  The storage layout.
+/// @tparam  _trans   The transpose storage layout.
 /// @tparam  _Matrix  The matrix type.
 ///
 template <typename _Scalar, Trans _trans, class _Matrix>

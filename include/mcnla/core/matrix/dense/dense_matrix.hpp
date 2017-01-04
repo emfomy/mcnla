@@ -48,8 +48,6 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix traits.
 ///
-/// @tparam  _Scalar  The scalar type.
-///
 template <typename _Scalar, Trans _trans>
 struct Traits<matrix::DenseMatrix<_Scalar, _trans>> {
 
@@ -75,6 +73,7 @@ namespace matrix {
 /// The dense matrix class.
 ///
 /// @tparam  _Scalar  The scalar type.
+/// @tparam  _trans   The transpose storage layout.
 ///
 template <typename _Scalar, Trans _trans = Trans::NORMAL>
 class DenseMatrix

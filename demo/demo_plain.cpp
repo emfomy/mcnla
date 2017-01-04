@@ -280,6 +280,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
   auto matrix_xjt = static_cast<double*>(malloc(k * mj    * sizeof(double)));
   auto matrix_tmp = static_cast<double*>(malloc(k * mj    * sizeof(double)));
   auto vector_e   = static_cast<double*>(malloc(k         * sizeof(double)));
+  auto vector_f   = static_cast<double*>(malloc(k         * sizeof(double)));
 
   bool is_converged = false;
 
@@ -320,41 +321,31 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
-    // B := I/4 - sum( Xj'*Xj )
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, -1.0, matrix_xjt, k, 0.0, matrix_d, k);
-    MPI_Allreduce(matrix_d, matrix_b, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-    for ( auto i = 0; i < k; ++i ) {
-      matrix_b[i+i*k] += 0.25;
-    }
-
-    // Compute the eigen-decomposition of B (E := eigenvalues, B := eigenvectors)
-    LAPACKE_dsyev(LAPACK_COL_MAJOR, 'V', 'L', k, matrix_b, k, vector_e);
-
-    // B *= E^(1/4)
-    for ( auto i = 0; i < k; ++i ) {
-      cblas_dscal(k, pow(vector_e[i], 0.25), matrix_b+i*k, 1);
-    }
-
-    // D := I/2 + B*B'
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, k, 1.0, matrix_b, k, 0.0, matrix_d, k);
-    for ( auto i = 0; i < k; ++i ) {
-      matrix_d[i+i*k] += 0.5;
-    }
+    // D := sum( Xj'*Xj )
+    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, -1.0, matrix_xjt, k, 0.0, matrix_b, k);
+    MPI_Allreduce(matrix_b, matrix_d, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
     // Compute the eigen-decomposition of D (E := eigenvalues, D := eigenvectors)
     LAPACKE_dsyev(LAPACK_COL_MAJOR, 'V', 'L', k, matrix_d, k, vector_e);
 
+    // E := sqrt( I/2 - sqrt( I/4 - E ) )
+    // F := sqrt( E )
+    for ( auto i = 0; i < k; ++i ) {
+      vector_e[i] = sqrt(0.5 + sqrt(0.25 - vector_e[i]));
+      vector_f[i] = sqrt(vector_e[i]);
+    }
+
     // B := D
     cblas_dcopy(k*k, matrix_d, 1, matrix_b, 1);
 
-    // D *= E^(1/4)
+    // D *= F
     for ( auto i = 0; i < k; ++i ) {
-      cblas_dscal(k, pow(vector_e[i], 0.25), matrix_d+i*k, 1);
+      cblas_dscal(k, vector_f[i], matrix_d+i*k, 1);
     }
 
-    // B /= E^(1/4)
+    // B /= F
     for ( auto i = 0; i < k; ++i ) {
-      cblas_dscal(k, pow(vector_e[i], -0.25), matrix_b+i*k, 1);
+      cblas_dscal(k, 1/vector_f[i], matrix_b+i*k, 1);
     }
 
     // C *= D * D'
@@ -376,7 +367,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // ================================================================================================================== //
     // Check convergence
     for ( auto i = 0; i < k; ++i ) {
-      vector_e[i] = sqrt(vector_e[i]) - 1.0;
+      vector_e[i] = vector_e[i] - 1.0;
     }
     is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tolerance);
   }

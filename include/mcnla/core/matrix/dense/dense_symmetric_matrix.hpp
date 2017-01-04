@@ -13,6 +13,7 @@
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,8 +40,6 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix traits.
 ///
-/// @tparam  _Scalar  The scalar type.
-///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 struct Traits<matrix::DenseSymmetricMatrix<_Scalar, _trans, _uplo>> {
 
@@ -65,6 +64,8 @@ namespace matrix {
 /// The dense symmetric matrix class.
 ///
 /// @tparam  _Scalar  The scalar type.
+/// @tparam  _trans   The transpose storage layout.
+/// @tparam  _uplo    The triangular storage layout.
 ///
 template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER>
 class DenseSymmetricMatrix
@@ -89,6 +90,8 @@ class DenseSymmetricMatrix
   using ComplexType    = DenseSymmetricMatrix<ComplexScalar<_Scalar>, _trans, _uplo>;
 
   using TransposeType  = DenseSymmetricMatrix<_Scalar, changeTrans(_trans), _uplo>;
+
+  using GeneralType    = DenseMatrix<_Scalar, _trans>;
 
  private:
 
@@ -125,6 +128,10 @@ class DenseSymmetricMatrix
   // Transpose
   inline       TransposeType& t() noexcept;
   inline const TransposeType& t() const noexcept;
+
+  // Change view
+  inline       GeneralType& viewGeneral() noexcept;
+  inline const GeneralType& viewGeneral() const noexcept;
 
  protected:
 

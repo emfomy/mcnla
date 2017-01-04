@@ -39,8 +39,6 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix traits.
 ///
-/// @tparam  _Scalar  The scalar type.
-///
 template <typename _Scalar>
 struct Traits<matrix::DenseDiagonalMatrix<_Scalar>> {
 
