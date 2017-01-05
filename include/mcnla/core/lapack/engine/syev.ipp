@@ -57,7 +57,10 @@ SyevEngine<_Matrix, _jobz>::SyevEngine(
 /// @copydoc  compute
 ///
 template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
-void SyevEngine<_Matrix, _jobz>::operator()( _TypeA &&a, _TypeW &&w ) noexcept {
+void SyevEngine<_Matrix, _jobz>::operator()(
+    _TypeA &&a,
+    _TypeW &&w
+) const noexcept {
   compute(a, w);
 }
 
@@ -65,7 +68,10 @@ void SyevEngine<_Matrix, _jobz>::operator()( _TypeA &&a, _TypeW &&w ) noexcept {
 /// @brief  Computes eigenvalues only.
 ///
 template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
-void SyevEngine<_Matrix, _jobz>::computeValues( _TypeA &&a, _TypeW &&w ) noexcept {
+void SyevEngine<_Matrix, _jobz>::computeValues(
+    _TypeA &&a,
+    _TypeW &&w
+) const noexcept {
   compute<'N'>(a, w);
 }
 
@@ -129,7 +135,7 @@ template <class _Matrix, JobOption _jobz> template <JobOption __jobz>
 void SyevEngine<_Matrix, _jobz>::compute(
     MatrixType &a,
     RealVectorType &w
-) noexcept {
+) const noexcept {
   mcnla_assert_gt(size_, 0);
   mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
   mcnla_assert_eq(w.length(), a.nrow());

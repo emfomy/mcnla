@@ -60,7 +60,12 @@ inline void gesvd(
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <JobOption _jobu, JobOption _jobvt, class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
-inline void gesvd( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept {
+inline void gesvd(
+    _TypeA &&a,
+    _TypeS &&s,
+    _TypeU &&u,
+    _TypeVt &&vt
+) noexcept {
   detail::gesvdImpl<_jobu, _jobvt>(a, s, u, vt);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

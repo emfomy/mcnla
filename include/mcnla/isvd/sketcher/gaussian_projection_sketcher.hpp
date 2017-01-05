@@ -10,7 +10,6 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <cstdlib>
 #include <mcnla/core/blas.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
@@ -49,7 +48,7 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
 
  public:
 
-  using ScalarType = ScalarT<_Matrix>;
+  using ScalarType  = ScalarT<_Matrix>;
   using MatrixAType = _Matrix;
   using SetYType    = DenseMatrixSet120<ScalarType>;
 
@@ -80,6 +79,13 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
   // Constructor
   inline Sketcher( const Parameters<ScalarType> &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
+  // Gets time
+  inline double time1() const noexcept;
+  inline double time2() const noexcept;
+
+  // Sets seed
+  Sketcher& setSeed( const index_t seed[4] ) noexcept;
+
  protected:
 
   // Initializes
@@ -93,10 +99,6 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
 
   // Gets time
   inline double timeImpl() const noexcept;
-  inline double time1() const noexcept;
-  inline double time2() const noexcept;
-
-  Sketcher& setSeed( const index_t seed[4] ) noexcept;
 
 };
 

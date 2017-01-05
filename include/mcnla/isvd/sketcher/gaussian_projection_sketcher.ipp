@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_IPP_
 
 #include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hpp>
-#include <omp.h>
+#include <ctime>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -31,8 +31,8 @@ Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketche
     const mpi_int_t mpi_root
 ) noexcept
   : BaseType(parameters, mpi_comm, mpi_root),
-    seed_{(rand()^mpi::commRank(mpi_comm))%4096, (rand()^mpi::commRank(mpi_comm))%4096,
-          (rand()^mpi::commRank(mpi_comm))%4096, ((rand()^mpi::commRank(mpi_comm))%2048)*2+1} {}
+    seed_{(time(NULL)^mpi::commRank(mpi_comm))%4096, (time(NULL)^mpi::commRank(mpi_comm))%4096,
+          (time(NULL)^mpi::commRank(mpi_comm))%4096, ((time(NULL)^mpi::commRank(mpi_comm))%2048)*2+1} {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize

@@ -41,7 +41,10 @@ inline void syev(
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <JobOption _jobz, Uplo _uplo = Uplo::LOWER, class _TypeA, class _TypeW>
-inline void syev( _TypeA &&a, _TypeW &&w ) noexcept {
+inline void syev(
+    _TypeA &&a,
+    _TypeW &&w
+) noexcept {
   syev<_jobz, _uplo>(a, w);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

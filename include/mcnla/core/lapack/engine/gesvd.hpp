@@ -78,11 +78,11 @@ class GesvdEngine {
 
   // Operators
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
-  inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
+  inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) const noexcept;
 
   // Computes eigenvalues
   template <class _TypeA, class _TypeS>
-  inline void computeValues( _TypeA &&a, _TypeS &&s ) noexcept;
+  inline void computeValues( _TypeA &&a, _TypeS &&s ) const noexcept;
 
   // Resizes
   template <typename... Args>
@@ -101,7 +101,7 @@ class GesvdEngine {
 
   // Computes
   template <JobOption __jobu = _jobu, JobOption __jobvt = _jobvt>
-  inline void compute( MatrixType &a, RealVectorType &s, MatrixType &u, MatrixType &vt ) noexcept;
+  inline void compute( MatrixType &a, RealVectorType &s, MatrixType &u, MatrixType &vt ) const noexcept;
 
   // Queries
   inline index_t query( const index_t nrow, const index_t ncol ) const noexcept;

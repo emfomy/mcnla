@@ -214,7 +214,7 @@ DenseMatrixSet102<_Scalar> DenseMatrixSet102<_Scalar>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const IdxRange&, const char*, const char* )
+/// @copydoc  operator()( const char*, const IdxRange&, const char* )
 ///
 template <class _Scalar>
 const DenseMatrixSet102<_Scalar> DenseMatrixSet102<_Scalar>::operator()(

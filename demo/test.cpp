@@ -7,16 +7,9 @@
 
 #include <iostream>
 #include <mcnla.hpp>
-#include <omp.h>
-#include <mkl.h>
+#include <cstdio>
 
 #define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
-
-template class mcnla::isvd::Sketcher<mcnla::matrix::DenseMatrixColMajor<double>,
-                                     mcnla::matrix::DenseMatrixSet120<double>,
-                                     mcnla::isvd::GaussianProjectionSketcherTag>;
-
-#define N 10000
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -27,34 +20,17 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  // std::cout << omp_get_max_threads() << std::endl;
+  int n = 100000000;
 
-  // auto a = new double[N*N];
-  // auto b = new double[N*N];
-  // auto c = new double[N*N];
-  // int n = N;
-  // double d0 = 0.0, d1 = 1.0;
-  // // dgemm("N", "N", &n, &n, &n, &d1, a, &n, b, &n, &d0, c, &n);
-  // cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, n, n, d1, a, n, b, n, d0, c, n);
+  mcnla::matrix::DenseVector<double> vec(n);
 
-  mcnla::matrix::DenseMatrixColMajor<double> A(N, N), B(N, N), C(N, N);
+  mcnla::random::gaussian(vec, 1);
 
-  mcnla::blas::mm(A, B, C);
-
-  std::cout << "!" << std::endl;
-  int tmp;
-  std::cin >> tmp;
-
-  #pragma omp parallel for collapse(2)
-  for ( auto i = 0; i < N; ++i ) {
-    for ( auto j = 0; j < N; ++j ) {
-      C(i, j) = A(i, j) + B(i, j);
-    }
-  }
-
-  // delete[] a;
-  // delete[] b;
-  // delete[] c;
+  double sum = 0.0, sum2 = 0.0;
+  for ( auto i = 0; i < n; ++i ) sum += vec(i);
+  for ( auto i = 0; i < n; ++i ) sum2 += vec(i) * vec(i);
+  sum /= n; sum2 /= n;
+  printf("mu = %16.12lf, sigma = %16.12lf\n", sum, sqrt(sum2-sum*sum));
 
   return 0;
 }

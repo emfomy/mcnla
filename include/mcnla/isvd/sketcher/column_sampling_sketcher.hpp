@@ -12,8 +12,7 @@
 #include <mcnla/isvd/def.hpp>
 #include <random>
 #include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/sketcher/sketcher_base.hpp>
+#include <mcnla/isvd/sketcher/sketcher.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,33 +24,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class ColumnSamplingSketcher;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The column sampling sketcher traits.
+/// The column sampling sketcher tag.
 ///
-/// @tparam  _Matrix  The matrix type.
-///
-template <class _Matrix>
-struct Traits<isvd::ColumnSamplingSketcher<_Matrix>> {
-  using MatrixType = _Matrix;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
+struct ColumnSamplingSketcherTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
@@ -61,38 +37,31 @@ namespace isvd {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class ColumnSamplingSketcher : public SketcherWrapper<ColumnSamplingSketcher<_Matrix>> {
+class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>
+  : public SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>> {
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
-
-  friend SketcherWrapper<ColumnSamplingSketcher<_Matrix>>;
+  friend SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>>;
 
  private:
 
-  using BaseType = SketcherWrapper<ColumnSamplingSketcher<_Matrix>>;
+  using BaseType = SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>>;
 
  public:
 
-  using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
-  using MatrixType     = _Matrix;
+  using ScalarType  = ScalarT<_Matrix>;
+  using MatrixAType = _Matrix;
+  using SetYType    = DenseMatrixSet120<ScalarType>;
 
  protected:
 
   /// The name.
   static constexpr const char* name_= "Column Sampling Sketcher";
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  /// The starting time
+  double time0_;
 
-  /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
-
-  /// The empty matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
-
-  /// The GESVD driver
-  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
+  /// The ending time of random sketching
+  double time1_;
 
   /// The random generator
   std::default_random_engine random_generator_;
@@ -100,10 +69,21 @@ class ColumnSamplingSketcher : public SketcherWrapper<ColumnSamplingSketcher<_Ma
   /// The uniform integer distribution
   std::uniform_int_distribution<index_t> random_distribution_;
 
+  /// The random seed
+  index_t seed_;
+
+  using BaseType::parameters_;
+
  public:
 
   // Constructor
-  inline ColumnSamplingSketcher( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline Sketcher( const Parameters<ScalarType> &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+
+  // Gets time
+  inline double time1() const noexcept;
+
+  // Sets seed
+  Sketcher& setSeed( const index_t seed[4] ) noexcept;
 
  protected:
 
@@ -111,12 +91,20 @@ class ColumnSamplingSketcher : public SketcherWrapper<ColumnSamplingSketcher<_Ma
   void initializeImpl() noexcept;
 
   // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
+  void sketchImpl( const MatrixAType &matrix_a, SetYType &set_y ) noexcept;
 
   // Gets name
   inline constexpr const char* nameImpl() const noexcept;
 
+  // Gets time
+  inline double timeImpl() const noexcept;
+
 };
+
+/// @ingroup  isvd_sketcher_module
+template <class _Matrix>
+using ColumnSamplingSketcher =
+    Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>;
 
 }  // namespace isvd
 

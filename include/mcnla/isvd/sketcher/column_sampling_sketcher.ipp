@@ -9,6 +9,7 @@
 #define MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_IPP_
 
 #include <mcnla/isvd/sketcher/column_sampling_sketcher.hpp>
+#include <ctime>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,9 +25,13 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::SketcherWrapper::SketcherWrapper
 ///
 template <class _Matrix>
-ColumnSamplingSketcher<_Matrix>::ColumnSamplingSketcher(
-    const Parameters<ScalarType> &parameters, index_t *seed
-) noexcept : BaseType(parameters, seed) {}
+Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>::Sketcher(
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : BaseType(parameters, mpi_comm, mpi_root),
+    seed_(time(NULL)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
