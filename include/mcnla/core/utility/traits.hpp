@@ -69,16 +69,40 @@ template <typename _Derived>
 using ComplexT = typename traits::Traits<_Derived>::ComplexType;
 
 /// @ingroup  utility_module
+template <class _Derived>
+using ScalarT = typename traits::Traits<_Derived>::ScalarType;
+
+/// @ingroup  utility_module
+template <class _Derived>
+using VectorT = typename traits::Traits<_Derived>::VectorType;
+
+/// @ingroup  utility_module
+template <class _Derived>
+using MatrixT = typename traits::Traits<_Derived>::MatrixType;
+
+/// @ingroup  utility_module
+template <class _Derived>
+using SetT = typename traits::Traits<_Derived>::SetType;
+
+/// @ingroup  utility_module
+template <class _Derived>
+using ContainerT = typename traits::Traits<_Derived>::ContainerType;
+
+/// @ingroup  utility_module
+template <class _Derived>
+using IteratorT = typename traits::Traits<_Derived>::IteratorType;
+
+/// @ingroup  utility_module
+template <class _Derived>
+using ConstIteratorT = typename traits::Traits<_Derived>::ConstIteratorType;
+
+/// @ingroup  utility_module
 template <typename _Scalar>
 using RealScalarT = typename traits::ScalarTraits<_Scalar>::RealType;
 
 /// @ingroup  utility_module
 template <typename _Scalar>
 using ComplexScalarT = typename traits::ScalarTraits<_Scalar>::ComplexType;
-
-/// @ingroup  utility_module
-template <class _Container>
-using ScalarT = typename _Container::ScalarType;
 
 }  // namespace mcnla
 

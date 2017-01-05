@@ -62,7 +62,7 @@ std::tuple<index_t, index_t, index_t> MatrixSetWrapper<_Derived>::sizes() const 
 /// @brief  Gets a matrix.
 ///
 template <class _Derived>
-typename MatrixSetWrapper<_Derived>::MatrixType MatrixSetWrapper<_Derived>::operator()(
+MatrixT<_Derived> MatrixSetWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
   return this->derived().getMatrixImpl(idx);
@@ -72,7 +72,7 @@ typename MatrixSetWrapper<_Derived>::MatrixType MatrixSetWrapper<_Derived>::oper
 /// @copydoc  operator()( const index_t )
 ///
 template <class _Derived>
-const typename MatrixSetWrapper<_Derived>::MatrixType MatrixSetWrapper<_Derived>::operator()(
+const MatrixT<_Derived> MatrixSetWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
   return this->derived().getMatrixImpl(idx);

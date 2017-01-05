@@ -21,8 +21,6 @@ namespace mcnla {
 //
 namespace utility {
 
-}
-
 }  // namespace utility
 
 }  // namespace mcnla

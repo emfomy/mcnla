@@ -73,7 +73,7 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
  public:
 
   using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = typename _Matrix::RealScalarType;
+  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
   using MatrixType     = _Matrix;
 
  protected:

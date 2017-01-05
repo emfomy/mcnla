@@ -35,7 +35,7 @@ class MatrixSetWrapper : public utility::CrtpBase<_Derived, MatrixSetWrapper<_De
 
  private:
 
-  using MatrixType = typename traits::Traits<_Derived>::MatrixType;
+  using MatrixType = MatrixT<_Derived>;
 
  protected:
 

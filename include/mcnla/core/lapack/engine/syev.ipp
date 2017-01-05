@@ -91,7 +91,7 @@ std::tuple<index_t> SyevEngine<_Matrix, _jobz>::sizes() const noexcept {
 /// @brief  Gets the workspace
 ///
 template <class _Matrix, JobOption _jobz>
-typename SyevEngine<_Matrix, _jobz>::VectorType& SyevEngine<_Matrix, _jobz>::getWork() noexcept {
+VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() noexcept {
   return work_;
 }
 
@@ -99,7 +99,7 @@ typename SyevEngine<_Matrix, _jobz>::VectorType& SyevEngine<_Matrix, _jobz>::get
 /// @copydoc  getWork
 ///
 template <class _Matrix, JobOption _jobz>
-const typename SyevEngine<_Matrix, _jobz>::VectorType& SyevEngine<_Matrix, _jobz>::getWork() const noexcept {
+const VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() const noexcept {
   return work_;
 }
 
@@ -107,7 +107,7 @@ const typename SyevEngine<_Matrix, _jobz>::VectorType& SyevEngine<_Matrix, _jobz
 /// @brief  Gets the real workspace
 ///
 template <class _Matrix, JobOption _jobz>
-typename SyevEngine<_Matrix, _jobz>::RealVectorType& SyevEngine<_Matrix, _jobz>::getRwork() noexcept {
+RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() noexcept {
   return rwork_;
 }
 
@@ -115,7 +115,7 @@ typename SyevEngine<_Matrix, _jobz>::RealVectorType& SyevEngine<_Matrix, _jobz>:
 /// @copydoc  getRwork
 ///
 template <class _Matrix, JobOption _jobz>
-const typename SyevEngine<_Matrix, _jobz>::RealVectorType& SyevEngine<_Matrix, _jobz>::getRwork() const noexcept {
+const RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() const noexcept {
   return rwork_;
 }
 

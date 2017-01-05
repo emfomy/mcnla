@@ -101,8 +101,7 @@ std::tuple<index_t, index_t> GesvdEngine<_Matrix, _jobu, _jobvt>::sizes() const 
 /// @brief  Gets the workspace
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-typename GesvdEngine<_Matrix, _jobu, _jobvt>::VectorType&
-    GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() noexcept {
+VectorT<_Matrix>& GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() noexcept {
   return work_;
 }
 
@@ -110,8 +109,7 @@ typename GesvdEngine<_Matrix, _jobu, _jobvt>::VectorType&
 /// @copydoc  getWork
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-const typename GesvdEngine<_Matrix, _jobu, _jobvt>::VectorType&
-    GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() const noexcept {
+const VectorT<_Matrix>& GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() const noexcept {
   return work_;
 }
 
@@ -119,8 +117,7 @@ const typename GesvdEngine<_Matrix, _jobu, _jobvt>::VectorType&
 /// @brief  Gets the real workspace
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-typename GesvdEngine<_Matrix, _jobu, _jobvt>::RealVectorType&
-    GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() noexcept {
+RealT<VectorT<_Matrix>>& GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() noexcept {
   return rwork_;
 }
 
@@ -128,8 +125,7 @@ typename GesvdEngine<_Matrix, _jobu, _jobvt>::RealVectorType&
 /// @copydoc  getRwork
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-const typename GesvdEngine<_Matrix, _jobu, _jobvt>::RealVectorType&
-    GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() const noexcept {
+const RealT<VectorT<_Matrix>>& GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() const noexcept {
   return rwork_;
 }
 

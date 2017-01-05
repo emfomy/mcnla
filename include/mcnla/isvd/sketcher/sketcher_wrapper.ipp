@@ -46,8 +46,8 @@ void SketcherWrapper<_Derived>::initialize() noexcept {
 ///
 template <class _Derived>
 void SketcherWrapper<_Derived>::sketch(
-    const MatrixType &matrix_a,
-          SetType &set_q
+    const MatrixAType &matrix_a,
+          SetYType &set_q
 ) noexcept {
   this->derived().sketchImpl(matrix_a, set_q);
 }

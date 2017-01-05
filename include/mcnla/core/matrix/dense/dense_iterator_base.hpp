@@ -30,13 +30,13 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseIteratorBase : public std::iterator<std::random_access_iterator_tag, ScalarT<traits::Traits<_Derived>>> {
+class DenseIteratorBase : public std::iterator<std::random_access_iterator_tag, ScalarT<_Derived>> {
 
  private:
 
   static constexpr index_t ndim = traits::Traits<_Derived>::ndim;
-  using ScalarType    = ScalarT<traits::Traits<_Derived>>;
-  using ContainerType = typename traits::Traits<_Derived>::ContainerType;
+  using ScalarType    = ScalarT<_Derived>;
+  using ContainerType = ContainerT<_Derived>;
 
  protected:
 

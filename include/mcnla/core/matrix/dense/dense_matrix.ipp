@@ -193,7 +193,7 @@ index_t DenseMatrix<_Scalar, _trans>::pos(
 /// @brief  Finds the iterator to element
 ///
 template <typename _Scalar, Trans _trans>
-typename DenseMatrix<_Scalar, _trans>::IteratorType DenseMatrix<_Scalar, _trans>::find(
+DenseMatrixIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::find(
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
@@ -207,7 +207,7 @@ typename DenseMatrix<_Scalar, _trans>::IteratorType DenseMatrix<_Scalar, _trans>
 /// @copydoc  find
 ///
 template <typename _Scalar, Trans _trans>
-typename DenseMatrix<_Scalar, _trans>::ConstIteratorType DenseMatrix<_Scalar, _trans>::find(
+DenseMatrixConstIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::find(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -221,7 +221,7 @@ typename DenseMatrix<_Scalar, _trans>::ConstIteratorType DenseMatrix<_Scalar, _t
 /// @copydoc  find
 ///
 template <typename _Scalar, Trans _trans>
-typename DenseMatrix<_Scalar, _trans>::ConstIteratorType DenseMatrix<_Scalar, _trans>::cfind(
+DenseMatrixConstIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::cfind(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {

@@ -50,9 +50,8 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
  public:
 
   using ScalarType = ScalarT<_Matrix>;
-  using MatrixType = _Matrix;
-  using VectorType = DenseVector<ScalarType>;
-  using SetType    = DenseMatrixSet120<ScalarType>;
+  using MatrixAType = _Matrix;
+  using SetYType    = DenseMatrixSet120<ScalarType>;
 
  protected:
 
@@ -87,7 +86,7 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
   void initializeImpl() noexcept;
 
   // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, SetType &set_y ) noexcept;
+  void sketchImpl( const MatrixAType &matrix_a, SetYType &set_y ) noexcept;
 
   // Gets name
   inline constexpr const char* nameImpl() const noexcept;

@@ -35,7 +35,7 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
 
  public:
 
-  using MatrixType     = typename traits::Traits<_Derived>::MatrixType;
+  using MatrixType     = MatrixT<_Derived>;
   using ScalarType     = ScalarT<MatrixType>;
   using RealScalarType = typename MatrixType::RealScalarType;
 

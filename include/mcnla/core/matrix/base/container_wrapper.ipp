@@ -24,7 +24,7 @@ namespace matrix {
 /// @brief  Gets the iterator to beginning.
 ///
 template <class _Derived>
-typename ContainerWrapper<_Derived>::IteratorType ContainerWrapper<_Derived>::begin() noexcept {
+IteratorT<_Derived> ContainerWrapper<_Derived>::begin() noexcept {
   return IteratorType::beginImpl(&(this->derived()));
 }
 
@@ -32,7 +32,7 @@ typename ContainerWrapper<_Derived>::IteratorType ContainerWrapper<_Derived>::be
 /// @copydoc  begin
 ///
 template <class _Derived>
-typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived>::begin() const noexcept {
+ConstIteratorT<_Derived> ContainerWrapper<_Derived>::begin() const noexcept {
   return ConstIteratorType::beginImpl(&(this->derived()));
 }
 
@@ -40,7 +40,7 @@ typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived
 /// @copydoc  begin
 ///
 template <class _Derived>
-typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived>::cbegin() const noexcept {
+ConstIteratorT<_Derived> ContainerWrapper<_Derived>::cbegin() const noexcept {
   return ConstIteratorType::beginImpl(&(this->derived()));
 }
 
@@ -48,7 +48,7 @@ typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived
 /// @brief  Gets the iterator to end.
 ///
 template <class _Derived>
-typename ContainerWrapper<_Derived>::IteratorType ContainerWrapper<_Derived>::end() noexcept {
+IteratorT<_Derived> ContainerWrapper<_Derived>::end() noexcept {
   return IteratorType::endImpl(&(this->derived()));
 }
 
@@ -56,7 +56,7 @@ typename ContainerWrapper<_Derived>::IteratorType ContainerWrapper<_Derived>::en
 /// @copydoc  end
 ///
 template <class _Derived>
-typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived>::end() const noexcept {
+ConstIteratorT<_Derived> ContainerWrapper<_Derived>::end() const noexcept {
   return ConstIteratorType::endImpl(&(this->derived()));
 }
 
@@ -64,7 +64,7 @@ typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived
 /// @copydoc  end
 ///
 template <class _Derived>
-typename ContainerWrapper<_Derived>::ConstIteratorType ContainerWrapper<_Derived>::cend() const noexcept {
+ConstIteratorT<_Derived> ContainerWrapper<_Derived>::cend() const noexcept {
   return ConstIteratorType::endImpl(&(this->derived()));
 }
 

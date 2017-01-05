@@ -54,7 +54,7 @@ std::tuple<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept 
 /// @brief  Gets a vector
 ///
 template <class _Derived>
-typename VectorSetWrapper<_Derived>::VectorType VectorSetWrapper<_Derived>::operator()(
+VectorT<_Derived> VectorSetWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
   return this->derived().getVector(idx);
@@ -64,7 +64,7 @@ typename VectorSetWrapper<_Derived>::VectorType VectorSetWrapper<_Derived>::oper
 /// @copydoc  operator()( const index_t )
 ///
 template <class _Derived>
-const typename VectorSetWrapper<_Derived>::VectorType VectorSetWrapper<_Derived>::operator()(
+const VectorT<_Derived> VectorSetWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
   return this->derived().getVector(idx);

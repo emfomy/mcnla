@@ -35,7 +35,7 @@ class VectorSetWrapper : public utility::CrtpBase<_Derived, VectorSetWrapper<_De
 
  private:
 
-  using VectorType = typename traits::Traits<_Derived>::VectorType;
+  using VectorType = VectorT<_Derived>;
 
  protected:
 

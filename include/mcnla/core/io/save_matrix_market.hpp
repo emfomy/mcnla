@@ -101,7 +101,7 @@ void saveMatrixMarket(
     const VectorSetWrapper<_Derived> &set,
     const char *file
 ) noexcept {
-  using VectorType = typename _Derived::VectorType;
+  using VectorType = VectorT<_Derived>;
   using ScalarType = ScalarT<VectorType>;
 
   static_assert(std::is_base_of<DenseVector<ScalarType>, VectorType>::value, "'_Derived' is not a dense vector!");
@@ -142,7 +142,7 @@ void saveMatrixMarket(
     const MatrixSetWrapper<_Derived> &set,
     const char *file
 ) noexcept {
-  using MatrixType = typename _Derived::MatrixType;
+  using MatrixType = MatrixT<_Derived>;
   using ScalarType = ScalarT<MatrixType>;
   constexpr Trans trans = MatrixType::trans;
 

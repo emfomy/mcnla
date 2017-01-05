@@ -35,7 +35,7 @@ inline void scal(
 
 template <typename _Scalar>
 inline void scal(
-    const typename DenseVector<std::complex<_Scalar>>::RealScalarType alpha,
+    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha,
           DenseVector<std::complex<_Scalar>> &x
 ) noexcept {
   detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
@@ -52,7 +52,7 @@ inline void scal(
 
 template <typename _Scalar>
 inline void scal(
-    const typename DenseVector<std::complex<_Scalar>>::RealScalarType alpha,
+    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha,
           DenseVector<std::complex<_Scalar>> &&x
 ) noexcept {
   scal(alpha, x);

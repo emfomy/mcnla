@@ -159,7 +159,7 @@ index_t DenseVector<_Scalar>::pos(
 /// @brief  Finds the iterator to element
 ///
 template <typename _Scalar>
-typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::find(
+DenseVectorIterator<_Scalar> DenseVector<_Scalar>::find(
     const index_t idx
 ) noexcept {
   mcnla_assert_gelt(idx, 0, this->length());
@@ -170,7 +170,7 @@ typename DenseVector<_Scalar>::IteratorType DenseVector<_Scalar>::find(
 /// @copydoc  find
 ///
 template <typename _Scalar>
-typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::find(
+DenseVectorConstIterator<_Scalar> DenseVector<_Scalar>::find(
     const index_t idx
 ) const noexcept {
   mcnla_assert_gelt(idx, 0, this->length());
@@ -181,7 +181,7 @@ typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::find(
 /// @copydoc  find
 ///
 template <typename _Scalar>
-typename DenseVector<_Scalar>::ConstIteratorType DenseVector<_Scalar>::cfind(
+DenseVectorConstIterator<_Scalar> DenseVector<_Scalar>::cfind(
     const index_t idx
 ) const noexcept {
   return find(idx);

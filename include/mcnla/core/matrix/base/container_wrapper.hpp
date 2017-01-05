@@ -34,8 +34,8 @@ class ContainerWrapper : public utility::CrtpBase<_Derived, ContainerWrapper<_De
 
  private:
 
-  using IteratorType      = typename traits::Traits<_Derived>::IteratorType;
-  using ConstIteratorType = typename traits::Traits<_Derived>::ConstIteratorType;
+  using IteratorType      = IteratorT<_Derived>;
+  using ConstIteratorType = ConstIteratorT<_Derived>;
 
  protected:
 

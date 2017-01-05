@@ -37,11 +37,11 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
  public:
 
-  using MatrixType = typename traits::Traits<_Derived>::MatrixType;
-  using SetType    = typename traits::Traits<_Derived>::SetType;
-  using ScalarType = ScalarT<MatrixType>;
+  using MatrixAType = typename traits::Traits<_Derived>::MatrixAType;
+  using SetYType    = typename traits::Traits<_Derived>::SetYType;
+  using ScalarType  = ScalarT<MatrixAType>;
 
-  static_assert(std::is_same<ScalarT<MatrixType>, ScalarT<SetType>>::value, "The scalar type does not fit!");
+  static_assert(std::is_same<ScalarT<MatrixAType>, ScalarT<SetYType>>::value, "The scalar type does not fit!");
 
  protected:
 
@@ -66,7 +66,7 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
   inline void initialize() noexcept;
 
   // Random sketches
-  inline void sketch( const MatrixType &matrix_a, SetType &set_q ) noexcept;
+  inline void sketch( const MatrixAType &matrix_a, SetYType &set_q ) noexcept;
 
   // Gets name
   inline constexpr const char* name() const noexcept;

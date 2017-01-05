@@ -39,8 +39,8 @@ namespace traits {
 ///
 template <class _Matrix, class _Set, class _Tag>
 struct Traits<isvd::Sketcher<_Matrix, _Set, _Tag>> {
-  using MatrixType = _Matrix;
-  using SetType    = _Set;
+  using MatrixAType = _Matrix;
+  using SetYType    = _Set;
 };
 
 }  // namespace traits

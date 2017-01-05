@@ -56,8 +56,8 @@ void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSk
 ///
 template <class _Matrix>
 void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::sketchImpl(
-    const _Matrix &matrix_a,
-          DenseMatrixSet120<ScalarType> &set_y
+    const MatrixAType &matrix_a,
+          SetYType &set_y
 ) noexcept {
 
   mcnla_assert_true(parameters_.isInitialized());

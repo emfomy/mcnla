@@ -45,8 +45,8 @@ class SyevEngine {
   static constexpr Uplo  uplo  = _Matrix::uplo;
 
   using ScalarType     = ScalarT<_Matrix>;
-  using VectorType     = typename _Matrix::VectorType;
-  using RealVectorType = typename _Matrix::VectorType::RealType;
+  using VectorType     = VectorT<_Matrix>;
+  using RealVectorType = RealT<VectorT<_Matrix>>;
   using MatrixType     = _Matrix;
 
   static constexpr bool is_real = traits::ScalarTraits<ScalarType>::is_real;

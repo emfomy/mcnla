@@ -57,12 +57,9 @@ class Solver {
   static_assert(std::is_base_of<FormerBase<_Former>, _Former>::value,
                 "'_Former' is not a former!");
 
-  static_assert(std::is_same<_Matrix, typename _Sketcher::MatrixType>::value,
-                "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, typename _Integrator::MatrixType>::value,
-                "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, typename _Former::MatrixType>::value,
-                "The matrix type does not fit!");
+  static_assert(std::is_same<_Matrix, MatrixT<_Sketcher>>::value,   "The matrix type does not fit!");
+  static_assert(std::is_same<_Matrix, MatrixT<_Integrator>>::value, "The matrix type does not fit!");
+  static_assert(std::is_same<_Matrix, MatrixT<_Former>>::value,     "The matrix type does not fit!");
 
  public:
 

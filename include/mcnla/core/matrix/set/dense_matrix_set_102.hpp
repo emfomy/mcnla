@@ -40,7 +40,13 @@ namespace traits {
 ///
 template <typename _Scalar>
 struct Traits<matrix::DenseMatrixSet102<_Scalar>> {
-  using MatrixType = matrix::DenseMatrixRowMajor<_Scalar>;
+
+  using ScalarType  = _Scalar;
+  using RealType    = matrix::DenseMatrixSet102<RealScalarT<_Scalar>>;
+  using ComplexType = matrix::DenseMatrixSet102<ComplexScalarT<_Scalar>>;
+  using SetType     = matrix::DenseMatrixSet102<_Scalar>;
+  using MatrixType  = matrix::DenseMatrixRowMajor<_Scalar>;
+
 };
 
 }  // namespace traits

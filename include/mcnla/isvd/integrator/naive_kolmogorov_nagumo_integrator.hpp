@@ -73,7 +73,7 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
  public:
 
   using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = typename _Matrix::RealScalarType;
+  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
   using MatrixType     = _Matrix;
   using SetType        = DenseMatrixSet120<ScalarType>;
 
