@@ -72,7 +72,7 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
 
  public:
 
-  using ScalarType     = typename _Matrix::ScalarType;
+  using ScalarType     = ScalarT<_Matrix>;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
@@ -87,7 +87,7 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   /// The starting time
   double time0_;
 
-  /// The ending time of reforming Q
+  /// The ending time of rearrangeing Q
   double time1_;
 
   /// The ending time of integrating
@@ -164,7 +164,7 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   void integrateImpl() noexcept;
 
   // Gets name
-  inline constexpr const char* nvecameImpl() const noexcept;
+  inline constexpr const char* nameImpl() const noexcept;
 
   // Gets time
   inline double getTimeImpl() const noexcept;

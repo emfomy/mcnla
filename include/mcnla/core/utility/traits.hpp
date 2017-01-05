@@ -29,6 +29,7 @@ namespace traits {
 template <typename _Derived> struct Traits {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_module
 /// The scalar type traits.
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -43,6 +44,7 @@ struct ScalarTraits {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_module
 /// @copydoc ScalarTraits
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -58,17 +60,25 @@ struct ScalarTraits<std::complex<_Scalar>> {
 
 }  // namespace traits
 
+/// @ingroup  utility_module
 template <typename _Derived>
-using RealType = typename traits::Traits<_Derived>::RealType;
+using RealT = typename traits::Traits<_Derived>::RealType;
 
+/// @ingroup  utility_module
 template <typename _Derived>
-using ComplexType = typename traits::Traits<_Derived>::ComplexType;
+using ComplexT = typename traits::Traits<_Derived>::ComplexType;
 
+/// @ingroup  utility_module
 template <typename _Scalar>
-using RealScalar = typename traits::ScalarTraits<_Scalar>::RealType;
+using RealScalarT = typename traits::ScalarTraits<_Scalar>::RealType;
 
+/// @ingroup  utility_module
 template <typename _Scalar>
-using ComplexScalar = typename traits::ScalarTraits<_Scalar>::ComplexType;
+using ComplexScalarT = typename traits::ScalarTraits<_Scalar>::ComplexType;
+
+/// @ingroup  utility_module
+template <class _Container>
+using ScalarT = typename _Container::ScalarType;
 
 }  // namespace mcnla
 

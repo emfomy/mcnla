@@ -36,7 +36,7 @@ class FormerBase : public utility::CrtpBase<_Derived, FormerBase<_Derived>> {
  public:
 
   using MatrixType     = typename traits::Traits<_Derived>::MatrixType;
-  using ScalarType     = typename MatrixType::ScalarType;
+  using ScalarType     = ScalarT<MatrixType>;
   using RealScalarType = typename MatrixType::RealScalarType;
 
  protected:
@@ -58,7 +58,7 @@ class FormerBase : public utility::CrtpBase<_Derived, FormerBase<_Derived>> {
   inline void form( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
-  inline constexpr const char* nvecame() const noexcept;
+  inline constexpr const char* name() const noexcept;
 
   // Gets compute time
   inline double getTime() const noexcept;

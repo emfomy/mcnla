@@ -10,9 +10,9 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
+#include <cstdlib>
 #include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/sketcher/sketcher_base.hpp>
+#include <mcnla/isvd/sketcher/sketcher.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,33 +24,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class GaussianProjectionSketcher;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gaussian projection sketcher traits.
+/// The Gaussian projection sketcher tag.
 ///
-/// @tparam  _Matrix  The matrix type.
-///
-template <class _Matrix>
-struct Traits<isvd::GaussianProjectionSketcher<_Matrix>> {
-  using MatrixType = _Matrix;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
+struct GaussianProjectionSketcherTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
@@ -60,29 +37,27 @@ namespace isvd {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketcher<_Matrix>> {
+class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>
+  : public SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>> {
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
-
-  friend SketcherBase<GaussianProjectionSketcher<_Matrix>>;
+  friend SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>>;
 
  private:
 
-  using BaseType = SketcherBase<GaussianProjectionSketcher<_Matrix>>;
+  using BaseType =
+    SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>>;
 
  public:
 
-  using ScalarType     = typename _Matrix::ScalarType;
-  using RealScalarType = typename _Matrix::RealScalarType;
-  using MatrixType     = _Matrix;
+  using ScalarType = ScalarT<_Matrix>;
+  using MatrixType = _Matrix;
+  using VectorType = DenseVector<ScalarType>;
+  using SetType    = DenseMatrixSet120<ScalarType>;
 
  protected:
 
   /// The name.
   static constexpr const char* name_= "Gaussian Projection Sketcher";
-
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
 
   /// The starting time
   double time0_;
@@ -93,25 +68,18 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   /// The ending time of random sketching
   double time2_;
 
-  /// The ending time of orthonormalizing
-  double time3_;
-
   /// The matrix Omega.
-  DenseMatrixSet120<ScalarType> set_omega_;
+  DenseMatrixColMajor<ScalarType> matrix_omegas_;
 
-  /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
+  /// The random seed
+  index_t seed_[4];
 
-  /// The empty matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
-
-  /// The GESVD driver
-  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
+  using BaseType::parameters_;
 
  public:
 
   // Constructor
-  inline GaussianProjectionSketcher( const Parameters<ScalarType> &parameters, index_t *seed ) noexcept;
+  inline Sketcher( const Parameters<ScalarType> &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  protected:
 
@@ -119,16 +87,24 @@ class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketche
   void initializeImpl() noexcept;
 
   // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
+  void sketchImpl( const _Matrix &matrix_a, SetType &set_y ) noexcept;
 
   // Gets name
-  inline constexpr const char* nvecameImpl() const noexcept;
+  inline constexpr const char* nameImpl() const noexcept;
 
   // Gets time
-  inline double getTimeImpl() const noexcept;
-  inline const std::vector<double> getTimesImpl() const noexcept;
+  inline double timeImpl() const noexcept;
+  inline double time1() const noexcept;
+  inline double time2() const noexcept;
+
+  Sketcher& setSeed( const index_t seed[4] ) noexcept;
 
 };
+
+/// @ingroup  isvd_sketcher_module
+template <class _Matrix>
+using GaussianProjectionSketcher =
+    Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>;
 
 }  // namespace isvd
 

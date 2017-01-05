@@ -36,7 +36,7 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
  public:
 
   using MatrixType     = typename traits::Traits<_Derived>::MatrixType;
-  using ScalarType     = typename MatrixType::ScalarType;
+  using ScalarType     = ScalarT<MatrixType>;
   using RealScalarType = typename MatrixType::RealScalarType;
 
  protected:
@@ -61,7 +61,7 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
   inline void integrate() noexcept;
 
   // Gets name
-  inline constexpr const char* nvecame() const noexcept;
+  inline constexpr const char* name() const noexcept;
 
   // Gets compute time
   inline double getTime() const noexcept;

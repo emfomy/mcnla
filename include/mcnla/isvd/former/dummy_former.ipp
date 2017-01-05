@@ -44,10 +44,10 @@ void DummyFormer<_Matrix>::formImpl(
 ) noexcept { static_cast<void>(matrix_a); static_cast<void>(matrix_qc); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::nvecame
+/// @copydoc  mcnla::isvd::FormerBase::name
 ///
 template <class _Matrix>
-constexpr const char* DummyFormer<_Matrix>::nvecameImpl() const noexcept {
+constexpr const char* DummyFormer<_Matrix>::nameImpl() const noexcept {
   return name_;
 }
 

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/parameters.ipp
+/// @file    include/mcnla/isvd/solver/parameters.ipp
 /// @brief   The implementation of the parameter structure of iSVD solver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>

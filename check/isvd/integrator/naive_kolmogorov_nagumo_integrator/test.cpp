@@ -6,8 +6,8 @@
 
 TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   using ScalarType = double;
-  auto mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
-  auto mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
+  auto mpi_size = mcnla::mpi::commSize(MPI_COMM_WORLD);
+  auto mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
 
   // Reads data
   mcnla::matrix::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> set_q_true;

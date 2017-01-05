@@ -7,9 +7,16 @@
 
 #include <iostream>
 #include <mcnla.hpp>
-#include <unistd.h>
+#include <omp.h>
+#include <mkl.h>
 
 #define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
+
+template class mcnla::isvd::Sketcher<mcnla::matrix::DenseMatrixColMajor<double>,
+                                     mcnla::matrix::DenseMatrixSet120<double>,
+                                     mcnla::isvd::GaussianProjectionSketcherTag>;
+
+#define N 10000
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -20,26 +27,34 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrixSet102<double> set(2, 5, 4);
-  int i = 0;
-  for ( auto &v : set.data() ) {
-    v = ++i;
+  // std::cout << omp_get_max_threads() << std::endl;
+
+  // auto a = new double[N*N];
+  // auto b = new double[N*N];
+  // auto c = new double[N*N];
+  // int n = N;
+  // double d0 = 0.0, d1 = 1.0;
+  // // dgemm("N", "N", &n, &n, &n, &d1, a, &n, b, &n, &d0, c, &n);
+  // cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, n, n, n, d1, a, n, b, n, d0, c, n);
+
+  mcnla::matrix::DenseMatrixColMajor<double> A(N, N), B(N, N), C(N, N);
+
+  mcnla::blas::mm(A, B, C);
+
+  std::cout << "!" << std::endl;
+  int tmp;
+  std::cin >> tmp;
+
+  #pragma omp parallel for collapse(2)
+  for ( auto i = 0; i < N; ++i ) {
+    for ( auto j = 0; j < N; ++j ) {
+      C(i, j) = A(i, j) + B(i, j);
+    }
   }
-  std::cout << set.unfold() << std::endl << std::endl;
 
-  for ( auto i = 0; i < set.nmat(); ++i ) {
-    std::cout << set(i) << std::endl << std::endl;
-  }
-
-  std::cout << set("", {1, 3}, "").unfold() << std::endl << std::endl;
-
-  auto subset = set("", {1, 3}, "");
-
-  std::cout << subset.unfold() << std::endl << std::endl;
-
-  for ( auto i = 0; i < subset.nmat(); ++i ) {
-    std::cout << subset(i) << std::endl << std::endl;
-  }
+  // delete[] a;
+  // delete[] b;
+  // delete[] c;
 
   return 0;
 }

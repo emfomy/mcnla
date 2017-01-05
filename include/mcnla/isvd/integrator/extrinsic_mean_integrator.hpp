@@ -72,7 +72,7 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
 
  public:
 
-  using ScalarType     = typename _Matrix::ScalarType;
+  using ScalarType     = ScalarT<_Matrix>;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
@@ -87,7 +87,7 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   /// The starting time
   double time0_;
 
-  /// The ending time of reforming Q
+  /// The ending time of rearrangeing Q
   double time1_;
 
   /// The ending time of computing B
@@ -164,7 +164,7 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   void integrateImpl() noexcept;
 
   // Gets name
-  inline constexpr const char* nvecameImpl() const noexcept;
+  inline constexpr const char* nameImpl() const noexcept;
 
   // Gets time
   inline double getTimeImpl() const noexcept;

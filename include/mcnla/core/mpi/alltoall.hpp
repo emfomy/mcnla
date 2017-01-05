@@ -70,8 +70,8 @@ inline void alltoall(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  mcnla_assert_eq(send.dim0() % getCommSize(comm), 0);
-  detail::alltoallImpl(send, recv, comm, send.nelem() / getCommSize(comm));
+  mcnla_assert_eq(send.dim0() % commSize(comm), 0);
+  detail::alltoallImpl(send, recv, comm, send.nelem() / commSize(comm));
 }
 
 template <typename _Scalar, Trans _transs, Trans _transr>
@@ -84,8 +84,8 @@ inline void alltoall(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  mcnla_assert_eq(send.dim1() % getCommSize(comm), 0);
-  detail::alltoallImpl(send, recv, comm, send.nelem() / getCommSize(comm));
+  mcnla_assert_eq(send.dim1() % commSize(comm), 0);
+  detail::alltoallImpl(send, recv, comm, send.nelem() / commSize(comm));
 }
 //@}
 
@@ -123,8 +123,8 @@ inline void alltoall(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  mcnla_assert_eq(buffer.dim0() % getCommSize(comm), 0);
-  detail::alltoallImpl(buffer, comm, buffer.nelem() / getCommSize(comm));
+  mcnla_assert_eq(buffer.dim0() % commSize(comm), 0);
+  detail::alltoallImpl(buffer, comm, buffer.nelem() / commSize(comm));
 }
 
 template <typename _Scalar, Trans _trans>
@@ -133,8 +133,8 @@ inline void alltoall(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  mcnla_assert_eq(buffer.dim1() % getCommSize(comm), 0);
-  detail::alltoallImpl(buffer, comm, buffer.nelem() / getCommSize(comm));
+  mcnla_assert_eq(buffer.dim1() % commSize(comm), 0);
+  detail::alltoallImpl(buffer, comm, buffer.nelem() / commSize(comm));
 }
 //@}
 

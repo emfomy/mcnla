@@ -64,6 +64,7 @@ class DenseMatrixSet102
 
  public:
 
+  using ScalarType = _Scalar;
   using SetType    = DenseMatrixSet102<_Scalar>;
   using MatrixType = DenseMatrixRowMajor<_Scalar>;
 

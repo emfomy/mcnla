@@ -44,7 +44,7 @@ class SyevEngine {
   static constexpr Trans trans = _Matrix::trans;
   static constexpr Uplo  uplo  = _Matrix::uplo;
 
-  using ScalarType     = typename _Matrix::ScalarType;
+  using ScalarType     = ScalarT<_Matrix>;
   using VectorType     = typename _Matrix::VectorType;
   using RealVectorType = typename _Matrix::VectorType::RealType;
   using MatrixType     = _Matrix;

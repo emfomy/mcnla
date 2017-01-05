@@ -30,10 +30,10 @@ namespace blas {
 template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> alpha,
     const CooMatrix<_Scalar, _layouta>   &a,
     const DenseMatrix<_Scalar, _layoutb> &b,
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> beta,
           DenseMatrix<_Scalar, _layoutc> &c
 ) noexcept {
   static_assert(!isConj(_transa) && !isConj(_transb), "Conjugate version is not supported!");
@@ -60,10 +60,10 @@ inline void gemm(
 template <Trans _transb = Trans::NORMAL, Trans _transa = Trans::NORMAL,
           typename _Scalar, Layout _layoutb, Layout _layouta, Layout _layoutc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> alpha,
     const DenseMatrix<_Scalar, _layoutb> &b,
     const CooMatrix<_Scalar, _layouta>   &a,
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> beta,
           DenseMatrix<_Scalar, _layoutc> &c
 ) noexcept {
   static_assert(!isConj(_transa) && !isConj(_transb), "Conjugate version is not supported!");
@@ -92,10 +92,10 @@ inline void gemm(
 template <Trans _transa = Trans::NORMAL, Trans _transb = Trans::NORMAL,
           typename _Scalar, Layout _layouta, Layout _layoutb, Layout _layoutc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> alpha,
     const CooMatrix<_Scalar, _layouta>   &a,
     const DenseMatrix<_Scalar, _layoutb> &b,
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> beta,
           DenseMatrix<_Scalar, _layoutc> &&c
 ) noexcept {
   detail::gemm<_transa, _transb>(alpha, a, b, beta, c);
@@ -104,10 +104,10 @@ inline void gemm(
 template <Trans _transb = Trans::NORMAL, Trans _transa = Trans::NORMAL,
           typename _Scalar, Layout _layoutb, Layout _layouta, Layout _layoutc>
 inline void gemm(
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType alpha,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> alpha,
     const DenseMatrix<_Scalar, _layoutb> &b,
     const CooMatrix<_Scalar, _layouta>   &a,
-    const typename DenseMatrix<_Scalar, _layoutc>::ScalarType beta,
+    const ScalarT<DenseMatrix<_Scalar, _layoutc>> beta,
           DenseMatrix<_Scalar, _layoutc> &&c
 ) noexcept {
   detail::gemm<_transb, _transa>(alpha, b, a, beta, c);

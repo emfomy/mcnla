@@ -37,7 +37,7 @@ template <class _Matrix>
 void ReductionIntegrator<_Matrix>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
-  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
   mcnla_assert_true(utility::isPowerOf2(parameters_.mpi_size));
@@ -49,7 +49,7 @@ void ReductionIntegrator<_Matrix>::initializeImpl() noexcept {
     set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
   }
 
-  const auto matrix_q_sizes = std::make_pair(nrow, dim_sketch);
+  const auto matrix_q_sizes = std::make_tuple(nrow, dim_sketch);
   if ( matrix_q_tmp_.sizes() != matrix_q_sizes ) {
     matrix_q_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_q_sizes);
   }
@@ -57,7 +57,7 @@ void ReductionIntegrator<_Matrix>::initializeImpl() noexcept {
     matrix_buffer_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_q_sizes);
   }
 
-  const auto matrix_u_sizes = std::make_pair(dim_sketch, dim_sketch);
+  const auto matrix_u_sizes = std::make_tuple(dim_sketch, dim_sketch);
   if ( matrix_u_.sizes() != matrix_u_sizes ) {
     matrix_u_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_u_sizes);
   }
@@ -86,8 +86,8 @@ void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
   const auto mpi_size        = parameters_.mpi_size;
-  const auto mpi_rank        = mpi::getCommRank(mpi_comm);
-  const auto num_sketch_each = parameters_.nvecumSketchEach();
+  const auto mpi_rank        = mpi::commRank(mpi_comm);
+  const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
   /// @todo  Uses column major.
@@ -150,10 +150,10 @@ void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::nvecame
+/// @copydoc  mcnla::isvd::IntegratorBase::name
 ///
 template <class _Matrix>
-constexpr const char* ReductionIntegrator<_Matrix>::nvecameImpl() const noexcept {
+constexpr const char* ReductionIntegrator<_Matrix>::nameImpl() const noexcept {
   return name_;
 }
 
@@ -169,7 +169,7 @@ index_t ReductionIntegrator<_Matrix>::getIterImpl() const noexcept {
 /// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
 ///
 template <class _Matrix>
-DenseMatrixSet120<typename ReductionIntegrator<_Matrix>::ScalarType>&
+DenseMatrixSet120<ScalarT<ReductionIntegrator<_Matrix>>>&
     ReductionIntegrator<_Matrix>::getSetQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return set_q_;
@@ -179,7 +179,7 @@ DenseMatrixSet120<typename ReductionIntegrator<_Matrix>::ScalarType>&
 /// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
 ///
 template <class _Matrix>
-const DenseMatrixSet120<typename ReductionIntegrator<_Matrix>::ScalarType>&
+const DenseMatrixSet120<ScalarT<ReductionIntegrator<_Matrix>>>&
     ReductionIntegrator<_Matrix>::getSetQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return set_q_;
@@ -189,7 +189,7 @@ const DenseMatrixSet120<typename ReductionIntegrator<_Matrix>::ScalarType>&
 /// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
 ///
 template <class _Matrix>
-DenseMatrix<typename ReductionIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
+DenseMatrix<ScalarT<ReductionIntegrator<_Matrix>>, Layout::ROWMAJOR>&
     ReductionIntegrator<_Matrix>::getMatrixQbarImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_q_bar_;
@@ -199,7 +199,7 @@ DenseMatrix<typename ReductionIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>
 /// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
 ///
 template <class _Matrix>
-const DenseMatrix<typename ReductionIntegrator<_Matrix>::ScalarType, Layout::ROWMAJOR>&
+const DenseMatrix<ScalarT<ReductionIntegrator<_Matrix>>, Layout::ROWMAJOR>&
     ReductionIntegrator<_Matrix>::getMatrixQbarImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_q_bar_;

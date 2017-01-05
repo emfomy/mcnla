@@ -47,8 +47,8 @@ void FormerBase<_Derived>::form(
 /// @copydoc  mcnla::isvd::Solver::getFormerName
 ///
 template <class _Derived>
-constexpr const char* FormerBase<_Derived>::nvecame() const noexcept {
-  return this->derived().nvecameImpl();
+constexpr const char* FormerBase<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ const DenseVector<typename FormerBase<_Derived>::RealScalarType>&
 /// @brief  Gets the matrix U.
 ///
 template <class _Derived>
-const DenseMatrix<typename FormerBase<_Derived>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<ScalarT<FormerBase<_Derived>>, Layout::COLMAJOR>&
     FormerBase<_Derived>::getMatrixU() const noexcept {
   return this->derived().getMatrixUImpl();
 }
@@ -89,7 +89,7 @@ const DenseMatrix<typename FormerBase<_Derived>::ScalarType, Layout::COLMAJOR>&
 /// @brief  Gets the transpose of the matrix V.
 ///
 template <class _Derived>
-const DenseMatrix<typename FormerBase<_Derived>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<ScalarT<FormerBase<_Derived>>, Layout::COLMAJOR>&
     FormerBase<_Derived>::getMatrixVt() const noexcept {
   return this->derived().getMatrixVtImpl();
 }

@@ -27,7 +27,7 @@ namespace blas {
 ///
 template <typename _Scalar>
 inline void scal(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const ScalarT<DenseVector<_Scalar>> alpha,
           DenseVector<_Scalar> &x
 ) noexcept {
   detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
@@ -44,7 +44,7 @@ inline void scal(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void scal(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const ScalarT<DenseVector<_Scalar>> alpha,
           DenseVector<_Scalar> &&x
 ) noexcept {
   scal(alpha, x);

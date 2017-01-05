@@ -103,8 +103,8 @@ inline void syr2k(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   detail::syr2kImpl1(a, b, c, alpha, beta);
 }
@@ -115,8 +115,8 @@ inline void syr2k(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   detail::syr2kImpl1(a, b, c, alpha, beta);
 }
@@ -131,8 +131,8 @@ inline void r2k(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   syr2k(a, b, c, alpha, beta);
 }
@@ -143,8 +143,8 @@ inline void r2k(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   syr2k(a, b, c, alpha, beta);
 }

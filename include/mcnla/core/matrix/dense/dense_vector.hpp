@@ -47,8 +47,8 @@ struct Traits<matrix::DenseVector<_Scalar>> {
   static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
-  using RealType          = matrix::DenseVector<RealScalar<_Scalar>>;
-  using ComplexType       = matrix::DenseVector<ComplexScalar<_Scalar>>;
+  using RealType          = matrix::DenseVector<RealScalarT<_Scalar>>;
+  using ComplexType       = matrix::DenseVector<ComplexScalarT<_Scalar>>;
   using IteratorType      = matrix::DenseVectorIterator<_Scalar>;
   using ConstIteratorType = matrix::DenseVectorConstIterator<_Scalar>;
 };
@@ -83,8 +83,8 @@ class DenseVector
   using ValueArrayType    = Array<_Scalar>;
   using SizesType         = std::tuple<index_t>;
 
-  using RealType          = DenseVector<RealScalar<_Scalar>>;
-  using ComplexType       = DenseVector<ComplexScalar<_Scalar>>;
+  using RealType          = DenseVector<RealScalarT<_Scalar>>;
+  using ComplexType       = DenseVector<ComplexScalarT<_Scalar>>;
 
   using VectorType        = DenseVector<_Scalar>;
 

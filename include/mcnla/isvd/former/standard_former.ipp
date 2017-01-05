@@ -43,7 +43,7 @@ void StandardFormer<_Matrix>::initializeImpl() noexcept {
   time2_ = 0;
   time3_ = 0;
 
-  const auto matrix_w_sizes = std::make_pair(dim_sketch, dim_sketch);
+  const auto matrix_w_sizes = std::make_tuple(dim_sketch, dim_sketch);
   if ( matrix_w_.sizes() != matrix_w_sizes ) {
     matrix_w_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_w_sizes);
   }
@@ -53,17 +53,17 @@ void StandardFormer<_Matrix>::initializeImpl() noexcept {
     vector_s_ = DenseVector<ScalarType>(vector_s_sizes);
   }
 
-  const auto matrix_u_sizes = std::make_pair(nrow, dim_sketch);
+  const auto matrix_u_sizes = std::make_tuple(nrow, dim_sketch);
   if ( matrix_u_.sizes() != matrix_u_sizes ) {
     matrix_u_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_u_sizes);
   }
 
-  const auto matrix_vt_sizes = std::make_pair(dim_sketch, ncol);
+  const auto matrix_vt_sizes = std::make_tuple(dim_sketch, ncol);
   if ( matrix_vt_.sizes() != matrix_vt_sizes ) {
     matrix_vt_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_vt_sizes);
   }
 
-  const auto gesvd_sizes = std::make_pair(dim_sketch, ncol);
+  const auto gesvd_sizes = std::make_tuple(dim_sketch, ncol);
   if ( gesvd_driver_.sizes() != gesvd_sizes ) {
     gesvd_driver_.resize(gesvd_sizes);
   }
@@ -91,8 +91,8 @@ void StandardFormer<_Matrix>::formImpl(
   const auto ncol            = parameters_.ncol();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  mcnla_assert_eq(matrix_a.sizes(),  std::make_pair(nrow, ncol));
-  mcnla_assert_eq(matrix_qc.sizes(), std::make_pair(nrow, dim_sketch));
+  mcnla_assert_eq(matrix_a.sizes(),  std::make_tuple(nrow, ncol));
+  mcnla_assert_eq(matrix_qc.sizes(), std::make_tuple(nrow, dim_sketch));
 
   time0_ = MPI_Wtime();
 
@@ -110,10 +110,10 @@ void StandardFormer<_Matrix>::formImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::nvecame
+/// @copydoc  mcnla::isvd::FormerBase::name
 ///
 template <class _Matrix>
-constexpr const char* StandardFormer<_Matrix>::nvecameImpl() const noexcept {
+constexpr const char* StandardFormer<_Matrix>::nameImpl() const noexcept {
   return name_;
 }
 
@@ -147,7 +147,7 @@ const DenseVector<typename StandardFormer<_Matrix>::RealScalarType>&
 /// @copydoc  mcnla::isvd::FormerBase::getMatrixU
 ///
 template <class _Matrix>
-const DenseMatrix<typename StandardFormer<_Matrix>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<ScalarT<StandardFormer<_Matrix>>, Layout::COLMAJOR>&
     StandardFormer<_Matrix>::getMatrixUImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return matrix_u_cut_;
@@ -157,7 +157,7 @@ const DenseMatrix<typename StandardFormer<_Matrix>::ScalarType, Layout::COLMAJOR
 /// @copydoc  mcnla::isvd::FormerBase::getMatrixVt
 ///
 template <class _Matrix>
-const DenseMatrix<typename StandardFormer<_Matrix>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<ScalarT<StandardFormer<_Matrix>>, Layout::COLMAJOR>&
     StandardFormer<_Matrix>::getMatrixVtImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return matrix_vt_cut_;

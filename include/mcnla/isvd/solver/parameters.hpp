@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/parameters.hpp
+/// @file    include/mcnla/isvd/solver/parameters.hpp
 /// @brief   The parameter structure of iSVD solver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_PARAMETERS_HPP_
-#define MCNLA_ISVD_PARAMETERS_HPP_
+#ifndef MCNLA_ISVD_SOLVER_PARAMETERS_HPP_
+#define MCNLA_ISVD_SOLVER_PARAMETERS_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mpi.h>
+#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -32,22 +32,11 @@ namespace isvd {
 template <typename _Scalar>
 class Parameters {
 
-  template <class _Matrix, class _Sketcher, class _Integrator, class _Former> friend class Solver;
+  template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor> friend class Solver;
 
  private:
 
-  using RealScalar = RealScalar<_Scalar>;
-
- public:
-
-  /// The MPI communicator.
-  const MPI_Comm mpi_comm;
-
-  /// The MPI size.
-  const mpi_int_t mpi_size;
-
-  /// The MPI root.
-  const mpi_int_t mpi_root;
+  using RealScalarType = RealScalarT<_Scalar>;
 
  protected:
 #ifdef MCNLA_USE_GTEST
@@ -79,29 +68,32 @@ class Parameters {
   index_t max_iteration_ = 256;
 
   /// The tolerance of converge condition.
-  RealScalar tolerance_ = 1e-4;
+  RealScalarType tolerance_ = 1e-4;
+
+  /// The MPI size
+  const index_t mpi_size_;
 
  public:
 
   // Constructors
-  Parameters( const MPI_Comm comm, const mpi_int_t root = 0 ) noexcept;
+  Parameters( const index_t mpi_size ) noexcept;
 
   // Gets parameter
   inline bool isInitialized() const noexcept;
   inline bool isComputed() const noexcept;
   inline index_t nrow() const noexcept;
   inline index_t ncol() const noexcept;
-  inline index_t getRank() const noexcept;
-  inline index_t getOverRank() const noexcept;
+  inline index_t rank() const noexcept;
+  inline index_t overRank() const noexcept;
   inline index_t dimSketch() const noexcept;
-  inline index_t nvecumSketch() const noexcept;
-  inline index_t nvecumSketchEach() const noexcept;
-  inline index_t getMaxIteration() const noexcept;
-  inline RealScalar getTolerance() const noexcept;
+  inline index_t numSketch() const noexcept;
+  inline index_t numSketchEach() const noexcept;
+  inline index_t maxIteration() const noexcept;
+  inline RealScalarType tolerance() const noexcept;
 };
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_PARAMETERS_HPP_
+#endif  // MCNLA_ISVD_SOLVER_PARAMETERS_HPP_

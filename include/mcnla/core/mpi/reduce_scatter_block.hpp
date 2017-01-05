@@ -61,7 +61,7 @@ inline void reduceScatterBlock(
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
-  mcnla_assert_eq(send.nelem(), recv.nelem() * getCommSize(comm));
+  mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
   detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
 }
 
@@ -74,7 +74,7 @@ inline void reduceScatterBlock(
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
-  mcnla_assert_eq(send.nelem(), recv.nelem() * getCommSize(comm));
+  mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
   detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
 }
 //@}

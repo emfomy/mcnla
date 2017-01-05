@@ -32,7 +32,7 @@ namespace detail {
 template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Trans _trans>
 inline void gesvdImpl(
     DenseMatrix<_Scalar, _trans> &a,
-    DenseVector<RealScalar<_Scalar>> &s,
+    DenseVector<RealScalarT<_Scalar>> &s,
     DenseMatrix<_Scalar, _trans> &u,
     DenseMatrix<_Scalar, _trans> &vt
 ) noexcept {
@@ -51,7 +51,7 @@ inline void gesvdImpl(
 template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Trans _trans>
 inline void gesvd(
     DenseMatrix<_Scalar, _trans> &a,
-    DenseVector<RealScalar<_Scalar>> &s,
+    DenseVector<RealScalarT<_Scalar>> &s,
     DenseMatrix<_Scalar, _trans> &u,
     DenseMatrix<_Scalar, _trans> &vt
 ) noexcept {

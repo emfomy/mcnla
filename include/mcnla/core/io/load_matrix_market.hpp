@@ -150,7 +150,7 @@ void loadMatrixMarket(
     const char *file
 ) noexcept {
   using VectorType = typename _Derived::VectorType;
-  using ScalarType = typename VectorType::ScalarType;
+  using ScalarType = ScalarT<VectorType>;
 
   static_assert(std::is_base_of<DenseVector<ScalarType>, VectorType>::value, "'_Derived' is not a dense vector!");
 
@@ -215,7 +215,7 @@ void loadMatrixMarket(
     const char *file
 ) noexcept {
   using MatrixType = typename _Derived::MatrixType;
-  using ScalarType = typename MatrixType::ScalarType;
+  using ScalarType = ScalarT<MatrixType>;
   constexpr Trans trans = MatrixType::trans;
 
   static_assert(std::is_base_of<DenseMatrix<ScalarType, trans>, MatrixType>::value, "'_Derived' is not a dense matrix!");

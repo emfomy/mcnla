@@ -10,7 +10,6 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/core.hpp>
-#pragma warning
-// #include <mcnla/isvd.hpp>
+#include <mcnla/isvd.hpp>
 
 #endif  // MCNLA_HPP_

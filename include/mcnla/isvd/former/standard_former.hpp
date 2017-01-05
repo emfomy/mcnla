@@ -72,7 +72,7 @@ class StandardFormer : public FormerBase<StandardFormer<_Matrix>> {
 
  public:
 
-  using ScalarType     = typename _Matrix::ScalarType;
+  using ScalarType     = ScalarT<_Matrix>;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
@@ -140,7 +140,7 @@ class StandardFormer : public FormerBase<StandardFormer<_Matrix>> {
   void formImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
 
   // Gets name
-  inline constexpr const char* nvecameImpl() const noexcept;
+  inline constexpr const char* nameImpl() const noexcept;
 
   // Gets time
   inline double getTimeImpl() const noexcept;

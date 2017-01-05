@@ -3,6 +3,13 @@ if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
   set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -pedantic")
   # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -pedantic")
 
+  # OpenMP
+  find_package(OpenMP REQUIRED)
+  if(OpenMP_FOUND)
+    set(COMFLGS "${COMFLGS} ${OpenMP_CXX_FLAGS}")
+    set(LNKFLGS "${LNKFLGS} ${OpenMP_CXX_FLAGS}")
+  endif()
+
   # MPI
   find_package(MPI REQUIRED)
   if(MPI_FOUND)

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/sketcher/sketcher_base.ipp
-/// @brief   The implementation of iSVD sketcher interface.
+/// @file    include/mcnla/isvd/sketcher/sketcher_wrapper.ipp
+/// @brief   The implementation of iSVD sketcher wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SKETCHER_BASE_IPP_
-#define MCNLA_ISVD_SKETCHER_BASE_IPP_
+#ifndef MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_IPP_
+#define MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_IPP_
 
-#include <mcnla/isvd/sketcher/sketcher_base.hpp>
+#include <mcnla/isvd/sketcher/sketcher_wrapper.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,51 +24,52 @@ namespace isvd {
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-SketcherBase<_Derived>::SketcherBase(
-    const Parameters<ScalarType> &parameters, index_t *seed
-) noexcept : parameters_(parameters), seed_(seed) {}
+SketcherWrapper<_Derived>::SketcherWrapper(
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : parameters_(parameters),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.
 ///
 template <class _Derived>
-void SketcherBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
+void SketcherWrapper<_Derived>::initialize() noexcept {
+  this->derived().initializeImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Random sketches.
 ///
 template <class _Derived>
-void SketcherBase<_Derived>::sketch(
+void SketcherWrapper<_Derived>::sketch(
     const MatrixType &matrix_a,
-          DenseMatrixSet120<ScalarType> &set_q
-) noexcept { this->derived().sketchImpl(matrix_a, set_q); }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getSketcherName
-///
-template <class _Derived>
-constexpr const char* SketcherBase<_Derived>::nvecame() const noexcept {
-  return this->derived().nvecameImpl();
+          SetType &set_q
+) noexcept {
+  this->derived().sketchImpl(matrix_a, set_q);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getSketcherTime
+/// @copydoc  mcnla::isvd::Solver::sketcherName
 ///
 template <class _Derived>
-double SketcherBase<_Derived>::getTime() const noexcept {
-  return this->derived().getTimeImpl();
+constexpr const char* SketcherWrapper<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getSketcherTimes
+/// @copydoc  mcnla::isvd::Solver::sketcherTime
 ///
 template <class _Derived>
-const std::vector<double> SketcherBase<_Derived>::getTimes() const noexcept {
-  return this->derived().getTimesImpl();
+double SketcherWrapper<_Derived>::time() const noexcept {
+  return this->derived().timeImpl();
 }
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SKETCHER_BASE_IPP_
+#endif  // MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_IPP_

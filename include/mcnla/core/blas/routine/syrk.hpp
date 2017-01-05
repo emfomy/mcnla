@@ -95,8 +95,8 @@ template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
 inline void syrk(
     const DenseMatrix<_Scalar, _transa> &a,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   detail::syrkImpl1(a, c, alpha, beta);
 }
@@ -106,8 +106,8 @@ template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
 inline void syrk(
     const DenseMatrix<_Scalar, _transa> &a,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   detail::syrkImpl1(a, c, alpha, beta);
 }
@@ -121,8 +121,8 @@ template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
 inline void rk(
     const DenseMatrix<_Scalar, _transa> &a,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   syrk(a, c, alpha, beta);
 }
@@ -132,8 +132,8 @@ template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
 inline void rk(
     const DenseMatrix<_Scalar, _transa> &a,
           DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType alpha = 1,
-    const typename DenseSymmetricMatrix<_Scalar, _transc, _uplo>::ScalarType beta  = 0
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
+    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
 ) noexcept {
   syrk(a, c, alpha, beta);
 }

@@ -27,7 +27,7 @@ namespace blas {
 ///
 template <typename _Scalar>
 inline void axpy(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const ScalarT<DenseVector<_Scalar>> alpha,
     const DenseVector<_Scalar> &x,
           DenseVector<_Scalar> &y
 ) noexcept {
@@ -37,7 +37,7 @@ inline void axpy(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void axpy(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const ScalarT<DenseVector<_Scalar>> alpha,
     const DenseVector<_Scalar> &x,
           DenseVector<_Scalar> &&y
 ) noexcept {

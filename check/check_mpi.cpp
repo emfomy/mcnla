@@ -16,7 +16,7 @@ int main( int argc, char **argv ) {
             << MCNLA_PATCH_VERSION << " "
             << MCNLA_CHECK_NAME << std::endl << std::endl;
 
-  std::cout << "Using " << mcnla::mpi::getCommSize(MPI_COMM_WORLD) << " MPI nodes." << std::endl << std::endl;
+  std::cout << "Using " << mcnla::mpi::commSize(MPI_COMM_WORLD) << " MPI nodes." << std::endl << std::endl;
 
   testing::InitGoogleTest(&argc, argv);
   auto retval = RUN_ALL_TESTS();

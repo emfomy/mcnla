@@ -27,9 +27,9 @@ namespace blas {
 ///
 template <typename _Scalar>
 inline void axpby(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const ScalarT<DenseVector<_Scalar>> alpha,
     const DenseVector<_Scalar> &x,
-    const typename DenseVector<_Scalar>::ScalarType beta,
+    const ScalarT<DenseVector<_Scalar>> beta,
           DenseVector<_Scalar> &y
 ) noexcept {
   detail::axpby(x.length(), alpha, x.valuePtr(), x.stride(), beta, y.valuePtr(), y.stride());
@@ -38,9 +38,9 @@ inline void axpby(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void axpby(
-    const typename DenseVector<_Scalar>::ScalarType alpha,
+    const ScalarT<DenseVector<_Scalar>> alpha,
     const DenseVector<_Scalar> &x,
-    const typename DenseVector<_Scalar>::ScalarType beta,
+    const ScalarT<DenseVector<_Scalar>> beta,
           DenseVector<_Scalar> &&y
 ) noexcept {
   axpby(alpha, x, beta, y);

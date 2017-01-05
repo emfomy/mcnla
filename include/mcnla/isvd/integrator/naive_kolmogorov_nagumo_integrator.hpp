@@ -72,7 +72,7 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
 
  public:
 
-  using ScalarType     = typename _Matrix::ScalarType;
+  using ScalarType     = ScalarT<_Matrix>;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
   using SetType        = DenseMatrixSet120<ScalarType>;
@@ -129,7 +129,7 @@ class NaiveKolmogorovNagumoIntegrator : public IntegratorBase<NaiveKolmogorovNag
   void integrateImpl() noexcept;
 
   // Gets name
-  inline constexpr const char* nvecameImpl() const noexcept;
+  inline constexpr const char* nameImpl() const noexcept;
 
   // Gets name
   inline index_t getIterImpl() const noexcept;

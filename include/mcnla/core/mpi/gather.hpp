@@ -60,7 +60,7 @@ inline void gather(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   if ( isCommRoot(root, comm) ) {
-    mcnla_assert_eq(send.dim0() * getCommSize(comm), recv.dim0());
+    mcnla_assert_eq(send.dim0() * commSize(comm), recv.dim0());
   }
   detail::gatherImpl(send, recv, root, comm, send.nelem());
 }
@@ -76,7 +76,7 @@ inline void gather(
   mcnla_assert_true(recv.isShrunk());
   if ( isCommRoot(root, comm) ) {
     mcnla_assert_eq(send.dim0(),                     recv.dim0());
-    mcnla_assert_eq(send.dim1() * getCommSize(comm), recv.dim1());
+    mcnla_assert_eq(send.dim1() * commSize(comm), recv.dim1());
   }
   detail::gatherImpl(send, recv, root, comm, send.nelem());
 }

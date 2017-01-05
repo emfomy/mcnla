@@ -61,19 +61,19 @@ namespace isvd {
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matrix>> {
+class ColumnSamplingSketcher : public SketcherWrapper<ColumnSamplingSketcher<_Matrix>> {
 
   static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
 
-  friend SketcherBase<ColumnSamplingSketcher<_Matrix>>;
+  friend SketcherWrapper<ColumnSamplingSketcher<_Matrix>>;
 
  private:
 
-  using BaseType = SketcherBase<ColumnSamplingSketcher<_Matrix>>;
+  using BaseType = SketcherWrapper<ColumnSamplingSketcher<_Matrix>>;
 
  public:
 
-  using ScalarType     = typename _Matrix::ScalarType;
+  using ScalarType     = ScalarT<_Matrix>;
   using RealScalarType = typename _Matrix::RealScalarType;
   using MatrixType     = _Matrix;
 
@@ -114,7 +114,7 @@ class ColumnSamplingSketcher : public SketcherBase<ColumnSamplingSketcher<_Matri
   void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
 
   // Gets name
-  inline constexpr const char* nvecameImpl() const noexcept;
+  inline constexpr const char* nameImpl() const noexcept;
 
 };
 

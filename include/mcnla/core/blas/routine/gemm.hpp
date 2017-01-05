@@ -102,8 +102,8 @@ inline void gemm(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   detail::gemmImpl1(a, b, c, alpha, beta);
 }
@@ -114,8 +114,8 @@ inline void gemm(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   detail::gemmImpl1(a, b, c, alpha, beta);
 }
@@ -130,8 +130,8 @@ inline void mm(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   gemm(a, b, c, alpha, beta);
 }
@@ -142,8 +142,8 @@ inline void mm(
     const DenseMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   gemm(a, b, c, alpha, beta);
 }

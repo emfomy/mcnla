@@ -222,8 +222,8 @@ inline void symm(
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   detail::symmImpl1(a, b, c, alpha, beta);
 }
@@ -233,8 +233,8 @@ inline void symm(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
           DenseMatrix<_Scalar, _transc> &c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   detail::symmImpl1(b, a, c, alpha, beta);
 }
@@ -246,8 +246,8 @@ inline void symm(
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   detail::symmImpl1(a, b, c, alpha, beta);
 }
@@ -257,8 +257,8 @@ inline void symm(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
           DenseMatrix<_Scalar, _transc> &&c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   detail::symmImpl1(b, a, c, alpha, beta);
 }
@@ -274,8 +274,8 @@ inline void mm(
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   symm(a, b, c, alpha, beta);
 }
@@ -285,8 +285,8 @@ inline void mm(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
           DenseMatrix<_Scalar, _transc> &c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   symm(b, a, c, alpha, beta);
 }
@@ -298,8 +298,8 @@ inline void mm(
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   symm(a, b, c, alpha, beta);
 }
@@ -309,8 +309,8 @@ inline void mm(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
           DenseMatrix<_Scalar, _transc> &&c,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType alpha = 1,
-    const typename DenseMatrix<_Scalar, _transc>::ScalarType beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
+    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
   symm(b, a, c, alpha, beta);
 }

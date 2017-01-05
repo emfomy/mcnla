@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/solver.ipp
+/// @file    include/mcnla/isvd/solver/solver.ipp
 /// @brief   The implementation of iSVD solver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
@@ -48,7 +48,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Former>::initialize() noexcept {
   mcnla_assert_gt(parameters_.getRank(), 0);
   mcnla_assert_ge(parameters_.getOverRank(), 0);
 
-  mcnla_assert_gt(parameters_.nvecumSketchEach(), 0);
+  mcnla_assert_gt(parameters_.numSketchEach(), 0);
 
   sketcher_.initialize();
   integrator_.initialize();
@@ -66,7 +66,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Former>::initialize() noexcept {
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
 void Solver<_Matrix, _Sketcher, _Integrator, _Former>::compute( const _Matrix &matrix_a ) noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  mcnla_assert_eq(matrix_a.sizes(), std::make_pair(parameters_.nrow(), parameters_.ncol()));
+  mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(parameters_.nrow(), parameters_.ncol()));
 
   sketcher_.sketch(matrix_a, integrator_.getSetQ());
 
@@ -82,7 +82,7 @@ void Solver<_Matrix, _Sketcher, _Integrator, _Former>::compute( const _Matrix &m
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
 constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getSketcherName() const noexcept {
-  return sketcher_.nvecame();
+  return sketcher_.name();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getSketc
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
 constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratorName() const noexcept {
-  return integrator_.nvecame();
+  return integrator_.name();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getInteg
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
 constexpr const char* Solver<_Matrix, _Sketcher, _Integrator, _Former>::getFormerName() const noexcept {
-  return former_.nvecame();
+  return former_.name();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +184,7 @@ const DenseVector<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::Rea
 /// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<ScalarT<Solver<_Matrix, _Sketcher, _Integrator, _Former>>, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Former>::getLeftSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.getMatrixU();
@@ -196,7 +196,7 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::Sca
 /// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::ScalarType, Layout::COLMAJOR>&
+const DenseMatrix<ScalarT<Solver<_Matrix, _Sketcher, _Integrator, _Former>>, Layout::COLMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Former>::getRightSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.getMatrixVt();
@@ -208,7 +208,7 @@ const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::Sca
 /// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
-const DenseMatrix<typename Solver<_Matrix, _Sketcher, _Integrator, _Former>::ScalarType, Layout::ROWMAJOR>&
+const DenseMatrix<ScalarT<Solver<_Matrix, _Sketcher, _Integrator, _Former>>, Layout::ROWMAJOR>&
     Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratedOrthonormalBasis() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.getMatrixQbar();
@@ -326,18 +326,6 @@ Solver<_Matrix, _Sketcher, _Integrator, _Former>&
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) { return *this; }
   parameters_.tolerance_ = tolerance;
   parameters_.initialized_ = false; parameters_.computed_ = false; return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the random seed.
-///
-template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
-Solver<_Matrix, _Sketcher, _Integrator, _Former>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Former>::setSeed( const index_t seed[4] ) noexcept {
-  for ( index_t i = 0; i < 4; ++i ) {
-    seed_[i] = seed[i];
-  }
-  return *this;
 }
 
 }  // namespace isvd

@@ -42,7 +42,7 @@ inline index_t iamax(
 ///
 //@{
 template <typename _Scalar>
-inline RealScalar<_Scalar> amax(
+inline RealScalarT<_Scalar> amax(
     const DenseVector<_Scalar> &x
 ) noexcept {
   index_t idx = detail::iamax(x.length(), x.valuePtr(), x.stride());

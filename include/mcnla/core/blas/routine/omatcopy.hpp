@@ -110,7 +110,7 @@ template <typename _Scalar, Trans _transa, Trans _transb>
 inline void omatcopy(
     const DenseMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transb> &b,
-    const typename DenseMatrix<_Scalar, _transb>::ScalarType alpha = 1
+    const ScalarT<DenseMatrix<_Scalar, _transb>> alpha = 1
 ) noexcept {
 #ifdef MCNLA_USE_MKL
   detail::omatcopyImpl1(a, b, alpha);
@@ -124,7 +124,7 @@ template <typename _Scalar, Trans _transa, Trans _transb>
 inline void omatcopy(
     const DenseMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transb> &&b,
-    const typename DenseMatrix<_Scalar, _transb>::ScalarType alpha = 1
+    const ScalarT<DenseMatrix<_Scalar, _transb>> alpha = 1
 ) noexcept {
 #ifdef MCNLA_USE_MKL
   detail::omatcopyImpl1(a, b, alpha);

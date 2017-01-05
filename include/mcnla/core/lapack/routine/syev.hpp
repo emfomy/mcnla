@@ -33,7 +33,7 @@ namespace lapack {
 template <JobOption _jobz, typename _Scalar, Trans _trans, Uplo _uplo>
 inline void syev(
     DenseSymmetricMatrix<_Scalar, _trans, _uplo> &a,
-    DenseVector<RealScalar<_Scalar>> &w
+    DenseVector<RealScalarT<_Scalar>> &w
 ) noexcept {
   SyevEngine<DenseSymmetricMatrix<_Scalar, _trans, _uplo>, _jobz> engine(a);
   engine(a, w);

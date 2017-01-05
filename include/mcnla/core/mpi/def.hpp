@@ -43,7 +43,7 @@ using namespace matrix;
 ///
 /// @return       The number of processes in the group of @a comm.
 ///
-static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
+static inline mpi_int_t commSize( const MPI_Comm comm ) noexcept {
   mpi_int_t size; mcnla_assert_eq(MPI_Comm_size(comm, &size), 0); return size;
 }
 
@@ -55,7 +55,7 @@ static inline mpi_int_t getCommSize( const MPI_Comm comm ) noexcept {
 ///
 /// @return       The rank of the calling process in group of @a comm.
 ///
-static inline mpi_int_t getCommRank( const MPI_Comm comm ) noexcept {
+static inline mpi_int_t commRank( const MPI_Comm comm ) noexcept {
   mpi_int_t rank; mcnla_assert_eq(MPI_Comm_rank(comm, &rank), 0); return rank;
 }
 
@@ -67,7 +67,7 @@ static inline mpi_int_t getCommRank( const MPI_Comm comm ) noexcept {
 /// @param  comm  The communicator.
 ///
 static inline bool isCommRoot( const mpi_int_t root, const MPI_Comm comm ) noexcept {
-  return (getCommRank(comm) == root);
+  return (commRank(comm) == root);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

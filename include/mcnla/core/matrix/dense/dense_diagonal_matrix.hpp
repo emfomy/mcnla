@@ -45,8 +45,8 @@ struct Traits<matrix::DenseDiagonalMatrix<_Scalar>> {
   static constexpr index_t ndim = 2;
 
   using ScalarType  = _Scalar;
-  using RealType    = matrix::DenseDiagonalMatrix<RealScalar<_Scalar>>;
-  using ComplexType = matrix::DenseDiagonalMatrix<ComplexScalar<_Scalar>>;
+  using RealType    = matrix::DenseDiagonalMatrix<RealScalarT<_Scalar>>;
+  using ComplexType = matrix::DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
 };
 
 }  // namespace traits
@@ -76,8 +76,8 @@ class DenseDiagonalMatrix
   using ScalarType     = _Scalar;
   using ValueArrayType = Array<_Scalar>;
 
-  using RealType       = DenseDiagonalMatrix<RealScalar<_Scalar>>;
-  using ComplexType    = DenseDiagonalMatrix<ComplexScalar<_Scalar>>;
+  using RealType       = DenseDiagonalMatrix<RealScalarT<_Scalar>>;
+  using ComplexType    = DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
 
   using TransposeType  = DenseDiagonalMatrix<_Scalar>;
 

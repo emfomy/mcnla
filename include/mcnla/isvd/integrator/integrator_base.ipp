@@ -48,8 +48,8 @@ void IntegratorBase<_Derived>::integrate() noexcept {
 /// @copydoc  mcnla::isvd::Solver::getIntegratorName
 ///
 template <class _Derived>
-constexpr const char* IntegratorBase<_Derived>::nvecame() const noexcept {
-  return this->derived().nvecameImpl();
+constexpr const char* IntegratorBase<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ index_t IntegratorBase<_Derived>::getIter() const noexcept {
 /// @brief  Gets the set Q.
 ///
 template <class _Derived>
-DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& IntegratorBase<_Derived>::getSetQ() noexcept {
+DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::getSetQ() noexcept {
   return this->derived().getSetQImpl();
 }
 
@@ -88,7 +88,7 @@ DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& IntegratorBase
 /// @copydoc  getSetQ
 ///
 template <class _Derived>
-const DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& IntegratorBase<_Derived>::getSetQ() const noexcept {
+const DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::getSetQ() const noexcept {
   return this->derived().getSetQImpl();
 }
 
@@ -96,7 +96,7 @@ const DenseMatrixSet120<typename IntegratorBase<_Derived>::ScalarType>& Integrat
 /// @brief  Gets the matrix Qc.
 ///
 template <class _Derived>
-DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
+DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
     IntegratorBase<_Derived>::getMatrixQbar() noexcept {
   return this->derived().getMatrixQbarImpl();
 }
@@ -105,7 +105,7 @@ DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
 /// @copydoc  getMatrixQbar
 ///
 template <class _Derived>
-const DenseMatrix<typename IntegratorBase<_Derived>::ScalarType, Layout::ROWMAJOR>&
+const DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
     IntegratorBase<_Derived>::getMatrixQbar() const noexcept {
   return this->derived().getMatrixQbarImpl();
 }

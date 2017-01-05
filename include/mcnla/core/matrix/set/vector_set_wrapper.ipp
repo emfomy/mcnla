@@ -46,7 +46,7 @@ index_t VectorSetWrapper<_Derived>::nvec() const noexcept {
 /// @brief  Gets the sizes.
 ///
 template <class _Derived>
-std::pair<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept {
+std::tuple<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept {
   return std::make_tuple(length()(), nvec());
 }
 

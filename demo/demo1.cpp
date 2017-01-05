@@ -33,8 +33,8 @@ int main( int argc, char **argv ) {
   // Initialize MPI
   MPI_Init(&argc, &argv);
   mcnla::mpi_int_t mpi_root = 0;
-  mcnla::mpi_int_t mpi_size = mcnla::mpi::getCommSize(MPI_COMM_WORLD);
-  mcnla::mpi_int_t mpi_rank = mcnla::mpi::getCommRank(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Display program information
