@@ -24,7 +24,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix, class _Set, class _Tag> class Sketcher;
+template <class _Scalar, class _Tag> class Sketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -35,12 +35,11 @@ template <class _Matrix, class _Set, class _Tag> class Sketcher;
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gaussian projection sketcher traits.
+/// The sketcher traits.
 ///
-template <class _Matrix, class _Set, class _Tag>
-struct Traits<isvd::Sketcher<_Matrix, _Set, _Tag>> {
-  using MatrixAType = _Matrix;
-  using SetYType    = _Set;
+template <typename _Scalar, class _Tag>
+struct Traits<isvd::Sketcher<_Scalar, _Tag>> {
+  using ScalarType = _Scalar;
 };
 
 }  // namespace traits
@@ -55,12 +54,11 @@ namespace isvd {
 ///
 /// The interface of iSVD sketcher.
 ///
-/// @tparam  _Matrix  The matrix type.
-/// @tparam  _Set     The set type.
+/// @tparam  _Scalar  The scalar type.
 /// @tparam  _Tag     The sketcher tag.
 ///
-template <class _Matrix, class _Set, class _Tag>
-class Sketcher : public SketcherWrapper<Sketcher<_Matrix, _Set, _Tag>> {};
+template <typename _Scalar, class _Tag>
+class Sketcher : public SketcherWrapper<Sketcher<_Scalar, _Tag>> {};
 
 }  // namespace isvd
 

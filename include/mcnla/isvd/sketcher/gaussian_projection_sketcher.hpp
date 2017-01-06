@@ -34,24 +34,22 @@ struct GaussianProjectionSketcherTag {};
 ///
 /// The Gaussian projection sketcher.
 ///
-/// @tparam  _Matrix  The matrix type.
+/// @tparam  _Scalar  The scalar type.
 ///
-template <class _Matrix>
-class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>
-  : public SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>> {
+template <typename _Scalar>
+class Sketcher<_Scalar, GaussianProjectionSketcherTag>
+  : public SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag>> {
 
-  friend SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>>;
+  friend SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag>>;
 
  private:
 
   using BaseType =
-    SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>>;
+    SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag>>;
 
  public:
 
-  using ScalarType  = ScalarT<_Matrix>;
-  using MatrixAType = _Matrix;
-  using SetYType    = DenseMatrixSet120<ScalarType>;
+  using ScalarType = _Scalar;
 
  protected:
 
@@ -91,7 +89,8 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
   void initializeImpl() noexcept;
 
   // Random sketches
-  void sketchImpl( const MatrixAType &matrix_a, SetYType &set_y ) noexcept;
+  template <class _Matrix>
+  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_y ) noexcept;
 
   // Gets name
   inline constexpr const char* nameImpl() const noexcept;
@@ -105,8 +104,8 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
 };
 
 /// @ingroup  isvd_sketcher_module
-template <class _Matrix>
-using GaussianProjectionSketcher = Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>;
+template <typename _Scalar>
+using GaussianProjectionSketcher = Sketcher<_Scalar, GaussianProjectionSketcherTag>;
 
 }  // namespace isvd
 

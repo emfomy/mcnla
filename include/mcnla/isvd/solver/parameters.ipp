@@ -24,8 +24,8 @@ namespace isvd {
 /// @brief  Default constructor
 ///
 template <typename _Scalar>
-Parameters<_Scalar>::Parameters( const index_t mpi_size ) noexcept
-  : mpi_size_(mpi_size) {}
+Parameters<_Scalar>::Parameters( const MPI_Comm mpi_comm ) noexcept
+  : mpi_size_(mcnla::mpi::commSize(mpi_comm)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Check if the solver is initialized.

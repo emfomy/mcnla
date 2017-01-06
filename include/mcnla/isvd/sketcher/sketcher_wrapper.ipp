@@ -44,10 +44,10 @@ void SketcherWrapper<_Derived>::initialize() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Random sketches.
 ///
-template <class _Derived>
+template <class _Derived> template <class _Matrix>
 void SketcherWrapper<_Derived>::sketch(
-    const MatrixAType &matrix_a,
-          SetYType &set_q
+    const _Matrix &matrix_a,
+          DenseMatrixSet120<ScalarType> &set_q
 ) noexcept {
   this->derived().sketchImpl(matrix_a, set_q);
 }

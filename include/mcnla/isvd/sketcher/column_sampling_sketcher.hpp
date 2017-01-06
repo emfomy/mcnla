@@ -37,20 +37,18 @@ struct ColumnSamplingSketcherTag {};
 /// @tparam  _Matrix  The matrix type.
 ///
 template <class _Matrix>
-class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>
-  : public SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>> {
+class Sketcher<_Scalar, ColumnSamplingSketcherTag>
+  : public SketcherWrapper<Sketcher<_Scalar, ColumnSamplingSketcherTag>> {
 
-  friend SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>>;
+  friend SketcherWrapper<Sketcher<_Scalar, ColumnSamplingSketcherTag>>;
 
  private:
 
-  using BaseType = SketcherWrapper<Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>>;
+  using BaseType = SketcherWrapper<Sketcher<_Scalar, ColumnSamplingSketcherTag>>;
 
  public:
 
-  using ScalarType  = ScalarT<_Matrix>;
-  using MatrixAType = _Matrix;
-  using SetYType    = DenseMatrixSet120<ScalarType>;
+  using ScalarType  = _Scalar;
 
  protected:
 
@@ -77,13 +75,11 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketc
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ScalarType> &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Sketcher( const Parameters<ScalarType> &parameters,
+                   const MPI_Comm mpi_comm, const mpi_int_t mpi_root, const index_t seed ) noexcept;
 
   // Gets time
   inline double time1() const noexcept;
-
-  // Sets seed
-  Sketcher& setSeed( const index_t seed[4] ) noexcept;
 
  protected:
 
@@ -91,7 +87,8 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketc
   void initializeImpl() noexcept;
 
   // Random sketches
-  void sketchImpl( const MatrixAType &matrix_a, SetYType &set_y ) noexcept;
+  template <class _Matrix>
+  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_y ) noexcept;
 
   // Gets name
   inline constexpr const char* nameImpl() const noexcept;
@@ -99,12 +96,14 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketc
   // Gets time
   inline double timeImpl() const noexcept;
 
+  // Sets seed
+  void setSeedImpl( const index_t seed ) noexcept;
+
 };
 
 /// @ingroup  isvd_sketcher_module
 template <class _Matrix>
-using ColumnSamplingSketcher =
-    Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>;
+using ColumnSamplingSketcher = Sketcher<_Scalar, ColumnSamplingSketcherTag>;
 
 }  // namespace isvd
 

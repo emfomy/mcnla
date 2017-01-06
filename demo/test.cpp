@@ -5,6 +5,8 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
+#define MCNLA_TEST
+
 #include <iostream>
 #include <mcnla.hpp>
 #include <cstdio>
@@ -20,25 +22,35 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  int n = 1000000000;
+  MPI_Init(&argc, &argv);
+  mcnla::mpi_int_t mpi_root = 0;
+  mcnla::index_t m = 10, n = 20, k = 5, p = 1, Nj = 4, seed = 0;
 
-  mcnla::matrix::DenseVector<double> vec(n);
+  mcnla::isvd::Parameters<double> parameters(MPI_COMM_WORLD);
+  parameters.nrow_ = m;
+  parameters.ncol_ = n;
+  parameters.rank_ = k;
+  parameters.over_rank_ = p;
+  parameters.num_sketch_each_ = Nj;
+  parameters.tolerance_ = 1e-4;
+  parameters.max_iteration_ = 256;
 
-  mcnla::random::GaussianEngine<double> rand(1);
+  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
+  sketcher.initialize();
+  parameters.initialized_ = true;
 
-  std::cout << "omp_size = " << rand.ompSize() << std::endl;
+  mcnla::matrix::DenseMatrixColMajor<double> mat(m, n);
+  mcnla::matrix::DenseMatrixSet120<double> set(m, k+p, Nj);
 
-  double t0 = omp_get_wtime();
-  rand(vec);
-  double t1 = omp_get_wtime();
+  mcnla::random::gaussian(mat.vectorize(), 0);
 
-  printf("time = %.2lfs\n", t1-t0);
+  sketcher.sketch(mat, set);
 
-  double sum = 0.0, sum2 = 0.0;
-  for ( auto i = 0; i < n; ++i ) sum += vec(i);
-  for ( auto i = 0; i < n; ++i ) sum2 += vec(i) * vec(i);
-  sum /= n; sum2 /= n;
-  printf("mu = %16.12lf, sigma = %16.12lf\n", sum, sqrt(sum2-sum*sum));
+  for ( auto i = 0; i < Nj; ++i ) {
+    std::cout << set(i) << std::endl;
+  }
+
+  MPI_Finalize();
 
   return 0;
 }

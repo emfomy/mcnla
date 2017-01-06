@@ -131,7 +131,7 @@ void GaussianEngine<_Scalar>::compute(
     }
 
     #ifdef MCNLA_USE_MKL
-      vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, streams_[i], length, vector.valuePtr()+start, 0.0, 1.0);
+      detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, streams_[i], length, vector.valuePtr()+start, 0.0, 1.0);
     #else  // MCNLA_USE_MKL
       lapack::detail::larnv(3, streams_[i], length, vector.valuePtr()+start);
     #endif  // MCNLA_USE_MKL

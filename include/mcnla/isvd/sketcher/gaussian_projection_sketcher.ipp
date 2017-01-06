@@ -24,8 +24,8 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::SketcherWrapper
 ///
-template <class _Matrix>
-Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::Sketcher(
+template <typename _Scalar>
+Sketcher<_Scalar, GaussianProjectionSketcherTag>::Sketcher(
     const Parameters<ScalarType> &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root,
@@ -37,8 +37,8 @@ Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketche
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
 ///
-template <class _Matrix>
-void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::initializeImpl() noexcept {
+template <typename _Scalar>
+void Sketcher<_Scalar, GaussianProjectionSketcherTag>::initializeImpl() noexcept {
 
   const auto ncol            = parameters_.ncol();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -54,10 +54,10 @@ void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSk
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::sketch
 ///
-template <class _Matrix>
-void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::sketchImpl(
-    const MatrixAType &matrix_a,
-          SetYType &set_y
+template <typename _Scalar> template <class _Matrix>
+void Sketcher<_Scalar, GaussianProjectionSketcherTag>::sketchImpl(
+    const _Matrix &matrix_a,
+          DenseMatrixSet120<ScalarType> &set_y
 ) noexcept {
 
   mcnla_assert_true(parameters_.isInitialized());
@@ -84,8 +84,8 @@ void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSk
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::name
 ///
-template <class _Matrix>
-constexpr const char* Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::nameImpl(
+template <typename _Scalar>
+constexpr const char* Sketcher<_Scalar, GaussianProjectionSketcherTag>::nameImpl(
 ) const noexcept {
   return name_;
 }
@@ -93,35 +93,35 @@ constexpr const char* Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, Gau
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
-template <class _Matrix>
-double Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::timeImpl() const noexcept {
+template <typename _Scalar>
+double Sketcher<_Scalar, GaussianProjectionSketcherTag>::timeImpl() const noexcept {
   return time2_-time0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
-template <class _Matrix>
-double Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::time1() const noexcept {
+template <typename _Scalar>
+double Sketcher<_Scalar, GaussianProjectionSketcherTag>::time1() const noexcept {
   return time1_-time0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
-template <class _Matrix>
-double Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::time2() const noexcept {
+template <typename _Scalar>
+double Sketcher<_Scalar, GaussianProjectionSketcherTag>::time2() const noexcept {
   return time2_-time1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
 ///
-template <class _Matrix>
-void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::setSeedImpl(
+template <typename _Scalar>
+void Sketcher<_Scalar, GaussianProjectionSketcherTag>::setSeedImpl(
     const index_t seed
 ) noexcept {
-  random_engine_.sedSeed();
+  random_engine_.setSeed(seed);
 }
 
 }  // namespace isvd

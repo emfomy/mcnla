@@ -10,7 +10,7 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/mpi.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -39,6 +39,11 @@ class Parameters {
   using RealScalarType = RealScalarT<_Scalar>;
 
  protected:
+
+#ifdef MCNLA_TEST
+ public:
+#endif  // MCNLA_TEST
+
 #ifdef MCNLA_USE_GTEST
  public:
 #endif  // MCNLA_USE_GTEST
@@ -76,7 +81,7 @@ class Parameters {
  public:
 
   // Constructors
-  Parameters( const index_t mpi_size ) noexcept;
+  Parameters( const MPI_Comm mpi_comm ) noexcept;
 
   // Gets parameter
   inline bool isInitialized() const noexcept;

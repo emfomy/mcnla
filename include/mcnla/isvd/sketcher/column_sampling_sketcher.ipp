@@ -28,10 +28,11 @@ template <class _Matrix>
 Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag>::Sketcher(
     const Parameters<ScalarType> &parameters,
     const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root
+    const mpi_int_t mpi_root,
+    const index_t seed
 ) noexcept
   : BaseType(parameters, mpi_comm, mpi_root),
-    seed_(time(NULL)) {}
+    random_engine_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
@@ -39,18 +40,10 @@ Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, ColumnSamplingSketcherTag
 template <class _Matrix>
 void ColumnSamplingSketcher<_Matrix>::initializeImpl() noexcept {
 
-  const auto vector_s_sizes = parameters_.dimSketch();
-  if ( vector_s_.sizes() != vector_s_sizes ) {
-    vector_s_ = DenseVector<RealScalarType>(vector_s_sizes);
-  }
-
-  const auto gesvd_sizes = std::make_tuple(parameters_.nrow(), parameters_.dimSketch());
-  if ( gesvd_driver_.sizes() != gesvd_sizes ) {
-    gesvd_driver_.resize(gesvd_sizes);
-  }
+  const auto ncol            = parameters_.ncol();
 
   srand(this->seed_[0]);
-  random_distribution_ = std::uniform_int_distribution<index_t>(0, parameters_.ncol()-1);
+  random_distribution_ = std::uniform_int_distribution<index_t>(0, ncol-1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

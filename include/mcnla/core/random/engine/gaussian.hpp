@@ -15,7 +15,9 @@
 #include <omp.h>
 
 #ifdef MCNLA_USE_MKL
-  #include <mkl.h>
+  #include <mcnla/core/random/vsl/vrnggaussian.hpp>
+#else  // MCNLA_USE_MKL
+  #include <mcnla/core/lapack.hpp>
 #endif  // MCNLA_USE_MKL
 
 #include <mcnla/core/matrix.hpp>
