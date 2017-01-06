@@ -36,13 +36,20 @@ int main( int argc, char **argv ) {
   parameters.max_iteration_ = 256;
 
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
+  // mcnla::isvd::ColumnSamplingSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
+
+  sketcher.setSeed(1);
   sketcher.initialize();
   parameters.initialized_ = true;
 
   mcnla::matrix::DenseMatrixColMajor<double> mat(m, n);
   mcnla::matrix::DenseMatrixSet120<double> set(m, k+p, Nj);
 
-  mcnla::random::gaussian(mat.vectorize(), 0);
+  // mcnla::random::gaussian(mat.vectorize(), 0);
+  int i = 0;
+  for ( auto &v : mat ) {
+    v = ++i;
+  }
 
   sketcher.sketch(mat, set);
 

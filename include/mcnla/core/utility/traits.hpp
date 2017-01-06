@@ -36,7 +36,7 @@ template <typename _Derived> struct Traits {};
 ///
 template <typename _Scalar>
 struct ScalarTraits {
-  static_assert(std::is_floating_point<_Scalar>::value, "'_Scalar' must be a floating point type!");
+  static_assert(std::is_arithmetic<_Scalar>::value, "'_Scalar' must be a arithmetic type!");
   using RealType = _Scalar;
   using ComplexType = std::complex<_Scalar>;
   static constexpr bool is_real = true;
@@ -51,7 +51,7 @@ struct ScalarTraits {
 ///
 template <typename _Scalar>
 struct ScalarTraits<std::complex<_Scalar>> {
-  static_assert(std::is_floating_point<_Scalar>::value, "'_Scalar' must be a floating point type!");
+  static_assert(std::is_arithmetic<_Scalar>::value, "'_Scalar' must be a arithmetic type!");
   using RealType = _Scalar;
   using ComplexType = std::complex<_Scalar>;
   static constexpr bool is_real = false;

@@ -73,7 +73,7 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag>::sketchImpl(
   time0_ = MPI_Wtime();
 
   // Random sample Omega using normal Gaussian distribution
-  random_engine_(matrix_omegas_.vectorize());
+  random_engine_.gaussian(matrix_omegas_.vectorize());
   time1_ = MPI_Wtime();
 
   // Q := A * Omega

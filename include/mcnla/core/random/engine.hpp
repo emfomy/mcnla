@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_RANDOM_ENGINE_HPP_
 #define MCNLA_CORE_RANDOM_ENGINE_HPP_
 
-#include <mcnla/core/random/engine/gaussian.hpp>
-#include <mcnla/core/random/engine/gaussian.ipp>
+#include <mcnla/core/random/engine/engine.hpp>
+#include <mcnla/core/random/engine/engine.ipp>
 
 #endif  // MCNLA_CORE_RANDOM_ENGINE_HPP_

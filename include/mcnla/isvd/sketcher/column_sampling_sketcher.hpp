@@ -34,9 +34,9 @@ struct ColumnSamplingSketcherTag {};
 ///
 /// The column sampling sketcher.
 ///
-/// @tparam  _Matrix  The matrix type.
+/// @tparam  _Scalar  The scalar type.
 ///
-template <class _Matrix>
+template <typename _Scalar>
 class Sketcher<_Scalar, ColumnSamplingSketcherTag>
   : public SketcherWrapper<Sketcher<_Scalar, ColumnSamplingSketcherTag>> {
 
@@ -58,17 +58,17 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
   /// The starting time
   double time0_;
 
-  /// The ending time of random sketching
+  /// The ending time of random generating
   double time1_;
 
-  /// The random generator
-  std::default_random_engine random_generator_;
+  /// The ending time of random sketching
+  double time2_;
 
-  /// The uniform integer distribution
-  std::uniform_int_distribution<index_t> random_distribution_;
+  /// The matrix Omega.
+  DenseVector<index_t> vector_idxs_;
 
-  /// The random seed
-  index_t seed_;
+  /// The random engine
+  random::Engine<index_t> random_engine_;
 
   using BaseType::parameters_;
 
@@ -80,6 +80,7 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
 
   // Gets time
   inline double time1() const noexcept;
+  inline double time2() const noexcept;
 
  protected:
 
@@ -102,7 +103,7 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
 };
 
 /// @ingroup  isvd_sketcher_module
-template <class _Matrix>
+template <typename _Scalar>
 using ColumnSamplingSketcher = Sketcher<_Scalar, ColumnSamplingSketcherTag>;
 
 }  // namespace isvd

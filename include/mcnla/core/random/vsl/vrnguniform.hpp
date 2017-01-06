@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/vsl/vrnggaussian.hpp
-/// @brief   The VSL vRngGaussian.
+/// @file    include/mcnla/core/random/vsl/vrnguniform.hpp
+/// @brief   The VSL vRngUniform.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_VSL_VRNGGAUSSIAN_HPP_
-#define MCNLA_CORE_RANDOM_VSL_VRNGGAUSSIAN_HPP_
+#ifndef MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORM_HPP_
+#define MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORM_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -28,15 +28,18 @@ namespace random {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Generates normally distributed random numbers.
+/// @brief  Generates random numbers with uniform distribution.
 ///
 //@{
-static inline index_t vRngGaussian(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, float *r, const float a, const float sigma
-) noexcept { return vsRngGaussian(method, stream, n, r, a, sigma); }
-static inline index_t vRngGaussian(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, double *r, const double a, const double sigma
-) noexcept { return vdRngGaussian(method, stream, n, r, a, sigma); }
+static inline index_t vRngUniform(
+    const index_t method, VSLStreamStatePtr stream, const index_t n, index_t *r, const index_t a, const index_t b
+) noexcept { return viRngUniform(method, stream, n, r, a, b); }
+static inline index_t vRngUniform(
+    const index_t method, VSLStreamStatePtr stream, const index_t n, float *r, const float a, const float b
+) noexcept { return vsRngUniform(method, stream, n, r, a, b); }
+static inline index_t vRngUniform(
+    const index_t method, VSLStreamStatePtr stream, const index_t n, double *r, const double a, const double b
+) noexcept { return vdRngUniform(method, stream, n, r, a, b); }
 //@}
 
 }  // namespace detail
@@ -45,4 +48,4 @@ static inline index_t vRngGaussian(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_VSL_VRNGGAUSSIAN_HPP_
+#endif  // MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORM_HPP_

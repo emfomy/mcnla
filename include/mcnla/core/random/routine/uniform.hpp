@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/routine/gaussian.hpp
-/// @brief   The normal (Gaussian) distribution generator routine.
+/// @file    include/mcnla/core/random/routine/uniform.hpp
+/// @brief   The uniform distribution generator routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_HPP_
-#define MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_HPP_
+#ifndef MCNLA_CORE_RANDOM_ROUTINE_UNIFORM_HPP_
+#define MCNLA_CORE_RANDOM_ROUTINE_UNIFORM_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
@@ -30,37 +30,37 @@ namespace random {
 namespace detail {
 
 template <typename _Scalar>
-inline void gaussianImpl(
+inline void uniformImpl(
     DenseVector<_Scalar> &vector,
     const index_t seed
 ) noexcept {
   Engine<_Scalar> engine(seed);
-  engine.gaussian(vector);
+  engine.uniform(vector);
 }
 
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  random_module
-/// @copydoc  mcnla::random::Engine::gaussian
+/// @copydoc  mcnla::random::Engine::uniform
 ///
 /// @see  mcnla::random::Engine
 ///
 template <typename _Scalar>
-inline void gaussian(
+inline void uniform(
     DenseVector<_Scalar> &vector,
     const index_t seed
 ) noexcept {
-  detail::gaussianImpl(vector, seed);
+  detail::uniformImpl(vector, seed);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
-inline void gaussian(
+inline void uniform(
     DenseVector<_Scalar> &&vector,
     const index_t seed
 ) noexcept {
-  detail::gaussianImpl(vector, seed);
+  detail::uniformImpl(vector, seed);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -68,4 +68,4 @@ inline void gaussian(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_HPP_
+#endif  // MCNLA_CORE_RANDOM_ROUTINE_UNIFORM_HPP_

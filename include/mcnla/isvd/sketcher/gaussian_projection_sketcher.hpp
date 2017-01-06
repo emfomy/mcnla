@@ -69,7 +69,7 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
   DenseMatrixColMajor<ScalarType> matrix_omegas_;
 
   /// The random engine
-  random::GaussianEngine<ScalarType> random_engine_;
+  random::Engine<ScalarType> random_engine_;
 
   using BaseType::parameters_;
 

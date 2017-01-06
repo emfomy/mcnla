@@ -1,27 +1,24 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/engine/gaussian.hpp
-/// @brief   The normal (Gaussian) distribution generator engine.
+/// @file    include/mcnla/core/random/engine/engine.hpp
+/// @brief   The random generator engine header.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ENGINE_GAUSSIAN_ENGINE_HPP_
-#define MCNLA_CORE_RANDOM_ENGINE_GAUSSIAN_ENGINE_HPP_
+#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_HPP_
+#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_HPP_
 
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/random/def.hpp>
 #include <vector>
 #include <omp.h>
-
-#ifdef MCNLA_USE_MKL
-  #include <mcnla/core/random/vsl/vrnggaussian.hpp>
-#else  // MCNLA_USE_MKL
-  #include <mcnla/core/lapack.hpp>
-#endif  // MCNLA_USE_MKL
-
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
+
+#ifdef MCNLA_USE_MKL
+  #include <mkl.h>
+#endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -35,12 +32,12 @@ namespace random {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  random_module
-/// @brief  The normal (Gaussian) distribution generator engine.
+/// @brief  The random generator engine.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class GaussianEngine {
+class Engine {
 
  private:
 
@@ -67,25 +64,22 @@ class GaussianEngine {
  public:
 
   // Constructors
-  inline GaussianEngine( const index_t seed ) noexcept;
+  inline Engine( const index_t seed ) noexcept;
 
   // Destructor
-  inline ~GaussianEngine() noexcept;
+  inline ~Engine() noexcept;
 
   // Gets information
   inline index_t ompSize() const noexcept;
 
-  // Operators
-  inline void operator()( VectorType &vector ) noexcept;
-  inline void operator()( VectorType &&vector ) noexcept;
+  // Computes
+  inline void uniform( VectorType &vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
+  inline void uniform( VectorType &&vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
+  inline void gaussian( VectorType &vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
+  inline void gaussian( VectorType &&vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
 
   // Sets seed
   inline void setSeed( const index_t seed ) noexcept;
-
- protected:
-
-  // Computes
-  inline void compute( VectorType &vector ) noexcept;
 
 };
 
@@ -93,4 +87,4 @@ class GaussianEngine {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ENGINE_GAUSSIAN_ENGINE_HPP_
+#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_HPP_

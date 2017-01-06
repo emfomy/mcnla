@@ -1,18 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/engine/gaussian.ipp
-/// @brief   The implementation of normal (Gaussian) distribution generator engine.
+/// @file    include/mcnla/core/random/engine/engine.ipp
+/// @brief   The implementation of random generator engine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ENGINE_GAUSSIAN_IPP_
-#define MCNLA_CORE_RANDOM_ENGINE_GAUSSIAN_IPP_
+#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_IPP_
+#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_IPP_
 
-#include <mcnla/core/random/engine/gaussian.hpp>
+#include <mcnla/core/random/engine/engine.hpp>
 
-#ifndef MCNLA_USE_MKL
-#include <random>
-#include <mcnla/core/lapack.hpp>
+#ifdef MCNLA_USE_MKL
+  #include <mcnla/core/random/engine/engine_detail_mkl.ipp>
+#else  // MCNLA_USE_MKL
+  #include <mcnla/core/random/engine/engine_detail_nomkl.ipp>
 #endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +30,7 @@ namespace random {
 /// @brief  Construct with given seed.
 ///
 template <typename _Scalar>
-GaussianEngine<_Scalar>::GaussianEngine(
+Engine<_Scalar>::Engine(
     const index_t seed
 ) noexcept
 #ifdef MCNLA_USE_OMP
@@ -45,7 +46,7 @@ GaussianEngine<_Scalar>::GaussianEngine(
 /// @brief  Default destructor.
 ///
 template <typename _Scalar>
-GaussianEngine<_Scalar>::~GaussianEngine() noexcept {
+Engine<_Scalar>::~Engine() noexcept {
   #ifdef MCNLA_USE_MKL
     #pragma omp parallel for
     for ( index_t i = 0; i < omp_size_; ++i ) {
@@ -58,35 +59,79 @@ GaussianEngine<_Scalar>::~GaussianEngine() noexcept {
 /// @brief  Gets the number of OpenMP threads.
 ///
 template <typename _Scalar>
-index_t GaussianEngine<_Scalar>::ompSize() const noexcept {
+index_t Engine<_Scalar>::ompSize() const noexcept {
   return omp_size_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  compute
+/// @brief  Returns a vector of random numbers from a uniform distribution.
 ///
 template <typename _Scalar>
-void GaussianEngine<_Scalar>::operator()(
-    VectorType &vector
+void Engine<_Scalar>::uniform(
+          VectorType &vector,
+    const ScalarType a,
+    const ScalarType b
 ) noexcept {
-  compute(vector);
+  #pragma omp parallel for
+  for ( index_t i = 0; i < omp_size_; ++i ) {
+    index_t length = vector.length() / omp_size_;
+    index_t start = length * i;
+    if ( i == omp_size_-1 ) {
+      length = vector.length() - start;
+    }
+    detail::uniformImpl(streams_[i], vector({start, start+length}), a, b);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  compute
+/// @copydoc  uniform
 ///
 template <typename _Scalar>
-void GaussianEngine<_Scalar>::operator()(
-    VectorType &&vector
+void Engine<_Scalar>::uniform(
+          VectorType &&vector,
+    const ScalarType a,
+    const ScalarType b
 ) noexcept {
-  compute(vector);
+  uniform(vector, a, b);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Returns a vector of random numbers from a normal (Gaussian) distribution.
+///
+template <typename _Scalar>
+void Engine<_Scalar>::gaussian(
+          VectorType &vector,
+    const ScalarType a,
+    const ScalarType b
+) noexcept {
+  #pragma omp parallel for
+  for ( index_t i = 0; i < omp_size_; ++i ) {
+    index_t length = vector.length() / omp_size_;
+    index_t start = length * i;
+    if ( i == omp_size_-1 ) {
+      length = vector.length() - start;
+    }
+    detail::gaussianImpl(streams_[i], vector({start, start+length}), a, b);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  gaussian
+///
+template <typename _Scalar>
+void Engine<_Scalar>::gaussian(
+          VectorType &&vector,
+    const ScalarType a,
+    const ScalarType b
+) noexcept {
+  gaussian(vector, a, b);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the random seed.
 ///
 template <typename _Scalar>
-void GaussianEngine<_Scalar>::setSeed(
+void Engine<_Scalar>::setSeed(
     const index_t seed
 ) noexcept {
 
@@ -115,32 +160,8 @@ void GaussianEngine<_Scalar>::setSeed(
   #endif  // MCNLA_USE_MKL
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Returns a vector of random numbers from a normal (Gaussian) distribution.
-///
-template <typename _Scalar>
-void GaussianEngine<_Scalar>::compute(
-    VectorType &vector
-) noexcept {
-  #pragma omp parallel for
-  for ( index_t i = 0; i < omp_size_; ++i ) {
-    index_t length = vector.length() / omp_size_;
-    index_t start = length * i;
-    if ( i == omp_size_-1 ) {
-      length = vector.length() - start;
-    }
-
-    #ifdef MCNLA_USE_MKL
-      detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, streams_[i], length, vector.valuePtr()+start, 0.0, 1.0);
-    #else  // MCNLA_USE_MKL
-      lapack::detail::larnv(3, streams_[i], length, vector.valuePtr()+start);
-    #endif  // MCNLA_USE_MKL
-
-  }
-}
-
 }  // namespace random
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ENGINE_GAUSSIAN_IPP_
+#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_IPP_
