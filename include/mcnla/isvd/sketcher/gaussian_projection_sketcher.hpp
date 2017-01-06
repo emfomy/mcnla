@@ -10,9 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/random.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
+#include <mcnla/core/random.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,13 +24,13 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher tag.
 ///
 struct GaussianProjectionSketcherTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
-///
 /// The Gaussian projection sketcher.
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -90,7 +89,7 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
 
   // Random sketches
   template <class _Matrix>
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_y ) noexcept;
+  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
 
   // Gets name
   inline constexpr const char* nameImpl() const noexcept;

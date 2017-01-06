@@ -47,6 +47,8 @@ struct Traits<matrix::DenseDiagonalMatrix<_Scalar>> {
   using ScalarType  = _Scalar;
   using RealType    = matrix::DenseDiagonalMatrix<RealScalarT<_Scalar>>;
   using ComplexType = matrix::DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
+  using VectorType  = matrix::DenseVector<_Scalar>;
+  using MatrixType  = matrix::DenseDiagonalMatrix<_Scalar>;
 };
 
 }  // namespace traits
@@ -78,6 +80,9 @@ class DenseDiagonalMatrix
 
   using RealType       = DenseDiagonalMatrix<RealScalarT<_Scalar>>;
   using ComplexType    = DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
+
+  using VectorType     = DenseVector<_Scalar>;
+  using MatrixType     = DenseDiagonalMatrix<_Scalar>;
 
   using TransposeType  = DenseDiagonalMatrix<_Scalar>;
 

@@ -48,8 +48,12 @@ struct Traits<matrix::DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
   static constexpr Uplo uplo = _uplo;
 
   using ScalarType = _Scalar;
+
   using RealType    = matrix::DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
   using ComplexType = matrix::DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+
+  using VectorType  = matirx::DenseVector<_Scalar>;
+  using MatrixType  = matirx::DenseTriangularMatrix<_Scalar, _trans, _uplo>;
 };
 
 }  // namespace traits
@@ -86,6 +90,9 @@ class DenseTriangularMatrix
 
   using RealType       = DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
   using ComplexType    = DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+
+  using VectorType     = DenseVector<_Scalar>;
+  using MatrixType     = DenseTriangularMatrix<_Scalar, _trans, _uplo>;
 
   using TransposeType  = DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>;
 

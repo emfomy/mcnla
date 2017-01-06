@@ -24,7 +24,7 @@ int main( int argc, char **argv ) {
 
   MPI_Init(&argc, &argv);
   mcnla::mpi_int_t mpi_root = 0;
-  mcnla::index_t m = 10, n = 20, k = 5, p = 1, Nj = 4, seed = 0;
+  mcnla::index_t m = 10, n = 20, k = 5, p = 1, Nj = 3, seed = 0;
 
   mcnla::isvd::Parameters<double> parameters(MPI_COMM_WORLD);
   parameters.nrow_ = m;
@@ -35,12 +35,11 @@ int main( int argc, char **argv ) {
   parameters.tolerance_ = 1e-4;
   parameters.max_iteration_ = 256;
 
-  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
-  // mcnla::isvd::ColumnSamplingSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
+  parameters.initialized_ = true;
 
+  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
   sketcher.setSeed(1);
   sketcher.initialize();
-  parameters.initialized_ = true;
 
   mcnla::matrix::DenseMatrixColMajor<double> mat(m, n);
   mcnla::matrix::DenseMatrixSet120<double> set(m, k+p, Nj);
@@ -52,6 +51,16 @@ int main( int argc, char **argv ) {
   }
 
   sketcher.sketch(mat, set);
+
+  for ( auto i = 0; i < Nj; ++i ) {
+    std::cout << set(i) << std::endl;
+  }
+
+  mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters, MPI_COMM_WORLD, mpi_root);
+  orthogonalizer.initialize();
+
+
+  orthogonalizer.orthogonalize(set);
 
   for ( auto i = 0; i < Nj; ++i ) {
     std::cout << set(i) << std::endl;

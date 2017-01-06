@@ -47,8 +47,12 @@ struct Traits<matrix::DenseVector<_Scalar>> {
   static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
+
   using RealType          = matrix::DenseVector<RealScalarT<_Scalar>>;
   using ComplexType       = matrix::DenseVector<ComplexScalarT<_Scalar>>;
+
+  using VectorType        = matrix::DenseVector<_Scalar>;
+
   using IteratorType      = matrix::DenseVectorIterator<_Scalar>;
   using ConstIteratorType = matrix::DenseVectorConstIterator<_Scalar>;
 };

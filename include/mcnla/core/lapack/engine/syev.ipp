@@ -139,7 +139,7 @@ void SyevEngine<_Matrix, _jobz>::compute(
 ) noexcept {
   mcnla_assert_gt(size_, 0);
   mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
-  mcnla_assert_eq(w.length(), a.nrow());
+  mcnla_assert_eq(w.length(), size_);
   mcnla_assert_eq(detail::syev(__jobz, toUploChar(uplo, trans), a.nrow(), a.valuePtr(), a.pitch(),
                                w.valuePtr(), work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
 }

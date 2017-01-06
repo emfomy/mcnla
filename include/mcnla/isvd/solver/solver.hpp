@@ -116,7 +116,7 @@ class Solver {
   inline const DenseVector<RealScalarType>& singularValues() const noexcept;
   inline const DenseMatrixColMajor<ScalarType>& leftSingularVectors() const noexcept;
   inline const DenseMatrixColMajor<ScalarType>& rightSingularVectors() const noexcept;
-  inline const DenseMatrixRowMajor<ScalarType>& integratedOrthonormalBasis() const noexcept;
+  inline const DenseMatrixRowMajor<ScalarType>& integratedOrthogonalBasis() const noexcept;
 
   // Gets parameters
   const ParametersType& parameters() const noexcept;

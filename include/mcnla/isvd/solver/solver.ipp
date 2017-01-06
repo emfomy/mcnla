@@ -203,13 +203,13 @@ const DenseMatrix<ScalarT<Solver<_Matrix, _Sketcher, _Integrator, _Former>>, Lay
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the integrated orthonormal basis of the sketched subspace.
+/// @brief  Gets the integrated orthogonal basis of the sketched subspace.
 ///
 /// @attention  The solver should have be computed.
 ///
 template <class _Matrix, class _Sketcher, class _Integrator, class _Former>
 const DenseMatrix<ScalarT<Solver<_Matrix, _Sketcher, _Integrator, _Former>>, Layout::ROWMAJOR>&
-    Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratedOrthonormalBasis() const noexcept {
+    Solver<_Matrix, _Sketcher, _Integrator, _Former>::getIntegratedOrthogonalBasis() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.getMatrixQbar();
 }

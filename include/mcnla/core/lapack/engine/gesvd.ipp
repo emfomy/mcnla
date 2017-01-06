@@ -149,7 +149,8 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::compute(
 ) noexcept {
   mcnla_assert_gt(nrow_, 0);
   mcnla_assert_gt(ncol_, 0);
-  mcnla_assert_eq(a.sizes(), std::make_tuple(nrow_, ncol_));
+  mcnla_assert_eq(a.sizes(),  std::make_tuple(nrow_, ncol_));
+  mcnla_assert_eq(s.length(), std::min(nrow_, ncol_));
 
   if ( __jobu == 'A' ) {
     mcnla_assert_eq(u.sizes(), std::make_tuple(nrow_, nrow_));

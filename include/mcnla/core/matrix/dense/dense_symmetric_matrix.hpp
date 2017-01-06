@@ -48,8 +48,12 @@ struct Traits<matrix::DenseSymmetricMatrix<_Scalar, _trans, _uplo>> {
   static constexpr Uplo uplo = _uplo;
 
   using ScalarType  = _Scalar;
+
   using RealType    = matrix::DenseSymmetricMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
   using ComplexType = matrix::DenseSymmetricMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+
+  using VectorType  = matirx::DenseVector<_Scalar>;
+  using MatrixType  = matirx::DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
 };
 
 }  // namespace traits
@@ -88,6 +92,9 @@ class DenseSymmetricMatrix
 
   using RealType       = DenseSymmetricMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
   using ComplexType    = DenseSymmetricMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+
+  using VectorType     = DenseVector<_Scalar>;
+  using MatrixType     = DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
 
   using TransposeType  = DenseSymmetricMatrix<_Scalar, changeTrans(_trans), _uplo>;
 

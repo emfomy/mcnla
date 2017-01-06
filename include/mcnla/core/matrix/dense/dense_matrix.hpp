@@ -55,8 +55,13 @@ struct Traits<matrix::DenseMatrix<_Scalar, _trans>> {
   static constexpr Trans trans = _trans;
 
   using ScalarType        = _Scalar;
+
   using RealType          = matrix::DenseMatrix<RealScalarT<_Scalar>, _trans>;
   using ComplexType       = matrix::DenseMatrix<ComplexScalarT<_Scalar>, _trans>;
+
+  using VectorType        = matrix::DenseVector<_Scalar>;
+  using MatrixType        = matrix::DenseMatrix<_Scalar, _trans>;
+
   using IteratorType      = matrix::DenseMatrixIterator<_Scalar, _trans>;
   using ConstIteratorType = matrix::DenseMatrixConstIterator<_Scalar, _trans>;
 };

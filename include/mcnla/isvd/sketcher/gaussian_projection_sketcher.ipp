@@ -10,6 +10,7 @@
 
 #include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hpp>
 #include <ctime>
+#include <mcnla/core/blas.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -57,7 +58,7 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag>::initializeImpl() noexcept
 template <typename _Scalar> template <class _Matrix>
 void Sketcher<_Scalar, GaussianProjectionSketcherTag>::sketchImpl(
     const _Matrix &matrix_a,
-          DenseMatrixSet120<ScalarType> &set_y
+          DenseMatrixSet120<ScalarType> &set_q
 ) noexcept {
 
   mcnla_assert_true(parameters_.isInitialized());
@@ -68,7 +69,7 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag>::sketchImpl(
   const auto dim_sketch      = parameters_.dimSketch();
 
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
-  mcnla_assert_eq(set_y.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
+  mcnla_assert_eq(set_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   time0_ = MPI_Wtime();
 
@@ -77,7 +78,7 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag>::sketchImpl(
   time1_ = MPI_Wtime();
 
   // Q := A * Omega
-  blas::mm(matrix_a, matrix_omegas_, set_y.unfold());
+  blas::mm(matrix_a, matrix_omegas_, set_q.unfold());
   time2_ = MPI_Wtime();
 }
 
