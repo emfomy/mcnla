@@ -28,11 +28,11 @@ template <class _Matrix>
 Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::Sketcher(
     const Parameters<ScalarType> &parameters,
     const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root
+    const mpi_int_t mpi_root,
+    const index_t seed
 ) noexcept
   : BaseType(parameters, mpi_comm, mpi_root),
-    seed_{(time(NULL)^mpi::commRank(mpi_comm))%4096, (time(NULL)^mpi::commRank(mpi_comm))%4096,
-          (time(NULL)^mpi::commRank(mpi_comm))%4096, ((time(NULL)^mpi::commRank(mpi_comm))%2048)*2+1} {}
+    random_engine_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
@@ -73,7 +73,7 @@ void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSk
   time0_ = MPI_Wtime();
 
   // Random sample Omega using normal Gaussian distribution
-  lapack::larnv<3>(matrix_omegas_.vectorize(), seed_);
+  random_engine_(matrix_omegas_.vectorize());
   time1_ = MPI_Wtime();
 
   // Q := A * Omega
@@ -115,17 +115,13 @@ double Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjection
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the random seed.
+/// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
 ///
 template <class _Matrix>
-Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>&
-  Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::setSeed(
-    const index_t seed[4]
+void Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>::setSeedImpl(
+    const index_t seed
 ) noexcept {
-  for ( index_t i = 0; i < 4; ++i ) {
-    seed_[i] = seed[i];
-  }
-  return *this;
+  random_engine_.sedSeed();
 }
 
 }  // namespace isvd

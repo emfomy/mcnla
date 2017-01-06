@@ -74,6 +74,9 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
   // Gets compute time
   inline double time() const noexcept;
 
+  // Sets seed
+  void setSeed( const index_t seed ) noexcept;
+
 };
 
 }  // namespace isvd

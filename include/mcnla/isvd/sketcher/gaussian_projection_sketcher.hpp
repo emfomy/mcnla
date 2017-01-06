@@ -11,6 +11,7 @@
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/core/blas.hpp>
+#include <mcnla/core/random.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,22 +70,20 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
   /// The matrix Omega.
   DenseMatrixColMajor<ScalarType> matrix_omegas_;
 
-  /// The random seed
-  index_t seed_[4];
+  /// The random engine
+  random::GaussianEngine<ScalarType> random_engine_;
 
   using BaseType::parameters_;
 
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ScalarType> &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Sketcher( const Parameters<ScalarType> &parameters,
+                   const MPI_Comm mpi_comm, const mpi_int_t mpi_root, const index_t seed ) noexcept;
 
   // Gets time
   inline double time1() const noexcept;
   inline double time2() const noexcept;
-
-  // Sets seed
-  Sketcher& setSeed( const index_t seed[4] ) noexcept;
 
  protected:
 
@@ -100,12 +99,14 @@ class Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionS
   // Gets time
   inline double timeImpl() const noexcept;
 
+  // Sets seed
+  void setSeedImpl( const index_t seed ) noexcept;
+
 };
 
 /// @ingroup  isvd_sketcher_module
 template <class _Matrix>
-using GaussianProjectionSketcher =
-    Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>;
+using GaussianProjectionSketcher = Sketcher<_Matrix, DenseMatrixSet120<ScalarT<_Matrix>>, GaussianProjectionSketcherTag>;
 
 }  // namespace isvd
 

@@ -68,6 +68,16 @@ double SketcherWrapper<_Derived>::time() const noexcept {
   return this->derived().timeImpl();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::setSeed
+///
+template <class _Derived>
+void SketcherWrapper<_Derived>::setSeed(
+    const index_t seed
+) noexcept {
+  return this->derived().setSeedImpl(seed);
+}
+
 }  // namespace isvd
 
 }  // namespace mcnla
