@@ -60,7 +60,7 @@ template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
 void SyevEngine<_Matrix, _jobz>::operator()(
     _TypeA &&a,
     _TypeW &&w
-) const noexcept {
+) noexcept {
   compute(a, w);
 }
 
@@ -71,7 +71,7 @@ template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
 void SyevEngine<_Matrix, _jobz>::computeValues(
     _TypeA &&a,
     _TypeW &&w
-) const noexcept {
+) noexcept {
   compute<'N'>(a, w);
 }
 
@@ -135,7 +135,7 @@ template <class _Matrix, JobOption _jobz> template <JobOption __jobz>
 void SyevEngine<_Matrix, _jobz>::compute(
     MatrixType &a,
     RealVectorType &w
-) const noexcept {
+) noexcept {
   mcnla_assert_gt(size_, 0);
   mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
   mcnla_assert_eq(w.length(), a.nrow());
@@ -149,7 +149,7 @@ void SyevEngine<_Matrix, _jobz>::compute(
 template <class _Matrix, JobOption _jobz>
 index_t SyevEngine<_Matrix, _jobz>::query(
     const index_t size
-) const noexcept {
+) noexcept {
   ScalarType lwork;
   mcnla_assert_eq(detail::syev(_jobz, toUploChar(uplo, trans), size, nullptr, size, nullptr, &lwork, -1, nullptr), 0);
   return lwork;

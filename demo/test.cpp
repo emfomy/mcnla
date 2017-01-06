@@ -20,11 +20,19 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  int n = 100000000;
+  int n = 1000000000;
 
   mcnla::matrix::DenseVector<double> vec(n);
 
-  mcnla::random::gaussian(vec, 1);
+  mcnla::random::GaussianEngine<double> rand(1);
+
+  std::cout << "omp_size = " << rand.ompSize() << std::endl;
+
+  double t0 = omp_get_wtime();
+  rand(vec);
+  double t1 = omp_get_wtime();
+
+  printf("time = %.2lfs\n", t1-t0);
 
   double sum = 0.0, sum2 = 0.0;
   for ( auto i = 0; i < n; ++i ) sum += vec(i);

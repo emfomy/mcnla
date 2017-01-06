@@ -11,12 +11,15 @@
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/random/def.hpp>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <vector>
+#include <omp.h>
 
 #ifdef MCNLA_USE_MKL
-#include <mkl.h>
+  #include <mkl.h>
 #endif  // MCNLA_USE_MKL
+
+#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -44,14 +47,18 @@ class GaussianEngine {
 
  protected:
 
+  /// The number of threads
+  const index_t omp_size_;
+
 #ifdef MCNLA_USE_MKL
 
-  /// The random stream
-  VSLStreamStatePtr stream_;
+  /// The random streams
+  std::vector<VSLStreamStatePtr> streams_;
 
 #else  // MCNLA_USE_MKL
 
-  index_t seed_[4];
+  /// The random streams
+  std::vector<index_t[4]> streams_;
 
 #endif  // MCNLA_USE_MKL
 
@@ -63,9 +70,12 @@ class GaussianEngine {
   // Destructor
   inline ~GaussianEngine() noexcept;
 
+  // Gets information
+  inline index_t ompSize() const noexcept;
+
   // Operators
-  inline void operator()( VectorType &vector ) const noexcept;
-  inline void operator()( VectorType &&vector ) const noexcept;
+  inline void operator()( VectorType &vector ) noexcept;
+  inline void operator()( VectorType &&vector ) noexcept;
 
   // Sets seed
   inline void setSeed( const index_t seed ) noexcept;
@@ -73,7 +83,7 @@ class GaussianEngine {
  protected:
 
   // Computes
-  inline void compute( VectorType &vector ) const noexcept;
+  inline void compute( VectorType &vector ) noexcept;
 
 };
 

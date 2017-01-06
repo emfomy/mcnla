@@ -64,7 +64,7 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::operator()(
     _TypeS &&s,
     _TypeU &&u,
     _TypeVt &&vt
-) const noexcept {
+) noexcept {
   compute(a, s, u, vt);
 }
 
@@ -75,7 +75,7 @@ template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <class _Typ
 void GesvdEngine<_Matrix, _jobu, _jobvt>::computeValues(
     _TypeA &&a,
     _TypeS &&s
-) const noexcept {
+) noexcept {
   compute<'N', 'N'>(a, s, matrix_empty_, matrix_empty_);
 }
 
@@ -145,7 +145,7 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::compute(
     RealVectorType &s,
     MatrixType &u,
     MatrixType &vt
-) const noexcept {
+) noexcept {
   mcnla_assert_gt(nrow_, 0);
   mcnla_assert_gt(ncol_, 0);
   mcnla_assert_eq(a.sizes(), std::make_tuple(nrow_, ncol_));
@@ -182,7 +182,7 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::compute(
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 index_t GesvdEngine<_Matrix, _jobu, _jobvt>::query(
     const index_t nrow, const index_t ncol
-) const noexcept {
+) noexcept {
   ScalarType lwork;
   if ( !isTrans(trans) ) {
     mcnla_assert_eq(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,

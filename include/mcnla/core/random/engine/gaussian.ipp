@@ -11,7 +11,8 @@
 #include <mcnla/core/random/engine/gaussian.hpp>
 
 #ifndef MCNLA_USE_MKL
-#include <<mcnla/core/lapack.hpp>
+#include <random>
+#include <mcnla/core/lapack.hpp>
 #endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +31,13 @@ namespace random {
 template <typename _Scalar>
 GaussianEngine<_Scalar>::GaussianEngine(
     const index_t seed
-) noexcept {
+) noexcept
+#ifdef MCNLA_USE_OMP
+  : omp_size_(omp_get_max_threads()),
+#else  // MCNLA_USE_OMP
+  : omp_size_(1),
+#endif  // MCNLA_USE_OMP
+    streams_(omp_size_) {
   setSeed(seed);
 }
 
@@ -39,9 +46,20 @@ GaussianEngine<_Scalar>::GaussianEngine(
 ///
 template <typename _Scalar>
 GaussianEngine<_Scalar>::~GaussianEngine() noexcept {
-#ifdef MCNLA_USE_MKL
-  vslDeleteStream(&stream_);
-#endif  // MCNLA_USE_MKL
+  #ifdef MCNLA_USE_MKL
+    #pragma omp parallel for
+    for ( index_t i = 0; i < omp_size_; ++i ) {
+      vslDeleteStream(&(streams_[i]));
+    }
+  #endif  // MCNLA_USE_MKL
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of OpenMP threads.
+///
+template <typename _Scalar>
+index_t GaussianEngine<_Scalar>::ompSize() const noexcept {
+  return omp_size_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +68,7 @@ GaussianEngine<_Scalar>::~GaussianEngine() noexcept {
 template <typename _Scalar>
 void GaussianEngine<_Scalar>::operator()(
     VectorType &vector
-) const noexcept {
+) noexcept {
   compute(vector);
 }
 
@@ -60,7 +78,7 @@ void GaussianEngine<_Scalar>::operator()(
 template <typename _Scalar>
 void GaussianEngine<_Scalar>::operator()(
     VectorType &&vector
-) const noexcept {
+) noexcept {
   compute(vector);
 }
 
@@ -71,14 +89,30 @@ template <typename _Scalar>
 void GaussianEngine<_Scalar>::setSeed(
     const index_t seed
 ) noexcept {
-#ifdef MCNLA_USE_MKL
-  vslNewStream(&stream_, VSL_BRNG_MCG31, seed);
-#else  // MCNLA_USE_MKL
-  seed_[0] = (seed & 0x000000FF);
-  seed_[1] = (seed & 0x0000FF00) >> 8;
-  seed_[2] = (seed & 0x00FF0000) >> 16;
-  seed_[3] = (seed & 0xFF000000) >> 23 + 1;
-#endif  // MCNLA_USE_MKL
+
+  #ifdef MCNLA_USE_MKL
+
+    std::seed_seq seq{seed};
+    std::vector<index_t> seeds(omp_size_);
+    seq.generate(seeds.begin(), seeds.end());
+    #pragma omp parallel for
+    for ( index_t i = 0; i < omp_size_; ++i ) {
+      vslNewStream(&(streams_[i]), VSL_BRNG_MCG31, seeds[i]);
+    }
+
+  #else  // MCNLA_USE_MKL
+
+    std::seed_seq seq{seed};
+    seq.generate(streams_[0], streams_[omp_size_]);
+    #pragma omp parallel for
+    for ( index_t i = 0; i < omp_size_; ++i ) {
+      streams_[i][0] = size_t(streams_[i][0]) % 4096;
+      streams_[i][1] = size_t(streams_[i][1]) % 4096;
+      streams_[i][2] = size_t(streams_[i][2]) % 4096;
+      streams_[i][3] = size_t(streams_[i][3]) % 2048 + 1;
+    }
+
+  #endif  // MCNLA_USE_MKL
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,12 +121,22 @@ void GaussianEngine<_Scalar>::setSeed(
 template <typename _Scalar>
 void GaussianEngine<_Scalar>::compute(
     VectorType &vector
-) const noexcept {
-#ifdef MCNLA_USE_MKL
-  vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream_, vector.length(), vector.valuePtr(), 0.0, 1.0);
-#else  // MCNLA_USE_MKL
-  lapack::larnv<3>(vector, seed_);
-#endif  // MCNLA_USE_MKL
+) noexcept {
+  #pragma omp parallel for
+  for ( index_t i = 0; i < omp_size_; ++i ) {
+    index_t length = vector.length() / omp_size_;
+    index_t start = length * i;
+    if ( i == omp_size_-1 ) {
+      length = vector.length() - start;
+    }
+
+    #ifdef MCNLA_USE_MKL
+      vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, streams_[i], length, vector.valuePtr()+start, 0.0, 1.0);
+    #else  // MCNLA_USE_MKL
+      lapack::detail::larnv(3, streams_[i], length, vector.valuePtr()+start);
+    #endif  // MCNLA_USE_MKL
+
+  }
 }
 
 }  // namespace random

@@ -25,6 +25,7 @@ else()
 endif()
 
 if(MKL_USE_OMP)
+  list(APPEND DEFS "MCNLA_USE_OMP")
   if(MKL_USE_IOMP)
     set(MKL_OMP "IOMP")
   else()

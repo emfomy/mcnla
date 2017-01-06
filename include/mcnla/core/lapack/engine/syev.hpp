@@ -74,11 +74,11 @@ class SyevEngine {
 
   // Operators
   template <class _TypeA, class _TypeW>
-  inline void operator()( _TypeA &&a, _TypeW &&w ) const noexcept;
+  inline void operator()( _TypeA &&a, _TypeW &&w ) noexcept;
 
   // Computes eigenvalues
   template <class _TypeA, class _TypeW>
-  inline void computeValues( _TypeA &&a, _TypeW &&w ) const noexcept;
+  inline void computeValues( _TypeA &&a, _TypeW &&w ) noexcept;
 
   // Resizes
   template <typename... Args>
@@ -97,10 +97,10 @@ class SyevEngine {
 
   // Computes
   template <JobOption __jobz = _jobz>
-  inline void compute( MatrixType &a, RealVectorType &w ) const noexcept;
+  inline void compute( MatrixType &a, RealVectorType &w ) noexcept;
 
   // Queries
-  inline index_t query( const index_t size ) const noexcept;
+  inline index_t query( const index_t size ) noexcept;
 
 };
 
