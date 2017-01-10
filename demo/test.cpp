@@ -37,13 +37,12 @@ int main( int argc, char **argv ) {
 
   parameters.initialized_ = true;
 
-  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
-  sketcher.setSeed(1);
-  sketcher.initialize();
-
   mcnla::matrix::DenseMatrixColMajor<double> mat(m, n);
   mcnla::matrix::DenseMatrixSet120<double> set(m, k+p, Nj);
 
+  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
+  sketcher.setSeed(1);
+  sketcher.initialize();
   // mcnla::random::gaussian(mat.vectorize(), 0);
   int i = 0;
   for ( auto &v : mat ) {
@@ -58,7 +57,6 @@ int main( int argc, char **argv ) {
 
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters, MPI_COMM_WORLD, mpi_root);
   orthogonalizer.initialize();
-
 
   orthogonalizer.orthogonalize(set);
 

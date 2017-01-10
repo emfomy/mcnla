@@ -322,8 +322,8 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // D := sum( Xj'*Xj )
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, -1.0, matrix_xjt, k, 0.0, matrix_b, k);
-    MPI_Allreduce(matrix_b, matrix_d, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, mj, 1.0, matrix_xjt, k, 0.0, matrix_d, k);
+    MPI_Allreduce(MPI_IN_PLACE, matrix_d, k*k, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
     // Compute the eigen-decomposition of D (E := eigenvalues, D := eigenvectors)
     LAPACKE_dsyev(LAPACK_COL_MAJOR, 'V', 'L', k, matrix_d, k, vector_e);
