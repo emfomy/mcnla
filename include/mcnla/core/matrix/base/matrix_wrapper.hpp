@@ -8,12 +8,8 @@
 #ifndef MCNLA_CORE_MATRIX_BASE_MATRIX_WRAPPER_HPP_
 #define MCNLA_CORE_MATRIX_BASE_MATRIX_WRAPPER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <iostream>
-#include <tuple>
-#include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/matrix/base/matrix_wrapper.hh>
+#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -26,36 +22,54 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
-/// The matrix wrapper.
+/// @brief  Print to stream.
 ///
-/// @tparam  _Derived  The derived type.
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &out,
+    const MatrixWrapper<__Derived> &wrapper
+) {
+  auto &matrix = wrapper.derived();
+  for ( index_t i = 0; i < matrix.nrow(); ++i ) {
+    for ( index_t j = 0; j < matrix.ncol(); ++j ) {
+      out << std::setw(ios_width) << matrix(i, j) << "  ";
+    }
+    out << '\n';
+  }
+  return out;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of rows.
 ///
 template <class _Derived>
-class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>> {
+index_t MatrixWrapper<_Derived>::nrow() const noexcept {
+  return this->derived().nrowImpl();
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of columns.
+///
+template <class _Derived>
+index_t MatrixWrapper<_Derived>::ncol() const noexcept {
+  return this->derived().ncolImpl();
+}
 
-  using SizesType = std::tuple<index_t, index_t>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of elements.
+///
+template <class _Derived>
+index_t MatrixWrapper<_Derived>::nelem() const noexcept {
+  return nrow() * ncol();
+}
 
- protected:
-
-  // Constructors
-  inline MatrixWrapper() noexcept = default;
-
- public:
-
-  // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &out, const MatrixWrapper<__Derived> &wrapper );
-
-  // Gets information
-  inline index_t   nrow() const noexcept;
-  inline index_t   ncol() const noexcept;
-  inline index_t   nelem() const noexcept;
-  inline SizesType sizes() const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the size of dimensions in interface order. [ nrow, ncol ]
+///
+template <class _Derived>
+std::tuple<index_t, index_t> MatrixWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(nrow(), ncol());
+}
 
 }  // namespace matrix
 

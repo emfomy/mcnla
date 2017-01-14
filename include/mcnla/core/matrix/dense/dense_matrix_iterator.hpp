@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_matrix_iterator.hpp
-/// @brief   The dense matrix iterator class.
+/// @brief   The dense matrix iterator.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,9 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HPP_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix.hpp>
+#include <mcnla/core/matrix/dense/dense_matrix_iterator.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,93 +20,58 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans> class DenseMatrix;
-template <typename _Scalar, Trans _trans, class _Matrix> class DenseMatrixIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix iterator traits.
+/// @brief  Print to stream.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _trans   The transpose storage layout.
-/// @tparam  _Matrix  The matrix type.
+template <typename __Scalar, Trans __trans, class __Matrix>
+std::ostream& operator<< (
+    std::ostream &out,
+    const DenseMatrixIteratorBase<__Scalar, __trans, __Matrix> &iterator
+) {
+  const index_t width_r = log10(iterator.container_->nrow())+1;
+  const index_t width_c = log10(iterator.container_->ncol())+1;
+  const index_t width   = std::max(width_r, width_c);
+  return out << "(" << std::setw(width) << iterator.rowidx() << ", "
+                    << std::setw(width) << iterator.colidx() << ")  "
+                    << std::setw(ios_width) << iterator.value();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the value.
+///
+/// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, Trans _trans, class _Matrix>
-struct Traits<matrix::DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>> {
-
-  static constexpr index_t ndim = 2;
-  static constexpr Trans trans = _trans;
-  using ScalarType    = _Scalar;
-  using ContainerType = _Matrix;
-};
-
-}  // namespace traits
+_Scalar& DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::value() const noexcept {
+  mcnla_assert_gelt(itidx_, 0, container_->nelem());
+  return container_->valuePtr()[pos()];
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
-/// The dense matrix iterator.
-///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _trans  The storage layout.
-/// @tparam  _Matrix  The matrix type.
-///
-/// @see  DenseMatrixIterator, DenseMatrixConstIterator
+/// @brief  Gets the row index.
 ///
 template <typename _Scalar, Trans _trans, class _Matrix>
-class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>> {
+index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::rowidx() const noexcept {
+  return !isTrans(_trans) ? itidx_ % container_->dim0() : itidx_ / container_->dim0();
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the column index.
+///
+template <typename _Scalar, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::colidx() const noexcept {
+  return !isTrans(_trans) ? itidx_ / container_->dim0() : itidx_ % container_->dim0();
+}
 
-  static constexpr index_t ndim = 2;
-  static constexpr Trans trans = _trans;
-  using ScalarType    = _Scalar;
-  using ContainerType = _Matrix;
-
-  using BaseType      = DenseIteratorBase<DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>>;
-
- protected:
-
-  using BaseType::itidx_;
-  using BaseType::container_;
-
- public:
-
-  using BaseType::DenseIteratorBase;
-  using BaseType::operator=;
-
-  // Operators
-  template <typename __Scalar, Trans __trans, class __Matrix>
-  friend inline std::ostream& operator<<( std::ostream &out,
-                                          const DenseMatrixIteratorBase<__Scalar, __trans, __Matrix> &iterator );
-
-  // Gets value
-  inline ScalarType& value() const noexcept;
-  inline index_t     rowidx() const noexcept;
-  inline index_t     colidx() const noexcept;
-  inline index_t     pos() const noexcept;
-
-};
-
-/// @ingroup  matrix_dense_module
-template <typename _Scalar, Trans _trans>
-using DenseMatrixIterator = DenseMatrixIteratorBase<_Scalar, _trans, DenseMatrix<_Scalar, _trans>>;
-
-/// @ingroup  matrix_dense_module
-template <typename _Scalar, Trans _trans>
-using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Scalar, _trans, const DenseMatrix<_Scalar, _trans>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position.
+///
+/// @attention  Never call this when the iterator is at the end.
+///
+template <typename _Scalar, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::pos() const noexcept {
+  return container_->pos(rowidx(), colidx());
+}
 
 }  // namespace matrix
 

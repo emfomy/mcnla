@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_vector_iterator.hpp
-/// @brief   The dense vector iterator class.
+/// @brief   The dense vector iterator.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,10 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <mcnla/core/matrix/dense/dense_vector.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/matrix/dense/dense_vector_iterator.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,83 +20,46 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseVector;
-template <typename _Scalar, class _Vector> class DenseVectorIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Print to stream.
+///
+template <typename __Scalar, class __Vector>
+std::ostream& operator<< (
+    std::ostream &out,
+    const DenseVectorIteratorBase<__Scalar, __Vector> &iterator
+) {
+  const index_t width = log10(iterator.container_->length())+1;
+  return out << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.value();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
+/// @brief  Gets the value.
+///
+/// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, class _Vector>
-struct Traits<matrix::DenseVectorIteratorBase<_Scalar, _Vector>> {
-  static constexpr index_t ndim = 1;
-  using ScalarType    = _Scalar;
-  using ContainerType = _Vector;
-};
-
-}  // namespace traits
+_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::value() const noexcept {
+  mcnla_assert_gelt(itidx_, 0, container_->nelem());
+  return container_->valuePtr()[pos()];
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
-/// The dense vector iterator.
-///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Vector  The vector type.
-///
-/// @see  DenseVectorIterator, DenseVectorConstIterator
+/// @brief  Gets the index.
 ///
 template <typename _Scalar, class _Vector>
-class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>> {
+index_t DenseVectorIteratorBase<_Scalar, _Vector>::idx() const noexcept {
+  return itidx_;
+}
 
- private:
-
-  static constexpr index_t ndim = 1;
-  using ScalarType    = _Scalar;
-  using ContainerType = _Vector;
-
-  using BaseType      = DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>;
-
- protected:
-
-  using BaseType::itidx_;
-  using BaseType::container_;
-
- public:
-
-  using BaseType::DenseIteratorBase;
-  using BaseType::operator=;
-
-  // Operators
-  template <typename __Scalar, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
-
-  // Gets value
-  inline ScalarType& value() const noexcept;
-  inline index_t     idx() const noexcept;
-  inline index_t     pos() const noexcept;
-
-};
-
-/// @ingroup  matrix_dense_module
-template <typename _Scalar>
-using DenseVectorIterator = DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
-
-/// @ingroup  matrix_dense_module
-template <typename _Scalar>
-using DenseVectorConstIterator = DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the internal position.
+///
+/// @attention  Never call this when the iterator is at the end.
+///
+template <typename _Scalar, class _Vector>
+index_t DenseVectorIteratorBase<_Scalar, _Vector>::pos() const noexcept {
+  return container_->pos(itidx_);
+}
 
 }  // namespace matrix
 

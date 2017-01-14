@@ -8,9 +8,7 @@
 #ifndef MCNLA_ISVD_FORMER_DUMMY_FORMER_HPP_
 #define MCNLA_ISVD_FORMER_DUMMY_FORMER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/former/former_base.hpp>
+#include <mcnla/isvd/former/dummy_former.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,92 +20,73 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class DummyFormer;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dummy former traits.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::FormerBase::FormerBase
 ///
 template <class _Matrix>
-struct Traits<isvd::DummyFormer<_Matrix>> {
-  using MatrixType = _Matrix;
-};
-
-}  // namespace traits
+DummyFormer<_Matrix>::DummyFormer(
+    const Parameters<ScalarType> &parameters
+) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_former_module
-///
-/// The dummy former.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::FormerBase::initialize
 ///
 template <class _Matrix>
-class DummyFormer : public FormerBase<DummyFormer<_Matrix>> {
+void DummyFormer<_Matrix>::initializeImpl() noexcept {}
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::form
+///
+template <class _Matrix>
+void DummyFormer<_Matrix>::formImpl(
+    const _Matrix &matrix_a,
+    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
+) noexcept { static_cast<void>(matrix_a); static_cast<void>(matrix_qc); }
 
-  friend FormerBase<DummyFormer<_Matrix>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::name
+///
+template <class _Matrix>
+constexpr const char* DummyFormer<_Matrix>::nameImpl() const noexcept {
+  return name_;
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::getTime
+///
+template <class _Matrix>
+double DummyFormer<_Matrix>::getTimeImpl() const noexcept {
+  return 0;
+}
 
-  using BaseType = FormerBase<DummyFormer<_Matrix>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::getTimes
+///
+template <class _Matrix>
+const std::vector<double> DummyFormer<_Matrix>::getTimesImpl() const noexcept {
+  return {};
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @fn  DummyFormer::getVectorSImpl
+/// @copydoc  mcnla::isvd::FormerBase::getVectorS
+///
+/// @attention  This routine is not available.
+///
 
-  using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
-  using MatrixType     = _Matrix;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @fn  DummyFormer::getMatrixUImpl
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixU
+///
+/// @attention  This routine is not available.
+///
 
- protected:
-
-  /// The name.
-  static constexpr const char* name_= "Dummy Former";
-
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
-
- public:
-
-  // Constructor
-  inline DummyFormer( const Parameters<ScalarType> &parameters ) noexcept;
-
- protected:
-
-  // Initializes
-  void initializeImpl() noexcept;
-
-  // Reconstructs
-  void formImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
-
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
-
-  // Gets compute time
-  inline double getTimeImpl() const noexcept;
-  inline const std::vector<double> getTimesImpl() const noexcept;
-
-  // Gets matrices
-  inline const DenseVector<RealScalarType>& getVectorSImpl() const noexcept = delete;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixUImpl() const noexcept = delete;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept = delete;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @fn  DummyFormer::getMatrixVtImpl
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixVt
+///
+/// @attention  This routine is not available.
+///
 
 }  // namespace isvd
 

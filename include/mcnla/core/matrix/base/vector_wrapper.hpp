@@ -8,12 +8,8 @@
 #ifndef MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HPP_
 #define MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <iostream>
-#include <tuple>
-#include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/matrix/base/vector_wrapper.hh>
+#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -26,35 +22,43 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
-/// The vector wrapper.
+/// @brief  Print to stream.
 ///
-/// @tparam  _Derived  The derived type.
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &out,
+    const VectorWrapper<__Derived> &wrapper
+) {
+  auto &vector = wrapper.derived();
+  for ( index_t i = 0; i < vector.length(); ++i ) {
+    out << std::setw(ios_width) << vector(i) << "  ";
+  }
+  return out << '\n';
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the length.
 ///
 template <class _Derived>
-class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>> {
+index_t VectorWrapper<_Derived>::length() const noexcept {
+  return this->derived().lengthImpl();
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of elements.
+///
+template <class _Derived>
+index_t VectorWrapper<_Derived>::nelem() const noexcept {
+  return length();
+}
 
-  using SizesType = std::tuple<index_t>;
-
- protected:
-
-  // Constructors
-  inline VectorWrapper() noexcept = default;
-
- public:
-
-  // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &out, const VectorWrapper<__Derived> &wrapper );
-
-  // Gets information
-  inline index_t   length() const noexcept;
-  inline index_t   nelem() const noexcept;
-  inline SizesType sizes() const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the size of dimensions in interface order. [ length ]
+///
+template <class _Derived>
+std::tuple<index_t> VectorWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(length());
+}
 
 }  // namespace matrix
 

@@ -5,13 +5,10 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_INTEGRATOR_BASE_HPP_
-#define MCNLA_ISVD_INTEGRATOR_INTEGRATOR_BASE_HPP_
+#ifndef MCNLA_ISVD_INTEGRATOR_BASE_HPP_
+#define MCNLA_ISVD_INTEGRATOR_BASE_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/utility.hpp>
+#include <mcnla/isvd/integrator/integrator_base.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,62 +21,97 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
-///
-/// The interface of iSVD integrator.
-///
-/// @tparam  _Derived  The derived type.
+/// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derived>> {
+IntegratorBase<_Derived>::IntegratorBase(
+    const Parameters<ScalarType> &parameters
+) noexcept : parameters_(parameters) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Initializes.
+///
+template <class _Derived>
+void IntegratorBase<_Derived>::initialize() noexcept {
+  this->derived().initializeImpl();
+}
 
-  using MatrixType     = MatrixT<_Derived>;
-  using ScalarType     = ScalarT<MatrixType>;
-  using RealScalarType = typename MatrixType::RealScalarType;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Integrates.
+///
+template <class _Derived>
+void IntegratorBase<_Derived>::integrate() noexcept {
+  this->derived().integrateImpl();
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getIntegratorName
+///
+template <class _Derived>
+constexpr const char* IntegratorBase<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
+}
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getIntegratorTime
+///
+template <class _Derived>
+double IntegratorBase<_Derived>::getTime() const noexcept {
+  return this->derived().getTimeImpl();
+}
 
-  /// The time of integrating
-  double integrating_time_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getIntegratorTimes
+///
+template <class _Derived>
+const std::vector<double> IntegratorBase<_Derived>::getTimes() const noexcept {
+  return this->derived().getTimesImpl();
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getIntegratorIter
+///
+template <class _Derived>
+index_t IntegratorBase<_Derived>::getIter() const noexcept {
+  return this->derived().getIterImpl();
+}
 
-  // Constructor
-  inline IntegratorBase( const Parameters<ScalarType> &parameters ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the set Q.
+///
+template <class _Derived>
+DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::getSetQ() noexcept {
+  return this->derived().getSetQImpl();
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getSetQ
+///
+template <class _Derived>
+const DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::getSetQ() const noexcept {
+  return this->derived().getSetQImpl();
+}
 
-  // Initializes
-  inline void initialize() noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the matrix Qc.
+///
+template <class _Derived>
+DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::getMatrixQbar() noexcept {
+  return this->derived().getMatrixQbarImpl();
+}
 
-  // Reconstructs
-  inline void integrate() noexcept;
-
-  // Gets name
-  inline constexpr const char* name() const noexcept;
-
-  // Gets compute time
-  inline double getTime() const noexcept;
-  inline const std::vector<double> getTimes() const noexcept;
-
-  // Gets iterator number
-  inline index_t getIter() const noexcept;
-
-  // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& getSetQ() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& getSetQ() const noexcept;
-  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbar() noexcept;
-  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbar() const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getMatrixQbar
+///
+template <class _Derived>
+const DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::getMatrixQbar() const noexcept {
+  return this->derived().getMatrixQbarImpl();
+}
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_INTEGRATOR_BASE_HPP_
+#endif  // MCNLA_ISVD_INTEGRATOR_BASE_HPP_

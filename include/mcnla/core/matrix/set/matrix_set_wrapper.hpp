@@ -8,11 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_SET_MATRIX_SET_WRAPPER_HPP_
 #define MCNLA_CORE_MATRIX_SET_MATRIX_SET_WRAPPER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <tuple>
-#include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/matrix/set/matrix_set_wrapper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,36 +21,62 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_set_module
-/// The matrix set wrapper.
-///
-/// @tparam  _Derived  The derived type.
+/// @brief  Default constructor.
 ///
 template <class _Derived>
-class MatrixSetWrapper : public utility::CrtpBase<_Derived, MatrixSetWrapper<_Derived>> {
+MatrixSetWrapper<_Derived>::MatrixSetWrapper() noexcept {}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of rows of matrix.
+///
+template <class _Derived>
+index_t MatrixSetWrapper<_Derived>::nrow() const noexcept {
+  return this->derived().nrowImpl();
+}
 
-  using MatrixType = MatrixT<_Derived>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of column of matrix.
+///
+template <class _Derived>
+index_t MatrixSetWrapper<_Derived>::ncol() const noexcept {
+  return this->derived().ncolImpl();
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of matrices.
+///
+template <class _Derived>
+index_t MatrixSetWrapper<_Derived>::nmat() const noexcept {
+  return this->derived().nmatImpl();
+}
 
-  // Constructors
-  inline MatrixSetWrapper() noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::tuple<index_t, index_t, index_t> MatrixSetWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(nrow(), ncol(), nmat());
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a matrix.
+///
+template <class _Derived>
+MatrixT<_Derived> MatrixSetWrapper<_Derived>::operator()(
+    const index_t idx
+) noexcept {
+  return this->derived().getMatrixImpl(idx);
+}
 
-  // Gets information
-  inline index_t nrow() const noexcept;
-  inline index_t ncol() const noexcept;
-  inline index_t nmat() const noexcept;
-  inline std::tuple<index_t, index_t, index_t> sizes() const noexcept;
-
-  // Gets matrix
-  inline       MatrixType operator()( const index_t idx ) noexcept;
-  inline const MatrixType operator()( const index_t idx ) const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const index_t )
+///
+template <class _Derived>
+const MatrixT<_Derived> MatrixSetWrapper<_Derived>::operator()(
+    const index_t idx
+) const noexcept {
+  return this->derived().getMatrixImpl(idx);
+}
 
 }  // namespace matrix
 

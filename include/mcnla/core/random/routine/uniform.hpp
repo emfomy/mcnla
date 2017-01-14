@@ -11,8 +11,7 @@
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/random/def.hpp>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/random.hpp>
+#include <mcnla/core/random/engine.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace

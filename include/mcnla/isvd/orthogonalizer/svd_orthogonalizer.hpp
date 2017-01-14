@@ -8,10 +8,9 @@
 #ifndef MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HPP_
 #define MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
-#include <mcnla/core/lapack.hpp>
+#include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hh>
+#include <ctime>
+#include <mcnla/core/blas.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,84 +23,81 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
-/// The SVD orthogonalizer tag.
+/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::OrthogonalizerWrapper
 ///
-struct SvdOrthogonalizerTag {};
+template <typename _Scalar>
+Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::Orthogonalizer(
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
-/// The SVD orthogonalizer.
-///
-/// @tparam  _Scalar  The scalar type.
+/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::initialize
 ///
 template <typename _Scalar>
-class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
-  : public OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>> {
+void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::initializeImpl() noexcept {
 
-  friend OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
+  const auto nrow            = parameters_.nrow();
+  const auto dim_sketch      = parameters_.dimSketch();
 
- private:
+  time0_ = 0;
+  time1_ = 0;
 
-  using BaseType =
-    OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
+  vector_s_.reconstruct(dim_sketch);
+  gesvd_engine_.reconstruct(nrow, dim_sketch);
+}
 
- public:
-
-  using ScalarType = _Scalar;
-  using MatrixType = MatrixT<DenseMatrixSet120<ScalarType>>;
-
- protected:
-
-  /// The name.
-  static constexpr const char* name_= "SVD Orthogonalizer";
-
-  /// The starting time
-  double time0_;
-
-  /// The ending time of orthogonalization
-  double time1_;
-
-  /// The vector S.
-  DenseVector<ScalarType> vector_s_;
-
-  /// The empty matrix.
-  MatrixType matrix_empty_;
-
-  /// The random engine.
-  lapack::GesvdEngine<MatrixType, 'O', 'N'> gesvd_engine_;
-
-  using BaseType::parameters_;
-
- public:
-
-  // Constructor
-  inline Orthogonalizer( const Parameters<ScalarType> &parameters,
-                         const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
-
-  // Gets time
-  inline double time1() const noexcept;
-  inline double time2() const noexcept;
-
- protected:
-
-  // Initializes
-  void initializeImpl() noexcept;
-
-  // Orthogonalizees
-  void orthogonalizeImpl( DenseMatrixSet120<ScalarType> &set_q ) noexcept;
-
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
-
-  // Gets time
-  inline double timeImpl() const noexcept;
-
-};
-
-/// @ingroup  isvd_orthogonalizer_module
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::orthogonalize
+///
 template <typename _Scalar>
-using SvdOrthogonalizer = Orthogonalizer<_Scalar, SvdOrthogonalizerTag>;
+void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
+          DenseMatrixSet120<ScalarType> &set_q
+) noexcept {
+
+  mcnla_assert_true(parameters_.isInitialized());
+
+  const auto nrow            = parameters_.nrow();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
+
+  mcnla_assert_eq(set_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
+
+  time0_ = MPI_Wtime();
+
+  // Orthogonalizes
+  for ( index_t i = 0; i < num_sketch_each; ++i ) {
+    gesvd_engine_(set_q(i), vector_s_, matrix_empty_, matrix_empty_);
+  }
+  time1_ = MPI_Wtime();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::name
+///
+template <typename _Scalar>
+constexpr const char* Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::nameImpl(
+) const noexcept {
+  return name_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::time
+///
+template <typename _Scalar>
+double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::timeImpl() const noexcept {
+  return time1_-time0_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::time
+///
+template <typename _Scalar>
+double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::time1() const noexcept {
+  return time1_-time0_;
+}
 
 }  // namespace isvd
 

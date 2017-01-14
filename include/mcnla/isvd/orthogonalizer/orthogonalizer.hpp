@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/orthogonalizer/orthogonalizer.hpp
-/// @brief   The iSVD orthogonalizer interface.
+/// @brief   The definition of iSVD orthogonalizer interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

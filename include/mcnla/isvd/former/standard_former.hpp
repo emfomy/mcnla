@@ -8,11 +8,7 @@
 #ifndef MCNLA_ISVD_FORMER_STANDARD_FORMER_HPP_
 #define MCNLA_ISVD_FORMER_STANDARD_FORMER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/former/former_base.hpp>
+#include <mcnla/isvd/former/standard_former.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,134 +20,148 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class StandardFormer;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The standard former traits.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::FormerBase::FormerBase
 ///
 template <class _Matrix>
-struct Traits<isvd::StandardFormer<_Matrix>> {
-  using MatrixType = _Matrix;
-};
-
-}  // namespace traits
+StandardFormer<_Matrix>::StandardFormer(
+    const Parameters<ScalarType> &parameters
+) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_former_module
-///
-/// The standard former.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::FormerBase::initialize
 ///
 template <class _Matrix>
-class StandardFormer : public FormerBase<StandardFormer<_Matrix>> {
+void StandardFormer<_Matrix>::initializeImpl() noexcept {
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto dim_sketch      = parameters_.dimSketch();
 
-  friend FormerBase<StandardFormer<_Matrix>>;
+  time0_ = 0;
+  time1_ = 0;
+  time2_ = 0;
+  time3_ = 0;
 
- private:
+  const auto matrix_w_sizes = std::make_tuple(dim_sketch, dim_sketch);
+  if ( matrix_w_.sizes() != matrix_w_sizes ) {
+    matrix_w_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_w_sizes);
+  }
 
-  using BaseType = FormerBase<StandardFormer<_Matrix>>;
+  const auto vector_s_sizes = dim_sketch;
+  if ( vector_s_.sizes() != vector_s_sizes ) {
+    vector_s_ = DenseVector<ScalarType>(vector_s_sizes);
+  }
 
- public:
+  const auto matrix_u_sizes = std::make_tuple(nrow, dim_sketch);
+  if ( matrix_u_.sizes() != matrix_u_sizes ) {
+    matrix_u_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_u_sizes);
+  }
 
-  using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
-  using MatrixType     = _Matrix;
+  const auto matrix_vt_sizes = std::make_tuple(dim_sketch, ncol);
+  if ( matrix_vt_.sizes() != matrix_vt_sizes ) {
+    matrix_vt_ = DenseMatrix<ScalarType, Layout::COLMAJOR>(matrix_vt_sizes);
+  }
 
- protected:
+  const auto gesvd_sizes = std::make_tuple(dim_sketch, ncol);
+  if ( gesvd_driver_.sizes() != gesvd_sizes ) {
+    gesvd_driver_.resize(gesvd_sizes);
+  }
 
-  /// The name.
-  static constexpr const char* name_= "Standard Former";
+  vector_s_cut_  = vector_s_.getSegment({0, parameters_.getRank()});
+  matrix_u_cut_  = matrix_u_.getCols({0, parameters_.getRank()});
+  matrix_vt_cut_ = matrix_vt_.getRows({0, parameters_.getRank()});
+}
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::form
+///
+template <class _Matrix>
+void StandardFormer<_Matrix>::formImpl(
+    const _Matrix &matrix_a,
+    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
+) noexcept {
+  if ( !mpi::isCommRoot(parameters_.mpi_root, parameters_.mpi_comm) ) {
+    return;
+  }
 
-  /// The starting time
-  double time0_;
+  mcnla_assert_true(parameters_.isInitialized());
 
-  /// The ending time of Q' * A
-  double time1_;
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto dim_sketch      = parameters_.dimSketch();
 
-  /// The ending time of SVD
-  double time2_;
+  mcnla_assert_eq(matrix_a.sizes(),  std::make_tuple(nrow, ncol));
+  mcnla_assert_eq(matrix_qc.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  /// The ending time of Q * W
-  double time3_;
+  time0_ = MPI_Wtime();
 
-  /// The matrix W.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_w_;
+  // Vt := Q' * A
+  blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_qc, matrix_a, 0.0, matrix_vt_);
+  time1_ = MPI_Wtime();
 
-  /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
+  // Compute the SVD of Vt -> W * S * Vt
+  gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
+  time2_ = MPI_Wtime();
 
-  /// The cut vector S.
-  DenseVector<RealScalarType> vector_s_cut_;
+  // U := Q * W
+  blas::gemm<Trans::NORMAL, Trans::NORMAL>(1.0, matrix_qc, matrix_w_, 0.0, matrix_u_);
+  time3_ = MPI_Wtime();
+}
 
-  /// The matrix U.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::name
+///
+template <class _Matrix>
+constexpr const char* StandardFormer<_Matrix>::nameImpl() const noexcept {
+  return name_;
+}
 
-  /// The cut matrix U.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_u_cut_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::getTime
+///
+template <class _Matrix>
+double StandardFormer<_Matrix>::getTimeImpl() const noexcept {
+  return time3_-time0_;
+}
 
-  /// The matrix Vt.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::getTimes
+///
+template <class _Matrix>
+const std::vector<double> StandardFormer<_Matrix>::getTimesImpl() const noexcept {
+  return {time1_-time0_, time2_-time1_, time3_-time2_};
+}
 
-  /// The cut matrix Vt.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_vt_cut_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::getVectorS
+///
+template <class _Matrix>
+const DenseVector<typename StandardFormer<_Matrix>::RealScalarType>&
+    StandardFormer<_Matrix>::getVectorSImpl() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return vector_s_cut_;
+}
 
-  /// The empty vector.
-  DenseVector<RealScalarType> vector_real_empty_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixU
+///
+template <class _Matrix>
+const DenseMatrix<ScalarT<StandardFormer<_Matrix>>, Layout::COLMAJOR>&
+    StandardFormer<_Matrix>::getMatrixUImpl() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return matrix_u_cut_;
+}
 
-  /// The empty matrix.
-  DenseMatrix<ScalarType, Layout::COLMAJOR> matrix_empty_;
-
-  /// The GESVD driver.
-  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::COLMAJOR>, 'S', 'O'> gesvd_driver_;
-
- public:
-
-  // Constructor
-  inline StandardFormer( const Parameters<ScalarType> &parameters ) noexcept;
-
- protected:
-
-  // Initializes
-  void initializeImpl() noexcept;
-
-  // Reconstructs
-  void formImpl( const _Matrix &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
-
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
-
-  // Gets time
-  inline double getTimeImpl() const noexcept;
-  inline const std::vector<double> getTimesImpl() const noexcept;
-
-  // Gets matrices
-  inline const DenseVector<RealScalarType>& getVectorSImpl() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixUImpl() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVtImpl() const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerBase::getMatrixVt
+///
+template <class _Matrix>
+const DenseMatrix<ScalarT<StandardFormer<_Matrix>>, Layout::COLMAJOR>&
+    StandardFormer<_Matrix>::getMatrixVtImpl() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return matrix_vt_cut_;
+}
 
 }  // namespace isvd
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_triangular_matrix.hpp
-/// @brief   The dense triangular matrix class.
+/// @brief   The dense triangular matrix.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,13 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
-#include <mcnla/core/matrix/base/container_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/matrix/dense/dense_triangular_matrix.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -26,137 +20,232 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense triangular matrix traits.
+/// @brief  Default constructor.
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
-struct Traits<matrix::DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
-
-  static constexpr index_t ndim = 2;
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
-
-  using ScalarType = _Scalar;
-
-  using RealType    = matrix::DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType = matrix::DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
-
-  using VectorType  = matirx::DenseVector<_Scalar>;
-  using MatrixType  = matirx::DenseTriangularMatrix<_Scalar, _trans, _uplo>;
-};
-
-}  // namespace traits
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix() noexcept
+  : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
+    const index_t size
+) noexcept
+  : BaseType(size, size) {
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
-/// The dense triangular matrix class.
+/// @brief  Construct with given size information.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _trans   The transpose storage layout.
-/// @tparam  _uplo    The triangular storage layout.
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
+    const index_t size,
+    const index_t pitch
+) noexcept
+  : BaseType(size, size, pitch) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER>
-class DenseTriangularMatrix
-  : public DenseMatrixStorage<_Scalar>,
-    public MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
+    const index_t size,
+    const index_t pitch,
+    const index_t capacity
+) noexcept
+  : BaseType(size, size, pitch, capacity) {}
 
-  static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
-  friend MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
+    const index_t size,
+    const index_t pitch,
+    const ValueArrayType &value,
+    const index_t offset
+) noexcept
+  : BaseType(size, size, pitch, value, offset) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
+    const DenseTriangularMatrix &other
+) noexcept
+  : BaseType(other) {}
 
-  static constexpr index_t ndim = 2;
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
+    DenseTriangularMatrix &&other
+) noexcept
+  : BaseType(std::move(other)) {}
 
-  using ScalarType     = _Scalar;
-  using ValueArrayType = Array<_Scalar>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy assignment operator.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::blas::copy.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator=(
+    const DenseTriangularMatrix &other
+) noexcept {
+  BaseType::operator=(other);
+  return *this;
+}
 
-  using RealType       = DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType    = DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator=(
+    DenseTriangularMatrix &&other
+) noexcept {
+  BaseType::operator=(std::move(other));
+  return *this;
+}
 
-  using VectorType     = DenseVector<_Scalar>;
-  using MatrixType     = DenseTriangularMatrix<_Scalar, _trans, _uplo>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the size.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::size() const noexcept {
+  return this->dim0();
+}
 
-  using TransposeType  = DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+_Scalar DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) noexcept {
+  if ( rowidx == colidx ) {
+    return isUnitDiag(_uplo) ? 1 : this->getElemImpl(rowidx, colidx);
+  } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
+    return (!isTrans(_trans) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
+  } else {
+    return 0;
+  }
+}
 
-  using GeneralType    = DenseMatrix<_Scalar, _trans>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const _Scalar DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  if ( rowidx == colidx ) {
+    return isUnitDiag(_uplo) ? 1 : this->getElemImpl(rowidx, colidx);
+  } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
+    return (!isTrans(_trans) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
+  } else {
+    return 0;
+  }
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the matrix.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo> template <typename... Args>
+void DenseTriangularMatrix<_Scalar, _trans, _uplo>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseTriangularMatrix<_Scalar, _trans, _uplo>(args...);
+}
 
-  using BaseType       = DenseMatrixStorage<_Scalar>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+void DenseTriangularMatrix<_Scalar, _trans, _uplo>::resize(
+    const index_t nrow,
+    const index_t ncol
+) noexcept {
+  !isTrans(_trans) ? this->resizeImpl(nrow, ncol) : this->resizeImpl(ncol, nrow);
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the transpose of the matrix.
+///
+/// @attention  The storage layout is also changed.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
+    DenseTriangularMatrix<_Scalar, _trans, _uplo>::t() noexcept {
+  return static_cast<TransposeType&>(base());
+}
 
-  // Constructors
-  inline DenseTriangularMatrix() noexcept;
-  inline DenseTriangularMatrix( const index_t size ) noexcept;
-  inline DenseTriangularMatrix( const index_t size, const index_t pitch ) noexcept;
-  inline DenseTriangularMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseTriangularMatrix( const index_t size, const index_t pitch,
-                                const ValueArrayType &value, const index_t offset = 0 ) noexcept;
-  inline DenseTriangularMatrix( const DenseTriangularMatrix &other ) noexcept;
-  inline DenseTriangularMatrix( DenseTriangularMatrix &&other ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  t
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>&
+    DenseTriangularMatrix<_Scalar, _trans, _uplo>::t() const noexcept {
+  return static_cast<const TransposeType&>(base());
+}
 
-  // Operators
-  inline DenseTriangularMatrix& operator=( const DenseTriangularMatrix &other ) noexcept;
-  inline DenseTriangularMatrix& operator=( DenseTriangularMatrix &&other ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the general view of the matrix.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseMatrix<_Scalar, _trans>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::viewGeneral() noexcept {
+  return static_cast<GeneralType&>(base());
+}
 
-  // Gets information
-  inline index_t size() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewGeneral
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const DenseMatrix<_Scalar, _trans>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::viewGeneral() const noexcept {
+  return static_cast<const GeneralType&>(base());
+}
 
-  // Gets element
-  inline       ScalarType operator()( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::nrow
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::nrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim0() : this->dim1();
+}
 
-  // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::ncol
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::ncolImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim1() : this->dim0();
+}
 
-  // Transpose
-  inline       TransposeType& t() noexcept;
-  inline const TransposeType& t() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to base class.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::base() noexcept {
+  return static_cast<BaseType&>(*this);
+}
 
-  // Change view
-  inline       GeneralType& viewGeneral() noexcept;
-  inline const GeneralType& viewGeneral() const noexcept;
-
- protected:
-
-  // Gets information
-  inline index_t nrowImpl() const noexcept;
-  inline index_t ncolImpl() const noexcept;
-
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
-
-};
-
-/// @ingroup  matrix_dense_module
-template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
-using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Scalar, Trans::NORMAL, _uplo>;
-
-/// @ingroup  matrix_dense_module
-template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
-using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Scalar, Trans::TRANS, _uplo>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  base
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+const DenseMatrixStorage<_Scalar>& DenseTriangularMatrix<_Scalar, _trans, _uplo>::base() const noexcept {
+  return static_cast<const BaseType&>(*this);
+}
 
 }  // namespace matrix
 

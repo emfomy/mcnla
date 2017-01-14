@@ -10,9 +10,7 @@
 
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
 #include <mcnla/isvd/orthogonalizer/orthogonalizer_wrapper.hpp>
-#include <mcnla/isvd/orthogonalizer/orthogonalizer_wrapper.ipp>
 
 #include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hpp>
-#include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.ipp>
 
 #endif  // MCNLA_ISVD_OTRHOGONALIZER_HPP_

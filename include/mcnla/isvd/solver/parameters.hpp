@@ -1,16 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/solver/parameters.hpp
-/// @brief   The parameter structure of iSVD solver.
+/// @brief   The the parameter structure of iSVD solver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SOLVER_PARAMETERS_HPP_
-#define MCNLA_ISVD_SOLVER_PARAMETERS_HPP_
+#ifndef MCNLA_ISVD_PARAMETERS_HPP_
+#define MCNLA_ISVD_PARAMETERS_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/core/mpi.hpp>
+#include <mcnla/isvd/solver/parameters.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,82 +21,102 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_module
-///
-/// The parameters of iSVD solver.
-///
-/// @tparam  _Scalar  The scalar type type.
+/// @brief  Default constructor
 ///
 template <typename _Scalar>
-class Parameters {
+Parameters<_Scalar>::Parameters( const MPI_Comm mpi_comm ) noexcept
+  : mpi_size_(mcnla::mpi::commSize(mpi_comm)) {}
 
-  template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor> friend class Solver;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Check if the solver is initialized.
+///
+template <typename _Scalar>
+bool Parameters<_Scalar>::isInitialized() const noexcept {
+  return initialized_;
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Check if the solver is computed.
+///
+template <typename _Scalar>
+bool Parameters<_Scalar>::isComputed() const noexcept {
+  return computed_;
+}
 
-  using RealScalarType = RealScalarT<_Scalar>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of rows of the matrix.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::nrow() const noexcept {
+  return nrow_;
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of column of the matrix.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::ncol() const noexcept {
+  return ncol_;
+}
 
-#ifdef MCNLA_TEST
- public:
-#endif  // MCNLA_TEST
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the desired rank of approximate SVD.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::rank() const noexcept {
+  return rank_;
+}
 
-#ifdef MCNLA_USE_GTEST
- public:
-#endif  // MCNLA_USE_GTEST
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the oversampling dimension.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::overRank() const noexcept {
+  return over_rank_;
+}
 
-  /// The tag shows if the solver is initialized or not.
-  bool initialized_ = false;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the dimension of random sketches.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::dimSketch() const noexcept {
+  return rank_ + over_rank_;
+}
 
-  /// The tag shows if the solver is computed or not.
-  bool computed_ = false;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of random sketches of all MPI nodes.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::numSketch() const noexcept {
+  return num_sketch_each_ * mpi_size_;
+}
 
-  /// The number of rows of the matrix.
-  index_t nrow_ = 0;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of random sketches per MPI node.
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::numSketchEach() const noexcept {
+  return num_sketch_each_;
+}
 
-  /// The number of columns of the matrix.
-  index_t ncol_ = 0;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum iteration
+///
+template <typename _Scalar>
+index_t Parameters<_Scalar>::maxIteration() const noexcept {
+  return max_iteration_;
+}
 
-  /// The desired rank of approximate SVD.
-  index_t rank_ = 0;
-
-  /// The oversampling dimension.
-  index_t over_rank_ = 12;
-
-  /// The number of random sketches per MPI node.
-  index_t num_sketch_each_ = 0;
-
-  /// The maximum iteration.
-  index_t max_iteration_ = 256;
-
-  /// The tolerance of converge condition.
-  RealScalarType tolerance_ = 1e-4;
-
-  /// The MPI size
-  const index_t mpi_size_;
-
- public:
-
-  // Constructors
-  Parameters( const MPI_Comm mpi_comm ) noexcept;
-
-  // Gets parameter
-  inline bool isInitialized() const noexcept;
-  inline bool isComputed() const noexcept;
-  inline index_t nrow() const noexcept;
-  inline index_t ncol() const noexcept;
-  inline index_t rank() const noexcept;
-  inline index_t overRank() const noexcept;
-  inline index_t dimSketch() const noexcept;
-  inline index_t numSketch() const noexcept;
-  inline index_t numSketchEach() const noexcept;
-  inline index_t maxIteration() const noexcept;
-  inline RealScalarType tolerance() const noexcept;
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the tolerance of converge condition.
+///
+template <typename _Scalar>
+RealScalarT<_Scalar> Parameters<_Scalar>::tolerance() const noexcept {
+  return tolerance_;
+}
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SOLVER_PARAMETERS_HPP_
+#endif  // MCNLA_ISVD_PARAMETERS_HPP_

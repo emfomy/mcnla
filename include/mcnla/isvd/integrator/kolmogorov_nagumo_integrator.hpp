@@ -8,11 +8,8 @@
 #ifndef MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_
 #define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/integrator/integrator_base.hpp>
+#include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh>
+#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,162 +21,283 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class KolmogorovNagumoIntegrator;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Kolmogorov-Nagumo-type integrator traits.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::IntegratorBase::IntegratorBase
 ///
 template <class _Matrix>
-struct Traits<isvd::KolmogorovNagumoIntegrator<_Matrix>> {
-  using MatrixType = _Matrix;
-};
-
-}  // namespace traits
+KolmogorovNagumoIntegrator<_Matrix>::KolmogorovNagumoIntegrator(
+    const Parameters<ScalarType> &parameters
+) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
-///
-/// The Kolmogorov-Nagumo-type integrator.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::IntegratorBase::initialize
 ///
 template <class _Matrix>
-class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>> {
+void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  const auto mpi_size        = parameters_.mpi_size;
+  const auto nrow            = parameters_.nrow();
+  const auto num_sketch      = parameters_.numSketch();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
-  friend IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>>;
+  time0_ = 0;
+  time1_ = 0;
+  time2_ = 0;
+  time3_ = 0;
 
- private:
+  nrow_each_ = (nrow-1) / mpi_size + 1;
+  nrow_all_  = nrow_each_ * mpi_size;
+  iter_      = -1;
 
-  using BaseType = IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>>;
+  const auto set_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
+  if ( set_q_.sizes() != set_q_sizes || !set_q_.isShrunk() ) {
+    set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
+  }
+  set_q_cut_ = set_q_.getMatrixRows({0, nrow});
+  matrix_qs_ = set_q_.unfold();
 
- public:
+  const auto matrix_qjs_sizes = std::make_tuple(nrow_each_, dim_sketch * num_sketch);
+  if ( matrix_qjs_.sizes() != matrix_qjs_sizes || !matrix_qjs_.isShrunk() ) {
+    matrix_qjs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qjs_sizes);
+  }
 
-  using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
-  using MatrixType     = _Matrix;
+  const auto matrix_qc_sizes = std::make_tuple(nrow_all_, dim_sketch);
+  if ( matrix_qc_.sizes() != matrix_qc_sizes || !matrix_qc_.isShrunk() ) {
+    matrix_qc_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qc_sizes);
+  }
+  matrix_qc_cut_ = matrix_qc_.getRows({0, nrow});
 
- protected:
+  const auto matrix_qcj_sizes = std::make_tuple(nrow_each_, dim_sketch);
+  if ( matrix_qcj_.sizes() != matrix_qcj_sizes ) {
+    matrix_qcj_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
+  }
+  if ( matrix_xj_.sizes() != matrix_qcj_sizes ) {
+    matrix_xj_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
+  }
+  if ( matrix_tmp_.sizes() != matrix_qcj_sizes ) {
+    matrix_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
+  }
 
-  /// The name.
-  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
+  const auto matrix_bs_sizes = std::make_tuple(dim_sketch, dim_sketch * num_sketch);
+  if ( matrix_bs_.sizes() != matrix_bs_sizes || !matrix_bs_.isShrunk() ) {
+    matrix_bs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_bs_sizes);
+  }
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const auto matrix_c_sizes = std::make_tuple(dim_sketch, dim_sketch);
+  if ( matrix_c_.sizes() != matrix_c_sizes ) {
+    matrix_c_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
+  }
+  if ( matrix_d_.sizes() != matrix_c_sizes ) {
+    matrix_d_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
+  }
+  if ( matrix_f_.sizes() != matrix_c_sizes ) {
+    matrix_f_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
+  }
 
-  /// The starting time
-  double time0_;
+  const auto vector_e_sizes = dim_sketch;
+  if ( vector_e_.sizes() != vector_e_sizes ) {
+    vector_e_ = DenseVector<ScalarType>(vector_e_sizes);
+  }
 
-  /// The ending time of rearrangeing Q
-  double time1_;
+  const auto syev_sizes = dim_sketch;
+  if ( syev_driver_.sizes() != syev_sizes ) {
+    syev_driver_.resize(syev_sizes);
+  }
+}
 
-  /// The ending time of integrating
-  double time2_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::integrate
+///
+template <class _Matrix>
+void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
 
-  /// The ending time of gathering Qc
-  double time3_;
+  const auto mpi_comm        = parameters_.mpi_comm;
+  const auto mpi_size        = parameters_.mpi_size;
+  const auto mpi_root        = parameters_.mpi_root;
+  const auto nrow            = parameters_.nrow();
+  const auto dim_sketch      = parameters_.dimSketch();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto num_sketch      = parameters_.numSketch();
+  const auto max_iteration   = parameters_.getMaxIteration();
+  const auto tolerance       = parameters_.getTolerance();
 
-  /// The number of rows of the matrix per MPI node.
-  index_t nrow_each_;
+  time0_ = MPI_Wtime();
 
-  /// The number of rows of the matrix of all MPI nodes.
-  index_t nrow_all_;
+  // Exchange Q
+  blas::memset0(set_q_.getMatrixRows({nrow, nrow_all_}).unfold());
+  mpi::alltoall(set_q_.unfold(), mpi_comm);
 
-  /// The number of iteration.
-  index_t iter_;
+  // Rearrange Qj
+  for ( index_t j = 0; j < mpi_size; ++j ) {
+    blas::omatcopy(1.0, matrix_qs_.getRows(IdxRange{j, j+1} * nrow_each_),
+                        matrix_qjs_.getCols(IdxRange{j, j+1} * dim_sketch * num_sketch_each));
+  }
 
-  /// The set Q.
-  DenseMatrixSet120<ScalarType> set_q_;
+  // Qc := Q0
+  blas::omatcopy(1.0, matrix_qjs_.getCols({0, dim_sketch}), matrix_qcj_);
 
-  /// The cut set Q.
-  DenseMatrixSet120<ScalarType> set_q_cut_;
+  time1_ = MPI_Wtime();
 
-  /// The matrix Qs.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qs_;
+  bool is_converged = false;
+  for ( iter_ = 0; iter_ < max_iteration && !is_converged; ++iter_ ) {
 
-  /// The matrix Qjs.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qjs_;
+    // ================================================================================================================== //
+    // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
-  /// The matrix Qc.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
+    // Bs := sum( Qcj' * Qjs )
+    blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_qcj_, matrix_qjs_, 0.0, matrix_bs_);
+    mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
 
-  /// The cut matrix Qc.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_cut_;
+    // D  := Bs * Bs'
+    blas::syrk<Trans::NORMAL>(1.0, matrix_bs_, 0.0, matrix_d_);
 
-  /// The matrix Qcj.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qcj_;
+    // Xj := 1/N * Qjs * Bs'
+    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0/num_sketch, matrix_qjs_, matrix_bs_, 0.0, matrix_xj_);
 
-  /// The matrix Bs.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_bs_;
+    // Xj -= 1/N * Qcj * D
+    blas::symm<Side::RIGHT>(-1.0/num_sketch, matrix_d_, matrix_qcj_, 1.0, matrix_xj_);
 
-  /// The matrix C.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_c_;
+    // ================================================================================================================== //
+    // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
-  /// The matrix D.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_d_;
+    // D := I/4 - sum(Xj' * Xj)
+    blas::syrk<Trans::TRANS>(-1.0, matrix_xj_, 0.0, matrix_d_);
+    mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm);
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      matrix_d_(i, i) += 0.25;
+    }
 
-  /// The matrix F.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_f_;
+    // Compute the eigen-decomposition of D -> D' * E * D
+    syev_driver_(matrix_d_, vector_e_);
 
-  /// The matrix Xj.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_xj_;
+    // D := E^(1/4) * D
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      blas::scal(std::pow(vector_e_(i), 0.25), matrix_d_.getRow(i));
+    }
 
-  /// The temporary matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_tmp_;
+    // F := I/2 + D' * D
+    blas::syrk<Trans::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      matrix_f_(i, i) += 0.5;
+    }
 
-  /// The vector E.
-  DenseVector<ScalarType> vector_e_;
+    // Compute the eigen-decomposition of F -> F' * E * F
+    syev_driver_(matrix_f_, vector_e_);
 
-  /// The SYEV driver.
-  lapack::SyevEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
+    // D := F
+    blas::copy(matrix_f_, matrix_d_);
 
- public:
+    // F := E^(1/4) * F; D := E^(-1/4) * D
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      blas::scal(std::pow(vector_e_(i),  0.25), matrix_f_.getRow(i));
+      blas::scal(std::pow(vector_e_(i), -0.25), matrix_d_.getRow(i));
+    }
 
-  // Constructor
-  inline KolmogorovNagumoIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
+    // C := F' * F
+    blas::syrk<Trans::TRANS>(1.0, matrix_f_, 0.0, matrix_c_);
 
- protected:
+    // inv(C) := D' * D
+    blas::syrk<Trans::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
 
-  // Initializes
-  void initializeImpl() noexcept;
+    // ================================================================================================================== //
+    // Qc := Qc * C + X * inv(C)
 
-  // Integrates
-  void integrateImpl() noexcept;
+    // Qcj := Qcj * C
+    blas::copy(matrix_qcj_, matrix_tmp_);
+    blas::symm<Side::RIGHT>(1.0, matrix_c_, matrix_tmp_, 0.0, matrix_qcj_);
 
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
+    // Qcj += Xj * inv(C)
+    blas::symm<Side::RIGHT>(1.0, matrix_f_, matrix_xj_, 1.0, matrix_qcj_);
 
-  // Gets time
-  inline double getTimeImpl() const noexcept;
-  inline const std::vector<double> getTimesImpl() const noexcept;
+    // ================================================================================================================== //
+    // Check convergence
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      vector_e_(i) = std::sqrt(vector_e_(i)) - 1.0;
+    }
+    is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
+  }
 
-  // Gets name
-  inline index_t getIterImpl() const noexcept;
+  time2_ = MPI_Wtime();
 
-  // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& getSetQImpl() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& getSetQImpl() const noexcept;
-  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
-  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
+  // Gather Qc
+  mpi::gather(matrix_qcj_, matrix_qc_, mpi_root, mpi_comm);
 
-};
+  time3_ = MPI_Wtime();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::name
+///
+template <class _Matrix>
+constexpr const char* KolmogorovNagumoIntegrator<_Matrix>::nameImpl() const noexcept {
+  return name_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getTime
+///
+template <class _Matrix>
+double KolmogorovNagumoIntegrator<_Matrix>::getTimeImpl() const noexcept {
+  return time3_-time0_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getTimes
+///
+template <class _Matrix>
+const std::vector<double> KolmogorovNagumoIntegrator<_Matrix>::getTimesImpl() const noexcept {
+  return {time1_-time0_, time2_-time1_, time3_-time2_};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getIter
+///
+template <class _Matrix>
+index_t KolmogorovNagumoIntegrator<_Matrix>::getIterImpl() const noexcept {
+  return iter_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+///
+template <class _Matrix>
+DenseMatrixSet120<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>>&
+    KolmogorovNagumoIntegrator<_Matrix>::getSetQImpl() noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return set_q_cut_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+///
+template <class _Matrix>
+const DenseMatrixSet120<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>>&
+    KolmogorovNagumoIntegrator<_Matrix>::getSetQImpl() const noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return set_q_cut_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+///
+template <class _Matrix>
+DenseMatrix<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>, Layout::ROWMAJOR>&
+    KolmogorovNagumoIntegrator<_Matrix>::getMatrixQbarImpl() noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return matrix_qc_cut_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+///
+template <class _Matrix>
+const DenseMatrix<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>, Layout::ROWMAJOR>&
+    KolmogorovNagumoIntegrator<_Matrix>::getMatrixQbarImpl() const noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return matrix_qc_cut_;
+}
 
 }  // namespace isvd
 

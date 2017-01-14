@@ -8,11 +8,9 @@
 #ifndef MCNLA_ISVD_INTEGRATOR_REDUCTION_INTEGRATOR_HPP_
 #define MCNLA_ISVD_INTEGRATOR_REDUCTION_INTEGRATOR_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/integrator/integrator_base.hpp>
+#include <mcnla/isvd/integrator/reduction_integrator.hh>
+#include <mcnla/core/utility/function.hpp>
+#include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,120 +22,188 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class ReductionIntegrator;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The reduction integrator traits.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::IntegratorBase::IntegratorBase
 ///
 template <class _Matrix>
-struct Traits<isvd::ReductionIntegrator<_Matrix>> {
-  using MatrixType = _Matrix;
-};
-
-}  // namespace traits
+ReductionIntegrator<_Matrix>::ReductionIntegrator(
+    const Parameters<ScalarType> &parameters
+) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
-///
-/// The reduction integrator.
-///
-/// @tparam  _Matrix  The matrix type.
+/// @copydoc  mcnla::isvd::IntegratorBase::initialize
 ///
 template <class _Matrix>
-class ReductionIntegrator : public IntegratorBase<ReductionIntegrator<_Matrix>> {
+void ReductionIntegrator<_Matrix>::initializeImpl() noexcept {
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
+  const auto nrow            = parameters_.nrow();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
-  friend IntegratorBase<ReductionIntegrator<_Matrix>>;
+  mcnla_assert_true(utility::isPowerOf2(parameters_.mpi_size));
+  mcnla_assert_true(utility::isPowerOf2(num_sketch_each));
+  mcnla_assert_eq(parameters_.mpi_root, 0);
 
- private:
+  const auto set_q_sizes = std::make_tuple(nrow, dim_sketch, num_sketch_each);
+  if ( set_q_.sizes() != set_q_sizes ) {
+    set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
+  }
 
-  using BaseType = IntegratorBase<ReductionIntegrator<_Matrix>>;
+  const auto matrix_q_sizes = std::make_tuple(nrow, dim_sketch);
+  if ( matrix_q_tmp_.sizes() != matrix_q_sizes ) {
+    matrix_q_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_q_sizes);
+  }
+  if ( matrix_buffer_.sizes() != matrix_q_sizes ) {
+    matrix_buffer_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_q_sizes);
+  }
 
- public:
+  const auto matrix_u_sizes = std::make_tuple(dim_sketch, dim_sketch);
+  if ( matrix_u_.sizes() != matrix_u_sizes ) {
+    matrix_u_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_u_sizes);
+  }
+  if ( matrix_vt_.sizes() != matrix_u_sizes ) {
+    matrix_vt_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_u_sizes);
+  }
 
-  using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
-  using MatrixType     = _Matrix;
-  using SetType        = DenseMatrixSet120<ScalarType>;
+  const auto vector_s_sizes = dim_sketch;
+  if ( vector_s_.sizes() != vector_s_sizes ) {
+    vector_s_ = DenseVector<ScalarType>(vector_s_sizes);
+  }
 
- protected:
+  if ( gesvd_driver_.sizes() != matrix_u_sizes ) {
+    gesvd_driver_.resize(matrix_u_sizes);
+  }
 
-  /// The name.
-  static constexpr const char* name_= "Reduction Integrator";
+  matrix_q_bar_ = matrix_empty_;
+}
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::integrate
+///
+template <class _Matrix>
+void ReductionIntegrator<_Matrix>::integrateImpl() noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
 
-  /// The set Q.
-  DenseMatrixSet120<ScalarType> set_q_;
+  const auto mpi_comm        = parameters_.mpi_comm;
+  const auto mpi_size        = parameters_.mpi_size;
+  const auto mpi_rank        = mpi::commRank(mpi_comm);
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
-  /// The matrix Qbar.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_q_bar_;
+  /// @todo  Uses column major.
+  /// @todo  Uses computational routines of gesvd (applying U & V instead of generating)
 
-  /// The temporary matrix Q.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_q_tmp_;
+  // In-node integrate.
+  for ( index_t j = 1; j < num_sketch_each; j *= 2 ) {
+    for ( index_t i = 0; i < num_sketch_each; i += 2*j ) {
 
-  /// The buffer matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_buffer_;
+      // U := Q(i)' * Q(i+j)
+      blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, set_q_.getPage(i), set_q_.getPage(i+j), 0.0, matrix_u_);
 
-  /// The matrix U.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_u_;
+      // Compute the SVD of U -> U * S * Vt
+      gesvd_driver_(matrix_u_, vector_s_, matrix_empty_, matrix_vt_);
 
-  /// The matrix Vt.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_vt_;
+      // Q(i) := Q(i) * U + Q(i+j) * V
+      blas::copy(set_q_.getPage(i), matrix_buffer_);
+      blas::gemm<Trans::NORMAL, Trans::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, set_q_.getPage(i));
+      blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, set_q_.getPage(i+j), matrix_vt_, 1.0, set_q_.getPage(i));
 
-  /// The vector S.
-  DenseVector<ScalarType> vector_s_;
+      // Q(i) /= sqrt(2(I+S))
+      for ( index_t k = 0; k < dim_sketch; ++k ) {
+        blas::scal(1.0 / sqrt(2.0 * vector_s_(k) + 2.0), set_q_.getPage(i).getCol(k));
+      }
 
-  /// The empty matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
+    }
+  }
 
-  /// The GESVD driver.
-  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'S'> gesvd_driver_;
+  matrix_q_bar_ = set_q_.getPage(0);
+  MPI_Status status;
 
- public:
+  // Cross-node integrate.
+  for ( index_t j = 1; j < mpi_size; j *= 2 ) {
 
-  // Constructor
-  inline ReductionIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
+    // Transfer Qbar -> Qtmp
+    if ( mpi_rank % (2*j) == 0 ) {
+      mpi::recv(matrix_q_tmp_, mpi_rank+j, 0, mpi_comm, status);
+    } else {
+      mpi::send(matrix_q_bar_, mpi_rank-j, 0, mpi_comm);
+      return;
+    }
 
- protected:
+    // U := Qbar' * Qtmp
+    blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_q_bar_, matrix_q_tmp_, 0.0, matrix_u_);
 
-  // Initializes
-  void initializeImpl() noexcept;
+    // Compute the SVD of U -> U * S * Vt
+    gesvd_driver_(matrix_u_, vector_s_, matrix_empty_, matrix_vt_);
 
-  // Integrates
-  void integrateImpl() noexcept;
+    // Q(i) := Q(i) * U + Q(i+j) * V
+    blas::copy(matrix_q_bar_, matrix_buffer_);
+    blas::gemm<Trans::NORMAL, Trans::NORMAL>(1.0, matrix_buffer_, matrix_u_, 0.0, matrix_q_bar_);
+    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, matrix_q_tmp_, matrix_vt_, 1.0, matrix_q_bar_);
 
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
+    // Q(i) /= sqrt(2(I+S))
+    for ( index_t k = 0; k < dim_sketch; ++k ) {
+      blas::scal(1.0 / sqrt(2.0 * vector_s_(k) + 2.0), matrix_q_bar_.getCol(k));
+    }
 
-  // Gets name
-  inline index_t getIterImpl() const noexcept;
+  }
+}
 
-  // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& getSetQImpl() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& getSetQImpl() const noexcept;
-  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
-  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::name
+///
+template <class _Matrix>
+constexpr const char* ReductionIntegrator<_Matrix>::nameImpl() const noexcept {
+  return name_;
+}
 
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getIter
+///
+template <class _Matrix>
+index_t ReductionIntegrator<_Matrix>::getIterImpl() const noexcept {
+  return -1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+///
+template <class _Matrix>
+DenseMatrixSet120<ScalarT<ReductionIntegrator<_Matrix>>>&
+    ReductionIntegrator<_Matrix>::getSetQImpl() noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return set_q_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+///
+template <class _Matrix>
+const DenseMatrixSet120<ScalarT<ReductionIntegrator<_Matrix>>>&
+    ReductionIntegrator<_Matrix>::getSetQImpl() const noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return set_q_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+///
+template <class _Matrix>
+DenseMatrix<ScalarT<ReductionIntegrator<_Matrix>>, Layout::ROWMAJOR>&
+    ReductionIntegrator<_Matrix>::getMatrixQbarImpl() noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return matrix_q_bar_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+///
+template <class _Matrix>
+const DenseMatrix<ScalarT<ReductionIntegrator<_Matrix>>, Layout::ROWMAJOR>&
+    ReductionIntegrator<_Matrix>::getMatrixQbarImpl() const noexcept {
+  mcnla_assert_true(parameters_.isInitialized());
+  return matrix_q_bar_;
+}
 
 }  // namespace isvd
 

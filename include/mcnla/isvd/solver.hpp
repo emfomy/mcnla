@@ -9,9 +9,7 @@
 #define MCNLA_ISVD_SOLVER_HPP_
 
 // #include <mcnla/isvd/solver/solver.hpp>
-// #include <mcnla/isvd/solver/solver.ipp>
 
 #include <mcnla/isvd/solver/parameters.hpp>
-#include <mcnla/isvd/solver/parameters.ipp>
 
 #endif  // MCNLA_ISVD_SOLVER_HPP_

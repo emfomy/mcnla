@@ -9,8 +9,6 @@
 #define MCNLA_CORE_LAPACK_ENGINE_HPP_
 
 #include <mcnla/core/lapack/engine/syev.hpp>
-#include <mcnla/core/lapack/engine/syev.ipp>
 #include <mcnla/core/lapack/engine/gesvd.hpp>
-#include <mcnla/core/lapack/engine/gesvd.ipp>
 
 #endif  // MCNLA_CORE_LAPACK_ENGINE_HPP_

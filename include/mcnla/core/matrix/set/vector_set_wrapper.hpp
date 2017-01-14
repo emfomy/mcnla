@@ -8,11 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_SET_VECTOR_SET_WRAPPER_HPP_
 #define MCNLA_CORE_MATRIX_SET_VECTOR_SET_WRAPPER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <tuple>
-#include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/matrix/set/vector_set_wrapper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,35 +21,54 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_set_module
-/// The vector set wrapper.
-///
-/// @tparam  _Derived  The derived type.
+/// @brief  Default constructor.
 ///
 template <class _Derived>
-class VectorSetWrapper : public utility::CrtpBase<_Derived, VectorSetWrapper<_Derived>> {
+VectorSetWrapper<_Derived>::VectorSetWrapper() noexcept {}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the length of vector.
+///
+template <class _Derived>
+index_t VectorSetWrapper<_Derived>::length() const noexcept {
+  return this->derived().length();
+}
 
-  using VectorType = VectorT<_Derived>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of vectors.
+///
+template <class _Derived>
+index_t VectorSetWrapper<_Derived>::nvec() const noexcept {
+  return this->derived().nvec();
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Derived>
+std::tuple<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(length()(), nvec());
+}
 
-  // Constructors
-  inline VectorSetWrapper() noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a vector
+///
+template <class _Derived>
+VectorT<_Derived> VectorSetWrapper<_Derived>::operator()(
+    const index_t idx
+) noexcept {
+  return this->derived().getVector(idx);
+}
 
- public:
-
-  // Gets information
-  inline index_t length() const noexcept;
-  inline index_t nvec() const noexcept;
-  inline std::tuple<index_t, index_t> sizes() const noexcept;
-
-  // Gets vector
-  inline       VectorType operator()( const index_t idx ) noexcept;
-  inline const VectorType operator()( const index_t idx ) const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const index_t )
+///
+template <class _Derived>
+const VectorT<_Derived> VectorSetWrapper<_Derived>::operator()(
+    const index_t idx
+) const noexcept {
+  return this->derived().getVector(idx);
+}
 
 }  // namespace matrix
 

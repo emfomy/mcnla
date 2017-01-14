@@ -1,7 +1,8 @@
 #pragma once
 
 #include <gtest/gtest.h>
-#include <mcnla.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
+#include <mcnla/core/lapack.hpp>
 
 using MyTypes = testing::Types<float, double, std::complex<float>, std::complex<double>>;
 

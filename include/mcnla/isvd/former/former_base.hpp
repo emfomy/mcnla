@@ -5,13 +5,10 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_FORMER_BASE_HPP_
-#define MCNLA_ISVD_FORMER_FORMER_BASE_HPP_
+#ifndef MCNLA_ISVD_FORMER_BASE_HPP_
+#define MCNLA_ISVD_FORMER_BASE_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/utility.hpp>
+#include <mcnla/isvd/former/former_base.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,55 +21,81 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_former_module
-///
-/// The interface of iSVD former.
-///
-/// @tparam  _Derived  The derived type.
+/// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-class FormerBase : public utility::CrtpBase<_Derived, FormerBase<_Derived>> {
+FormerBase<_Derived>::FormerBase(
+    const Parameters<ScalarType> &parameters
+) noexcept : parameters_(parameters) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Initializes.
+///
+template <class _Derived>
+void FormerBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
 
-  using MatrixType     = MatrixT<_Derived>;
-  using ScalarType     = ScalarT<MatrixType>;
-  using RealScalarType = typename MatrixType::RealScalarType;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstructs SVD.
+///
+template <class _Derived>
+void FormerBase<_Derived>::form(
+    const MatrixType &matrix_a,
+    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
+) noexcept { this->derived().formImpl(matrix_a, matrix_qc); }
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getFormerName
+///
+template <class _Derived>
+constexpr const char* FormerBase<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
+}
 
-  /// The parameters.
-  const Parameters<ScalarType> &parameters_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getFormerTime
+///
+template <class _Derived>
+double FormerBase<_Derived>::getTime() const noexcept {
+  return this->derived().getTimeImpl();
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::getFormerTimes
+///
+template <class _Derived>
+const std::vector<double> FormerBase<_Derived>::getTimes() const noexcept {
+  return this->derived().getTimesImpl();
+}
 
-  // Constructor
-  inline FormerBase( const Parameters<ScalarType> &parameters ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the vector S.
+///
+template <class _Derived>
+const DenseVector<typename FormerBase<_Derived>::RealScalarType>&
+    FormerBase<_Derived>::getVectorS() const noexcept {
+  return this->derived().getVectorSImpl();
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the matrix U.
+///
+template <class _Derived>
+const DenseMatrix<ScalarT<FormerBase<_Derived>>, Layout::COLMAJOR>&
+    FormerBase<_Derived>::getMatrixU() const noexcept {
+  return this->derived().getMatrixUImpl();
+}
 
-  // Initializes
-  inline void initialize() noexcept;
-
-  // Reconstructs
-  inline void form( const MatrixType &matrix_a, const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc ) noexcept;
-
-  // Gets name
-  inline constexpr const char* name() const noexcept;
-
-  // Gets compute time
-  inline double getTime() const noexcept;
-  inline const std::vector<double> getTimes() const noexcept;
-
-  // Gets matrices
-  inline const DenseVector<RealScalarType>& getVectorS() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixU() const noexcept;
-  inline const DenseMatrix<ScalarType, Layout::COLMAJOR>& getMatrixVt() const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the transpose of the matrix V.
+///
+template <class _Derived>
+const DenseMatrix<ScalarT<FormerBase<_Derived>>, Layout::COLMAJOR>&
+    FormerBase<_Derived>::getMatrixVt() const noexcept {
+  return this->derived().getMatrixVtImpl();
+}
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_FORMER_BASE_HPP_
+#endif  // MCNLA_ISVD_FORMER_BASE_HPP_

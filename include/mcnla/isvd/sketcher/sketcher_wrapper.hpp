@@ -8,12 +8,7 @@
 #ifndef MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_HPP_
 #define MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/solver/parameters.hpp>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/isvd/sketcher/sketcher_wrapper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -26,55 +21,62 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
-///
-/// The iSVD sketcher wrapper.
-///
-/// @tparam  _Derived  The derived type.
+/// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Derived>> {
+SketcherWrapper<_Derived>::SketcherWrapper(
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : parameters_(parameters),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Initializes.
+///
+template <class _Derived>
+void SketcherWrapper<_Derived>::initialize() noexcept {
+  this->derived().initializeImpl();
+}
 
-  using ScalarType = ScalarT<_Derived>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Random sketches.
+///
+template <class _Derived> template <class _Matrix>
+void SketcherWrapper<_Derived>::sketch(
+    const _Matrix &matrix_a,
+          DenseMatrixSet120<ScalarType> &set_q
+) noexcept {
+  this->derived().sketchImpl(matrix_a, set_q);
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::sketcherName
+///
+template <class _Derived>
+constexpr const char* SketcherWrapper<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
+}
 
-  /// @copydoc  mcnla::isvd::Solver::parameters_
-  const Parameters<ScalarType> &parameters_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::sketcherTime
+///
+template <class _Derived>
+double SketcherWrapper<_Derived>::time() const noexcept {
+  return this->derived().timeImpl();
+}
 
-  /// @copydoc  mcnla::isvd::Solver::mpi_comm_
-  const MPI_Comm mpi_comm_;
-
-  /// @copydoc  mcnla::isvd::Solver::mpi_root_
-  const mpi_int_t mpi_root_;
-
- protected:
-
-  // Constructor
-  inline SketcherWrapper( const Parameters<ScalarType> &parameters,
-                          const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
-
- public:
-
-  // Initializes
-  inline void initialize() noexcept;
-
-  // Random sketches
-  template <class _Matrix>
-  inline void sketch( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
-
-  // Gets name
-  inline constexpr const char* name() const noexcept;
-
-  // Gets compute time
-  inline double time() const noexcept;
-
-  // Sets seed
-  void setSeed( const index_t seed ) noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::setSeed
+///
+template <class _Derived>
+void SketcherWrapper<_Derived>::setSeed(
+    const index_t seed
+) noexcept {
+  return this->derived().setSeedImpl(seed);
+}
 
 }  // namespace isvd
 

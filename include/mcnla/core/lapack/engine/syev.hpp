@@ -5,15 +5,11 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LAPACK_ENGINE_SYEV_ENGINE_HPP_
-#define MCNLA_CORE_LAPACK_ENGINE_SYEV_ENGINE_HPP_
+#ifndef MCNLA_CORE_LAPACK_ENGINE_SYEV_HH_
+#define MCNLA_CORE_LAPACK_ENGINE_SYEV_HH_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <mcnla/core/lapack/def.hpp>
-#include <tuple>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/lapack/engine/syev.hh>
+#include <mcnla/core/lapack/lapack/syev.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -26,85 +22,142 @@ namespace mcnla {
 namespace lapack {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  lapack_driver_module
-/// @brief  The eigenvalue solver of symmetric / Hermitian matrices.
-///
-/// @tparam  _Matrix  The matrix type.
-///
-/// @see mcnla::lapack::syev
+/// @brief  Default constructor.
 ///
 template <class _Matrix, JobOption _jobz>
-class SyevEngine {
+SyevEngine<_Matrix, _jobz>::SyevEngine() noexcept
+  : size_(0),
+    work_(),
+    rwork_() {}
 
-  static_assert(_jobz == 'N' || _jobz == 'V', "Job undefined!");
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Matrix, JobOption _jobz>
+SyevEngine<_Matrix, _jobz>::SyevEngine(
+    const index_t size
+) noexcept
+  : size_(size),
+    work_(query(size)),
+    rwork_(is_real ? RealVectorType() : RealVectorType(3*size)) {
+  mcnla_assert_gt(size_, 0);
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Matrix, JobOption _jobz>
+SyevEngine<_Matrix, _jobz>::SyevEngine(
+    const MatrixType &a
+) noexcept
+  : SyevEngine(a.nrow()) {
+  mcnla_assert_eq(a.nrow(), a.ncol());
+}
 
-  static constexpr Trans trans = _Matrix::trans;
-  static constexpr Uplo  uplo  = _Matrix::uplo;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  compute
+///
+template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
+void SyevEngine<_Matrix, _jobz>::operator()(
+    _TypeA &&a,
+    _TypeW &&w
+) noexcept {
+  compute(a, w);
+}
 
-  using ScalarType     = ScalarT<_Matrix>;
-  using VectorType     = VectorT<_Matrix>;
-  using RealVectorType = RealT<VectorT<_Matrix>>;
-  using MatrixType     = _Matrix;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Computes eigenvalues only.
+///
+template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
+void SyevEngine<_Matrix, _jobz>::computeValues(
+    _TypeA &&a,
+    _TypeW &&w
+) noexcept {
+  compute<'N'>(a, w);
+}
 
-  static constexpr bool is_real = traits::ScalarTraits<ScalarType>::is_real;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the engine.
+///
+template <class _Matrix, JobOption _jobz> template <typename... Args>
+void SyevEngine<_Matrix, _jobz>::reconstruct(
+    Args... args
+) noexcept {
+  *this = SyevEngine<_Matrix, _jobz>(args...);
+}
 
-  static_assert(std::is_same<DenseSymmetricMatrix<ScalarType, trans, uplo>, _Matrix>::value,
-                "'_Matrix' is not a dense symmetric matrix!");
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the sizes.
+///
+template <class _Matrix, JobOption _jobz>
+std::tuple<index_t> SyevEngine<_Matrix, _jobz>::sizes() const noexcept {
+  return std::make_tuple(size_);
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the workspace
+///
+template <class _Matrix, JobOption _jobz>
+VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() noexcept {
+  return work_;
+}
 
-  /// The dimension.
-  index_t size_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getWork
+///
+template <class _Matrix, JobOption _jobz>
+const VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() const noexcept {
+  return work_;
+}
 
-  /// The workspace.
-  VectorType work_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the real workspace
+///
+template <class _Matrix, JobOption _jobz>
+RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() noexcept {
+  return rwork_;
+}
 
-  /// The real workspace.
-  RealVectorType rwork_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getRwork
+///
+template <class _Matrix, JobOption _jobz>
+const RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() const noexcept {
+  return rwork_;
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Computes the eigenvalue decomposition.
+///
+/// @attention  The eigenvectors are Stored in columnwise for column-major storage, in rowwise for row-major storage.
+/// @attention  Matrix @a a will be destroyed!
+///
+template <class _Matrix, JobOption _jobz> template <JobOption __jobz>
+void SyevEngine<_Matrix, _jobz>::compute(
+    MatrixType &a,
+    RealVectorType &w
+) noexcept {
+  mcnla_assert_gt(size_, 0);
+  mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
+  mcnla_assert_eq(w.length(), size_);
+  mcnla_assert_eq(detail::syev(__jobz, toUploChar(uplo, trans), a.nrow(), a.valuePtr(), a.pitch(),
+                               w.valuePtr(), work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
+}
 
-  // Constructor
-  inline SyevEngine() noexcept;
-  inline SyevEngine( const index_t size ) noexcept;
-  inline SyevEngine( const MatrixType &a ) noexcept;
-
-  // Operators
-  template <class _TypeA, class _TypeW>
-  inline void operator()( _TypeA &&a, _TypeW &&w ) noexcept;
-
-  // Computes eigenvalues
-  template <class _TypeA, class _TypeW>
-  inline void computeValues( _TypeA &&a, _TypeW &&w ) noexcept;
-
-  // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-
-  // Get sizes
-  inline std::tuple<index_t> sizes() const noexcept;
-
-  // Gets workspaces
-  inline       VectorType& getWork() noexcept;
-  inline const VectorType& getWork() const noexcept;
-  inline       RealVectorType& getRwork() noexcept;
-  inline const RealVectorType& getRwork() const noexcept;
-
- protected:
-
-  // Computes
-  template <JobOption __jobz = _jobz>
-  inline void compute( MatrixType &a, RealVectorType &w ) noexcept;
-
-  // Queries
-  inline index_t query( const index_t size ) noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Query the optimal workspace size.
+///
+template <class _Matrix, JobOption _jobz>
+index_t SyevEngine<_Matrix, _jobz>::query(
+    const index_t size
+) noexcept {
+  ScalarType lwork;
+  mcnla_assert_eq(detail::syev(_jobz, toUploChar(uplo, trans), size, nullptr, size, nullptr, &lwork, -1, nullptr), 0);
+  return lwork;
+}
 
 }  // namespace lapack
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LAPACK_ENGINE_SYEV_ENGINE_HPP_
+#endif  // MCNLA_CORE_LAPACK_ENGINE_SYEV_HH_

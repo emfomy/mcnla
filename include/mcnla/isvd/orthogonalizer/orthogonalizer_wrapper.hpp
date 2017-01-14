@@ -8,12 +8,7 @@
 #ifndef MCNLA_ISVD_ORTHOGONALIZER_ORTHOGONALIZER_WRAPPER_HPP_
 #define MCNLA_ISVD_ORTHOGONALIZER_ORTHOGONALIZER_WRAPPER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/solver/parameters.hpp>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/isvd/orthogonalizer/orthogonalizer_wrapper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -26,51 +21,51 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
-///
-/// The iSVD orthogonalizer wrapper.
-///
-/// @tparam  _Derived  The derived type.
+/// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-class OrthogonalizerWrapper : public utility::CrtpBase<_Derived, OrthogonalizerWrapper<_Derived>> {
+OrthogonalizerWrapper<_Derived>::OrthogonalizerWrapper(
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : parameters_(parameters),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Initializes.
+///
+template <class _Derived>
+void OrthogonalizerWrapper<_Derived>::initialize() noexcept {
+  this->derived().initializeImpl();
+}
 
-  using ScalarType = ScalarT<_Derived>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Orthogonalizes.
+///
+template <class _Derived>
+void OrthogonalizerWrapper<_Derived>::orthogonalize(
+    DenseMatrixSet120<ScalarType> &set_q
+) noexcept {
+  this->derived().orthogonalizeImpl(set_q);
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::orthogonalizerName
+///
+template <class _Derived>
+constexpr const char* OrthogonalizerWrapper<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
+}
 
-  /// @copydoc  mcnla::isvd::Solver::parameters_
-  const Parameters<ScalarType> &parameters_;
-
-  /// @copydoc  mcnla::isvd::Solver::mpi_comm_
-  const MPI_Comm mpi_comm_;
-
-  /// @copydoc  mcnla::isvd::Solver::mpi_root_
-  const mpi_int_t mpi_root_;
-
- protected:
-
-  // Constructor
-  inline OrthogonalizerWrapper( const Parameters<ScalarType> &parameters,
-                                const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
-
- public:
-
-  // Initializes
-  inline void initialize() noexcept;
-
-  // Orthogonalizes
-  inline void orthogonalize( DenseMatrixSet120<ScalarType> &set_q ) noexcept;
-
-  // Gets name
-  inline constexpr const char* name() const noexcept;
-
-  // Gets compute time
-  inline double time() const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::orthogonalizerTime
+///
+template <class _Derived>
+double OrthogonalizerWrapper<_Derived>::time() const noexcept {
+  return this->derived().timeImpl();
+}
 
 }  // namespace isvd
 
