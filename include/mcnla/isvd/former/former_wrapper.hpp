@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/former_base.hpp
-/// @brief   The iSVD former interface.
+/// @file    include/mcnla/isvd/former/former_wrapper.hpp
+/// @brief   The iSVD former wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_BASE_HPP_
-#define MCNLA_ISVD_FORMER_BASE_HPP_
+#ifndef MCNLA_ISVD_FORMER_FORMER_WRAPPER_HPP_
+#define MCNLA_ISVD_FORMER_FORMER_WRAPPER_HPP_
 
-#include <mcnla/isvd/former/former_base.hh>
+#include <mcnla/isvd/former/former_wrapper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,78 +24,76 @@ namespace isvd {
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-FormerBase<_Derived>::FormerBase(
-    const Parameters<ScalarType> &parameters
-) noexcept : parameters_(parameters) {}
+FormerWrapper<_Derived>::FormerWrapper(
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : parameters_(parameters),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.
 ///
 template <class _Derived>
-void FormerBase<_Derived>::initialize() noexcept { this->derived().initializeImpl(); }
+void FormerWrapper<_Derived>::initialize() noexcept {
+  this->derived().initializeImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Reconstructs SVD.
+/// @brief  Forms SVD.
 ///
-template <class _Derived>
-void FormerBase<_Derived>::form(
-    const MatrixType &matrix_a,
-    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
-) noexcept { this->derived().formImpl(matrix_a, matrix_qc); }
+template <class _Derived> template <class _Matrix>
+void FormerWrapper<_Derived>::form(
+    const _Matrix &matrix_a,
+    const DenseMatrixRowMajor<ScalarType> &matrix_q
+) noexcept {
+  this->derived().formImpl(matrix_a, matrix_q);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getFormerName
+/// @copydoc  mcnla::isvd::Solver::formerName
 ///
 template <class _Derived>
-constexpr const char* FormerBase<_Derived>::name() const noexcept {
+constexpr const char* FormerWrapper<_Derived>::name() const noexcept {
   return this->derived().nameImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getFormerTime
+/// @copydoc  mcnla::isvd::Solver::formerTime
 ///
 template <class _Derived>
-double FormerBase<_Derived>::getTime() const noexcept {
-  return this->derived().getTimeImpl();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::getFormerTimes
-///
-template <class _Derived>
-const std::vector<double> FormerBase<_Derived>::getTimes() const noexcept {
-  return this->derived().getTimesImpl();
+double FormerWrapper<_Derived>::time() const noexcept {
+  return this->derived().timeImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the vector S.
 ///
 template <class _Derived>
-const DenseVector<typename FormerBase<_Derived>::RealScalarType>&
-    FormerBase<_Derived>::getVectorS() const noexcept {
-  return this->derived().getVectorSImpl();
+const DenseVector<RealScalarT<ScalarT<_Derived>>>& FormerWrapper<_Derived>::vectorS() const noexcept {
+  return this->derived().vectorSImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the matrix U.
 ///
 template <class _Derived>
-const DenseMatrix<ScalarT<FormerBase<_Derived>>, Layout::COLMAJOR>&
-    FormerBase<_Derived>::getMatrixU() const noexcept {
-  return this->derived().getMatrixUImpl();
+const DenseMatrixColMajor<ScalarT<_Derived>>& FormerWrapper<_Derived>::matrixU() const noexcept {
+  return this->derived().matrixUImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the transpose of the matrix V.
 ///
 template <class _Derived>
-const DenseMatrix<ScalarT<FormerBase<_Derived>>, Layout::COLMAJOR>&
-    FormerBase<_Derived>::getMatrixVt() const noexcept {
-  return this->derived().getMatrixVtImpl();
+const DenseMatrixColMajor<ScalarT<_Derived>>& FormerWrapper<_Derived>::matrixVt() const noexcept {
+  return this->derived().matrixVtImpl();
 }
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_BASE_HPP_
+#endif  // MCNLA_ISVD_FORMER_FORMER_WRAPPER_HPP_

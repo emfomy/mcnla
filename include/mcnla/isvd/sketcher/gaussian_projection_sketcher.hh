@@ -71,6 +71,8 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
   random::Engine<ScalarType> random_engine_;
 
   using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
 
  public:
 
@@ -98,7 +100,7 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
   inline double timeImpl() const noexcept;
 
   // Sets seed
-  void setSeedImpl( const index_t seed ) noexcept;
+  inline void setSeedImpl( const index_t seed ) noexcept;
 
 };
 

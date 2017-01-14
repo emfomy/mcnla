@@ -105,7 +105,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::Solver<mcnla::matrix::DenseMatrix<ScalarType>,
                       mcnla::isvd::GaussianProjectionSketcher<mcnla::matrix::DenseMatrix<ScalarType>>,
                       mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>>,
-                      mcnla::isvd::StandardFormer<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
+                      mcnla::isvd::SvdFormer<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeed(seed);
   solver.setTolerance(tolerance).setMaxIteration(maxiter);
   solver.initialize();

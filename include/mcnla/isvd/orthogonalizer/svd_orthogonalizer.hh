@@ -72,6 +72,8 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
   lapack::GesvdEngine<MatrixType, 'O', 'N'> gesvd_engine_;
 
   using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
 
  public:
 

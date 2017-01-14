@@ -70,6 +70,8 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
   random::Engine<index_t> random_engine_;
 
   using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
 
  public:
 
@@ -97,7 +99,7 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
   inline double timeImpl() const noexcept;
 
   // Sets seed
-  void setSeedImpl( const index_t seed ) noexcept;
+  inline void setSeedImpl( const index_t seed ) noexcept;
 
 };
 

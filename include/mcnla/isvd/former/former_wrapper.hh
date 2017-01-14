@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/sketcher/sketcher_wrapper.hh
-/// @brief   The definition of iSVD sketcher wrapper.
+/// @file    include/mcnla/isvd/former/former_wrapper.hh
+/// @brief   The definition of iSVD former wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_HH_
-#define MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_HH_
+#ifndef MCNLA_ISVD_FORMER_FORMER_WRAPPER_HH_
+#define MCNLA_ISVD_FORMER_FORMER_WRAPPER_HH_
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
@@ -26,18 +26,19 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
+/// @ingroup  isvd_former_module
 ///
-/// The iSVD sketcher wrapper.
+/// The iSVD former wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Derived>> {
+class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>> {
 
  public:
 
   using ScalarType = ScalarT<_Derived>;
+  using RealScalarType = RealScalarT<ScalarType>;
 
  protected:
 
@@ -53,17 +54,17 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
  protected:
 
   // Constructor
-  inline SketcherWrapper( const Parameters<ScalarType> &parameters,
-                          const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline FormerWrapper( const Parameters<ScalarType> &parameters,
+                        const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  public:
 
   // Initializes
   inline void initialize() noexcept;
 
-  // Random sketches
+  // Forms SVD
   template <class _Matrix>
-  inline void sketch( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
+  inline void form( const _Matrix &matrix_a, const DenseMatrixRowMajor<ScalarType> &matrix_q ) noexcept;
 
   // Gets name
   inline constexpr const char* name() const noexcept;
@@ -71,8 +72,10 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
   // Gets compute time
   inline double time() const noexcept;
 
-  // Sets seed
-  inline void setSeed( const index_t seed ) noexcept;
+  // Gets matrices
+  inline const DenseVector<RealScalarType>& vectorS() const noexcept;
+  inline const DenseMatrixColMajor<ScalarType>& matrixU() const noexcept;
+  inline const DenseMatrixColMajor<ScalarType>& matrixVt() const noexcept;
 
 };
 
@@ -80,4 +83,4 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SKETCHER_SKETCHER_WRAPPER_HH_
+#endif  // MCNLA_ISVD_FORMER_FORMER_WRAPPER_HH_

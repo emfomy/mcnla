@@ -45,7 +45,7 @@ namespace isvd {
 template <class _Matrix,
           class _Sketcher   = GaussianProjectionSketcher<_Matrix>,
           class _Integrator = KolmogorovNagumoIntegrator<_Matrix>,
-          class _Former     = StandardFormer<_Matrix>>
+          class _Former     = SvdFormer<_Matrix>>
 class Solver {
 
   static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value,

@@ -36,6 +36,7 @@ int main( int argc, char **argv ) {
   parameters.max_iteration_ = 256;
 
   parameters.initialized_ = true;
+  parameters.computed_ = true;
 
   mcnla::matrix::DenseMatrixColMajor<double> mat(m, n);
   mcnla::matrix::DenseMatrixSet120<double> set(m, k+p, Nj);
@@ -63,6 +64,20 @@ int main( int argc, char **argv ) {
   for ( auto i = 0; i < Nj; ++i ) {
     std::cout << set(i) << std::endl;
   }
+
+  mcnla::isvd::SvdFormer<double> former(parameters, MPI_COMM_WORLD, mpi_root);
+  former.initialize();
+
+  former.form(mat, set(0));
+
+  std::cout << former.vectorS() << std::endl;
+  std::cout << former.matrixU() << std::endl;
+  std::cout << former.matrixVt() << std::endl;
+
+  mcnla::isvd::DummyFormer<double> d_former(parameters, MPI_COMM_WORLD, mpi_root);
+  d_former.initialize();
+
+  d_former.form(mat, set(0));
 
   MPI_Finalize();
 

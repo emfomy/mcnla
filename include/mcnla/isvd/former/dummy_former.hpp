@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/former/dummy_former.hpp
-/// @brief   The dummy former.
+/// @brief   The SVD former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -21,71 +21,69 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::FormerBase
+/// @copydoc  mcnla::isvd::FormerWrapper::FormerWrapper
 ///
-template <class _Matrix>
-DummyFormer<_Matrix>::DummyFormer(
-    const Parameters<ScalarType> &parameters
-) noexcept : BaseType(parameters) {}
+template <typename _Scalar>
+Former<_Scalar, DummyFormerTag>::Former(
+    const Parameters<ScalarType> &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::initialize
+/// @copydoc  mcnla::isvd::FormerWrapper::initialize
 ///
-template <class _Matrix>
-void DummyFormer<_Matrix>::initializeImpl() noexcept {}
+template <typename _Scalar>
+void Former<_Scalar, DummyFormerTag>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::form
+/// @copydoc  mcnla::isvd::FormerWrapper::form
 ///
-template <class _Matrix>
-void DummyFormer<_Matrix>::formImpl(
+template <typename _Scalar> template <class _Matrix>
+void Former<_Scalar, DummyFormerTag>::formImpl(
     const _Matrix &matrix_a,
-    const DenseMatrix<ScalarType, Layout::ROWMAJOR> &matrix_qc
-) noexcept { static_cast<void>(matrix_a); static_cast<void>(matrix_qc); }
+    const DenseMatrixRowMajor<ScalarType> &matrix_q
+) noexcept {
+  static_cast<void>(matrix_a);
+  static_cast<void>(matrix_q);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::name
+/// @copydoc  mcnla::isvd::FormerWrapper::name
 ///
-template <class _Matrix>
-constexpr const char* DummyFormer<_Matrix>::nameImpl() const noexcept {
+template <typename _Scalar>
+constexpr const char* Former<_Scalar, DummyFormerTag>::nameImpl() const noexcept {
   return name_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::getTime
+/// @copydoc  mcnla::isvd::FormerWrapper::time
 ///
-template <class _Matrix>
-double DummyFormer<_Matrix>::getTimeImpl() const noexcept {
+template <typename _Scalar>
+double Former<_Scalar, DummyFormerTag>::timeImpl() const noexcept {
   return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerBase::getTimes
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @fn  Former<_Scalar, DummyFormerTag>::vectorSImpl
+/// @copydoc  mcnla::isvd::FormerWrapper::vectorS
 ///
-template <class _Matrix>
-const std::vector<double> DummyFormer<_Matrix>::getTimesImpl() const noexcept {
-  return {};
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  DummyFormer::getVectorSImpl
-/// @copydoc  mcnla::isvd::FormerBase::getVectorS
-///
-/// @attention  This routine is not available.
+/// @attention  This routine is unavailable.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  DummyFormer::getMatrixUImpl
-/// @copydoc  mcnla::isvd::FormerBase::getMatrixU
+/// @fn  Former<_Scalar, DummyFormerTag>::matrixUImpl
+/// @copydoc  mcnla::isvd::FormerWrapper::matrixU
 ///
-/// @attention  This routine is not available.
+/// @attention  This routine is unavailable.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  DummyFormer::getMatrixVtImpl
-/// @copydoc  mcnla::isvd::FormerBase::getMatrixVt
+/// @fn  Former<_Scalar, DummyFormerTag>::matrixVtImpl
+/// @copydoc  mcnla::isvd::FormerWrapper::matrixVt
 ///
-/// @attention  This routine is not available.
+/// @attention  This routine is unavailable.
 ///
 
 }  // namespace isvd
