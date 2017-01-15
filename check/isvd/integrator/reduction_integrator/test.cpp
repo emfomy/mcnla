@@ -10,8 +10,8 @@ TEST(ReductionIntegratorTest, Test) {
   auto mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
 
   // Reads data
-  mcnla::matrix::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> set_q_true;
-  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar_true;
+  mcnla::container::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> set_q_true;
+  mcnla::container::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar_true;
   mcnla::io::loadMatrixMarket(set_q_true, CUBE_Q_PATH);
   mcnla::io::loadMatrixMarket(matrix_qbar_true, MATRIX_QBAR_PATH);
 
@@ -29,7 +29,7 @@ TEST(ReductionIntegratorTest, Test) {
   ASSERT_EQ(N % K, 0);
 
   // Sets parameters
-  mcnla::isvd::Parameters<ScalarType> parameters(MPI_COMM_WORLD, 0);
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
   parameters.nrow_ = m;
   parameters.rank_ = k;
   parameters.over_rank_ = p;
@@ -38,7 +38,7 @@ TEST(ReductionIntegratorTest, Test) {
   parameters.max_iteration_ = 256;
 
   // Initializes
-  mcnla::isvd::ReductionIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters);
+  mcnla::isvd::ReductionIntegrator<mcnla::container::DenseMatrix<ScalarType>> integrator(parameters);
   integrator.initialize();
   parameters.initialized_ = true;
 
@@ -51,8 +51,8 @@ TEST(ReductionIntegratorTest, Test) {
   integrator.integrate();
 
   // Checks result
-  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2_true(m, m);
-  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2(m, m);
+  mcnla::container::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2_true(m, m);
+  mcnla::container::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar2(m, m);
   auto matrix_qbar = integrator.getMatrixQbar();
   mcnla::blas::syrk<mcnla::Trans::NORMAL>(1.0, matrix_qbar_true, 0.0, matrix_qbar2_true);
   mcnla::blas::syrk<mcnla::Trans::NORMAL>(1.0, matrix_qbar,      0.0, matrix_qbar2);

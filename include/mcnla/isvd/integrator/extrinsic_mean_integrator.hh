@@ -82,7 +82,7 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   static constexpr const char* name_= "Extrinsic Mean Integrator";
 
   /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters &parameters_ = BaseType::parameters_;
 
   /// The starting time
   double time0_;
@@ -153,7 +153,7 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
  public:
 
   // Constructor
-  inline ExtrinsicMeanIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
+  inline ExtrinsicMeanIntegrator( const Parameters &parameters ) noexcept;
 
  protected:
 

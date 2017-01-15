@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <class _Matrix>
 KolmogorovNagumoIntegrator<_Matrix>::KolmogorovNagumoIntegrator(
-    const Parameters<ScalarType> &parameters
+    const Parameters &parameters
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

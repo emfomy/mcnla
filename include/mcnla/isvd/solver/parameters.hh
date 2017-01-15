@@ -27,26 +27,19 @@ namespace isvd {
 ///
 /// The parameters of iSVD solver.
 ///
-/// @tparam  _Scalar  The scalar type type.
-///
-template <typename _Scalar>
 class Parameters {
 
-  template <class _Matrix, class _Sketcher, class _Integrator, class _Reconstructor> friend class Solver;
-
- private:
-
-  using RealScalarType = RealScalarT<_Scalar>;
+  template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+  friend class Solver;
 
  protected:
 
-#ifdef MCNLA_TEST
+#if defined(MCNLA_TEST) || defined(MCNLA_USE_GTEST)
  public:
-#endif  // MCNLA_TEST
+#endif  // MCNLA_TEST or MCNLA_USE_GTEST
 
-#ifdef MCNLA_USE_GTEST
- public:
-#endif  // MCNLA_USE_GTEST
+  /// The MPI size
+  const index_t mpi_size_;
 
   /// The tag shows if the solver is initialized or not.
   bool initialized_ = false;
@@ -69,15 +62,6 @@ class Parameters {
   /// The number of random sketches per MPI node.
   index_t num_sketch_each_ = 0;
 
-  /// The maximum iteration.
-  index_t max_iteration_ = 256;
-
-  /// The tolerance of converge condition.
-  RealScalarType tolerance_ = 1e-4;
-
-  /// The MPI size
-  const index_t mpi_size_;
-
  public:
 
   // Constructors
@@ -93,8 +77,6 @@ class Parameters {
   inline index_t dimSketch() const noexcept;
   inline index_t numSketch() const noexcept;
   inline index_t numSketchEach() const noexcept;
-  inline index_t maxIteration() const noexcept;
-  inline RealScalarType tolerance() const noexcept;
 };
 
 }  // namespace isvd

@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <class _Matrix>
 ExtrinsicMeanIntegrator<_Matrix>::ExtrinsicMeanIntegrator(
-    const Parameters<ScalarType> &parameters
+    const Parameters &parameters
 ) noexcept : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

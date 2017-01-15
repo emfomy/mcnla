@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gtest/gtest.h>
-#include <mcnla/core/matrix/dense/dense_matrix.hpp>
+#include <mcnla/core/container/dense/dense_matrix.hpp>
 #include <mcnla/core/lapack.hpp>
 
 using MyTypes = testing::Types<float, double, std::complex<float>, std::complex<double>>;
@@ -20,13 +20,13 @@ class DenseMatrixTestBase : public testing::Test {
   const mcnla::index_t offset_   = _offset;
 
   std::valarray<_Scalar> valarray_;
-  mcnla::matrix::DenseMatrix<_Scalar, _trans> mat_;
+  mcnla::container::DenseMatrix<_Scalar, _trans> mat_;
 
   mcnla::index_t iseed[4] = {0, 0, 0, 1};
 
   virtual void SetUp() {
-    mcnla::matrix::Array<_Scalar> array(memsize_, offset_);
-    mat_ = mcnla::matrix::DenseMatrix<_Scalar, _trans>(nrow_, ncol_, pitch_, array);
+    mcnla::container::Array<_Scalar> array(memsize_, offset_);
+    mat_ = mcnla::container::DenseMatrix<_Scalar, _trans>(nrow_, ncol_, pitch_, array);
     mcnla::lapack::larnv<3>(mat_.vectorize(), iseed);
     valarray_ = mat_.value().valarray();
   }

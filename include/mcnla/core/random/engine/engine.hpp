@@ -9,6 +9,7 @@
 #define MCNLA_CORE_RANDOM_ENGINE_ENGINE_HPP_
 
 #include <mcnla/core/random/engine/engine.hh>
+#include <random>
 
 #ifdef MCNLA_USE_MKL
   #include <mcnla/core/random/engine/engine_detail_mkl.hpp>

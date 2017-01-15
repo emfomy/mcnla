@@ -27,7 +27,7 @@ namespace isvd {
 ///
 template <typename _Scalar>
 Sketcher<_Scalar, ColumnSamplingSketcherTag>::Sketcher(
-    const Parameters<ScalarType> &parameters,
+    const Parameters &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root,
     const index_t seed
@@ -117,7 +117,7 @@ double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time2() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
+/// @copydoc  mcnla::isvd::SketcherWrapper::seed
 ///
 template <typename _Scalar>
 void Sketcher<_Scalar, ColumnSamplingSketcherTag>::setSeedImpl(

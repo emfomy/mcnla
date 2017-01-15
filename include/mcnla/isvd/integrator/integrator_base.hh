@@ -10,7 +10,7 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/container.hpp>
 #include <mcnla/core/utility.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
  protected:
 
   /// The parameters.
-  const Parameters<ScalarType> &parameters_;
+  const Parameters &parameters_;
 
   /// The time of integrating
   double integrating_time_;
@@ -50,7 +50,7 @@ class IntegratorBase : public utility::CrtpBase<_Derived, IntegratorBase<_Derive
  protected:
 
   // Constructor
-  inline IntegratorBase( const Parameters<ScalarType> &parameters ) noexcept;
+  inline IntegratorBase( const Parameters &parameters ) noexcept;
 
  public:
 

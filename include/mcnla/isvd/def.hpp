@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_DEF_HPP_
 
 #include <mcnla/def.hpp>
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/container/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @defgroup  isvd_module  iSVD Module
@@ -51,7 +51,7 @@ namespace mcnla {
 ///
 namespace isvd {
 
-using namespace matrix;
+using namespace container;
 
 }  // namespace isvd
 

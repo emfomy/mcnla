@@ -26,20 +26,18 @@ int main( int argc, char **argv ) {
   mcnla::mpi_int_t mpi_root = 0;
   mcnla::index_t m = 10, n = 20, k = 5, p = 1, Nj = 3, seed = 0;
 
-  mcnla::isvd::Parameters<double> parameters(MPI_COMM_WORLD);
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD);
   parameters.nrow_ = m;
   parameters.ncol_ = n;
   parameters.rank_ = k;
   parameters.over_rank_ = p;
   parameters.num_sketch_each_ = Nj;
-  parameters.tolerance_ = 1e-4;
-  parameters.max_iteration_ = 256;
 
   parameters.initialized_ = true;
   parameters.computed_ = true;
 
-  mcnla::matrix::DenseMatrixColMajor<double> mat(m, n);
-  mcnla::matrix::DenseMatrixSet120<double> set(m, k+p, Nj);
+  mcnla::container::DenseMatrixColMajor<double> mat(m, n);
+  mcnla::container::DenseMatrixSet120<double> set(m, k+p, Nj);
 
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
   sketcher.setSeed(1);

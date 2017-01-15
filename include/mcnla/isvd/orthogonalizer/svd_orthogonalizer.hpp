@@ -27,7 +27,7 @@ namespace isvd {
 ///
 template <typename _Scalar>
 Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::Orthogonalizer(
-    const Parameters<ScalarType> &parameters,
+    const Parameters &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept

@@ -12,7 +12,7 @@
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/lapack/def.hpp>
 #include <tuple>
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/container.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_BLAS_ROUTINE_SYMM_HPP_
 #define MCNLA_CORE_BLAS_ROUTINE_SYMM_HPP_
 
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/container.hpp>
 #include <mcnla/core/blas/blas/symm.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

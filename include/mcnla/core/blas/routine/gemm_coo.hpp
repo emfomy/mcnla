@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_BLAS_ROUTINE_GEMM_COO_HPP_
 #define MCNLA_CORE_BLAS_ROUTINE_GEMM_COO_HPP_
 
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/container.hpp>
 #include <mcnla/core/blas/routine/axpby.hpp>
 #include <mcnla/core/blas/routine/memset0.hpp>
 

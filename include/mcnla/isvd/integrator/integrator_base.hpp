@@ -25,7 +25,7 @@ namespace isvd {
 ///
 template <class _Derived>
 IntegratorBase<_Derived>::IntegratorBase(
-    const Parameters<ScalarType> &parameters
+    const Parameters &parameters
 ) noexcept : parameters_(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

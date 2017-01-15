@@ -10,8 +10,8 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   auto mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
 
   // Reads data
-  mcnla::matrix::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> set_q_true;
-  mcnla::matrix::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar_true;
+  mcnla::container::DenseCube<ScalarType, mcnla::Layout::ROWMAJOR> set_q_true;
+  mcnla::container::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar_true;
   mcnla::io::loadMatrixMarket(set_q_true, CUBE_Q_PATH);
   mcnla::io::loadMatrixMarket(matrix_qbar_true, MATRIX_QBAR_PATH);
 
@@ -29,7 +29,7 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   ASSERT_EQ(N % K, 0);
 
   // Sets parameters
-  mcnla::isvd::Parameters<ScalarType> parameters(MPI_COMM_WORLD, 0);
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
   parameters.nrow_ = m;
   parameters.rank_ = k;
   parameters.over_rank_ = p;
@@ -38,7 +38,7 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   parameters.max_iteration_ = 256;
 
   // Initializes
-  mcnla::isvd::NaiveKolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>> integrator(parameters);
+  mcnla::isvd::NaiveKolmogorovNagumoIntegrator<mcnla::container::DenseMatrix<ScalarType>> integrator(parameters);
   integrator.initialize();
   parameters.initialized_ = true;
 

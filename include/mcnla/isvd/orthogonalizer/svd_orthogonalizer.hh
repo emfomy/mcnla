@@ -78,7 +78,7 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters<ScalarType> &parameters,
+  inline Orthogonalizer( const Parameters &parameters,
                          const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
   // Gets time
@@ -90,7 +90,7 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
   // Initializes
   void initializeImpl() noexcept;
 
-  // Orthogonalizees
+  // Orthogonalizes
   void orthogonalizeImpl( DenseMatrixSet120<ScalarType> &set_q ) noexcept;
 
   // Gets name

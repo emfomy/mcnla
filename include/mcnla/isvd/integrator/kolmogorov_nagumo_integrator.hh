@@ -82,7 +82,13 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
 
   /// The parameters.
-  const Parameters<ScalarType> &parameters_ = BaseType::parameters_;
+  const Parameters &parameters_ = BaseType::parameters_;
+
+  /// The maximum iteration.
+  index_t max_iteration_ = 256;
+
+  /// The tolerance of converge condition.
+  RealScalarType tolerance_ = 1e-4;
 
   /// The starting time
   double time0_;
@@ -153,7 +159,7 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
  public:
 
   // Constructor
-  inline KolmogorovNagumoIntegrator( const Parameters<ScalarType> &parameters ) noexcept;
+  inline KolmogorovNagumoIntegrator( const Parameters &parameters ) noexcept;
 
  protected:
 

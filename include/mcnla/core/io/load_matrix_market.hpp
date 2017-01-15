@@ -12,7 +12,7 @@
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/io/def.hpp>
 #include <fstream>
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/container.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -271,7 +271,7 @@ inline void loadMatrixMarket(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-}  // namespace matrix
+}  // namespace container
 
 }  // namespace mcnla
 

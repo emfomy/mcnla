@@ -103,7 +103,7 @@ class Former<_Scalar, SvdFormerTag>
  public:
 
   // Constructor
-  inline Former( const Parameters<ScalarType> &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Former( const Parameters &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
   // Gets time
   inline double time1() const noexcept;
@@ -115,7 +115,7 @@ class Former<_Scalar, SvdFormerTag>
   // Initializes
   void initializeImpl() noexcept;
 
-  // Reconstructs
+  // Forms SVD
   template <class _Matrix>
   void formImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ScalarType> &matrix_qc ) noexcept;
 

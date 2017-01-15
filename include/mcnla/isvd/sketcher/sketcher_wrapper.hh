@@ -10,8 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/solver/parameters.hpp>
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/isvd/solver.hpp>
+#include <mcnla/core/container.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -42,7 +42,7 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
  protected:
 
   /// @copydoc  mcnla::isvd::Solver::parameters_
-  const Parameters<ScalarType> &parameters_;
+  const Parameters &parameters_;
 
   /// @copydoc  mcnla::isvd::Solver::mpi_comm_
   const MPI_Comm mpi_comm_;
@@ -53,7 +53,7 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
  protected:
 
   // Constructor
-  inline SketcherWrapper( const Parameters<ScalarType> &parameters,
+  inline SketcherWrapper( const Parameters &parameters,
                           const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  public:
@@ -73,6 +73,8 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
   // Sets seed
   inline void setSeed( const index_t seed ) noexcept;
+  inline void setSeeds( const index_t seed ) noexcept;
+
 
 };
 

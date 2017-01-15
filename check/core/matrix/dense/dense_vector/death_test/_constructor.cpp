@@ -1,7 +1,7 @@
 #include "../death_test.hpp"
 
 TYPED_TEST(DenseVectorDeathTest, Constructor) {
-  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
+  using VectorType = mcnla::container::DenseVector<TypeParam>;
 
   EXPECT_DEATH(VectorType vec1(-1), "");
   EXPECT_DEATH(VectorType vec1(0, 0), "");
@@ -10,8 +10,8 @@ TYPED_TEST(DenseVectorDeathTest, Constructor) {
 
 
 TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, Constructor) {
-  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
-  using ArrayType  = mcnla::matrix::Array<TypeParam>;
+  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using ArrayType  = mcnla::container::Array<TypeParam>;
 
   const auto length   = this->length_;
   const auto stride   = this->stride_;
@@ -30,8 +30,8 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, Constructor) {
 
 
 TYPED_TEST(DenseVectorDeathTest_Size8_Stride3, Constructor) {
-  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
-  using ArrayType  = mcnla::matrix::Array<TypeParam>;
+  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using ArrayType  = mcnla::container::Array<TypeParam>;
 
   const auto length   = this->length_;
   const auto stride   = this->stride_;

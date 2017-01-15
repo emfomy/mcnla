@@ -11,13 +11,13 @@
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <vector>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/utility.hpp>
 #include <mcnla/isvd/solver/parameters.hpp>
 #include <mcnla/isvd/sketcher.hpp>
 #include <mcnla/isvd/integrator.hpp>
 #include <mcnla/isvd/former.hpp>
-#include <mpi.h>
+#include <mcnla/core/container.hpp>
+#include <mcnla/core/mpi.hpp>
+#include <mcnla/core/utility/crtp.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -34,39 +34,32 @@ namespace isvd {
 ///
 /// The Integrated Singular Value Decomposition solver.
 ///
-/// @tparam  _Matrix         The matrix type.
-/// @tparam  _Sketcher       The sketcher type.
-/// @tparam  _Integrator     The integrator type.
-/// @tparam  _Former  The former type.
+/// @tparam  _Scalar             The scalar type.
+/// @tparam  _SketcherTag        The sketcher tag.
+/// @tparam  _OrthogonalizerTag  The orthogonalizer tag.
+/// @tparam  _IntegratorTag      The integrator tag.
+/// @tparam  _FormerTag          The former tag.
 ///
 /// @attention  The solver should have been @link initialize() initialized@endlink before calling #compute.
 /// @attention  The solver should be @link initialize() re-initialized@endlink after changing parameters.
 ///
-template <class _Matrix,
-          class _Sketcher   = GaussianProjectionSketcher<_Matrix>,
-          class _Integrator = KolmogorovNagumoIntegrator<_Matrix>,
-          class _Former     = SvdFormer<_Matrix>>
+template <class _Scalar,
+          class _SketcherTag       = GaussianProjectionSketcherTag,
+          class _OrthogonalizerTag = SvdOrthogonalizerTag,
+          class _IntegratorTag     = KolmogorovNagumoIntegratorTag,
+          class _FormerTag         = SvdFormerTag>
 class Solver {
-
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value,
-                "'_Matrix' is not a matrix!");
-  static_assert(std::is_base_of<SketcherWrapper<_Sketcher>, _Sketcher>::value,
-                "'_Sketcher' is not a sketcher!");
-  static_assert(std::is_base_of<IntegratorBase<_Integrator>, _Integrator>::value,
-                "'_Integrator' is not a integrator!");
-  static_assert(std::is_base_of<FormerBase<_Former>, _Former>::value,
-                "'_Former' is not a former!");
-
-  static_assert(std::is_same<_Matrix, MatrixT<_Sketcher>>::value,   "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, MatrixT<_Integrator>>::value, "The matrix type does not fit!");
-  static_assert(std::is_same<_Matrix, MatrixT<_Former>>::value,     "The matrix type does not fit!");
 
  public:
 
-  using MatrixType      = _Matrix;
-  using ScalarType      = ScalarT<MatrixType>;
-  using RealScalarType  = typename MatrixType::RealScalarType;
-  using ParametersType  = Parameters<ScalarType>;
+  using ScalarType     = _Scalar;
+  using RealScalarType = RealScalarT<_Scalar>;
+
+  using ParametersType     = Parameters;
+  using SketcherType       = Sketcher<ScalarType, _SketcherTag>;
+  using OrthogonalizerType = Orthogonalizer<ScalarType, _OrthogonalizerTag>;
+  using IntegratorType     = Integrator<ScalarType, _IntegratorTag>;
+  using FormerType         = Former<ScalarType, _FormerTag>;
 
  protected:
 
@@ -79,17 +72,20 @@ class Solver {
   /// The MPI root.
   const mpi_int_t mpi_root_;
 
-  /// The random seed
-  index_t seed_[4] = {rand()%4096, rand()%4096, rand()%4096, (rand()%2048)*2+1};
+  /// The random seed.
+  index_t seed_ = 0;
 
   /// The sketcher.
-  _Sketcher sketcher_;
+  SketcherType sketcher_;
+
+  /// The orthogonalizer.
+  OrthogonalizerType orthogonalizer_;
 
   /// The integrator.
-  _Integrator integrator_;
+  IntegratorType integrator_;
 
   /// The former.
-  _Former former_;
+  FormerType former_;
 
  public:
 
@@ -100,17 +96,20 @@ class Solver {
   void initialize() noexcept;
 
   // Compute
+  template<class _Matrix>
   void compute( const _Matrix &matrix ) noexcept;
 
   // Gets name
   inline constexpr const char* sketcherName() const noexcept;
+  inline constexpr const char* orthogonalizerName() const noexcept;
   inline constexpr const char* integratorName() const noexcept;
-  inline constexpr const char* reconstructorName() const noexcept;
+  inline constexpr const char* formerName() const noexcept;
 
   // Gets compute time
   inline double sketcherTime() const noexcept;
+  inline double orthogonalizerTime() const noexcept;
   inline double integratorTime() const noexcept;
-  inline double reconstructorTime() const noexcept;
+  inline double formerTime() const noexcept;
 
   // Gets matrices
   inline const DenseVector<RealScalarType>& singularValues() const noexcept;
@@ -123,11 +122,13 @@ class Solver {
 
   // Sets parameters
   inline Solver& setSize( const index_t nrow, const index_t ncol ) noexcept;
+  template<class _Matrix>
   inline Solver& setSize( const _Matrix &matrix ) noexcept;
   inline Solver& setRank( const index_t rank ) noexcept;
   inline Solver& setOverRank( const index_t over_rank ) noexcept;
   inline Solver& setNumSketch( const index_t num_sketch ) noexcept;
   inline Solver& setNumSketchEach( const index_t num_sketch_each ) noexcept;
+  inline Solver& seed( const index_t seed ) noexcept;
 
 };
 

@@ -1,0 +1,117 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/mcnla/isvd/integrator/integrator_wrapper.hpp
+/// @brief   The iSVD integrator wrapper.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_ISVD_INTEGRATOR_INTEGRATOR_WRAPPER_HPP_
+#define MCNLA_ISVD_INTEGRATOR_INTEGRATOR_WRAPPER_HPP_
+
+#include <mcnla/isvd/integrator/integrator_wrapper.hh>
+#include <vector>
+#include <random>
+#include <mcnla/core/mpi.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The MCNLA namespace.
+//
+namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given parameters.
+///
+template <class _Derived>
+IntegratorWrapper<_Derived>::IntegratorWrapper(
+    const Parameters &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : parameters_(parameters),
+    mpi_comm_(mpi_comm),
+    mpi_root_(mpi_root) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Initializes.
+///
+template <class _Derived>
+void IntegratorWrapper<_Derived>::initialize() noexcept {
+  this->derived().initializeImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Integrates.
+///
+template <class _Derived> template <class _Matrix>
+void IntegratorWrapper<_Derived>::integrate() noexcept {
+  this->derived().integrateImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::integratorName
+///
+template <class _Derived>
+constexpr const char* IntegratorWrapper<_Derived>::name() const noexcept {
+  return this->derived().nameImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::integratorTime
+///
+template <class _Derived>
+double IntegratorWrapper<_Derived>::time() const noexcept {
+  return this->derived().timeImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the iterator number
+///
+template <class _Derived>
+index_t IntegratorBase<_Derived>::iter() const noexcept {
+  return this->derived().iterImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the set Q.
+///
+template <class _Derived>
+DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::setQ() noexcept {
+  return this->derived().setQImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  setQ
+///
+template <class _Derived>
+const DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::setQ() const noexcept {
+  return this->derived().setQImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the matrix Qc.
+///
+template <class _Derived>
+DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::matrixQbar() noexcept {
+  return this->derived().matrixQbarImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  matrixQbar
+///
+template <class _Derived>
+const DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
+    IntegratorBase<_Derived>::matrixQbar() const noexcept {
+  return this->derived().matrixQbarImpl();
+}
+
+}  // namespace isvd
+
+}  // namespace mcnla
+
+#endif  // MCNLA_ISVD_INTEGRATOR_INTEGRATOR_WRAPPER_HPP_

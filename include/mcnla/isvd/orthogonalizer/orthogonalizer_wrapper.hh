@@ -10,8 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/solver/parameters.hpp>
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/isvd/solver.hpp>
+#include <mcnla/core/container.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -42,7 +42,7 @@ class OrthogonalizerWrapper : public utility::CrtpBase<_Derived, OrthogonalizerW
  protected:
 
   /// @copydoc  mcnla::isvd::Solver::parameters_
-  const Parameters<ScalarType> &parameters_;
+  const Parameters &parameters_;
 
   /// @copydoc  mcnla::isvd::Solver::mpi_comm_
   const MPI_Comm mpi_comm_;
@@ -53,7 +53,7 @@ class OrthogonalizerWrapper : public utility::CrtpBase<_Derived, OrthogonalizerW
  protected:
 
   // Constructor
-  inline OrthogonalizerWrapper( const Parameters<ScalarType> &parameters,
+  inline OrthogonalizerWrapper( const Parameters &parameters,
                                 const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  public:
