@@ -66,7 +66,6 @@ inline void alltoall(
           DenseVector<_Scalar> &recv,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
@@ -80,7 +79,6 @@ inline void alltoall(
           DenseMatrix<_Scalar, _transr> &recv,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());

@@ -135,7 +135,7 @@ template <typename _Type>
 Array<_Type> Array<_Type>::operator>>(
     const index_t offset
 ) noexcept {
-  Array retval = *this;
+  auto retval = *this;
   retval >>= offset;
   return retval;
 }
@@ -148,7 +148,7 @@ template <typename _Type>
 const Array<_Type> Array<_Type>::operator>>(
     const index_t offset
 ) const noexcept {
-  Array retval = *this;
+  auto retval = *this;
   retval >>= offset;
   return retval;
 }
@@ -161,7 +161,7 @@ template <typename _Type>
 Array<_Type> Array<_Type>::operator<<(
     const index_t offset
 ) noexcept {
-  Array retval = *this;
+  auto retval = *this;
   retval <<= offset;
   return retval;
 }
@@ -174,7 +174,7 @@ template <typename _Type>
 const Array<_Type> Array<_Type>::operator<<(
     const index_t offset
 ) const noexcept {
-  Array retval = *this;
+  auto retval = *this;
   retval <<= offset;
   return retval;
 }

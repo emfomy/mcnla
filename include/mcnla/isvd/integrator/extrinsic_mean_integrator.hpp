@@ -25,18 +25,21 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::IntegratorBase::IntegratorBase
 ///
-template <class _Matrix>
-ExtrinsicMeanIntegrator<_Matrix>::ExtrinsicMeanIntegrator(
-    const Parameters &parameters
-) noexcept : BaseType(parameters) {}
+template <typename _Scalar>
+Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::Integrator(
+    const Parameters &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::IntegratorBase::initialize
 ///
-template <class _Matrix>
-void ExtrinsicMeanIntegrator<_Matrix>::initializeImpl() noexcept {
+template <typename _Scalar>
+void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::initializeImpl() noexcept {
 
-  const auto mpi_size        = parameters_.mpi_size;
+  const auto mpi_size        = mpi::commSize(mpi_comm_);
   const auto nrow            = parameters_.nrow();
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -51,77 +54,37 @@ void ExtrinsicMeanIntegrator<_Matrix>::initializeImpl() noexcept {
   nrow_each_ = (nrow-1) / mpi_size + 1;
   nrow_all_  = nrow_each_ * mpi_size;
 
-  const auto collection_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
-  if ( collection_q_.sizes() != collection_q_sizes || !collection_q_.isShrunk() ) {
-    collection_q_ = DenseMatrixCollection120<ScalarType>(collection_q_sizes);
-  }
-  collection_q_cut_ = collection_q_.getMatrixRows({0, nrow});
+  collection_q_.reconstruct(nrow_all_, dim_sketch, num_sketch_each);
+  collection_q_cut_ = collection_q_({0, nrow}, "", "");
 
-  const auto matrix_tmp_sizes = std::make_tuple(nrow_all_, dim_sketch * num_sketch_each);
-  if ( matrix_tmp_.sizes() != matrix_tmp_sizes ) {
-    matrix_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_tmp_sizes);
-  }
+  matrix_qjs_.reconstruct(nrow_each_, dim_sketch * num_sketch);
+  matrix_qbar_.reconstruct(nrow, dim_sketch);
 
-  const auto matrix_qjs_sizes = std::make_tuple(nrow_each_, dim_sketch * num_sketch);
-  if ( matrix_qjs_.sizes() != matrix_qjs_sizes || !matrix_qjs_.isShrunk() ) {
-    matrix_qjs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qjs_sizes);
-  }
+  matrix_bjs_.reconstruct(dim_sketch * num_sketch, dim_sketch * num_sketch);
+  collection_bi_.reconstruct(dim_sketch, dim_sketch * num_sketch, num_sketch_each);
+  collection_bi0_ = collection_bi_("", {0, dim_sketch}, "");
 
-  const auto matrix_qbar_sizes = std::make_tuple(nrow, dim_sketch);
-  if ( matrix_qbar_.sizes() != matrix_qbar_sizes || !matrix_qbar_.isShrunk() ) {
-    matrix_qbar_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qbar_sizes);
-  }
+  collection_g_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
+  matrix_g0_.reconstruct(dim_sketch, dim_sketch);
+  matrix_gb_.reconstruct(dim_sketch, dim_sketch);
 
-  const auto matrix_bjs_sizes = std::make_tuple(dim_sketch * num_sketch, dim_sketch * num_sketch);
-  if ( matrix_bjs_.sizes() != matrix_bjs_sizes || !matrix_bjs_.isShrunk() ) {
-    matrix_bjs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_bjs_sizes);
-  }
+  vector_s_.reconstruct(dim_sketch);
 
-  const auto matrix_bis_sizes = std::make_tuple(dim_sketch * num_sketch_each, dim_sketch * num_sketch);
-  if ( matrix_bis_.sizes() != matrix_bis_sizes || !matrix_bis_.isShrunk() ) {
-    matrix_bis_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_bis_sizes);
-  }
+  matrix_tmp_.reconstruct(nrow_all_, dim_sketch * num_sketch_each);
 
-  const auto set_g_sizes = std::make_tuple(dim_sketch, dim_sketch, num_sketch_each);
-  if ( set_g_.sizes() != set_g_sizes ) {
-    set_g_ = DenseMatrixCollection120<ScalarType>(set_g_sizes);
-  }
-
-  const auto matrix_g_sizes = std::make_tuple(dim_sketch, dim_sketch);
-  if ( matrix_g0_.sizes() != matrix_g_sizes ) {
-    matrix_g0_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_g_sizes);
-  }
-  if ( matrix_gb_.sizes() != matrix_g_sizes ) {
-    matrix_gb_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_g_sizes);
-  }
-
-  const auto vector_s_sizes = dim_sketch;
-  if ( vector_s_.sizes() != vector_s_sizes ) {
-    vector_s_ = DenseVector<ScalarType>(vector_s_sizes);
-  }
-
-  const auto gesvd_sizes = std::make_tuple(nrow, dim_sketch);
-  if ( gesvd_engine_.sizes() != gesvd_sizes ) {
-    gesvd_engine_.resize(gesvd_sizes);
-  }
-
-  const auto syev_sizes = dim_sketch;
-  if ( syev_engine_.sizes() != syev_sizes ) {
-    syev_engine_.resize(syev_sizes);
-  }
+  gesvd_engine_.reconstruct(nrow, dim_sketch);
+  syev_engine_.reconstruct(dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::IntegratorBase::integrate
 ///
-template <class _Matrix>
-void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
+template <typename _Scalar>
+void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
-  const auto mpi_comm        = parameters_.mpi_comm;
-  const auto mpi_size        = parameters_.mpi_size;
-  const auto mpi_root        = parameters_.mpi_root;
-  const auto mpi_rank        = mpi::commRank(mpi_comm);
+  const auto mpi_size        = mpi::commSize(mpi_comm_);
+  const auto mpi_rank        = mpi::commRank(mpi_comm_);
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -129,38 +92,38 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   time0_ = MPI_Wtime();
 
   // Exchange Q
-  blas::memset0(collection_q_.getMatrixRows({nrow, nrow_all_}).unfold());
-  mpi::alltoall(collection_q_.unfold(), matrix_tmp_, mpi_comm);
+  blas::memset0(collection_q_({nrow, nrow_all_}, "", "").unfold());
+  mpi::alltoall(collection_q_.unfold(), matrix_tmp_, mpi_comm_);
 
   // Rearrange Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
-    blas::omatcopy(1.0, matrix_tmp_.getRows(IdxRange{j, j+1} * nrow_each_),
-                        matrix_qjs_.getCols(IdxRange{j, j+1} * dim_sketch * num_sketch_each));
+    blas::copy(matrix_tmp_(IdxRange{j, j+1} * nrow_each_, ""),
+               matrix_qjs_("", IdxRange{j, j+1} * dim_sketch * num_sketch_each));
   }
 
   time1_ = MPI_Wtime();
 
   // Bs := sum( Qjs' * Qjs )
-  blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_qjs_, matrix_qjs_, 0.0, matrix_bjs_);
-  mpi::reduceScatterBlock(matrix_bjs_, matrix_bis_, MPI_SUM, mpi_comm);
+  blas::mm(matrix_qjs_.t(), matrix_qjs_, matrix_bjs_);
+  mpi::reduceScatterBlock(matrix_bjs_, collection_bi_.unfold(), MPI_SUM, mpi_comm_);
 
   time2_ = MPI_Wtime();
 
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
-    // Gi := Bis * Bis'
-    blas::syrk<Trans::NORMAL>(1.0, matrix_bis_.getRows(IdxRange{i, i+1}*dim_sketch), 0.0, set_g_(i));
+    // Gi := Bi * Bi'
+    blas::rk(collection_bi_(i), collection_g_(i).viewSymmetric());
 
     // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
-    syev_engine_(set_g_(i), vector_s_);
+    syev_engine_(collection_g_(i).viewSymmetric(), vector_s_);
 
   }
 
   // Broadcast G0
   if ( mpi_rank == 0 ) {
-    blas::omatcopy(1.0, set_g_(0), matrix_g0_);
+    blas::omatcopy(collection_g_(0), matrix_g0_);
   }
-  mpi::bcast(matrix_g0_, 0, mpi_comm);
+  mpi::bcast(matrix_g0_, 0, mpi_comm_);
 
   time3_ = MPI_Wtime();
 
@@ -170,26 +133,26 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
     // Inverse Gi(j-row) if Gi(j-row) * Bi0 * G0(j-row)' < 0
-    auto matrix_bi0 = matrix_bis_.getBlock(IdxRange{i, i+1}*dim_sketch, {0, dim_sketch});
-    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, matrix_g0_, matrix_bi0, 0.0, matrix_gb_);
+    blas::mm(matrix_g0_, collection_bi0_(i).t(), matrix_gb_);
+
     for ( index_t j = 0; j < dim_sketch; ++j ) {
-      if ( blas::dot(set_g_(i).getRow(j), matrix_gb_.getRow(j)) < 0 ) {
-        blas::scal(-1.0, set_g_(i).getRow(j));
+      if ( blas::dot(collection_g_(i)(j, ""), matrix_gb_(j, "")) < 0 ) {
+        blas::scal(collection_g_(i)(j, ""), -1.0);
       }
     }
 
     // Qbar += Qi * Gi'
-    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, collection_q_cut_(i), set_g_(i), 1.0, matrix_qbar_);
+    blas::mm(collection_q_cut_(i), collection_g_(i).t(), matrix_qbar_, 1.0, 1.0);
 
   }
 
   time4_ = MPI_Wtime();
 
-  // Qbar := SVD( Qbar )
-  mpi::reduce(matrix_qbar_, MPI_SUM, mpi_root, mpi_comm);
+  // Qbar := sum( Qbar )
+  mpi::reduce(matrix_qbar_, MPI_SUM, mpi_root_, mpi_comm_);
 
   // Compute the left singular vectors of Qbar
-  if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
+  if ( mpi_rank == mpi_root_ ) {
     gesvd_engine_(matrix_qbar_, vector_s_, matrix_empty_, matrix_empty_);
   }
 
@@ -199,71 +162,91 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::IntegratorBase::name
 ///
-template <class _Matrix>
-constexpr const char* ExtrinsicMeanIntegrator<_Matrix>::nameImpl() const noexcept {
+template <typename _Scalar>
+constexpr const char* Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::nameImpl() const noexcept {
   return name_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getTime
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-double ExtrinsicMeanIntegrator<_Matrix>::getTimeImpl() const noexcept {
+template <typename _Scalar>
+double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::timeImpl() const noexcept {
   return time5_-time0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getTimes
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-const std::vector<double> ExtrinsicMeanIntegrator<_Matrix>::getTimesImpl() const noexcept {
-  return {time1_-time0_, time2_-time1_, time3_-time2_, time4_-time3_, time5_-time4_};
+template <typename _Scalar>
+double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time1() const noexcept {
+  return time1_-time0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getIter
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-index_t ExtrinsicMeanIntegrator<_Matrix>::getIterImpl() const noexcept {
-  return -1;
+template <typename _Scalar>
+double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time2() const noexcept {
+  return time2_-time1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getCollectionQ
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-DenseMatrixCollection120<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>>&
-    ExtrinsicMeanIntegrator<_Matrix>::getCollectionQImpl() noexcept {
+template <typename _Scalar>
+double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time3() const noexcept {
+  return time3_-time2_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
+///
+template <typename _Scalar>
+double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time4() const noexcept {
+  return time4_-time3_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
+///
+template <typename _Scalar>
+double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time5() const noexcept {
+  return time5_-time4_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
+///
+template <typename _Scalar>
+DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::collectionQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return collection_q_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getCollectionQ
+/// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
 ///
-template <class _Matrix>
-const DenseMatrixCollection120<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>>&
-    ExtrinsicMeanIntegrator<_Matrix>::getCollectionQImpl() const noexcept {
+template <typename _Scalar>
+const DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::collectionQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return collection_q_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+/// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
-template <class _Matrix>
-DenseMatrix<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>, Layout::ROWMAJOR>&
-    ExtrinsicMeanIntegrator<_Matrix>::getMatrixQbarImpl() noexcept {
+template <typename _Scalar>
+DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::matrixQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qbar_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+/// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
-template <class _Matrix>
-const DenseMatrix<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>, Layout::ROWMAJOR>&
-    ExtrinsicMeanIntegrator<_Matrix>::getMatrixQbarImpl() const noexcept {
+template <typename _Scalar>
+const DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::matrixQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qbar_;
 }

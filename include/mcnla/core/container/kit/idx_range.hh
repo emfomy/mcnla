@@ -44,6 +44,11 @@ struct IdxRange {
   inline IdxRange operator*( const index_t scalar ) const noexcept;
   inline IdxRange operator/( const index_t scalar ) const noexcept;
 
+  inline IdxRange& operator+=( const index_t scalar ) noexcept;
+  inline IdxRange& operator-=( const index_t scalar ) noexcept;
+  inline IdxRange& operator*=( const index_t scalar ) noexcept;
+  inline IdxRange& operator/=( const index_t scalar ) noexcept;
+
   // Gets data
   inline index_t length() const noexcept;
 
