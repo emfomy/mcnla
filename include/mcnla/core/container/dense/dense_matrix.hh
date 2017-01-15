@@ -173,14 +173,14 @@ class DenseMatrix
   inline const HermitianType& h() const noexcept;
 
   // Change view
-  template <Uplo _uplo = Uplo::UPPER>
+  template <Uplo _uplo = Uplo::UPPER ^ _trans>
   inline       SymmetricType<_uplo>& viewSymmetric() noexcept;
-  template <Uplo _uplo = Uplo::UPPER>
+  template <Uplo _uplo = Uplo::UPPER ^ _trans>
   inline const SymmetricType<_uplo>& viewSymmetric() const noexcept;
 
-  template <Uplo _uplo = Uplo::UPPER>
+  template <Uplo _uplo = Uplo::UPPER ^ _trans>
   inline       TriangularType<_uplo>& viewTriangular() noexcept;
-  template <Uplo _uplo = Uplo::UPPER>
+  template <Uplo _uplo = Uplo::UPPER ^ _trans>
   inline const TriangularType<_uplo>& viewTriangular() const noexcept;
 
   inline       DiagonalType viewDiagonal() noexcept;

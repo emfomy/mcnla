@@ -132,6 +132,16 @@ static constexpr Uplo changeDiag( const Uplo uplo ) noexcept {
   return uplo ^ Uplo::UNITUPPER;
 }
 
+/// @ingroup  core_module
+static constexpr Uplo operator^( const Uplo uplo, const Trans trans ) noexcept {
+  return static_cast<Uplo>(static_cast<int>(uplo) ^ isTrans(trans));
+}
+
+/// @ingroup  core_module
+static constexpr Trans operator^( const Trans trans, const Uplo uplo ) noexcept {
+  return static_cast<Trans>(static_cast<int>(trans) ^ isLower(uplo));
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_DEF_HPP_

@@ -71,7 +71,7 @@ namespace container {
 /// @tparam  _trans   The transpose storage layout.
 /// @tparam  _uplo    The triangular storage layout.
 ///
-template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER>
+template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
 class DenseTriangularMatrix
   : public DenseMatrixStorage<_Scalar>,
     public MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
@@ -94,7 +94,7 @@ class DenseTriangularMatrix
   using VectorType     = DenseVector<_Scalar>;
   using MatrixType     = DenseTriangularMatrix<_Scalar, _trans, _uplo>;
 
-  using TransposeType  = DenseTriangularMatrix<_Scalar, changeTrans(_trans), _uplo>;
+  using TransposeType  = DenseTriangularMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>;
 
   using GeneralType    = DenseMatrix<_Scalar, _trans>;
 
@@ -154,7 +154,7 @@ template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
 using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Scalar, Trans::NORMAL, _uplo>;
 
 /// @ingroup  container_dense_module
-template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
+template <typename _Scalar, Uplo _uplo = Uplo::LOWER>
 using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Scalar, Trans::TRANS, _uplo>;
 
 }  // namespace container

@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_BLAS_ROUTINE_HPP_
 #define MCNLA_CORE_BLAS_ROUTINE_HPP_
 
-#pragma warning
 #include <mcnla/core/blas/routine/copy.hpp>
 // #include <mcnla/core/blas/routine/copy_coo.hpp>
 #include <mcnla/core/blas/routine/scal.hpp>

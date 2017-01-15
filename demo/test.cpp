@@ -24,7 +24,8 @@ int main( int argc, char **argv ) {
 
   mcnla::index_t m = 5, n = 7;
 
-  mcnla::container::DenseDiagonalMatrix<double> a(m);
+  mcnla::container::DenseDiagonalMatrix<double> al(m);
+  mcnla::container::DenseDiagonalMatrix<double> ar(n);
   mcnla::container::DenseMatrixColMajor<double> b(m, n);
   mcnla::container::DenseMatrixColMajor<double> c(m, n);
 
@@ -33,23 +34,28 @@ int main( int argc, char **argv ) {
   // mcnla::random::gaussian(c.vectorize(), 2);
 
   int i = 0;
-  for ( auto &v : a.viewVector() ) {
+  for ( auto &v : al.viewVector() ) {
+    v = ++i;
+  }
+  i = 0;
+  for ( auto &v : ar.viewVector() ) {
     v = ++i;
   }
   for ( auto &v : b ) {
-    v = ++i;
-  }
-  for ( auto &v : c ) {
-    v = ++i;
+    v = 1;
   }
 
-  std::cout << a << std::endl;
+  std::cout << al << std::endl;
+  std::cout << ar << std::endl;
   std::cout << b << std::endl;
-  std::cout << c << std::endl;
 
-  mcnla::blas::mm(a, b, c, 2, 3);
+  mcnla::blas::mm(al, "", b);
 
-  std::cout << c << std::endl;
+  std::cout << b << std::endl;
+
+  mcnla::blas::mm("", ar, b);
+
+  std::cout << b << std::endl;
 
   // MPI_Init(&argc, &argv);
   // mcnla::mpi_int_t mpi_root = 0;

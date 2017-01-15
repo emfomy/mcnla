@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_CONTAINER_HPP_
 #define MCNLA_CORE_CONTAINER_HPP_
 
-#pragma warning
 #include <mcnla/core/container/def.hpp>
 #include <mcnla/core/container/base.hpp>
 #include <mcnla/core/container/dense.hpp>

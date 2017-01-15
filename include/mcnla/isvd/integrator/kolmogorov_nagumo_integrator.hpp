@@ -125,12 +125,12 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     blas::mm(matrix_qjs_, matrix_bs_.t(), matrix_xj_, 1.0/num_sketch);
 
     // Xj -= 1/N * Qcj * D
-    blas::mm(matrix_qcj_, matrix_d_.viewSymmetric(), matrix_xj_, 1.0/num_sketch, -1.0);
+    blas::mm(matrix_qcj_, matrix_d_.viewSymmetric(), matrix_xj_, -1.0/num_sketch, 1.0);
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
-    // Z(D) := sum(Xj' * Xj)
+    // D := sum(Xj' * Xj)
     blas::rk(matrix_xj_.t(), matrix_d_.viewSymmetric());
     mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm_);
 
@@ -139,15 +139,15 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
 
     // E := sqrt( I/2 - sqrt( I/4 - E ) )
     vector_e_.value().valarray() = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_.value().valarray()));
-    vector_einv_.value().valarray() = 1.0/vector_e_.value().valarray();
+    vector_einv_.value().valarray() = 1.0 / vector_e_.value().valarray();
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
-    // C      = D * diag(E)      * D'
-    // inv(C) = D * inv(diag(E)) * D'
+    // C      = D' * diag(E)      * D
+    // inv(C) = D' * inv(diag(E)) * D
 
-    // Tmp' := Qcj * D
-    blas::mm(matrix_qcj_, matrix_d_, matrix_tmp_.t());
+    // Tmp' := Qcj * D'
+    blas::mm(matrix_qcj_, matrix_d_.t(), matrix_tmp_.t());
 
     // Tmp' *= E
     blas::mm("", vector_e_.viewDiagonal(), matrix_tmp_.t());
@@ -155,8 +155,8 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     // Qcj := Tmp' * D
     blas::mm(matrix_tmp_.t(), matrix_d_, matrix_qcj_);
 
-    // Tmp' := Xj * D
-    blas::mm(matrix_xj_, matrix_d_, matrix_tmp_.t());
+    // Tmp' := Xj * D'
+    blas::mm(matrix_xj_, matrix_d_.t(), matrix_tmp_.t());
 
     // Tmp' /= E
     blas::mm("", vector_einv_.viewDiagonal(), matrix_tmp_.t());
