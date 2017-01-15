@@ -9,9 +9,6 @@
 #define MCNLA_ISVD_INTEGRATOR_INTEGRATOR_WRAPPER_HPP_
 
 #include <mcnla/isvd/integrator/integrator_wrapper.hh>
-#include <vector>
-#include <random>
-#include <mcnla/core/mpi.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -47,7 +44,7 @@ void IntegratorWrapper<_Derived>::initialize() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Integrates.
 ///
-template <class _Derived> template <class _Matrix>
+template <class _Derived>
 void IntegratorWrapper<_Derived>::integrate() noexcept {
   this->derived().integrateImpl();
 }
@@ -67,47 +64,36 @@ template <class _Derived>
 double IntegratorWrapper<_Derived>::time() const noexcept {
   return this->derived().timeImpl();
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the iterator number
+/// @brief  Gets the collection Q.
 ///
 template <class _Derived>
-index_t IntegratorBase<_Derived>::iter() const noexcept {
-  return this->derived().iterImpl();
+DenseMatrixCollection120<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::collectionQ() noexcept {
+  return this->derived().collectionQImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the set Q.
+/// @copydoc  collectionQ
 ///
 template <class _Derived>
-DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::setQ() noexcept {
-  return this->derived().setQImpl();
+const DenseMatrixCollection120<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::collectionQ() const noexcept {
+  return this->derived().collectionQImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  setQ
+/// @brief  Gets the matrix Q.
 ///
 template <class _Derived>
-const DenseMatrixSet120<ScalarT<IntegratorBase<_Derived>>>& IntegratorBase<_Derived>::setQ() const noexcept {
-  return this->derived().setQImpl();
+DenseMatrixRowMajor<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::matrixQ() noexcept {
+  return this->derived().matrixQImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the matrix Qc.
+/// @copydoc  matrixQ
 ///
 template <class _Derived>
-DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::matrixQbar() noexcept {
-  return this->derived().matrixQbarImpl();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  matrixQbar
-///
-template <class _Derived>
-const DenseMatrix<ScalarT<IntegratorBase<_Derived>>, Layout::ROWMAJOR>&
-    IntegratorBase<_Derived>::matrixQbar() const noexcept {
-  return this->derived().matrixQbarImpl();
+const DenseMatrixRowMajor<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::matrixQ() const noexcept {
+  return this->derived().matrixQImpl();
 }
 
 }  // namespace isvd

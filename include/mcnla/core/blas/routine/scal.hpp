@@ -27,16 +27,16 @@ namespace blas {
 ///
 template <typename _Scalar>
 inline void scal(
-    const ScalarT<DenseVector<_Scalar>> alpha,
-          DenseVector<_Scalar> &x
+          DenseVector<_Scalar> &x,
+    const ScalarT<DenseVector<_Scalar>> alpha
 ) noexcept {
   detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
 }
 
 template <typename _Scalar>
 inline void scal(
-    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha,
-          DenseVector<std::complex<_Scalar>> &x
+          DenseVector<std::complex<_Scalar>> &x,
+    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha
 ) noexcept {
   detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
 }
@@ -44,18 +44,18 @@ inline void scal(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void scal(
-    const ScalarT<DenseVector<_Scalar>> alpha,
-          DenseVector<_Scalar> &&x
+          DenseVector<_Scalar> &&x,
+    const ScalarT<DenseVector<_Scalar>> alpha
 ) noexcept {
-  scal(alpha, x);
+  scal(x, alpha);
 }
 
 template <typename _Scalar>
 inline void scal(
-    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha,
-          DenseVector<std::complex<_Scalar>> &&x
+          DenseVector<std::complex<_Scalar>> &&x,
+    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha
 ) noexcept {
-  scal(alpha, x);
+  scal(x, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

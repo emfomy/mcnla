@@ -25,7 +25,7 @@ namespace mcnla {
 namespace container {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseMatrixSet102;
+template <typename _Scalar> class DenseMatrixCollection102;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace container
@@ -39,12 +39,12 @@ namespace traits {
 /// The traits of dense matrix collection with dimension order [1 0 2].
 ///
 template <typename _Scalar>
-struct Traits<container::DenseMatrixSet102<_Scalar>> {
+struct Traits<container::DenseMatrixCollection102<_Scalar>> {
 
   using ScalarType  = _Scalar;
-  using RealType    = container::DenseMatrixSet102<RealScalarT<_Scalar>>;
-  using ComplexType = container::DenseMatrixSet102<ComplexScalarT<_Scalar>>;
-  using SetType     = container::DenseMatrixSet102<_Scalar>;
+  using RealType    = container::DenseMatrixCollection102<RealScalarT<_Scalar>>;
+  using ComplexType = container::DenseMatrixCollection102<ComplexScalarT<_Scalar>>;
+  using SetType     = container::DenseMatrixCollection102<_Scalar>;
   using MatrixType  = container::DenseMatrixRowMajor<_Scalar>;
 
 };
@@ -63,20 +63,20 @@ namespace container {
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class DenseMatrixSet102
-  : public MatrixSetWrapper<DenseMatrixSet102<_Scalar>> {
+class DenseMatrixCollection102
+  : public MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>> {
 
-  friend MatrixSetWrapper<DenseMatrixSet102<_Scalar>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
 
  public:
 
   using ScalarType = _Scalar;
-  using SetType    = DenseMatrixSet102<_Scalar>;
+  using SetType    = DenseMatrixCollection102<_Scalar>;
   using MatrixType = DenseMatrixRowMajor<_Scalar>;
 
  private:
 
-  using BaseType = MatrixSetWrapper<DenseMatrixSet102<_Scalar>>;
+  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
 
  protected:
 
@@ -89,16 +89,16 @@ class DenseMatrixSet102
  public:
 
   // Constructors
-  inline DenseMatrixSet102() noexcept;
-  inline DenseMatrixSet102( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline DenseMatrixSet102( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  inline DenseMatrixSet102( const index_t ncol, const MatrixType &data ) noexcept;
-  inline DenseMatrixSet102( const DenseMatrixSet102 &other ) noexcept;
-  inline DenseMatrixSet102( DenseMatrixSet102 &&other ) noexcept;
+  inline DenseMatrixCollection102() noexcept;
+  inline DenseMatrixCollection102( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline DenseMatrixCollection102( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
+  inline DenseMatrixCollection102( const index_t ncol, const MatrixType &data ) noexcept;
+  inline DenseMatrixCollection102( const DenseMatrixCollection102 &other ) noexcept;
+  inline DenseMatrixCollection102( DenseMatrixCollection102 &&other ) noexcept;
 
   // Operators
-  inline DenseMatrixSet102& operator=( const DenseMatrixSet102 &other ) noexcept;
-  inline DenseMatrixSet102& operator=( DenseMatrixSet102 &&other ) noexcept;
+  inline DenseMatrixCollection102& operator=( const DenseMatrixCollection102 &other ) noexcept;
+  inline DenseMatrixCollection102& operator=( DenseMatrixCollection102 &&other ) noexcept;
 
   // Gets information
   inline bool isShrunk() const noexcept;

@@ -24,13 +24,13 @@ namespace container {
 /// @brief  Default constructor.
 ///
 template <class _Derived>
-MatrixSetWrapper<_Derived>::MatrixSetWrapper() noexcept {}
+MatrixCollectionWrapper<_Derived>::MatrixCollectionWrapper() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of matrix.
 ///
 template <class _Derived>
-index_t MatrixSetWrapper<_Derived>::nrow() const noexcept {
+index_t MatrixCollectionWrapper<_Derived>::nrow() const noexcept {
   return this->derived().nrowImpl();
 }
 
@@ -38,7 +38,7 @@ index_t MatrixSetWrapper<_Derived>::nrow() const noexcept {
 /// @brief  Gets the number of column of matrix.
 ///
 template <class _Derived>
-index_t MatrixSetWrapper<_Derived>::ncol() const noexcept {
+index_t MatrixCollectionWrapper<_Derived>::ncol() const noexcept {
   return this->derived().ncolImpl();
 }
 
@@ -46,7 +46,7 @@ index_t MatrixSetWrapper<_Derived>::ncol() const noexcept {
 /// @brief  Gets the number of matrices.
 ///
 template <class _Derived>
-index_t MatrixSetWrapper<_Derived>::nmat() const noexcept {
+index_t MatrixCollectionWrapper<_Derived>::nmat() const noexcept {
   return this->derived().nmatImpl();
 }
 
@@ -54,7 +54,7 @@ index_t MatrixSetWrapper<_Derived>::nmat() const noexcept {
 /// @brief  Gets the sizes.
 ///
 template <class _Derived>
-std::tuple<index_t, index_t, index_t> MatrixSetWrapper<_Derived>::sizes() const noexcept {
+std::tuple<index_t, index_t, index_t> MatrixCollectionWrapper<_Derived>::sizes() const noexcept {
   return std::make_tuple(nrow(), ncol(), nmat());
 }
 
@@ -62,7 +62,7 @@ std::tuple<index_t, index_t, index_t> MatrixSetWrapper<_Derived>::sizes() const 
 /// @brief  Gets a matrix.
 ///
 template <class _Derived>
-MatrixT<_Derived> MatrixSetWrapper<_Derived>::operator()(
+MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
   return this->derived().getMatrixImpl(idx);
@@ -72,7 +72,7 @@ MatrixT<_Derived> MatrixSetWrapper<_Derived>::operator()(
 /// @copydoc  operator()( const index_t )
 ///
 template <class _Derived>
-const MatrixT<_Derived> MatrixSetWrapper<_Derived>::operator()(
+const MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
   return this->derived().getMatrixImpl(idx);

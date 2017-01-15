@@ -90,7 +90,7 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
 
   // Random sketches
   template <class _Matrix>
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
+  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
 
   // Gets name
   inline constexpr const char* nameImpl() const noexcept;

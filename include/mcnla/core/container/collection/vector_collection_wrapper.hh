@@ -31,7 +31,7 @@ namespace container {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class VectorSetWrapper : public utility::CrtpBase<_Derived, VectorSetWrapper<_Derived>> {
+class VectorCollectionWrapper : public utility::CrtpBase<_Derived, VectorCollectionWrapper<_Derived>> {
 
  private:
 
@@ -40,7 +40,7 @@ class VectorSetWrapper : public utility::CrtpBase<_Derived, VectorSetWrapper<_De
  protected:
 
   // Constructors
-  inline VectorSetWrapper() noexcept;
+  inline VectorCollectionWrapper() noexcept;
 
  public:
 

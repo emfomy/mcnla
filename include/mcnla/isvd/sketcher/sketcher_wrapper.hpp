@@ -50,9 +50,9 @@ void SketcherWrapper<_Derived>::initialize() noexcept {
 template <class _Derived> template <class _Matrix>
 void SketcherWrapper<_Derived>::sketch(
     const _Matrix &matrix_a,
-          DenseMatrixSet120<ScalarType> &set_q
+          DenseMatrixCollection120<ScalarType> &collection_q
 ) noexcept {
-  this->derived().sketchImpl(matrix_a, set_q);
+  this->derived().sketchImpl(matrix_a, collection_q);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,17 +75,18 @@ double SketcherWrapper<_Derived>::time() const noexcept {
 /// Sets the random seed.
 ///
 template <class _Derived>
-void SketcherWrapper<_Derived>::setSeed(
+_Derived& SketcherWrapper<_Derived>::setSeed(
     const index_t seed
 ) noexcept {
-  return this->derived().setSeedImpl(seed);
+  this->derived().setSeedImpl(seed);
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Generate the random seeds and send to each MPI nodes.
 ///
 template <class _Derived>
-void SketcherWrapper<_Derived>::setSeeds(
+_Derived& SketcherWrapper<_Derived>::setSeeds(
     const index_t seed
 ) noexcept {
   std::vector<index_t> seeds(mpi::commSize(mpi_comm_));
@@ -96,6 +97,7 @@ void SketcherWrapper<_Derived>::setSeeds(
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<index_t>::datatype;
   MPI_Scatter(seeds.data(), 1, datatype, &seed, 1, datatype, mpi_root_, mpi_comm_);
   setSeed(seed);
+  return this->derived();
 }
 
 }  // namespace isvd

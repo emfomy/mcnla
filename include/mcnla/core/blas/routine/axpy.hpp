@@ -27,9 +27,9 @@ namespace blas {
 ///
 template <typename _Scalar>
 inline void axpy(
-    const ScalarT<DenseVector<_Scalar>> alpha,
     const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &y
+          DenseVector<_Scalar> &y,
+    const ScalarT<DenseVector<_Scalar>> alpha = 1
 ) noexcept {
   detail::axpy(x.length(), alpha, x.valuePtr(), x.stride(), y.valuePtr(), y.stride());
 }
@@ -37,11 +37,11 @@ inline void axpy(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
 inline void axpy(
-    const ScalarT<DenseVector<_Scalar>> alpha,
     const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &&y
+          DenseVector<_Scalar> &&y,
+    const ScalarT<DenseVector<_Scalar>> alpha = 1
 ) noexcept {
-  axpy(alpha, x, y);
+  axpy(x, y, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

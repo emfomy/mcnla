@@ -80,9 +80,9 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
   mcnla_assert_true(parameters_.isInitialized());
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(parameters_.nrow(), parameters_.ncol()));
 
-  sketcher_.sketch(matrix_a, integrator_.setQ());
+  sketcher_.sketch(matrix_a, integrator_.collectionQ());
 
-  orthogonalizer_.orthogonalize(integrator_.setQ());
+  orthogonalizer_.orthogonalize(integrator_.collectionQ());
 
   integrator_.integrate();
 
@@ -104,7 +104,7 @@ constexpr const char* Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _Integra
 /// @brief  Gets the name of the orthogonalizer.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-constexpr const char* Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::OrthogonalizerName(
+constexpr const char* Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizerName(
 ) const noexcept {
   return integrator_.name();
 }
@@ -239,13 +239,11 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @copydoc  setSize
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+template <class _Matrix>
 Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
   Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
     const _Matrix &matrix
 ) noexcept {
-  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
-    return *this;
-  }
   return setSize(matrix.nrow(), matrix.ncol());
 }
 
@@ -321,44 +319,6 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
     return *this;
   }
   parameters_.num_sketch_each_ = num_sketch_each;
-  parameters_.initialized_ = false;
-  parameters_.computed_ = false;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the maximum iteration.
-///
-/// @attention  Only affects on root rank.
-///
-template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setMaxIteration(
-    const index_t max_iteration
-) noexcept {
-  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
-    return *this;
-  }
-  parameters_.max_iteration_ = max_iteration;
-  parameters_.initialized_ = false;
-  parameters_.computed_ = false;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the tolerance of converge condition.
-///
-/// @attention  Only affects on root rank.
-///
-template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setTolerance(
-    const RealScalarType tolerance
-) noexcept {
-  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
-    return *this;
-  }
-  parameters_.tolerance_ = tolerance;
   parameters_.initialized_ = false;
   parameters_.computed_ = false;
   return *this;

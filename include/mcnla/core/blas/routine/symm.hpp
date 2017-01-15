@@ -266,7 +266,7 @@ inline void symm(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  blas_module
-/// @copydoc  mm
+/// @brief  Computes a matrix-matrix product.
 ///
 //@{
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>

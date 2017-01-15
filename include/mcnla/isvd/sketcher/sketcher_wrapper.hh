@@ -63,7 +63,7 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
   // Random sketches
   template <class _Matrix>
-  inline void sketch( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
+  inline void sketch( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
 
   // Gets name
   inline constexpr const char* name() const noexcept;
@@ -72,8 +72,8 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
   inline double time() const noexcept;
 
   // Sets seed
-  inline void setSeed( const index_t seed ) noexcept;
-  inline void setSeeds( const index_t seed ) noexcept;
+  inline _Derived& setSeed( const index_t seed ) noexcept;
+  inline _Derived& setSeeds( const index_t seed ) noexcept;
 
 
 };

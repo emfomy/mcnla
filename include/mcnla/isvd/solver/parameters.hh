@@ -65,7 +65,7 @@ class Parameters {
  public:
 
   // Constructors
-  Parameters( const MPI_Comm mpi_comm ) noexcept;
+  inline Parameters( const MPI_Comm mpi_comm ) noexcept;
 
   // Gets parameter
   inline bool isInitialized() const noexcept;

@@ -62,7 +62,6 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
   inline void initialize() noexcept;
 
   // Integrates
-  template <class _Matrix>
   inline void integrate() noexcept;
 
   // Gets name
@@ -71,12 +70,9 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
   // Gets compute time
   inline double time() const noexcept;
 
-  // Gets iterator number
-  inline index_t iter() const noexcept;
-
   // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& setQ() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& setQ() const noexcept;
+  inline       DenseMatrixCollection120<ScalarType>& collectionQ() noexcept;
+  inline const DenseMatrixCollection120<ScalarType>& collectionQ() const noexcept;
   inline       DenseMatrixRowMajor<ScalarType>& matrixQ() noexcept;
   inline const DenseMatrixRowMajor<ScalarType>& matrixQ() const noexcept;
 

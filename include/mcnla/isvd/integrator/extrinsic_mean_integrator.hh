@@ -10,9 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/core/blas.hpp>
+#include <mcnla/isvd/integrator/integrator.hpp>
 #include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/integrator/integrator_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -108,11 +107,11 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   /// The number of rows of the matrix of all MPI nodes.
   index_t nrow_all_;
 
-  /// The set Q.
-  DenseMatrixSet120<ScalarType> set_q_;
+  /// The collection Q.
+  DenseMatrixCollection120<ScalarType> collection_q_;
 
-  /// The cut set Q.
-  DenseMatrixSet120<ScalarType> set_q_cut_;
+  /// The cut collection Q.
+  DenseMatrixCollection120<ScalarType> collection_q_cut_;
 
   /// The matrix Qjs.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qjs_;
@@ -126,8 +125,8 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   /// The matrix Bis.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_bis_;
 
-  /// The set G.
-  DenseMatrixSet120<ScalarType> set_g_;
+  /// The collection G.
+  DenseMatrixCollection120<ScalarType> set_g_;
 
   /// The matrix G0.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_g0_;
@@ -144,11 +143,11 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   /// The empty matrix.
   DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
 
-  /// The SYEV driver.
-  lapack::SyevEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
+  /// The SYEV engine.
+  lapack::SyevEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_engine_;
 
-  /// The GESVD driver.
-  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
+  /// The GESVD engine.
+  lapack::GesvdEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_engine_;
 
  public:
 
@@ -174,8 +173,8 @@ class ExtrinsicMeanIntegrator : public IntegratorBase<ExtrinsicMeanIntegrator<_M
   inline index_t getIterImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& getSetQImpl() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& getSetQImpl() const noexcept;
+  inline       DenseMatrixCollection120<ScalarType>& getCollectionQImpl() noexcept;
+  inline const DenseMatrixCollection120<ScalarType>& getCollectionQImpl() const noexcept;
   inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
   inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
 

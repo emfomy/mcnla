@@ -10,9 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/core/blas.hpp>
+#include <mcnla/isvd/integrator/integrator.hpp>
 #include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/integrator/integrator_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,71 +23,38 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class KolmogorovNagumoIntegrator;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Kolmogorov-Nagumo-type integrator traits.
+/// @ingroup  isvd_integrator_module
+/// The Kolmogorov-Nagumo-type integrator tag.
 ///
-/// @tparam  _Matrix  The matrix type.
-///
-template <class _Matrix>
-struct Traits<isvd::KolmogorovNagumoIntegrator<_Matrix>> {
-  using MatrixType = _Matrix;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
+struct KolmogorovNagumoIntegratorTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
-///
 /// The Kolmogorov-Nagumo-type integrator.
 ///
-/// @tparam  _Matrix  The matrix type.
+/// @tparam  _Scalar  The scalar type.
 ///
-template <class _Matrix>
-class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>> {
+template <typename _Scalar>
+class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
+  : public IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>> {
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
-
-  friend IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>>;
+  friend IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>>;
 
  private:
 
-  using BaseType = IntegratorBase<KolmogorovNagumoIntegrator<_Matrix>>;
+  using ThisType = Integrator<_Scalar, KolmogorovNagumoIntegratorTag>;
+  using BaseType = IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>>;
 
  public:
 
-  using ScalarType     = ScalarT<_Matrix>;
-  using RealScalarType = RealScalarT<ScalarT<_Matrix>>;
-  using MatrixType     = _Matrix;
+  using ScalarType     = _Scalar;
+  using RealScalarType = RealScalarT<_Scalar>;
 
  protected:
 
   /// The name.
   static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
-
-  /// The parameters.
-  const Parameters &parameters_ = BaseType::parameters_;
-
-  /// The maximum iteration.
-  index_t max_iteration_ = 256;
-
-  /// The tolerance of converge condition.
-  RealScalarType tolerance_ = 1e-4;
 
   /// The starting time
   double time0_;
@@ -109,57 +75,81 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   index_t nrow_all_;
 
   /// The number of iteration.
-  index_t iter_;
+  index_t iteration_;
 
-  /// The set Q.
-  DenseMatrixSet120<ScalarType> set_q_;
+  /// The maximum iteration.
+  index_t max_iteration_ = 256;
 
-  /// The cut set Q.
-  DenseMatrixSet120<ScalarType> set_q_cut_;
+  /// The tolerance of converge condition.
+  RealScalarType tolerance_ = 1e-4;
+
+  /// The collection Q.
+  DenseMatrixCollection120<ScalarType> collection_q_;
+
+  /// The cut collection Q.
+  DenseMatrixCollection120<ScalarType> collection_q_cut_;
 
   /// The matrix Qs.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qs_;
+  DenseMatrixRowMajor<ScalarType> matrix_qs_;
 
   /// The matrix Qjs.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qjs_;
+  DenseMatrixRowMajor<ScalarType> matrix_qjs_;
 
   /// The matrix Qc.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_;
+  DenseMatrixRowMajor<ScalarType> matrix_qc_;
 
   /// The cut matrix Qc.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qc_cut_;
+  DenseMatrixRowMajor<ScalarType> matrix_qc_cut_;
 
   /// The matrix Qcj.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_qcj_;
+  DenseMatrixRowMajor<ScalarType> matrix_qcj_;
 
   /// The matrix Bs.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_bs_;
+  DenseMatrixRowMajor<ScalarType> matrix_bs_;
 
   /// The matrix C.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_c_;
+  DenseMatrixRowMajor<ScalarType> matrix_c_;
 
   /// The matrix D.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_d_;
-
-  /// The matrix F.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_f_;
+  DenseMatrixRowMajor<ScalarType> matrix_d_;
 
   /// The matrix Xj.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_xj_;
+  DenseMatrixRowMajor<ScalarType> matrix_xj_;
 
   /// The temporary matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_tmp_;
+  DenseMatrixRowMajor<ScalarType> matrix_tmp_;
 
   /// The vector E.
   DenseVector<ScalarType> vector_e_;
 
-  /// The SYEV driver.
-  lapack::SyevEngine<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'V'> syev_driver_;
+  /// The inverse of E.
+  DenseVector<ScalarType> vector_einv_;
+
+  /// The SYEV engine.
+  lapack::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
+
+  using BaseType::parameters_;
+  using BaseType::mpi_comm_;
+  using BaseType::mpi_root_;
 
  public:
 
   // Constructor
-  inline KolmogorovNagumoIntegrator( const Parameters &parameters ) noexcept;
+  inline Integrator( const Parameters &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+
+  // Gets time
+  inline double time1() const noexcept;
+  inline double time2() const noexcept;
+  inline double time3() const noexcept;
+
+  // Gets the iteration number
+  inline index_t iteration() const noexcept;
+
+  // Gets the parameters
+  inline       index_t& maxIteration() noexcept;
+  inline const index_t& maxIteration() const noexcept;
+  inline       RealScalarType& tolerance() noexcept;
+  inline const RealScalarType& tolerance() const noexcept;
 
  protected:
 
@@ -173,19 +163,19 @@ class KolmogorovNagumoIntegrator : public IntegratorBase<KolmogorovNagumoIntegra
   inline constexpr const char* nameImpl() const noexcept;
 
   // Gets time
-  inline double getTimeImpl() const noexcept;
-  inline const std::vector<double> getTimesImpl() const noexcept;
-
-  // Gets name
-  inline index_t getIterImpl() const noexcept;
+  inline double timeImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseMatrixSet120<ScalarType>& getSetQImpl() noexcept;
-  inline const DenseMatrixSet120<ScalarType>& getSetQImpl() const noexcept;
-  inline       DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() noexcept;
-  inline const DenseMatrix<ScalarType, Layout::ROWMAJOR>& getMatrixQbarImpl() const noexcept;
+  inline       DenseMatrixCollection120<ScalarType>& collectionQImpl() noexcept;
+  inline const DenseMatrixCollection120<ScalarType>& collectionQImpl() const noexcept;
+  inline       DenseMatrixRowMajor<ScalarType>& matrixQImpl() noexcept;
+  inline const DenseMatrixRowMajor<ScalarType>& matrixQImpl() const noexcept;
 
 };
+
+/// @ingroup  isvd_integrator_module
+template <typename _Scalar>
+using KolmogorovNagumoIntegrator = Integrator<_Scalar, KolmogorovNagumoIntegratorTag>;
 
 }  // namespace isvd
 

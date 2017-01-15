@@ -46,9 +46,9 @@ void OrthogonalizerWrapper<_Derived>::initialize() noexcept {
 ///
 template <class _Derived>
 void OrthogonalizerWrapper<_Derived>::orthogonalize(
-    DenseMatrixSet120<ScalarType> &set_q
+    DenseMatrixCollection120<ScalarType> &collection_q
 ) noexcept {
-  this->derived().orthogonalizeImpl(set_q);
+  this->derived().orthogonalizeImpl(collection_q);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

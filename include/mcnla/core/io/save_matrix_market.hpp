@@ -98,7 +98,7 @@ void saveMatrixMarket(
 ///
 template <class _Derived>
 void saveMatrixMarket(
-    const VectorSetWrapper<_Derived> &set,
+    const VectorCollectionWrapper<_Derived> &set,
     const char *file
 ) noexcept {
   using VectorType = VectorT<_Derived>;
@@ -139,7 +139,7 @@ void saveMatrixMarket(
 ///
 template <class _Derived>
 void saveMatrixMarket(
-    const MatrixSetWrapper<_Derived> &set,
+    const MatrixCollectionWrapper<_Derived> &set,
     const char *file
 ) noexcept {
   using MatrixType = MatrixT<_Derived>;

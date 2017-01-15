@@ -278,9 +278,8 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
   auto matrix_d   = static_cast<double*>(malloc(k * k     * sizeof(double)));
   auto matrix_c   = static_cast<double*>(malloc(k * k     * sizeof(double)));
   auto matrix_xjt = static_cast<double*>(malloc(k * mj    * sizeof(double)));
-  auto matrix_tmp = static_cast<double*>(malloc(k * mj    * sizeof(double)));
+  auto matrix_tmp = static_cast<double*>(malloc(mj * k    * sizeof(double)));
   auto vector_e   = static_cast<double*>(malloc(k         * sizeof(double)));
-  auto vector_f   = static_cast<double*>(malloc(k         * sizeof(double)));
 
   bool is_converged = false;
 
@@ -329,40 +328,36 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     LAPACKE_dsyev(LAPACK_COL_MAJOR, 'V', 'L', k, matrix_d, k, vector_e);
 
     // E := sqrt( I/2 - sqrt( I/4 - E ) )
-    // F := sqrt( E )
     for ( auto i = 0; i < k; ++i ) {
       vector_e[i] = sqrt(0.5 + sqrt(0.25 - vector_e[i]));
-      vector_f[i] = sqrt(vector_e[i]);
     }
-
-    // B := D
-    cblas_dcopy(k*k, matrix_d, 1, matrix_b, 1);
-
-    // D *= F
-    for ( auto i = 0; i < k; ++i ) {
-      cblas_dscal(k, vector_f[i], matrix_d+i*k, 1);
-    }
-
-    // B /= F
-    for ( auto i = 0; i < k; ++i ) {
-      cblas_dscal(k, 1/vector_f[i], matrix_b+i*k, 1);
-    }
-
-    // C *= D * D'
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, k, 1.0, matrix_d, k, 0.0, matrix_c, k);
-
-    // inv(C) := B * B'
-    cblas_dsyrk(CblasColMajor, CblasLower, CblasNoTrans, k, k, 1.0, matrix_b, k, 0.0, matrix_d, k);
 
     // ================================================================================================================== //
     // Q := Q * C + X * inv(C)
+    // C      = D * diag(E)      * D'
+    // inv(C) = D * inv(diag(E)) * D'
 
-    // Qj' := C * Qj'
-    cblas_dsymm(CblasColMajor, CblasLeft, CblasLower, k, mj, 1.0, matrix_c, k, matrix_qjt, k, 0.0, matrix_tmp, k);
-    cblas_dcopy(k*mj, matrix_tmp, 1, matrix_qjt, 1);
+    // Tmp := Qj * D
+    cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, mj, k, k, 1.0, matrix_qjt, k, matrix_d, k, 0.0, matrix_tmp, mj);
 
-    // Qj' += inv(C) * Xj'
-    cblas_dsymm(CblasColMajor, CblasLeft, CblasLower, k, mj, 1.0, matrix_d, k, matrix_xjt, k, 1.0, matrix_qjt, k);
+    // Tmp *= E
+    for ( auto i = 0; i < k; ++i ) {
+      cblas_dscal(mj, vector_e[i], matrix_tmp+i*mj, 1);
+    }
+
+    // Qj' := D * Tmp'
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, k, mj, k, 1.0, matrix_d, k, matrix_tmp, mj, 0.0, matrix_qjt, k);
+
+    // Tmp := Xj * D
+    cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, mj, k, k, 1.0, matrix_xjt, k, matrix_d, k, 0.0, matrix_tmp, mj);
+
+    // Tmp /= E
+    for ( auto i = 0; i < k; ++i ) {
+      cblas_dscal(mj, 1/vector_e[i], matrix_tmp+i*mj, 1);
+    }
+
+    // Qj' += D * Tmp'
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, k, mj, k, 1.0, matrix_d, k, matrix_tmp, mj, 1.0, matrix_qjt, k);
 
     // ================================================================================================================== //
     // Check convergence

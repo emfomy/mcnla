@@ -148,7 +148,7 @@ inline void copy(
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _transa, Trans _transb>
-inline void omatcopy(
+inline void copy(
     const DenseMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transb> &&b
 ) noexcept {

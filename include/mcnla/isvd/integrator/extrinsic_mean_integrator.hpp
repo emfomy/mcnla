@@ -10,6 +10,7 @@
 
 #include <mcnla/isvd/integrator/extrinsic_mean_integrator.hh>
 #include <cmath>
+#include <mcnla/core/blas.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -50,11 +51,11 @@ void ExtrinsicMeanIntegrator<_Matrix>::initializeImpl() noexcept {
   nrow_each_ = (nrow-1) / mpi_size + 1;
   nrow_all_  = nrow_each_ * mpi_size;
 
-  const auto set_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
-  if ( set_q_.sizes() != set_q_sizes || !set_q_.isShrunk() ) {
-    set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
+  const auto collection_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
+  if ( collection_q_.sizes() != collection_q_sizes || !collection_q_.isShrunk() ) {
+    collection_q_ = DenseMatrixCollection120<ScalarType>(collection_q_sizes);
   }
-  set_q_cut_ = set_q_.getMatrixRows({0, nrow});
+  collection_q_cut_ = collection_q_.getMatrixRows({0, nrow});
 
   const auto matrix_tmp_sizes = std::make_tuple(nrow_all_, dim_sketch * num_sketch_each);
   if ( matrix_tmp_.sizes() != matrix_tmp_sizes ) {
@@ -83,7 +84,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::initializeImpl() noexcept {
 
   const auto set_g_sizes = std::make_tuple(dim_sketch, dim_sketch, num_sketch_each);
   if ( set_g_.sizes() != set_g_sizes ) {
-    set_g_ = DenseMatrixSet120<ScalarType>(set_g_sizes);
+    set_g_ = DenseMatrixCollection120<ScalarType>(set_g_sizes);
   }
 
   const auto matrix_g_sizes = std::make_tuple(dim_sketch, dim_sketch);
@@ -100,13 +101,13 @@ void ExtrinsicMeanIntegrator<_Matrix>::initializeImpl() noexcept {
   }
 
   const auto gesvd_sizes = std::make_tuple(nrow, dim_sketch);
-  if ( gesvd_driver_.sizes() != gesvd_sizes ) {
-    gesvd_driver_.resize(gesvd_sizes);
+  if ( gesvd_engine_.sizes() != gesvd_sizes ) {
+    gesvd_engine_.resize(gesvd_sizes);
   }
 
   const auto syev_sizes = dim_sketch;
-  if ( syev_driver_.sizes() != syev_sizes ) {
-    syev_driver_.resize(syev_sizes);
+  if ( syev_engine_.sizes() != syev_sizes ) {
+    syev_engine_.resize(syev_sizes);
   }
 }
 
@@ -128,8 +129,8 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
   time0_ = MPI_Wtime();
 
   // Exchange Q
-  blas::memset0(set_q_.getMatrixRows({nrow, nrow_all_}).unfold());
-  mpi::alltoall(set_q_.unfold(), matrix_tmp_, mpi_comm);
+  blas::memset0(collection_q_.getMatrixRows({nrow, nrow_all_}).unfold());
+  mpi::alltoall(collection_q_.unfold(), matrix_tmp_, mpi_comm);
 
   // Rearrange Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
@@ -151,7 +152,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
     blas::syrk<Trans::NORMAL>(1.0, matrix_bis_.getRows(IdxRange{i, i+1}*dim_sketch), 0.0, set_g_(i));
 
     // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
-    syev_driver_(set_g_(i), vector_s_);
+    syev_engine_(set_g_(i), vector_s_);
 
   }
 
@@ -178,7 +179,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
     }
 
     // Qbar += Qi * Gi'
-    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, set_q_cut_(i), set_g_(i), 1.0, matrix_qbar_);
+    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0, collection_q_cut_(i), set_g_(i), 1.0, matrix_qbar_);
 
   }
 
@@ -189,7 +190,7 @@ void ExtrinsicMeanIntegrator<_Matrix>::integrateImpl() noexcept {
 
   // Compute the left singular vectors of Qbar
   if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
-    gesvd_driver_(matrix_qbar_, vector_s_, matrix_empty_, matrix_empty_);
+    gesvd_engine_(matrix_qbar_, vector_s_, matrix_empty_, matrix_empty_);
   }
 
   time5_ = MPI_Wtime();
@@ -228,23 +229,23 @@ index_t ExtrinsicMeanIntegrator<_Matrix>::getIterImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getCollectionQ
 ///
 template <class _Matrix>
-DenseMatrixSet120<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>>&
-    ExtrinsicMeanIntegrator<_Matrix>::getSetQImpl() noexcept {
+DenseMatrixCollection120<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>>&
+    ExtrinsicMeanIntegrator<_Matrix>::getCollectionQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return set_q_cut_;
+  return collection_q_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+/// @copydoc  mcnla::isvd::IntegratorBase::getCollectionQ
 ///
 template <class _Matrix>
-const DenseMatrixSet120<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>>&
-    ExtrinsicMeanIntegrator<_Matrix>::getSetQImpl() const noexcept {
+const DenseMatrixCollection120<ScalarT<ExtrinsicMeanIntegrator<_Matrix>>>&
+    ExtrinsicMeanIntegrator<_Matrix>::getCollectionQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return set_q_cut_;
+  return collection_q_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

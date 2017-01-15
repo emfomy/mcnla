@@ -10,6 +10,7 @@
 
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh>
 #include <cmath>
+#include <mcnla/core/blas.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,20 +23,23 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::IntegratorBase
+/// @copydoc  mcnla::isvd::IntegratorWrapper::IntegratorWrapper
 ///
-template <class _Matrix>
-KolmogorovNagumoIntegrator<_Matrix>::KolmogorovNagumoIntegrator(
-    const Parameters &parameters
-) noexcept : BaseType(parameters) {}
+template <typename _Scalar>
+Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::Integrator(
+    const Parameters &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root
+) noexcept
+  : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::initialize
+/// @copydoc  mcnla::isvd::IntegratorWrapper::initialize
 ///
-template <class _Matrix>
-void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
+template <typename _Scalar>
+void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::initializeImpl() noexcept {
 
-  const auto mpi_size        = parameters_.mpi_size;
+  const auto mpi_size        = mpi::commSize(mpi_comm_);
   const auto nrow            = parameters_.nrow();
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -48,253 +52,244 @@ void KolmogorovNagumoIntegrator<_Matrix>::initializeImpl() noexcept {
 
   nrow_each_ = (nrow-1) / mpi_size + 1;
   nrow_all_  = nrow_each_ * mpi_size;
-  iter_      = -1;
+  iteration_ = -1;
 
-  const auto set_q_sizes = std::make_tuple(nrow_all_, dim_sketch, num_sketch_each);
-  if ( set_q_.sizes() != set_q_sizes || !set_q_.isShrunk() ) {
-    set_q_ = DenseMatrixSet120<ScalarType>(set_q_sizes);
-  }
-  set_q_cut_ = set_q_.getMatrixRows({0, nrow});
-  matrix_qs_ = set_q_.unfold();
+  collection_q_.reconstruct(nrow_all_, dim_sketch, num_sketch_each);
+  collection_q_cut_ = collection_q_({0, nrow}, "", "");
+  matrix_qs_ = collection_q_.unfold();
 
-  const auto matrix_qjs_sizes = std::make_tuple(nrow_each_, dim_sketch * num_sketch);
-  if ( matrix_qjs_.sizes() != matrix_qjs_sizes || !matrix_qjs_.isShrunk() ) {
-    matrix_qjs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qjs_sizes);
-  }
+  matrix_qjs_.reconstruct(nrow_each_, dim_sketch * num_sketch);
 
-  const auto matrix_qc_sizes = std::make_tuple(nrow_all_, dim_sketch);
-  if ( matrix_qc_.sizes() != matrix_qc_sizes || !matrix_qc_.isShrunk() ) {
-    matrix_qc_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qc_sizes);
-  }
-  matrix_qc_cut_ = matrix_qc_.getRows({0, nrow});
+  matrix_qc_.reconstruct(nrow_all_, dim_sketch);
+  matrix_qc_cut_ = matrix_qc_({0, nrow}, "");
 
-  const auto matrix_qcj_sizes = std::make_tuple(nrow_each_, dim_sketch);
-  if ( matrix_qcj_.sizes() != matrix_qcj_sizes ) {
-    matrix_qcj_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
-  }
-  if ( matrix_xj_.sizes() != matrix_qcj_sizes ) {
-    matrix_xj_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
-  }
-  if ( matrix_tmp_.sizes() != matrix_qcj_sizes ) {
-    matrix_tmp_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_qcj_sizes);
-  }
+  matrix_qcj_.reconstruct(nrow_each_, dim_sketch);
 
-  const auto matrix_bs_sizes = std::make_tuple(dim_sketch, dim_sketch * num_sketch);
-  if ( matrix_bs_.sizes() != matrix_bs_sizes || !matrix_bs_.isShrunk() ) {
-    matrix_bs_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_bs_sizes);
-  }
+  matrix_bs_.reconstruct(dim_sketch, dim_sketch * num_sketch);
+  matrix_c_.reconstruct(dim_sketch, dim_sketch);
+  matrix_d_.reconstruct(dim_sketch, dim_sketch);
 
-  const auto matrix_c_sizes = std::make_tuple(dim_sketch, dim_sketch);
-  if ( matrix_c_.sizes() != matrix_c_sizes ) {
-    matrix_c_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
-  }
-  if ( matrix_d_.sizes() != matrix_c_sizes ) {
-    matrix_d_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
-  }
-  if ( matrix_f_.sizes() != matrix_c_sizes ) {
-    matrix_f_ = DenseMatrix<ScalarType, Layout::ROWMAJOR>(matrix_c_sizes);
-  }
+  matrix_xj_.reconstruct(nrow_each_, dim_sketch);
+  matrix_tmp_.reconstruct(dim_sketch, nrow_each_);
 
-  const auto vector_e_sizes = dim_sketch;
-  if ( vector_e_.sizes() != vector_e_sizes ) {
-    vector_e_ = DenseVector<ScalarType>(vector_e_sizes);
-  }
+  vector_e_.reconstruct(dim_sketch);
+  vector_einv_.reconstruct(dim_sketch);
 
-  const auto syev_sizes = dim_sketch;
-  if ( syev_driver_.sizes() != syev_sizes ) {
-    syev_driver_.resize(syev_sizes);
-  }
+  syev_engine_.reconstruct(dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::integrate
+/// @copydoc  mcnla::isvd::IntegratorWrapper::integrate
 ///
-template <class _Matrix>
-void KolmogorovNagumoIntegrator<_Matrix>::integrateImpl() noexcept {
+template <typename _Scalar>
+void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
-  const auto mpi_comm        = parameters_.mpi_comm;
-  const auto mpi_size        = parameters_.mpi_size;
-  const auto mpi_root        = parameters_.mpi_root;
+  const auto mpi_size        = mpi::commSize(mpi_comm_);
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto num_sketch      = parameters_.numSketch();
-  const auto max_iteration   = parameters_.getMaxIteration();
-  const auto tolerance       = parameters_.getTolerance();
 
   time0_ = MPI_Wtime();
 
   // Exchange Q
-  blas::memset0(set_q_.getMatrixRows({nrow, nrow_all_}).unfold());
-  mpi::alltoall(set_q_.unfold(), mpi_comm);
+  blas::memset0(collection_q_({nrow, nrow_all_}, "", "").unfold());
+  mpi::alltoall(collection_q_.unfold(), mpi_comm_);
 
   // Rearrange Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
-    blas::omatcopy(1.0, matrix_qs_.getRows(IdxRange{j, j+1} * nrow_each_),
-                        matrix_qjs_.getCols(IdxRange{j, j+1} * dim_sketch * num_sketch_each));
+    blas::copy(matrix_qs_(IdxRange{j, j+1} * nrow_each_, ""),
+               matrix_qjs_("", IdxRange{j, j+1} * dim_sketch * num_sketch_each));
   }
 
   // Qc := Q0
-  blas::omatcopy(1.0, matrix_qjs_.getCols({0, dim_sketch}), matrix_qcj_);
+  blas::copy(matrix_qjs_("", {0, dim_sketch}), matrix_qcj_);
 
   time1_ = MPI_Wtime();
 
   bool is_converged = false;
-  for ( iter_ = 0; iter_ < max_iteration && !is_converged; ++iter_ ) {
+  for ( iteration_ = 0; iteration_ < max_iteration_ && !is_converged; ++iteration_ ) {
 
     // ================================================================================================================== //
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
     // Bs := sum( Qcj' * Qjs )
-    blas::gemm<Trans::TRANS, Trans::NORMAL>(1.0, matrix_qcj_, matrix_qjs_, 0.0, matrix_bs_);
-    mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
+    blas::mm(matrix_qcj_.t(), matrix_qjs_, matrix_bs_);
+    mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm_);
 
     // D  := Bs * Bs'
-    blas::syrk<Trans::NORMAL>(1.0, matrix_bs_, 0.0, matrix_d_);
+    blas::rk(matrix_bs_, matrix_d_.viewSymmetric());
 
     // Xj := 1/N * Qjs * Bs'
-    blas::gemm<Trans::NORMAL, Trans::TRANS>(1.0/num_sketch, matrix_qjs_, matrix_bs_, 0.0, matrix_xj_);
+    blas::mm(matrix_qjs_, matrix_bs_.t(), matrix_xj_, 1.0/num_sketch);
 
     // Xj -= 1/N * Qcj * D
-    blas::symm<Side::RIGHT>(-1.0/num_sketch, matrix_d_, matrix_qcj_, 1.0, matrix_xj_);
+    blas::mm(matrix_qcj_, matrix_d_.viewSymmetric(), matrix_xj_, 1.0/num_sketch, -1.0);
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
-    // D := I/4 - sum(Xj' * Xj)
-    blas::syrk<Trans::TRANS>(-1.0, matrix_xj_, 0.0, matrix_d_);
-    mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm);
-    for ( index_t i = 0; i < dim_sketch; ++i ) {
-      matrix_d_(i, i) += 0.25;
-    }
+    // Z(D) := sum(Xj' * Xj)
+    blas::rk(matrix_xj_.t(), matrix_d_.viewSymmetric());
+    mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm_);
 
     // Compute the eigen-decomposition of D -> D' * E * D
-    syev_driver_(matrix_d_, vector_e_);
+    syev_engine_(matrix_d_.viewSymmetric(), vector_e_);
 
-    // D := E^(1/4) * D
-    for ( index_t i = 0; i < dim_sketch; ++i ) {
-      blas::scal(std::pow(vector_e_(i), 0.25), matrix_d_.getRow(i));
-    }
-
-    // F := I/2 + D' * D
-    blas::syrk<Trans::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
-    for ( index_t i = 0; i < dim_sketch; ++i ) {
-      matrix_f_(i, i) += 0.5;
-    }
-
-    // Compute the eigen-decomposition of F -> F' * E * F
-    syev_driver_(matrix_f_, vector_e_);
-
-    // D := F
-    blas::copy(matrix_f_, matrix_d_);
-
-    // F := E^(1/4) * F; D := E^(-1/4) * D
-    for ( index_t i = 0; i < dim_sketch; ++i ) {
-      blas::scal(std::pow(vector_e_(i),  0.25), matrix_f_.getRow(i));
-      blas::scal(std::pow(vector_e_(i), -0.25), matrix_d_.getRow(i));
-    }
-
-    // C := F' * F
-    blas::syrk<Trans::TRANS>(1.0, matrix_f_, 0.0, matrix_c_);
-
-    // inv(C) := D' * D
-    blas::syrk<Trans::TRANS>(1.0, matrix_d_, 0.0, matrix_f_);
+    // E := sqrt( I/2 - sqrt( I/4 - E ) )
+    vector_e_.value().valarray() = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_.value().valarray()));
+    vector_einv_.value().valarray() = 1.0/vector_e_.value().valarray();
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
+    // C      = D * diag(E)      * D'
+    // inv(C) = D * inv(diag(E)) * D'
 
-    // Qcj := Qcj * C
-    blas::copy(matrix_qcj_, matrix_tmp_);
-    blas::symm<Side::RIGHT>(1.0, matrix_c_, matrix_tmp_, 0.0, matrix_qcj_);
+    // Tmp' := Qcj * D
+    blas::mm(matrix_qcj_, matrix_d_, matrix_tmp_.t());
 
-    // Qcj += Xj * inv(C)
-    blas::symm<Side::RIGHT>(1.0, matrix_f_, matrix_xj_, 1.0, matrix_qcj_);
+    // Tmp' *= E
+    blas::mm("", vector_e_.viewDiagonal(), matrix_tmp_.t());
+
+    // Qcj := Tmp' * D
+    blas::mm(matrix_tmp_.t(), matrix_d_, matrix_qcj_);
+
+    // Tmp' := Xj * D
+    blas::mm(matrix_xj_, matrix_d_, matrix_tmp_.t());
+
+    // Tmp' /= E
+    blas::mm("", vector_einv_.viewDiagonal(), matrix_tmp_.t());
+
+    // Qcj += Tmp' * D
+    blas::mm(matrix_tmp_.t(), matrix_d_, matrix_qcj_, 1.0, 1.0);
 
     // ================================================================================================================== //
     // Check convergence
-    for ( index_t i = 0; i < dim_sketch; ++i ) {
-      vector_e_(i) = std::sqrt(vector_e_(i)) - 1.0;
-    }
-    is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
+    vector_e_.value().valarray() -= 1.0;
+    is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance_);
   }
 
   time2_ = MPI_Wtime();
 
   // Gather Qc
-  mpi::gather(matrix_qcj_, matrix_qc_, mpi_root, mpi_comm);
+  mpi::gather(matrix_qcj_, matrix_qc_, mpi_root_, mpi_comm_);
 
   time3_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::name
+/// @copydoc  mcnla::isvd::IntegratorWrapper::name
 ///
-template <class _Matrix>
-constexpr const char* KolmogorovNagumoIntegrator<_Matrix>::nameImpl() const noexcept {
+template <typename _Scalar>
+constexpr const char* Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::nameImpl() const noexcept {
   return name_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getTime
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-double KolmogorovNagumoIntegrator<_Matrix>::getTimeImpl() const noexcept {
+template <typename _Scalar>
+double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::timeImpl() const noexcept {
   return time3_-time0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getTimes
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-const std::vector<double> KolmogorovNagumoIntegrator<_Matrix>::getTimesImpl() const noexcept {
-  return {time1_-time0_, time2_-time1_, time3_-time2_};
+template <typename _Scalar>
+double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time1() const noexcept {
+  return time1_-time0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getIter
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-index_t KolmogorovNagumoIntegrator<_Matrix>::getIterImpl() const noexcept {
-  return iter_;
+template <typename _Scalar>
+double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time2() const noexcept {
+  return time2_-time1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+/// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
-template <class _Matrix>
-DenseMatrixSet120<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>>&
-    KolmogorovNagumoIntegrator<_Matrix>::getSetQImpl() noexcept {
+template <typename _Scalar>
+double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time3() const noexcept {
+  return time3_-time2_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of iteration.
+///
+template <typename _Scalar>
+index_t Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::iteration() const noexcept {
+  return iteration_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum number of iteration.
+///
+template <typename _Scalar>
+index_t& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::maxIteration() noexcept {
+  return max_iteration_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  maxIteration
+///
+template <typename _Scalar>
+const index_t& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::maxIteration() const noexcept {
+  return max_iteration_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the tolerance of converge condition.
+///
+template <typename _Scalar>
+RealScalarT<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::tolerance() noexcept {
+  return tolerance_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  tolerance
+///
+template <typename _Scalar>
+const RealScalarT<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::tolerance() const noexcept {
+  return tolerance_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
+///
+template <typename _Scalar>
+DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::collectionQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return set_q_cut_;
+  return collection_q_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getSetQ
+/// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
 ///
-template <class _Matrix>
-const DenseMatrixSet120<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>>&
-    KolmogorovNagumoIntegrator<_Matrix>::getSetQImpl() const noexcept {
+template <typename _Scalar>
+const DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::collectionQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
-  return set_q_cut_;
+  return collection_q_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+/// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
-template <class _Matrix>
-DenseMatrix<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>, Layout::ROWMAJOR>&
-    KolmogorovNagumoIntegrator<_Matrix>::getMatrixQbarImpl() noexcept {
+template <typename _Scalar>
+DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::matrixQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::getMatrixQbar
+/// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
-template <class _Matrix>
-const DenseMatrix<ScalarT<KolmogorovNagumoIntegrator<_Matrix>>, Layout::ROWMAJOR>&
-    KolmogorovNagumoIntegrator<_Matrix>::getMatrixQbarImpl() const noexcept {
+template <typename _Scalar>
+const DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::matrixQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_cut_;
 }

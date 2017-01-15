@@ -54,7 +54,7 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::initializeImpl() noexcept {
 ///
 template <typename _Scalar>
 void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
-          DenseMatrixSet120<ScalarType> &set_q
+          DenseMatrixCollection120<ScalarType> &collection_q
 ) noexcept {
 
   mcnla_assert_true(parameters_.isInitialized());
@@ -63,13 +63,13 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  mcnla_assert_eq(set_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
+  mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   time0_ = MPI_Wtime();
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    gesvd_engine_(set_q(i), vector_s_, matrix_empty_, matrix_empty_);
+    gesvd_engine_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
   time1_ = MPI_Wtime();
 }

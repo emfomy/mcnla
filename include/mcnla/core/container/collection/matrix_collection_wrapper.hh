@@ -31,7 +31,7 @@ namespace container {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class MatrixSetWrapper : public utility::CrtpBase<_Derived, MatrixSetWrapper<_Derived>> {
+class MatrixCollectionWrapper : public utility::CrtpBase<_Derived, MatrixCollectionWrapper<_Derived>> {
 
  private:
 
@@ -40,7 +40,7 @@ class MatrixSetWrapper : public utility::CrtpBase<_Derived, MatrixSetWrapper<_De
  protected:
 
   // Constructors
-  inline MatrixSetWrapper() noexcept;
+  inline MatrixCollectionWrapper() noexcept;
 
  public:
 

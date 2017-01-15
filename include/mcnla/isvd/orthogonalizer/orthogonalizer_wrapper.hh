@@ -62,7 +62,7 @@ class OrthogonalizerWrapper : public utility::CrtpBase<_Derived, OrthogonalizerW
   inline void initialize() noexcept;
 
   // Orthogonalizes
-  inline void orthogonalize( DenseMatrixSet120<ScalarType> &set_q ) noexcept;
+  inline void orthogonalize( DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
 
   // Gets name
   inline constexpr const char* name() const noexcept;

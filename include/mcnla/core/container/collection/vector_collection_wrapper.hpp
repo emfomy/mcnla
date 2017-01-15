@@ -24,13 +24,13 @@ namespace container {
 /// @brief  Default constructor.
 ///
 template <class _Derived>
-VectorSetWrapper<_Derived>::VectorSetWrapper() noexcept {}
+VectorCollectionWrapper<_Derived>::VectorCollectionWrapper() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of vector.
 ///
 template <class _Derived>
-index_t VectorSetWrapper<_Derived>::length() const noexcept {
+index_t VectorCollectionWrapper<_Derived>::length() const noexcept {
   return this->derived().length();
 }
 
@@ -38,7 +38,7 @@ index_t VectorSetWrapper<_Derived>::length() const noexcept {
 /// @brief  Gets the number of vectors.
 ///
 template <class _Derived>
-index_t VectorSetWrapper<_Derived>::nvec() const noexcept {
+index_t VectorCollectionWrapper<_Derived>::nvec() const noexcept {
   return this->derived().nvec();
 }
 
@@ -46,7 +46,7 @@ index_t VectorSetWrapper<_Derived>::nvec() const noexcept {
 /// @brief  Gets the sizes.
 ///
 template <class _Derived>
-std::tuple<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept {
+std::tuple<index_t, index_t> VectorCollectionWrapper<_Derived>::sizes() const noexcept {
   return std::make_tuple(length()(), nvec());
 }
 
@@ -54,7 +54,7 @@ std::tuple<index_t, index_t> VectorSetWrapper<_Derived>::sizes() const noexcept 
 /// @brief  Gets a vector
 ///
 template <class _Derived>
-VectorT<_Derived> VectorSetWrapper<_Derived>::operator()(
+VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
   return this->derived().getVector(idx);
@@ -64,7 +64,7 @@ VectorT<_Derived> VectorSetWrapper<_Derived>::operator()(
 /// @copydoc  operator()( const index_t )
 ///
 template <class _Derived>
-const VectorT<_Derived> VectorSetWrapper<_Derived>::operator()(
+const VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
   return this->derived().getVector(idx);

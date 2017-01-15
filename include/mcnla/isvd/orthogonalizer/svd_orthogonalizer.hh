@@ -43,13 +43,12 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
 
  private:
 
-  using BaseType =
-    OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
+  using BaseType = OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
 
  public:
 
   using ScalarType = _Scalar;
-  using MatrixType = MatrixT<DenseMatrixSet120<ScalarType>>;
+  using MatrixType = MatrixT<DenseMatrixCollection120<ScalarType>>;
 
  protected:
 
@@ -91,7 +90,7 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void orthogonalizeImpl( DenseMatrixSet120<ScalarType> &set_q ) noexcept;
+  void orthogonalizeImpl( DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
 
   // Gets name
   inline constexpr const char* nameImpl() const noexcept;

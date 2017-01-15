@@ -57,7 +57,7 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::initializeImpl() noexcept {
 template <typename _Scalar> template <class _Matrix>
 void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
     const _Matrix &matrix_a,
-          DenseMatrixSet120<ScalarType> &set_q
+          DenseMatrixCollection120<ScalarType> &collection_q
 ) noexcept {
 
   mcnla_assert_true(parameters_.isInitialized());
@@ -68,7 +68,7 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
   const auto dim_sketch      = parameters_.dimSketch();
 
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
-  mcnla_assert_eq(set_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
+  mcnla_assert_eq(collection_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   time0_ = MPI_Wtime();
 
@@ -78,7 +78,7 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
-    blas::copy(matrix_a("", vector_idxs_(i)), set_q.unfold()("", i));
+    blas::copy(matrix_a("", vector_idxs_(i)), collection_q.unfold()("", i));
   }
   time2_ = MPI_Wtime();
 }
@@ -117,7 +117,7 @@ double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time2() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::seed
+/// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
 ///
 template <typename _Scalar>
 void Sketcher<_Scalar, ColumnSamplingSketcherTag>::setSeedImpl(

@@ -138,6 +138,7 @@ class DenseVector
   inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t length, const index_t stride = 1 ) noexcept;
 
+  // Changes view
   inline       DiagonalType& viewDiagonal() noexcept;
   inline const DiagonalType& viewDiagonal() const noexcept;
 

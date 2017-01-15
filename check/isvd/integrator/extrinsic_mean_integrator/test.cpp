@@ -10,20 +10,20 @@ TEST(EntrinsicMeanIntegratorTest, Test) {
   auto mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
 
   // Reads data
-  mcnla::container::DenseMatrixSet120<ScalarType> set_q_true;
+  mcnla::container::DenseMatrixCollection120<ScalarType> collection_q_true;
   mcnla::container::DenseMatrix<ScalarType, mcnla::Layout::ROWMAJOR> matrix_qbar_true;
-  mcnla::io::loadMatrixMarket(set_q_true, CUBE_Q_PATH);
+  mcnla::io::loadMatrixMarket(collection_q_true, CUBE_Q_PATH);
   mcnla::io::loadMatrixMarket(matrix_qbar_true, MATRIX_QBAR_PATH);
 
   // Checks size
-  ASSERT_EQ(set_q_true.nrow(), matrix_qbar_true.nrow());
-  ASSERT_EQ(set_q_true.ncol(), matrix_qbar_true.ncol());
+  ASSERT_EQ(collection_q_true.nrow(), matrix_qbar_true.nrow());
+  ASSERT_EQ(collection_q_true.ncol(), matrix_qbar_true.ncol());
 
   // Gets size
-  const mcnla::index_t m  = set_q_true.nrow();
-  const mcnla::index_t k  = set_q_true.ncol();
+  const mcnla::index_t m  = collection_q_true.nrow();
+  const mcnla::index_t k  = collection_q_true.ncol();
   const mcnla::index_t p  = 0;
-  const mcnla::index_t N  = set_q_true.nmat();
+  const mcnla::index_t N  = collection_q_true.nmat();
   const mcnla::index_t K  = mpi_size;
   const mcnla::index_t Nj = N / K;
   ASSERT_EQ(N % K, 0);
@@ -44,7 +44,7 @@ TEST(EntrinsicMeanIntegratorTest, Test) {
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {
-    mcnla::blas::omatcopy(1.0, set_q_true(mpi_rank*Nj + i), integrator.getSetQ().getMatrix(i));
+    mcnla::blas::omatcopy(1.0, collection_q_true(mpi_rank*Nj + i), integrator.getCollectionQ().getMatrix(i));
   }
 
   // Integrates
