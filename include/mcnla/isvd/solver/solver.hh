@@ -13,6 +13,7 @@
 #include <vector>
 #include <mcnla/isvd/solver/parameters.hpp>
 #include <mcnla/isvd/sketcher.hpp>
+#include <mcnla/isvd/orthogonalizer.hpp>
 #include <mcnla/isvd/integrator.hpp>
 #include <mcnla/isvd/former.hpp>
 #include <mcnla/core/container.hpp>
@@ -55,7 +56,7 @@ class Solver {
   using ScalarType     = _Scalar;
   using RealScalarType = RealScalarT<_Scalar>;
 
-  using ParametersType     = Parameters;
+  using ParametersType     = Parameters<ScalarType>;
   using SketcherType       = Sketcher<ScalarType, _SketcherTag>;
   using OrthogonalizerType = Orthogonalizer<ScalarType, _OrthogonalizerTag>;
   using IntegratorType     = Integrator<ScalarType, _IntegratorTag>;
@@ -111,6 +112,9 @@ class Solver {
   inline double integratorTime() const noexcept;
   inline double formerTime() const noexcept;
 
+  // Gets information
+  inline index_t integratorIteration() const noexcept;
+
   // Gets matrices
   inline const DenseVector<RealScalarType>& singularValues() const noexcept;
   inline const DenseMatrixColMajor<ScalarType>& leftSingularVectors() const noexcept;
@@ -128,7 +132,10 @@ class Solver {
   inline Solver& setOverRank( const index_t over_rank ) noexcept;
   inline Solver& setNumSketch( const index_t num_sketch ) noexcept;
   inline Solver& setNumSketchEach( const index_t num_sketch_each ) noexcept;
-  inline Solver& seed( const index_t seed ) noexcept;
+  inline Solver& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline Solver& setTolerance( const RealScalarType tolerance ) noexcept;
+  inline Solver& setSeed( const index_t seed ) noexcept;
+  inline Solver& setSeeds( const index_t seed ) noexcept;
 
 };
 

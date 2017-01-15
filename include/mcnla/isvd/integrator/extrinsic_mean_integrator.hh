@@ -51,6 +51,8 @@ class Integrator<_Scalar, ExtrinsicMeanIntegratorTag>
   using ScalarType     = _Scalar;
   using RealScalarType = RealScalarT<_Scalar>;
 
+  using ParametersType = Parameters<ScalarType>;
+
  protected:
 
   /// The name.
@@ -128,11 +130,12 @@ class Integrator<_Scalar, ExtrinsicMeanIntegratorTag>
   using BaseType::parameters_;
   using BaseType::mpi_comm_;
   using BaseType::mpi_root_;
+  using BaseType::iteration_;
 
  public:
 
   // Constructor
-  inline Integrator( const Parameters &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Integrator( const ParametersType &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
   // Gets time
   inline double time1() const noexcept;

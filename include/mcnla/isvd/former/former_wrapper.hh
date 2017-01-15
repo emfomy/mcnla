@@ -40,10 +40,12 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
   using ScalarType = ScalarT<_Derived>;
   using RealScalarType = RealScalarT<ScalarType>;
 
+  using ParametersType = Parameters<ScalarType>;
+
  protected:
 
   /// @copydoc  mcnla::isvd::Solver::parameters_
-  const Parameters &parameters_;
+  const ParametersType &parameters_;
 
   /// @copydoc  mcnla::isvd::Solver::mpi_comm_
   const MPI_Comm mpi_comm_;
@@ -54,7 +56,7 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
  protected:
 
   // Constructor
-  inline FormerWrapper( const Parameters &parameters,
+  inline FormerWrapper( const ParametersType &parameters,
                         const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  public:

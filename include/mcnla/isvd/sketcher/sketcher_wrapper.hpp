@@ -28,7 +28,7 @@ namespace isvd {
 ///
 template <class _Derived>
 SketcherWrapper<_Derived>::SketcherWrapper(
-    const Parameters &parameters,
+    const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
@@ -72,7 +72,7 @@ double SketcherWrapper<_Derived>::time() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Sets the random seed.
+/// @copydoc  mcnla::isvd::Solver::setSeed
 ///
 template <class _Derived>
 _Derived& SketcherWrapper<_Derived>::setSeed(
@@ -83,20 +83,21 @@ _Derived& SketcherWrapper<_Derived>::setSeed(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Generate the random seeds and send to each MPI nodes.
+/// @copydoc  mcnla::isvd::Solver::setSeeds
 ///
 template <class _Derived>
 _Derived& SketcherWrapper<_Derived>::setSeeds(
     const index_t seed
 ) noexcept {
   std::vector<index_t> seeds(mpi::commSize(mpi_comm_));
-  if ( mpi::isCommRoot(mpi_comm_, mpi_root_) ) {
+  if ( mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
     std::seed_seq seq{seed};
     seq.generate(seeds.begin(), seeds.end());
   }
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<index_t>::datatype;
-  MPI_Scatter(seeds.data(), 1, datatype, &seed, 1, datatype, mpi_root_, mpi_comm_);
-  setSeed(seed);
+  index_t seed_tmp;
+  MPI_Scatter(seeds.data(), 1, datatype, &seed_tmp, 1, datatype, mpi_root_, mpi_comm_);
+  setSeed(seed_tmp);
   return this->derived();
 }
 

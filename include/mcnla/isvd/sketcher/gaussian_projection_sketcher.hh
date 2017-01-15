@@ -49,6 +49,8 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
 
   using ScalarType = _Scalar;
 
+  using ParametersType = Parameters<ScalarType>;
+
  protected:
 
   /// The name.
@@ -76,7 +78,7 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters &parameters,
+  inline Sketcher( const ParametersType &parameters,
                    const MPI_Comm mpi_comm, const mpi_int_t mpi_root, const index_t seed ) noexcept;
 
   // Gets time

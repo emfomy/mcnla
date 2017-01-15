@@ -54,7 +54,7 @@ int main( int argc, char **argv ) {
   int Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
   int m0        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
   int n         = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  int k         = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  int k         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
   int q         = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
   int num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   int skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;

@@ -49,7 +49,8 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
  public:
 
   using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<_Scalar>;
+
+  using ParametersType = Parameters<ScalarType>;
 
  protected:
 
@@ -73,15 +74,6 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
 
   /// The number of rows of the matrix of all MPI nodes.
   index_t nrow_all_;
-
-  /// The number of iteration.
-  index_t iteration_;
-
-  /// The maximum iteration.
-  index_t max_iteration_ = 256;
-
-  /// The tolerance of converge condition.
-  RealScalarType tolerance_ = 1e-4;
 
   /// The collection Q.
   DenseMatrixCollection120<ScalarType> collection_q_;
@@ -131,25 +123,17 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
   using BaseType::parameters_;
   using BaseType::mpi_comm_;
   using BaseType::mpi_root_;
+  using BaseType::iteration_;
 
  public:
 
   // Constructor
-  inline Integrator( const Parameters &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Integrator( const ParametersType &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
   // Gets time
   inline double time1() const noexcept;
   inline double time2() const noexcept;
   inline double time3() const noexcept;
-
-  // Gets the iteration number
-  inline index_t iteration() const noexcept;
-
-  // Gets the parameters
-  inline       index_t& maxIteration() noexcept;
-  inline const index_t& maxIteration() const noexcept;
-  inline       RealScalarType& tolerance() noexcept;
-  inline const RealScalarType& tolerance() const noexcept;
 
  protected:
 

@@ -31,17 +31,17 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   ASSERT_EQ(N % K, 0);
 
   // Sets parameters
-  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD);
+  mcnla::isvd::Parameters<ScalarType> parameters(MPI_COMM_WORLD);
   parameters.nrow_ = m;
   parameters.rank_ = k;
   parameters.over_rank_ = p;
   parameters.num_sketch_each_ = Nj;
+  parameters.tolerance_ = 1e-4;
+  parameters.max_iteration_ = 256;
 
   // Initializes
   mcnla::isvd::KolmogorovNagumoIntegrator<ScalarType> integrator(parameters, MPI_COMM_WORLD, mpi_root);
   integrator.initialize();
-  integrator.tolerance() = 1e-4;
-  integrator.maxIteration() = 256;
   parameters.initialized_ = true;
 
   // Copies data

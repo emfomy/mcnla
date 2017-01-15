@@ -52,6 +52,8 @@ class Former<_Scalar, SvdFormerTag>
   using ScalarType     = _Scalar;
   using RealScalarType = RealScalarT<ScalarType>;
 
+  using ParametersType = Parameters<ScalarType>;
+
  protected:
 
   /// The name.
@@ -103,7 +105,7 @@ class Former<_Scalar, SvdFormerTag>
  public:
 
   // Constructor
-  inline Former( const Parameters &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Former( const ParametersType &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
   // Gets time
   inline double time1() const noexcept;

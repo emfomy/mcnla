@@ -61,7 +61,7 @@ int main( int argc, char **argv ) {
   // mcnla::mpi_int_t mpi_root = 0;
   // mcnla::index_t m = 10, n = 20, k = 5, p = 1, Nj = 3, seed = 0;
 
-  // mcnla::isvd::Parameters parameters(MPI_COMM_WORLD);
+  // mcnla::isvd::Parameters<double> parameters(MPI_COMM_WORLD);
   // parameters.nrow_ = m;
   // parameters.ncol_ = n;
   // parameters.rank_ = k;

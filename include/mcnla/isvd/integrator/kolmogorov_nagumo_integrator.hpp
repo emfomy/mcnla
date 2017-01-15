@@ -27,7 +27,7 @@ namespace isvd {
 ///
 template <typename _Scalar>
 Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::Integrator(
-    const Parameters &parameters,
+    const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
@@ -52,7 +52,6 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::initializeImpl() noexce
 
   nrow_each_ = (nrow-1) / mpi_size + 1;
   nrow_all_  = nrow_each_ * mpi_size;
-  iteration_ = -1;
 
   collection_q_.reconstruct(nrow_all_, dim_sketch, num_sketch_each);
   collection_q_cut_ = collection_q_({0, nrow}, "", "");
@@ -90,6 +89,8 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
   const auto dim_sketch      = parameters_.dimSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto num_sketch      = parameters_.numSketch();
+  const auto max_iteration   = parameters_.maxIteration();
+  const auto tolerance       = parameters_.tolerance();
 
   time0_ = MPI_Wtime();
 
@@ -109,7 +110,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
   time1_ = MPI_Wtime();
 
   bool is_converged = false;
-  for ( iteration_ = 0; iteration_ < max_iteration_ && !is_converged; ++iteration_ ) {
+  for ( iteration_ = 0; iteration_ < max_iteration && !is_converged; ++iteration_ ) {
 
     // ================================================================================================================== //
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
@@ -167,7 +168,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     // ================================================================================================================== //
     // Check convergence
     vector_e_.value().valarray() -= 1.0;
-    is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance_);
+    is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
   }
 
   time2_ = MPI_Wtime();
@@ -216,46 +217,6 @@ double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time2() const noexcep
 template <typename _Scalar>
 double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time3() const noexcept {
   return time3_-time2_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of iteration.
-///
-template <typename _Scalar>
-index_t Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::iteration() const noexcept {
-  return iteration_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the maximum number of iteration.
-///
-template <typename _Scalar>
-index_t& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::maxIteration() noexcept {
-  return max_iteration_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  maxIteration
-///
-template <typename _Scalar>
-const index_t& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::maxIteration() const noexcept {
-  return max_iteration_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the tolerance of converge condition.
-///
-template <typename _Scalar>
-RealScalarT<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::tolerance() noexcept {
-  return tolerance_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  tolerance
-///
-template <typename _Scalar>
-const RealScalarT<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::tolerance() const noexcept {
-  return tolerance_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -25,7 +25,7 @@ namespace isvd {
 ///
 template <typename _Scalar>
 Former<_Scalar, DummyFormerTag>::Former(
-    const Parameters &parameters,
+    const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept

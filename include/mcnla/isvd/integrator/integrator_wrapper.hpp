@@ -25,7 +25,7 @@ namespace isvd {
 ///
 template <class _Derived>
 IntegratorWrapper<_Derived>::IntegratorWrapper(
-    const Parameters &parameters,
+    const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
@@ -38,6 +38,7 @@ IntegratorWrapper<_Derived>::IntegratorWrapper(
 ///
 template <class _Derived>
 void IntegratorWrapper<_Derived>::initialize() noexcept {
+  iteration_ = -1;
   this->derived().initializeImpl();
 }
 
@@ -64,6 +65,15 @@ template <class _Derived>
 double IntegratorWrapper<_Derived>::time() const noexcept {
   return this->derived().timeImpl();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::Solver::integratorIteration
+///
+template <class _Derived>
+index_t IntegratorWrapper<_Derived>::iteration() const noexcept {
+  return iteration_;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the collection Q.
 ///

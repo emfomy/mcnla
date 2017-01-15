@@ -47,7 +47,9 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
 
  public:
 
-  using ScalarType  = _Scalar;
+  using ScalarType = _Scalar;
+
+  using ParametersType = Parameters<ScalarType>;
 
  protected:
 
@@ -76,7 +78,7 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters &parameters,
+  inline Sketcher( const ParametersType &parameters,
                    const MPI_Comm mpi_comm, const mpi_int_t mpi_root, const index_t seed ) noexcept;
 
   // Gets time

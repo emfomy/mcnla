@@ -39,10 +39,12 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
   using ScalarType = ScalarT<_Derived>;
 
+  using ParametersType = Parameters<ScalarType>;
+
  protected:
 
   /// @copydoc  mcnla::isvd::Solver::parameters_
-  const Parameters &parameters_;
+  const ParametersType &parameters_;
 
   /// @copydoc  mcnla::isvd::Solver::mpi_comm_
   const MPI_Comm mpi_comm_;
@@ -53,7 +55,7 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
  protected:
 
   // Constructor
-  inline SketcherWrapper( const Parameters &parameters,
+  inline SketcherWrapper( const ParametersType &parameters,
                           const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  public:

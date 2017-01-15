@@ -5,10 +5,10 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SOLVER_HPP_
-#define MCNLA_ISVD_SOLVER_HPP_
+#ifndef MCNLA_ISVD_SOLVER_SOLVER_HPP_
+#define MCNLA_ISVD_SOLVER_SOLVER_HPP_
 
-#include <mcnla/isvd/solver.hh>
+#include <mcnla/isvd/solver/solver.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -32,7 +32,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::S
     mpi_comm_(mpi_comm),
     mpi_root_(mpi_root),
     sketcher_(parameters_, mpi_comm, mpi_root, seed_),
-    orthogonalizer(parameters_, mpi_comm, mpi_root),
+    orthogonalizer_(parameters_, mpi_comm, mpi_root),
     integrator_(parameters_, mpi_comm, mpi_root),
     former_(parameters_, mpi_comm, mpi_root) {}
 
@@ -47,7 +47,7 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
   MPI_Bcast(&parameters_, sizeof(parameters_), MPI_BYTE, mpi_root_, mpi_comm_);
 
   // Update random seeds
-  sketcher.setSeeds(seed_);
+  sketcher_.setSeeds(seed_);
 
   // Check parameters
   mcnla_assert_ge(parameters_.ncol(), parameters_.nrow());
@@ -60,7 +60,7 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
   mcnla_assert_gt(parameters_.numSketchEach(), 0);
 
   sketcher_.initialize();
-  orthogonalizer.initialize();
+  orthogonalizer_.initialize();
   integrator_.initialize();
   former_.initialize();
 
@@ -74,6 +74,7 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 /// @attention  @a matrix_a should be the same in each MPI node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+template <class _Matrix>
 void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::compute(
     const _Matrix &matrix_a
 ) noexcept {
@@ -86,7 +87,7 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 
   integrator_.integrate();
 
-  former_.reconstruct(matrix_a, integrator_.matrixQ());
+  former_.form(matrix_a, integrator_.matrixQ());
 
   parameters_.computed_ = true;
 }
@@ -155,6 +156,15 @@ double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of iterator when running integrator.
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+index_t Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorIteration() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return integrator_.iteration();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate singular values.
 ///
 /// @attention  The solver should have be computed.
@@ -205,7 +215,7 @@ const DenseMatrixRowMajor<_Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the parameters.
 ///
-/// @attention  Only affects on root rank.
+/// @attention  Only affects on root node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const typename Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::ParametersType&
@@ -217,7 +227,7 @@ const typename Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag,
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the sizes of the matrix.
 ///
-/// @attention  Only affects on root rank.
+/// @attention  Only affects on root node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
@@ -250,7 +260,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the desired rank of approximate SVD.
 ///
-/// @attention  Only affects on root rank.
+/// @attention  Only affects on root node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
@@ -269,7 +279,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the dimension of random sketches.
 ///
-/// @attention  Only affects on root rank.
+/// @attention  Only affects on root node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
@@ -289,7 +299,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @brief  Sets the number of total random sketches
 ///
 /// @attention  @a num_sketch must be a multiple of #mpi_size_.
-/// @attention  Only affects on root rank.
+/// @attention  Only affects on root node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
@@ -308,7 +318,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of random sketches per MPI node.
 ///
-/// @attention  Only affects on root rank.
+/// @attention  Only affects on root node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
@@ -324,8 +334,70 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
   return *this;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the maximum number of iteration
+///
+/// @attention  Only affects on root node.
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setMaxIteration(
+    const index_t max_iteration
+) noexcept {
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
+    return *this;
+  }
+  parameters_.max_iteration_ = max_iteration;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the tolerance of converge condition.
+///
+/// @attention  Only affects on root node.
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setTolerance(
+    const RealScalarType tolerance
+) noexcept {
+  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
+    return *this;
+  }
+  parameters_.tolerance_ = tolerance;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the random seed.
+///
+/// @attention  Affects on current node only.
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeed(
+    const index_t seed
+) noexcept {
+  sketcher_.setSeed(seed);
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Generate the random seeds and send to each MPI nodes.
+///
+/// @attention  Affects on all MPI nodes.
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeeds(
+    const index_t seed
+) noexcept {
+  sketcher_.setSeeds(seed);
+  return *this;
+}
+
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SOLVER_HPP_
+#endif  // MCNLA_ISVD_SOLVER_SOLVER_HPP_

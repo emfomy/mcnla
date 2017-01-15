@@ -47,8 +47,11 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
 
  public:
 
-  using ScalarType = _Scalar;
-  using MatrixType = MatrixT<DenseMatrixCollection120<ScalarType>>;
+  using ScalarType     = _Scalar;
+  using RealScalarType = RealScalarT<ScalarType>;
+  using MatrixType     = MatrixT<DenseMatrixCollection120<ScalarType>>;
+
+  using ParametersType = Parameters<ScalarType>;
 
  protected:
 
@@ -62,7 +65,7 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
   double time1_;
 
   /// The vector S.
-  DenseVector<ScalarType> vector_s_;
+  DenseVector<RealScalarType> vector_s_;
 
   /// The empty matrix.
   MatrixType matrix_empty_;
@@ -77,7 +80,7 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters &parameters,
+  inline Orthogonalizer( const ParametersType &parameters,
                          const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
   // Gets time

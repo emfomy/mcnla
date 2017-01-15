@@ -25,12 +25,19 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_module
 ///
+/// @tparam  _Scalar  The scalar type.
+///
 /// The parameters of iSVD solver.
 ///
+template <typename _Scalar>
 class Parameters {
 
-  template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+  template <class __Scalar, class __SketcherTag, class __OrthogonalizerTag, class __IntegratorTag, class __FormerTag>
   friend class Solver;
+
+ public:
+
+  using RealScalarType = RealScalarT<_Scalar>;
 
  protected:
 
@@ -62,6 +69,12 @@ class Parameters {
   /// The number of random sketches per MPI node.
   index_t num_sketch_each_ = 0;
 
+  /// The maximum iteration.
+  index_t max_iteration_ = 256;
+
+  /// The tolerance of converge condition.
+  RealScalarType tolerance_ = 1e-4;
+
  public:
 
   // Constructors
@@ -77,6 +90,9 @@ class Parameters {
   inline index_t dimSketch() const noexcept;
   inline index_t numSketch() const noexcept;
   inline index_t numSketchEach() const noexcept;
+  inline index_t maxIteration() const noexcept;
+  inline RealScalarType tolerance() const noexcept;
+
 };
 
 }  // namespace isvd

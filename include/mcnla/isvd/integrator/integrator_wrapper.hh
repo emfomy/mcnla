@@ -39,10 +39,12 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
 
   using ScalarType = ScalarT<_Derived>;
 
+  using ParametersType = Parameters<ScalarType>;
+
  protected:
 
   /// @copydoc  mcnla::isvd::Solver::parameters_
-  const Parameters &parameters_;
+  const ParametersType &parameters_;
 
   /// @copydoc  mcnla::isvd::Solver::mpi_comm_
   const MPI_Comm mpi_comm_;
@@ -50,10 +52,13 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
   /// @copydoc  mcnla::isvd::Solver::mpi_root_
   const mpi_int_t mpi_root_;
 
+  /// The number of iteration.
+  index_t iteration_;
+
  protected:
 
   // Constructor
-  inline IntegratorWrapper( const Parameters &parameters,
+  inline IntegratorWrapper( const ParametersType &parameters,
                             const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
  public:
@@ -69,6 +74,9 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
 
   // Gets compute time
   inline double time() const noexcept;
+
+  // Gets iteration number
+  inline index_t iteration() const noexcept;
 
   // Gets matrices
   inline       DenseMatrixCollection120<ScalarType>& collectionQ() noexcept;
