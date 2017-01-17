@@ -42,13 +42,9 @@ void loadMatrixMarket(
   mcnla_assert_false(fin.fail());
 
   // Skip comment
-  char c;
-  fin >> c;
-  while ( c == '%' ) {
+  while ( fin.peek() == '%' ) {
     fin.ignore(4096, '\n');
-    fin >> c;
   }
-  fin.unget();
 
   // Get size
   index_t m, n;
@@ -96,13 +92,9 @@ void loadMatrixMarket(
   mcnla_assert_false(fin.fail());
 
   // Skip comment
-  char c;
-  fin >> c;
-  while ( c == '%' ) {
+  while ( fin.peek() == '%' ) {
     fin.ignore(4096, '\n');
-    fin >> c;
   }
-  fin.unget();
 
   // Get size
   index_t m, n;
@@ -161,13 +153,9 @@ void loadMatrixMarket(
   mcnla_assert_false(fin.fail());
 
   // Skip comment
-  char c;
-  fin >> c;
-  while ( c == '%' ) {
+  while ( fin.peek() == '%' ) {
     fin.ignore(4096, '\n');
-    fin >> c;
   }
-  fin.unget();
 
   // Get size
   index_t m, n;
@@ -227,13 +215,9 @@ void loadMatrixMarket(
   mcnla_assert_false(fin.fail());
 
   // Skip comment
-  char c;
-  fin >> c;
-  while ( c == '%' ) {
+  while ( fin.peek() == '%' ) {
     fin.ignore(4096, '\n');
-    fin >> c;
   }
-  fin.unget();
 
   // Get size
   index_t m, n, k;
