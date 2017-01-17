@@ -10,7 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/solver.hpp>
+#include <iostream>
+#include <mcnla/isvd/solver/parameters.hpp>
 #include <mcnla/core/container.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -61,6 +62,9 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
   inline IntegratorWrapper( const ParametersType &parameters,
                             const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
+  // Outputs name
+  inline std::ostream& outputName( std::ostream &os ) const noexcept;
+
  public:
 
   // Initializes
@@ -69,8 +73,9 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
   // Integrates
   inline void integrate() noexcept;
 
-  // Gets name
-  inline constexpr const char* name() const noexcept;
+  // Operators
+  template <class __Derived>
+  friend inline std::ostream& operator<<( std::ostream &os, const IntegratorWrapper<__Derived> &wrapper );
 
   // Gets compute time
   inline double time() const noexcept;

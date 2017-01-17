@@ -47,7 +47,7 @@ class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>
 
   // Operators
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &out, const MatrixWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const MatrixWrapper<__Derived> &wrapper );
 
   // Gets information
   inline index_t   nrow() const noexcept;

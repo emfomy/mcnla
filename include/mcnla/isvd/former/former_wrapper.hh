@@ -10,7 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/solver.hpp>
+#include <iostream>
+#include <mcnla/isvd/solver/parameters.hpp>
 #include <mcnla/core/container.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -59,6 +60,9 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
   inline FormerWrapper( const ParametersType &parameters,
                         const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
+  // Outputs name
+  inline std::ostream& outputName( std::ostream &os ) const noexcept;
+
  public:
 
   // Initializes
@@ -68,8 +72,9 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
   template <class _Matrix>
   inline void form( const _Matrix &matrix_a, const DenseMatrixRowMajor<ScalarType> &matrix_q ) noexcept;
 
-  // Gets name
-  inline constexpr const char* name() const noexcept;
+  // Operators
+  template <class __Derived>
+  friend inline std::ostream& operator<<( std::ostream &os, const FormerWrapper<__Derived> &wrapper );
 
   // Gets compute time
   inline double time() const noexcept;

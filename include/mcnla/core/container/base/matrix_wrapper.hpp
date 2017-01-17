@@ -22,21 +22,21 @@ namespace mcnla {
 namespace container {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
+/// @brief  Output to stream.
 ///
 template <class __Derived>
 std::ostream& operator<< (
-    std::ostream &out,
+    std::ostream &os,
     const MatrixWrapper<__Derived> &wrapper
 ) {
   auto &matrix = wrapper.derived();
   for ( index_t i = 0; i < matrix.nrow(); ++i ) {
     for ( index_t j = 0; j < matrix.ncol(); ++j ) {
-      out << std::setw(ios_width) << matrix(i, j) << "  ";
+      os << std::setw(ios_width) << matrix(i, j) << "  ";
     }
-    out << '\n';
+    os << '\n';
   }
-  return out;
+  return os;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

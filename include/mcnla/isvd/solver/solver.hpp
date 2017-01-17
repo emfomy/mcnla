@@ -93,39 +93,83 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the name of the sketcher.
+/// @brief  Gets the sketcher.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-constexpr const char* Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcherName(
-) const noexcept {
-  return sketcher_.name();
+Sketcher<_Scalar, _SketcherTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
+) noexcept {
+  return sketcher_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the name of the orthogonalizer.
+/// @copydoc  sketcher
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-constexpr const char* Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizerName(
+const Sketcher<_Scalar, _SketcherTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
 ) const noexcept {
-  return integrator_.name();
+  return sketcher_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the name of the integrator.
+/// @brief  Gets the orthogonalizer.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-constexpr const char* Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorName(
-) const noexcept {
-  return integrator_.name();
+Orthogonalizer<_Scalar, _OrthogonalizerTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
+) noexcept {
+  return integrator_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the name of the former.
+/// @copydoc  orthogonalizer
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-constexpr const char* Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::formerName(
+const Orthogonalizer<_Scalar, _OrthogonalizerTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) const noexcept {
-  return former_.name();
+  return integrator_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the integrator.
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Integrator<_Scalar, _IntegratorTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
+) noexcept {
+  return integrator_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  integrator
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const Integrator<_Scalar, _IntegratorTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
+) const noexcept {
+  return integrator_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the former.
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Former<_Scalar, _FormerTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
+) noexcept {
+  return former_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  former
+///
+template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const Former<_Scalar, _FormerTag>&
+    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
+) const noexcept {
+  return former_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,7 +342,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of total random sketches
 ///
-/// @attention  @a num_sketch must be a multiple of #mpi_size_.
+/// @attention  @a num_sketch must be a multiple of @link mcnla::mpi::commSize mpi_size@endlink.
 /// @attention  Only affects on root node.
 ///
 template <class _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>

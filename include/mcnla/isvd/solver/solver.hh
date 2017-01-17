@@ -10,7 +10,6 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
-#include <vector>
 #include <mcnla/isvd/solver/parameters.hpp>
 #include <mcnla/isvd/sketcher.hpp>
 #include <mcnla/isvd/orthogonalizer.hpp>
@@ -31,7 +30,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_module
+/// @ingroup  isvd_solver_module
 ///
 /// The Integrated Singular Value Decomposition solver.
 ///
@@ -45,7 +44,7 @@ namespace isvd {
 /// @attention  The solver should be @link initialize() re-initialized@endlink after changing parameters.
 ///
 template <class _Scalar,
-          class _SketcherTag       = GaussianProjectionSketcherTag,
+          class _SketcherTag       = GaussianProjectionSketcherTag<0>,
           class _OrthogonalizerTag = SvdOrthogonalizerTag,
           class _IntegratorTag     = KolmogorovNagumoIntegratorTag,
           class _FormerTag         = SvdFormerTag>
@@ -100,11 +99,15 @@ class Solver {
   template<class _Matrix>
   void compute( const _Matrix &matrix ) noexcept;
 
-  // Gets name
-  inline constexpr const char* sketcherName() const noexcept;
-  inline constexpr const char* orthogonalizerName() const noexcept;
-  inline constexpr const char* integratorName() const noexcept;
-  inline constexpr const char* formerName() const noexcept;
+  // Gets subsolver
+  inline       SketcherType&       sketcher() noexcept;
+  inline const SketcherType&       sketcher() const noexcept;
+  inline       OrthogonalizerType& orthogonalizer() noexcept;
+  inline const OrthogonalizerType& orthogonalizer() const noexcept;
+  inline       IntegratorType&     integrator() noexcept;
+  inline const IntegratorType&     integrator() const noexcept;
+  inline       FormerType&         former() noexcept;
+  inline const FormerType&         former() const noexcept;
 
   // Gets compute time
   inline double sketcherTime() const noexcept;

@@ -87,7 +87,7 @@ int main( int argc, char **argv ) {
   // Initialize solver
   mcnla::container::DenseMatrix<ScalarType> matrix_a(m, n), matrix_u_true;
   mcnla::isvd::Solver<ScalarType,
-                      mcnla::isvd::GaussianProjectionSketcherTag,
+                      mcnla::isvd::GaussianProjectionSketcherTag<0>,
                       mcnla::isvd::SvdOrthogonalizerTag,
                       mcnla::isvd::KolmogorovNagumoIntegratorTag,
                       mcnla::isvd::SvdFormerTag> solver(MPI_COMM_WORLD);
@@ -95,9 +95,9 @@ int main( int argc, char **argv ) {
   solver.setTolerance(tolerance).setMaxIteration(maxiter).setSeeds(seed);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Uses " << solver.sketcherName() << "." << std::endl;
-    std::cout << "Uses " << solver.integratorName() << "." << std::endl;
-    std::cout << "Uses " << solver.formerName() << "." << std::endl << std::endl;
+    std::cout << "Uses " << solver.sketcher() << "." << std::endl;
+    std::cout << "Uses " << solver.integrator() << "." << std::endl;
+    std::cout << "Uses " << solver.former() << "." << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //

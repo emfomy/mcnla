@@ -23,11 +23,10 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_module
+/// @ingroup  isvd_solver_module
+/// The parameters of iSVD solver.
 ///
 /// @tparam  _Scalar  The scalar type.
-///
-/// The parameters of iSVD solver.
 ///
 template <typename _Scalar>
 class Parameters {

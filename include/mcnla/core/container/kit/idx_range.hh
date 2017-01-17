@@ -55,10 +55,10 @@ struct IdxRange {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
+/// @brief  Output to stream.
 ///
-static inline std::ostream& operator<<( std::ostream &out, const IdxRange &range ) {
-  return out << "[" << range.begin << ", " << range.end << ")";
+static inline std::ostream& operator<<( std::ostream &os, const IdxRange &range ) {
+  return os << "[" << range.begin << ", " << range.end << ")";
 }
 
 }  // namespace container

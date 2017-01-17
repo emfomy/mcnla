@@ -84,12 +84,14 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::name
+/// @copydoc  mcnla::isvd::SketcherWrapper::outputName
+///
 ///
 template <typename _Scalar>
-constexpr const char* Sketcher<_Scalar, ColumnSamplingSketcherTag>::nameImpl(
+std::ostream&Sketcher<_Scalar, ColumnSamplingSketcherTag>::outputNameImpl(
+    std::ostream &os
 ) const noexcept {
-  return name_;
+  return (os << name_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

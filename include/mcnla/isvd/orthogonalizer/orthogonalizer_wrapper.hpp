@@ -52,11 +52,24 @@ void OrthogonalizerWrapper<_Derived>::orthogonalize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::orthogonalizerName
+/// @brief  Output name to stream.
+///
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &os,
+    const OrthogonalizerWrapper<__Derived> &wrapper
+) {
+  return wrapper.outputName(os);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator<<
 ///
 template <class _Derived>
-constexpr const char* OrthogonalizerWrapper<_Derived>::name() const noexcept {
-  return this->derived().nameImpl();
+std::ostream& OrthogonalizerWrapper<_Derived>::outputName(
+    std::ostream &os
+) const noexcept {
+  return this->derived().outputNameImpl(os);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

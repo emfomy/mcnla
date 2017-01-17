@@ -95,11 +95,14 @@ void Former<_Scalar, SvdFormerTag>::formImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::name
+/// @copydoc  mcnla::isvd::FormerWrapper::outputName
+///
 ///
 template <typename _Scalar>
-constexpr const char* Former<_Scalar, SvdFormerTag>::nameImpl() const noexcept {
-  return name_;
+std::ostream&Former<_Scalar, SvdFormerTag>::outputNameImpl(
+    std::ostream &os
+) const noexcept {
+  return (os << name_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

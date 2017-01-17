@@ -85,7 +85,7 @@ class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase
 
   // Operators
   template <typename __Scalar, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &out, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
 
   // Gets value
   inline ScalarType& value() const noexcept;

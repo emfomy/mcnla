@@ -21,15 +21,15 @@ namespace mcnla {
 namespace container {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
+/// @brief  Output to stream.
 ///
 template <typename __Scalar, class __Vector>
 std::ostream& operator<< (
-    std::ostream &out,
+    std::ostream &os,
     const DenseVectorIteratorBase<__Scalar, __Vector> &iterator
 ) {
   const index_t width = log10(iterator.container_->length())+1;
-  return out << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.value();
+  return os << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

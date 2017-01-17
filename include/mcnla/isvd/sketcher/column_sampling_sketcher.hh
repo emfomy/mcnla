@@ -94,8 +94,8 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
   template <class _Matrix>
   void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
 
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
+  // Outputs name
+  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
   // Gets time
   inline double timeImpl() const noexcept;

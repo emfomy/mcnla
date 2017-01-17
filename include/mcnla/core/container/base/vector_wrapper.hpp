@@ -22,18 +22,18 @@ namespace mcnla {
 namespace container {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
+/// @brief  Output to stream.
 ///
 template <class __Derived>
 std::ostream& operator<< (
-    std::ostream &out,
+    std::ostream &os,
     const VectorWrapper<__Derived> &wrapper
 ) {
   auto &vector = wrapper.derived();
   for ( index_t i = 0; i < vector.length(); ++i ) {
-    out << std::setw(ios_width) << vector(i) << "  ";
+    os << std::setw(ios_width) << vector(i) << "  ";
   }
-  return out << '\n';
+  return os << '\n';
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

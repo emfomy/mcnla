@@ -93,7 +93,7 @@ class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase
 
   // Operators
   template <typename __Scalar, Trans __trans, class __Matrix>
-  friend inline std::ostream& operator<<( std::ostream &out,
+  friend inline std::ostream& operator<<( std::ostream &os,
                                           const DenseMatrixIteratorBase<__Scalar, __trans, __Matrix> &iterator );
 
   // Gets value

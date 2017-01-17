@@ -21,19 +21,19 @@ namespace mcnla {
 namespace container {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
+/// @brief  Output to stream.
 ///
 template <typename __Scalar, Trans __trans, class __Matrix>
 std::ostream& operator<< (
-    std::ostream &out,
+    std::ostream &os,
     const DenseMatrixIteratorBase<__Scalar, __trans, __Matrix> &iterator
 ) {
   const index_t width_r = log10(iterator.container_->nrow())+1;
   const index_t width_c = log10(iterator.container_->ncol())+1;
   const index_t width   = std::max(width_r, width_c);
-  return out << "(" << std::setw(width) << iterator.rowidx() << ", "
-                    << std::setw(width) << iterator.colidx() << ")  "
-                    << std::setw(ios_width) << iterator.value();
+  return os << "(" << std::setw(width) << iterator.rowidx() << ", "
+                   << std::setw(width) << iterator.colidx() << ")  "
+                   << std::setw(ios_width) << iterator.value();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

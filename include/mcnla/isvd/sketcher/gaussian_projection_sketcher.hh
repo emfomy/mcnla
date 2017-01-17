@@ -27,23 +27,27 @@ namespace isvd {
 /// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher tag.
 ///
+/// @tparam  _exponent  exponent of the power method.
+///
+template <index_t _exponent = 0>
 struct GaussianProjectionSketcherTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Scalar    The scalar type.
+/// @tparam  _exponent  exponent of the power method.
 ///
-template <typename _Scalar>
-class Sketcher<_Scalar, GaussianProjectionSketcherTag>
-  : public SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag>> {
+template <typename _Scalar, index_t _exponent>
+class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
+  : public SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>> {
 
-  friend SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag>>;
+  friend SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>>;
 
  private:
 
-  using BaseType = SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag>>;
+  using BaseType = SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>>;
 
  public:
 
@@ -94,8 +98,8 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
   template <class _Matrix>
   void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
 
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
+  // Outputs name
+  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
   // Gets time
   inline double timeImpl() const noexcept;
@@ -106,8 +110,8 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag>
 };
 
 /// @ingroup  isvd_sketcher_module
-template <typename _Scalar>
-using GaussianProjectionSketcher = Sketcher<_Scalar, GaussianProjectionSketcherTag>;
+template <typename _Scalar, index_t _exponent = 0>
+using GaussianProjectionSketcher = Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>;
 
 }  // namespace isvd
 

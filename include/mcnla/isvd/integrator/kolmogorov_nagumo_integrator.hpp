@@ -180,11 +180,14 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorWrapper::name
+/// @copydoc  mcnla::isvd::IntegratorWrapper::outputName
+///
 ///
 template <typename _Scalar>
-constexpr const char* Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::nameImpl() const noexcept {
-  return name_;
+std::ostream& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::outputNameImpl(
+    std::ostream &os
+) const noexcept {
+  return (os << name_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -47,7 +47,7 @@ class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>
 
   // Operators
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &out, const VectorWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const VectorWrapper<__Derived> &wrapper );
 
   // Gets information
   inline index_t   length() const noexcept;

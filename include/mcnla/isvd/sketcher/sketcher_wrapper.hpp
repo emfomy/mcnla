@@ -56,11 +56,24 @@ void SketcherWrapper<_Derived>::sketch(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::sketcherName
+/// @brief  Output name to stream.
+///
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &os,
+    const SketcherWrapper<__Derived> &wrapper
+) {
+  return wrapper.outputName(os);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator<<
 ///
 template <class _Derived>
-constexpr const char* SketcherWrapper<_Derived>::name() const noexcept {
-  return this->derived().nameImpl();
+std::ostream& SketcherWrapper<_Derived>::outputName(
+    std::ostream &os
+) const noexcept {
+  return this->derived().outputNameImpl(os);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -91,9 +91,9 @@ int main( int argc, char **argv ) {
   solver.setTolerance(tolerance).setMaxIteration(maxiter);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Uses " << solver.getSketcherName() << "." << std::endl;
-    std::cout << "Uses " << solver.getIntegratorName() << "." << std::endl;
-    std::cout << "Uses " << solver.getFormerName() << "." << std::endl << std::endl;
+    std::cout << "Uses " << solver.getSketcher() << "." << std::endl;
+    std::cout << "Uses " << solver.getIntegrator() << "." << std::endl;
+    std::cout << "Uses " << solver.getFormer() << "." << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //

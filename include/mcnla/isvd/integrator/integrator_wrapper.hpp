@@ -51,11 +51,24 @@ void IntegratorWrapper<_Derived>::integrate() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::integratorName
+/// @brief  Output name to stream.
+///
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &os,
+    const IntegratorWrapper<__Derived> &wrapper
+) {
+  return wrapper.outputName(os);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator<<
 ///
 template <class _Derived>
-constexpr const char* IntegratorWrapper<_Derived>::name() const noexcept {
-  return this->derived().nameImpl();
+std::ostream& IntegratorWrapper<_Derived>::outputName(
+    std::ostream &os
+) const noexcept {
+  return this->derived().outputNameImpl(os);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

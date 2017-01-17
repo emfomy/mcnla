@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::IntegratorBase
+/// @copydoc  mcnla::isvd::IntegratorWrapper::IntegratorWrapper
 ///
 template <typename _Scalar>
 Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::Integrator(
@@ -34,7 +34,7 @@ Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::Integrator(
   : BaseType(parameters, mpi_comm, mpi_root) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::initialize
+/// @copydoc  mcnla::isvd::IntegratorWrapper::initialize
 ///
 template <typename _Scalar>
 void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::initializeImpl() noexcept {
@@ -77,7 +77,7 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::initializeImpl() noexcept 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::integrate
+/// @copydoc  mcnla::isvd::IntegratorWrapper::integrate
 ///
 template <typename _Scalar>
 void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
@@ -160,11 +160,14 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::IntegratorBase::name
+/// @copydoc  mcnla::isvd::IntegratorWrapper::outputName
+///
 ///
 template <typename _Scalar>
-constexpr const char* Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::nameImpl() const noexcept {
-  return name_;
+std::ostream& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::outputNameImpl(
+    std::ostream &os
+) const noexcept {
+  return (os << name_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -75,12 +75,14 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::name
+/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::outputName
+///
 ///
 template <typename _Scalar>
-constexpr const char* Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::nameImpl(
+std::ostream&Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::outputNameImpl(
+    std::ostream &os
 ) const noexcept {
-  return name_;
+  return (os << name_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

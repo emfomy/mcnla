@@ -152,8 +152,8 @@ class Integrator<_Scalar, ExtrinsicMeanIntegratorTag>
   // Integrates
   void integrateImpl() noexcept;
 
-  // Gets name
-  inline constexpr const char* nameImpl() const noexcept;
+  // Outputs name
+  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
   // Gets time
   inline double timeImpl() const noexcept;

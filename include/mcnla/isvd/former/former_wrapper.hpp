@@ -53,11 +53,24 @@ void FormerWrapper<_Derived>::form(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::formerName
+/// @brief  Output name to stream.
+///
+template <class __Derived>
+std::ostream& operator<< (
+    std::ostream &os,
+    const FormerWrapper<__Derived> &wrapper
+) {
+  return wrapper.outputName(os);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator<<
 ///
 template <class _Derived>
-constexpr const char* FormerWrapper<_Derived>::name() const noexcept {
-  return this->derived().nameImpl();
+std::ostream& FormerWrapper<_Derived>::outputName(
+    std::ostream &os
+) const noexcept {
+  return this->derived().outputNameImpl(os);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
