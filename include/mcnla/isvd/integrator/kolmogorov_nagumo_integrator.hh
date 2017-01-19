@@ -99,11 +99,14 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
   /// The matrix Bs.
   DenseMatrixRowMajor<ScalarType> matrix_bs_;
 
-  /// The matrix C.
-  DenseMatrixRowMajor<ScalarType> matrix_c_;
-
   /// The matrix D.
   DenseMatrixRowMajor<ScalarType> matrix_d_;
+
+  /// The matrix Z.
+  DenseMatrixRowMajor<ScalarType> matrix_z_;
+
+  /// The matrix C.
+  DenseMatrixRowMajor<ScalarType> matrix_c_;
 
   /// The matrix Xj.
   DenseMatrixRowMajor<ScalarType> matrix_xj_;
@@ -114,8 +117,8 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
   /// The vector E.
   DenseVector<ScalarType> vector_e_;
 
-  /// The inverse of E.
-  DenseVector<ScalarType> vector_einv_;
+  /// The vector F.
+  DenseVector<ScalarType> vector_f_;
 
   /// The SYEV engine.
   lapack::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;

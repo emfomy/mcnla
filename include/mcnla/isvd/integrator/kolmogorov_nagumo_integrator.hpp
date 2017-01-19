@@ -65,14 +65,16 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::initializeImpl() noexce
   matrix_qcj_.reconstruct(nrow_each_, dim_sketch);
 
   matrix_bs_.reconstruct(dim_sketch, dim_sketch * num_sketch);
-  matrix_c_.reconstruct(dim_sketch, dim_sketch);
+
   matrix_d_.reconstruct(dim_sketch, dim_sketch);
+  matrix_z_.reconstruct(dim_sketch, dim_sketch);
+  matrix_c_.reconstruct(dim_sketch, dim_sketch);
 
   matrix_xj_.reconstruct(nrow_each_, dim_sketch);
-  matrix_tmp_.reconstruct(dim_sketch, nrow_each_);
+  matrix_tmp_.reconstruct(nrow_each_, dim_sketch);
 
   vector_e_.reconstruct(dim_sketch);
-  vector_einv_.reconstruct(dim_sketch);
+  vector_f_.reconstruct(dim_sketch);
 
   syev_engine_.reconstruct(dim_sketch);
 }
@@ -131,39 +133,40 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
-    // D := sum(Xj' * Xj)
-    blas::rk(matrix_xj_.t(), matrix_d_.viewSymmetric());
-    mpi::allreduce(matrix_d_, MPI_SUM, mpi_comm_);
+    // Z := sum(Xj' * Xj)
+    blas::rk(matrix_xj_.t(), matrix_z_.viewSymmetric());
+    mpi::allreduce(matrix_z_, MPI_SUM, mpi_comm_);
 
-    // Compute the eigen-decomposition of D -> D' * E * D
-    syev_engine_(matrix_d_.viewSymmetric(), vector_e_);
+    // Compute the eigen-decomposition of Z -> Z' * E * Z
+    syev_engine_(matrix_z_.viewSymmetric(), vector_e_);
 
     // E := sqrt( I/2 - sqrt( I/4 - E ) )
     vector_e_.value().valarray() = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_.value().valarray()));
-    vector_einv_.value().valarray() = 1.0 / vector_e_.value().valarray();
+
+    // F := sqrt( E )
+    vector_f_.value().valarray() = std::sqrt(vector_e_.value().valarray());
+
+    // D := F \ Z
+    blas::sm(vector_f_.viewDiagonal(), matrix_z_, matrix_d_);
+
+    // Z := F * Z
+    blas::mm(vector_f_.viewDiagonal(), "", matrix_z_);
+
+    // C := Z' * Z
+    blas::rk(matrix_z_.t(), matrix_c_.viewSymmetric());
+
+    // inv(C) := D' * D
+    blas::rk(matrix_d_.t(), matrix_z_.viewSymmetric());
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
-    // C      = D' * diag(E)      * D
-    // inv(C) = D' * inv(diag(E)) * D
 
-    // Tmp' := Qcj * D'
-    blas::mm(matrix_qcj_, matrix_d_.t(), matrix_tmp_.t());
+    // Qc *= C
+    blas::copy(matrix_qcj_.vectorize(), matrix_tmp_.vectorize());
+    blas::mm(matrix_tmp_, matrix_c_.viewSymmetric(), matrix_qcj_);
 
-    // Tmp' *= E
-    blas::mm("", vector_e_.viewDiagonal(), matrix_tmp_.t());
-
-    // Qcj := Tmp' * D
-    blas::mm(matrix_tmp_.t(), matrix_d_, matrix_qcj_);
-
-    // Tmp' := Xj * D'
-    blas::mm(matrix_xj_, matrix_d_.t(), matrix_tmp_.t());
-
-    // Tmp' /= E
-    blas::mm("", vector_einv_.viewDiagonal(), matrix_tmp_.t());
-
-    // Qcj += Tmp' * D
-    blas::mm(matrix_tmp_.t(), matrix_d_, matrix_qcj_, 1.0, 1.0);
+    // Qc += X * inv(C)
+    blas::mm(matrix_xj_, matrix_z_.viewSymmetric(), matrix_qcj_, 1.0, 1.0);
 
     // ================================================================================================================== //
     // Check convergence
