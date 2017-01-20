@@ -10,6 +10,10 @@
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
+
+#ifdef MCNLA_USE_MKL
+  #include <mcnla/core/la/raw/spblas/diasm.hpp>
+#endif  // MCNLA_USE_MKL
 #include <mcnla/core/la/dense/routine/axpby.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,23 +34,41 @@ namespace detail {
 //@{
 
 // ========================================================================================================================== //
-// Impl2
+// Impl3
 //
+
+#ifdef MCNLA_USE_MKL
+
+template <typename _Scalar>
+inline void dismImpl2(
+    const DenseDiagonalMatrix<_Scalar> &a,
+    const DenseMatrix<_Scalar, Trans::NORMAL> &b,
+          DenseMatrix<_Scalar, Trans::NORMAL> &c,
+    const _Scalar alpha
+) noexcept {
+  mcnla_assert_eq(a.size(), c.nrow());
+  mcnla_assert_eq(b.sizes(), c.sizes());
+
+  index_t idiag[1] = {0};
+  diasm('N', c.nrow(), c.ncol(), alpha, "TLNC",
+        a.valuePtr(), a.size(), idiag, 1, b.valuePtr(), b.pitch(), c.valuePtr(), c.pitch());
+}
+
+#endif  // MCNLA_USE_MKL
 
 template <typename _Scalar, Trans _transb>
 inline void dismImpl2(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
   mcnla_assert_eq(a.size(), c.nrow());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
   auto da = a.vectorize();
   for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b(i, ""), c(i, ""), alpha / da(i), beta);
+    la::axpby(b(i, ""), c(i, ""), alpha / da(i), 0.0);
   }
 }
 
@@ -55,15 +77,14 @@ inline void dismImpl2(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
   mcnla_assert_eq(a.size(), c.ncol());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
   auto da = a.vectorize();
   for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b("", i), c("", i), alpha / da(i), beta);
+    la::axpby(b("", i), c("", i), alpha / da(i), 0.0);
   }
 }
 
@@ -76,10 +97,9 @@ inline void dismImpl1(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
-  dismImpl2(a, b, c, alpha, beta);
+  dismImpl2(a, b, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb>
@@ -87,10 +107,9 @@ inline void dismImpl1(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, Trans::TRANS> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
-  dismImpl2(b.t(), a.t(), c.t(), alpha, beta);
+  dismImpl2(b.t(), a.t(), c.t(), alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
@@ -98,14 +117,12 @@ inline void dismImpl1(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(c);
   static_cast<void>(alpha);
-  static_cast<void>(beta);
   static_assert(!isConj(_transc), "Conjugate version of DISM is not supported!");
 }
 
@@ -118,10 +135,9 @@ inline void dismImpl1(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
-  dismImpl2(b, a, c, alpha, beta);
+  dismImpl2(b, a, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb>
@@ -129,10 +145,9 @@ inline void dismImpl1(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, Trans::TRANS> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
-  dismImpl2(a.t(), b.t(), c.t(), alpha, beta);
+  dismImpl2(a.t(), b.t(), c.t(), alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
@@ -140,14 +155,12 @@ inline void dismImpl1(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const _Scalar alpha
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(c);
   static_cast<void>(alpha);
-  static_cast<void>(beta);
   static_assert(!isConj(_transc), "Conjugate version of DISM is not supported!");
 }
 
@@ -165,10 +178,9 @@ inline void dism(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, b, c, alpha, beta);
+  detail::dismImpl1(a, b, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
@@ -176,10 +188,9 @@ inline void dism(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(b, a, c, alpha, beta);
+  detail::dismImpl1(b, a, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -187,10 +198,9 @@ inline void dism(
     const DenseDiagonalMatrix<_Scalar> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, c, c, alpha, beta);
+  detail::dismImpl1(a, c, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -198,10 +208,9 @@ inline void dism(
     const char*,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(c, a, c, alpha, beta);
+  detail::dismImpl1(c, a, c, alpha);
 }
 //@}
 
@@ -211,10 +220,9 @@ inline void dism(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, b, c, alpha, beta);
+  detail::dismImpl1(a, b, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
@@ -222,10 +230,9 @@ inline void dism(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(b, a, c, alpha, beta);
+  detail::dismImpl1(b, a, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -233,10 +240,9 @@ inline void dism(
     const DenseDiagonalMatrix<_Scalar> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, c, c, alpha, beta);
+  detail::dismImpl1(a, c, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -244,10 +250,9 @@ inline void dism(
     const char*,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(c, a, c, alpha, beta);
+  detail::dismImpl1(c, a, c, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -261,10 +266,9 @@ inline void sm(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(a, b, c, alpha, beta);
+  dism(a, b, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
@@ -272,10 +276,9 @@ inline void sm(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(b, a, c, alpha, beta);
+  dism(b, a, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -283,10 +286,9 @@ inline void sm(
     const DenseDiagonalMatrix<_Scalar> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(a, c, c, alpha, beta);
+  dism(a, c, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -294,10 +296,9 @@ inline void sm(
     const char*,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(c, a, c, alpha, beta);
+  dism(c, a, c, alpha);
 }
 //@}
 
@@ -307,10 +308,9 @@ inline void sm(
     const DenseDiagonalMatrix<_Scalar> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(a, b, c, alpha, beta);
+  dism(a, b, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
@@ -318,10 +318,9 @@ inline void sm(
     const DenseMatrix<_Scalar, _transb> &b,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(b, a, c, alpha, beta);
+  dism(b, a, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -329,10 +328,9 @@ inline void sm(
     const DenseDiagonalMatrix<_Scalar> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(a, c, c, alpha, beta);
+  dism(a, c, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
@@ -340,10 +338,9 @@ inline void sm(
     const char*,
     const DenseDiagonalMatrix<_Scalar> &a,
           DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  dism(c, a, c, alpha, beta);
+  dism(c, a, c, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

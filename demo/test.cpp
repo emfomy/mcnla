@@ -11,7 +11,8 @@
 #include <mcnla.hpp>
 #include <cstdio>
 
-#include <mkl.h>
+#include <mcnla/core/la/raw/spblas/diamm.hpp>
+#include <mcnla/core/la/raw/spblas/diasm.hpp>
 
 #define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
 
@@ -56,17 +57,19 @@ int main( int argc, char **argv ) {
 
   {
 
-  mcnla::la::mm(al, b, c);
+    mcnla::la::mm(al, b, c);
 
-  std::cout << "C\n"  << c << std::endl;
+    std::cout << "C\n"  << c << std::endl;
 
-  c.value().valarray() = 0;
+    c.value().valarray() = 0;
 
-  int izero = 0, ione = 1;
-  double done = 1.0, dzero = 0.0;
-  mkl_ddiamm("N", &m, &n, &m, &done, "D NC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, &dzero, c.valuePtr(), &m);
+    int izero = 0;
+    // int izero = 0, ione = 1;
+    // double done = 1.0, dzero = 0.0;
+    // mkl_ddiamm("N", &m, &n, &m, &done, "D NC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, &dzero, c.valuePtr(), &m);
+    mcnla::la::detail::diamm('N', m, n, m, 1.0, "D NC", al.valuePtr(), m, &izero, 1, b.valuePtr(), m, 0.0, c.valuePtr(), m);
 
-  std::cout << "C\n"  << c << std::endl;
+    std::cout << "C\n"  << c << std::endl;
 
   }
 
@@ -74,17 +77,47 @@ int main( int argc, char **argv ) {
 
   {
 
-  mcnla::la::sm(al, b, c);
+    mcnla::la::sm(al, b, c);
 
-  std::cout << "C\n"  << c << std::endl;
+    std::cout << "C\n"  << c << std::endl;
 
-  c.value().valarray() = 0;
+    c.value().valarray() = 0;
 
-  int izero = 0, ione = 1;
-  double done = 1.0;
-  mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
+    int izero = 0;
+    // int izero = 0, ione = 1;
+    // double done = 1.0;
+    // mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
+    mcnla::la::detail::diasm('N', m, n, 1.0, "TLNC", al.valuePtr(), m, &izero, 1, b.valuePtr(), m, c.valuePtr(), m);
 
-  std::cout << "C\n"  << c << std::endl;
+    std::cout << "C\n"  << c << std::endl;
+
+  }
+
+  std::cout << "================================" << std::endl;
+
+  {
+
+    i = 0;
+    for ( auto &v : c ) {
+      v = ++i;
+    }
+
+    mcnla::la::sm(al, "", c);
+
+    std::cout << "C\n"  << c << std::endl;
+
+    i = 0;
+    for ( auto &v : c ) {
+      v = ++i;
+    }
+
+    int izero = 0;
+    // int izero = 0, ione = 1;
+    // double done = 1.0;
+    // mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
+    mcnla::la::detail::diasm('N', m, n, 1.0, "TLNC", al.valuePtr(), m, &izero, 1, c.valuePtr(), m, c.valuePtr(), m);
+
+    std::cout << "C\n"  << c << std::endl;
 
   }
 

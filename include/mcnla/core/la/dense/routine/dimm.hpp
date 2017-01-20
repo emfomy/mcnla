@@ -10,6 +10,10 @@
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
+
+#ifdef MCNLA_USE_MKL
+  #include <mcnla/core/la/raw/spblas/diamm.hpp>
+#endif  // MCNLA_USE_MKL
 #include <mcnla/core/la/dense/routine/axpby.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +36,26 @@ namespace detail {
 // ========================================================================================================================== //
 // Impl2
 //
+
+#ifdef MCNLA_USE_MKL
+
+template <typename _Scalar>
+inline void dimmImpl2(
+    const DenseDiagonalMatrix<_Scalar> &a,
+    const DenseMatrix<_Scalar, Trans::NORMAL> &b,
+          DenseMatrix<_Scalar, Trans::NORMAL> &c,
+    const _Scalar alpha,
+    const _Scalar beta
+) noexcept {
+  mcnla_assert_eq(a.size(), c.nrow());
+  mcnla_assert_eq(b.sizes(), c.sizes());
+
+  index_t idiag[1] = {0};
+  diamm('N', c.nrow(), c.ncol(), a.size(), alpha, "D NC",
+        a.valuePtr(), a.size(), idiag, 1, b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+}
+
+#endif  // MCNLA_USE_MKL
 
 template <typename _Scalar, Trans _transb>
 inline void dimmImpl2(

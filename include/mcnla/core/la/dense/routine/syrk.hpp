@@ -42,8 +42,8 @@ inline void syrkImpl2(
 ) noexcept {
   mcnla_assert_eq(c.size(), a.nrow());
 
-  detail::syrk(toUploChar(_uplo, _transc), toTransChar<_Scalar>(_transa), c.nrow(), a.ncol(),
-               alpha, a.valuePtr(), a.pitch(), beta, c.valuePtr(), c.pitch());
+  syrk(toUploChar(_uplo, _transc), toTransChar<_Scalar>(_transa), c.nrow(), a.ncol(),
+       alpha, a.valuePtr(), a.pitch(), beta, c.valuePtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

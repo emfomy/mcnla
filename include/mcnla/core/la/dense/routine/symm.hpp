@@ -33,10 +33,10 @@ namespace detail {
 // Impl3
 //
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
+template <typename _Scalar, Trans _transa, Uplo _uplo>
 inline void symmImpl3(
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
+    const DenseMatrix<_Scalar, Trans::NORMAL> &b,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
@@ -44,13 +44,13 @@ inline void symmImpl3(
   mcnla_assert_eq(a.size(), c.nrow());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
-  detail::symm('L', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
-               alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+  symm('L', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
+       alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
+template <typename _Scalar, Trans _transa, Uplo _uplo>
 inline void symmImpl3(
-    const DenseMatrix<_Scalar, _transb> &b,
+    const DenseMatrix<_Scalar, Trans::NORMAL> &b,
     const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
@@ -59,8 +59,8 @@ inline void symmImpl3(
   mcnla_assert_eq(a.size(), c.ncol());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
-  detail::symm('R', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
-               alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+  symm('R', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
+       alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

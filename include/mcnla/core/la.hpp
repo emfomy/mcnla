@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_LA_HPP_
 #define MCNLA_CORE_LA_HPP_
 
-#pragma warning
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/la/base.hpp>
 #include <mcnla/core/la/dense.hpp>
