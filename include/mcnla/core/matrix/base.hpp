@@ -9,6 +9,7 @@
 #define MCNLA_CORE_MATRIX_BASE_HPP_
 
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>

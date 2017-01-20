@@ -25,10 +25,12 @@ namespace utility {
 /// The curiously recurring template pattern (CRTP) interface.
 ///
 /// @tparam  _Derived  The derived types.
-/// @tparam  _Base     The interface class type.
+/// @tparam  _Wrapper  The wrapper class type.
 ///
-template <class _Derived, class _Base = void>
+template <class _Derived, class _Wrapper = void>
 class CrtpBase {
+
+  friend _Wrapper;
 
  protected:
 

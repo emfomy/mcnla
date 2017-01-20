@@ -147,7 +147,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     vector_f_.value().valarray() = std::sqrt(vector_e_.value().valarray());
 
     // D := F \ Z
-    la::sm(vector_f_.viewDiagonal(), matrix_z_, matrix_d_);
+    la::sm(vector_f_.viewDiagonal().inv(), matrix_z_, matrix_d_);
 
     // Z := F * Z
     la::mm(vector_f_.viewDiagonal(), "", matrix_z_);

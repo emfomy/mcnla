@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -74,10 +75,12 @@ template <typename _Scalar>
 class DenseVector
   : public DenseVectorStorage<_Scalar>,
     public VectorWrapper<DenseVector<_Scalar>>,
-    public ContainerWrapper<DenseVector<_Scalar>> {
+    public ContainerWrapper<DenseVector<_Scalar>>,
+    public InvertibleWrapper<DenseVector<_Scalar>> {
 
   friend VectorWrapper<DenseVector<_Scalar>>;
   friend ContainerWrapper<DenseVector<_Scalar>>;
+  friend InvertibleWrapper<DenseVector<_Scalar>>;
 
  public:
 

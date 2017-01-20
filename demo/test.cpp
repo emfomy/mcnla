@@ -77,17 +77,16 @@ int main( int argc, char **argv ) {
 
   {
 
-    mcnla::la::sm(al, b, c);
+    mcnla::la::sm(al.inv(), b, c);
 
     std::cout << "C\n"  << c << std::endl;
 
     c.value().valarray() = 0;
 
     int izero = 0;
-    // int izero = 0, ione = 1;
-    // double done = 1.0;
-    // mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
-    mcnla::la::detail::diasm('N', m, n, 1.0, "TLNC", al.valuePtr(), m, &izero, 1, b.valuePtr(), m, c.valuePtr(), m);
+    int izero = 0, ione = 1;
+    double done = 1.0;
+    mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
 
     std::cout << "C\n"  << c << std::endl;
 
@@ -102,7 +101,7 @@ int main( int argc, char **argv ) {
       v = ++i;
     }
 
-    mcnla::la::sm(al, "", c);
+    mcnla::la::sm(al.inv(), "", c);
 
     std::cout << "C\n"  << c << std::endl;
 
@@ -111,11 +110,9 @@ int main( int argc, char **argv ) {
       v = ++i;
     }
 
-    int izero = 0;
-    // int izero = 0, ione = 1;
-    // double done = 1.0;
-    // mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
-    mcnla::la::detail::diasm('N', m, n, 1.0, "TLNC", al.valuePtr(), m, &izero, 1, c.valuePtr(), m, c.valuePtr(), m);
+    int izero = 0, ione = 1;
+    double done = 1.0;
+    mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
 
     std::cout << "C\n"  << c << std::endl;
 

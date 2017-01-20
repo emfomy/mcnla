@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
@@ -73,10 +74,13 @@ namespace matrix {
 template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
 class DenseTriangularMatrix
   : public DenseMatrixStorage<_Scalar>,
-    public MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
+    public MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>,
+    public InvertibleWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
+
   friend MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>;
+  friend InvertibleWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>;
 
  public:
 

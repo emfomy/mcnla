@@ -175,84 +175,84 @@ inline void dismImpl1(
 //@{
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void dism(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, b, c, alpha);
+  detail::dismImpl1(a.inv(), b, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void dism(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(b, a, c, alpha);
+  detail::dismImpl1(b, a.inv(), c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
 inline void dism(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, c, c, alpha);
+  detail::dismImpl1(a.inv(), c, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
 inline void dism(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(c, a, c, alpha);
+  detail::dismImpl1(c, a.inv(), c, alpha);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void dism(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, b, c, alpha);
+  detail::dismImpl1(a.inv(), b, c, alpha);
 }
 
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void dism(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(b, a, c, alpha);
+  detail::dismImpl1(b, a.inv(), c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
 inline void dism(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a, c, c, alpha);
+  detail::dismImpl1(a.inv(), c, c, alpha);
 }
 
 template <typename _Scalar, Trans _transc>
 inline void dism(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(c, a, c, alpha);
+  detail::dismImpl1(c, a.inv(), c, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -263,7 +263,7 @@ inline void dism(
 //@{
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void sm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
@@ -274,7 +274,7 @@ inline void sm(
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void sm(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
@@ -283,7 +283,7 @@ inline void sm(
 
 template <typename _Scalar, Trans _transc>
 inline void sm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
@@ -294,7 +294,7 @@ inline void sm(
 template <typename _Scalar, Trans _transc>
 inline void sm(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
@@ -305,7 +305,7 @@ inline void sm(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void sm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
@@ -316,7 +316,7 @@ inline void sm(
 template <typename _Scalar, Trans _transb, Trans _transc>
 inline void sm(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
@@ -325,7 +325,7 @@ inline void sm(
 
 template <typename _Scalar, Trans _transc>
 inline void sm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
     const char*,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
@@ -336,7 +336,7 @@ inline void sm(
 template <typename _Scalar, Trans _transc>
 inline void sm(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
 ) noexcept {
