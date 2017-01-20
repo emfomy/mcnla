@@ -8,7 +8,6 @@
 #ifndef MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
 #define MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 #include <mcnla/core/random.hpp>

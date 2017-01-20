@@ -8,10 +8,9 @@
 #ifndef MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HH_
 #define MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
-#include <mcnla/core/lapack.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -71,7 +70,7 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
   MatrixType matrix_empty_;
 
   /// The random engine.
-  lapack::GesvdEngine<MatrixType, 'O', 'N'> gesvd_engine_;
+  la::GesvdEngine<MatrixType, 'O', 'N'> gesvd_engine_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

@@ -11,6 +11,8 @@
 #include <mcnla.hpp>
 #include <cstdio>
 
+#include <mkl.h>
+
 #define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,10 +26,10 @@ int main( int argc, char **argv ) {
 
   mcnla::index_t m = 5, n = 7;
 
-  mcnla::container::DenseDiagonalMatrix<double> al(m);
-  mcnla::container::DenseDiagonalMatrix<double> ar(n);
-  mcnla::container::DenseMatrixColMajor<double> b(m, n);
-  mcnla::container::DenseMatrixColMajor<double> c(m, n);
+  mcnla::matrix::DenseDiagonalMatrix<double> al(m);
+  mcnla::matrix::DenseDiagonalMatrix<double> ar(n);
+  mcnla::matrix::DenseMatrixColMajor<double> b(m, n);
+  mcnla::matrix::DenseMatrixColMajor<double> c(m, n);
 
   // mcnla::random::gaussian(a.vectorize(), 0);
   // mcnla::random::gaussian(b.vectorize(), 1);
@@ -41,78 +43,52 @@ int main( int argc, char **argv ) {
   for ( auto &v : ar.viewVector() ) {
     v = ++i;
   }
+  i = 0;
   for ( auto &v : b ) {
-    v = 1;
+    v = ++i;
   }
 
-  std::cout << al << std::endl;
-  std::cout << ar << std::endl;
-  std::cout << b << std::endl;
+  std::cout << "Al\n" << al << std::endl;
+  std::cout << "Ar\n"  << ar << std::endl;
+  std::cout << "B\n"  << b << std::endl;
 
-  mcnla::blas::mm(al, "", b);
+  std::cout << "================================" << std::endl;
 
-  std::cout << b << std::endl;
+  {
 
-  mcnla::blas::mm("", ar, b);
+  mcnla::la::mm(al, b, c);
 
-  std::cout << b << std::endl;
+  std::cout << "C\n"  << c << std::endl;
 
-  // MPI_Init(&argc, &argv);
-  // mcnla::mpi_int_t mpi_root = 0;
-  // mcnla::index_t m = 10, n = 20, k = 5, p = 1, Nj = 3, seed = 0;
+  c.value().valarray() = 0;
 
-  // mcnla::isvd::Parameters<double> parameters(MPI_COMM_WORLD);
-  // parameters.nrow_ = m;
-  // parameters.ncol_ = n;
-  // parameters.rank_ = k;
-  // parameters.over_rank_ = p;
-  // parameters.num_sketch_each_ = Nj;
+  int izero = 0, ione = 1;
+  double done = 1.0, dzero = 0.0;
+  mkl_ddiamm("N", &m, &n, &m, &done, "D NC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, &dzero, c.valuePtr(), &m);
 
-  // parameters.initialized_ = true;
-  // parameters.computed_ = true;
+  std::cout << "C\n"  << c << std::endl;
 
-  // mcnla::container::DenseMatrixColMajor<double> mat(m, n);
-  // mcnla::container::DenseMatrixCollection120<double> collection(m, k+p, Nj);
+  }
 
-  // mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, MPI_COMM_WORLD, mpi_root, seed);
-  // sketcher.setSeed(1);
-  // sketcher.initialize();
-  // // mcnla::random::gaussian(mat.vectorize(), 0);
-  // int i = 0;
-  // for ( auto &v : mat ) {
-  //   v = ++i;
-  // }
+  std::cout << "================================" << std::endl;
 
-  // sketcher.sketch(mat, collection);
+  {
 
-  // for ( auto i = 0; i < Nj; ++i ) {
-  //   std::cout << collection(i) << std::endl;
-  // }
+  mcnla::la::sm(al, b, c);
 
-  // mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters, MPI_COMM_WORLD, mpi_root);
-  // orthogonalizer.initialize();
+  std::cout << "C\n"  << c << std::endl;
 
-  // orthogonalizer.orthogonalize(collection);
+  c.value().valarray() = 0;
 
-  // for ( auto i = 0; i < Nj; ++i ) {
-  //   std::cout << collection(i) << std::endl;
-  // }
+  int izero = 0, ione = 1;
+  double done = 1.0;
+  mkl_ddiasm("N", &m, &n, &done, "TLNC", al.valuePtr(), &m, &izero, &ione, b.valuePtr(), &m, c.valuePtr(), &m);
 
-  // mcnla::isvd::SvdFormer<double> former(parameters, MPI_COMM_WORLD, mpi_root);
-  // former.initialize();
+  std::cout << "C\n"  << c << std::endl;
 
-  // former.form(mat, collection(0));
+  }
 
-  // std::cout << former.vectorS() << std::endl;
-  // std::cout << former.matrixU() << std::endl;
-  // std::cout << former.matrixVt() << std::endl;
-
-  // mcnla::isvd::DummyFormer<double> d_former(parameters, MPI_COMM_WORLD, mpi_root);
-  // d_former.initialize();
-
-  // d_former.form(mat, collection(0));
-
-  // MPI_Finalize();
+  std::cout << "================================" << std::endl;
 
   return 0;
 }

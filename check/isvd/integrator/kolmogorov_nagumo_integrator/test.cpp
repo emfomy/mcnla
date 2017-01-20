@@ -12,8 +12,8 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   const mcnla::index_t mpi_root = 0;
 
   // Reads data
-  mcnla::container::DenseMatrixCollection120<ScalarType> collection_q_true;
-  mcnla::container::DenseMatrixRowMajor<ScalarType> matrix_q_true;
+  mcnla::matrix::DenseMatrixCollection120<ScalarType> collection_q_true;
+  mcnla::matrix::DenseMatrixRowMajor<ScalarType> matrix_q_true;
   mcnla::io::loadMatrixMarket(collection_q_true, CUBE_Q_PATH);
   mcnla::io::loadMatrixMarket(matrix_q_true, MATRIX_Q_PATH);
 
@@ -46,7 +46,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {
-    mcnla::blas::copy(collection_q_true(mpi_rank*Nj + i), integrator.collectionQ()(i));
+    mcnla::la::copy(collection_q_true(mpi_rank*Nj + i), integrator.collectionQ()(i));
   }
 
   // Integrates

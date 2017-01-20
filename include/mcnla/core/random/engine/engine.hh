@@ -13,7 +13,7 @@
 #include <mcnla/core/random/def.hpp>
 #include <vector>
 #include <omp.h>
-#include <mcnla/core/container.hpp>
+#include <mcnla/core/matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 #ifdef MCNLA_USE_MKL

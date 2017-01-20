@@ -8,7 +8,6 @@
 #ifndef MCNLA_ISVD_SOLVER_PARAMETERS_HH_
 #define MCNLA_ISVD_SOLVER_PARAMETERS_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/core/mpi.hpp>
 

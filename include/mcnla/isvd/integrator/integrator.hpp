@@ -8,7 +8,6 @@
 #ifndef MCNLA_ISVD_INTEGRATOR_INTEGRATOR_HPP_
 #define MCNLA_ISVD_INTEGRATOR_INTEGRATOR_HPP_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>

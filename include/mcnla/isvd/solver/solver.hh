@@ -8,14 +8,13 @@
 #ifndef MCNLA_ISVD_SOLVER_SOLVER_HH_
 #define MCNLA_ISVD_SOLVER_SOLVER_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/solver/parameters.hpp>
 #include <mcnla/isvd/sketcher.hpp>
 #include <mcnla/isvd/orthogonalizer.hpp>
 #include <mcnla/isvd/integrator.hpp>
 #include <mcnla/isvd/former.hpp>
-#include <mcnla/core/container.hpp>
+#include <mcnla/core/matrix.hpp>
 #include <mcnla/core/mpi.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 

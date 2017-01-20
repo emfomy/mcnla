@@ -8,10 +8,9 @@
 #ifndef MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
 #define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
-#include <mcnla/core/lapack.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -121,7 +120,7 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
   DenseVector<ScalarType> vector_f_;
 
   /// The SYEV engine.
-  lapack::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
+  la::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

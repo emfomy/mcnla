@@ -1,7 +1,7 @@
 #include "../test.hpp"
 
 TYPED_TEST(DenseVectorTest, Constructor) {
-  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto length = 8;
   const auto sizes  = std::make_tuple(length);
@@ -79,7 +79,7 @@ TYPED_TEST(DenseVectorTest, Constructor) {
 
 
 TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
-  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto length  = this->length_;
   const auto stride  = this->stride_;
@@ -187,7 +187,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
 
 
 TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
-  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto length  = this->length_;
   const auto stride  = this->stride_;

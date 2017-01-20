@@ -8,7 +8,6 @@
 #ifndef MCNLA_ISVD_ORTHOGONALIZER_ORTHOGONALIZER_HPP_
 #define MCNLA_ISVD_ORTHOGONALIZER_ORTHOGONALIZER_HPP_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/orthogonalizer/orthogonalizer_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>

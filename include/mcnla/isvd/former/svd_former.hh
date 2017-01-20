@@ -8,11 +8,9 @@
 #ifndef MCNLA_ISVD_FORMER_SVD_FORMER_HH_
 #define MCNLA_ISVD_FORMER_SVD_FORMER_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/former/former.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -96,7 +94,7 @@ class Former<_Scalar, SvdFormerTag>
   DenseMatrixColMajor<ScalarType> matrix_empty_;
 
   /// The GESVD driver.
-  lapack::GesvdEngine<DenseMatrixColMajor<ScalarType>, 'S', 'O'> gesvd_engine_;
+  la::GesvdEngine<DenseMatrixColMajor<ScalarType>, 'S', 'O'> gesvd_engine_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

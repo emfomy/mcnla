@@ -28,7 +28,7 @@ namespace mcnla {
 ///
 namespace io {
 
-using namespace container;
+using namespace matrix;
 
 }
 

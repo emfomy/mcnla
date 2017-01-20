@@ -1,7 +1,7 @@
 #include "../test.hpp"
 
 TYPED_TEST(DenseMatrixTest_ColMajor, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
 
   const auto nrow = 8;
   const auto ncol = 5;
@@ -77,7 +77,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor, Constructor) {
 
 
 TYPED_TEST(DenseMatrixTest_RowMajor, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
 
   const auto nrow = 8;
   const auto ncol = 5;
@@ -153,7 +153,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor, Constructor) {
 
 
 TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
 
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;
@@ -276,7 +276,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
 
 
 TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
 
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;
@@ -399,7 +399,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
 
 
 TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
 
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;
@@ -522,7 +522,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
 
 
 TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
 
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;

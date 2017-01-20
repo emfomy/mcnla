@@ -12,7 +12,7 @@
   #error 'MCNLA_USE_MKL' should be set!
 #endif
 
-#include <mcnla/core/container.hpp>
+#include <mcnla/core/matrix.hpp>
 #include <mcnla/core/random/vsl/vrnguniform.hpp>
 #include <mcnla/core/random/vsl/vrnggaussian.hpp>
 

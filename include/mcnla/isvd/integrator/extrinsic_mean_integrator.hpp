@@ -10,7 +10,7 @@
 
 #include <mcnla/isvd/integrator/extrinsic_mean_integrator.hh>
 #include <cmath>
-#include <mcnla/core/blas.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -92,19 +92,19 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
   time0_ = MPI_Wtime();
 
   // Exchange Q
-  blas::memset0(collection_q_({nrow, nrow_all_}, "", "").unfold());
+  la::memset0(collection_q_({nrow, nrow_all_}, "", "").unfold());
   mpi::alltoall(collection_q_.unfold(), matrix_tmp_, mpi_comm_);
 
   // Rearrange Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
-    blas::copy(matrix_tmp_(IdxRange{j, j+1} * nrow_each_, ""),
+    la::copy(matrix_tmp_(IdxRange{j, j+1} * nrow_each_, ""),
                matrix_qjs_("", IdxRange{j, j+1} * dim_sketch * num_sketch_each));
   }
 
   time1_ = MPI_Wtime();
 
   // Bs := sum( Qjs' * Qjs )
-  blas::mm(matrix_qjs_.t(), matrix_qjs_, matrix_bjs_);
+  la::mm(matrix_qjs_.t(), matrix_qjs_, matrix_bjs_);
   mpi::reduceScatterBlock(matrix_bjs_, collection_bi_.unfold(), MPI_SUM, mpi_comm_);
 
   time2_ = MPI_Wtime();
@@ -112,7 +112,7 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
     // Gi := Bi * Bi'
-    blas::rk(collection_bi_(i), collection_g_(i).viewSymmetric());
+    la::rk(collection_bi_(i), collection_g_(i).viewSymmetric());
 
     // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
     syev_engine_(collection_g_(i).viewSymmetric(), vector_s_);
@@ -121,28 +121,28 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
 
   // Broadcast G0
   if ( mpi_rank == 0 ) {
-    blas::omatcopy(collection_g_(0), matrix_g0_);
+    la::omatcopy(collection_g_(0), matrix_g0_);
   }
   mpi::bcast(matrix_g0_, 0, mpi_comm_);
 
   time3_ = MPI_Wtime();
 
   // Qbar := 0
-  blas::memset0(matrix_qbar_);
+  la::memset0(matrix_qbar_);
 
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
     // Inverse Gi(j-row) if Gi(j-row) * Bi0 * G0(j-row)' < 0
-    blas::mm(matrix_g0_, collection_bi0_(i).t(), matrix_gb_);
+    la::mm(matrix_g0_, collection_bi0_(i).t(), matrix_gb_);
 
     for ( index_t j = 0; j < dim_sketch; ++j ) {
-      if ( blas::dot(collection_g_(i)(j, ""), matrix_gb_(j, "")) < 0 ) {
-        blas::scal(collection_g_(i)(j, ""), -1.0);
+      if ( la::dot(collection_g_(i)(j, ""), matrix_gb_(j, "")) < 0 ) {
+        la::scal(collection_g_(i)(j, ""), -1.0);
       }
     }
 
     // Qbar += Qi * Gi'
-    blas::mm(collection_q_cut_(i), collection_g_(i).t(), matrix_qbar_, 1.0, 1.0);
+    la::mm(collection_q_cut_(i), collection_g_(i).t(), matrix_qbar_, 1.0, 1.0);
 
   }
 

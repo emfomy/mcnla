@@ -8,10 +8,9 @@
 #ifndef MCNLA_ISVD_INTEGRATOR_EXTRINSIC_MEAN_INTEGRATOR_HH_
 #define MCNLA_ISVD_INTEGRATOR_EXTRINSIC_MEAN_INTEGRATOR_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
-#include <mcnla/core/lapack.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -122,10 +121,10 @@ class Integrator<_Scalar, ExtrinsicMeanIntegratorTag>
   DenseMatrixRowMajor<ScalarType> matrix_empty_;
 
   /// The SYEV engine.
-  lapack::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
+  la::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
 
   /// The GESVD engine.
-  lapack::GesvdEngine<DenseMatrixRowMajor<ScalarType>, 'O', 'N'> gesvd_engine_;
+  la::GesvdEngine<DenseMatrixRowMajor<ScalarType>, 'O', 'N'> gesvd_engine_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

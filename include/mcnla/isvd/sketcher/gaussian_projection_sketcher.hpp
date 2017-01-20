@@ -10,7 +10,7 @@
 
 #include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hh>
 #include <ctime>
-#include <mcnla/core/blas.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -78,10 +78,10 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::sketchImpl(
   time1_ = MPI_Wtime();
 
   // Q := A * Omega
-  blas::mm(matrix_a, matrix_omegas_, collection_q.unfold());
+  la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
   for ( index_t i = 0; i < _exponent; ++i ) {
-    blas::mm(matrix_a.t(), collection_q.unfold(), matrix_omegas_);
-    blas::mm(matrix_a, matrix_omegas_, collection_q.unfold());
+    la::mm(matrix_a.t(), collection_q.unfold(), matrix_omegas_);
+    la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
   }
   time2_ = MPI_Wtime();
 }

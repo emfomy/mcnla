@@ -8,11 +8,10 @@
 #ifndef MCNLA_ISVD_ORTHOGONALIZER_ORTHOGONALIZER_WRAPPER_HH_
 #define MCNLA_ISVD_ORTHOGONALIZER_ORTHOGONALIZER_WRAPPER_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <iostream>
 #include <mcnla/isvd/solver/parameters.hpp>
-#include <mcnla/core/container.hpp>
+#include <mcnla/core/matrix.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 

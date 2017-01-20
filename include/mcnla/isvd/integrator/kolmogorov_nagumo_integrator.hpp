@@ -10,7 +10,7 @@
 
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh>
 #include <cmath>
-#include <mcnla/core/blas.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -97,17 +97,17 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
   time0_ = MPI_Wtime();
 
   // Exchange Q
-  blas::memset0(collection_q_({nrow, nrow_all_}, "", "").unfold());
+  la::memset0(collection_q_({nrow, nrow_all_}, "", "").unfold());
   mpi::alltoall(collection_q_.unfold(), mpi_comm_);
 
   // Rearrange Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
-    blas::copy(matrix_qs_(IdxRange{j, j+1} * nrow_each_, ""),
+    la::copy(matrix_qs_(IdxRange{j, j+1} * nrow_each_, ""),
                matrix_qjs_("", IdxRange{j, j+1} * dim_sketch * num_sketch_each));
   }
 
   // Qc := Q0
-  blas::copy(matrix_qjs_("", {0, dim_sketch}), matrix_qcj_);
+  la::copy(matrix_qjs_("", {0, dim_sketch}), matrix_qcj_);
 
   time1_ = MPI_Wtime();
 
@@ -118,23 +118,23 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
     // Bs := sum( Qcj' * Qjs )
-    blas::mm(matrix_qcj_.t(), matrix_qjs_, matrix_bs_);
+    la::mm(matrix_qcj_.t(), matrix_qjs_, matrix_bs_);
     mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm_);
 
     // D  := Bs * Bs'
-    blas::rk(matrix_bs_, matrix_d_.viewSymmetric());
+    la::rk(matrix_bs_, matrix_d_.viewSymmetric());
 
     // Xj := 1/N * Qjs * Bs'
-    blas::mm(matrix_qjs_, matrix_bs_.t(), matrix_xj_, 1.0/num_sketch);
+    la::mm(matrix_qjs_, matrix_bs_.t(), matrix_xj_, 1.0/num_sketch);
 
     // Xj -= 1/N * Qcj * D
-    blas::mm(matrix_qcj_, matrix_d_.viewSymmetric(), matrix_xj_, -1.0/num_sketch, 1.0);
+    la::mm(matrix_qcj_, matrix_d_.viewSymmetric(), matrix_xj_, -1.0/num_sketch, 1.0);
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // Z := sum(Xj' * Xj)
-    blas::rk(matrix_xj_.t(), matrix_z_.viewSymmetric());
+    la::rk(matrix_xj_.t(), matrix_z_.viewSymmetric());
     mpi::allreduce(matrix_z_, MPI_SUM, mpi_comm_);
 
     // Compute the eigen-decomposition of Z -> Z' * E * Z
@@ -147,31 +147,31 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     vector_f_.value().valarray() = std::sqrt(vector_e_.value().valarray());
 
     // D := F \ Z
-    blas::sm(vector_f_.viewDiagonal(), matrix_z_, matrix_d_);
+    la::sm(vector_f_.viewDiagonal(), matrix_z_, matrix_d_);
 
     // Z := F * Z
-    blas::mm(vector_f_.viewDiagonal(), "", matrix_z_);
+    la::mm(vector_f_.viewDiagonal(), "", matrix_z_);
 
     // C := Z' * Z
-    blas::rk(matrix_z_.t(), matrix_c_.viewSymmetric());
+    la::rk(matrix_z_.t(), matrix_c_.viewSymmetric());
 
     // inv(C) := D' * D
-    blas::rk(matrix_d_.t(), matrix_z_.viewSymmetric());
+    la::rk(matrix_d_.t(), matrix_z_.viewSymmetric());
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
 
     // Qc *= C
-    blas::copy(matrix_qcj_.vectorize(), matrix_tmp_.vectorize());
-    blas::mm(matrix_tmp_, matrix_c_.viewSymmetric(), matrix_qcj_);
+    la::copy(matrix_qcj_.vectorize(), matrix_tmp_.vectorize());
+    la::mm(matrix_tmp_, matrix_c_.viewSymmetric(), matrix_qcj_);
 
     // Qc += X * inv(C)
-    blas::mm(matrix_xj_, matrix_z_.viewSymmetric(), matrix_qcj_, 1.0, 1.0);
+    la::mm(matrix_xj_, matrix_z_.viewSymmetric(), matrix_qcj_, 1.0, 1.0);
 
     // ================================================================================================================== //
     // Check convergence
     vector_e_.value().valarray() -= 1.0;
-    is_converged = !(blas::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
+    is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
   }
 
   time2_ = MPI_Wtime();

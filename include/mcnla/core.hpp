@@ -9,9 +9,9 @@
 #define MCNLA_CORE_HPP_
 
 #include <mcnla/core/def.hpp>
-#include <mcnla/core/container.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
+#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/la.hpp>
+#pragma warning
 #include <mcnla/core/random.hpp>
 #include <mcnla/core/mpi.hpp>
 #include <mcnla/core/io.hpp>

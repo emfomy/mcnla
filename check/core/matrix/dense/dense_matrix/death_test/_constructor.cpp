@@ -1,7 +1,7 @@
 #include "../death_test.hpp"
 
 TYPED_TEST(DenseMatrixDeathTest_ColMajor, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::NORMAL>;
 
   const auto nrow = 8;
   const auto ncol = 5;
@@ -15,7 +15,7 @@ TYPED_TEST(DenseMatrixDeathTest_ColMajor, Constructor) {
 
 
 TYPED_TEST(DenseMatrixDeathTest_RowMajor, Constructor) {
-  using MatrixType = mcnla::container::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
+  using MatrixType = mcnla::matrix::DenseMatrix<TypeParam, mcnla::Trans::TRANS>;
 
   const auto nrow = 8;
   const auto ncol = 5;

@@ -15,10 +15,10 @@ ScalarType tolerance = 1e-4;
 mcnla::index_t maxiter = 256;
 
 template <mcnla::Layout _layout>
-void check( const mcnla::container::DenseMatrix<ScalarType, _layout> &matrix_a,
-            const mcnla::container::DenseMatrix<ScalarType, _layout> &matrix_u,
-            const mcnla::container::DenseMatrix<ScalarType, _layout> &matrix_vt,
-            const mcnla::container::DenseVector<ScalarType> &vector_s,
+void check( const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_a,
+            const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
+            const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_vt,
+            const mcnla::matrix::DenseVector<ScalarType> &vector_s,
             ScalarType &frerr ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Load matrix
-  mcnla::container::DenseMatrix<ScalarType> matrix_a;
+  mcnla::matrix::DenseMatrix<ScalarType> matrix_a;
   mcnla::index_t anrow, ancol;
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
@@ -64,7 +64,7 @@ int main( int argc, char **argv ) {
   MPI_Bcast(&anrow, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
   MPI_Bcast(&ancol, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
   if ( mpi_rank != mpi_root ) {
-    matrix_a = mcnla::container::DenseMatrix<ScalarType>(anrow, ancol);
+    matrix_a = mcnla::matrix::DenseMatrix<ScalarType>(anrow, ancol);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
@@ -102,10 +102,10 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize solver
-  mcnla::isvd::Solver<mcnla::container::DenseMatrix<ScalarType>,
-                      mcnla::isvd::GaussianProjectionSketcher<mcnla::container::DenseMatrix<ScalarType>>,
-                      mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::container::DenseMatrix<ScalarType>>,
-                      mcnla::isvd::SvdFormer<mcnla::container::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
+  mcnla::isvd::Solver<mcnla::matrix::DenseMatrix<ScalarType>,
+                      mcnla::isvd::GaussianProjectionSketcher<mcnla::matrix::DenseMatrix<ScalarType>>,
+                      mcnla::isvd::KolmogorovNagumoIntegrator<mcnla::matrix::DenseMatrix<ScalarType>>,
+                      mcnla::isvd::SvdFormer<mcnla::matrix::DenseMatrix<ScalarType>>> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeed(seed);
   solver.setTolerance(tolerance).setMaxIteration(maxiter);
   solver.initialize();
@@ -170,25 +170,25 @@ int main( int argc, char **argv ) {
 ///
 template <mcnla::Layout _layout>
 void check(
-    const mcnla::container::DenseMatrix<ScalarType, _layout> &matrix_a,
-    const mcnla::container::DenseMatrix<ScalarType, _layout> &matrix_u,
-    const mcnla::container::DenseMatrix<ScalarType, _layout> &matrix_vt,
-    const mcnla::container::DenseVector<ScalarType>          &vector_s,
+    const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_a,
+    const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_u,
+    const mcnla::matrix::DenseMatrix<ScalarType, _layout> &matrix_vt,
+    const mcnla::matrix::DenseVector<ScalarType>          &vector_s,
           ScalarType &frerr
 ) noexcept {
-  mcnla::container::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.sizes());
-  mcnla::container::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.sizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_a_tmp(matrix_a.sizes());
+  mcnla::matrix::DenseMatrix<ScalarType, _layout> matrix_u_tmp(matrix_u.sizes());
 
   // A_tmp := A, U_tmp = U
-  mcnla::blas::copy(matrix_a, matrix_a_tmp);
-  mcnla::blas::copy(matrix_u, matrix_u_tmp);
+  mcnla::la::copy(matrix_a, matrix_a_tmp);
+  mcnla::la::copy(matrix_u, matrix_u_tmp);
 
   // A_tmp -= U * S * V'
   for ( auto i = 0; i < vector_s.length(); ++i ) {
-    mcnla::blas::scal(vector_s(i), matrix_u_tmp.getCol(i));
+    mcnla::la::scal(vector_s(i), matrix_u_tmp.getCol(i));
   }
-  mcnla::blas::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
+  mcnla::la::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
-  frerr = mcnla::blas::nrm2(matrix_a_tmp.vectorize()) / mcnla::blas::nrm2(matrix_a.vectorize());
+  frerr = mcnla::la::nrm2(matrix_a_tmp.vectorize()) / mcnla::la::nrm2(matrix_a.vectorize());
 }

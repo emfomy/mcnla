@@ -8,11 +8,9 @@
 #ifndef MCNLA_CORE_IO_SAVE_MATRIX_MARKET_HPP_
 #define MCNLA_CORE_IO_SAVE_MATRIX_MARKET_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
 #include <mcnla/core/io/def.hpp>
 #include <fstream>
-#include <mcnla/core/container.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -32,7 +30,7 @@ namespace io {
 ///
 template <typename _Scalar>
 void saveMatrixMarket(
-    const container::DenseVector<_Scalar> &vector,
+    const matrix::DenseVector<_Scalar> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -65,7 +63,7 @@ void saveMatrixMarket(
 ///
 template <typename _Scalar, Trans _trans>
 void saveMatrixMarket(
-    const container::DenseMatrix<_Scalar, _trans> &matrix,
+    const matrix::DenseMatrix<_Scalar, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
@@ -173,7 +171,7 @@ void saveMatrixMarket(
   fout.close();
 }
 
-}  // namespace container
+}  // namespace matrix
 
 }  // namespace mcnla
 

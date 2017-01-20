@@ -1,7 +1,7 @@
 #include "../test.hpp"
 
 TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
-  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto vec     = this->vec_;
 
@@ -71,7 +71,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
 
 
 TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
-  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto vec     = this->vec_;
 

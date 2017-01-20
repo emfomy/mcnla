@@ -8,10 +8,8 @@
 #ifndef MCNLA_CORE_MPI_RECV_HPP_
 #define MCNLA_CORE_MPI_RECV_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
 #include <mcnla/core/mpi/def.hpp>
-#include <mcnla/core/container.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

@@ -8,7 +8,6 @@
 #ifndef MCNLA_ISVD_FORMER_FORMER_HPP_
 #define MCNLA_ISVD_FORMER_FORMER_HPP_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/former/former_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>

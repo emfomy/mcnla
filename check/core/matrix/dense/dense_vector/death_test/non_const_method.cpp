@@ -2,7 +2,7 @@
 
 
 TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, NonConstMethod) {
-  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto length = this->length_;
   const auto stride = this->stride_;
@@ -16,7 +16,7 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, NonConstMethod) {
 
 
 TYPED_TEST(DenseVectorDeathTest_Size8_Stride3, NonConstMethod) {
-  using VectorType = mcnla::container::DenseVector<TypeParam>;
+  using VectorType = mcnla::matrix::DenseVector<TypeParam>;
 
   const auto length = this->length_;
   const auto stride = this->stride_;

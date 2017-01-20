@@ -8,11 +8,9 @@
 #ifndef MCNLA_ISVD_FORMER_DUMMY_FORMER_HH_
 #define MCNLA_ISVD_FORMER_DUMMY_FORMER_HH_
 
-#include <mcnla/def.hpp>
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/former/former.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

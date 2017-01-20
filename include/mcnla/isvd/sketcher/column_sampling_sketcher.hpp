@@ -10,7 +10,7 @@
 
 #include <mcnla/isvd/sketcher/column_sampling_sketcher.hh>
 #include <ctime>
-#include <mcnla/core/blas.hpp>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -78,7 +78,7 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
-    blas::copy(matrix_a("", vector_idxs_(i)), collection_q.unfold()("", i));
+    la::copy(matrix_a("", vector_idxs_(i)), collection_q.unfold()("", i));
   }
   time2_ = MPI_Wtime();
 }

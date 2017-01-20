@@ -82,7 +82,7 @@ void Former<_Scalar, SvdFormerTag>::formImpl(
   time0_ = MPI_Wtime();
 
   // Vt := Q' * A
-  blas::gemm(matrix_q.t(), matrix_a, matrix_vt_);
+  la::gemm(matrix_q.t(), matrix_a, matrix_vt_);
   time1_ = MPI_Wtime();
 
   // Compute the SVD of Vt -> W * S * Vt
@@ -90,7 +90,7 @@ void Former<_Scalar, SvdFormerTag>::formImpl(
   time2_ = MPI_Wtime();
 
   // U := Q * W
-  blas::gemm(matrix_q, matrix_w_, matrix_u_);
+  la::gemm(matrix_q, matrix_w_, matrix_u_);
   time3_ = MPI_Wtime();
 }
 
