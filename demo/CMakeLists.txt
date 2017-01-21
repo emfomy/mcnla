@@ -38,11 +38,8 @@ set_target(demo_plain demo_plain.cpp)
 # Set target (isvd)
 set_target(isvd isvd.cpp)
 
-# Set target (isvd_driver)
-set_target(isvd_driver isvd_driver.cpp)
-
 # Set target (test)
 set_target(test test.cpp)
 
 # Add rule 'run'
-add_custom_target(run DEPENDS run_demo)
+add_custom_target(run DEPENDS run_test)

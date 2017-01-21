@@ -11,9 +11,9 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, ConstMethod) {
   EXPECT_DEATH(vec.find(-1), "");
   EXPECT_DEATH(vec.find(length), "");
 
-  EXPECT_DEATH(vec.getSegment({-1, 0}), "");
-  EXPECT_DEATH(vec.getSegment({0, length+1}), "");
-  EXPECT_DEATH(vec.getSegment({1, 0}), "");
+  EXPECT_DEATH(vec({-1, 0}), "");
+  EXPECT_DEATH(vec({0, length+1}), "");
+  EXPECT_DEATH(vec({1, 0}), "");
 }
 
 
@@ -27,7 +27,7 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride3, ConstMethod) {
   EXPECT_DEATH(vec.find(-1), "");
   EXPECT_DEATH(vec.find(length), "");
 
-  EXPECT_DEATH(vec.getSegment({-1, 0}), "");
-  EXPECT_DEATH(vec.getSegment({0, length+1}), "");
-  EXPECT_DEATH(vec.getSegment({1, 0}), "");
+  EXPECT_DEATH(vec({-1, 0}), "");
+  EXPECT_DEATH(vec({0, length+1}), "");
+  EXPECT_DEATH(vec({1, 0}), "");
 }

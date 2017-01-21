@@ -1,4 +1,5 @@
 # Create configure files
+string(REPLACE ";" " " DEFS_STR "${DEFS}")
 unset(cfgfiles)
 file(
   GLOB_RECURSE cfgfiles

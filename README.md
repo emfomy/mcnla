@@ -16,6 +16,7 @@ Monte Carlo Numerical Linear Algebra Package
 * [CMake](https://cmake.org) 3+.
 * C++ compiler with C++11 support ([GCC](https://gcc.gnu.org) 5+ recommended).
 * [BLAS](http://www.netlib.org/blas) & [LAPACK](http://www.netlib.org/lapack) library.
+* [OpenMP](http://openmp.org) Library.
 * MPI Library ([OpenMPI](https://www.open-mpi.org) or [MPICH](http://www.mpich.org)).
 
 ### Optional

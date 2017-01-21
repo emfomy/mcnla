@@ -1,7 +1,8 @@
 #pragma once
 
 #include <gtest/gtest.h>
-#include <mcnla.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
+#include <mcnla/core/la.hpp>
 
 using MyTypes = testing::Types<float, double, std::complex<float>, std::complex<double>>;
 
@@ -24,8 +25,8 @@ class DenseVectorTestBase : public testing::Test {
   virtual void SetUp() {
     mcnla::matrix::Array<_Scalar> array(memsize_, offset_);
     vec_ = mcnla::matrix::DenseVector<_Scalar>(length_, stride_, array);
-    mcnla::lapack::larnv<3>(vec_, iseed);
-    valarray_ = vec_.getValueValarray();
+    mcnla::la::larnv<3>(vec_, iseed);
+    valarray_ = vec_.val().valarray();
   }
 
   virtual void TearDown() {}

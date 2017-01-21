@@ -26,6 +26,8 @@ message(STATUS "Build documentation:  ${MCNLA_BUILD_DOC}")
 
 message(STATUS "")
 
+message(STATUS "Use OpenMP:           ${OpenMP_CXX_FLAGS}")
+
 if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
   message(STATUS "Use MPI:              ${MPI_LIBRARIES}")
 else()

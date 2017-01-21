@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_UTILITY_FUNCTION_HPP_
 #define MCNLA_CORE_UTILITY_FUNCTION_HPP_
 
-#include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,10 +19,6 @@ namespace mcnla {
 //  The utility namespace.
 //
 namespace utility {
-
-static inline bool isPowerOf2( const index_t num ) {
-  return ( num > 0 ) && ( (num & (num-1)) == 0 );
-}
 
 }  // namespace utility
 

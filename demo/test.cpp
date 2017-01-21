@@ -5,8 +5,14 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
+#define MCNLA_TEST
+
+#include <cstdio>
 #include <iostream>
 #include <mcnla.hpp>
+
+// #define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
+#define MTX_PATH MCNLA_DATA_PATH "/../demo/b1_ss.mtx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -17,18 +23,11 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrix<double> a(5, 6), b(5, 6);
+  mcnla::matrix::CooMatrixColMajor<double> a;
 
-  int i = 0;
-  for ( auto &v : a ) {
-    v = ++i;
-  }
+  mcnla::io::loadMatrixMarket(a, MTX_PATH);
+
   std::cout << a << std::endl;
-
-  mcnla::blas::omatcopy(1.0, a.getRows({0, 3}), b.getRows({0, 3}));
-
-  std::cout << b << std::endl;
-
 
   return 0;
 }

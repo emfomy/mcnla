@@ -8,11 +8,9 @@
 #ifndef MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
 #define MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/core/blas.hpp>
-#include <mcnla/core/lapack.hpp>
-#include <mcnla/isvd/sketcher/sketcher_base.hpp>
+#include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hh>
+#include <ctime>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,113 +22,114 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Matrix> class GaussianProjectionSketcher;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::SketcherWrapper::SketcherWrapper
+///
+template <typename _Scalar, index_t _exponent>
+Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::Sketcher(
+    const ParametersType &parameters,
+    const MPI_Comm mpi_comm,
+    const mpi_int_t mpi_root,
+    const index_t seed
+) noexcept
+  : BaseType(parameters, mpi_comm, mpi_root),
+    random_engine_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
+/// @copydoc  mcnla::isvd::SketcherWrapper::initialize
+///
+template <typename _Scalar, index_t _exponent>
+void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::initializeImpl() noexcept {
+
+  const auto ncol            = parameters_.ncol();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
+
+  time0_ = 0;
+  time1_ = 0;
+  time2_ = 0;
+
+  matrix_omegas_.reconstruct(ncol, dim_sketch * num_sketch_each);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gaussian projection sketcher traits.
+/// @copydoc  mcnla::isvd::SketcherWrapper::sketch
 ///
-/// @tparam  _Matrix  The matrix type.
-///
-template <class _Matrix>
-struct Traits<isvd::GaussianProjectionSketcher<_Matrix>> {
-  using MatrixType = _Matrix;
-};
+template <typename _Scalar, index_t _exponent> template <class _Matrix>
+void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::sketchImpl(
+    const _Matrix &matrix_a,
+          DenseMatrixCollection120<ScalarType> &collection_q
+) noexcept {
 
-}  // namespace traits
+  mcnla_assert_true(parameters_.isInitialized());
+
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
+
+  mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
+  mcnla_assert_eq(collection_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
+
+  time0_ = MPI_Wtime();
+
+  // Random sample Omega using normal Gaussian distribution
+  random_engine_.gaussian(matrix_omegas_.vectorize());
+  time1_ = MPI_Wtime();
+
+  // Q := A * Omega
+  la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
+  for ( index_t i = 0; i < _exponent; ++i ) {
+    la::mm(matrix_a.t(), collection_q.unfold(), matrix_omegas_);
+    la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
+  }
+  time2_ = MPI_Wtime();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
+/// @copydoc  mcnla::isvd::SketcherWrapper::outputName
+///
+///
+template <typename _Scalar, index_t _exponent>
+std::ostream& Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::outputNameImpl(
+    std::ostream &os
+) const noexcept {
+  return (os << name_ << ' ' << _exponent);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
+/// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
-/// The Gaussian projection sketcher.
+template <typename _Scalar, index_t _exponent>
+double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::timeImpl() const noexcept {
+  return time2_-time0_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
-/// @tparam  _Matrix  The matrix type.
+template <typename _Scalar, index_t _exponent>
+double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time1() const noexcept {
+  return time1_-time0_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
-template <class _Matrix>
-class GaussianProjectionSketcher : public SketcherBase<GaussianProjectionSketcher<_Matrix>> {
+template <typename _Scalar, index_t _exponent>
+double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time2() const noexcept {
+  return time2_-time1_;
+}
 
-  static_assert(std::is_base_of<MatrixBase<_Matrix>, _Matrix>::value, "'_Matrix' is not a matrix!");
-
-  friend SketcherBase<GaussianProjectionSketcher<_Matrix>>;
-
- private:
-
-  using BaseType = SketcherBase<GaussianProjectionSketcher<_Matrix>>;
-
- public:
-
-  using ScalarType     = typename _Matrix::ScalarType;
-  using RealScalarType = typename _Matrix::RealScalarType;
-  using MatrixType     = _Matrix;
-
- protected:
-
-  /// The name.
-  static constexpr const char* name_= "Gaussian Projection Sketcher";
-
-  /// The starting time
-  double time0_;
-
-  /// The ending time of random generating
-  double time1_;
-
-  /// The ending time of random sketching
-  double time2_;
-
-  /// The ending time of orthonormalizing
-  double time3_;
-
-  /// The matrix Omega.
-  DenseMatrixSet120<ScalarType> set_omega_;
-
-  /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
-
-  /// The empty matrix.
-  DenseMatrix<ScalarType, Layout::ROWMAJOR> matrix_empty_;
-
-  /// The GESVD driver
-  lapack::GesvdDriver<DenseMatrix<ScalarType, Layout::ROWMAJOR>, 'O', 'N'> gesvd_driver_;
-
-  using BaseType::parameters_;
-  using BaseType::mpi_comm_;
-  using BaseType::mpi_root_;
-
- public:
-
-  // Constructor
-  inline GaussianProjectionSketcher( const Parameters<ScalarType> &parameters,
-                                     const MPI_Comm mpi_comm, const mpi_int_t mpi_root, index_t *seed ) noexcept;
-
- protected:
-
-  // Initializes
-  void initializeImpl() noexcept;
-
-  // Random sketches
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixSet120<ScalarType> &set_q ) noexcept;
-
-  // Gets name
-  inline constexpr const char* getNameImpl() const noexcept;
-
-  // Gets time
-  inline double getTimeImpl() const noexcept;
-  inline const std::vector<double> getTimesImpl() const noexcept;
-
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
+///
+template <typename _Scalar, index_t _exponent>
+void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::setSeedImpl(
+    const index_t seed
+) noexcept {
+  random_engine_.setSeed(seed);
+}
 
 }  // namespace isvd
 

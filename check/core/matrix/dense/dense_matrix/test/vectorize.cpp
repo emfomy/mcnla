@@ -16,18 +16,16 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.getLength(), idxs);
-  EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
-  EXPECT_EQ(segment.getStride(), 1);
+  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.nelem(),  idxs);
+  EXPECT_EQ(segment.stride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity);
-  EXPECT_EQ(segment.getOffset(),   offset);
+  EXPECT_EQ(segment.capacity(), capacity);
+  EXPECT_EQ(segment.offset(),   offset);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -77,18 +75,16 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.getLength(), idxs);
-  EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
-  EXPECT_EQ(segment.getStride(), 1);
+  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.nelem(),  idxs);
+  EXPECT_EQ(segment.stride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity);
-  EXPECT_EQ(segment.getOffset(),   offset);
+  EXPECT_EQ(segment.capacity(), capacity);
+  EXPECT_EQ(segment.offset(),   offset);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -140,18 +136,16 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.getLength(), idxs);
-  EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
-  EXPECT_EQ(segment.getStride(), 1);
+  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.nelem(),  idxs);
+  EXPECT_EQ(segment.stride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity);
-  EXPECT_EQ(segment.getOffset(),   offset);
+  EXPECT_EQ(segment.capacity(), capacity);
+  EXPECT_EQ(segment.offset(),   offset);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -201,18 +195,16 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.getLength(), idxs);
-  EXPECT_EQ(segment.getNelem(),  idxs);
-  EXPECT_EQ(segment.getSizes(),  idxs);
-  EXPECT_EQ(segment.getStride(), 1);
+  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.nelem(),  idxs);
+  EXPECT_EQ(segment.stride(), 1);
 
   EXPECT_TRUE(segment.isShrunk());
 
-  EXPECT_EQ(segment.getCapacity(), capacity);
-  EXPECT_EQ(segment.getOffset(),   offset);
+  EXPECT_EQ(segment.capacity(), capacity);
+  EXPECT_EQ(segment.offset(),   offset);
 
-  EXPECT_EQ(segment.getValue(),            &(mat(0, 0)));
-  EXPECT_EQ(&(segment.getValueValarray()), &(mat.getValueValarray()));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, 0)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {

@@ -8,8 +8,6 @@
 #ifndef MCNLA_CORE_MPI_BCAST_HPP_
 #define MCNLA_CORE_MPI_BCAST_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
 
@@ -19,33 +17,70 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The MPI namespace.
-///
+//  The MPI namespace.
+//
 namespace mpi {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The detail namespace
+//
+namespace detail {
+
+template <typename _Scalar>
+inline void bcastImpl(
+          DenseStorage<_Scalar> &buffer,
+    const mpi_int_t root,
+    const MPI_Comm comm,
+    const index_t count
+) noexcept {
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  MPI_Bcast(buffer.valPtr(), count, datatype, root, comm);
+}
+
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
 /// @brief  Broadcasts a message from the process with rank root to all other processes of the group.
 ///
-/// @attention  The size of @a buffer should be the same for all MPI nodes.
+/// @attention  The dimensions of @a buffer should be the same for all MPI nodes.
 /// @attention  @a buffer should be shrunk.
 ///
-template <class _Derived>
+//@{
+template <typename _Scalar>
 inline void bcast(
-          DenseBase<_Derived> &buffer,
+          DenseVector<_Scalar> &buffer,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
-  mcnla_assert_true(buffer.derived().isShrunk());
-  mpi_int_t count = buffer.derived().getNelem();
-  MPI_Bcast(buffer.getValue(), count, datatype, root, comm);
+  mcnla_assert_true(buffer.isShrunk());
+  detail::bcastImpl(buffer, root, comm, buffer.nelem());
 }
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Derived>
+template <typename _Scalar, Trans _trans>
 inline void bcast(
-          DenseBase<_Derived> &&buffer,
+          DenseMatrix<_Scalar, _trans> &buffer,
+    const mpi_int_t root,
+    const MPI_Comm comm
+) noexcept {
+  mcnla_assert_true(buffer.isShrunk());
+  detail::bcastImpl(buffer, root, comm, buffer.nelem());
+}
+//@}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar>
+inline void bcast(
+          DenseVector<_Scalar> &&buffer,
+    const mpi_int_t root,
+    const MPI_Comm comm
+) noexcept {
+  bcast(buffer, root, comm);
+}
+
+template <typename _Scalar, Trans _trans>
+inline void bcast(
+          DenseMatrix<_Scalar, _trans> &&buffer,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {

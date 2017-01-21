@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_UTILITY_CRTP_HPP_
 #define MCNLA_CORE_UTILITY_CRTP_HPP_
 
-#include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,14 +25,16 @@ namespace utility {
 /// The curiously recurring template pattern (CRTP) interface.
 ///
 /// @tparam  _Derived  The derived types.
-/// @tparam  _Base     The interface class type.
+/// @tparam  _Wrapper  The wrapper class type.
 ///
-template <class _Derived, class _Base = void>
+template <class _Derived, class _Wrapper = void>
 class CrtpBase {
+
+  friend _Wrapper;
 
  protected:
 
-  inline CrtpBase() noexcept {};
+  inline CrtpBase() noexcept = default;
 
  public:
 

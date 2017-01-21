@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/coo/coo_vector.hpp
-/// @brief   The COO vector class.
+/// @brief   The COO vector.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,14 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_HPP_
 #define MCNLA_CORE_MATRIX_COO_COO_VECTOR_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <iostream>
-#include <mcnla/core/matrix/base/container_base.hpp>
-#include <mcnla/core/matrix/base/vector_base.hpp>
-#include <mcnla/core/matrix/coo/coo_base.hpp>
-#include <mcnla/core/matrix/coo/coo_vector_iterator.hpp>
-#include <mcnla/core/matrix/kit/idx_range.hpp>
+#include <mcnla/core/matrix/coo/coo_vector.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -27,129 +20,248 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class CooVector;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The coordinate list (COO) vector traits.
-///
-/// @tparam  _Scalar  The scalar type.
+/// @brief  Default constructor.
 ///
 template <typename _Scalar>
-struct Traits<matrix::CooVector<_Scalar>> {
-  static constexpr index_t ndim = 1;
-  using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-
-  using VectorType        = matrix::CooVector<ScalarType>;
-  using RealVectorType    = matrix::CooVector<RealScalarType>;
-
-  using IteratorType      = matrix::CooVectorIterator<ScalarType>;
-  using ConstIteratorType = matrix::CooVectorConstIterator<ScalarType>;
-};
-
-}  // namespace traits
+CooVector<_Scalar>::CooVector() noexcept
+  : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
-/// The coordinate list (COO) vector class.
-///
-/// @tparam  _Scalar  The scalar type.
-///
-/// @todo  Add sorting attention to routines.
+/// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-class CooVector
-  : public ContainerBase<CooVector<_Scalar>>,
-    public VectorBase<CooVector<_Scalar>>,
-    public CooBase<CooVector<_Scalar>> {
+CooVector<_Scalar>::CooVector(
+    const index_t length,
+    const index_t nnz
+) noexcept
+  : BaseType(toDim0(length), nnz) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector(
+    const SizesType sizes,
+    const index_t nnz
+) noexcept
+  : BaseType(toDim0(sizes), nnz) {}
 
-  static constexpr index_t ndim = 1;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector(
+    const index_t length,
+    const index_t nnz,
+    const index_t capacity
+) noexcept
+  : BaseType(toDim0(length), nnz, capacity) {}
 
-  using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-  using ValueArrayType    = Array<ScalarType>;
-  using IdxArrayType      = Array<index_t>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector(
+    const SizesType sizes,
+    const index_t nnz,
+    const index_t capacity
+) noexcept
+  : BaseType(toDim0(sizes), nnz, capacity) {}
 
-  using VectorType        = CooVector<ScalarType>;
-  using RealVectorType    = CooVector<RealScalarType>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector(
+    const index_t length,
+    const index_t nnz,
+    const ValArrayType &val,
+    const IdxArrayType &idx0,
+    const index_t offset
+) noexcept
+  : BaseType(toDim0(length), nnz, val, idx0, offset) {}
 
-  using DataType          = CooData<ndim, ScalarType>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector( const CooVector &other ) noexcept
+  : BaseType(other) {}
 
-  using IteratorType      = CooVectorIterator<ScalarType>;
-  using ConstIteratorType = CooVectorConstIterator<ScalarType>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar>
+CooVector<_Scalar>::CooVector( CooVector &&other ) noexcept
+  : BaseType(std::move(other)) {}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy assignment operator.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+///
+template <typename _Scalar>
+CooVector<_Scalar>& CooVector<_Scalar>::operator=( const CooVector &other ) noexcept {
+  BaseType::operator=(other);
+  return *this;
+}
 
-  using ContainerBaseType = ContainerBase<CooVector<_Scalar>>;
-  using VectorBaseType    = VectorBase<CooVector<_Scalar>>;
-  using CooBaseType       = CooBase<CooVector<_Scalar>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar>
+CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept {
+  BaseType::operator=(std::move(other));
+  return *this;
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the capacity of the index array.
+///
+template <typename _Scalar>
+index_t CooVector<_Scalar>::idxCapacity() const noexcept {
+  return this->idx0Capacity();
+}
 
-  using VectorBaseType::length_;
-  using CooBaseType::nnz_;
-  using CooBaseType::data_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of the index array.
+///
+template <typename _Scalar>
+index_t CooVector<_Scalar>::idxOffset() const noexcept {
+  return this->idx0Offset();
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index array.
+///
+template <typename _Scalar>
+Array<index_t>& CooVector<_Scalar>::idx() noexcept {
+  return this->idx0();
+}
 
-  // Constructors
-  inline CooVector() noexcept;
-  inline CooVector( const index_t length ) noexcept;
-  inline CooVector( const index_t length, const index_t capacity ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz, const index_t capacity ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz, const ValueArrayType &value, const IdxArrayType &idx ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz, const DataType &data, const index_t offset = 0 ) noexcept;
-  inline CooVector( const CooVector &other ) noexcept;
-  inline CooVector( CooVector &&other ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  idx
+///
+template <typename _Scalar>
+const Array<index_t>& CooVector<_Scalar>::idx() const noexcept {
+  return this->idx0();
+}
 
-  // Operators
-  inline CooVector& operator=( const CooVector &other ) noexcept;
-  inline CooVector& operator=( CooVector &&other ) noexcept;
-  template <typename __Scalar>
-  friend inline std::ostream& operator<<( std::ostream &out, const CooVector<__Scalar> &vector );
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw index pointer.
+///
+template <typename _Scalar>
+index_t* CooVector<_Scalar>::idxPtr() noexcept {
+  return this->idx0Ptr();
+}
 
-  // Gets index array
-  using CooBaseType::getIdx;
-  inline       index_t* getIdx() noexcept;
-  inline const index_t* getIdx() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  idxPtr
+///
+template <typename _Scalar>
+const index_t* CooVector<_Scalar>::idxPtr() const noexcept {
+  return this->idx0Ptr();
+}
 
-  // Gets element
-  inline ScalarType getElem( const index_t idx ) const noexcept;
-  inline ScalarType operator()( const index_t idx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooVectorStorage::elemImpl
+///
+template <typename _Scalar>
+_Scalar CooVector<_Scalar>::operator()(
+    const index_t idx
+) noexcept {
+  return this->elemImpl(idx);
+}
 
-  // Gets the internal position
-  inline index_t getPos( const index_t idx ) const noexcept;
-  inline void getPosNnz( const IdxRange range, index_t &pos, index_t &nnz ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooVectorStorage::elemImpl
+///
+template <typename _Scalar>
+const _Scalar CooVector<_Scalar>::operator()(
+    const index_t idx
+) const noexcept {
+  return this->elemImpl(idx);
+}
 
-  // Finds the iterator
-  inline IteratorType      find( const index_t idx ) noexcept;
-  inline ConstIteratorType find( const index_t idx ) const noexcept;
-  inline ConstIteratorType cfind( const index_t idx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooVectorStorage::posImpl
+///
+template <typename _Scalar>
+index_t CooVector<_Scalar>::pos(
+    const index_t idx
+) const noexcept {
+  return this->posImpl(idx);
+}
 
-  // Sorts
-  inline void sort() noexcept;
-  inline bool isSorted() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the vector.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar> template <typename... Args>
+void CooVector<_Scalar>::reconstruct(
+    Args... args
+) noexcept {
+  *this = CooVector<_Scalar>(args...);
+}
 
-  // Resizes
-  inline void resize( const index_t length ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooVectorStorage::resizeImpl
+///
+template <typename _Scalar>
+void CooVector<_Scalar>::resize(
+    const index_t length,
+    const index_t nnz
+) noexcept {
+  this->resizeImpl(length, nnz);
+}
 
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::VectorWrapper::length
+///
+template <typename _Scalar>
+index_t CooVector<_Scalar>::lengthImpl() const noexcept {
+  return this->dim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Gets the first dimension from sizes.
+///
+template <typename _Scalar>
+index_t CooVector<_Scalar>::toDim0(
+    const SizesType sizes
+) const noexcept {
+  return std::get<0>(sizes);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  toDim0
+///
+template <typename _Scalar>
+index_t CooVector<_Scalar>::toDim0(
+    const index_t length
+) const noexcept {
+  return length;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to base class.
+///
+template <typename _Scalar>
+CooVectorStorage<_Scalar>& CooVector<_Scalar>::base() noexcept {
+  return static_cast<BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  base
+///
+template <typename _Scalar>
+const CooVectorStorage<_Scalar>& CooVector<_Scalar>::base() const noexcept {
+  return static_cast<const BaseType&>(*this);
+}
 
 }  // namespace matrix
 

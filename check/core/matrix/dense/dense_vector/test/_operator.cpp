@@ -9,69 +9,62 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     SCOPED_TRACE("Assignment Predo");
     VectorType vec1, vec2;
 
-    EXPECT_EQ(vec1.getLength(), 0);
-    EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
-    EXPECT_EQ(vec1.getStride(), 1);
+    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.nelem(),  0);
+    EXPECT_EQ(vec1.stride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
 
-    EXPECT_EQ(vec1.getCapacity(), 0);
-    EXPECT_EQ(vec1.getOffset(),   0);
+    EXPECT_EQ(vec1.capacity(), 0);
+    EXPECT_EQ(vec1.offset(),   0);
 
-    EXPECT_EQ(vec2.getLength(), 0);
-    EXPECT_EQ(vec2.getNelem(),  0);
-    EXPECT_EQ(vec2.getSizes(),  0);
-    EXPECT_EQ(vec2.getStride(), 1);
+    EXPECT_EQ(vec2.length(), 0);
+    EXPECT_EQ(vec2.nelem(),  0);
+    EXPECT_EQ(vec2.stride(), 1);
 
     EXPECT_TRUE(vec2.isShrunk());
 
-    EXPECT_EQ(vec2.getCapacity(), 0);
-    EXPECT_EQ(vec2.getOffset(),   0);
+    EXPECT_EQ(vec2.capacity(), 0);
+    EXPECT_EQ(vec2.offset(),   0);
 
     SCOPED_TRACE("Copy Assignment");
     vec1 = vec;
 
-    EXPECT_EQ(vec1.getLength(), vec.getLength());
-    EXPECT_EQ(vec1.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
-    EXPECT_EQ(vec1.getStride(), vec.getStride());
+    EXPECT_EQ(vec1.length(), vec.length());
+    EXPECT_EQ(vec1.nelem(),  vec.nelem());
+    EXPECT_EQ(vec1.stride(), vec.stride());
 
     EXPECT_EQ(vec1.isShrunk(), vec.isShrunk());
 
-    EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
-    EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
+    EXPECT_EQ(vec1.capacity(), vec.capacity());
+    EXPECT_EQ(vec1.offset(),   vec.offset());
 
-    EXPECT_EQ(vec1.getValue(),            vec.getValue());
-    EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec1.valPtr(), vec.valPtr());
 
 
     SCOPED_TRACE("Move Assignment");
     vec2 = std::move(vec1);
 
-    EXPECT_EQ(vec1.getLength(), 0);
-    EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
-    EXPECT_EQ(vec1.getStride(), 1);
+    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.nelem(),  0);
+    EXPECT_EQ(vec1.stride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
 
-    EXPECT_EQ(vec1.getCapacity(), 0);
-    EXPECT_EQ(vec1.getOffset(),   0);
+    EXPECT_EQ(vec1.capacity(), 0);
+    EXPECT_EQ(vec1.offset(),   0);
 
 
-    EXPECT_EQ(vec2.getLength(), vec.getLength());
-    EXPECT_EQ(vec2.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec2.getSizes(),  vec.getSizes());
-    EXPECT_EQ(vec2.getStride(), vec.getStride());
+    EXPECT_EQ(vec2.length(), vec.length());
+    EXPECT_EQ(vec2.nelem(),  vec.nelem());
+    EXPECT_EQ(vec2.stride(), vec.stride());
 
     EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());
 
-    EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
-    EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
+    EXPECT_EQ(vec2.capacity(), vec.capacity());
+    EXPECT_EQ(vec2.offset(),   vec.offset());
 
-    EXPECT_EQ(vec2.getValue(),            vec.getValue());
-    EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }
 
@@ -86,68 +79,61 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     SCOPED_TRACE("Assignment Predo");
     VectorType vec1, vec2;
 
-    EXPECT_EQ(vec1.getLength(), 0);
-    EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
-    EXPECT_EQ(vec1.getStride(), 1);
+    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.nelem(),  0);
+    EXPECT_EQ(vec1.stride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
 
-    EXPECT_EQ(vec1.getCapacity(), 0);
-    EXPECT_EQ(vec1.getOffset(),   0);
+    EXPECT_EQ(vec1.capacity(), 0);
+    EXPECT_EQ(vec1.offset(),   0);
 
-    EXPECT_EQ(vec2.getLength(), 0);
-    EXPECT_EQ(vec2.getNelem(),  0);
-    EXPECT_EQ(vec2.getSizes(),  0);
-    EXPECT_EQ(vec2.getStride(), 1);
+    EXPECT_EQ(vec2.length(), 0);
+    EXPECT_EQ(vec2.nelem(),  0);
+    EXPECT_EQ(vec2.stride(), 1);
 
     EXPECT_TRUE(vec2.isShrunk());
 
-    EXPECT_EQ(vec2.getCapacity(), 0);
-    EXPECT_EQ(vec2.getOffset(),   0);
+    EXPECT_EQ(vec2.capacity(), 0);
+    EXPECT_EQ(vec2.offset(),   0);
 
     SCOPED_TRACE("Copy Assignment");
     vec1 = vec;
 
-    EXPECT_EQ(vec1.getLength(), vec.getLength());
-    EXPECT_EQ(vec1.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec1.getSizes(),  vec.getSizes());
-    EXPECT_EQ(vec1.getStride(), vec.getStride());
+    EXPECT_EQ(vec1.length(), vec.length());
+    EXPECT_EQ(vec1.nelem(),  vec.nelem());
+    EXPECT_EQ(vec1.stride(), vec.stride());
 
     EXPECT_EQ(vec1.isShrunk(), vec.isShrunk());
 
-    EXPECT_EQ(vec1.getCapacity(), vec.getCapacity());
-    EXPECT_EQ(vec1.getOffset(),   vec.getOffset());
+    EXPECT_EQ(vec1.capacity(), vec.capacity());
+    EXPECT_EQ(vec1.offset(),   vec.offset());
 
-    EXPECT_EQ(vec1.getValue(),            vec.getValue());
-    EXPECT_EQ(&(vec1.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec1.valPtr(), vec.valPtr());
 
 
     SCOPED_TRACE("Move Assignment");
     vec2 = std::move(vec1);
 
-    EXPECT_EQ(vec1.getLength(), 0);
-    EXPECT_EQ(vec1.getNelem(),  0);
-    EXPECT_EQ(vec1.getSizes(),  0);
-    EXPECT_EQ(vec1.getStride(), 1);
+    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.nelem(),  0);
+    EXPECT_EQ(vec1.stride(), 1);
 
     EXPECT_TRUE(vec1.isShrunk());
 
-    EXPECT_EQ(vec1.getCapacity(), 0);
-    EXPECT_EQ(vec1.getOffset(),   0);
+    EXPECT_EQ(vec1.capacity(), 0);
+    EXPECT_EQ(vec1.offset(),   0);
 
 
-    EXPECT_EQ(vec2.getLength(), vec.getLength());
-    EXPECT_EQ(vec2.getNelem(),  vec.getNelem());
-    EXPECT_EQ(vec2.getSizes(),  vec.getSizes());
-    EXPECT_EQ(vec2.getStride(), vec.getStride());
+    EXPECT_EQ(vec2.length(), vec.length());
+    EXPECT_EQ(vec2.nelem(),  vec.nelem());
+    EXPECT_EQ(vec2.stride(), vec.stride());
 
     EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());
 
-    EXPECT_EQ(vec2.getCapacity(), vec.getCapacity());
-    EXPECT_EQ(vec2.getOffset(),   vec.getOffset());
+    EXPECT_EQ(vec2.capacity(), vec.capacity());
+    EXPECT_EQ(vec2.offset(),   vec.offset());
 
-    EXPECT_EQ(vec2.getValue(),            vec.getValue());
-    EXPECT_EQ(&(vec2.getValueValarray()), &(vec.getValueValarray()));
+    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }

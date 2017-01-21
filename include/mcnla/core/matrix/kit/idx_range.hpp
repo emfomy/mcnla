@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/kit/idx_range.hpp
-/// @brief   The index range class.
+/// @brief   The index range.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,8 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_HPP_
 #define MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
+#include <mcnla/core/matrix/kit/idx_range.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,34 +21,118 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
-/// The index range.
+/// @brief  Construct with given index
 ///
-struct IdxRange {
-
-  /// The beginning index.
-  index_t begin;
-
-  /// The end index.
-  index_t end;
-
-  // Operators
-  inline bool operator==( const IdxRange& other ) const noexcept;
-  inline bool operator!=( const IdxRange& other ) const noexcept;
-  inline IdxRange operator+( const index_t scalar ) const noexcept;
-  inline IdxRange operator-( const index_t scalar ) const noexcept;
-  inline IdxRange operator*( const index_t scalar ) const noexcept;
-  inline IdxRange operator/( const index_t scalar ) const noexcept;
-
-  // Gets data
-  inline index_t getLength() const noexcept;
-};
+IdxRange::IdxRange(
+    const index_t begin,
+    const index_t end
+) noexcept
+  : begin(begin),
+    end(end) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Print to stream.
+/// @brief  Equal-to operator.
 ///
-static inline std::ostream& operator<<( std::ostream &out, const IdxRange &range ) {
-  return out << "[" << range.begin << ", " << range.end << ")";
+bool IdxRange::operator==(
+    const IdxRange& other
+) const noexcept {
+  return (begin == other.begin && end == other.end);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Not-equal-to operator.
+///
+bool IdxRange::operator!=(
+    const IdxRange& other
+) const noexcept {
+  return !(*this == other);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Addition operator.
+///
+IdxRange IdxRange::operator+(
+    const index_t scalar
+) const noexcept {
+  return {this->begin + scalar, this->end + scalar};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Subtraction operator.
+///
+IdxRange IdxRange::operator-(
+    const index_t scalar
+) const noexcept {
+  return {this->begin - scalar, this->end - scalar};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Multiplication operator.
+///
+IdxRange IdxRange::operator*(
+    const index_t scalar
+) const noexcept {
+  return {this->begin * scalar, this->end * scalar};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Division operator.
+///
+IdxRange IdxRange::operator/(
+    const index_t scalar
+) const noexcept {
+  return {this->begin / scalar, this->end / scalar};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Addition assignment operator.
+///
+IdxRange& IdxRange::operator+=(
+    const index_t scalar
+) noexcept {
+  this->begin += scalar;
+  this->end   += scalar;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Subtraction assignment operator.
+///
+IdxRange& IdxRange::operator-=(
+    const index_t scalar
+) noexcept {
+  this->begin -= scalar;
+  this->end   -= scalar;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Multiplication assignment operator.
+///
+IdxRange& IdxRange::operator*=(
+    const index_t scalar
+) noexcept {
+  this->begin *= scalar;
+  this->end   *= scalar;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Division assignment operator.
+///
+IdxRange& IdxRange::operator/=(
+    const index_t scalar
+) noexcept {
+  this->begin /= scalar;
+  this->end   /= scalar;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the length of the range.
+///
+index_t IdxRange::length() const noexcept {
+  return (end-begin);
 }
 
 }  // namespace matrix

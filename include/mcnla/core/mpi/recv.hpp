@@ -8,8 +8,6 @@
 #ifndef MCNLA_CORE_MPI_RECV_HPP_
 #define MCNLA_CORE_MPI_RECV_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
 
@@ -19,9 +17,29 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The MPI namespace.
-///
+//  The MPI namespace.
+//
 namespace mpi {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The detail namespace
+//
+namespace detail {
+
+template <typename _Scalar>
+inline void recvImpl(
+          DenseStorage<_Scalar> &buffer,
+    const mpi_int_t source,
+    const mpi_int_t tag,
+    const MPI_Comm comm,
+          MPI_Status &status,
+    const index_t count
+) noexcept {
+  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  MPI_Recv(buffer.valPtr(), count, datatype, source, tag, comm, &status);
+}
+
+}  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
@@ -29,19 +47,55 @@ namespace mpi {
 ///
 /// @attention  @a buffer should be shrunk.
 ///
-template <class _Derived>
+//@{
+template <typename _Scalar>
 inline void recv(
-          DenseBase<_Derived> &buffer,
+          DenseVector<_Scalar> &buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
     const MPI_Comm comm,
           MPI_Status &status
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<typename traits::Traits<_Derived>::ScalarType>::datatype;
-  mcnla_assert_true(buffer.derived().isShrunk());
-  mpi_int_t count = buffer.derived().getNelem();
-  MPI_Recv(buffer.getValue(), count, datatype, source, tag, comm, &status);
+  mcnla_assert_true(buffer.isShrunk());
+  detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
 }
+
+template <typename _Scalar, Trans _trans>
+inline void recv(
+          DenseMatrix<_Scalar, _trans> &buffer,
+    const mpi_int_t source,
+    const mpi_int_t tag,
+    const MPI_Comm comm,
+          MPI_Status &status
+) noexcept {
+  mcnla_assert_true(buffer.isShrunk());
+  detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
+}
+//@}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Scalar>
+inline void recv(
+          DenseVector<_Scalar> &&buffer,
+    const mpi_int_t source,
+    const mpi_int_t tag,
+    const MPI_Comm comm,
+          MPI_Status &status
+) noexcept {
+  recv(buffer, source, tag, comm, status);
+}
+
+template <typename _Scalar, Trans _trans>
+inline void recv(
+          DenseMatrix<_Scalar, _trans> &&buffer,
+    const mpi_int_t source,
+    const mpi_int_t tag,
+    const MPI_Comm comm,
+          MPI_Status &status
+) noexcept {
+  recv(buffer, source, tag, comm, status);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace mpi
 

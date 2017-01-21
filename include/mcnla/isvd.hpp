@@ -11,13 +11,9 @@
 #include <mcnla/isvd/def.hpp>
 
 #include <mcnla/isvd/solver.hpp>
-#include <mcnla/isvd/solver.ipp>
-
-#include <mcnla/isvd/parameters.hpp>
-#include <mcnla/isvd/parameters.ipp>
-
 #include <mcnla/isvd/sketcher.hpp>
+#include <mcnla/isvd/orthogonalizer.hpp>
 #include <mcnla/isvd/integrator.hpp>
-#include <mcnla/isvd/reconstructor.hpp>
+#include <mcnla/isvd/former.hpp>
 
 #endif  // MCNLA_ISVD_HPP_

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/coo/coo_matrix.hpp
-/// @brief   The COO matrix class.
+/// @brief   The COO matrix.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,15 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_MATRIX_HPP_
 #define MCNLA_CORE_MATRIX_COO_COO_MATRIX_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <iostream>
-#include <utility>
-#include <mcnla/core/matrix/base/matrix_base.hpp>
-#include <mcnla/core/matrix/coo/coo_base.hpp>
-#include <mcnla/core/matrix/coo/coo_vector.hpp>
-#include <mcnla/core/matrix/coo/coo_matrix_iterator.hpp>
-#include <mcnla/core/matrix/kit/idx_range.hpp>
+#include <mcnla/core/matrix/coo/coo_matrix.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -28,161 +20,487 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout> class CooMatrix;
-template <typename _Scalar> class CooVector;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix() noexcept
+  : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t nnz
+) noexcept
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), nnz) {
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The coordinate list (COO) matrix traits.
+/// @brief  Construct with given size information.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _layout  The storage layout.
-///
-template <typename _Scalar, Layout _layout>
-struct Traits<matrix::CooMatrix<_Scalar, _layout>> {
-  static constexpr index_t ndim = 2;
-  static constexpr Layout layout = _layout;
-
-  using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-
-  using VectorType        = matrix::CooVector<ScalarType>;
-  using RealVectorType    = matrix::CooVector<RealScalarType>;
-  using MatrixType        = matrix::CooMatrix<ScalarType, _layout>;
-  using RealMatrixType    = matrix::CooMatrix<RealScalarType, _layout>;
-  using TransposeType     = matrix::CooMatrix<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = matrix::CooMatrix<RealScalarType, changeLayout(_layout)>;
-
-  using IteratorType      = matrix::CooMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType = matrix::CooMatrixConstIterator<ScalarType, _layout>;
-};
-
-}  // namespace traits
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix(
+    const SizesType sizes,
+    const index_t nnz
+) noexcept
+  : BaseType(toDim0(sizes), toDim1(sizes), nnz) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t nnz,
+    const index_t capacity
+) noexcept
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
-/// The coordinate list (COO) matrix class.
+/// @brief  Construct with given size information.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _layout  The storage layout.
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix(
+    const SizesType sizes,
+    const index_t nnz,
+    const index_t capacity
+) noexcept
+  : BaseType(toDim0(sizes), toDim1(sizes), nnz, capacity) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
 ///
-/// @todo  Add sorting attention to routines.
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t nnz,
+    const ValArrayType &val,
+    const IdxArrayType &colidx,
+    const IdxArrayType &rowidx,
+    const index_t offset
+) noexcept
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), nnz, val, toIdx0(colidx, rowidx), toIdx1(colidx, rowidx), offset) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
 ///
-template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class CooMatrix
-  : public ContainerBase<CooMatrix<_Scalar, _layout>>,
-    public MatrixBase<CooMatrix<_Scalar, _layout>>,
-    public CooBase<CooMatrix<_Scalar, _layout>> {
+/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix(
+    const CooMatrix &other
+) noexcept
+  : BaseType(other) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>::CooMatrix(
+    CooMatrix &&other
+) noexcept
+  : BaseType(std::move(other)) {}
 
-  static constexpr index_t ndim = 2;
-  static constexpr Layout layout = _layout;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy assignment operator.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>& CooMatrix<_Scalar, _trans>::operator=(
+    const CooMatrix &other
+) noexcept {
+  BaseType::operator=(other);
+  return *this;
+}
 
-  using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-  using ValueArrayType    = Array<ScalarType>;
-  using IdxArrayType      = Array<index_t>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, _trans>& CooMatrix<_Scalar, _trans>::operator=(
+    CooMatrix &&other
+) noexcept {
+  BaseType::operator=(std::move(other));
+  return *this;
+}
 
-  using VectorType        = CooVector<ScalarType>;
-  using RealVectorType    = CooVector<RealScalarType>;
-  using MatrixType        = CooMatrix<ScalarType, _layout>;
-  using RealMatrixType    = CooMatrix<RealScalarType, _layout>;
-  using TransposeType     = CooMatrix<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = CooMatrix<RealScalarType, changeLayout(_layout)>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the capacity of the row index array.
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::rowidxCapacity() const noexcept {
+  return !isTrans(_trans) ? this->idx0Capacity() : this->idx1Capacity();
+}
 
-  using DataType          = CooData<ndim, ScalarType>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the capacity of the index array.
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::colidxCapacity() const noexcept {
+  return !isTrans(_trans) ? this->idx1Capacity() : this->idx0Capacity();
+}
 
-  using IteratorType      = CooMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType = CooMatrixConstIterator<ScalarType, _layout>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of the row index array.
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::rowidxOffset() const noexcept {
+  return !isTrans(_trans) ? this->idx0Offset() : this->idx1Offset();
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the offset of the index array.
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::colidxOffset() const noexcept {
+  return !isTrans(_trans) ? this->idx1Offset() : this->idx0Offset();
+}
 
-  using ContainerBaseType = ContainerBase<CooMatrix<_Scalar, _layout>>;
-  using MatrixBaseType    = MatrixBase<CooMatrix<_Scalar, _layout>>;
-  using CooBaseType       = CooBase<CooMatrix<_Scalar, _layout>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the row index array.
+///
+template <typename _Scalar, Trans _trans>
+Array<index_t>& CooMatrix<_Scalar, _trans>::rowidx() noexcept {
+  return !isTrans(_trans) ? this->idx0() : this->idx1();
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  rowidx
+///
+template <typename _Scalar, Trans _trans>
+const Array<index_t>& CooMatrix<_Scalar, _trans>::rowidx() const noexcept {
+  return !isTrans(_trans) ? this->idx0() : this->idx1();
+}
 
-  using MatrixBaseType::nrow_;
-  using MatrixBaseType::ncol_;
-  using MatrixBaseType::size0_;
-  using MatrixBaseType::size1_;
-  using CooBaseType::nnz_;
-  using CooBaseType::data_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index array.
+///
+template <typename _Scalar, Trans _trans>
+Array<index_t>& CooMatrix<_Scalar, _trans>::colidx() noexcept {
+  return !isTrans(_trans) ? this->idx1() : this->idx0();
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  colidx
+///
+template <typename _Scalar, Trans _trans>
+const Array<index_t>& CooMatrix<_Scalar, _trans>::colidx() const noexcept {
+  return !isTrans(_trans) ? this->idx1() : this->idx0();
+}
 
-  // Constructors
-  inline CooMatrix() noexcept;
-  inline CooMatrix( const index_t ncol, const index_t nrow ) noexcept;
-  inline CooMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
-  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t capacity ) noexcept;
-  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t capacity ) noexcept;
-  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz, const index_t capacity ) noexcept;
-  inline CooMatrix( const std::pair<index_t, index_t> sizes, const index_t nnz, const index_t capacity ) noexcept;
-  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
-                    const ValueArrayType &value, const IdxArrayType &rowidx, const IdxArrayType &colidx ) noexcept;
-  inline CooMatrix( const index_t ncol, const index_t nrow, const index_t nnz,
-                    const DataType &data, const index_t offset = 0 ) noexcept;
-  inline CooMatrix( const CooMatrix &other ) noexcept;
-  inline CooMatrix( CooMatrix &&other ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw index pointer.
+///
+template <typename _Scalar, Trans _trans>
+index_t* CooMatrix<_Scalar, _trans>::rowidxPtr() noexcept {
+  return !isTrans(_trans) ? this->idx0Ptr() : this->idx1Ptr();
+}
 
-  // Operators
-  inline CooMatrix& operator=( const CooMatrix &other ) noexcept;
-  inline CooMatrix& operator=( CooMatrix &&other ) noexcept;
-  template <typename __Scalar, Layout __layout>
-  friend inline std::ostream& operator<<( std::ostream &out, const CooMatrix<__Scalar, __layout> &matrix );
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  rowidxPtr
+///
+template <typename _Scalar, Trans _trans>
+const index_t* CooMatrix<_Scalar, _trans>::rowidxPtr() const noexcept {
+  return !isTrans(_trans) ? this->idx0Ptr() : this->idx1Ptr();
+}
 
-  // Gets index array
-  inline       index_t* getRowIdx() noexcept;
-  inline const index_t* getRowIdx() const noexcept;
-  inline       index_t* getColIdx() noexcept;
-  inline const index_t* getColIdx() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw index pointer.
+///
+template <typename _Scalar, Trans _trans>
+index_t* CooMatrix<_Scalar, _trans>::colidxPtr() noexcept {
+  return !isTrans(_trans) ? this->idx1Ptr() : this->idx0Ptr();
+}
 
-  // Gets element
-  inline ScalarType getElem( const index_t rowidx, const index_t colidx ) const noexcept;
-  inline ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  colidxPtr
+///
+template <typename _Scalar, Trans _trans>
+const index_t* CooMatrix<_Scalar, _trans>::colidxPtr() const noexcept {
+  return !isTrans(_trans) ? this->idx1Ptr() : this->idx0Ptr();
+}
 
-  // Gets the internal position
-  inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
-  inline void getPosNnz( const IdxRange rowrange, const IdxRange colrange, index_t &pos, index_t &nnz ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooMatrixStorage::elemImpl
+///
+template <typename _Scalar, Trans _trans>
+_Scalar CooMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) noexcept {
+  return !isTrans(_trans) ? this->elemImpl(rowidx, colidx) : this->elemImpl(colidx, rowidx);
+}
 
-  // Finds the iterator
-  inline IteratorType      find( const index_t rowidx, const index_t colidx ) noexcept;
-  inline ConstIteratorType find( const index_t rowidx, const index_t colidx ) const noexcept;
-  inline ConstIteratorType cfind( const index_t rowidx, const index_t colidx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooMatrixStorage::elemImpl
+///
+template <typename _Scalar, Trans _trans>
+const _Scalar CooMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  return !isTrans(_trans) ? this->elemImpl(rowidx, colidx) : this->elemImpl(colidx, rowidx);
+}
 
-  // Sorts
-  inline void sort() noexcept;
-  inline bool isSorted() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooMatrixStorage::posImpl
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::pos(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  return !isTrans(_trans) ? this->posImpl(rowidx, colidx) : this->posImpl(colidx, rowidx);
+}
 
-  // Transpose
-  inline TransposeType transpose() noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the matrix.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar, Trans _trans> template <typename... Args>
+void CooMatrix<_Scalar, _trans>::reconstruct(
+    Args... args
+) noexcept {
+  *this = CooMatrix<_Scalar, _trans>(args...);
+}
 
-  // Resizes
-  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooMatrixStorage::resizeImpl
+///
+template <typename _Scalar, Trans _trans>
+void CooMatrix<_Scalar, _trans>::resize(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t nnz
+) noexcept {
+  this->resizeImpl(toDim0(nrow, ncol), toDim1(nrow, ncol), nnz);
+}
 
-  // Gets vector segment
-  inline       VectorType getCol( const index_t colidx ) noexcept;
-  inline const VectorType getCol( const index_t colidx ) const noexcept;
-  inline       VectorType getRow( const index_t rowidx ) noexcept;
-  inline const VectorType getRow( const index_t rowidx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the transpose of the matrix.
+///
+/// @attention  The storage layout is also changed.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, changeTrans(_trans)>& CooMatrix<_Scalar, _trans>::t() noexcept {
+  return static_cast<TransposeType&>(base());
+}
 
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  t
+///
+template <typename _Scalar, Trans _trans>
+const CooMatrix<_Scalar, changeTrans(_trans)>& CooMatrix<_Scalar, _trans>::t() const noexcept {
+  return static_cast<const TransposeType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the conjugate of the matrix.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, changeConj(_trans)>& CooMatrix<_Scalar, _trans>::c() noexcept {
+  return static_cast<ConjugateType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  c
+///
+template <typename _Scalar, Trans _trans>
+const CooMatrix<_Scalar, changeConj(_trans)>& CooMatrix<_Scalar, _trans>::c() const noexcept {
+  return static_cast<const ConjugateType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the conjugate transpose of the matrix.
+///
+/// @attention  The storage layout is also changed.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrix<_Scalar, changeHerm(_trans)>& CooMatrix<_Scalar, _trans>::h() noexcept {
+  return static_cast<HermitianType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  t
+///
+template <typename _Scalar, Trans _trans>
+const CooMatrix<_Scalar, changeHerm(_trans)>& CooMatrix<_Scalar, _trans>::h() const noexcept {
+  return static_cast<const HermitianType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a column vector segment.
+///
+template <typename _Scalar, Trans _trans>
+CooVector<_Scalar> CooMatrix<_Scalar, _trans>::operator()(
+    const char*,
+    const index_t colidx
+) noexcept {
+  static_assert(!isTrans(_trans), "This routine is only available in column-major matrices.");
+  return static_cast<VectorType&&>(this->getVector0Impl(colidx));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const char*, const index_t )
+///
+template <typename _Scalar, Trans _trans>
+const CooVector<_Scalar> CooMatrix<_Scalar, _trans>::operator()(
+    const char*,
+    const index_t colidx
+) const noexcept {
+  static_assert(!isTrans(_trans), "This routine is only available in column-major matrices.");
+  return static_cast<VectorType&&>(this->getVector0Impl(colidx));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a row vector segment.
+///
+template <typename _Scalar, Trans _trans>
+CooVector<_Scalar> CooMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const char*
+) noexcept {
+  static_assert(isTrans(_trans), "This routine is only available in row-major matrices.");
+  return static_cast<VectorType&&>(this->getVector0Impl(rowidx));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const index_t, const char* )
+///
+template <typename _Scalar, Trans _trans>
+const CooVector<_Scalar> CooMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const char*
+) const noexcept {
+  static_assert(isTrans(_trans), "This routine is only available in row-major matrices.");
+  return static_cast<VectorType&&>(this->getVector0Impl(rowidx));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::nrow
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::nrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim0() : this->dim1();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::ncol
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::ncolImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim1() : this->dim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Gets the first dimension from sizes.
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::toDim0(
+    const SizesType sizes
+) const noexcept {
+  return !isTrans(_trans) ? std::get<0>(sizes) : std::get<1>(sizes);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  toDim0
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::toDim0(
+    const index_t nrow,
+    const index_t ncol
+) const noexcept {
+  return !isTrans(_trans) ? nrow : ncol;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Gets the second dimension from sizes.
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::toDim1(
+    const SizesType sizes
+) const noexcept {
+  return !isTrans(_trans) ? std::get<1>(sizes) : std::get<0>(sizes);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  toDim1
+///
+template <typename _Scalar, Trans _trans>
+index_t CooMatrix<_Scalar, _trans>::toDim1(
+    const index_t nrow,
+    const index_t ncol
+) const noexcept {
+  return !isTrans(_trans) ? ncol : nrow;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Gets the first dimension index array.
+///
+template <typename _Scalar, Trans _trans>
+Array<index_t>& CooMatrix<_Scalar, _trans>::toIdx0(
+    IdxArrayType &rowidx,
+    IdxArrayType &colidx
+) const noexcept {
+  return !isTrans(_trans) ? rowidx : colidx;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  toIdx0
+///
+template <typename _Scalar, Trans _trans>
+const Array<index_t>& CooMatrix<_Scalar, _trans>::toIdx0(
+    const IdxArrayType &rowidx,
+    const IdxArrayType &colidx
+) const noexcept {
+  return !isTrans(_trans) ? rowidx : colidx;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Gets the second dimension index array.
+///
+template <typename _Scalar, Trans _trans>
+Array<index_t>& CooMatrix<_Scalar, _trans>::toIdx1(
+    IdxArrayType &rowidx,
+    IdxArrayType &colidx
+) const noexcept {
+  return !isTrans(_trans) ? colidx : rowidx;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  toIdx1
+///
+template <typename _Scalar, Trans _trans>
+const Array<index_t>& CooMatrix<_Scalar, _trans>::toIdx1(
+    const IdxArrayType &rowidx,
+    const IdxArrayType &colidx
+) const noexcept {
+  return !isTrans(_trans) ? colidx : rowidx;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to base class.
+///
+template <typename _Scalar, Trans _trans>
+CooMatrixStorage<_Scalar>& CooMatrix<_Scalar, _trans>::base() noexcept {
+  return static_cast<BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  base
+///
+template <typename _Scalar, Trans _trans>
+const CooMatrixStorage<_Scalar>& CooMatrix<_Scalar, _trans>::base() const noexcept {
+  return static_cast<const BaseType&>(*this);
+}
 
 }  // namespace matrix
 
