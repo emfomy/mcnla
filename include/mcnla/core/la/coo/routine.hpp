@@ -14,6 +14,7 @@
 // BLAS 2
 
 // BLAS 3
+#include <mcnla/core/la/coo/routine/gemm.hpp>
 
 // BLAS-like
 

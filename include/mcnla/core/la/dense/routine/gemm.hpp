@@ -87,7 +87,8 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "Conjugate version of GEMM is not supported!");
+
+  static_assert(!isConj(_transc), "GEMM does not support conjugate matrices!");
 }
 
 //@}

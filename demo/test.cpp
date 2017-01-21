@@ -22,34 +22,41 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  int n = 7, nnz = 9;
+  int m = 5, n = 4, k = 3, nnz = m*k, i;
 
-  using DataType = std::tuple<mcnla::index_t, mcnla::index_t, double>;
-  std::vector<DataType> data(nnz);
+  mcnla::matrix::CooMatrixColMajor<double> a(m, k, nnz);
+  mcnla::matrix::DenseMatrixRowMajor<double> b(k, n);
+  mcnla::matrix::DenseMatrixRowMajor<double> c(m, n);
 
-  int i = 1, j = 2, jj = 2, k = 3, kk = 3;
-  for ( auto &value : data ) {
-    value = std::make_tuple(i++, (((j += 3) %= n) + ((jj *= 3) %= n)) % n, (((k += 4) %= n) + ((kk *= 4) %= n)) % n);
+
+  for ( auto j = 0; j < k; ++j ) {
+    for ( auto i = 0; i < m; ++i ) {
+      a.val().valarray()[i+j*m] = i+j*m;
+      a.rowidx().valarray()[i+j*m] = i;
+      a.colidx().valarray()[i+j*m] = j;
+    }
   }
 
-  std::sort(data.begin(), data.end(), []( DataType &i, DataType&j ) {
-    return (std::get<1>(i) == std::get<1>(j) ? std::get<0>(i) < std::get<0>(j) : std::get<1>(i) < std::get<1>(j));
-  } );
-
-  mcnla::matrix::CooMatrixRowMajor<double> mat(n, n, nnz);
-
-  for ( auto i = 0; i < nnz; ++i ) {
-    mat.val().valarray()[i] = std::get<0>(data[i]);
-    mat.rowidx().valarray()[i] = std::get<1>(data[i]);
-    mat.colidx().valarray()[i] = std::get<2>(data[i]);
+  i = 0;
+  for ( auto &v : b ) {
+    v = ++i;
   }
 
-  for ( auto i = 0; i < nnz; ++i ) {
-    std::cout << mat.rowidxPtr()[i] << mat.colidxPtr()[i] << mat.valPtr()[i] << std::endl;
-  }
+  std::cout << "a:\n" << a << std::endl;
+  std::cout << "b:\n" << b << std::endl;
 
-  std::cout << mat << std::endl;
-  std::cout << mat(1, "") << std::endl;
+  double done = 1.0, dzero = 0.0;
+  int ldb = b.pitch(), ldc = c.pitch();
+  mkl_dcoomm("N", &m, &n, &k, &done, "G  C", a.valPtr(), a.rowidxPtr(), a.colidxPtr(), &nnz,
+             b.valPtr(), &ldb, &dzero, c.valPtr(), &ldc);
+
+  std::cout << "c:\n" << c << std::endl;
+
+  mcnla::la::memset0(c);
+
+  mcnla::la::mm(a, b, c);
+
+  std::cout << "c:\n" << c << std::endl;
 
   return 0;
 }

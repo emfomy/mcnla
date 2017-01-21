@@ -1,16 +1,21 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/la/dense/routine/symm.hpp
-/// @brief   The BLAS SYMM routine.
+/// @file    include/mcnla/core/la/coo/routine/gemm.hpp
+/// @brief   The BLAS GEMM routine for COO format.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LA_DENSE_ROUTINE_SYMM_HPP_
-#define MCNLA_CORE_LA_DENSE_ROUTINE_SYMM_HPP_
+#ifndef MCNLA_CORE_LA_COO_ROUTINE_GEMM_HPP_
+#define MCNLA_CORE_LA_COO_ROUTINE_GEMM_HPP_
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <mcnla/core/la/raw/blas/symm.hpp>
+
+#ifdef MCNLA_USE_MKL
+  #include <mcnla/core/la/raw/spblas/coomm.hpp>
+#endif  // MCNLA_USE_MKL
+#include <mcnla/core/la/dense/routine/axpy.hpp>
+#include <mcnla/core/la/dense/routine/scal.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -33,54 +38,88 @@ namespace detail {
 // Impl3
 //
 
-template <typename _Scalar, Trans _transa, Uplo _uplo>
-inline void symmImpl3(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+#ifdef MCNLA_USE_MKL
+
+template <typename _Scalar, Trans _transa>
+inline void gemmImpl3(
     const DenseMatrix<_Scalar, Trans::NORMAL> &b,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  mcnla_assert_eq(a.size(), c.nrow());
-  mcnla_assert_eq(b.sizes(), c.sizes());
+  mcnla_assert_eq(c.nrow(), b.nrow());
+  mcnla_assert_eq(c.ncol(), a.ncol());
+  mcnla_assert_eq(a.nrow(), b.ncol());
 
-  symm('L', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
-       alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
+  coomm(toTransChar<_Scalar>(_transa), c.ncol(), c.nrow(), a.ncol(), alpha, "G  C",
+        a.valPtr(), a.rowidxPtr(), a.colidxPtr(), a.nnz(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 
-template <typename _Scalar, Trans _transa, Uplo _uplo>
-inline void symmImpl3(
+#else  // MCNLA_USE_MKL
+
+template <typename _Scalar, Trans _transa>
+inline void gemmImpl3(
     const DenseMatrix<_Scalar, Trans::NORMAL> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  mcnla_assert_eq(a.size(), c.ncol());
-  mcnla_assert_eq(b.sizes(), c.sizes());
+  mcnla_assert_eq(c.nrow(), b.nrow());
+  mcnla_assert_eq(c.ncol(), a.ncol());
+  mcnla_assert_eq(a.nrow(), b.ncol());
 
-  symm('R', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
-       alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
+  if ( c.isShrunk() ) {
+    la::scal(c.vectorize(), beta);
+  } else {
+    for ( index_t i = 0; i < c.nrow(); ++i ) {
+      la::scal(c("", i), beta);
+    }
+  }
+
+  for ( index_t i = 0; i < a.nnz(); ++i ) {
+    la::axpy(b("", a.rowidxPtr()[i]), c("", a.colidxPtr()[i]), a.valPtr()[i] * alpha);
+  }
+}
+
+#endif  // MCNLA_USE_MKL
+
+template <typename _Scalar, Trans _transa, Trans _transb, bool dummy = 0>
+inline void gemmImpl3(
+    const CooMatrix<_Scalar, _transa> &a,
+    const DenseMatrix<_Scalar, Trans::NORMAL> &b,
+          DenseMatrix<_Scalar, Trans::NORMAL> &c,
+    const _Scalar alpha,
+    const _Scalar beta
+) noexcept {
+  static_cast<void>(a);
+  static_cast<void>(b);
+  static_cast<void>(c);
+  static_cast<void>(alpha);
+  static_cast<void>(beta);
+
+  static_assert(dummy && false, "COO GEMM does not support this layout!");
 }
 
 // ========================================================================================================================== //
 // Impl2 Left
 //
 
-template <typename _Scalar, Trans _transa, Uplo _uplo>
-inline void symmImpl2(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+template <typename _Scalar, Trans _transa>
+inline void gemmImpl2(
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, Trans::NORMAL> &b,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl3(a, b, c, alpha, beta);
+  gemmImpl3(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
-inline void symmImpl2(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl2(
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
@@ -91,28 +130,28 @@ inline void symmImpl2(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(_transb == Trans::NORMAL, "The layout of B and C in SYMM must be the same!");
+  static_assert(_transb == Trans::NORMAL, "The layout of B and C in COO GEMM must be the same!");
 }
 
 // ========================================================================================================================== //
 // Impl2 Right
 //
 
-template <typename _Scalar, Trans _transa, Uplo _uplo>
-inline void symmImpl2(
+template <typename _Scalar, Trans _transa>
+inline void gemmImpl2(
     const DenseMatrix<_Scalar, Trans::NORMAL> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl3(b, a, c, alpha, beta);
+  gemmImpl3(b, a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
-inline void symmImpl2(
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl2(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
@@ -122,38 +161,38 @@ inline void symmImpl2(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(_transb == Trans::NORMAL, "The layout of B and C in SYMM must be the same!");
+  static_assert(_transb == Trans::NORMAL, "The layout of B and C in COO GEMM must be the same!");
 }
 
 // ========================================================================================================================== //
 // Impl1 Left
 //
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
-inline void symmImpl1(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl1(
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl2(a, b, c, alpha, beta);
+  gemmImpl3(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
-inline void symmImpl1(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl1(
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, Trans::TRANS> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl2(b.t(), a.t(), c.t(), alpha, beta);
+  gemmImpl3(b.t(), a.t(), c.t(), alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
-inline void symmImpl1(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void gemmImpl1(
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
     const _Scalar alpha,
@@ -165,39 +204,39 @@ inline void symmImpl1(
   static_cast<void>(alpha);
   static_cast<void>(beta);
 
-  static_assert(!isConj(_transc), "SYMM does not support conjugate matrices!");
+  static_assert(!isConj(_transc), "COO GEMM does not support conjugate matrices!");
 }
 
 // ========================================================================================================================== //
 // Impl1 Right
 //
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
-inline void symmImpl1(
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl1(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, Trans::NORMAL> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl2(b, a, c, alpha, beta);
+  gemmImpl3(b, a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Uplo _uplo>
-inline void symmImpl1(
+template <typename _Scalar, Trans _transa, Trans _transb>
+inline void gemmImpl1(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, Trans::TRANS> &c,
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  symmImpl2(a.t(), b.t(), c.t(), alpha, beta);
+  gemmImpl3(a.t(), b.t(), c.t(), alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
-inline void symmImpl1(
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void gemmImpl1(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transc> &c,
     const _Scalar alpha,
     const _Scalar beta
@@ -208,7 +247,7 @@ inline void symmImpl1(
   static_cast<void>(alpha);
   static_cast<void>(beta);
 
-  static_assert(!isConj(_transc), "SYMM does not support conjugate matrices!");
+  static_assert(!isConj(_transc), "COO GEMM does not support conjugate matrices!");
 }
 
 //@}
@@ -216,54 +255,54 @@ inline void symmImpl1(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_blas3_module
-/// @brief  Computes a matrix-matrix product where one input matrix is symmetric/Hermitian.
+/// @ingroup  la_coo_blas3_module
+/// @brief  Computes a matrix-matrix product with general matrices.
 ///
 //@{
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
-inline void symm(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void gemm(
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  detail::symmImpl1(a, b, c, alpha, beta);
+  detail::gemmImpl1(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
-inline void symm(
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void gemm(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  detail::symmImpl1(b, a, c, alpha, beta);
+  detail::gemmImpl1(b, a, c, alpha, beta);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
-inline void symm(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void gemm(
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  detail::symmImpl1(a, b, c, alpha, beta);
+  detail::gemmImpl1(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
-inline void symm(
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+inline void gemm(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  detail::symmImpl1(b, a, c, alpha, beta);
+  detail::gemmImpl1(b, a, c, alpha, beta);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -272,50 +311,50 @@ inline void symm(
 /// @brief  Computes a matrix-matrix product.
 ///
 //@{
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  symm(a, b, c, alpha, beta);
+  gemm(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transc> &c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  symm(b, a, c, alpha, beta);
+  gemm(b, a, c, alpha, beta);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
     const DenseMatrix<_Scalar, _transb> &b,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  symm(a, b, c, alpha, beta);
+  gemm(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
     const DenseMatrix<_Scalar, _transb> &b,
-    const DenseSymmetricMatrix<_Scalar, _transa, _uplo> &a,
+    const CooMatrix<_Scalar, _transa> &a,
           DenseMatrix<_Scalar, _transc> &&c,
     const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
     const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
 ) noexcept {
-  symm(b, a, c, alpha, beta);
+  gemm(b, a, c, alpha, beta);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -323,4 +362,4 @@ inline void mm(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_DENSE_ROUTINE_SYMM_HPP_
+#endif  // MCNLA_CORE_LA_COO_ROUTINE_GEMM_HPP_
