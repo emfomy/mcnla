@@ -22,7 +22,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCol) {
   EXPECT_EQ(segment.capacity(), capacity - colidx*pitch);
   EXPECT_EQ(segment.offset(),   offset + colidx*pitch);
 
-  EXPECT_EQ(segment.valuePtr(), &(mat(0, colidx)));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));
@@ -65,7 +65,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCol) {
   EXPECT_EQ(segment.capacity(), capacity - colidx*pitch);
   EXPECT_EQ(segment.offset(),   offset + colidx*pitch);
 
-  EXPECT_EQ(segment.valuePtr(), &(mat(0, colidx)));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));
@@ -108,7 +108,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCol) {
   EXPECT_EQ(segment.capacity(), capacity - colidx);
   EXPECT_EQ(segment.offset(),   offset + colidx);
 
-  EXPECT_EQ(segment.valuePtr(), &(mat(0, colidx)));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));
@@ -151,7 +151,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCol) {
   EXPECT_EQ(segment.capacity(), capacity - colidx);
   EXPECT_EQ(segment.offset(),   offset + colidx);
 
-  EXPECT_EQ(segment.valuePtr(), &(mat(0, colidx)));
+  EXPECT_EQ(segment.valPtr(), &(mat(0, colidx)));
 
   for ( auto i = 0; i < nrow; ++i ) {
     EXPECT_EQ(segment(i), mat(i, colidx));

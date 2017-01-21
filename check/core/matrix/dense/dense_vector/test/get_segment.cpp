@@ -21,7 +21,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
   EXPECT_EQ(segment.capacity(), capacity - idx0);
   EXPECT_EQ(segment.offset(),   offset + idx0);
 
-  EXPECT_EQ(segment.valuePtr(), &(vec(idx0)));
+  EXPECT_EQ(segment.valPtr(), &(vec(idx0)));
 
   for ( auto i = 0; i < idxs; ++i ) {
     EXPECT_EQ(segment(i), vec(i+idx0));
@@ -63,7 +63,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
   EXPECT_EQ(segment.capacity(), capacity - idx0 * stride);
   EXPECT_EQ(segment.offset(),   offset + idx0 * stride);
 
-  EXPECT_EQ(segment.valuePtr(), &(vec(idx0)));
+  EXPECT_EQ(segment.valPtr(), &(vec(idx0)));
 
   for ( auto i = 0; i < idxs; ++i ) {
     EXPECT_EQ(segment(i), vec(i+idx0));

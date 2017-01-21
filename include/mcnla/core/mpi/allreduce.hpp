@@ -35,7 +35,7 @@ inline void allreduceImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Allreduce(send.valuePtr(), recv.valuePtr(), count, datatype, op, comm);
+  MPI_Allreduce(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
 }
 
 template <typename _Scalar>
@@ -46,7 +46,7 @@ inline void allreduceImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Allreduce(MPI_IN_PLACE, buffer.valuePtr(), count, datatype, op, comm);
+  MPI_Allreduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, comm);
 }
 
 }  // namespace detail

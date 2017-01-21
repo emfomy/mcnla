@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_storage.hh
-/// @brief   The definition of dense storage.
+/// @file    include/mcnla/core/matrix/coo/coo_storage.hh
+/// @brief   The definition of COO storage.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HH_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HH_
+#ifndef MCNLA_CORE_MATRIX_COO_COO_STORAGE_HH_
+#define MCNLA_CORE_MATRIX_COO_COO_STORAGE_HH_
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/kit/array.hpp>
@@ -23,13 +23,13 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
-/// The dense storage.
+/// @ingroup  matrix_coo_module
+/// The coordinate list (COO) storage.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <class _Scalar>
-class DenseStorage {
+class CooStorage {
 
  private:
 
@@ -44,22 +44,21 @@ class DenseStorage {
  protected:
 
   // Constructors
-  inline DenseStorage() noexcept;
-  inline DenseStorage( const index_t capacity ) noexcept;
-  inline DenseStorage( const ValArrayType &val ) noexcept;
-  inline DenseStorage( const DenseStorage &other ) noexcept;
-  inline DenseStorage( DenseStorage &&other ) noexcept;
+  inline CooStorage() noexcept;
+  inline CooStorage( const index_t capacity ) noexcept;
+  inline CooStorage( const ValArrayType &val ) noexcept;
+  inline CooStorage( const CooStorage &other ) noexcept;
+  inline CooStorage( CooStorage &&other ) noexcept;
 
   // Operators
-  inline DenseStorage& operator=( const DenseStorage &other ) noexcept;
-  inline DenseStorage& operator=( DenseStorage &&other ) noexcept;
+  inline CooStorage& operator=( const CooStorage &other ) noexcept;
+  inline CooStorage& operator=( CooStorage &&other ) noexcept;
 
  public:
 
   // Gets information
-  inline bool    isEmpty() const noexcept;
-  inline index_t capacity() const noexcept;
-  inline index_t offset() const noexcept;
+  inline index_t valCapacity() const noexcept;
+  inline index_t valOffset() const noexcept;
 
   // Gets array
   inline       ValArrayType& val() noexcept;
@@ -73,4 +72,4 @@ class DenseStorage {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HH_
+#endif  // MCNLA_CORE_MATRIX_COO_COO_STORAGE_HH_

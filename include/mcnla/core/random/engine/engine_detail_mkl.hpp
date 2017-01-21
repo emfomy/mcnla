@@ -5,8 +5,8 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_MKL_HPP_
-#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_MKL_HPP_
+#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_
+#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_
 
 #ifndef MCNLA_USE_MKL
   #error 'MCNLA_USE_MKL' should be set!
@@ -39,7 +39,7 @@ static inline void uniformImpl(
     const _Scalar a,
     const _Scalar b
 ) noexcept {
-  detail::vRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, vector.length(), vector.valuePtr(), a, b);
+  detail::vRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, vector.length(), vector.valPtr(), a, b);
 }
 
 template <typename _Scalar>
@@ -49,7 +49,7 @@ static inline void gaussianImpl(
     const _Scalar a,
     const _Scalar b
 ) noexcept {
-  detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, vector.length(), vector.valuePtr(), a, b);
+  detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, vector.length(), vector.valPtr(), a, b);
 }
 
 }  // namespace detail
@@ -58,4 +58,4 @@ static inline void gaussianImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_MKL_HPP_
+#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_

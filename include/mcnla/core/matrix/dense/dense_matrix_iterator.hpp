@@ -33,7 +33,7 @@ std::ostream& operator<< (
   const index_t width   = std::max(width_r, width_c);
   return os << "(" << std::setw(width) << iterator.rowidx() << ", "
                    << std::setw(width) << iterator.colidx() << ")  "
-                   << std::setw(ios_width) << iterator.value();
+                   << std::setw(ios_width) << iterator.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,9 +42,9 @@ std::ostream& operator<< (
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, Trans _trans, class _Matrix>
-_Scalar& DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::value() const noexcept {
+_Scalar& DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::val() const noexcept {
   mcnla_assert_gelt(itidx_, 0, container_->nelem());
-  return container_->valuePtr()[pos()];
+  return container_->valPtr()[pos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -5,8 +5,8 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_NOMKL_HPP_
-#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_NOMKL_HPP_
+#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_
+#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_
 
 #ifdef MCNLA_USE_MKL
   #error 'MCNLA_USE_MKL' should not be set!
@@ -79,4 +79,4 @@ static inline void gaussianImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_NOMKL_HPP_
+#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_

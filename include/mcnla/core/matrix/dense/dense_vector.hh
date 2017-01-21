@@ -9,10 +9,9 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix.hpp>
@@ -75,11 +74,11 @@ template <typename _Scalar>
 class DenseVector
   : public DenseVectorStorage<_Scalar>,
     public VectorWrapper<DenseVector<_Scalar>>,
-    public ContainerWrapper<DenseVector<_Scalar>>,
+    public IterableWrapper<DenseVector<_Scalar>>,
     public InvertibleWrapper<DenseVector<_Scalar>> {
 
   friend VectorWrapper<DenseVector<_Scalar>>;
-  friend ContainerWrapper<DenseVector<_Scalar>>;
+  friend IterableWrapper<DenseVector<_Scalar>>;
   friend InvertibleWrapper<DenseVector<_Scalar>>;
 
  public:
@@ -87,7 +86,7 @@ class DenseVector
   static constexpr index_t ndim = 1;
 
   using ScalarType        = _Scalar;
-  using ValueArrayType    = Array<_Scalar>;
+  using ValArrayType      = Array<_Scalar>;
   using SizesType         = std::tuple<index_t>;
 
   using RealType          = DenseVector<RealScalarT<_Scalar>>;
@@ -112,8 +111,7 @@ class DenseVector
   inline DenseVector( const SizesType sizes, const index_t stride = 1 ) noexcept;
   inline DenseVector( const index_t length, const index_t stride, const index_t capacity ) noexcept;
   inline DenseVector( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseVector( const index_t length, const index_t stride,
-                      const ValueArrayType &value, const index_t offset = 0 ) noexcept;
+  inline DenseVector( const index_t length, const index_t stride, const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseVector( const DenseVector &other ) noexcept;
   inline DenseVector( DenseVector &&other ) noexcept;
 

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_storage.hpp
-/// @brief   The dense storage.
+/// @file    include/mcnla/core/matrix/coo/coo_storage.hpp
+/// @brief   The COO storage.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HPP_
+#ifndef MCNLA_CORE_MATRIX_COO_COO_STORAGE_HPP_
+#define MCNLA_CORE_MATRIX_COO_COO_STORAGE_HPP_
 
-#include <mcnla/core/matrix/dense/dense_storage.hh>
+#include <mcnla/core/matrix/coo/coo_storage.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,14 +24,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Scalar>
-DenseStorage<_Scalar>::DenseStorage() noexcept
+CooStorage<_Scalar>::CooStorage() noexcept
   : val_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
+CooStorage<_Scalar>::CooStorage(
     const index_t capacity
 ) noexcept
   : val_(capacity) {}
@@ -40,7 +40,7 @@ DenseStorage<_Scalar>::DenseStorage(
 /// @brief  Construct with given raw data.
 ///
 template <class _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
+CooStorage<_Scalar>::CooStorage(
     const ValArrayType &val
 ) noexcept
   : val_(val) {}
@@ -51,8 +51,8 @@ DenseStorage<_Scalar>::DenseStorage(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
 template <class _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
-    const DenseStorage &other
+CooStorage<_Scalar>::CooStorage(
+    const CooStorage &other
 ) noexcept
   : val_(other.val_) {}
 
@@ -60,8 +60,8 @@ DenseStorage<_Scalar>::DenseStorage(
 /// @brief  Move constructor.
 ///
 template <class _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
-    DenseStorage &&other
+CooStorage<_Scalar>::CooStorage(
+    CooStorage &&other
 ) noexcept
   : val_(std::move(other.val_)) {}
 
@@ -71,8 +71,8 @@ DenseStorage<_Scalar>::DenseStorage(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
 template <class _Scalar>
-DenseStorage<_Scalar>& DenseStorage<_Scalar>::operator=(
-    const DenseStorage &other
+CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
+    const CooStorage &other
 ) noexcept {
   val_ = other.val_;
   return *this;
@@ -82,26 +82,18 @@ DenseStorage<_Scalar>& DenseStorage<_Scalar>::operator=(
 /// @brief  Move assignment operator.
 ///
 template <class _Scalar>
-DenseStorage<_Scalar>& DenseStorage<_Scalar>::operator=(
-    DenseStorage &&other
+CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
+    CooStorage &&other
 ) noexcept {
   val_ = std::move(other.val_);
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Determines if the memory size is zero.
-///
-template <class _Scalar>
-bool DenseStorage<_Scalar>::isEmpty() const noexcept {
-  return val_.isEmpty();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the value array.
 ///
 template <class _Scalar>
-index_t DenseStorage<_Scalar>::capacity() const noexcept {
+index_t CooStorage<_Scalar>::valCapacity() const noexcept {
   return val_.capacity();
 }
 
@@ -109,7 +101,7 @@ index_t DenseStorage<_Scalar>::capacity() const noexcept {
 /// @brief  Gets the offset of the value array.
 ///
 template <class _Scalar>
-index_t DenseStorage<_Scalar>::offset() const noexcept {
+index_t CooStorage<_Scalar>::valOffset() const noexcept {
   return val_.offset();
 }
 
@@ -117,7 +109,7 @@ index_t DenseStorage<_Scalar>::offset() const noexcept {
 /// @brief  Gets the value array.
 ///
 template <class _Scalar>
-Array<_Scalar>& DenseStorage<_Scalar>::val() noexcept {
+Array<_Scalar>& CooStorage<_Scalar>::val() noexcept {
   return val_;
 }
 
@@ -125,7 +117,7 @@ Array<_Scalar>& DenseStorage<_Scalar>::val() noexcept {
 /// @copydoc  val
 ///
 template <class _Scalar>
-const Array<_Scalar>& DenseStorage<_Scalar>::val() const noexcept {
+const Array<_Scalar>& CooStorage<_Scalar>::val() const noexcept {
   return val_;
 }
 
@@ -133,7 +125,7 @@ const Array<_Scalar>& DenseStorage<_Scalar>::val() const noexcept {
 /// @brief  Gets the raw value pointer.
 ///
 template <class _Scalar>
-_Scalar* DenseStorage<_Scalar>::valPtr() noexcept {
+_Scalar* CooStorage<_Scalar>::valPtr() noexcept {
   return *val_;
 }
 
@@ -141,7 +133,7 @@ _Scalar* DenseStorage<_Scalar>::valPtr() noexcept {
 /// @copydoc  valPtr
 ///
 template <class _Scalar>
-const _Scalar* DenseStorage<_Scalar>::valPtr() const noexcept {
+const _Scalar* CooStorage<_Scalar>::valPtr() const noexcept {
   return *val_;
 }
 
@@ -149,4 +141,4 @@ const _Scalar* DenseStorage<_Scalar>::valPtr() const noexcept {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HPP_
+#endif  // MCNLA_CORE_MATRIX_COO_COO_STORAGE_HPP_

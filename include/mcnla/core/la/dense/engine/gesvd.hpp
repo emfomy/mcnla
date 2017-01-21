@@ -168,13 +168,13 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::compute(
   auto vt_pitch = (vt.pitch() > 0) ? vt.pitch() : 1;
 
   if ( !isTrans(trans) ) {
-    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.nrow(), a.ncol(), a.valuePtr(), a.pitch(),
-                                  s.valuePtr(), u.valuePtr(), u_pitch, vt.valuePtr(), vt_pitch,
-                                  work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
+    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.nrow(), a.ncol(), a.valPtr(), a.pitch(),
+                                  s.valPtr(), u.valPtr(), u_pitch, vt.valPtr(), vt_pitch,
+                                  work_.valPtr(), work_.length(), rwork_.valPtr()), 0);
   } else {
-    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.ncol(), a.nrow(), a.valuePtr(), a.pitch(),
-                                  s.valuePtr(), vt.valuePtr(), vt_pitch, u.valuePtr(), u_pitch,
-                                  work_.valuePtr(), work_.length(), rwork_.valuePtr()), 0);
+    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.ncol(), a.nrow(), a.valPtr(), a.pitch(),
+                                  s.valPtr(), vt.valPtr(), vt_pitch, u.valPtr(), u_pitch,
+                                  work_.valPtr(), work_.length(), rwork_.valPtr()), 0);
   }
 }
 

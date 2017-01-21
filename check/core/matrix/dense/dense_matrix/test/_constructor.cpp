@@ -243,7 +243,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat1.capacity(), mat.capacity());
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
-    EXPECT_EQ(mat1.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat1.valPtr(), mat.valPtr());
 
 
     SCOPED_TRACE("Move Constructor");
@@ -270,7 +270,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat2.capacity(), mat.capacity());
     EXPECT_EQ(mat2.offset(),   mat.offset());
 
-    EXPECT_EQ(mat2.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }
 
@@ -366,7 +366,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), mat.capacity());
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
-    EXPECT_EQ(mat1.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat1.valPtr(), mat.valPtr());
 
 
     SCOPED_TRACE("Move Constructor");
@@ -393,7 +393,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat2.capacity(), mat.capacity());
     EXPECT_EQ(mat2.offset(),   mat.offset());
 
-    EXPECT_EQ(mat2.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }
 
@@ -489,7 +489,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat1.capacity(), mat.capacity());
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
-    EXPECT_EQ(mat1.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat1.valPtr(), mat.valPtr());
 
 
     SCOPED_TRACE("Move Constructor");
@@ -516,7 +516,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat2.capacity(), mat.capacity());
     EXPECT_EQ(mat2.offset(),   mat.offset());
 
-    EXPECT_EQ(mat2.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }
 
@@ -612,7 +612,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), mat.capacity());
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
-    EXPECT_EQ(mat1.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat1.valPtr(), mat.valPtr());
 
 
     SCOPED_TRACE("Move Constructor");
@@ -639,6 +639,6 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat2.capacity(), mat.capacity());
     EXPECT_EQ(mat2.offset(),   mat.offset());
 
-    EXPECT_EQ(mat2.valuePtr(), mat.valuePtr());
+    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }

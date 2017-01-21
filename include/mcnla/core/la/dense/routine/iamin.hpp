@@ -33,7 +33,7 @@ template <typename _Scalar>
 inline index_t iamin(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return detail::iamin(x.length(), x.valuePtr(), x.stride());
+  return detail::iamin(x.length(), x.valPtr(), x.stride());
 }
 //@}
 
@@ -46,7 +46,7 @@ template <typename _Scalar>
 inline RealScalarT<_Scalar> amin(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  index_t idx = detail::iamin(x.length(), x.valuePtr(), x.stride());
+  index_t idx = detail::iamin(x.length(), x.valPtr(), x.stride());
   return std::abs(x(idx));
 }
 //@}

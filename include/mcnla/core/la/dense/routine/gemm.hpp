@@ -45,7 +45,7 @@ inline void gemmImpl2(
   mcnla_assert_eq(a.ncol(), b.nrow());
 
   gemm(toTransChar<_Scalar>(_transa), toTransChar<_Scalar>(_transb), c.nrow(), c.ncol(), a.ncol(),
-       alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+       alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

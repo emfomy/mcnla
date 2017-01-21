@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -77,20 +77,20 @@ class DenseDiagonalMatrix
 
   static constexpr index_t ndim = 2;
 
-  using ScalarType     = _Scalar;
-  using ValueArrayType = Array<_Scalar>;
+  using ScalarType    = _Scalar;
+  using ValArrayType  = Array<_Scalar>;
 
-  using RealType       = DenseDiagonalMatrix<RealScalarT<_Scalar>>;
-  using ComplexType    = DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
+  using RealType      = DenseDiagonalMatrix<RealScalarT<_Scalar>>;
+  using ComplexType   = DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
 
-  using VectorType     = DenseVector<_Scalar>;
-  using MatrixType     = DenseDiagonalMatrix<_Scalar>;
+  using VectorType    = DenseVector<_Scalar>;
+  using MatrixType    = DenseDiagonalMatrix<_Scalar>;
 
-  using TransposeType  = DenseDiagonalMatrix<_Scalar>;
+  using TransposeType = DenseDiagonalMatrix<_Scalar>;
 
  private:
 
-  using BaseType       = DenseVectorStorage<_Scalar>;
+  using BaseType      = DenseVectorStorage<_Scalar>;
 
  public:
 
@@ -100,7 +100,7 @@ class DenseDiagonalMatrix
   inline DenseDiagonalMatrix( const index_t size, const index_t pitch ) noexcept;
   inline DenseDiagonalMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseDiagonalMatrix( const index_t size, const index_t pitch,
-                              const ValueArrayType &value, const index_t offset = 0 ) noexcept;
+                              const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseDiagonalMatrix( const DenseDiagonalMatrix &other ) noexcept;
   inline DenseDiagonalMatrix( DenseDiagonalMatrix &&other ) noexcept;
 

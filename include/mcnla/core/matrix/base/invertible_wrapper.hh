@@ -53,7 +53,7 @@ class InvertibleWrapper : public utility::CrtpBase<_Derived, InvertibleWrapper<_
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_module
-/// The inverse class.
+/// The inverse view.
 ///
 /// @tparam  _Base  The base type.
 ///

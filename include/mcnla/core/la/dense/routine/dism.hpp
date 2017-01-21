@@ -51,7 +51,7 @@ inline void dismImpl2(
 
   index_t idiag[1] = {0};
   diasm('N', c.nrow(), c.ncol(), alpha, "TLNC",
-        a.valuePtr(), a.size(), idiag, 1, b.valuePtr(), b.pitch(), c.valuePtr(), c.pitch());
+        a.valPtr(), a.size(), idiag, 1, b.valPtr(), b.pitch(), c.valPtr(), c.pitch());
 }
 
 #endif  // MCNLA_USE_MKL

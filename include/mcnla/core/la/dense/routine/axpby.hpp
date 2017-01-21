@@ -33,7 +33,7 @@ inline void axpby(
     const ScalarT<DenseVector<_Scalar>> alpha = 1,
     const ScalarT<DenseVector<_Scalar>> beta  = 1
 ) noexcept {
-  detail::axpby(x.length(), alpha, x.valuePtr(), x.stride(), beta, y.valuePtr(), y.stride());
+  detail::axpby(x.length(), alpha, x.valPtr(), x.stride(), beta, y.valPtr(), y.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

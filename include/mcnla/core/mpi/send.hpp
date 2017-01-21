@@ -35,7 +35,7 @@ inline void sendImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Send(buffer.valuePtr(), count, datatype, dest, tag, comm);
+  MPI_Send(buffer.valPtr(), count, datatype, dest, tag, comm);
 }
 
 }  // namespace detail

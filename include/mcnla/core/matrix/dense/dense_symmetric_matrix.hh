@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
@@ -89,22 +89,22 @@ class DenseSymmetricMatrix
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
-  using ScalarType     = _Scalar;
-  using ValueArrayType = Array<_Scalar>;
+  using ScalarType    = _Scalar;
+  using ValArrayType  = Array<_Scalar>;
 
-  using RealType       = DenseSymmetricMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType    = DenseSymmetricMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+  using RealType      = DenseSymmetricMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
+  using ComplexType   = DenseSymmetricMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
 
-  using VectorType     = DenseVector<_Scalar>;
-  using MatrixType     = DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
+  using VectorType    = DenseVector<_Scalar>;
+  using MatrixType    = DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
 
-  using TransposeType  = DenseSymmetricMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>;
+  using TransposeType = DenseSymmetricMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>;
 
-  using GeneralType    = DenseMatrix<_Scalar, _trans>;
+  using GeneralType   = DenseMatrix<_Scalar, _trans>;
 
  private:
 
-  using BaseType       = DenseMatrixStorage<_Scalar>;
+  using BaseType      = DenseMatrixStorage<_Scalar>;
 
  public:
 
@@ -114,7 +114,7 @@ class DenseSymmetricMatrix
   inline DenseSymmetricMatrix( const index_t size, const index_t pitch ) noexcept;
   inline DenseSymmetricMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseSymmetricMatrix( const index_t size, const index_t pitch,
-                               const ValueArrayType &value, const index_t offset = 0 ) noexcept;
+                               const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseSymmetricMatrix( const DenseSymmetricMatrix &other ) noexcept;
   inline DenseSymmetricMatrix( DenseSymmetricMatrix &&other ) noexcept;
 

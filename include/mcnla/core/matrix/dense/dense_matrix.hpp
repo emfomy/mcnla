@@ -99,10 +99,10 @@ DenseMatrix<_Scalar, _trans>::DenseMatrix(
     const index_t nrow,
     const index_t ncol,
     const index_t pitch,
-    const ValueArrayType &value,
+    const ValArrayType &val,
     const index_t offset
 ) noexcept
-  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), pitch, value, offset) {}
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), pitch, val, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.

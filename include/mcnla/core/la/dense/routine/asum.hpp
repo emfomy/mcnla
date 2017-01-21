@@ -33,7 +33,7 @@ template <typename _Scalar>
 inline _Scalar asum(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return detail::asum(x.length(), x.valuePtr(), x.stride());
+  return detail::asum(x.length(), x.valPtr(), x.stride());
 }
 //@}
 

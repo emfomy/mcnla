@@ -34,7 +34,7 @@ inline void bcastImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Bcast(buffer.valuePtr(), count, datatype, root, comm);
+  MPI_Bcast(buffer.valPtr(), count, datatype, root, comm);
 }
 
 }  // namespace detail

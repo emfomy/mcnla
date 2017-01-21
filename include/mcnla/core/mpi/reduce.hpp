@@ -36,7 +36,7 @@ inline void reduceImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Reduce(send.valuePtr(), recv.valuePtr(), count, datatype, op, root, comm);
+  MPI_Reduce(send.valPtr(), recv.valPtr(), count, datatype, op, root, comm);
 }
 
 template <typename _Scalar>
@@ -49,9 +49,9 @@ inline void reduceImpl(
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
   if ( isCommRoot(root, comm) ) {
-    MPI_Reduce(MPI_IN_PLACE, buffer.valuePtr(), count, datatype, op, root, comm);
+    MPI_Reduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, root, comm);
   } else {
-    MPI_Reduce(buffer.valuePtr(), buffer.valuePtr(), count, datatype, op, root, comm);
+    MPI_Reduce(buffer.valPtr(), buffer.valPtr(), count, datatype, op, root, comm);
   }
 }
 

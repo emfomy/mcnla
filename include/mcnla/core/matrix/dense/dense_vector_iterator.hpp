@@ -29,7 +29,7 @@ std::ostream& operator<< (
     const DenseVectorIteratorBase<__Scalar, __Vector> &iterator
 ) {
   const index_t width = log10(iterator.container_->length())+1;
-  return os << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.value();
+  return os << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,9 +38,9 @@ std::ostream& operator<< (
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <typename _Scalar, class _Vector>
-_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::value() const noexcept {
+_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::val() const noexcept {
   mcnla_assert_gelt(itidx_, 0, container_->nelem());
-  return container_->valuePtr()[pos()];
+  return container_->valPtr()[pos()];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -32,7 +32,7 @@ template <typename _Scalar>
 inline void memset0(
   DenseVector<_Scalar> &x
 ) noexcept {
-  std::memset(x.valuePtr(), 0, x.nelem() * sizeof(_Scalar));
+  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Scalar));
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -54,7 +54,7 @@ template <typename _Scalar, Trans _trans>
 inline void memset0(
   DenseMatrix<_Scalar, _trans> &x
 ) noexcept {
-  std::memset(x.valuePtr(), 0, x.nelem() * sizeof(_Scalar));
+  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Scalar));
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

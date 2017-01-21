@@ -36,7 +36,7 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
  private:
 
   using ScalarType        = _Scalar;
-  using ValueArrayType    = Array<ScalarType>;
+  using ValArrayType      = Array<ScalarType>;
   using DimsType          = std::tuple<index_t, index_t>;
 
   using VectorStorageType = DenseVectorStorage<ScalarType>;
@@ -58,7 +58,7 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   /// The stride.
   index_t stride_;
 
-  using BaseType::value_;
+  using BaseType::val_;
 
  protected:
 
@@ -68,7 +68,7 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   inline DenseMatrixStorage( const index_t dim0, const index_t dim1, const index_t pitch ) noexcept;
   inline DenseMatrixStorage( const index_t dim0, const index_t dim1, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseMatrixStorage( const index_t dim0, const index_t dim1, const index_t pitch,
-                             const ValueArrayType &value, const index_t offset = 0 ) noexcept;
+                             const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseMatrixStorage( const DenseMatrixStorage &other ) noexcept;
   inline DenseMatrixStorage( DenseMatrixStorage &&other ) noexcept;
 

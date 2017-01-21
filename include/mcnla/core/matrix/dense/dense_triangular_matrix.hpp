@@ -65,10 +65,10 @@ template <typename _Scalar, Trans _trans, Uplo _uplo>
 DenseTriangularMatrix<_Scalar, _trans, _uplo>::DenseTriangularMatrix(
     const index_t size,
     const index_t pitch,
-    const ValueArrayType &value,
+    const ValArrayType &val,
     const index_t offset
 ) noexcept
-  : BaseType(size, size, pitch, value, offset) {}
+  : BaseType(size, size, pitch, val, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.

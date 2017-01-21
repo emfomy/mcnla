@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
@@ -88,22 +88,22 @@ class DenseTriangularMatrix
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
-  using ScalarType     = _Scalar;
-  using ValueArrayType = Array<_Scalar>;
+  using ScalarType    = _Scalar;
+  using ValArrayType  = Array<_Scalar>;
 
-  using RealType       = DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType    = DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+  using RealType      = DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
+  using ComplexType   = DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
 
-  using VectorType     = DenseVector<_Scalar>;
-  using MatrixType     = DenseTriangularMatrix<_Scalar, _trans, _uplo>;
+  using VectorType    = DenseVector<_Scalar>;
+  using MatrixType    = DenseTriangularMatrix<_Scalar, _trans, _uplo>;
 
-  using TransposeType  = DenseTriangularMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>;
+  using TransposeType = DenseTriangularMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>;
 
-  using GeneralType    = DenseMatrix<_Scalar, _trans>;
+  using GeneralType   = DenseMatrix<_Scalar, _trans>;
 
  private:
 
-  using BaseType       = DenseMatrixStorage<_Scalar>;
+  using BaseType      = DenseMatrixStorage<_Scalar>;
 
  public:
 
@@ -113,7 +113,7 @@ class DenseTriangularMatrix
   inline DenseTriangularMatrix( const index_t size, const index_t pitch ) noexcept;
   inline DenseTriangularMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseTriangularMatrix( const index_t size, const index_t pitch,
-                                const ValueArrayType &value, const index_t offset = 0 ) noexcept;
+                                const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseTriangularMatrix( const DenseTriangularMatrix &other ) noexcept;
   inline DenseTriangularMatrix( DenseTriangularMatrix &&other ) noexcept;
 

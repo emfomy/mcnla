@@ -37,7 +37,7 @@ inline void reduceScatterBlockImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Reduce_scatter_block(send.valuePtr(), recv.valuePtr(), count, datatype, op, comm);
+  MPI_Reduce_scatter_block(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
 }
 
 }  // namespace detail

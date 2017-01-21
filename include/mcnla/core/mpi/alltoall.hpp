@@ -34,7 +34,7 @@ inline void alltoallImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Alltoall(send.valuePtr(), count, datatype, recv.valuePtr(), count, datatype, comm);
+  MPI_Alltoall(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, comm);
 }
 
 template <typename _Scalar>
@@ -44,7 +44,7 @@ inline void alltoallImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.valuePtr(), count, datatype, comm);
+  MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.valPtr(), count, datatype, comm);
 }
 
 }  // namespace detail

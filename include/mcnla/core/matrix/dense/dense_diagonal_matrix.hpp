@@ -65,10 +65,10 @@ template <typename _Scalar>
 DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
     const index_t size,
     const index_t pitch,
-    const ValueArrayType &value,
+    const ValArrayType &val,
     const index_t offset
 ) noexcept
-  : BaseType(size, pitch+1, value, offset) {}
+  : BaseType(size, pitch+1, val, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.

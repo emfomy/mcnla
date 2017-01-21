@@ -52,7 +52,7 @@ inline void dimmImpl2(
 
   index_t idiag[1] = {0};
   diamm('N', c.nrow(), c.ncol(), a.size(), alpha, "D NC",
-        a.valuePtr(), a.size(), idiag, 1, b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+        a.valPtr(), a.size(), idiag, 1, b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 
 #endif  // MCNLA_USE_MKL

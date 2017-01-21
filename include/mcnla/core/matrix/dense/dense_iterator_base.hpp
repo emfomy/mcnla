@@ -67,7 +67,7 @@ _Derived& DenseIteratorBase<_Derived>::operator=(
 ///
 template <class _Derived>
 ScalarT<_Derived>& DenseIteratorBase<_Derived>::operator*() const noexcept {
-  return derived().value();
+  return derived().val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ ScalarT<_Derived>& DenseIteratorBase<_Derived>::operator*() const noexcept {
 ///
 template <class _Derived>
 ScalarT<_Derived>* DenseIteratorBase<_Derived>::operator->() const noexcept {
-  return &(derived().value());
+  return &(derived().val());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

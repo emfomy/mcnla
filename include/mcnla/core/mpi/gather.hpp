@@ -35,7 +35,7 @@ inline void gatherImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Gather(send.valuePtr(), count, datatype, recv.valuePtr(), count, datatype, root, comm);
+  MPI_Gather(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, root, comm);
 }
 
 }  // namespace detail

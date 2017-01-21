@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_vector.hpp
-/// @brief   The dense vector.
+/// @file    include/mcnla/core/matrix/coo/coo_vector.hpp
+/// @brief   The COO vector.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HPP_
+#ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_HPP_
+#define MCNLA_CORE_MATRIX_COO_COO_VECTOR_HPP_
 
-#include <mcnla/core/matrix/dense/dense_vector.hh>
+#include <mcnla/core/matrix/coo/coo_vector.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,62 +24,63 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector() noexcept
+CooVector<_Scalar>::CooVector() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
+CooVector<_Scalar>::CooVector(
     const index_t length,
-    const index_t stride
+    const index_t nnz
 ) noexcept
-  : BaseType(toDim0(length), stride) {}
+  : BaseType(toDim0(length), nnz) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
+CooVector<_Scalar>::CooVector(
     const SizesType sizes,
-    const index_t stride
+    const index_t nnz
 ) noexcept
-  : BaseType(toDim0(sizes), stride) {}
+  : BaseType(toDim0(sizes), nnz) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
+CooVector<_Scalar>::CooVector(
     const index_t length,
-    const index_t stride,
+    const index_t nnz,
     const index_t capacity
 ) noexcept
-  : BaseType(toDim0(length), stride, capacity) {}
+  : BaseType(toDim0(length), nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
+CooVector<_Scalar>::CooVector(
     const SizesType sizes,
-    const index_t stride,
+    const index_t nnz,
     const index_t capacity
 ) noexcept
-  : BaseType(toDim0(sizes), stride, capacity) {}
+  : BaseType(toDim0(sizes), nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector(
+CooVector<_Scalar>::CooVector(
     const index_t length,
-    const index_t stride,
+    const index_t nnz,
     const ValArrayType &val,
+    const IdxArrayType &idx0,
     const index_t offset
 ) noexcept
-  : BaseType(toDim0(length), stride, val, offset) {}
+  : BaseType(toDim0(length), nnz, val, idx0, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -87,14 +88,14 @@ DenseVector<_Scalar>::DenseVector(
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector( const DenseVector &other ) noexcept
+CooVector<_Scalar>::CooVector( const CooVector &other ) noexcept
   : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
+CooVector<_Scalar>::CooVector( CooVector &&other ) noexcept
   : BaseType(std::move(other)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +104,7 @@ DenseVector<_Scalar>::DenseVector( DenseVector &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other ) noexcept {
+CooVector<_Scalar>& CooVector<_Scalar>::operator=( const CooVector &other ) noexcept {
   BaseType::operator=(other);
   return *this;
 }
@@ -112,7 +113,7 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( const DenseVector &other 
 /// @brief  Move assignment operator.
 ///
 template <typename _Scalar>
-DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noexcept {
+CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
 }
@@ -121,70 +122,38 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noe
 /// @brief  Gets the number of internal index.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::nidx() const noexcept {
+index_t CooVector<_Scalar>::nidx() const noexcept {
   return this->nelem();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::getElemImpl
+/// @copydoc  mcnla::matrix::CooVectorStorage::getElemImpl
 ///
 template <typename _Scalar>
-_Scalar& DenseVector<_Scalar>::operator()(
+_Scalar& CooVector<_Scalar>::operator()(
     const index_t idx
 ) noexcept {
   return this->getElemImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::getElemImpl
+/// @copydoc  mcnla::matrix::CooVectorStorage::getElemImpl
 ///
 template <typename _Scalar>
-const _Scalar& DenseVector<_Scalar>::operator()(
+const _Scalar& CooVector<_Scalar>::operator()(
     const index_t idx
 ) const noexcept {
   return this->getElemImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::posImpl
+/// @copydoc  mcnla::matrix::CooVectorStorage::posImpl
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::pos(
+index_t CooVector<_Scalar>::pos(
     const index_t idx
 ) const noexcept {
   return this->posImpl(idx);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Finds the iterator to element
-///
-template <typename _Scalar>
-DenseVectorIterator<_Scalar> DenseVector<_Scalar>::find(
-    const index_t idx
-) noexcept {
-  mcnla_assert_gelt(idx, 0, this->length());
-  return IteratorType(this, idx);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  find
-///
-template <typename _Scalar>
-DenseVectorConstIterator<_Scalar> DenseVector<_Scalar>::find(
-    const index_t idx
-) const noexcept {
-  mcnla_assert_gelt(idx, 0, this->length());
-  return ConstIteratorType(this, idx);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  find
-///
-template <typename _Scalar>
-DenseVectorConstIterator<_Scalar> DenseVector<_Scalar>::cfind(
-    const index_t idx
-) const noexcept {
-  return find(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,64 +162,28 @@ DenseVectorConstIterator<_Scalar> DenseVector<_Scalar>::cfind(
 /// @attention  The data is also reallocated.
 ///
 template <typename _Scalar> template <typename... Args>
-void DenseVector<_Scalar>::reconstruct(
+void CooVector<_Scalar>::reconstruct(
     Args... args
 ) noexcept {
-  *this = DenseVector<_Scalar>(args...);
+  *this = CooVector<_Scalar>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::resizeImpl
+/// @copydoc  mcnla::matrix::CooVectorStorage::resizeImpl
 ///
 template <typename _Scalar>
-void DenseVector<_Scalar>::resize(
+void CooVector<_Scalar>::resize(
     const index_t length,
-    const index_t stride
+    const index_t nnz
 ) noexcept {
-  this->resizeImpl(length, stride);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the diagonal view of the matrix.
-///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>& DenseVector<_Scalar>::viewDiagonal() noexcept {
-  return static_cast<DiagonalType&>(base());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewDiagonal
-///
-template <typename _Scalar>
-const DenseDiagonalMatrix<_Scalar>& DenseVector<_Scalar>::viewDiagonal() const noexcept {
-  return static_cast<const DiagonalType&>(base());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a vector segment.
-///
-template <typename _Scalar>
-DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
-    const IdxRange &range
-) noexcept {
-  return static_cast<VectorType&&>(this->getVectorImpl(range));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a vector segment.
-///
-template <typename _Scalar>
-const DenseVector<_Scalar> DenseVector<_Scalar>::operator()(
-    const IdxRange &range
-) const noexcept {
-  return static_cast<const VectorType&&>(this->getVectorImpl(range));
+  this->resizeImpl(length, nnz);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::VectorWrapper::length
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::lengthImpl() const noexcept {
+index_t CooVector<_Scalar>::lengthImpl() const noexcept {
   return this->dim0();
 }
 
@@ -258,7 +191,7 @@ index_t DenseVector<_Scalar>::lengthImpl() const noexcept {
 /// Gets the first dimension from sizes.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::toDim0(
+index_t CooVector<_Scalar>::toDim0(
     const SizesType sizes
 ) const noexcept {
   return std::get<0>(sizes);
@@ -268,7 +201,7 @@ index_t DenseVector<_Scalar>::toDim0(
 /// @copydoc  toDim0
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::toDim0(
+index_t CooVector<_Scalar>::toDim0(
     const index_t length
 ) const noexcept {
   return length;
@@ -278,7 +211,7 @@ index_t DenseVector<_Scalar>::toDim0(
 /// @brief  Convert to base class.
 ///
 template <typename _Scalar>
-DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() noexcept {
+CooVectorStorage<_Scalar>& CooVector<_Scalar>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
@@ -286,7 +219,7 @@ DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() noexcept {
 /// @copydoc  base
 ///
 template <typename _Scalar>
-const DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() const noexcept {
+const CooVectorStorage<_Scalar>& CooVector<_Scalar>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 
@@ -294,4 +227,4 @@ const DenseVectorStorage<_Scalar>& DenseVector<_Scalar>::base() const noexcept {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HPP_
+#endif  // MCNLA_CORE_MATRIX_COO_COO_VECTOR_HPP_

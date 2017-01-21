@@ -42,7 +42,7 @@ inline void omatcopyImpl2(
   mcnla_assert_eq(a.sizes(), b.sizes());
 
   omatcopy('C', toTransChar<_Scalar>(_transb), a.nrow(), a.ncol(),
-           alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch());
+           alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
 }
 
 // ========================================================================================================================== //

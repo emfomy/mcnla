@@ -36,7 +36,7 @@ inline void recvImpl(
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Recv(buffer.valuePtr(), count, datatype, source, tag, comm, &status);
+  MPI_Recv(buffer.valPtr(), count, datatype, source, tag, comm, &status);
 }
 
 }  // namespace detail

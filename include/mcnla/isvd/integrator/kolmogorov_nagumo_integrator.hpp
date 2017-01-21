@@ -103,7 +103,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
   // Rearrange Qj
   for ( index_t j = 0; j < mpi_size; ++j ) {
     la::copy(matrix_qs_(IdxRange{j, j+1} * nrow_each_, ""),
-               matrix_qjs_("", IdxRange{j, j+1} * dim_sketch * num_sketch_each));
+             matrix_qjs_("", IdxRange{j, j+1} * dim_sketch * num_sketch_each));
   }
 
   // Qc := Q0
@@ -141,10 +141,10 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     syev_engine_(matrix_z_.viewSymmetric(), vector_e_);
 
     // E := sqrt( I/2 - sqrt( I/4 - E ) )
-    vector_e_.value().valarray() = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_.value().valarray()));
+    vector_e_.val().valarray() = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_.val().valarray()));
 
     // F := sqrt( E )
-    vector_f_.value().valarray() = std::sqrt(vector_e_.value().valarray());
+    vector_f_.val().valarray() = std::sqrt(vector_e_.val().valarray());
 
     // D := F \ Z
     la::sm(vector_f_.viewDiagonal().inv(), matrix_z_, matrix_d_);
@@ -170,7 +170,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
 
     // ================================================================================================================== //
     // Check convergence
-    vector_e_.value().valarray() -= 1.0;
+    vector_e_.val().valarray() -= 1.0;
     is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) > tolerance);
   }
 

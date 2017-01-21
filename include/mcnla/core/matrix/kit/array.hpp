@@ -44,10 +44,10 @@ Array<_Type>::Array(
 ///
 template <typename _Type>
 Array<_Type>::Array(
-    const BaseType &value,
+    const BaseType &ptr,
     const index_t offset
 ) noexcept
-  : BaseType(value),
+  : BaseType(ptr),
     offset_(offset) {
   mcnla_assert_gele(offset_, 0, size());
 }

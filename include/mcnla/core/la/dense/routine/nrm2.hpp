@@ -33,7 +33,7 @@ template <typename _Scalar>
 inline RealScalarT<_Scalar> nrm2(
     const DenseVector<_Scalar> &x
 ) noexcept {
-  return detail::nrm2(x.length(), x.valuePtr(), x.stride());
+  return detail::nrm2(x.length(), x.valPtr(), x.stride());
 }
 //@}
 

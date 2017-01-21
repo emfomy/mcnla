@@ -45,7 +45,7 @@ inline void symmImpl3(
   mcnla_assert_eq(b.sizes(), c.sizes());
 
   symm('L', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
-       alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+       alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 
 template <typename _Scalar, Trans _transa, Uplo _uplo>
@@ -60,7 +60,7 @@ inline void symmImpl3(
   mcnla_assert_eq(b.sizes(), c.sizes());
 
   symm('R', toUploChar(_uplo, _transa), c.nrow(), c.ncol(),
-       alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+       alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/base/container_wrapper.hpp
-/// @brief   The container wrapper.
+/// @file    include/mcnla/core/matrix/base/iterable_wrapper.hpp
+/// @brief   The iterable container wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_BASE_CONTAINER_WRAPPER_HPP_
-#define MCNLA_CORE_MATRIX_BASE_CONTAINER_WRAPPER_HPP_
+#ifndef MCNLA_CORE_MATRIX_BASE_ITERABLE_WRAPPER_HPP_
+#define MCNLA_CORE_MATRIX_BASE_ITERABLE_WRAPPER_HPP_
 
-#include <mcnla/core/matrix/base/container_wrapper.hh>
+#include <mcnla/core/matrix/base/iterable_wrapper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,7 +24,7 @@ namespace matrix {
 /// @brief  Gets the iterator to beginning.
 ///
 template <class _Derived>
-IteratorT<_Derived> ContainerWrapper<_Derived>::begin() noexcept {
+IteratorT<_Derived> IterableWrapper<_Derived>::begin() noexcept {
   return IteratorType::beginImpl(&(this->derived()));
 }
 
@@ -32,7 +32,7 @@ IteratorT<_Derived> ContainerWrapper<_Derived>::begin() noexcept {
 /// @copydoc  begin
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> ContainerWrapper<_Derived>::begin() const noexcept {
+ConstIteratorT<_Derived> IterableWrapper<_Derived>::begin() const noexcept {
   return ConstIteratorType::beginImpl(&(this->derived()));
 }
 
@@ -40,7 +40,7 @@ ConstIteratorT<_Derived> ContainerWrapper<_Derived>::begin() const noexcept {
 /// @copydoc  begin
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> ContainerWrapper<_Derived>::cbegin() const noexcept {
+ConstIteratorT<_Derived> IterableWrapper<_Derived>::cbegin() const noexcept {
   return ConstIteratorType::beginImpl(&(this->derived()));
 }
 
@@ -48,7 +48,7 @@ ConstIteratorT<_Derived> ContainerWrapper<_Derived>::cbegin() const noexcept {
 /// @brief  Gets the iterator to end.
 ///
 template <class _Derived>
-IteratorT<_Derived> ContainerWrapper<_Derived>::end() noexcept {
+IteratorT<_Derived> IterableWrapper<_Derived>::end() noexcept {
   return IteratorType::endImpl(&(this->derived()));
 }
 
@@ -56,7 +56,7 @@ IteratorT<_Derived> ContainerWrapper<_Derived>::end() noexcept {
 /// @copydoc  end
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> ContainerWrapper<_Derived>::end() const noexcept {
+ConstIteratorT<_Derived> IterableWrapper<_Derived>::end() const noexcept {
   return ConstIteratorType::endImpl(&(this->derived()));
 }
 
@@ -64,7 +64,7 @@ ConstIteratorT<_Derived> ContainerWrapper<_Derived>::end() const noexcept {
 /// @copydoc  end
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> ContainerWrapper<_Derived>::cend() const noexcept {
+ConstIteratorT<_Derived> IterableWrapper<_Derived>::cend() const noexcept {
   return ConstIteratorType::endImpl(&(this->derived()));
 }
 
@@ -72,4 +72,4 @@ ConstIteratorT<_Derived> ContainerWrapper<_Derived>::cend() const noexcept {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_BASE_CONTAINER_WRAPPER_HPP_
+#endif  // MCNLA_CORE_MATRIX_BASE_ITERABLE_WRAPPER_HPP_

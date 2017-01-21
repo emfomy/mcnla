@@ -39,7 +39,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec1.capacity(), vec.capacity());
     EXPECT_EQ(vec1.offset(),   vec.offset());
 
-    EXPECT_EQ(vec1.valuePtr(), vec.valuePtr());
+    EXPECT_EQ(vec1.valPtr(), vec.valPtr());
 
 
     SCOPED_TRACE("Move Assignment");
@@ -64,7 +64,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec2.capacity(), vec.capacity());
     EXPECT_EQ(vec2.offset(),   vec.offset());
 
-    EXPECT_EQ(vec2.valuePtr(), vec.valuePtr());
+    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }
 
@@ -109,7 +109,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec1.capacity(), vec.capacity());
     EXPECT_EQ(vec1.offset(),   vec.offset());
 
-    EXPECT_EQ(vec1.valuePtr(), vec.valuePtr());
+    EXPECT_EQ(vec1.valPtr(), vec.valPtr());
 
 
     SCOPED_TRACE("Move Assignment");
@@ -134,6 +134,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec2.capacity(), vec.capacity());
     EXPECT_EQ(vec2.offset(),   vec.offset());
 
-    EXPECT_EQ(vec2.valuePtr(), vec.valuePtr());
+    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }

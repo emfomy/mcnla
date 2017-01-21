@@ -32,7 +32,7 @@ inline void axpy(
           DenseVector<_Scalar> &y,
     const ScalarT<DenseVector<_Scalar>> alpha = 1
 ) noexcept {
-  detail::axpy(x.length(), alpha, x.valuePtr(), x.stride(), y.valuePtr(), y.stride());
+  detail::axpy(x.length(), alpha, x.valPtr(), x.stride(), y.valPtr(), y.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

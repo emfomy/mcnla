@@ -47,7 +47,7 @@ inline void syr2kImpl2(
   mcnla_assert_eq(a.sizes(), b.sizes());
 
   syr2k(toUploChar(_uplo, _transc), toTransChar<_Scalar>(_transa), c.nrow(), a.ncol(),
-        alpha, a.valuePtr(), a.pitch(), b.valuePtr(), b.pitch(), beta, c.valuePtr(), c.pitch());
+        alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 
 // ========================================================================================================================== //

@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/container_wrapper.hpp>
+#include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
@@ -84,13 +84,13 @@ template <typename _Scalar, Trans _trans = Trans::NORMAL>
 class DenseMatrix
   : public DenseMatrixStorage<_Scalar>,
     public MatrixWrapper<DenseMatrix<_Scalar, _trans>>,
-    public ContainerWrapper<DenseMatrix<_Scalar, _trans>>,
+    public IterableWrapper<DenseMatrix<_Scalar, _trans>>,
     public InvertibleWrapper<DenseMatrix<_Scalar, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
   friend MatrixWrapper<DenseMatrix<_Scalar, _trans>>;
-  friend ContainerWrapper<DenseMatrix<_Scalar, _trans>>;
+  friend IterableWrapper<DenseMatrix<_Scalar, _trans>>;
   friend InvertibleWrapper<DenseMatrix<_Scalar, _trans>>;
 
  public:
@@ -99,7 +99,7 @@ class DenseMatrix
   static constexpr Trans trans = _trans;
 
   using ScalarType        = _Scalar;
-  using ValueArrayType    = Array<_Scalar>;
+  using ValArrayType      = Array<_Scalar>;
   using SizesType         = std::tuple<index_t, index_t>;
 
   using RealType          = DenseMatrix<RealScalarT<_Scalar>, _trans>;
@@ -138,7 +138,7 @@ class DenseMatrix
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseMatrix( const SizesType sizes, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-                      const ValueArrayType &value, const index_t offset = 0 ) noexcept;
+                      const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const DenseMatrix &other ) noexcept;
   inline DenseMatrix( DenseMatrix &&other ) noexcept;
 

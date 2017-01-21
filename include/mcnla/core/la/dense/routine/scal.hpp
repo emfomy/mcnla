@@ -31,7 +31,7 @@ inline void scal(
           DenseVector<_Scalar> &x,
     const ScalarT<DenseVector<_Scalar>> alpha
 ) noexcept {
-  detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
+  detail::scal(x.length(), alpha, x.valPtr(), x.stride());
 }
 
 template <typename _Scalar>
@@ -39,7 +39,7 @@ inline void scal(
           DenseVector<std::complex<_Scalar>> &x,
     const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha
 ) noexcept {
-  detail::scal(x.length(), alpha, x.valuePtr(), x.stride());
+  detail::scal(x.length(), alpha, x.valPtr(), x.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
