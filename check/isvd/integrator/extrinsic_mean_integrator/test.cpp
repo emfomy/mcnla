@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <mcnla/isvd/integrator/extrinsic_mean_integrator.hpp>
-#include <mcnla/core/io.hpp>
+#include <mcnla/core/io/matrix_market.hpp>
 
 #define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_em.mtx"

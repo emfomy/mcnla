@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/load_matrix_market.hpp
-/// @brief   Load data from a matrix market file.
+/// @file    include/mcnla/core/io/matrix_matket/dense_load.hpp
+/// @brief   Load dense data from a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
-#define MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
+#ifndef MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_HPP_
+#define MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_HPP_
 
 #include <mcnla/core/io/def.hpp>
 #include <fstream>
@@ -257,4 +257,4 @@ inline void loadMatrixMarket(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_IO_LOAD_MATRIX_MARKET_HPP_
+#endif  // MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_HPP_

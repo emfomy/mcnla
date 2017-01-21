@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/save_matrix_market.hpp
-/// @brief   Save data into a matrix market file.
+/// @file    include/mcnla/core/io/matrix_matket/dense_save.hpp
+/// @brief   Save dense data into a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_IO_SAVE_MATRIX_MARKET_HPP_
-#define MCNLA_CORE_IO_SAVE_MATRIX_MARKET_HPP_
+#ifndef MCNLA_CORE_IO_MATRIX_MARKET_DENSE_SAVE_HPP_
+#define MCNLA_CORE_IO_MATRIX_MARKET_DENSE_SAVE_HPP_
 
 #include <mcnla/core/io/def.hpp>
 #include <fstream>
@@ -175,4 +175,4 @@ void saveMatrixMarket(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_IO_SAVE_MATRIX_MARKET_HPP_
+#endif  // MCNLA_CORE_IO_MATRIX_MARKET_DENSE_SAVE_HPP_
