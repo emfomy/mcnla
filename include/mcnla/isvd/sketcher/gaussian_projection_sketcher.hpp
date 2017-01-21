@@ -94,7 +94,7 @@ template <typename _Scalar, index_t _exponent>
 std::ostream& Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
-  return (os << name_ << ' ' << _exponent);
+  return (os << name_ << " (Power " << _exponent << ")");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

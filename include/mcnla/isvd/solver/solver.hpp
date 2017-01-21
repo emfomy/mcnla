@@ -119,7 +119,7 @@ template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class 
 Orthogonalizer<_Scalar, _OrthogonalizerTag>&
     Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) noexcept {
-  return integrator_;
+  return orthogonalizer_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class 
 const Orthogonalizer<_Scalar, _OrthogonalizerTag>&
     Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) const noexcept {
-  return integrator_;
+  return orthogonalizer_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,6 +179,15 @@ template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class 
 double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcherTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return sketcher_.time();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the time of running orthogonalizer.
+///
+template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizerTime() const noexcept {
+  mcnla_assert_true(parameters_.isComputed());
+  return orthogonalizer_.time();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
