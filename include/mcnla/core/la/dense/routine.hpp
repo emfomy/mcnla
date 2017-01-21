@@ -20,6 +20,8 @@
 #include <mcnla/core/la/dense/routine/iamax.hpp>
 #include <mcnla/core/la/dense/routine/iamin.hpp>
 
+// BLAS 2
+
 // BLAS 3
 #include <mcnla/core/la/dense/routine/gemm.hpp>
 #include <mcnla/core/la/dense/routine/symm.hpp>
@@ -32,7 +34,9 @@
 #include <mcnla/core/la/dense/routine/omatcopy.hpp>
 #include <mcnla/core/la/dense/routine/memset0.hpp>
 
-// LAPACK driver
+// LAPACK linear equation
+
+// LAPACK least squares
 #include <mcnla/core/la/dense/routine/syev.hpp>
 #include <mcnla/core/la/dense/routine/gesvd.hpp>
 

@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_LA_DENSE_ENGINE_HPP_
 #define MCNLA_CORE_LA_DENSE_ENGINE_HPP_
 
-// LAPACK driver
+// LAPACK least squares
 #include <mcnla/core/la/dense/engine/syev.hpp>
 #include <mcnla/core/la/dense/engine/gesvd.hpp>
 

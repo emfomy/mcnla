@@ -8,8 +8,7 @@
 #ifndef MCNLA_CORE_RANDOM_VSL_VRNGGAUSSIAN_HPP_
 #define MCNLA_CORE_RANDOM_VSL_VRNGGAUSSIAN_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
+#include <mcnla/core/random/def.hpp>
 #include <mkl.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

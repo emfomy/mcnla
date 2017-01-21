@@ -8,8 +8,6 @@
 #ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_HH_
 #define MCNLA_CORE_RANDOM_ENGINE_ENGINE_HH_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
 #include <mcnla/core/random/def.hpp>
 #include <vector>
 #include <omp.h>

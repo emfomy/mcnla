@@ -8,8 +8,6 @@
 #ifndef MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_HPP_
 #define MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
 #include <mcnla/core/random/def.hpp>
 #include <mcnla/core/random/engine.hpp>
 

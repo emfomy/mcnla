@@ -8,8 +8,7 @@
 #ifndef MCNLA_CORE_LA_RAW_LAPACK_GESVD_HPP_
 #define MCNLA_CORE_LA_RAW_LAPACK_GESVD_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
+#include <mcnla/core/la/def.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 

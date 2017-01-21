@@ -11,6 +11,7 @@
 #include <mcnla/core/la/def.hpp>
 #include <cstring>
 #include <mcnla/core/matrix.hpp>
+#include <mcnla/core/la/dense/routine/memset0.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -35,7 +36,7 @@ inline void scal0(
   DenseVector<_Scalar> &x
 ) noexcept {
   if ( x.isShrunk() ) {
-    std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Scalar));
+    memset0(x);
   } else {
     x.valValarray()[x.valMask()] = 0;
   }
@@ -55,15 +56,15 @@ inline void scal0(
 /// @brief  Computes the product of a matrix by zero.
 ///
 /// @attention  It is inefficient if the pitch is different from the size.
-///             Uses memset0 instead if the out-of-range spaces are useless.
-/// @attention  However, memset0 is slow if the pitch much larger than the size.
+///             Uses memset0() instead if the out-of-range spaces are useless.
+/// @attention  However, memset0() is slow if the pitch much larger than the size.
 ///
 template <typename _Scalar, Trans _trans>
 inline void scal0(
   DenseMatrix<_Scalar, _trans> &x
 ) noexcept {
   if ( x.isShrunk() ) {
-    std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Scalar));
+    memset0(x);
   } else {
     x.valValarray()[x.valMask()] = 0;
   }

@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_MPI_DEF_HPP_
 #define MCNLA_CORE_MPI_DEF_HPP_
 
-#include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/matrix/def.hpp>
 #include <mpi.h>
