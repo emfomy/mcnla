@@ -9,9 +9,9 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
@@ -147,7 +147,7 @@ class DenseMatrix
   inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
 
   // Gets information
-  inline index_t nidx() const noexcept;
+  inline index_t nnz() const noexcept;
 
   // Gets element
   inline       ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;

@@ -11,6 +11,7 @@
 #include <mcnla/core/matrix/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/coo/coo_storage.hpp>
+#include <mcnla/core/matrix/coo/coo_idx0_storage.hpp>
 #include <mcnla/core/matrix/kit/idx_range.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +34,9 @@ template <typename _Scalar> class CooMatrixStorage;
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
+/// @todo  Add sorting routines.
+/// @todo  Add sorting attention to routines.
+///
 template <typename _Scalar>
 class CooVectorStorage
   : public CooStorage<_Scalar>,
@@ -50,17 +54,20 @@ class CooVectorStorage
   using VectorStorageType = CooVectorStorage<_Scalar>;
 
   using BaseType          = CooStorage<_Scalar>;
-  using Idx0BaseType      = CooIdx0Storage<index_t>;
+  using Base0Type      = CooIdx0Storage<index_t>;
 
  protected:
 
   /// The size in the first dimension.
   index_t dim0_;
 
-  /// The number of nonzero elements
-  index_t nnz_;
-
   using BaseType::val_;
+  using BaseType::nnz_;
+
+ public:
+
+  using BaseType::val;
+  using BaseType::valPtr;
 
  protected:
 
@@ -83,13 +90,12 @@ class CooVectorStorage
   inline bool     isEmpty() const noexcept;
   inline index_t  dim0() const noexcept;
   inline DimsType dims() const noexcept;
-  inline index_t  nnz() const noexcept;
 
  protected:
 
   // Gets element
-  inline       ScalarType getElemImpl( const index_t idx0 ) noexcept;
-  inline const ScalarType getElemImpl( const index_t idx0 ) const noexcept;
+  inline       ScalarType elemImpl( const index_t idx0 ) noexcept;
+  inline const ScalarType elemImpl( const index_t idx0 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0 ) const noexcept;

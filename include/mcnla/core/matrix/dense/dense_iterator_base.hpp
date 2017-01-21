@@ -150,9 +150,9 @@ template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::operator++() noexcept {
   mcnla_assert_ne(container_, nullptr);
 
-  const auto nidx = container_->nidx();
-  if ( ++itidx_ > nidx ) {
-    itidx_ = nidx;
+  const auto nnz = container_->nnz();
+  if ( ++itidx_ > nnz ) {
+    itidx_ = nnz;
   }
   return derived();
 }
@@ -200,9 +200,9 @@ _Derived& DenseIteratorBase<_Derived>::operator+=(
   mcnla_assert_ne(container_, nullptr);
   mcnla_assert_ge(num, 0);
 
-  const auto nidx = container_->nidx();
-  if ( (itidx_+=num) > nidx ) {
-    itidx_ = nidx;
+  const auto nnz = container_->nnz();
+  if ( (itidx_+=num) > nnz ) {
+    itidx_ = nnz;
   }
   return derived();
 }
@@ -297,7 +297,7 @@ _Derived& DenseIteratorBase<_Derived>::setBegin() noexcept {
 ///
 template <class _Derived>
 _Derived& DenseIteratorBase<_Derived>::setEnd() noexcept {
-  itidx_ = (container_ != nullptr) ? container_->nidx() : 0;
+  itidx_ = (container_ != nullptr) ? container_->nnz() : 0;
   return derived();
 }
 

@@ -170,7 +170,7 @@ index_t DenseVectorStorage<_Scalar>::stride() const noexcept {
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>
-_Scalar& DenseVectorStorage<_Scalar>::getElemImpl(
+_Scalar& DenseVectorStorage<_Scalar>::elemImpl(
     const index_t idx0
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
@@ -178,10 +178,10 @@ _Scalar& DenseVectorStorage<_Scalar>::getElemImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElemImpl
+/// @copydoc  elemImpl
 ///
 template <typename _Scalar>
-const _Scalar& DenseVectorStorage<_Scalar>::getElemImpl(
+const _Scalar& DenseVectorStorage<_Scalar>::elemImpl(
     const index_t idx0
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);

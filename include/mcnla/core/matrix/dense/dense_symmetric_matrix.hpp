@@ -123,7 +123,15 @@ index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::size() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
+/// @brief  Gets the number of nonzero elements.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::nnz() const noexcept {
+  return !isUnitDiag(_uplo) ? (this->size()*(this->size()+1)/2) : (this->size()*(this->size()-1)/2);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 _Scalar DenseSymmetricMatrix<_Scalar, _trans, _uplo>::operator()(
@@ -131,7 +139,7 @@ _Scalar DenseSymmetricMatrix<_Scalar, _trans, _uplo>::operator()(
     const index_t colidx
 ) const noexcept {
   return ( !isTrans(_trans) ^ isUpper(_uplo) ^ (rowidx <= colidx) )
-      ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx);
+      ? this->elemImpl(rowidx, colidx) : this->elemImpl(colidx, rowidx);
 }
 
 
@@ -152,10 +160,9 @@ void DenseSymmetricMatrix<_Scalar, _trans, _uplo>::reconstruct(
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 void DenseSymmetricMatrix<_Scalar, _trans, _uplo>::resize(
-    const index_t nrow,
-    const index_t ncol
+    const index_t size
 ) noexcept {
-  !isTrans(_trans) ? this->resizeImpl(nrow, ncol) : this->resizeImpl(ncol, nrow);
+  this->resizeImpl(size, size);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -119,31 +119,71 @@ CooVector<_Scalar>& CooVector<_Scalar>::operator=( CooVector &&other ) noexcept 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of internal index.
+/// @brief  Gets the capacity of the index array.
 ///
 template <typename _Scalar>
-index_t CooVector<_Scalar>::nidx() const noexcept {
-  return this->nelem();
+index_t CooVector<_Scalar>::idxCapacity() const noexcept {
+  return this->idx0Capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::CooVectorStorage::getElemImpl
+/// @brief  Gets the offset of the index array.
 ///
 template <typename _Scalar>
-_Scalar& CooVector<_Scalar>::operator()(
+index_t CooVector<_Scalar>::idxOffset() const noexcept {
+  return this->idx0Offset();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index array.
+///
+template <typename _Scalar>
+Array<index_t>& CooVector<_Scalar>::idx() noexcept {
+  return this->idx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  idx
+///
+template <typename _Scalar>
+const Array<index_t>& CooVector<_Scalar>::idx() const noexcept {
+  return this->idx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the raw index pointer.
+///
+template <typename _Scalar>
+index_t* CooVector<_Scalar>::idxPtr() noexcept {
+  return this->idx0Ptr();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  idxPtr
+///
+template <typename _Scalar>
+const index_t* CooVector<_Scalar>::idxPtr() const noexcept {
+  return this->idx0Ptr();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::CooVectorStorage::elemImpl
+///
+template <typename _Scalar>
+_Scalar CooVector<_Scalar>::operator()(
     const index_t idx
 ) noexcept {
-  return this->getElemImpl(idx);
+  return this->elemImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::CooVectorStorage::getElemImpl
+/// @copydoc  mcnla::matrix::CooVectorStorage::elemImpl
 ///
 template <typename _Scalar>
-const _Scalar& CooVector<_Scalar>::operator()(
+const _Scalar CooVector<_Scalar>::operator()(
     const index_t idx
 ) const noexcept {
-  return this->getElemImpl(idx);
+  return this->elemImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

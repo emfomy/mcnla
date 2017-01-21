@@ -42,7 +42,7 @@ namespace isvd {
 /// @attention  The solver should have been @link initialize() initialized@endlink before calling #compute.
 /// @attention  The solver should be @link initialize() re-initialized@endlink after changing parameters.
 ///
-template <class _Scalar,
+template <typename _Scalar,
           class _SketcherTag       = GaussianProjectionSketcherTag<0>,
           class _OrthogonalizerTag = SvdOrthogonalizerTag,
           class _IntegratorTag     = KolmogorovNagumoIntegratorTag,

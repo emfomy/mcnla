@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Scalar, class _Tag> class Integrator;
+template <typename _Scalar, class _Tag> class Integrator;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd

@@ -123,7 +123,15 @@ index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::size() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
+/// @brief  Gets the number of nonzero elements.
+///
+template <typename _Scalar, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrix<_Scalar, _trans, _uplo>::nnz() const noexcept {
+  return !isUnitDiag(_uplo) ? (this->size()*(this->size()+1)/2) : (this->size()*(this->size()-1)/2);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 _Scalar DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator()(
@@ -131,9 +139,9 @@ _Scalar DenseTriangularMatrix<_Scalar, _trans, _uplo>::operator()(
     const index_t colidx
 ) const noexcept {
   if ( rowidx == colidx ) {
-    return isUnitDiag(_uplo) ? 1 : this->getElemImpl(rowidx, colidx);
+    return isUnitDiag(_uplo) ? 1 : this->elemImpl(rowidx, colidx);
   } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
-    return (!isTrans(_trans) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx));
+    return (!isTrans(_trans) ? this->elemImpl(rowidx, colidx) : this->elemImpl(colidx, rowidx));
   } else {
     return 0;
   }
@@ -156,10 +164,9 @@ void DenseTriangularMatrix<_Scalar, _trans, _uplo>::reconstruct(
 ///
 template <typename _Scalar, Trans _trans, Uplo _uplo>
 void DenseTriangularMatrix<_Scalar, _trans, _uplo>::resize(
-    const index_t nrow,
-    const index_t ncol
+    const index_t size
 ) noexcept {
-  !isTrans(_trans) ? this->resizeImpl(nrow, ncol) : this->resizeImpl(ncol, nrow);
+  this->resizeImpl(size, size);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

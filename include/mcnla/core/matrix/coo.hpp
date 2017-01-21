@@ -13,10 +13,10 @@
 #include <mcnla/core/matrix/coo/coo_idx1_storage.hpp>
 
 #include <mcnla/core/matrix/coo/coo_vector_storage.hpp>
-// #include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
+#include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
 
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
 
-// #include <mcnla/core/matrix/coo/coo_matrix.hpp>
+#include <mcnla/core/matrix/coo/coo_matrix.hpp>
 
 #endif  // MCNLA_CORE_MATRIX_COO_HPP_

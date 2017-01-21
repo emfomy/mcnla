@@ -123,14 +123,22 @@ index_t DenseDiagonalMatrix<_Scalar>::size() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
+/// @brief  Gets the number of nonzero elements.
+///
+template <typename _Scalar>
+index_t DenseDiagonalMatrix<_Scalar>::nnz() const noexcept {
+  return this->size();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
 template <typename _Scalar>
 _Scalar DenseDiagonalMatrix<_Scalar>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  return (rowidx == colidx) ? this->getElemImpl(rowidx) : 0;
+  return (rowidx == colidx) ? this->elemImpl(rowidx) : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -149,33 +149,33 @@ DenseMatrix<_Scalar, _trans>& DenseMatrix<_Scalar, _trans>::operator=(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of internal index.
+/// @brief  Gets the number of nonzero elements.
 ///
 template <typename _Scalar, Trans _trans>
-index_t DenseMatrix<_Scalar, _trans>::nidx() const noexcept {
+index_t DenseMatrix<_Scalar, _trans>::nnz() const noexcept {
   return this->nelem();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
 template <typename _Scalar, Trans _trans>
 _Scalar& DenseMatrix<_Scalar, _trans>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
-  return !isTrans(_trans) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx);
+  return this->elemImpl(toDim0(rowidx, colidx), toDim1(rowidx, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getElemImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
 template <typename _Scalar, Trans _trans>
 const _Scalar& DenseMatrix<_Scalar, _trans>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  return !isTrans(_trans) ? this->getElemImpl(rowidx, colidx) : this->getElemImpl(colidx, rowidx);
+  return this->elemImpl(toDim0(rowidx, colidx), toDim1(rowidx, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,7 +186,7 @@ index_t DenseMatrix<_Scalar, _trans>::pos(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  return !isTrans(_trans) ? this->posImpl(rowidx, colidx) : this->posImpl(colidx, rowidx);
+  return this->posImpl(toDim0(rowidx, colidx), toDim1(rowidx, colidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +199,7 @@ DenseMatrixIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::find(
 ) noexcept {
   mcnla_assert_gelt(rowidx, 0, this->nrow());
   mcnla_assert_gelt(colidx, 0, this->ncol());
-  auto itidx = !isTrans(_trans) ? (rowidx + colidx * this->dim0()) : (colidx + rowidx * this->dim0());
+  auto itidx = toDim0(rowidx, colidx) + toDim1(rowidx, colidx) * this->dim0();
   return IteratorType(this, itidx);
 }
 
@@ -213,7 +213,7 @@ DenseMatrixConstIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::find(
 ) const noexcept {
   mcnla_assert_gelt(rowidx, 0, this->nrow());
   mcnla_assert_gelt(colidx, 0, this->ncol());
-  auto itidx = !isTrans(_trans) ? (rowidx + colidx * this->dim0()) : (colidx + rowidx * this->dim0());
+  auto itidx = toDim0(rowidx, colidx) + toDim1(rowidx, colidx) * this->dim0();
   return ConstIteratorType(this, itidx);
 }
 
@@ -226,6 +226,29 @@ DenseMatrixConstIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::cfind(
     const index_t colidx
 ) const noexcept {
   return find(rowidx, colidx);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the matrix.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar, Trans _trans> template <typename... Args>
+void DenseMatrix<_Scalar, _trans>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseMatrix<_Scalar, _trans>(args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
+///
+template <typename _Scalar, Trans _trans>
+void DenseMatrix<_Scalar, _trans>::resize(
+    const index_t nrow,
+    const index_t ncol
+) noexcept {
+  this->resizeImpl(toDim0(nrow, ncol), toDim1(nrow, ncol), nnz);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,29 +354,6 @@ DenseDiagonalMatrix<_Scalar> DenseMatrix<_Scalar, _trans>::viewDiagonal() noexce
 template <typename _Scalar, Trans _trans>
 const DenseDiagonalMatrix<_Scalar> DenseMatrix<_Scalar, _trans>::viewDiagonal() const noexcept {
   return getDiagonal().viewDiagonal();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Reconstruct the matrix.
-///
-/// @attention  The data is also reallocated.
-///
-template <typename _Scalar, Trans _trans> template <typename... Args>
-void DenseMatrix<_Scalar, _trans>::reconstruct(
-    Args... args
-) noexcept {
-  *this = DenseMatrix<_Scalar, _trans>(args...);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
-///
-template <typename _Scalar, Trans _trans>
-void DenseMatrix<_Scalar, _trans>::resize(
-    const index_t nrow,
-    const index_t ncol
-) noexcept {
-  !isTrans(_trans) ? this->resizeImpl(nrow, ncol) : this->resizeImpl(ncol, nrow);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

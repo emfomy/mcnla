@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_COO_COO_IDX1_STORAGE_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/coo/coo_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_storage.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -27,19 +27,19 @@ namespace matrix {
 ///
 /// @tparam  _Idx  The index type.
 ///
-template <class _Idx = index_t>
-class CooIdx1Storage : protected CooStorage<_Idx> {
+template <typename _Idx = index_t>
+class CooIdx1Storage : protected DenseStorage<_Idx> {
 
  private:
 
   using IdxType      = _Idx;
   using IdxArrayType = Array<_Idx>;
 
-  using BaseType     = CooStorage<_Idx>;
+  using BaseType     = DenseStorage<_Idx>;
 
  protected:
 
-  using BaseType::CooStorage;
+  using BaseType::DenseStorage;
   using BaseType::operator=;
 
  public:

@@ -9,9 +9,9 @@
 #define MCNLA_CORE_MATRIX_COO_COO_VECTOR_HH_
 
 #include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_vector_storage.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -109,11 +109,18 @@ class CooVector
   inline CooVector& operator=( CooVector &&other ) noexcept;
 
   // Gets information
-  inline index_t nidx() const noexcept;
+  inline index_t idxCapacity() const noexcept;
+  inline index_t idxOffset() const noexcept;
+
+  // Gets array
+  inline       IdxArrayType& idx() noexcept;
+  inline const IdxArrayType& idx() const noexcept;
+  inline       index_t* idxPtr() noexcept;
+  inline const index_t* idxPtr() const noexcept;
 
   // Gets element
-  inline       ScalarType& operator()( const index_t idx ) noexcept;
-  inline const ScalarType& operator()( const index_t idx ) const noexcept;
+  inline       ScalarType operator()( const index_t idx ) noexcept;
+  inline const ScalarType operator()( const index_t idx ) const noexcept;
 
   // Gets internal position
   inline index_t pos( const index_t idx ) const noexcept;

@@ -118,31 +118,31 @@ DenseVector<_Scalar>& DenseVector<_Scalar>::operator=( DenseVector &&other ) noe
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of internal index.
+/// @brief  Gets the number of nonzero elements.
 ///
 template <typename _Scalar>
-index_t DenseVector<_Scalar>::nidx() const noexcept {
+index_t DenseVector<_Scalar>::nnz() const noexcept {
   return this->nelem();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::getElemImpl
+/// @copydoc  mcnla::matrix::DenseVectorStorage::elemImpl
 ///
 template <typename _Scalar>
 _Scalar& DenseVector<_Scalar>::operator()(
     const index_t idx
 ) noexcept {
-  return this->getElemImpl(idx);
+  return this->elemImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::getElemImpl
+/// @copydoc  mcnla::matrix::DenseVectorStorage::elemImpl
 ///
 template <typename _Scalar>
 const _Scalar& DenseVector<_Scalar>::operator()(
     const index_t idx
 ) const noexcept {
-  return this->getElemImpl(idx);
+  return this->elemImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

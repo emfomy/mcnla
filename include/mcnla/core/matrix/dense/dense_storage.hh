@@ -10,7 +10,6 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/kit/array.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -28,7 +27,7 @@ namespace matrix {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 class DenseStorage {
 
  private:

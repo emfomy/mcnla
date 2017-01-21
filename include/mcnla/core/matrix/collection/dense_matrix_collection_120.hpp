@@ -23,7 +23,7 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120() noexcept
   : BaseType(),
     data_(),
@@ -32,7 +32,7 @@ DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
     const index_t nrow,
     const index_t ncol,
@@ -49,7 +49,7 @@ DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
     const std::tuple<index_t, index_t, index_t> sizes
 ) noexcept
@@ -58,7 +58,7 @@ DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
     const index_t ncol,
     const MatrixType &data
@@ -76,7 +76,7 @@ DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
     const DenseMatrixCollection120 &other
 ) noexcept
@@ -87,7 +87,7 @@ DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
     DenseMatrixCollection120 &&other
 ) noexcept
@@ -102,7 +102,7 @@ DenseMatrixCollection120<_Scalar>::DenseMatrixCollection120(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>& DenseMatrixCollection120<_Scalar>::operator=( const DenseMatrixCollection120 &other ) noexcept {
   BaseType::operator=(other);
   data_ = other.data_;
@@ -113,7 +113,7 @@ DenseMatrixCollection120<_Scalar>& DenseMatrixCollection120<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar>& DenseMatrixCollection120<_Scalar>::operator=( DenseMatrixCollection120 &&other ) noexcept {
   BaseType::operator=(std::move(other));
   data_ = std::move(other.data_);
@@ -124,7 +124,7 @@ DenseMatrixCollection120<_Scalar>& DenseMatrixCollection120<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the dimensions are equal to the sizes.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 bool DenseMatrixCollection120<_Scalar>::isShrunk() const noexcept {
   return (data_.ncol() % ncol_ == 0) && data_.isShrunk();
 }
@@ -132,7 +132,7 @@ bool DenseMatrixCollection120<_Scalar>::isShrunk() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw data.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixRowMajor<_Scalar>& DenseMatrixCollection120<_Scalar>::data() noexcept {
   return data_;
 }
@@ -140,7 +140,7 @@ DenseMatrixRowMajor<_Scalar>& DenseMatrixCollection120<_Scalar>::data() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  data
 ///
-template <class _Scalar>
+template <typename _Scalar>
 const DenseMatrixRowMajor<_Scalar>& DenseMatrixCollection120<_Scalar>::data() const noexcept {
   return data_;
 }
@@ -150,7 +150,7 @@ const DenseMatrixRowMajor<_Scalar>& DenseMatrixCollection120<_Scalar>::data() co
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Scalar> template <typename... Args>
+template <typename _Scalar> template <typename... Args>
 void DenseMatrixCollection120<_Scalar>::reconstruct(
     Args... args
 ) noexcept {
@@ -160,7 +160,7 @@ void DenseMatrixCollection120<_Scalar>::reconstruct(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a subcollection.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
     const IdxRange &idxrange
 ) noexcept {
@@ -170,7 +170,7 @@ DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator()( const IdxRange& )
 ///
-template <class _Scalar>
+template <typename _Scalar>
 const DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
     const IdxRange &idxrange
 ) const noexcept {
@@ -180,7 +180,7 @@ const DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::opera
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator()( const IdxRange& )
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
     const char*,
     const char*,
@@ -192,7 +192,7 @@ DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator()( const IdxRange& )
 ///
-template <class _Scalar>
+template <typename _Scalar>
 const DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
     const char*,
     const char*,
@@ -204,7 +204,7 @@ const DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::opera
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a collection of rows.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
     const IdxRange &rowrange,
     const char*,
@@ -216,7 +216,7 @@ DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator()( const IdxRange&, const char*, const char* )
 ///
-template <class _Scalar>
+template <typename _Scalar>
 const DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::operator()(
     const IdxRange &rowrange,
     const char*,
@@ -228,7 +228,7 @@ const DenseMatrixCollection120<_Scalar> DenseMatrixCollection120<_Scalar>::opera
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Unfolds the collection.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::unfold() noexcept {
   return data_;
 }
@@ -236,7 +236,7 @@ DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::unfold() noexcep
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  unfold
 ///
-template <class _Scalar>
+template <typename _Scalar>
 const DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::unfold() const noexcept {
   return data_;
 }
@@ -244,7 +244,7 @@ const DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::unfold() c
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nrow
 ///
-template <class _Scalar>
+template <typename _Scalar>
 index_t DenseMatrixCollection120<_Scalar>::nrowImpl() const noexcept {
   return data_.nrow();
 }
@@ -252,7 +252,7 @@ index_t DenseMatrixCollection120<_Scalar>::nrowImpl() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::ncol
 ///
-template <class _Scalar>
+template <typename _Scalar>
 index_t DenseMatrixCollection120<_Scalar>::ncolImpl() const noexcept {
   return ncol_;
 }
@@ -260,7 +260,7 @@ index_t DenseMatrixCollection120<_Scalar>::ncolImpl() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nmat
 ///
-template <class _Scalar>
+template <typename _Scalar>
 index_t DenseMatrixCollection120<_Scalar>::nmatImpl() const noexcept {
   return ncol_ ? (data_.ncol() / ncol_) : 0;
 }
@@ -268,7 +268,7 @@ index_t DenseMatrixCollection120<_Scalar>::nmatImpl() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
-template <class _Scalar>
+template <typename _Scalar>
 DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::getMatrixImpl(
     const index_t idx
 ) noexcept {
@@ -279,7 +279,7 @@ DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::getMatrixImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
-template <class _Scalar>
+template <typename _Scalar>
 const DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::getMatrixImpl(
     const index_t idx
 ) const noexcept {

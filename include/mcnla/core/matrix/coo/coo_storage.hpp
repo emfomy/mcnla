@@ -23,118 +23,109 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 CooStorage<_Scalar>::CooStorage() noexcept
-  : val_() {}
+  : BaseType(),
+    nnz_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 CooStorage<_Scalar>::CooStorage(
-    const index_t capacity
+    const index_t capacity,
+    const index_t nnz
 ) noexcept
-  : val_(capacity) {}
+  : BaseType(capacity),
+    nnz_(nnz) {
+  mcnla_assert_ge(nnz_, 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 CooStorage<_Scalar>::CooStorage(
-    const ValArrayType &val
+    const ValArrayType &val,
+    const index_t nnz
 ) noexcept
-  : val_(val) {}
+  : BaseType(val),
+    nnz_(nnz) {
+  mcnla_assert_ge(nnz_, 0);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 CooStorage<_Scalar>::CooStorage(
     const CooStorage &other
 ) noexcept
-  : val_(other.val_) {}
+  : BaseType(other),
+    nnz_(other.nnz_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 CooStorage<_Scalar>::CooStorage(
     CooStorage &&other
 ) noexcept
-  : val_(std::move(other.val_)) {}
+  : BaseType(std::move(other)),
+    nnz_(other.nnz_) {
+  other.nnz_ = 0;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
     const CooStorage &other
 ) noexcept {
-  val_ = other.val_;
+  BaseType::operator=(other);
+  nnz_ = other.nnz_;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
     CooStorage &&other
 ) noexcept {
-  val_ = std::move(other.val_);
+  BaseType::operator=(std::move(other));
+  nnz_ = other.nnz_;  other.nnz_ = 0;
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of nonzero elements.
+///
+template <typename _Scalar>
+index_t CooStorage<_Scalar>::nnz() const noexcept {
+  return nnz_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the value array.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 index_t CooStorage<_Scalar>::valCapacity() const noexcept {
-  return val_.capacity();
+  return this->capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the value array.
 ///
-template <class _Scalar>
+template <typename _Scalar>
 index_t CooStorage<_Scalar>::valOffset() const noexcept {
-  return val_.offset();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the value array.
-///
-template <class _Scalar>
-Array<_Scalar>& CooStorage<_Scalar>::val() noexcept {
-  return val_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  val
-///
-template <class _Scalar>
-const Array<_Scalar>& CooStorage<_Scalar>::val() const noexcept {
-  return val_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the raw value pointer.
-///
-template <class _Scalar>
-_Scalar* CooStorage<_Scalar>::valPtr() noexcept {
-  return *val_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  valPtr
-///
-template <class _Scalar>
-const _Scalar* CooStorage<_Scalar>::valPtr() const noexcept {
-  return *val_;
+  return this->offset();
 }
 
 }  // namespace matrix

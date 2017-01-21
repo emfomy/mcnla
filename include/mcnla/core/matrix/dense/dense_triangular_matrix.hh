@@ -9,9 +9,9 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -123,6 +123,7 @@ class DenseTriangularMatrix
 
   // Gets information
   inline index_t size() const noexcept;
+  inline index_t nnz() const noexcept;
 
   // Gets element
   inline ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
@@ -130,7 +131,7 @@ class DenseTriangularMatrix
   // Resizes
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
+  inline void resize( const index_t size ) noexcept;
 
   // Transpose
   inline       TransposeType& t() noexcept;

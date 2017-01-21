@@ -9,9 +9,9 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -110,6 +110,7 @@ class DenseDiagonalMatrix
 
   // Gets information
   inline index_t size() const noexcept;
+  inline index_t nnz() const noexcept;
 
   // Gets element
   inline ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;

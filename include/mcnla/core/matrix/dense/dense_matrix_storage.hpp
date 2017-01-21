@@ -217,7 +217,7 @@ index_t DenseMatrixStorage<_Scalar>::pitch() const noexcept {
 /// @brief  Gets the element of given index.
 ///
 template <typename _Scalar>
-_Scalar& DenseMatrixStorage<_Scalar>::getElemImpl(
+_Scalar& DenseMatrixStorage<_Scalar>::elemImpl(
     const index_t idx0,
     const index_t idx1
 ) noexcept {
@@ -227,10 +227,10 @@ _Scalar& DenseMatrixStorage<_Scalar>::getElemImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getElemImpl
+/// @copydoc  elemImpl
 ///
 template <typename _Scalar>
-const _Scalar& DenseMatrixStorage<_Scalar>::getElemImpl(
+const _Scalar& DenseMatrixStorage<_Scalar>::elemImpl(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
