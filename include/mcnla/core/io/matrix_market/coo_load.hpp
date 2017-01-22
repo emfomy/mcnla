@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_matket/coo_load.hpp
+/// @file    include/mcnla/core/io/matrix_market/coo_load.hpp
 /// @brief   Load COO data from a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>

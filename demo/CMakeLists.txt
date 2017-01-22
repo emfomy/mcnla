@@ -1,5 +1,11 @@
 # The CMake setting of 'demo/'
 
+# Break
+if(NOT MCNLA_BUILD_DEMO)
+  return()
+endif()
+
+# Macro
 macro(SET_TARGET target files)
   # Set target
   add_executable(mcnla_${target} EXCLUDE_FROM_ALL ${files})
@@ -20,11 +26,6 @@ macro(SET_TARGET target files)
     COMMENT "Running ${target}"
   )
 endmacro()
-
-# Break
-if(NOT MCNLA_BUILD_DEMO)
-  return()
-endif()
 
 # Set target (demo)
 set_target(demo demo.cpp)

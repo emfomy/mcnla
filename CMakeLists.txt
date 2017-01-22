@@ -7,7 +7,7 @@ set(MCNLA_NAME "Monte Carlo Numerical Linear Algebra Package")
 
 # Set version number
 set(MCNLA_MAJOR_VERSION 0)
-set(MCNLA_MINOR_VERSION 4)
+set(MCNLA_MINOR_VERSION 5)
 set(MCNLA_PATCH_VERSION 0)
 set(MCNLA_VERSION "${MCNLA_MAJOR_VERSION}.${MCNLA_MINOR_VERSION}.${MCNLA_PATCH_VERSION}")
 
@@ -28,16 +28,13 @@ include(cmake/options.cmake)
 include(cmake/packages.cmake)
 
 # Add subdirectories
-add_subdirectory(bin)
+add_subdirectory(src)
 add_subdirectory(demo)
 add_subdirectory(check)
 add_subdirectory(doxygen)
 
 # Create configure files
 include(cmake/configure.cmake)
-
-# Sets install rule
-include(cmake/install.cmake)
 
 # Display message
 include(cmake/display.cmake)

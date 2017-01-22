@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_matket/dense_save.hpp
+/// @file    include/mcnla/core/io/matrix_market/dense_save.hpp
 /// @brief   Save dense data into a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>

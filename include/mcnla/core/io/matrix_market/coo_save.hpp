@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_matket/coo_save.hpp
+/// @file    include/mcnla/core/io/matrix_market/coo_save.hpp
 /// @brief   Save COO data into a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>

@@ -22,3 +22,6 @@ set_directory_properties(
   ADDITIONAL_MAKE_CLEAN_FILES
   "${MCNLA_DOCS_DIR}"
 )
+
+# Set install rule
+install(DIRECTORY "${MCNLA_DOCS_DIR}/" DESTINATION docs)

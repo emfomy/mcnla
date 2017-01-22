@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_matket/dense_load.hpp
+/// @file    include/mcnla/core/io/matrix_market/dense_load.hpp
 /// @brief   Load dense data from a matrix market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>

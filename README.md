@@ -42,9 +42,10 @@ Use the following command to set options
 ccmake ..
 ```
 
-* Set `MCNLA_BUILD_DEMO` to build demo codes.
-* Set `MCNLA_BUILD_TEST` to build test codes.
-* Set `MCNLA_BUILD_DOC`  to build documentation.
+* Set `MCNLA_BUILD_DRIVER` to build driver codes.
+* Set `MCNLA_BUILD_DEMO`   to build demo codes.
+* Set `MCNLA_BUILD_TEST`   to build test codes.
+* Set `MCNLA_BUILD_DOC`    to build documentation.
 
 * Set `MCNLA_USE_ILP64` to change the system integer size. (`OFF`: 32bit / `ON`: 64bit)
 * Set `MCNLA_USE_MKL`   to enable Intel MKL.
@@ -60,6 +61,7 @@ ccmake ..
 
 | Command      | Detail                   |
 |--------------|--------------------------|
+| `make all`   | build all driver         |
 | `make run`   | run demo code            |
 | `make check` | build and run test codes |
 | `make doc`   | build documentation      |
