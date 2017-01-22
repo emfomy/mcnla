@@ -45,7 +45,7 @@ inline void memset0(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_blas1_module
+/// @ingroup  la_dense_blas1m_module
 /// @brief  Set a matrix to zero.
 ///
 /// @attention  the out-of-range spaces are also changed.

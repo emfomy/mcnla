@@ -195,7 +195,7 @@ void create(
   for ( mcnla::index_t i = 0; i < rank; ++i ) {
     mcnla::la::scal(1.0/(i+1), matrix_u.getCol(i));
   }
-  ScalarType tmp = 1.0 / rank / mcnla::la::nrm2(matrix_a.vectorize());
+  ScalarType tmp = 1.0 / rank / mcnla::la::nrmf(matrix_a);
   mcnla::la::gemm<mcnla::Trans::NORMAL, mcnla::Trans::TRANS>(1.0, matrix_u, matrix_v, tmp, matrix_a);
 }
 
@@ -224,5 +224,5 @@ void check(
   mcnla::la::gemm<mcnla::Trans::NORMAL, mcnla::Trans::NORMAL>(-1.0, matrix_u_tmp, matrix_vt, 1.0, matrix_a_tmp);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
-  frerr = mcnla::la::nrm2(matrix_a_tmp.vectorize()) / mcnla::la::nrm2(matrix_a.vectorize());
+  frerr = mcnla::la::nrmf(matrix_a_tmp) / mcnla::la::nrmf(matrix_a);
 }

@@ -61,7 +61,7 @@ ccmake ..
 
 | Command      | Detail                   |
 |--------------|--------------------------|
-| `make all`   | build all driver         |
+| `make all`   | build all drivers        |
 | `make run`   | run demo code            |
 | `make check` | build and run test codes |
 | `make doc`   | build documentation      |

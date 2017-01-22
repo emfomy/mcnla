@@ -30,7 +30,7 @@ namespace io {
 ///
 template <typename _Scalar>
 void saveMatrixMarket(
-    const matrix::DenseVector<_Scalar> &vector,
+    const matrix::CooVector<_Scalar> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -63,7 +63,7 @@ void saveMatrixMarket(
 ///
 template <typename _Scalar, Trans _trans>
 void saveMatrixMarket(
-    const matrix::DenseMatrix<_Scalar, _trans> &matrix,
+    const matrix::CooMatrix<_Scalar, _trans> &matrix,
     const char *file
 ) noexcept {
 

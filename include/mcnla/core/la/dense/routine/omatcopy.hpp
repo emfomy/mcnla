@@ -105,7 +105,7 @@ inline void omatcopyImpl0(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_blas1_module
+/// @ingroup  la_dense_blas1m_module
 /// @brief  Performs scaling and out-place transposition/copying of matrices.
 ///
 template <typename _Scalar, Trans _transa, Trans _transb>
@@ -137,7 +137,7 @@ inline void omatcopy(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_blas1_module
+/// @ingroup  la_wrapper_module
 /// @brief  Copies a matrix to another matrix.
 ///
 /// @note  This routines calls @link copy() copy@endlink(a.vectorize(), b.vectorize()) if both @a a and @a b are shrunk,

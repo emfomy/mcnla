@@ -16,6 +16,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <cmath>
 #include <complex>
 #include <type_traits>
 #include <mcnla/config.hpp>

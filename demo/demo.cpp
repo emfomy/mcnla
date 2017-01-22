@@ -255,5 +255,5 @@ void check(
   mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
-  frerr = mcnla::la::nrm2(matrix_a_tmp.vectorize()) / mcnla::la::nrm2(matrix_a.vectorize());
+  frerr = mcnla::la::nrmf(matrix_a_tmp) / mcnla::la::nrmf(matrix_a);
 }
