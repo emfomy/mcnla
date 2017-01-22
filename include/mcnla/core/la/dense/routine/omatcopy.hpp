@@ -140,8 +140,8 @@ inline void omatcopy(
 /// @ingroup  la_wrapper_module
 /// @brief  Copies a matrix to another matrix.
 ///
-/// @note  This routines calls @link copy() copy@endlink(a.vectorize(), b.vectorize()) if both @a a and @a b are shrunk,
-///        otherwise it calls @link omatcopy() omatcopy@endlink(a, b, 1).
+/// @note  This routines calls @ref copy "copy"(a.vectorize(), b.vectorize()) if both @a a and @a b are shrunk,
+///        otherwise it calls @ref omatcopy "omatcopy"(a, b, 1).
 ///
 template <typename _Scalar, Trans _transa, Trans _transb>
 inline void copy(

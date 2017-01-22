@@ -1,0 +1,54 @@
+namespace mcnla {
+
+namespace matrix {
+
+/**
+  @page tutorial_data_structure Data Structures
+  - @subpage tutorial_data_structure_array
+  - @subpage tutorial_data_structure_dense
+  - @subpage tutorial_data_structure_coo
+*/
+
+/**
+  @page tutorial_data_structure_array Base %Array Type
+
+  All the data structures used in MCNLA uses @ref Array to store data. The @ref Array stores a `std::shared_ptr` of `std::valarray` of the scalars. The @ref Array::offset "offset" variable mark offset of the @ref Array.
+
+  Let `a` be an @ref Array of @ref Array::size "size" `s` with @ref Array::offset "offset" `o`, then `a` contains a `std::valarray` with length `s`, and the first data of `a` is stored at the `o`-th position. That is, the `std::valarray` stores
+  @code
+    a[-s], a[-s+1], ..., a[-1], a[0], a[1], ..., a[s-o-1]
+  @endcode
+
+  An extra variable @ref Array::capacity "capacity" returns `(s-o)`, the maximum size that the data can be. Note that there is an equality: @ref Array::capacity "capacity" + @ref Array::offset "offset" = @ref Array::size "size".
+
+  <h2>Operations</h2>
+
+  @ref Array provides several operations:
+  - @ref Array::operator[] "a[i]": gets the `i`-th element of the data; that is, the `(i+s)`-th element in the `std::valarray`.
+  - @ref Array::operator* "*a": gets the raw pointer; that is, the address of `a[0]`.
+  - @ref Array::operator[] "b = a": copies `a` to `b`.
+  - @ref Array::operator>> "b = a >> i": right shift the array; that is, `b[x+i] = a[x]`
+  - @ref Array::operator<< "b = a << i": left shift the array;  that is, `b[x-i] = a[x]`
+  - @ref Array::operator>> "a >>= i": same as `a = a >> i`.
+  - @ref Array::operator<< "a <<= i": same as `a = a << i`.
+  - @ref Array::operator<< "a.isEmpty()": returns `true` if the @ref Array::size "size" is zero.
+
+*/
+
+/**
+  @page tutorial_data_structure_dense Dense Data Structures
+
+  There are two primary @ref DenseStorage "dense data structures" in MCNLA --- @ref DenseVector and @ref DenseMatrix. Both of them uses an @ref Array --- @ref DenseStorage::val "val" --- to store the values.
+
+*/
+
+/**
+  @page tutorial_data_structure_coo Coordinate List (COO) Data Structures
+
+  There are two primary @ref CooStorage "coordinate list (COO) data structures" in MCNLA --- @ref CooVector and @ref CooMatrix. Both of them uses an @ref Array --- @ref CooStorage::val "val" --- to store the values and several @ref Array "Array"s to stores the indices.
+
+*/
+
+}  // namespace matrix
+
+}  // namespace mcnla
