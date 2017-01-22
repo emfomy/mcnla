@@ -17,20 +17,21 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Check) {
   const auto mat      = this->mat_;
   const auto valarray = this->valarray_;
 
-  EXPECT_EQ(mat.getNrow(),  nrow);
-  EXPECT_EQ(mat.getNcol(),  ncol);
-  EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
-  EXPECT_EQ(mat.getPitch(), pitch);
+  EXPECT_EQ(mat.nrow(),  nrow);
+  EXPECT_EQ(mat.ncol(),  ncol);
+  EXPECT_EQ(mat.nelem(), nrow * ncol);
+  EXPECT_EQ(mat.pitch(), pitch);
+
+  EXPECT_EQ(mat.sizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_TRUE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());
 
-  EXPECT_EQ(mat.getCapacity(), capacity);
-  EXPECT_EQ(mat.getOffset(),   offset);
+  EXPECT_EQ(mat.capacity(), capacity);
+  EXPECT_EQ(mat.offset(),   offset);
 
-  EXPECT_EQ(mat.getNrow(), mat.getPitch());
-  EXPECT_EQ(mat.getCapacity(), nrow * ncol);
+  EXPECT_EQ(mat.nrow(),     mat.pitch());
+  EXPECT_EQ(mat.capacity(), nrow * ncol);
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -65,20 +66,21 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Check) {
   const auto mat      = this->mat_;
   const auto valarray = this->valarray_;
 
-  EXPECT_EQ(mat.getNrow(),  nrow);
-  EXPECT_EQ(mat.getNcol(),  ncol);
-  EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
-  EXPECT_EQ(mat.getPitch(), pitch);
+  EXPECT_EQ(mat.nrow(),  nrow);
+  EXPECT_EQ(mat.ncol(),  ncol);
+  EXPECT_EQ(mat.nelem(), nrow * ncol);
+  EXPECT_EQ(mat.pitch(), pitch);
+
+  EXPECT_EQ(mat.sizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_FALSE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());
 
-  EXPECT_EQ(mat.getCapacity(), capacity);
-  EXPECT_EQ(mat.getOffset(),   offset);
+  EXPECT_EQ(mat.capacity(), capacity);
+  EXPECT_EQ(mat.offset(),   offset);
 
-  EXPECT_LT(mat.getNrow(), mat.getPitch());
-  EXPECT_EQ(mat.getCapacity(), pitch * ncol - (pitch-nrow));
+  EXPECT_LT(mat.nrow(),     mat.pitch());
+  EXPECT_EQ(mat.capacity(), pitch * ncol - (pitch-nrow));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -113,20 +115,21 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Check) {
   const auto mat      = this->mat_;
   const auto valarray = this->valarray_;
 
-  EXPECT_EQ(mat.getNrow(),  nrow);
-  EXPECT_EQ(mat.getNcol(),  ncol);
-  EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
-  EXPECT_EQ(mat.getPitch(), pitch);
+  EXPECT_EQ(mat.nrow(),  nrow);
+  EXPECT_EQ(mat.ncol(),  ncol);
+  EXPECT_EQ(mat.nelem(), nrow * ncol);
+  EXPECT_EQ(mat.pitch(), pitch);
+
+  EXPECT_EQ(mat.sizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_TRUE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());
 
-  EXPECT_EQ(mat.getCapacity(), capacity);
-  EXPECT_EQ(mat.getOffset(),   offset);
+  EXPECT_EQ(mat.capacity(), capacity);
+  EXPECT_EQ(mat.offset(),   offset);
 
-  EXPECT_EQ(mat.getNcol(), mat.getPitch());
-  EXPECT_EQ(mat.getCapacity(), nrow * ncol);
+  EXPECT_EQ(mat.ncol(),     mat.pitch());
+  EXPECT_EQ(mat.capacity(), nrow * ncol);
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {
@@ -161,20 +164,21 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Check) {
   const auto mat      = this->mat_;
   const auto valarray = this->valarray_;
 
-  EXPECT_EQ(mat.getNrow(),  nrow);
-  EXPECT_EQ(mat.getNcol(),  ncol);
-  EXPECT_EQ(mat.getNelem(), nrow * ncol);
-  EXPECT_EQ(mat.getSizes(), std::make_pair(nrow, ncol));
-  EXPECT_EQ(mat.getPitch(), pitch);
+  EXPECT_EQ(mat.nrow(),  nrow);
+  EXPECT_EQ(mat.ncol(),  ncol);
+  EXPECT_EQ(mat.nelem(), nrow * ncol);
+  EXPECT_EQ(mat.pitch(), pitch);
+
+  EXPECT_EQ(mat.sizes(), std::make_tuple(nrow, ncol));
 
   EXPECT_FALSE(mat.isShrunk());
   EXPECT_FALSE(mat.isSquare());
 
-  EXPECT_EQ(mat.getCapacity(), capacity);
-  EXPECT_EQ(mat.getOffset(),   offset);
+  EXPECT_EQ(mat.capacity(), capacity);
+  EXPECT_EQ(mat.offset(),   offset);
 
-  EXPECT_LT(mat.getNcol(), mat.getPitch());
-  EXPECT_EQ(mat.getCapacity(), nrow * pitch - (pitch-ncol));
+  EXPECT_LT(mat.ncol(),     mat.pitch());
+  EXPECT_EQ(mat.capacity(), nrow * pitch - (pitch-ncol));
 
   for ( auto i = 0; i < nrow; ++i ) {
     for ( auto j = 0; j < ncol; ++j ) {

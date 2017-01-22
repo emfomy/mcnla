@@ -12,10 +12,14 @@ Monte Carlo Numerical Linear Algebra Package
 ### Author
 * Mu Yang <<emfomy@gmail.com>>
 
+### Tutorial
+* @ref tutorial_main
+
 ## Requirements
 * [CMake](https://cmake.org) 3+.
 * C++ compiler with C++11 support ([GCC](https://gcc.gnu.org) 5+ recommended).
 * [BLAS](http://www.netlib.org/blas) & [LAPACK](http://www.netlib.org/lapack) library.
+* [OpenMP](http://openmp.org) Library.
 * MPI Library ([OpenMPI](https://www.open-mpi.org) or [MPICH](http://www.mpich.org)).
 
 ### Optional
@@ -41,12 +45,16 @@ Use the following command to set options
 ccmake ..
 ```
 
-* Set `MCNLA_BUILD_DEMO` to build demo codes.
-* Set `MCNLA_BUILD_TEST` to build test codes.
-* Set `MCNLA_BUILD_DOC`  to build documentation.
+* Set `MCNLA_BUILD_DRIVER` to build driver codes.
+* Set `MCNLA_BUILD_DEMO`   to build demo codes.
+* Set `MCNLA_BUILD_TEST`   to build test codes.
+* Set `MCNLA_BUILD_DOC`    to build documentation.
 
 * Set `MCNLA_USE_ILP64` to change the system integer size. (`OFF`: 32bit / `ON`: 64bit)
 * Set `MCNLA_USE_MKL`   to enable Intel MKL.
+* Set `MKL_USE_OMP`     to enable multithread MKL. (Require `MCNLA_USE_MKL`)
+* Set `MKL_USE_IOMP`    to enable Intel OMP.       (Require `MKL_USE_OMP`)
+
 * Set `MPI_PROCS`       to set the number of MPI processes. (Default: 4)
 
 * Set `MKL_ROOT`   for the root path of Intel MKL. (Automatically set if environment variable `MKLROOT` is set.)
@@ -56,7 +64,7 @@ ccmake ..
 
 | Command      | Detail                   |
 |--------------|--------------------------|
-| `make demo`  | build demo code          |
+| `make all`   | build all drivers        |
 | `make run`   | run demo code            |
 | `make check` | build and run test codes |
 | `make doc`   | build documentation      |

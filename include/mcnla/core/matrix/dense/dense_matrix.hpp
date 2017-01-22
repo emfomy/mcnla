@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_matrix.hpp
-/// @brief   The dense matrix class.
+/// @brief   The dense matrix.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,15 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HPP_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HPP_
 
-#include <mcnla/def.hpp>
-#include <mcnla/core/def.hpp>
-#include <iostream>
-#include <utility>
-#include <mcnla/core/matrix/base/container_base.hpp>
-#include <mcnla/core/matrix/base/matrix_base.hpp>
-#include <mcnla/core/matrix/dense/dense_base.hpp>
-#include <mcnla/core/matrix/dense/dense_vector.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
+#include <mcnla/core/matrix/dense/dense_matrix.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -28,180 +20,653 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Layout _layout> class DenseMatrix;
-template <typename _Scalar> class DenseVector;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Default constructor.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix() noexcept
+  : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const index_t nrow,
+    const index_t ncol
+) noexcept
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol)) {
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix traits.
+/// @brief  Construct with given size information.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _layout  The storage layout.
-///
-template <typename _Scalar, Layout _layout>
-struct Traits<matrix::DenseMatrix<_Scalar, _layout>> {
-  static constexpr index_t ndim = 2;
-  static constexpr Layout layout = _layout;
-
-  using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-
-  using VectorType        = matrix::DenseVector<ScalarType>;
-  using RealVectorType    = matrix::DenseVector<RealScalarType>;
-  using MatrixType        = matrix::DenseMatrix<ScalarType, _layout>;
-  using RealMatrixType    = matrix::DenseMatrix<RealScalarType, _layout>;
-  using TransposeType     = matrix::DenseMatrix<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = matrix::DenseMatrix<RealScalarType, changeLayout(_layout)>;
-
-  using IteratorType      = matrix::DenseMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType = matrix::DenseMatrixConstIterator<ScalarType, _layout>;
-};
-
-}  // namespace traits
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const SizesType sizes
+) noexcept
+  : BaseType(toDim0(sizes), toDim1(sizes)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t pitch
+) noexcept
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), pitch) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
-/// The dense matrix class.
+/// @brief  Construct with given size information.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _layout  The storage layout.
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const SizesType sizes,
+    const index_t pitch
+) noexcept
+  : BaseType(toDim0(sizes), toDim1(sizes), pitch) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Layout _layout = Layout::COLMAJOR>
-class DenseMatrix
-  : public ContainerBase<DenseMatrix<_Scalar, _layout>>,
-    public MatrixBase<DenseMatrix<_Scalar, _layout>>,
-    public DenseBase<DenseMatrix<_Scalar, _layout>> {
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t pitch,
+    const index_t capacity
+) noexcept
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), pitch, capacity) {}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const SizesType sizes,
+    const index_t pitch,
+    const index_t capacity
+) noexcept
+  : BaseType(toDim0(sizes), toDim1(sizes), pitch, capacity) {}
 
-  static constexpr index_t ndim = 2;
-  static constexpr Layout layout = _layout;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t pitch,
+    const ValArrayType &val,
+    const index_t offset
+) noexcept
+  : BaseType(toDim0(nrow, ncol), toDim1(nrow, ncol), pitch, val, offset) {}
 
-  using ScalarType        = _Scalar;
-  using RealScalarType    = RealType<_Scalar>;
-  using ValueArrayType    = Array<ScalarType>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy constructor.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    const DenseMatrix &other
+) noexcept
+  : BaseType(other) {}
 
-  using VectorType        = DenseVector<ScalarType>;
-  using RealVectorType    = DenseVector<RealScalarType>;
-  using MatrixType        = DenseMatrix<ScalarType, _layout>;
-  using RealMatrixType    = DenseMatrix<RealScalarType, _layout>;
-  using TransposeType     = DenseMatrix<ScalarType, changeLayout(_layout)>;
-  using RealTransposeType = DenseMatrix<RealScalarType, changeLayout(_layout)>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move constructor.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>::DenseMatrix(
+    DenseMatrix &&other
+) noexcept
+  : BaseType(std::move(other)) {}
 
-  using DataType          = DenseData<ScalarType>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copy assignment operator.
+///
+/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>& DenseMatrix<_Scalar, _trans>::operator=(
+    const DenseMatrix &other
+) noexcept {
+  BaseType::operator=(other);
+  return *this;
+}
 
-  using IteratorType      = DenseMatrixIterator<ScalarType, _layout>;
-  using ConstIteratorType = DenseMatrixConstIterator<ScalarType, _layout>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Move assignment operator.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans>& DenseMatrix<_Scalar, _trans>::operator=(
+    DenseMatrix &&other
+) noexcept {
+  BaseType::operator=(std::move(other));
+  return *this;
+}
 
- private:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of nonzero elements.
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::nnz() const noexcept {
+  return this->nelem();
+}
 
-  using ContainerBaseType = ContainerBase<DenseMatrix<_Scalar, _layout>>;
-  using MatrixBaseType    = MatrixBase<DenseMatrix<_Scalar, _layout>>;
-  using DenseBaseType     = DenseBase<DenseMatrix<_Scalar, _layout>>;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
+///
+template <typename _Scalar, Trans _trans>
+_Scalar& DenseMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) noexcept {
+  return this->elemImpl(toDim0(rowidx, colidx), toDim1(rowidx, colidx));
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
+///
+template <typename _Scalar, Trans _trans>
+const _Scalar& DenseMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  return this->elemImpl(toDim0(rowidx, colidx), toDim1(rowidx, colidx));
+}
 
-  /// The leading dimension.
-  index_t pitch_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::posImpl
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::pos(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  return this->posImpl(toDim0(rowidx, colidx), toDim1(rowidx, colidx));
+}
 
-  using MatrixBaseType::nrow_;
-  using MatrixBaseType::ncol_;
-  using MatrixBaseType::size0_;
-  using MatrixBaseType::size1_;
-  using DenseBaseType::data_;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Finds the iterator to element
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrixIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::find(
+    const index_t rowidx,
+    const index_t colidx
+) noexcept {
+  mcnla_assert_gelt(rowidx, 0, this->nrow());
+  mcnla_assert_gelt(colidx, 0, this->ncol());
+  auto itidx = toDim0(rowidx, colidx) + toDim1(rowidx, colidx) * this->dim0();
+  return IteratorType(this, itidx);
+}
 
- public:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrixConstIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::find(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  mcnla_assert_gelt(rowidx, 0, this->nrow());
+  mcnla_assert_gelt(colidx, 0, this->ncol());
+  auto itidx = toDim0(rowidx, colidx) + toDim1(rowidx, colidx) * this->dim0();
+  return ConstIteratorType(this, itidx);
+}
 
-  // Constructors
-  inline DenseMatrix() noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol ) noexcept;
-  inline DenseMatrix( const std::pair<index_t, index_t> sizes ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseMatrix( const std::pair<index_t, index_t> sizes, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch, const ValueArrayType &value ) noexcept;
-  inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
-                      const DataType &data, const index_t offset = 0 ) noexcept;
-  inline DenseMatrix( const DenseMatrix &other ) noexcept;
-  inline DenseMatrix( DenseMatrix &&other ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  find
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrixConstIterator<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::cfind(
+    const index_t rowidx,
+    const index_t colidx
+) const noexcept {
+  return find(rowidx, colidx);
+}
 
-  // Operators
-  inline DenseMatrix& operator=( const DenseMatrix &other ) noexcept;
-  inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
-  template <typename __Scalar, Layout __layout>
-  friend inline std::ostream& operator<<( std::ostream &out, const DenseMatrix<__Scalar, __layout> &matrix );
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Reconstruct the matrix.
+///
+/// @attention  The data is also reallocated.
+///
+template <typename _Scalar, Trans _trans> template <typename... Args>
+void DenseMatrix<_Scalar, _trans>::reconstruct(
+    Args... args
+) noexcept {
+  *this = DenseMatrix<_Scalar, _trans>(args...);
+}
 
-  // Gets information
-  inline index_t getPitch() const noexcept;
-  inline bool isShrunk() const noexcept;
-  inline bool isSquare() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
+///
+template <typename _Scalar, Trans _trans>
+void DenseMatrix<_Scalar, _trans>::resize(
+    const index_t nrow,
+    const index_t ncol
+) noexcept {
+  this->resizeImpl(toDim0(nrow, ncol), toDim1(nrow, ncol), nnz);
+}
 
-  // Gets element
-  inline       ScalarType& getElem( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const ScalarType& getElem( const index_t rowidx, const index_t colidx ) const noexcept;
-  inline       ScalarType& operator()( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const ScalarType& operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the transpose of the matrix.
+///
+/// @attention  The storage layout is also changed.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::t() noexcept {
+  return static_cast<TransposeType&>(base());
+}
 
-  // Gets mask
-  inline const std::gslice getValueMask() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  t
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, changeTrans(_trans)>& DenseMatrix<_Scalar, _trans>::t() const noexcept {
+  return static_cast<const TransposeType&>(base());
+}
 
-  // Gets internal position
-  inline index_t getPos( const index_t rowidx, const index_t colidx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the conjugate of the matrix.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, changeConj(_trans)>& DenseMatrix<_Scalar, _trans>::c() noexcept {
+  return static_cast<ConjugateType&>(base());
+}
 
-  // Transpose
-  inline TransposeType transpose() noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  c
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, changeConj(_trans)>& DenseMatrix<_Scalar, _trans>::c() const noexcept {
+  return static_cast<const ConjugateType&>(base());
+}
 
-  // Finds the iterator
-  inline IteratorType      find( const index_t rowidx, const index_t colidx ) noexcept;
-  inline ConstIteratorType find( const index_t rowidx, const index_t colidx ) const noexcept;
-  inline ConstIteratorType cfind( const index_t rowidx, const index_t colidx ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the conjugate transpose of the matrix.
+///
+/// @attention  The storage layout is also changed.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, changeHerm(_trans)>& DenseMatrix<_Scalar, _trans>::h() noexcept {
+  return static_cast<HermitianType&>(base());
+}
 
-  // Resizes
-  inline void resize( const index_t nrow, const index_t ncol ) noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  t
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, changeHerm(_trans)>& DenseMatrix<_Scalar, _trans>::h() const noexcept {
+  return static_cast<const HermitianType&>(base());
+}
 
-  // Gets matrix block
-  inline       MatrixType getBlock( const IdxRange rowrange, const IdxRange colrange ) noexcept;
-  inline const MatrixType getBlock( const IdxRange rowrange, const IdxRange colrange ) const noexcept;
-  inline       MatrixType getCols( const IdxRange colrange ) noexcept;
-  inline const MatrixType getCols( const IdxRange colrange ) const noexcept;
-  inline       MatrixType getRows( const IdxRange rowrange ) noexcept;
-  inline const MatrixType getRows( const IdxRange rowrange ) const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the symmetric view of the matrix.
+///
+template <typename _Scalar, Trans _trans> template <Uplo _uplo>
+DenseSymmetricMatrix<_Scalar, _trans, _uplo>& DenseMatrix<_Scalar, _trans>::viewSymmetric() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<SymmetricType<_uplo>&>(base());
+}
 
-  // Gets vector segment
-  inline       VectorType getCol( const index_t colidx ) noexcept;
-  inline const VectorType getCol( const index_t colidx ) const noexcept;
-  inline       VectorType getColSegment( const index_t colidx, const IdxRange rowrange ) noexcept;
-  inline const VectorType getColSegment( const index_t colidx, const IdxRange rowrange ) const noexcept;
-  inline       VectorType getRow( const index_t rowidx ) noexcept;
-  inline const VectorType getRow( const index_t rowidx ) const noexcept;
-  inline       VectorType getRowSegment( const index_t rowidx, const IdxRange colrange ) noexcept;
-  inline const VectorType getRowSegment( const index_t rowidx, const IdxRange colrange ) const noexcept;
-  inline       VectorType getDiagonal( const index_t idx = 0 ) noexcept;
-  inline const VectorType getDiagonal( const index_t idx = 0 ) const noexcept;
-  inline       VectorType vectorize() noexcept;
-  inline const VectorType vectorize() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewSymmetric
+///
+template <typename _Scalar, Trans _trans> template <Uplo _uplo>
+const DenseSymmetricMatrix<_Scalar, _trans, _uplo>& DenseMatrix<_Scalar, _trans>::viewSymmetric() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const SymmetricType<_uplo>&>(base());
+}
 
- protected:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the triangular view of the matrix.
+///
+template <typename _Scalar, Trans _trans> template <Uplo _uplo>
+DenseTriangularMatrix<_Scalar, _trans, _uplo>& DenseMatrix<_Scalar, _trans>::viewTriangular() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<TriangularType<_uplo>&>(base());
+}
 
-  // Gets stride
-  inline index_t getColStride() const noexcept;
-  inline index_t getRowStride() const noexcept;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewTriangular
+///
+template <typename _Scalar, Trans _trans> template <Uplo _uplo>
+const DenseTriangularMatrix<_Scalar, _trans, _uplo>& DenseMatrix<_Scalar, _trans>::viewTriangular() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const TriangularType<_uplo>&>(base());
+}
 
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the diagonal view of the matrix.
+///
+template <typename _Scalar, Trans _trans>
+DenseDiagonalMatrix<_Scalar> DenseMatrix<_Scalar, _trans>::viewDiagonal() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return getDiagonal().viewDiagonal();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewDiagonal
+///
+template <typename _Scalar, Trans _trans>
+const DenseDiagonalMatrix<_Scalar> DenseMatrix<_Scalar, _trans>::viewDiagonal() const noexcept {
+  return getDiagonal().viewDiagonal();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a matrix block.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
+    const IdxRange &rowrange,
+    const IdxRange &colrange
+) noexcept {
+  return static_cast<MatrixType&&>(
+      !isTrans(_trans) ? this->getMatrixImpl(rowrange, colrange) : this->getMatrixImpl(colrange, rowrange)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
+    const IdxRange &rowrange,
+    const IdxRange &colrange
+) const noexcept {
+  return static_cast<const MatrixType&&>(
+      !isTrans(_trans) ? this->getMatrixImpl(rowrange, colrange) : this->getMatrixImpl(colrange, rowrange)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
+    const char*,
+    const IdxRange &colrange
+) noexcept {
+  return static_cast<MatrixType&&>(
+      !isTrans(_trans) ? this->getMatrixImpl(rowfullrange(), colrange) : this->getMatrixImpl(colrange, rowfullrange())
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
+    const char*,
+    const IdxRange &colrange
+) const noexcept {
+  return static_cast<const MatrixType&&>(
+      !isTrans(_trans) ? this->getMatrixImpl(rowfullrange(), colrange) : this->getMatrixImpl(colrange, rowfullrange())
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
+    const IdxRange &rowrange,
+    const char*
+) noexcept {
+  return static_cast<MatrixType&&>(
+      !isTrans(_trans) ? this->getMatrixImpl(rowrange, colfullrange()) : this->getMatrixImpl(colfullrange(), rowrange)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrix<_Scalar, _trans> DenseMatrix<_Scalar, _trans>::operator()(
+    const IdxRange &rowrange,
+    const char*
+) const noexcept {
+  return static_cast<const MatrixType&&>(
+      !isTrans(_trans) ? this->getMatrixImpl(rowrange, colfullrange()) : this->getMatrixImpl(colfullrange(), rowrange)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a column vector segment.
+///
+template <typename _Scalar, Trans _trans>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const IdxRange &rowrange,
+    const index_t colidx
+) noexcept {
+  return static_cast<VectorType&&>(
+      !isTrans(_trans) ? this->getVector0Impl(rowrange, colidx) : this->getVector1Impl(colidx, rowrange)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const index_t )
+///
+template <typename _Scalar, Trans _trans>
+const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const IdxRange &rowrange,
+    const index_t colidx
+) const noexcept {
+  return static_cast<const VectorType&&>(
+      !isTrans(_trans) ? this->getVector0Impl(rowrange, colidx) : this->getVector1Impl(colidx, rowrange)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const index_t )
+///
+template <typename _Scalar, Trans _trans>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const char*,
+    const index_t colidx
+) noexcept {
+  return static_cast<VectorType&&>(
+      !isTrans(_trans) ? this->getVector0Impl(rowfullrange(), colidx) : this->getVector1Impl(colidx, rowfullrange())
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange&, const index_t )
+///
+template <typename _Scalar, Trans _trans>
+const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const char*,
+    const index_t colidx
+) const noexcept {
+  return static_cast<const VectorType&&>(
+      !isTrans(_trans) ? this->getVector0Impl(rowfullrange(), colidx) : this->getVector1Impl(colidx, rowfullrange())
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a row vector segment.
+///
+template <typename _Scalar, Trans _trans>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const IdxRange &colrange
+) noexcept {
+  return static_cast<VectorType&&>(
+      !isTrans(_trans) ? this->getVector1Impl(rowidx, colrange) : this->getVector0Impl(colrange, rowidx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const index_t, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const IdxRange &colrange
+) const noexcept {
+  return static_cast<const VectorType&&>(
+      !isTrans(_trans) ? this->getVector1Impl(rowidx, colrange) : this->getVector0Impl(colrange, rowidx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const index_t, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const char*
+) noexcept {
+  return static_cast<VectorType&&>(
+      !isTrans(_trans) ? this->getVector1Impl(rowidx, colfullrange()) : this->getVector0Impl(colfullrange(), rowidx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const index_t, const IdxRange& )
+///
+template <typename _Scalar, Trans _trans>
+const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::operator()(
+    const index_t rowidx,
+    const char*
+) const noexcept {
+  return static_cast<const VectorType&&>(
+      !isTrans(_trans) ? this->getVector1Impl(rowidx, colfullrange()) : this->getVector0Impl(colfullrange(), rowidx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getDiagonalImpl
+///
+template <typename _Scalar, Trans _trans>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::getDiagonal(
+    const index_t idx
+) noexcept {
+  return static_cast<VectorType&&>(
+      !isTrans(_trans) ? this->getDiagonalImpl(idx) : this->getDiagonalImpl(-idx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  getDiagonal
+///
+template <typename _Scalar, Trans _trans>
+const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::getDiagonal(
+    const index_t idx
+) const noexcept {
+  return static_cast<const VectorType&&>(
+      !isTrans(_trans) ? this->getDiagonalImpl(idx) : this->getDiagonalImpl(-idx)
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::vectorizeImpl
+///
+template <typename _Scalar, Trans _trans>
+DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::vectorize() noexcept {
+  return static_cast<VectorType&&>(this->vectorizeImpl());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  vectorize
+///
+template <typename _Scalar, Trans _trans>
+const DenseVector<_Scalar> DenseMatrix<_Scalar, _trans>::vectorize() const noexcept {
+  return static_cast<const VectorType&&>(this->vectorizeImpl());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::nrow
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::nrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim0() : this->dim1();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::ncol
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::ncolImpl() const noexcept {
+  return !isTrans(_trans) ? this->dim1() : this->dim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Gets the first dimension from sizes.
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::toDim0(
+    const SizesType sizes
+) const noexcept {
+  return !isTrans(_trans) ? std::get<0>(sizes) : std::get<1>(sizes);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  toDim0
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::toDim0(
+    const index_t nrow,
+    const index_t ncol
+) const noexcept {
+  return !isTrans(_trans) ? nrow : ncol;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Gets the second dimension from sizes.
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::toDim1(
+    const SizesType sizes
+) const noexcept {
+  return !isTrans(_trans) ? std::get<1>(sizes) : std::get<0>(sizes);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  toDim1
+///
+template <typename _Scalar, Trans _trans>
+index_t DenseMatrix<_Scalar, _trans>::toDim1(
+    const index_t nrow,
+    const index_t ncol
+) const noexcept {
+  return !isTrans(_trans) ? ncol : nrow;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Create a full row index range.
+///
+template <typename _Scalar, Trans _trans>
+const IdxRange DenseMatrix<_Scalar, _trans>::rowfullrange() const noexcept {
+  return {0, this->nrow()};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Create a full column index range.
+///
+template <typename _Scalar, Trans _trans>
+const IdxRange DenseMatrix<_Scalar, _trans>::colfullrange() const noexcept {
+  return {0, this->ncol()};
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to base class.
+///
+template <typename _Scalar, Trans _trans>
+DenseMatrixStorage<_Scalar>& DenseMatrix<_Scalar, _trans>::base() noexcept {
+  return static_cast<BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  base
+///
+template <typename _Scalar, Trans _trans>
+const DenseMatrixStorage<_Scalar>& DenseMatrix<_Scalar, _trans>::base() const noexcept {
+  return static_cast<const BaseType&>(*this);
+}
 
 }  // namespace matrix
 

@@ -21,151 +21,125 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The enumeration of matrix storage layout.
+/// @ingroup  core_module
+/// The enumeration of matrix transpose storage.
 ///
-enum class Layout {
-  COLMAJOR = 0x0,  ///< Column-major order.
-  ROWMAJOR = 0x1,  ///< Row-major order.
+enum class Trans {
+  NORMAL = 0x0,           ///< No-transpose.
+  TRANS  = 0x1,           ///< Transpose.
+  CONJ   = 0x2,           ///< Conjugate.
+  HERM   = TRANS | CONJ,  ///< Conjugate transpose.
 };
 
-static constexpr bool operator !( const Layout layout ) noexcept {
-  return !static_cast<const bool>(layout);
+/// @ingroup  core_module
+static constexpr bool operator !( const Trans trans ) noexcept {
+  return !static_cast<bool>(trans);
 }
 
-static constexpr Layout operator|( const Layout a, const Layout b ) noexcept {
-  return static_cast<const Layout>(static_cast<const int>(a) | static_cast<const int>(b));
+/// @ingroup  core_module
+static constexpr Trans operator|( const Trans a, const Trans b ) noexcept {
+  return static_cast<Trans>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-static constexpr Layout operator&( const Layout a, const Layout b ) noexcept {
-  return static_cast<const Layout>(static_cast<const int>(a) & static_cast<const int>(b));
+/// @ingroup  core_module
+static constexpr Trans operator&( const Trans a, const Trans b ) noexcept {
+  return static_cast<Trans>(static_cast<int>(a) & static_cast<int>(b));
 }
 
-static constexpr Layout operator^( const Layout a, const Layout b ) noexcept {
-  return static_cast<const Layout>(static_cast<const int>(a) ^ static_cast<const int>(b));
+/// @ingroup  core_module
+static constexpr Trans operator^( const Trans a, const Trans b ) noexcept {
+  return static_cast<Trans>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
-static constexpr bool isColMajor( const Layout layout ) noexcept {
-  return !(layout & Layout::ROWMAJOR);
+/// @ingroup  core_module
+static constexpr bool isTrans( const Trans trans ) noexcept {
+  return !!(trans & Trans::TRANS);
 }
 
-static constexpr bool isRowMajor( const Layout layout ) noexcept {
-  return !!(layout & Layout::ROWMAJOR);
+/// @ingroup  core_module
+static constexpr bool isConj( const Trans trans ) noexcept {
+  return !!(trans & Trans::CONJ);
 }
 
-static constexpr Layout changeLayout( const Layout layout ) noexcept {
-  return layout ^ Layout::ROWMAJOR;
+/// @ingroup  core_module
+static constexpr Trans changeTrans( const Trans trans ) noexcept {
+  return trans ^ Trans::TRANS;
+}
+
+/// @ingroup  core_module
+static constexpr Trans changeConj( const Trans trans ) noexcept {
+  return trans ^ Trans::CONJ;
+}
+
+/// @ingroup  core_module
+static constexpr Trans changeHerm( const Trans trans ) noexcept {
+  return trans ^ Trans::HERM;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The enumeration of matrix storage layout.
-///
-enum class TransOption {
-  NORMAL    = 0x0,           ///< No-transpose.
-  TRANS     = 0x1,           ///< Transpose.
-  CONJ      = 0x2,           ///< Conjugate.
-  CONJTRANS = TRANS | CONJ,  ///< Conjugate transpose.
-};
-
-static constexpr bool operator !( const TransOption trans ) noexcept {
-  return !static_cast<const bool>(trans);
-}
-
-static constexpr TransOption operator|( const TransOption a, const TransOption b ) noexcept {
-  return static_cast<const TransOption>(static_cast<const int>(a) | static_cast<const int>(b));
-}
-
-static constexpr TransOption operator&( const TransOption a, const TransOption b ) noexcept {
-  return static_cast<const TransOption>(static_cast<const int>(a) & static_cast<const int>(b));
-}
-
-static constexpr TransOption operator^( const TransOption a, const TransOption b ) noexcept {
-  return static_cast<const TransOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
-}
-
-static constexpr bool isTranspose( const TransOption trans ) noexcept {
-  return !!(trans & TransOption::TRANS);
-}
-
-static constexpr bool isConjugate( const TransOption trans ) noexcept {
-  return !!(trans & TransOption::CONJ);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  core_module
 /// The enumeration of matrix triangular storage.
 ///
-enum class UploOption {
-  LOWER     = 0x0, ///< Lower triangular storage.
-  UPPER     = 0x1, ///< Upper triangular storage.
-  UNITLOWER = 0x2, ///< Unit diagonal lower triangular storage.
-  UNITUPPER = 0x3, ///< Unit diagonal upper triangular storage.
+enum class Uplo {
+  UPPER     = 0x0,  ///< Upper triangular storage.
+  LOWER     = 0x1,  ///< Lower triangular storage.
+  UNITUPPER = 0x2,  ///< Unit diagonal upper triangular storage.
+  UNITLOWER = 0x3,  ///< Unit diagonal lower triangular storage.
 };
 
-static constexpr bool operator!( const UploOption uplo ) noexcept {
-  return !static_cast<const bool>(uplo);
+/// @ingroup  core_module
+static constexpr bool operator!( const Uplo uplo ) noexcept {
+  return !static_cast<bool>(uplo);
 }
 
-static constexpr UploOption operator|( const UploOption a, const UploOption b ) noexcept {
-  return static_cast<const UploOption>(static_cast<const int>(a) | static_cast<const int>(b));
+/// @ingroup  core_module
+static constexpr Uplo operator|( const Uplo a, const Uplo b ) noexcept {
+  return static_cast<Uplo>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-static constexpr UploOption operator&( const UploOption a, const UploOption b ) noexcept {
-  return static_cast<const UploOption>(static_cast<const int>(a) & static_cast<const int>(b));
+/// @ingroup  core_module
+static constexpr Uplo operator&( const Uplo a, const Uplo b ) noexcept {
+  return static_cast<Uplo>(static_cast<int>(a) & static_cast<int>(b));
 }
 
-static constexpr UploOption operator^( const UploOption a, const UploOption b ) noexcept {
-  return static_cast<const UploOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
+/// @ingroup  core_module
+static constexpr Uplo operator^( const Uplo a, const Uplo b ) noexcept {
+  return static_cast<Uplo>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
-static constexpr bool isLower( const UploOption uplo ) noexcept {
-  return !(uplo & UploOption::UPPER);
+/// @ingroup  core_module
+static constexpr bool isLower( const Uplo uplo ) noexcept {
+  return !!(uplo & Uplo::LOWER);
 }
 
-static constexpr bool isUpper( const UploOption uplo ) noexcept {
-  return !!(uplo & UploOption::UPPER);
+/// @ingroup  core_module
+static constexpr bool isUpper( const Uplo uplo ) noexcept {
+  return !(uplo & Uplo::LOWER);
 }
 
-static constexpr bool isUnitDiag( const UploOption uplo ) noexcept {
-  return !!(uplo & UploOption::UNITLOWER);
+/// @ingroup  core_module
+static constexpr bool isUnitDiag( const Uplo uplo ) noexcept {
+  return !!(uplo & Uplo::UNITUPPER);
 }
 
-static constexpr UploOption changeUplo( const UploOption uplo ) noexcept {
-  return uplo ^ UploOption::UPPER;
+/// @ingroup  core_module
+static constexpr Uplo changeUplo( const Uplo uplo ) noexcept {
+  return uplo ^ Uplo::LOWER;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The enumeration of matrix operation size.
-///
-enum class SideOption {
-  LEFT  = 0x0,   ///< Left-hand side.
-  RIGHT = 0x1,  ///< Right-hand side.
-};
-
-static constexpr bool operator!( const SideOption side ) noexcept {
-  return !static_cast<const bool>(side);
+/// @ingroup  core_module
+static constexpr Uplo changeDiag( const Uplo uplo ) noexcept {
+  return uplo ^ Uplo::UNITUPPER;
 }
 
-static constexpr SideOption operator|( const SideOption a, const SideOption b ) noexcept {
-  return static_cast<const SideOption>(static_cast<const int>(a) | static_cast<const int>(b));
+/// @ingroup  core_module
+static constexpr Uplo operator^( const Uplo uplo, const Trans trans ) noexcept {
+  return static_cast<Uplo>(static_cast<int>(uplo) ^ isTrans(trans));
 }
 
-static constexpr SideOption operator&( const SideOption a, const SideOption b ) noexcept {
-  return static_cast<const SideOption>(static_cast<const int>(a) & static_cast<const int>(b));
-}
-
-static constexpr SideOption operator^( const SideOption a, const SideOption b ) noexcept {
-  return static_cast<const SideOption>(static_cast<const int>(a) ^ static_cast<const int>(b));
-}
-
-static constexpr bool isLeftSide( const SideOption side ) noexcept {
-  return !(side & SideOption::RIGHT);
-}
-
-static constexpr bool isRightSide( const SideOption side ) noexcept {
-  return !!(side & SideOption::RIGHT);
-}
-
-static constexpr SideOption changeSide( const SideOption side ) noexcept {
-  return side ^ SideOption::RIGHT;
+/// @ingroup  core_module
+static constexpr Trans operator^( const Trans trans, const Uplo uplo ) noexcept {
+  return static_cast<Trans>(static_cast<int>(trans) ^ isLower(uplo));
 }
 
 }  // namespace mcnla

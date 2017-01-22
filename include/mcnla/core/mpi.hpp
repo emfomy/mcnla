@@ -9,11 +9,7 @@
 #define MCNLA_CORE_MPI_HPP_
 
 #include <mcnla/core/mpi/def.hpp>
-#include <mcnla/core/mpi/allreduce.hpp>
-#include <mcnla/core/mpi/alltoall.hpp>
-#include <mcnla/core/mpi/bcast.hpp>
-#include <mcnla/core/mpi/gather.hpp>
-#include <mcnla/core/mpi/recv.hpp>
-#include <mcnla/core/mpi/send.hpp>
+#include <mcnla/core/mpi/dense.hpp>
+#include <mcnla/core/mpi/coo.hpp>
 
 #endif  // MCNLA_CORE_MPI_HPP_
