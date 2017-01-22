@@ -16,7 +16,7 @@ mcnla::index_t maxiter = 256;
 
 void create( mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
              mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
-             const mcnla::index_t rank, mcnla::index_t seed ) noexcept;
+             const mcnla::index_t rank ) noexcept;
 
 template <mcnla::Trans _trans>
 void check_u( const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_u,
@@ -54,7 +54,6 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize random seed
   srand(time(NULL) ^ mpi_rank);
-  mcnla::index_t seed = rand();;
 
   // ====================================================================================================================== //
   // Set parameters
@@ -81,7 +80,8 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Create statistics collector
   StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frerr(num_test),
-                set_time(num_test), set_time_s(num_test), set_time_i(num_test), set_time_f(num_test), set_iter(num_test);
+                set_time(num_test), set_time_s(num_test), set_time_o(num_test), set_time_i(num_test), set_time_f(num_test),
+                set_iter(num_test);
 
   // ====================================================================================================================== //
   // Initialize solver
@@ -92,10 +92,11 @@ int main( int argc, char **argv ) {
                       mcnla::isvd::KolmogorovNagumoIntegratorTag,
                       mcnla::isvd::SvdFormerTag> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-  solver.setTolerance(tolerance).setMaxIteration(maxiter).setSeeds(seed);
+  solver.setTolerance(tolerance).setMaxIteration(maxiter).setSeeds(rand());
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << solver.sketcher() << "." << std::endl;
+    std::cout << "Uses " << solver.orthogonalizer() << "." << std::endl;
     std::cout << "Uses " << solver.integrator() << "." << std::endl;
     std::cout << "Uses " << solver.former() << "." << std::endl << std::endl;
   }
@@ -104,7 +105,7 @@ int main( int argc, char **argv ) {
   // Generate matrix
   if ( mpi_rank == mpi_root ) {
     std::cout << "Generate A with given singular values." << std::endl << std::endl;
-    create(matrix_a, matrix_u_true, k, seed);
+    create(matrix_a, matrix_u_true, k);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
@@ -130,17 +131,19 @@ int main( int argc, char **argv ) {
       auto iter    = solver.integratorIteration();
       auto maxiter = solver.parameters().maxIteration();
       auto time_s = solver.sketcherTime();
+      auto time_o = solver.orthogonalizerTime();
       auto time_i = solver.integratorTime();
       auto time_f = solver.formerTime();
-      auto time = time_s + time_i + time_f;
+      auto time = time_s + time_o + time_i + time_f;
       std::cout << std::setw(log10(num_test)+1) << t
                 << " | validity: " << smax << " / " << smean << " / " << smin
                 << " | error: " << frerr
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
-                << " | time: " << time << " (" << time_s << " / " << time_i << " / " << time_f << ")" << std::endl;
+                << " | time: " << time << " (" << time_s << " / " << time_o << " / "
+                                               << time_i << " / " << time_f << ")" << std::endl;
       if ( t >= 0 ) {
         set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
-        set_time(time); set_time_s(time_s); set_time_f(time_f); set_time_i(time_i); set_iter(iter);
+        set_time(time); set_time_s(time_s); set_time_o(time_o); set_time_i(time_i); set_time_f(time_f); set_iter(iter);
       }
     }
   }
@@ -150,6 +153,7 @@ int main( int argc, char **argv ) {
     std::cout << std::endl;
     std::cout << "Average total computing time: " << set_time.mean() << " seconds." << std::endl;
     std::cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << std::endl;
+    std::cout << "Average orthogonaling time:   " << set_time_o.mean() << " seconds." << std::endl;
     std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
     std::cout << "Average forming time:         " << set_time_f.mean() << " seconds." << std::endl;
     std::cout << "mean(validity): max = " << set_smax.mean()
@@ -160,8 +164,8 @@ int main( int argc, char **argv ) {
                             << ", min = " << set_smin.sd() << std::endl;
     std::cout << "mean(error) = " << set_frerr.mean() << std::endl;
     std::cout << "sd(error)   = " << set_frerr.sd() << std::endl;
-    std::cout << "mean(iter) = " << set_iter.mean() << std::endl;
-    std::cout << "sd(iter)   = " << set_iter.sd() << std::endl;
+    std::cout << "mean(iter)  = " << set_iter.mean() << std::endl;
+    std::cout << "sd(iter)    = " << set_iter.sd() << std::endl;
     std::cout << std::endl;
     std::cout << "validity = svd(U_true' U)_2" << std::endl;
     std::cout << "error = norm(A-USV')_F/norm(A)_F" << std::endl;
@@ -176,8 +180,7 @@ int main( int argc, char **argv ) {
 void create(
           mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
           mcnla::matrix::DenseMatrix<ScalarType> &matrix_u_true,
-    const mcnla::index_t rank,
-          mcnla::index_t seed
+    const mcnla::index_t rank
 ) noexcept {
   matrix_u_true = mcnla::matrix::DenseMatrix<ScalarType>(matrix_a.nrow(), rank);
 
@@ -187,8 +190,8 @@ void create(
   mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_a.nrow());
 
   // Generate U & V using normal random
-  mcnla::random::gaussian(matrix_u.vectorize(), seed);
-  mcnla::random::gaussian(matrix_v.vectorize(), seed);
+  mcnla::random::gaussian(matrix_u.vectorize(), rand());
+  mcnla::random::gaussian(matrix_v.vectorize(), rand());
 
   // Orthogonalize U & V
   mcnla::la::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
@@ -240,7 +243,7 @@ void check(
     const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_a,
     const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_u,
     const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_vt,
-    const mcnla::matrix::DenseVector<ScalarType>          &vector_s,
+    const mcnla::matrix::DenseVector<ScalarType>         &vector_s,
           ScalarType &frerr
 ) noexcept {
   mcnla::matrix::DenseMatrix<ScalarType, _trans> matrix_a_tmp(matrix_a.sizes());
