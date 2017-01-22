@@ -70,8 +70,6 @@ namespace matrix {
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
-/// @see  Tutorial @ref tutorial_matrix_dense
-///
 template <typename _Scalar>
 class DenseVector
   : public DenseVectorStorage<_Scalar>,
