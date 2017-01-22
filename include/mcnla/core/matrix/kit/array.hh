@@ -26,6 +26,8 @@ namespace matrix {
 /// @ingroup  matrix_module
 /// The array.
 ///
+/// @see  Tutorial @ref tutorial_matrix_array
+///
 template <typename _Type>
 class Array : public std::shared_ptr<std::valarray<_Type>> {
 

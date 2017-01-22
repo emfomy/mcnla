@@ -53,7 +53,7 @@ class DenseVectorStorage : public DenseStorage<_Scalar> {
   /// The size in the first dimension.
   index_t dim0_;
 
-  /// The stride.
+  /// The number of positions between successive elements
   index_t stride_;
 
   using BaseType::val_;

@@ -159,7 +159,7 @@ std::tuple<index_t> DenseVectorStorage<_Scalar>::dims() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the stride.
+/// @brief  Gets the number of positions between successive elements.
 ///
 template <typename _Scalar>
 index_t DenseVectorStorage<_Scalar>::stride() const noexcept {

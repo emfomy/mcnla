@@ -1,0 +1,79 @@
+namespace mcnla {
+
+namespace matrix {
+
+/**
+  @page tutorial_matrix Data Structures
+
+  There are two primary containers in MCNLA --- @ref VectorWrapper "vector" and @ref MatrixWrapper "matrix".
+
+  <h3>Subpages</h3>
+
+  - @subpage tutorial_matrix_array
+  - @subpage tutorial_matrix_dense
+  - @subpage tutorial_matrix_coo
+*/
+
+/**
+  @page tutorial_matrix_array Base %Array Type
+
+  All the data structures used in MCNLA uses @ref Array to store data. The @ref Array stores a `std::shared_ptr` of `std::valarray` of the scalars. The variable @ref Array::offset "offset" mark offset of the @ref Array.
+
+  Let `a` be an @ref Array of @ref Array::size "size" `n` with @ref Array::offset "offset" `k`, then `a` contains a `std::valarray` with length `n`, and the first data of `a` is stored at the `o`-th position. That is, the `std::valarray` stores
+  @code
+    a[-k], a[-k+1], ..., a[-1], a[0], a[1], ..., a[n-k-1]
+  @endcode
+
+  An extra variable @ref Array::capacity "capacity" returns `(n-k)`, the maximum size that the data can be. Note that there is an equality: @ref Array::capacity "capacity" + @ref Array::offset "offset" = @ref Array::size "size".
+
+  <h3>Operations</h3>
+
+  @ref Array provides several operations:
+  - @ref Array::operator[] "a[i]": gets the `i`-th element of the data; that is, the `(i+k)`-th element in the `std::valarray`.
+  - @ref Array::operator* "*a": gets the raw pointer; that is, the address of `a[0]`.
+  - @ref Array::operator[] "b = a": copies `a` to `b`.
+  - @ref Array::operator>> "b = a >> i": right shift the array; that is, `b[x+i] = a[x]`.
+  - @ref Array::operator<< "b = a << i": left shift the array;  that is, `b[x-i] = a[x]`.
+  - @ref Array::operator>> "a >>= i": same as `a = a >> i`.
+  - @ref Array::operator<< "a <<= i": same as `a = a << i`.
+  - @ref Array::operator<< "a.isEmpty()": returns `true` if the @ref Array::size "size" is zero.
+
+*/
+
+/**
+  @page tutorial_matrix_dense Dense Data Structures
+
+  There are two primary @ref DenseStorage "dense data structures" in MCNLA --- @ref DenseVector and @ref DenseMatrix. Both of them uses an @ref Array --- @ref DenseStorage::val "val" --- to store the values.
+
+  <h3>%DenseVector</h3>
+
+  The variable @ref DenseVector::length "length" gives the number of elements in the vector. An special variable @ref DenseVector::stride "stride" gives the number of positions between successive elements in raw data.
+
+  Let `x` be a @ref DenseVector of @ref DenseVector::length "length" `n` and @ref DenseVector::stride "stride" `s`, then the elements are
+  @code
+    vx[0], vx[s], vx[2*s], ..., vx[(n-1)*s]
+  @endcode
+
+  where `vx = x.val()` is the raw array of `x`. That is, `x(i) = vx[i*s]`.
+
+  Note that @ref DenseVector::stride "stride" is the same as the variable `inc?` (e.g. `incx` for vector `x`) in BLAS.
+
+  <h3>%DenseMatrix</h3>
+
+  The variable @ref DenseMatrix::nrow "nrow" gives the number of rows in the matrix, and the variable @ref DenseMatrix::ncol "ncol" gives the number of columns in the matrix. An special variable @ref DenseMatrix::pitch "pitch" gives the number of positions between successive elements in raw data. Extra variables @ref DenseMatrix::dim0 "dim0" and @ref DenseMatrix::dim1 "dim1" gives the sizes in storage order: (@ref DenseMatrix::dim0 "dim0", @ref DenseMatrix::dim1 "dim1") = (@ref DenseMatrix::nrow "nrow", @ref DenseMatrix::ncol "ncol") for column-major layout, and (@ref DenseMatrix::dim0 "dim0", @ref DenseMatrix::dim1 "dim1") = (@ref DenseMatrix::ncol "ncol", @ref DenseMatrix::nrow "nrow") for row-major layout.
+
+  Let `a` be a @ref DenseMatrix with @ref DenseMatrix::pitch "pitch" `p`, then the element `a(i, j)` is `va[i + j*p]` for column-major layout and `va[i*p + j]` for row-major layout, where `va = a.val()` is the raw array of `a`.
+
+  Note that @ref DenseMatrix::pitch "pitch" is the same as the variable `ld?` (e.g. `lda` for matrix `a`) in BLAS.
+*/
+
+/**
+  @page tutorial_matrix_coo Coordinate List (COO) Data Structures
+
+  There are two primary @ref CooStorage "coordinate list (COO) data structures" in MCNLA --- @ref CooVector and @ref CooMatrix. Both of them uses an @ref Array --- @ref CooStorage::val "val" --- to store the values and several @ref Array "Array"s to stores the indices.
+
+*/
+
+}  // namespace matrix
+
+}  // namespace mcnla
