@@ -9,7 +9,6 @@
 #define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_
 
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh>
-#include <cmath>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

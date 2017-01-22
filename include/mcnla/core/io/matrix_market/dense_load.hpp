@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_matket/dense_load.hpp
-/// @brief   Load dense data from a matrix market file.
+/// @file    include/mcnla/core/io/matrix_market/dense_load.hpp
+/// @brief   Load dense data from a Matrix Market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -24,7 +24,7 @@ namespace io {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a dense vector from a matrix market file.
+/// Load a dense vector from a Matrix Market file.
 ///
 /// @note  If @a vector is empty, the memory will be allocated.
 ///
@@ -74,7 +74,7 @@ inline void loadMatrixMarket(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a dense matrix from a matrix market file.
+/// Load a dense matrix from a Matrix Market file.
 ///
 /// @note  If @a matrix is empty, the memory will be allocated.
 ///
@@ -128,7 +128,7 @@ inline void loadMatrixMarket(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a dense vector set from a matrix market file.
+/// Load a dense vector set from a Matrix Market file.
 ///
 /// @note  If @a set is empty, the memory will be allocated.
 ///
@@ -189,7 +189,7 @@ inline void loadMatrixMarket(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a dense matrix set from a matrix market file.
+/// Load a dense matrix set from a Matrix Market file.
 ///
 /// @note  If @a set is empty, the memory will be allocated.
 ///

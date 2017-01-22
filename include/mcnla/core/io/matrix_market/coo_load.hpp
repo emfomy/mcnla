@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_matket/coo_load.hpp
-/// @brief   Load COO data from a matrix market file.
+/// @file    include/mcnla/core/io/matrix_market/coo_load.hpp
+/// @brief   Load COO data from a Matrix Market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -24,7 +24,7 @@ namespace io {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a COO vector from a matrix market file.
+/// Load a COO vector from a Matrix Market file.
 ///
 /// @note  If @a vector is empty, the memory will be allocated.
 ///
@@ -77,7 +77,7 @@ inline void loadMatrixMarket(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a COO matrix from a matrix market file.
+/// Load a COO matrix from a Matrix Market file.
 ///
 /// @note  If @a matrix is empty, the memory will be allocated.
 ///

@@ -4,15 +4,20 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 # Set options
-option(MCNLA_BUILD_DEMO "Build demo codes."                             "ON")
-option(MCNLA_BUILD_TEST "Build test codes."                             "OFF")
-option(MCNLA_BUILD_DOC  "Build documentation."                          "OFF")
-option(MCNLA_USE_ILP64  "Uses 64bit integer."                           "OFF")
-option(MCNLA_USE_MKL    "Uses Intel MKL."                               "OFF")
-option(MKL_USE_OMP      "Uses multithread MKL. (Require MCNLA_USE_MKL)" "OFF")
-option(MKL_USE_IOMP     "Uses Intel OMP. (Require MKL_USE_OMP)"         "OFF")
+option(MCNLA_BUILD_DRIVER "Build driver codes."                           "ON")
+option(MCNLA_BUILD_DEMO   "Build demo codes."                             "ON")
+option(MCNLA_BUILD_TEST   "Build test codes."                             "OFF")
+option(MCNLA_BUILD_DOC    "Build documentation."                          "OFF")
+option(MCNLA_USE_ILP64    "Uses 64bit integer."                           "OFF")
+option(MCNLA_USE_MKL      "Uses Intel MKL."                               "OFF")
+option(MKL_USE_OMP        "Uses multithread MKL. (Require MCNLA_USE_MKL)" "OFF")
+option(MKL_USE_IOMP       "Uses Intel OMP. (Require MKL_USE_OMP)"         "OFF")
 
 # Set variables
+if(MCNLA_BUILD_DRIVER OR MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
+  set(MCNLA_BUILD_BIN "ON")
+endif()
+
 if(MCNLA_USE_ILP64)
   list(APPEND DEFS "MCNLA_USE_ILP64")
 endif()
@@ -36,7 +41,7 @@ else()
 endif()
 
 # Check compiler support
-if(MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
+if(MCNLA_BUILD_BIN)
   include(CheckCXXCompilerFlag)
   CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
   if(NOT COMPILER_SUPPORTS_CXX11)

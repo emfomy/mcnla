@@ -105,7 +105,7 @@ Array<_Type>& Array<_Type>::operator=(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
-/// Add the #offset_ to @a offset.
+/// Add @a offset to @ref offset_.
 ///
 template <typename _Type>
 void Array<_Type>::operator>>=(
@@ -117,7 +117,7 @@ void Array<_Type>::operator>>=(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
-/// Subtract #offset_ from @a offset.
+/// Subtract @ref offset_ from @a offset.
 ///
 template <typename _Type>
 void Array<_Type>::operator<<=(
@@ -129,7 +129,7 @@ void Array<_Type>::operator<<=(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
-/// Add the #offset_ to @a offset.
+/// Add @a offset to @ref offset_.
 ///
 template <typename _Type>
 Array<_Type> Array<_Type>::operator>>(
@@ -142,7 +142,7 @@ Array<_Type> Array<_Type>::operator>>(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Right-shift the offset.
-/// Add the #offset_ to @a offset.
+/// Add @a offset to @ref offset_.
 ///
 template <typename _Type>
 const Array<_Type> Array<_Type>::operator>>(
@@ -155,7 +155,7 @@ const Array<_Type> Array<_Type>::operator>>(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
-/// Subtract #offset_ from @a offset.
+/// Subtract @ref offset_ from @a offset.
 ///
 template <typename _Type>
 Array<_Type> Array<_Type>::operator<<(
@@ -168,7 +168,7 @@ Array<_Type> Array<_Type>::operator<<(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
-/// Subtract #offset_ from @a offset.
+/// Subtract @ref offset_ from @a offset.
 ///
 template <typename _Type>
 const Array<_Type> Array<_Type>::operator<<(
@@ -190,7 +190,7 @@ bool Array<_Type>::isEmpty() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the memory size.
 ///
-/// @note  @link capacity() capacity@endlink + @link offset() offset@endlink = @link size() memory size@endlink.
+/// @note  #capacity + #offset = #size.
 ///
 template <typename _Type>
 index_t Array<_Type>::size() const noexcept {
@@ -200,7 +200,7 @@ index_t Array<_Type>::size() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity.
 ///
-/// @note  @link capacity() capacity@endlink + @link offset() offset@endlink = @link size() memory size@endlink.
+/// @note  #capacity + #offset = #size.
 ///
 template <typename _Type>
 index_t Array<_Type>::capacity() const noexcept {
@@ -210,7 +210,7 @@ index_t Array<_Type>::capacity() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset.
 ///
-/// @note  @link capacity() capacity@endlink + @link offset() offset@endlink = @link size() memory size@endlink.
+/// @note  #capacity + #offset = #size.
 ///
 template <typename _Type>
 index_t Array<_Type>::offset() const noexcept {

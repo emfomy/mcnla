@@ -33,6 +33,7 @@
 // BLAS-like
 #include <mcnla/core/la/dense/routine/omatcopy.hpp>
 #include <mcnla/core/la/dense/routine/memset0.hpp>
+#include <mcnla/core/la/dense/routine/nrmf.hpp>
 
 // LAPACK linear equation
 

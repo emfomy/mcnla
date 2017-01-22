@@ -24,11 +24,6 @@ extern CPP_INT izamin_( const FORTRAN_INT n, const FORTRAN_COMP8 x, const FORTRA
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_end.h>
 
-#else  // MCNLA_USE_MKL
-
-#include <cmath>
-#include <complex>
-
 #endif  // MCNLA_USE_MKL
 
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

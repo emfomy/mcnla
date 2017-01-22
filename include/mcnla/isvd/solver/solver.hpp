@@ -70,7 +70,7 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the SVD decomposition.
 ///
-/// @attention  The solver should have be initialized.
+/// @attention  The solver should have be @ref initialize "initialized".
 /// @attention  @a matrix_a should be the same in each MPI node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
@@ -220,7 +220,7 @@ index_t Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Forme
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate singular values.
 ///
-/// @attention  The solver should have be computed.
+/// @attention  The solver should have been @ref compute "computed".
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const DenseVector<RealScalarT<_Scalar>>&
@@ -232,7 +232,7 @@ const DenseVector<RealScalarT<_Scalar>>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate left singular vectors.
 ///
-/// @attention  The solver should have be computed.
+/// @attention  The solver should have been @ref compute "computed".
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const DenseMatrixColMajor<_Scalar>&
@@ -351,7 +351,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of total random sketches
 ///
-/// @attention  @a num_sketch must be a multiple of @link mcnla::mpi::commSize mpi_size@endlink.
+/// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size".
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>

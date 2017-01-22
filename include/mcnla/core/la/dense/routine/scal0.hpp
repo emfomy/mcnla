@@ -28,8 +28,8 @@ namespace la {
 /// @brief  Computes the product of a vector by zero.
 ///
 /// @attention  It is inefficient if the stride is not 1.
-///             Uses memset0 instead if the out-of-range spaces are useless.
-/// @attention  However, memset0 is slow if the stride is vary large.
+///             Uses memset0() instead if the out-of-range spaces are useless.
+/// @attention  However, memset0() is slow if the stride is vary large.
 ///
 template <typename _Scalar>
 inline void scal0(
@@ -52,7 +52,7 @@ inline void scal0(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_blas1_module
+/// @ingroup  la_dense_blas1m_module
 /// @brief  Computes the product of a matrix by zero.
 ///
 /// @attention  It is inefficient if the pitch is different from the size.

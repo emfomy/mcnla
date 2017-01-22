@@ -70,24 +70,21 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load matrix
   AType matrix_a;
-  mcnla::index_t asize0, asize1;
+  auto sizes = matrix_a.sizes();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
     mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
-    asize0 = matrix_a.nrow();
-    asize1 = matrix_a.ncol();
+    sizes = matrix_a.sizes();
   }
-  MPI_Bcast(&asize0, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
-  MPI_Bcast(&asize1, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
+  MPI_Bcast(&sizes, 2, MPI_INT, mpi_root, MPI_COMM_WORLD);
   if ( mpi_rank != mpi_root ) {
-    matrix_a.reconstruct(asize0, asize1);
+    matrix_a.reconstruct(sizes);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Initialize random seed
-  srand(time(NULL) ^ mpi_rank);
-  mcnla::index_t seed = rand();
+  srand(time(NULL));
 
   // ====================================================================================================================== //
   // Set parameters
@@ -114,7 +111,7 @@ int main( int argc, char **argv ) {
                       mcnla::isvd::ORTHOGONALIZER,
                       mcnla::isvd::INTEGRATOR,
                       mcnla::isvd::FORMER> solver(MPI_COMM_WORLD);
-  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(seed);
+  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(rand());
   solver.setTolerance(tolerance).setMaxIteration(maxiter);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
@@ -125,18 +122,18 @@ int main( int argc, char **argv ) {
   }
 
   // ====================================================================================================================== //
-  // Run MCNLA
+  // Run iSVD
   if ( mpi_rank == mpi_root ) {
     std::cout << "Start iSVD." << std::endl << std::endl;
     std::cout << std::fixed << std::setprecision(6);
   }
 
-  // Run solver
   MPI_Barrier(MPI_COMM_WORLD);
   solver.compute(matrix_a);
   MPI_Barrier(MPI_COMM_WORLD);
 
-  // Display statistics results
+  // ====================================================================================================================== //
+  // Display executing time
   if ( mpi_rank == mpi_root ) {
     auto time_s = solver.sketcherTime();
     auto time_i = solver.integratorTime();
@@ -167,5 +164,7 @@ int main( int argc, char **argv ) {
     std::cout << std::endl;
   }
 
+  // ====================================================================================================================== //
+  // Finalize MPI
   MPI_Finalize();
 }

@@ -9,8 +9,6 @@
 #define MCNLA_CORE_LA_DENSE_ROUTINE_NRM2_HPP_
 
 #include <mcnla/core/la/def.hpp>
-#include <cmath>
-#include <complex>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/la/raw/blas/nrm2.hpp>
 

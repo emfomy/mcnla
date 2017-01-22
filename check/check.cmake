@@ -1,5 +1,6 @@
 # check/check.cmake
 
+# Macro
 macro(_ADD_CHECK_PREDO checktype)
   # Set target name
   get_filename_component(checkname ${checkpath} NAME)

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_matket/coo_save.hpp
-/// @brief   Save COO data into a matrix market file.
+/// @file    include/mcnla/core/io/matrix_market/coo_save.hpp
+/// @brief   Save COO data into a Matrix Market file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -24,13 +24,13 @@ namespace io {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Save a COO vector into a matrix market file.
+/// Save a COO vector into a Matrix Market file.
 ///
 /// @todo  Write banner
 ///
 template <typename _Scalar>
 void saveMatrixMarket(
-    const matrix::DenseVector<_Scalar> &vector,
+    const matrix::CooVector<_Scalar> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -57,13 +57,13 @@ void saveMatrixMarket(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Save a COO matrix into a matrix market file.
+/// Save a COO matrix into a Matrix Market file.
 ///
 /// @todo  Write banner
 ///
 template <typename _Scalar, Trans _trans>
 void saveMatrixMarket(
-    const matrix::DenseMatrix<_Scalar, _trans> &matrix,
+    const matrix::CooMatrix<_Scalar, _trans> &matrix,
     const char *file
 ) noexcept {
 

@@ -9,7 +9,6 @@
 #define MCNLA_ISVD_INTEGRATOR_EXTRINSIC_MEAN_INTEGRATOR_HPP_
 
 #include <mcnla/isvd/integrator/extrinsic_mean_integrator.hh>
-#include <cmath>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

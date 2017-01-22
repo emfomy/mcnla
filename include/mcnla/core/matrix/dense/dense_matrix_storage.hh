@@ -55,9 +55,6 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   /// The maximum size in the first dimension.
   index_t pitch_;
 
-  /// The stride.
-  index_t stride_;
-
   using BaseType::val_;
 
  protected:

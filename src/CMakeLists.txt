@@ -1,8 +1,19 @@
-# The CMake setting of 'bin/'
+# The CMake setting of 'src/'
 
+# Break
+if(NOT MCNLA_BUILD_DEMO)
+  return()
+endif()
+
+# Set output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# Macro
 macro(SET_TARGET target files)
   # Set target
-  add_executable(${target} EXCLUDE_FROM_ALL ${files})
+  add_executable(${target} ${files})
   target_include_directories(${target} PUBLIC "${PROJECT_BINARY_DIR}/include")
   target_include_directories(${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
   target_include_directories(${target} PUBLIC SYSTEM ${INCS})
@@ -10,6 +21,7 @@ macro(SET_TARGET target files)
   target_compile_definitions(${target} PUBLIC ${DEFS} ${ARGN})
   set_target_properties(${target} PROPERTIES COMPILE_FLAGS ${COMFLGS})
   set_target_properties(${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
+  install(TARGETS ${target} RUNTIME DESTINATION bin)
 endmacro()
 
 # Set target (isvd_dense)

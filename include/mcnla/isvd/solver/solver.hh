@@ -39,8 +39,8 @@ namespace isvd {
 /// @tparam  _IntegratorTag      The integrator tag.
 /// @tparam  _FormerTag          The former tag.
 ///
-/// @attention  The solver should have been @link initialize() initialized@endlink before calling #compute.
-/// @attention  The solver should be @link initialize() re-initialized@endlink after changing parameters.
+/// @attention  The solver should have been @ref initialize "initialized" before calling #compute.
+/// @attention  The solver should be @ref initialize "re-initialized" after changing parameters.
 ///
 template <typename _Scalar,
           class _SketcherTag       = GaussianProjectionSketcherTag<0>,
