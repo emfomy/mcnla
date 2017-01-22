@@ -12,6 +12,9 @@ Monte Carlo Numerical Linear Algebra Package
 ### Author
 * Mu Yang <<emfomy@gmail.com>>
 
+### Tutorial
+* @ref tutorial_main
+
 ## Requirements
 * [CMake](https://cmake.org) 3+.
 * C++ compiler with C++11 support ([GCC](https://gcc.gnu.org) 5+ recommended).

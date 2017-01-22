@@ -1,0 +1,133 @@
+namespace mcnla {
+
+namespace isvd {
+
+/**
+  @page tutorial_isvd iSVD %Solver
+
+  <h3>iSVD %Solver</h3>
+
+  The @ref Solver "iSVD Solver" solves a approximate low-rank singular value decomposition of matrix `a`.
+
+  <h4>Example</h4>
+
+  The following is an example of using @ref Solver "iSVD Solver":
+
+  <h5>Initialize Environment</h5>
+
+  The MPI environment and random seed should be set up before calling @ref Solver "iSVD Solver".
+
+  @code{.cpp}
+  // Initialize MPI
+  MPI_Init(&argc, &argv);
+  mcnla::mpi_int_t mpi_root = 0;
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
+
+  // Initialize random seed
+  srand(time(NULL));
+  mcnla::index_t seed = rand();
+  @endcode
+
+  <h5>Load Data</h5>
+
+  One may use @ref mcnla::io::loadMatrixMarket to load a matrix from a Matrix Market format file. Note the matrix should be boardcasted to all MPI nodes.
+
+  @code{.cpp}
+  // Load matrix
+  mcnla::DenseMatrix<double> matrix_a;
+  mcnla::index_t asize0, asize1;
+  auto sizes = matrix_a.sizes();
+  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
+    mcnla::io::loadMatrixMarket(matrix_a, "a.mtx");
+    sizes = matrix_a.sizes();
+  }
+  MPI_Bcast(&sizes, 2, MPI_INT, mpi_root, MPI_COMM_WORLD);
+  if ( !mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
+    matrix_a.reconstruct(sizes);
+  }
+  mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
+  @endcode
+
+  <h5>Initialize Solver</h5>
+
+  The @ref Solver "iSVD Solver" should be @ref Solver::initialize "initialized" be before @ref Solver::compute "compute". In initialization, the solver boardcasts the parameters and allocates the memories.
+
+  Note that most of the `set?()` methods only affect on the root node. @ref Solver::setSeeds should called by all the nodes, although only the value on root node is used. @ref Solver::initialize also required to be called by all the nodes.
+
+  @code{.cpp}
+  // Set parameters
+  mcnla::index_t Nj    = 4;
+  mcnla::index_t k     = 16;
+  mcnla::index_t p     = 12;
+  double         tol   = 1e-4;
+  mcnla::index_t maxit = 256;
+
+  // Initialize %solver
+  mcnla::isvd::Solver<ScalarType,
+               mcnla::isvd::GaussianProjectionSketcherTag<0>,
+               mcnla::isvd::SvdOrthogonalizerTag,
+               mcnla::isvd::KolmogorovNagumoIntegratorTag,
+               mcnla::isvd::SvdFormerTag> solver(MPI_COMM_WORLD);
+  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(seed);
+  solver.setTolerance(tol).setMaxIteration(maxit);
+  solver.initialize();
+  @endcode
+
+  <h5>Run %Solver</h5>
+
+  The @ref Solver "iSVD Solver" compute the approximate low-rank singular value decomposition while calling @ref Solver::compute.
+
+  @code{.cpp}
+  // Run iSVD
+  solver.compute(matrix_a);
+  @endcode
+
+  <h5>Get Executing Time</h5>
+
+  The @ref Solver "iSVD Solver" also records the executing time of each step.
+
+  @code{.cpp}
+  // Display executing time
+  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
+    auto time_s = solver.sketcherTime();
+    auto time_i = solver.integratorTime();
+    auto time_o = solver.orthogonalizerTime();
+    auto time_f = solver.formerTime();
+    auto time = time_s + time_o + time_i + time_f;
+
+    std::cout << "Average total computing time: " << time   << " seconds." << std::endl;
+    std::cout << "Average sketching time:       " << time_s << " seconds." << std::endl;
+    std::cout << "Average orthogonalizing time: " << time_o << " seconds." << std::endl;
+    std::cout << "Average integrating time:     " << time_i << " seconds." << std::endl;
+    std::cout << "Average forming time:         " << time_f << " seconds." << std::endl;
+  }
+  @endcode
+
+  <h5>Save Data</h5>
+
+  One may use @ref mcnla::io::saveMatrixMarket to save the results into Matrix Market format files.
+
+  @code{.cpp}
+  // Save matrix
+  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
+    mcnla::io::saveMatrixMarket(solver.singularValues(),       "s.mtx");
+    mcnla::io::saveMatrixMarket(solver.leftSingularVectors(),  "u.mtx");
+    mcnla::io::saveMatrixMarket(solver.rightSingularVectors(), "vt.mtx");
+  }
+  @endcode
+
+  <h5>Finalize</h5>
+
+  Remember to finalize the MPI.
+
+  @code{.cpp}
+  // Finalize MPI
+  MPI_Finalize();
+
+  @endcode
+
+*/
+
+}  // namespace isvd
+
+}  // namespace mcnla
