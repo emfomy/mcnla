@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/allreduce.hpp
+/// @file    include/mcnla/core/mpi/dense/allreduce.hpp
 /// @brief   The MPI ALLREDUCE routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MPI_ALLREDUCE_HPP_
-#define MCNLA_CORE_MPI_ALLREDUCE_HPP_
+#ifndef MCNLA_CORE_MPI_DENSE_ALLREDUCE_HPP_
+#define MCNLA_CORE_MPI_DENSE_ALLREDUCE_HPP_
 
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -52,7 +52,7 @@ inline void allreduceImpl(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  mpi_module
+/// @ingroup  mpi_dense_module
 /// @brief  Combines values from all processes and distributes the result back to all processes.
 ///
 /// @attention  The dimensions of @a send and @a recv should be the same for all MPI nodes.
@@ -109,7 +109,7 @@ inline void allreduce(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  mpi_module
+/// @ingroup  mpi_dense_module
 /// @brief  Combines values from all processes and distributes the result back to all processes (in-place version).
 ///
 /// @attention  The dimension of @a buffer should be the same for all MPI nodes.
@@ -161,4 +161,4 @@ inline void allreduce(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MPI_ALLREDUCE_HPP_
+#endif  // MCNLA_CORE_MPI_DENSE_ALLREDUCE_HPP_

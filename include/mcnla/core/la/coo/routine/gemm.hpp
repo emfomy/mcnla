@@ -98,7 +98,6 @@ inline void gemmImpl3(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(dummy && false, "COO GEMM does not support this layout!");
 }
 
@@ -176,7 +175,7 @@ inline void gemmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  gemmImpl3(a, b, c, alpha, beta);
+  gemmImpl2(a, b, c, alpha, beta);
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb>
@@ -187,7 +186,7 @@ inline void gemmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  gemmImpl3(b.t(), a.t(), c.t(), alpha, beta);
+  gemmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
@@ -203,7 +202,6 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(!isConj(_transc), "COO GEMM does not support conjugate matrices!");
 }
 
@@ -219,7 +217,7 @@ inline void gemmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  gemmImpl3(b, a, c, alpha, beta);
+  gemmImpl2(b, a, c, alpha, beta);
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb>
@@ -230,7 +228,7 @@ inline void gemmImpl1(
     const _Scalar alpha,
     const _Scalar beta
 ) noexcept {
-  gemmImpl3(a.t(), b.t(), c.t(), alpha, beta);
+  gemmImpl2(a.t(), b.t(), c.t(), alpha, beta);
 }
 
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
@@ -246,7 +244,6 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(!isConj(_transc), "COO GEMM does not support conjugate matrices!");
 }
 

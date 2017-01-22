@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/recv.hpp
+/// @file    include/mcnla/core/mpi/dense/recv.hpp
 /// @brief   The MPI RECV routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MPI_RECV_HPP_
-#define MCNLA_CORE_MPI_RECV_HPP_
+#ifndef MCNLA_CORE_MPI_DENSE_RECV_HPP_
+#define MCNLA_CORE_MPI_DENSE_RECV_HPP_
 
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -42,7 +42,7 @@ inline void recvImpl(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  mpi_module
+/// @ingroup  mpi_dense_module
 /// @brief  Blocking receive for a message.
 ///
 /// @attention  @a buffer should be shrunk.
@@ -101,4 +101,4 @@ inline void recv(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MPI_RECV_HPP_
+#endif  // MCNLA_CORE_MPI_DENSE_RECV_HPP_

@@ -7,7 +7,7 @@ macro(SET_TARGET target files)
   target_include_directories(mcnla_${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
   target_include_directories(mcnla_${target} PUBLIC SYSTEM ${INCS})
   target_link_libraries(mcnla_${target} ${LIBS})
-  target_compile_definitions(mcnla_${target} PUBLIC ${DEFS})
+  target_compile_definitions(mcnla_${target} PUBLIC ${DEFS} ${ARGN})
   set_target_properties(mcnla_${target} PROPERTIES COMPILE_FLAGS ${COMFLGS})
   set_target_properties(mcnla_${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
 
@@ -34,12 +34,6 @@ set_target(demo1 demo1.cpp)
 
 # Set target (demo_plain)
 set_target(demo_plain demo_plain.cpp)
-
-# Set target (isvd)
-set_target(isvd isvd.cpp)
-
-# Set target (isvd_driver)
-set_target(isvd_driver isvd_driver.cpp)
 
 # Set target (test)
 set_target(test test.cpp)

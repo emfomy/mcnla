@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/isvd_driver.cpp
-/// @brief   The isvd driver
+/// @file    demo/isvd.cpp
+/// @brief   The iSVD driver
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,7 +8,31 @@
 #include <iostream>
 #include <mcnla.hpp>
 
+#ifndef ATYPE
+#define ATYPE DenseMatrix
+#endif  // ATYPE
+
+#ifndef SKETCHER
+#define SKETCHER GaussianProjectionSketcherTag<0>
+#endif  // SKETCHER
+
+#ifndef ORTHOGONALIZER
+#define ORTHOGONALIZER SvdOrthogonalizerTag
+#endif  // ORTHOGONALIZER
+
+#ifndef INTEGRATOR
+#define INTEGRATOR KolmogorovNagumoIntegratorTag
+#endif  // INTEGRATOR
+
+#ifndef FORMER
+#define FORMER SvdFormerTag
+#endif  // FORMER
+
+#define QUOTE(str) #str
+#define MACROSTR(str) QUOTE(str)
+
 using ScalarType = double;
+using AType = mcnla::matrix::ATYPE<ScalarType>;
 
 ScalarType tolerance = 1e-4;
 mcnla::index_t maxiter = 256;
@@ -31,7 +55,7 @@ int main( int argc, char **argv ) {
     std::cout << "MCNLA "
               << MCNLA_MAJOR_VERSION << "."
               << MCNLA_MINOR_VERSION << "."
-              << MCNLA_PATCH_VERSION << " isvd driver" << std::endl << std::endl;
+              << MCNLA_PATCH_VERSION << " iSVD driver for " << MACROSTR(ATYPE) << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -45,7 +69,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Load matrix
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_a;
+  AType matrix_a;
   mcnla::index_t asize0, asize1;
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
@@ -56,7 +80,7 @@ int main( int argc, char **argv ) {
   MPI_Bcast(&asize0, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
   MPI_Bcast(&asize1, 1, MPI_INT, mpi_root, MPI_COMM_WORLD);
   if ( mpi_rank != mpi_root ) {
-    matrix_a = mcnla::matrix::DenseMatrix<ScalarType>(asize0, asize1);
+    matrix_a.reconstruct(asize0, asize1);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
@@ -86,10 +110,10 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize solver
   mcnla::isvd::Solver<ScalarType,
-                      mcnla::isvd::GaussianProjectionSketcherTag<0>,
-                      mcnla::isvd::SvdOrthogonalizerTag,
-                      mcnla::isvd::KolmogorovNagumoIntegratorTag,
-                      mcnla::isvd::SvdFormerTag> solver(MPI_COMM_WORLD);
+                      mcnla::isvd::SKETCHER,
+                      mcnla::isvd::ORTHOGONALIZER,
+                      mcnla::isvd::INTEGRATOR,
+                      mcnla::isvd::FORMER> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(seed);
   solver.setTolerance(tolerance).setMaxIteration(maxiter);
   solver.initialize();
@@ -131,10 +155,10 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Save matrix
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Save S into "  << argv[2] << "." << std::endl;
+    std::cout << "Save S  into "  << argv[2] << "." << std::endl;
     mcnla::io::saveMatrixMarket(solver.singularValues(), argv[2]);
 
-    std::cout << "Save U into "  << argv[3] << "." << std::endl;
+    std::cout << "Save U  into "  << argv[3] << "." << std::endl;
     mcnla::io::saveMatrixMarket(solver.leftSingularVectors(), argv[3]);
 
     std::cout << "Save Vt into " << argv[4] << "." << std::endl;

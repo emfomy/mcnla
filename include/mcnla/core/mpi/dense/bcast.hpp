@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/bcast.hpp
+/// @file    include/mcnla/core/mpi/dense/bcast.hpp
 /// @brief   The MPI BCAST routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MPI_BCAST_HPP_
-#define MCNLA_CORE_MPI_BCAST_HPP_
+#ifndef MCNLA_CORE_MPI_DENSE_BCAST_HPP_
+#define MCNLA_CORE_MPI_DENSE_BCAST_HPP_
 
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -40,7 +40,7 @@ inline void bcastImpl(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  mpi_module
+/// @ingroup  mpi_dense_module
 /// @brief  Broadcasts a message from the process with rank root to all other processes of the group.
 ///
 /// @attention  The dimensions of @a buffer should be the same for all MPI nodes.
@@ -92,4 +92,4 @@ inline void bcast(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MPI_BCAST_HPP_
+#endif  // MCNLA_CORE_MPI_DENSE_BCAST_HPP_

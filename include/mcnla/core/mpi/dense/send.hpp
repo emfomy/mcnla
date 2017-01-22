@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/send.hpp
+/// @file    include/mcnla/core/mpi/dense/send.hpp
 /// @brief   The MPI SEND routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MPI_SEND_HPP_
-#define MCNLA_CORE_MPI_SEND_HPP_
+#ifndef MCNLA_CORE_MPI_DENSE_SEND_HPP_
+#define MCNLA_CORE_MPI_DENSE_SEND_HPP_
 
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -41,7 +41,7 @@ inline void sendImpl(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  mpi_module
+/// @ingroup  mpi_dense_module
 /// @brief  Performs a blocking send
 ///
 /// @attention  @a buffer should be shrunk.
@@ -74,4 +74,4 @@ inline void send(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MPI_SEND_HPP_
+#endif  // MCNLA_CORE_MPI_DENSE_SEND_HPP_

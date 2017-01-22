@@ -1,17 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/reduce_scatter_block.hpp
-/// @brief   The MPI RECUDE_SCATTER_BLOCK routine.
+/// @file    include/mcnla/core/mpi/dense/gather.hpp
+/// @brief   The MPI GATHER routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MPI_RECUDESCATTER_HPP_
-#define MCNLA_CORE_MPI_RECUDESCATTER_HPP_
+#ifndef MCNLA_CORE_MPI_DENSE_GATHER_HPP_
+#define MCNLA_CORE_MPI_DENSE_GATHER_HPP_
 
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <algorithm>
-#include <numeric>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -29,73 +27,78 @@ namespace mpi {
 namespace detail {
 
 template <typename _Scalar>
-inline void reduceScatterBlockImpl(
+inline void gatherImpl(
     const DenseStorage<_Scalar> &send,
           DenseStorage<_Scalar> &recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
-  MPI_Reduce_scatter_block(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
+  MPI_Gather(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, root, comm);
 }
 
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  mpi_module
-/// @brief  Combines values and scatters the results (same-size version).
+/// @ingroup  mpi_dense_module
+/// @brief  Gathers values from a group of processes.
 ///
-/// @attention  The size of @a send should be equal to the size of @a recv &times the number of MPI rank.
+/// @attention  The dimensions of @a send should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
 template <typename _Scalar>
-inline void reduceScatterBlock(
+inline void gather(
     const DenseVector<_Scalar> &send,
           DenseVector<_Scalar> &recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
-  mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
-  detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
+  if ( isCommRoot(root, comm) ) {
+    mcnla_assert_eq(send.dim0() * commSize(comm), recv.dim0());
+  }
+  detail::gatherImpl(send, recv, root, comm, send.nelem());
 }
 
 template <typename _Scalar, Trans _transs, Trans _transr>
-inline void reduceScatterBlock(
+inline void gather(
     const DenseMatrix<_Scalar, _transs> &send,
           DenseMatrix<_Scalar, _transr> &recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
-  mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
-  detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
+  if ( isCommRoot(root, comm) ) {
+    mcnla_assert_eq(send.dim0(),                     recv.dim0());
+    mcnla_assert_eq(send.dim1() * commSize(comm), recv.dim1());
+  }
+  detail::gatherImpl(send, recv, root, comm, send.nelem());
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar>
-inline void reduceScatterBlock(
+inline void gather(
     const DenseVector<_Scalar> &send,
           DenseVector<_Scalar> &&recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  reduceScatterBlock(send, recv, op, comm);
+  gather(send, recv, root, comm);
 }
 
 template <typename _Scalar, Trans _transs, Trans _transr>
-inline void reduceScatterBlock(
+inline void gather(
     const DenseMatrix<_Scalar, _transs> &send,
           DenseMatrix<_Scalar, _transr> &&recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  reduceScatterBlock(send, recv, op, comm);
+  gather(send, recv, root, comm);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -103,4 +106,4 @@ inline void reduceScatterBlock(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MPI_RECUDESCATTER_HPP_
+#endif  // MCNLA_CORE_MPI_DENSE_GATHER_HPP_

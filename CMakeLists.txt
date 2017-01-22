@@ -28,6 +28,7 @@ include(cmake/options.cmake)
 include(cmake/packages.cmake)
 
 # Add subdirectories
+add_subdirectory(bin)
 add_subdirectory(demo)
 add_subdirectory(check)
 add_subdirectory(doxygen)

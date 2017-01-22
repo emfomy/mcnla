@@ -130,7 +130,6 @@ inline void dimmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(!isConj(_transc), "DIMM does not support conjugate matrices!");
 }
 
@@ -173,7 +172,6 @@ inline void dimmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(!isConj(_transc), "DIMM does not support conjugate matrices!");
 }
 

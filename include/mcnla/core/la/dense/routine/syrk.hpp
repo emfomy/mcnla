@@ -81,7 +81,6 @@ inline void syrkImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(!isConj(_transc), "SYRK does not support conjugate matrices!");
 }
 

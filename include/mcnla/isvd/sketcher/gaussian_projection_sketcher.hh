@@ -69,7 +69,7 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
   double time2_;
 
   /// The matrix Omega.
-  DenseMatrixColMajor<ScalarType> matrix_omegas_;
+  DenseMatrixRowMajor<ScalarType> matrix_omegas_;
 
   /// The random engine
   random::Engine<ScalarType> random_engine_;

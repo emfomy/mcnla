@@ -164,7 +164,6 @@ inline void symmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(!isConj(_transc), "SYMM does not support conjugate matrices!");
 }
 
@@ -207,7 +206,6 @@ inline void symmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-
   static_assert(!isConj(_transc), "SYMM does not support conjugate matrices!");
 }
 
