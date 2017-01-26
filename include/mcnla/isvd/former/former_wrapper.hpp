@@ -74,7 +74,7 @@ std::ostream& FormerWrapper<_Derived>::outputName(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::formerTime
+/// @copydoc  mcnla::isvd::Driver::formerTime
 ///
 template <class _Derived>
 double FormerWrapper<_Derived>::time() const noexcept {

@@ -94,7 +94,7 @@ class Former<_Scalar, SvdFormerTag>
   DenseMatrixColMajor<ScalarType> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdEngine<DenseMatrixColMajor<ScalarType>, 'S', 'O'> gesvd_engine_;
+  la::GesvdDriver<DenseMatrixColMajor<ScalarType>, 'S', 'O'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

@@ -73,7 +73,7 @@ std::ostream& OrthogonalizerWrapper<_Derived>::outputName(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::orthogonalizerTime
+/// @copydoc  mcnla::isvd::Driver::orthogonalizerTime
 ///
 template <class _Derived>
 double OrthogonalizerWrapper<_Derived>::time() const noexcept {

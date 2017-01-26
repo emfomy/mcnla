@@ -71,8 +71,8 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
   /// The matrix Omega.
   DenseMatrixRowMajor<ScalarType> matrix_omegas_;
 
-  /// The random engine
-  random::Engine<ScalarType> random_engine_;
+  /// The random driver
+  random::Driver<ScalarType> random_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

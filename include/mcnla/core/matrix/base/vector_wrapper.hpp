@@ -53,7 +53,7 @@ index_t VectorWrapper<_Derived>::nelem() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size of dimensions in interface order. [ length ]
+/// @brief  Gets the size of dimensions in interface order: `{ #length }`.
 ///
 template <class _Derived>
 std::tuple<index_t> VectorWrapper<_Derived>::sizes() const noexcept {

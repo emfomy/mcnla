@@ -128,23 +128,18 @@ inline void loadMatrixMarket(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a dense vector set from a Matrix Market file.
+/// Load a dense vector collection from a Matrix Market file.
 ///
-/// @note  If @a set is empty, the memory will be allocated.
+/// @note  If @a collection is empty, the memory will be allocated.
 ///
 /// @todo  Read banner
 ///
 template <class _Derived>
 void loadMatrixMarket(
-    VectorCollectionWrapper<_Derived> &set,
+    DenseVectorCollectionWrapper<_Derived> &collection,
     const char *file
 ) noexcept {
-  using VectorType = VectorT<_Derived>;
-  using ScalarType = ScalarT<VectorType>;
-
-  static_assert(std::is_base_of<DenseVector<ScalarType>, VectorType>::value, "'_Derived' is not a dense vector!");
-
-  auto &derived = set.derived();
+  auto &derived = collection.derived();
 
   // Open file
   std::ifstream fin(file);
@@ -161,13 +156,13 @@ void loadMatrixMarket(
   if ( derived.unfold().isEmpty() ) {
     derived.reconstruct(m, n);
   } else {
-    mcnla_assert_eq(set.vec(), n);
-    mcnla_assert_eq(set(0).dims(), std::make_tuple(m));
+    mcnla_assert_eq(collection.vec(), n);
+    mcnla_assert_eq(collection(0).dims(), std::make_tuple(m));
   }
 
   // Read values
   for ( auto i = 0; i < n; ++i ) {
-    auto vector = set(i);
+    auto vector = collection(i);
     for ( auto &value : vector ) {
       fin >> value;
     }
@@ -180,33 +175,27 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
 inline void loadMatrixMarket(
-    VectorCollectionWrapper<_Derived> &&set,
+    DenseVectorCollectionWrapper<_Derived> &&collection,
     const char *file
 ) noexcept {
-  loadMatrixMarket(set, file);
+  loadMatrixMarket(collection, file);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a dense matrix set from a Matrix Market file.
+/// Load a dense matrix collection from a Matrix Market file.
 ///
-/// @note  If @a set is empty, the memory will be allocated.
+/// @note  If @a collection is empty, the memory will be allocated.
 ///
 /// @todo  Read banner
 ///
 template <class _Derived>
 void loadMatrixMarket(
-    MatrixCollectionWrapper<_Derived> &set,
+    DenseMatrixCollectionWrapper<_Derived> &collection,
     const char *file
 ) noexcept {
-  using MatrixType = MatrixT<_Derived>;
-  using ScalarType = ScalarT<MatrixType>;
-  constexpr Trans trans = MatrixType::trans;
-
-  static_assert(std::is_base_of<DenseMatrix<ScalarType, trans>, MatrixType>::value, "'_Derived' is not a dense matrix!");
-
-  auto &derived = set.derived();
+  auto &derived = collection.derived();
 
   // Open file
   std::ifstream fin(file);
@@ -221,19 +210,19 @@ void loadMatrixMarket(
   index_t m, n, k;
   fin >> m >> n >> k;
   if ( derived.unfold().isEmpty() ) {
-    if ( !isTrans(trans) ) {
+    if ( !isTrans(MatrixT<_Derived>::trans) ) {
       derived.reconstruct(m, n, k);
     } else {
       derived.reconstruct(n, m, k);
     }
   } else {
-    mcnla_assert_eq(set.nmat(), k);
-    mcnla_assert_eq(set(0).dims(), std::make_tuple(m, n));
+    mcnla_assert_eq(collection.nmat(), k);
+    mcnla_assert_eq(collection(0).dims(), std::make_tuple(m, n));
   }
 
   // Read values
   for ( auto i = 0; i < k; ++i ) {
-    auto matrix = set(i);
+    auto matrix = collection(i);
     for ( auto &value : matrix ) {
       fin >> value;
     }
@@ -246,10 +235,10 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Derived>
 inline void loadMatrixMarket(
-    MatrixCollectionWrapper<_Derived> &&set,
+    DenseMatrixCollectionWrapper<_Derived> &&collection,
     const char *file
 ) noexcept {
-  loadMatrixMarket(set, file);
+  loadMatrixMarket(collection, file);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

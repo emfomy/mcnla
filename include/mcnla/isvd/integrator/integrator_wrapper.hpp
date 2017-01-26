@@ -72,7 +72,7 @@ std::ostream& IntegratorWrapper<_Derived>::outputName(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::integratorTime
+/// @copydoc  mcnla::isvd::Driver::integratorTime
 ///
 template <class _Derived>
 double IntegratorWrapper<_Derived>::time() const noexcept {
@@ -80,7 +80,7 @@ double IntegratorWrapper<_Derived>::time() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::integratorIteration
+/// @copydoc  mcnla::isvd::Driver::integratorIteration
 ///
 template <class _Derived>
 index_t IntegratorWrapper<_Derived>::iteration() const noexcept {

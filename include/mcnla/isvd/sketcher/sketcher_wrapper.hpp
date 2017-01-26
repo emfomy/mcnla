@@ -77,7 +77,7 @@ std::ostream& SketcherWrapper<_Derived>::outputName(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::sketcherTime
+/// @copydoc  mcnla::isvd::Driver::sketcherTime
 ///
 template <class _Derived>
 double SketcherWrapper<_Derived>::time() const noexcept {
@@ -85,7 +85,7 @@ double SketcherWrapper<_Derived>::time() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::setSeed
+/// @copydoc  mcnla::isvd::Driver::setSeed
 ///
 template <class _Derived>
 _Derived& SketcherWrapper<_Derived>::setSeed(
@@ -96,7 +96,7 @@ _Derived& SketcherWrapper<_Derived>::setSeed(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::Solver::setSeeds
+/// @copydoc  mcnla::isvd::Driver::setSeeds
 ///
 template <class _Derived>
 _Derived& SketcherWrapper<_Derived>::setSeeds(

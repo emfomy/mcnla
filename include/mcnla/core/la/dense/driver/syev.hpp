@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/la/dense/engine/syev.hpp
-/// @brief   The LAPACK SYEV engine.
+/// @file    include/mcnla/core/la/dense/driver/syev.hpp
+/// @brief   The LAPACK SYEV driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LA_DENSE_ENGINE_SYEV_HH_
-#define MCNLA_CORE_LA_DENSE_ENGINE_SYEV_HH_
+#ifndef MCNLA_CORE_LA_DENSE_DRIVER_SYEV_HH_
+#define MCNLA_CORE_LA_DENSE_DRIVER_SYEV_HH_
 
-#include <mcnla/core/la/dense/engine/syev.hh>
+#include <mcnla/core/la/dense/driver/syev.hh>
 #include <mcnla/core/la/raw/lapack/syev.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace la {
 /// @brief  Default constructor.
 ///
 template <class _Matrix, JobOption _jobz>
-SyevEngine<_Matrix, _jobz>::SyevEngine() noexcept
+SyevDriver<_Matrix, _jobz>::SyevDriver() noexcept
   : size_(0),
     work_(),
     rwork_() {}
@@ -34,7 +34,7 @@ SyevEngine<_Matrix, _jobz>::SyevEngine() noexcept
 /// @brief  Construct with given size information.
 ///
 template <class _Matrix, JobOption _jobz>
-SyevEngine<_Matrix, _jobz>::SyevEngine(
+SyevDriver<_Matrix, _jobz>::SyevDriver(
     const index_t size
 ) noexcept
   : size_(size),
@@ -47,10 +47,10 @@ SyevEngine<_Matrix, _jobz>::SyevEngine(
 /// @brief  Construct with given size information.
 ///
 template <class _Matrix, JobOption _jobz>
-SyevEngine<_Matrix, _jobz>::SyevEngine(
+SyevDriver<_Matrix, _jobz>::SyevDriver(
     const MatrixType &a
 ) noexcept
-  : SyevEngine(a.nrow()) {
+  : SyevDriver(a.nrow()) {
   mcnla_assert_eq(a.nrow(), a.ncol());
 }
 
@@ -58,7 +58,7 @@ SyevEngine<_Matrix, _jobz>::SyevEngine(
 /// @copydoc  compute
 ///
 template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
-void SyevEngine<_Matrix, _jobz>::operator()(
+void SyevDriver<_Matrix, _jobz>::operator()(
     _TypeA &&a,
     _TypeW &&w
 ) noexcept {
@@ -69,7 +69,7 @@ void SyevEngine<_Matrix, _jobz>::operator()(
 /// @brief  Computes eigenvalues only.
 ///
 template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
-void SyevEngine<_Matrix, _jobz>::computeValues(
+void SyevDriver<_Matrix, _jobz>::computeValues(
     _TypeA &&a,
     _TypeW &&w
 ) noexcept {
@@ -77,20 +77,20 @@ void SyevEngine<_Matrix, _jobz>::computeValues(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Reconstruct the engine.
+/// @brief  Reconstruct the driver.
 ///
 template <class _Matrix, JobOption _jobz> template <typename... Args>
-void SyevEngine<_Matrix, _jobz>::reconstruct(
+void SyevDriver<_Matrix, _jobz>::reconstruct(
     Args... args
 ) noexcept {
-  *this = SyevEngine<_Matrix, _jobz>(args...);
+  *this = SyevDriver<_Matrix, _jobz>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Matrix, JobOption _jobz>
-std::tuple<index_t> SyevEngine<_Matrix, _jobz>::sizes() const noexcept {
+std::tuple<index_t> SyevDriver<_Matrix, _jobz>::sizes() const noexcept {
   return std::make_tuple(size_);
 }
 
@@ -98,7 +98,7 @@ std::tuple<index_t> SyevEngine<_Matrix, _jobz>::sizes() const noexcept {
 /// @brief  Gets the workspace
 ///
 template <class _Matrix, JobOption _jobz>
-VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() noexcept {
+VectorT<_Matrix>& SyevDriver<_Matrix, _jobz>::getWork() noexcept {
   return work_;
 }
 
@@ -106,7 +106,7 @@ VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() noexcept {
 /// @copydoc  getWork
 ///
 template <class _Matrix, JobOption _jobz>
-const VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() const noexcept {
+const VectorT<_Matrix>& SyevDriver<_Matrix, _jobz>::getWork() const noexcept {
   return work_;
 }
 
@@ -114,7 +114,7 @@ const VectorT<_Matrix>& SyevEngine<_Matrix, _jobz>::getWork() const noexcept {
 /// @brief  Gets the real workspace
 ///
 template <class _Matrix, JobOption _jobz>
-RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() noexcept {
+RealT<VectorT<_Matrix>>& SyevDriver<_Matrix, _jobz>::getRwork() noexcept {
   return rwork_;
 }
 
@@ -122,7 +122,7 @@ RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() noexcept {
 /// @copydoc  getRwork
 ///
 template <class _Matrix, JobOption _jobz>
-const RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() const noexcept {
+const RealT<VectorT<_Matrix>>& SyevDriver<_Matrix, _jobz>::getRwork() const noexcept {
   return rwork_;
 }
 
@@ -133,7 +133,7 @@ const RealT<VectorT<_Matrix>>& SyevEngine<_Matrix, _jobz>::getRwork() const noex
 /// @attention  Matrix @a a will be destroyed!
 ///
 template <class _Matrix, JobOption _jobz> template <JobOption __jobz>
-void SyevEngine<_Matrix, _jobz>::compute(
+void SyevDriver<_Matrix, _jobz>::compute(
     MatrixType &a,
     RealVectorType &w
 ) noexcept {
@@ -148,7 +148,7 @@ void SyevEngine<_Matrix, _jobz>::compute(
 /// @brief  Query the optimal workspace size.
 ///
 template <class _Matrix, JobOption _jobz>
-index_t SyevEngine<_Matrix, _jobz>::query(
+index_t SyevDriver<_Matrix, _jobz>::query(
     const index_t size
 ) noexcept {
   ScalarType lwork;
@@ -160,4 +160,4 @@ index_t SyevEngine<_Matrix, _jobz>::query(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_DENSE_ENGINE_SYEV_HH_
+#endif  // MCNLA_CORE_LA_DENSE_DRIVER_SYEV_HH_

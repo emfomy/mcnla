@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/solver/solver.hh
-/// @brief   The definition of iSVD solver.
+/// @file    include/mcnla/isvd/driver/driver.hh
+/// @brief   The definition of iSVD driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SOLVER_SOLVER_HH_
-#define MCNLA_ISVD_SOLVER_SOLVER_HH_
+#ifndef MCNLA_ISVD_DRIVER_DRIVER_HH_
+#define MCNLA_ISVD_DRIVER_DRIVER_HH_
 
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/solver/parameters.hpp>
+#include <mcnla/isvd/driver/parameters.hpp>
 #include <mcnla/isvd/sketcher.hpp>
 #include <mcnla/isvd/orthogonalizer.hpp>
 #include <mcnla/isvd/integrator.hpp>
@@ -29,9 +29,9 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_solver_module
+/// @ingroup  isvd_driver_module
 ///
-/// The Integrated Singular Value Decomposition solver.
+/// The Integrated Singular Value Decomposition driver.
 ///
 /// @tparam  _Scalar             The scalar type.
 /// @tparam  _SketcherTag        The sketcher tag.
@@ -39,15 +39,15 @@ namespace isvd {
 /// @tparam  _IntegratorTag      The integrator tag.
 /// @tparam  _FormerTag          The former tag.
 ///
-/// @attention  The solver should have been @ref initialize "initialized" before calling #compute.
-/// @attention  The solver should be @ref initialize "re-initialized" after changing parameters.
+/// @attention  The driver should have been @ref initialize "initialized" before calling #compute.
+/// @attention  The driver should be @ref initialize "re-initialized" after changing parameters.
 ///
 template <typename _Scalar,
           class _SketcherTag       = GaussianProjectionSketcherTag<0>,
           class _OrthogonalizerTag = SvdOrthogonalizerTag,
           class _IntegratorTag     = KolmogorovNagumoIntegratorTag,
           class _FormerTag         = SvdFormerTag>
-class Solver {
+class Driver {
 
  public:
 
@@ -89,7 +89,7 @@ class Solver {
  public:
 
   // Constructor
-  inline Solver( const MPI_Comm mpi_comm, const mpi_int_t mpi_root = 0 ) noexcept;
+  inline Driver( const MPI_Comm mpi_comm, const mpi_int_t mpi_root = 0 ) noexcept;
 
   // Initializes
   void initialize() noexcept;
@@ -98,7 +98,7 @@ class Solver {
   template<class _Matrix>
   void compute( const _Matrix &matrix ) noexcept;
 
-  // Gets subsolver
+  // Gets subdriver
   inline       SketcherType&       sketcher() noexcept;
   inline const SketcherType&       sketcher() const noexcept;
   inline       OrthogonalizerType& orthogonalizer() noexcept;
@@ -127,17 +127,17 @@ class Solver {
   const ParametersType& parameters() const noexcept;
 
   // Sets parameters
-  inline Solver& setSize( const index_t nrow, const index_t ncol ) noexcept;
+  inline Driver& setSize( const index_t nrow, const index_t ncol ) noexcept;
   template<class _Matrix>
-  inline Solver& setSize( const _Matrix &matrix ) noexcept;
-  inline Solver& setRank( const index_t rank ) noexcept;
-  inline Solver& setOverRank( const index_t over_rank ) noexcept;
-  inline Solver& setNumSketch( const index_t num_sketch ) noexcept;
-  inline Solver& setNumSketchEach( const index_t num_sketch_each ) noexcept;
-  inline Solver& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline Solver& setTolerance( const RealScalarType tolerance ) noexcept;
-  inline Solver& setSeed( const index_t seed ) noexcept;
-  inline Solver& setSeeds( const index_t seed ) noexcept;
+  inline Driver& setSize( const _Matrix &matrix ) noexcept;
+  inline Driver& setRank( const index_t rank ) noexcept;
+  inline Driver& setOverRank( const index_t over_rank ) noexcept;
+  inline Driver& setNumSketch( const index_t num_sketch ) noexcept;
+  inline Driver& setNumSketchEach( const index_t num_sketch_each ) noexcept;
+  inline Driver& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline Driver& setTolerance( const RealScalarType tolerance ) noexcept;
+  inline Driver& setSeed( const index_t seed ) noexcept;
+  inline Driver& setSeeds( const index_t seed ) noexcept;
 
 };
 
@@ -145,4 +145,4 @@ class Solver {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SOLVER_SOLVER_HH_
+#endif  // MCNLA_ISVD_DRIVER_DRIVER_HH_

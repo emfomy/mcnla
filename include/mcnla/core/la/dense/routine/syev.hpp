@@ -10,7 +10,7 @@
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <mcnla/core/la/dense/engine/syev.hpp>
+#include <mcnla/core/la/dense/driver/syev.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -24,17 +24,17 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @copydoc  mcnla::la::SyevEngine::compute
+/// @copydoc  mcnla::la::SyevDriver::compute
 ///
-/// @see  mcnla::la::SyevEngine
+/// @see  mcnla::la::SyevDriver
 ///
 template <JobOption _jobz, typename _Scalar, Trans _trans, Uplo _uplo>
 inline void syev(
     DenseSymmetricMatrix<_Scalar, _trans, _uplo> &a,
     DenseVector<RealScalarT<_Scalar>> &w
 ) noexcept {
-  SyevEngine<DenseSymmetricMatrix<_Scalar, _trans, _uplo>, _jobz> engine(a);
-  engine(a, w);
+  SyevDriver<DenseSymmetricMatrix<_Scalar, _trans, _uplo>, _jobz> driver(a);
+  driver(a, w);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/solver/parameters.hpp
-/// @brief   The the parameter structure of iSVD solver.
+/// @file    include/mcnla/isvd/driver/parameters.hpp
+/// @brief   The the parameter structure of iSVD driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,7 +8,7 @@
 #ifndef MCNLA_ISVD_PARAMETERS_HPP_
 #define MCNLA_ISVD_PARAMETERS_HPP_
 
-#include <mcnla/isvd/solver/parameters.hh>
+#include <mcnla/isvd/driver/parameters.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -28,7 +28,7 @@ Parameters<_Scalar>::Parameters( const MPI_Comm mpi_comm ) noexcept
   : mpi_size_(mcnla::mpi::commSize(mpi_comm)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Check if the solver is initialized.
+/// @brief  Check if the driver is initialized.
 ///
 template <typename _Scalar>
 bool Parameters<_Scalar>::isInitialized() const noexcept {
@@ -36,7 +36,7 @@ bool Parameters<_Scalar>::isInitialized() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Check if the solver is computed.
+/// @brief  Check if the driver is computed.
 ///
 template <typename _Scalar>
 bool Parameters<_Scalar>::isComputed() const noexcept {

@@ -10,7 +10,7 @@
 
 #include <mcnla/isvd/def.hpp>
 #include <iostream>
-#include <mcnla/isvd/solver/parameters.hpp>
+#include <mcnla/isvd/driver/parameters.hpp>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -43,13 +43,13 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
 
  protected:
 
-  /// @copydoc  mcnla::isvd::Solver::parameters_
+  /// @copydoc  mcnla::isvd::Driver::parameters_
   const ParametersType &parameters_;
 
-  /// @copydoc  mcnla::isvd::Solver::mpi_comm_
+  /// @copydoc  mcnla::isvd::Driver::mpi_comm_
   const MPI_Comm mpi_comm_;
 
-  /// @copydoc  mcnla::isvd::Solver::mpi_root_
+  /// @copydoc  mcnla::isvd::Driver::mpi_root_
   const mpi_int_t mpi_root_;
 
   /// The number of iteration.

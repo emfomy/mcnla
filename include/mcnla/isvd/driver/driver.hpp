@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/solver/solver.hpp
-/// @brief   The iSVD solver.
+/// @file    include/mcnla/isvd/driver/driver.hpp
+/// @brief   The iSVD driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SOLVER_SOLVER_HPP_
-#define MCNLA_ISVD_SOLVER_SOLVER_HPP_
+#ifndef MCNLA_ISVD_DRIVER_DRIVER_HPP_
+#define MCNLA_ISVD_DRIVER_DRIVER_HPP_
 
-#include <mcnla/isvd/solver/solver.hh>
+#include <mcnla/isvd/driver/driver.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,7 +24,7 @@ namespace isvd {
 /// @brief  Default constructor
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::Solver(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::Driver(
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
@@ -41,7 +41,7 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::S
 /// Broadcasts the parameters to all MPI ranks and allocates the memories.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::initialize() noexcept {
+void Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::initialize() noexcept {
 
   // Broadcast parameters
   MPI_Bcast(&parameters_, sizeof(parameters_), MPI_BYTE, mpi_root_, mpi_comm_);
@@ -70,12 +70,12 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes the SVD decomposition.
 ///
-/// @attention  The solver should have be @ref initialize "initialized".
+/// @attention  The driver should have be @ref initialize "initialized".
 /// @attention  @a matrix_a should be the same in each MPI node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 template <class _Matrix>
-void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::compute(
+void Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::compute(
     const _Matrix &matrix_a
 ) noexcept {
   mcnla_assert_true(parameters_.isInitialized());
@@ -97,7 +97,7 @@ void Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Sketcher<_Scalar, _SketcherTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
 ) noexcept {
   return sketcher_;
 }
@@ -107,7 +107,7 @@ Sketcher<_Scalar, _SketcherTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const Sketcher<_Scalar, _SketcherTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
 ) const noexcept {
   return sketcher_;
 }
@@ -117,7 +117,7 @@ const Sketcher<_Scalar, _SketcherTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Orthogonalizer<_Scalar, _OrthogonalizerTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) noexcept {
   return orthogonalizer_;
 }
@@ -127,7 +127,7 @@ Orthogonalizer<_Scalar, _OrthogonalizerTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const Orthogonalizer<_Scalar, _OrthogonalizerTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) const noexcept {
   return orthogonalizer_;
 }
@@ -137,7 +137,7 @@ const Orthogonalizer<_Scalar, _OrthogonalizerTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Integrator<_Scalar, _IntegratorTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
 ) noexcept {
   return integrator_;
 }
@@ -147,7 +147,7 @@ Integrator<_Scalar, _IntegratorTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const Integrator<_Scalar, _IntegratorTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
 ) const noexcept {
   return integrator_;
 }
@@ -157,7 +157,7 @@ const Integrator<_Scalar, _IntegratorTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 Former<_Scalar, _FormerTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
 ) noexcept {
   return former_;
 }
@@ -167,7 +167,7 @@ Former<_Scalar, _FormerTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const Former<_Scalar, _FormerTag>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
 ) const noexcept {
   return former_;
 }
@@ -176,7 +176,7 @@ const Former<_Scalar, _FormerTag>&
 /// @brief  Gets the time of running sketcher.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcherTime() const noexcept {
+double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcherTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return sketcher_.time();
 }
@@ -185,7 +185,7 @@ double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 /// @brief  Gets the time of running orthogonalizer.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizerTime() const noexcept {
+double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizerTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return orthogonalizer_.time();
 }
@@ -194,7 +194,7 @@ double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 /// @brief  Gets the time of running integrator.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorTime() const noexcept {
+double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.time();
 }
@@ -203,7 +203,7 @@ double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 /// @brief  Gets the time of running former.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::formerTime() const noexcept {
+double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::formerTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.time();
 }
@@ -212,7 +212,7 @@ double Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 /// @brief  Gets the number of iterator when running integrator.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-index_t Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorIteration() const noexcept {
+index_t Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorIteration() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.iteration();
 }
@@ -220,11 +220,11 @@ index_t Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Forme
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate singular values.
 ///
-/// @attention  The solver should have been @ref compute "computed".
+/// @attention  The driver should have been @ref compute "computed".
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const DenseVector<RealScalarT<_Scalar>>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::singularValues() const noexcept {
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::singularValues() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.vectorS();
 }
@@ -232,11 +232,11 @@ const DenseVector<RealScalarT<_Scalar>>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate left singular vectors.
 ///
-/// @attention  The solver should have been @ref compute "computed".
+/// @attention  The driver should have been @ref compute "computed".
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const DenseMatrixColMajor<_Scalar>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::leftSingularVectors() const noexcept {
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::leftSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.matrixU();
 }
@@ -244,11 +244,11 @@ const DenseMatrixColMajor<_Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the approximate right singular vectors.
 ///
-/// @attention  The solver should have be computed.
+/// @attention  The driver should have be computed.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const DenseMatrixColMajor<_Scalar>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::rightSingularVectors() const noexcept {
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::rightSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.matrixVt();
 }
@@ -256,11 +256,11 @@ const DenseMatrixColMajor<_Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the integrated orthogonal basis of the sketched subspace.
 ///
-/// @attention  The solver should have be computed.
+/// @attention  The driver should have be computed.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 const DenseMatrixRowMajor<_Scalar>&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratedOrthogonalBasis() const noexcept {
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratedOrthogonalBasis() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.matrixQ();
 }
@@ -271,8 +271,8 @@ const DenseMatrixRowMajor<_Scalar>&
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const typename Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::ParametersType&
-    Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::parameters() const noexcept {
+const typename Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::ParametersType&
+    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::parameters() const noexcept {
   mcnla_assert_true(mpi::isCommRoot(mpi_root_, mpi_comm_));
   return parameters_;
 }
@@ -283,8 +283,8 @@ const typename Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag,
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
@@ -303,8 +303,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 template <class _Matrix>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
     const _Matrix &matrix
 ) noexcept {
   return setSize(matrix.nrow(), matrix.ncol());
@@ -316,8 +316,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setRank(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setRank(
     const index_t rank
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -335,8 +335,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setOverRank(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setOverRank(
     const index_t over_rank
   ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -355,8 +355,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketch(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketch(
     const index_t num_sketch
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -374,8 +374,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketchEach(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketchEach(
     const index_t num_sketch_each
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -393,8 +393,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setMaxIteration(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -410,8 +410,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Only affects on root node.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setTolerance(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setTolerance(
     const RealScalarType tolerance
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -427,8 +427,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Affects on current node only.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeed(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeed(
     const index_t seed
 ) noexcept {
   sketcher_.setSeed(seed);
@@ -441,8 +441,8 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  Affects on all MPI nodes.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeeds(
+Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeeds(
     const index_t seed
 ) noexcept {
   sketcher_.setSeeds(seed);
@@ -453,4 +453,4 @@ Solver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SOLVER_SOLVER_HPP_
+#endif  // MCNLA_ISVD_DRIVER_DRIVER_HPP_

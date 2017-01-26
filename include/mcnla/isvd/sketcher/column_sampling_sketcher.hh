@@ -67,8 +67,8 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
   /// The matrix Omega.
   DenseVector<index_t> vector_idxs_;
 
-  /// The random engine
-  random::Engine<index_t> random_engine_;
+  /// The random driver
+  random::Driver<index_t> random_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

@@ -71,8 +71,8 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::initializeImpl() noexcept 
 
   matrix_tmp_.reconstruct(nrow_all_, dim_sketch * num_sketch_each);
 
-  gesvd_engine_.reconstruct(nrow, dim_sketch);
-  syev_engine_.reconstruct(dim_sketch);
+  gesvd_driver_.reconstruct(nrow, dim_sketch);
+  syev_driver_.reconstruct(dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +114,7 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
     la::rk(collection_bi_(i), collection_g_(i).viewSymmetric());
 
     // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
-    syev_engine_(collection_g_(i).viewSymmetric(), vector_s_);
+    syev_driver_(collection_g_(i).viewSymmetric(), vector_s_);
 
   }
 
@@ -152,7 +152,7 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
 
   // Compute the left singular vectors of Qbar
   if ( mpi_rank == mpi_root_ ) {
-    gesvd_engine_(matrix_qbar_, vector_s_, matrix_empty_, matrix_empty_);
+    gesvd_driver_(matrix_qbar_, vector_s_, matrix_empty_, matrix_empty_);
   }
 
   time5_ = MPI_Wtime();

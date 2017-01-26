@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/la/dense/engine/syev.hh
-/// @brief   The definition of LAPACK SYEV engine.
+/// @file    include/mcnla/core/la/dense/driver/gesvd.hh
+/// @brief   The definition of LAPACK GESVD driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LA_DENSE_ENGINE_SYEV_ENGINE_HH_
-#define MCNLA_CORE_LA_DENSE_ENGINE_SYEV_ENGINE_HH_
+#ifndef MCNLA_CORE_LA_DENSE_DRIVER_GESVD_DRIVER_HH_
+#define MCNLA_CORE_LA_DENSE_DRIVER_GESVD_DRIVER_HH_
 
 #include <mcnla/core/la/def.hpp>
 #include <tuple>
@@ -25,21 +25,22 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @brief  The eigenvalue solver of symmetric / Hermitian matrices.
+/// @brief  The singular value driver of general rectangular matrices.
 ///
-/// @tparam  _Matrix  The matrix type.
+/// @see mcnla::la::gesvd
 ///
-/// @see mcnla::la::syev
-///
-template <class _Matrix, JobOption _jobz>
-class SyevEngine {
+template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+class GesvdDriver {
 
-  static_assert(_jobz == 'N' || _jobz == 'V', "Job undefined!");
+  assertDenseMatrix(_Matrix);
+
+  static_assert(_jobu  == 'A' || _jobu  == 'S' || _jobu  == 'O' || _jobu  == 'N', "Job undefined!");
+  static_assert(_jobvt == 'A' || _jobvt == 'S' || _jobvt == 'O' || _jobvt == 'N', "Job undefined!");
+  static_assert(_jobu  != 'O' || _jobvt != 'O', "Job conflict!");
 
  private:
 
   static constexpr Trans trans = _Matrix::trans;
-  static constexpr Uplo  uplo  = _Matrix::uplo;
 
   using ScalarType     = ScalarT<_Matrix>;
   using VectorType     = VectorT<_Matrix>;
@@ -48,13 +49,13 @@ class SyevEngine {
 
   static constexpr bool is_real = traits::ScalarTraits<ScalarType>::is_real;
 
-  static_assert(std::is_same<DenseSymmetricMatrix<ScalarType, trans, uplo>, _Matrix>::value,
-                "'_Matrix' is not a dense symmetric matrix!");
-
  protected:
 
-  /// The dimension.
-  index_t size_;
+  /// The number of rows.
+  index_t nrow_;
+
+  /// The number of columns.
+  index_t ncol_;
 
   /// The workspace.
   VectorType work_;
@@ -62,27 +63,30 @@ class SyevEngine {
   /// The real workspace.
   RealVectorType rwork_;
 
+  /// Empty matrix.
+  MatrixType matrix_empty_;
+
  public:
 
-  // Constructor
-  inline SyevEngine() noexcept;
-  inline SyevEngine( const index_t size ) noexcept;
-  inline SyevEngine( const MatrixType &a ) noexcept;
+  // Constructors
+  inline GesvdDriver() noexcept;
+  inline GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
+  inline GesvdDriver( const MatrixType &a ) noexcept;
 
   // Operators
-  template <class _TypeA, class _TypeW>
-  inline void operator()( _TypeA &&a, _TypeW &&w ) noexcept;
+  template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
+  inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
 
   // Computes eigenvalues
-  template <class _TypeA, class _TypeW>
-  inline void computeValues( _TypeA &&a, _TypeW &&w ) noexcept;
+  template <class _TypeA, class _TypeS>
+  inline void computeValues( _TypeA &&a, _TypeS &&s ) noexcept;
 
   // Resizes
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
 
   // Get sizes
-  inline std::tuple<index_t> sizes() const noexcept;
+  inline std::tuple<index_t, index_t> sizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;
@@ -93,11 +97,11 @@ class SyevEngine {
  protected:
 
   // Computes
-  template <JobOption __jobz = _jobz>
-  inline void compute( MatrixType &a, RealVectorType &w ) noexcept;
+  template <JobOption __jobu = _jobu, JobOption __jobvt = _jobvt>
+  inline void compute( MatrixType &a, RealVectorType &s, MatrixType &u, MatrixType &vt ) noexcept;
 
   // Queries
-  inline index_t query( const index_t size ) noexcept;
+  inline index_t query( const index_t nrow, const index_t ncol ) noexcept;
 
 };
 
@@ -105,4 +109,4 @@ class SyevEngine {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_DENSE_ENGINE_SYEV_ENGINE_HH_
+#endif  // MCNLA_CORE_LA_DENSE_DRIVER_GESVD_DRIVER_HH_

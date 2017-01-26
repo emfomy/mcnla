@@ -1,20 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/engine/engine.hpp
-/// @brief   The random generator engine.
+/// @file    include/mcnla/core/random/driver/driver.hpp
+/// @brief   The random generator driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_HPP_
-#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_HPP_
+#ifndef MCNLA_CORE_RANDOM_DRIVER_DRIVER_HPP_
+#define MCNLA_CORE_RANDOM_DRIVER_DRIVER_HPP_
 
-#include <mcnla/core/random/engine/engine.hh>
+#include <mcnla/core/random/driver/driver.hh>
 #include <random>
 
 #ifdef MCNLA_USE_MKL
-  #include <mcnla/core/random/engine/engine_detail_mkl.hpp>
+  #include <mcnla/core/random/driver/driver_detail_mkl.hpp>
 #else  // MCNLA_USE_MKL
-  #include <mcnla/core/random/engine/engine_detail_nomkl.hpp>
+  #include <mcnla/core/random/driver/driver_detail_nomkl.hpp>
 #endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace random {
 /// @brief  Construct with given seed.
 ///
 template <typename _Scalar>
-Engine<_Scalar>::Engine(
+Driver<_Scalar>::Driver(
     const index_t seed
 ) noexcept
 #ifdef MCNLA_USE_OMP
@@ -47,7 +47,7 @@ Engine<_Scalar>::Engine(
 /// @brief  Default destructor.
 ///
 template <typename _Scalar>
-Engine<_Scalar>::~Engine() noexcept {
+Driver<_Scalar>::~Driver() noexcept {
   #ifdef MCNLA_USE_MKL
     #pragma omp parallel for
     for ( index_t i = 0; i < omp_size_; ++i ) {
@@ -60,7 +60,7 @@ Engine<_Scalar>::~Engine() noexcept {
 /// @brief  Gets the number of OpenMP threads.
 ///
 template <typename _Scalar>
-index_t Engine<_Scalar>::ompSize() const noexcept {
+index_t Driver<_Scalar>::ompSize() const noexcept {
   return omp_size_;
 }
 
@@ -68,7 +68,7 @@ index_t Engine<_Scalar>::ompSize() const noexcept {
 /// @brief  Returns a vector of random numbers from a uniform distribution.
 ///
 template <typename _Scalar>
-void Engine<_Scalar>::uniform(
+void Driver<_Scalar>::uniform(
           VectorType &vector,
     const ScalarType a,
     const ScalarType b
@@ -88,7 +88,7 @@ void Engine<_Scalar>::uniform(
 /// @copydoc  uniform
 ///
 template <typename _Scalar>
-void Engine<_Scalar>::uniform(
+void Driver<_Scalar>::uniform(
           VectorType &&vector,
     const ScalarType a,
     const ScalarType b
@@ -100,7 +100,7 @@ void Engine<_Scalar>::uniform(
 /// @brief  Returns a vector of random numbers from a normal (Gaussian) distribution.
 ///
 template <typename _Scalar>
-void Engine<_Scalar>::gaussian(
+void Driver<_Scalar>::gaussian(
           VectorType &vector,
     const ScalarType a,
     const ScalarType b
@@ -120,7 +120,7 @@ void Engine<_Scalar>::gaussian(
 /// @copydoc  gaussian
 ///
 template <typename _Scalar>
-void Engine<_Scalar>::gaussian(
+void Driver<_Scalar>::gaussian(
           VectorType &&vector,
     const ScalarType a,
     const ScalarType b
@@ -132,7 +132,7 @@ void Engine<_Scalar>::gaussian(
 /// @brief  Sets the random seed.
 ///
 template <typename _Scalar>
-void Engine<_Scalar>::setSeed(
+void Driver<_Scalar>::setSeed(
     const index_t seed
 ) noexcept {
 
@@ -165,4 +165,4 @@ void Engine<_Scalar>::setSeed(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_HPP_
+#endif  // MCNLA_CORE_RANDOM_DRIVER_DRIVER_HPP_

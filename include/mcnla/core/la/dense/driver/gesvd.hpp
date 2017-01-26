@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/la/dense/engine/gesvd.hpp
-/// @brief   The LAPACK GESVD engine.
+/// @file    include/mcnla/core/la/dense/driver/gesvd.hpp
+/// @brief   The LAPACK GESVD driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LA_DENSE_ENGINE_GESVD_HPP_
-#define MCNLA_CORE_LA_DENSE_ENGINE_GESVD_HPP_
+#ifndef MCNLA_CORE_LA_DENSE_DRIVER_GESVD_HPP_
+#define MCNLA_CORE_LA_DENSE_DRIVER_GESVD_HPP_
 
-#include <mcnla/core/la/dense/engine/gesvd.hh>
+#include <mcnla/core/la/dense/driver/gesvd.hh>
 #include <mcnla/core/la/raw/lapack/gesvd.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace la {
 /// @brief  Default constructor.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-GesvdEngine<_Matrix, _jobu, _jobvt>::GesvdEngine() noexcept
+GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver() noexcept
   : nrow_(0),
     ncol_(0),
     work_(),
@@ -35,7 +35,7 @@ GesvdEngine<_Matrix, _jobu, _jobvt>::GesvdEngine() noexcept
 /// @brief  Construct with given size information.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-GesvdEngine<_Matrix, _jobu, _jobvt>::GesvdEngine(
+GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
     const index_t nrow, const index_t ncol
 ) noexcept
   : nrow_(nrow),
@@ -50,17 +50,17 @@ GesvdEngine<_Matrix, _jobu, _jobvt>::GesvdEngine(
 /// @brief  Construct with given size information.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-GesvdEngine<_Matrix, _jobu, _jobvt>::GesvdEngine(
+GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
     const MatrixType &a
 ) noexcept
-  : GesvdEngine(a.nrow(), a.ncol()) {}
+  : GesvdDriver(a.nrow(), a.ncol()) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
-void GesvdEngine<_Matrix, _jobu, _jobvt>::operator()(
+void GesvdDriver<_Matrix, _jobu, _jobvt>::operator()(
     _TypeA &&a,
     _TypeS &&s,
     _TypeU &&u,
@@ -73,7 +73,7 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::operator()(
 /// @brief  Computes singular values only.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <class _TypeA, class _TypeS>
-void GesvdEngine<_Matrix, _jobu, _jobvt>::computeValues(
+void GesvdDriver<_Matrix, _jobu, _jobvt>::computeValues(
     _TypeA &&a,
     _TypeS &&s
 ) noexcept {
@@ -81,20 +81,20 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::computeValues(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Reconstruct the engine.
+/// @brief  Reconstruct the driver.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <typename... Args>
-void GesvdEngine<_Matrix, _jobu, _jobvt>::reconstruct(
+void GesvdDriver<_Matrix, _jobu, _jobvt>::reconstruct(
     Args... args
 ) noexcept {
-  *this = GesvdEngine<_Matrix, _jobu, _jobvt>(args...);
+  *this = GesvdDriver<_Matrix, _jobu, _jobvt>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-std::tuple<index_t, index_t> GesvdEngine<_Matrix, _jobu, _jobvt>::sizes() const noexcept {
+std::tuple<index_t, index_t> GesvdDriver<_Matrix, _jobu, _jobvt>::sizes() const noexcept {
   return std::make_tuple(nrow_, ncol_);
 }
 
@@ -102,7 +102,7 @@ std::tuple<index_t, index_t> GesvdEngine<_Matrix, _jobu, _jobvt>::sizes() const 
 /// @brief  Gets the workspace
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-VectorT<_Matrix>& GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() noexcept {
+VectorT<_Matrix>& GesvdDriver<_Matrix, _jobu, _jobvt>::getWork() noexcept {
   return work_;
 }
 
@@ -110,7 +110,7 @@ VectorT<_Matrix>& GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() noexcept {
 /// @copydoc  getWork
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-const VectorT<_Matrix>& GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() const noexcept {
+const VectorT<_Matrix>& GesvdDriver<_Matrix, _jobu, _jobvt>::getWork() const noexcept {
   return work_;
 }
 
@@ -118,7 +118,7 @@ const VectorT<_Matrix>& GesvdEngine<_Matrix, _jobu, _jobvt>::getWork() const noe
 /// @brief  Gets the real workspace
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-RealT<VectorT<_Matrix>>& GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() noexcept {
+RealT<VectorT<_Matrix>>& GesvdDriver<_Matrix, _jobu, _jobvt>::getRwork() noexcept {
   return rwork_;
 }
 
@@ -126,7 +126,7 @@ RealT<VectorT<_Matrix>>& GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() noexcep
 /// @copydoc  getRwork
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-const RealT<VectorT<_Matrix>>& GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() const noexcept {
+const RealT<VectorT<_Matrix>>& GesvdDriver<_Matrix, _jobu, _jobvt>::getRwork() const noexcept {
   return rwork_;
 }
 
@@ -141,7 +141,7 @@ const RealT<VectorT<_Matrix>>& GesvdEngine<_Matrix, _jobu, _jobvt>::getRwork() c
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 template <JobOption __jobu, JobOption __jobvt>
-void GesvdEngine<_Matrix, _jobu, _jobvt>::compute(
+void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
     MatrixType &a,
     RealVectorType &s,
     MatrixType &u,
@@ -182,7 +182,7 @@ void GesvdEngine<_Matrix, _jobu, _jobvt>::compute(
 /// @brief  Query the optimal workspace size.
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-index_t GesvdEngine<_Matrix, _jobu, _jobvt>::query(
+index_t GesvdDriver<_Matrix, _jobu, _jobvt>::query(
     const index_t nrow, const index_t ncol
 ) noexcept {
   ScalarType lwork;
@@ -200,4 +200,4 @@ index_t GesvdEngine<_Matrix, _jobu, _jobvt>::query(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_DENSE_ENGINE_GESVD_HPP_
+#endif  // MCNLA_CORE_LA_DENSE_DRIVER_GESVD_HPP_

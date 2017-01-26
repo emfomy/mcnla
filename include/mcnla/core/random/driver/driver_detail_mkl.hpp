@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/engine/engine_detail_mkl.hpp
-/// @brief   The detail of random generator engine with MKL.
+/// @file    include/mcnla/core/random/driver/driver_detail_mkl.hpp
+/// @brief   The detail of random generator driver with MKL.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_
-#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_
+#ifndef MCNLA_CORE_RANDOM_DRIVER_DRIVER_DETAIL_HPP_
+#define MCNLA_CORE_RANDOM_DRIVER_DRIVER_DETAIL_HPP_
 
 #ifndef MCNLA_USE_MKL
   #error 'MCNLA_USE_MKL' should be set!
@@ -58,4 +58,4 @@ static inline void gaussianImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_DETAIL_HPP_
+#endif  // MCNLA_CORE_RANDOM_DRIVER_DRIVER_DETAIL_HPP_

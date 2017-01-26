@@ -33,7 +33,7 @@ Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::Sketcher(
     const index_t seed
 ) noexcept
   : BaseType(parameters, mpi_comm, mpi_root),
-    random_engine_(seed) {}
+    random_driver_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
@@ -74,7 +74,7 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::sketchImpl(
   time0_ = MPI_Wtime();
 
   // Random sample Omega using normal Gaussian distribution
-  random_engine_.gaussian(matrix_omegas_.vectorize());
+  random_driver_.gaussian(matrix_omegas_.vectorize());
   time1_ = MPI_Wtime();
 
   // Q := A * Omega
@@ -128,7 +128,7 @@ template <typename _Scalar, index_t _exponent>
 void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::setSeedImpl(
     const index_t seed
 ) noexcept {
-  random_engine_.setSeed(seed);
+  random_driver_.setSeed(seed);
 }
 
 }  // namespace isvd

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/engine/engine.hh
-/// @brief   The definition of random generator engine header.
+/// @file    include/mcnla/core/random/driver/driver.hh
+/// @brief   The definition of random generator driver header.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ENGINE_ENGINE_HH_
-#define MCNLA_CORE_RANDOM_ENGINE_ENGINE_HH_
+#ifndef MCNLA_CORE_RANDOM_DRIVER_DRIVER_HH_
+#define MCNLA_CORE_RANDOM_DRIVER_DRIVER_HH_
 
 #include <mcnla/core/random/def.hpp>
 #include <vector>
@@ -30,12 +30,12 @@ namespace random {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  random_module
-/// @brief  The random generator engine.
+/// @brief  The random generator driver.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class Engine {
+class Driver {
 
  private:
 
@@ -62,10 +62,10 @@ class Engine {
  public:
 
   // Constructors
-  inline Engine( const index_t seed ) noexcept;
+  inline Driver( const index_t seed ) noexcept;
 
   // Destructor
-  inline ~Engine() noexcept;
+  inline ~Driver() noexcept;
 
   // Gets information
   inline index_t ompSize() const noexcept;
@@ -85,4 +85,4 @@ class Engine {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ENGINE_ENGINE_HH_
+#endif  // MCNLA_CORE_RANDOM_DRIVER_DRIVER_HH_

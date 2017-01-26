@@ -31,8 +31,8 @@ namespace la {
   `%la::mv(a, x, y, alpha, beta)`                                  | @f$y \gets \alpha A x + \beta y@f$
   `%la::sv(a, x, y)`                                               | @f$y \gets A^{-1} x@f$
   `%la::r(a, x)`                                                   | @f$A \gets x x^* + A@f$
-  `%la::r(a, x, y.t())`                                            | @f$A \gets x y^\top + A@f$
-  `%la::r(a, x, y.h())`                                            | @f$A \gets x y^* + A@f$
+  `%la::r(a, x, y)`                                                | @f$A \gets x y^* + A@f$
+  `%la::ru(a, x, y)`                                               | @f$A \gets x y^\top + A@f$
   `%la::r2(a, x, y)`                                               | @f$A \gets x y^* + y x^* + A@f$
   `%la::mm(a, b, c, alpha, beta)`                                  | @f$C \gets \alpha A B + \beta C@f$
   `%la::sm(a, b, c, alpha)`                                        | @f$C \gets \alpha A^{-1} B@f$

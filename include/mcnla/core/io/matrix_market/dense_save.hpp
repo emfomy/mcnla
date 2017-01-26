@@ -41,7 +41,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix array real general" << std::endl;
+  fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
   fout << vector.dim0() << " 1" << std::endl;
@@ -74,7 +74,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix array real general" << std::endl;
+  fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
   fout << matrix.dim0() << " " << matrix.dim1() << std::endl;
@@ -96,14 +96,9 @@ void saveMatrixMarket(
 ///
 template <class _Derived>
 void saveMatrixMarket(
-    const VectorCollectionWrapper<_Derived> &set,
+    const DenseVectorCollectionWrapper<_Derived> &set,
     const char *file
 ) noexcept {
-  using VectorType = VectorT<_Derived>;
-  using ScalarType = ScalarT<VectorType>;
-
-  static_assert(std::is_base_of<DenseVector<ScalarType>, VectorType>::value, "'_Derived' is not a dense vector!");
-
   // Open file
   std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
@@ -112,7 +107,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix array real general" << std::endl;
+  fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
   fout << set.dim0() << " " << set.nvec() << std::endl;
@@ -137,15 +132,9 @@ void saveMatrixMarket(
 ///
 template <class _Derived>
 void saveMatrixMarket(
-    const MatrixCollectionWrapper<_Derived> &set,
+    const DenseMatrixCollectionWrapper<_Derived> &set,
     const char *file
 ) noexcept {
-  using MatrixType = MatrixT<_Derived>;
-  using ScalarType = ScalarT<MatrixType>;
-  constexpr Trans trans = MatrixType::trans;
-
-  static_assert(std::is_base_of<DenseMatrix<ScalarType, trans>, MatrixType>::value, "'_Derived' is not a dense matrix!");
-
   // Open file
   std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
@@ -154,7 +143,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket cube array real general" << std::endl;
+  fout << "%%MatrixMarket cube array real general" << std::endl;
 
   // Write size
   fout << set.dim0() << " " << set.dim1() << " " << set.nmat() << std::endl;

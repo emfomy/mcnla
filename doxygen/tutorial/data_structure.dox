@@ -7,7 +7,7 @@ namespace matrix {
 
   <h3>%Array</h3>
 
-  All the data structures used in MCNLA uses @ref Array to store data. The @ref Array stores a `std::shared_ptr` of `std::valarray` of the scalars. The variable @ref Array::offset "offset" mark offset of the @ref Array.
+  All the data structures used in MCNLA uses @ref Array to store data. The @ref Array stores a `std::shared_ptr` of `std::valarray` of the scalars. The variable @ref Array::offset "offset" marks the offset of the @ref Array.
 
   Let `a` be an @ref Array of @ref Array::size "size" `n` with @ref Array::offset "offset" `k`, then `a` contains a `std::valarray` with length `n`, and the first data of `a` is stored at the `o`-th position; that is, the `std::valarray` stores
   @code

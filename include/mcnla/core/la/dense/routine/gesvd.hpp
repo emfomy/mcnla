@@ -10,7 +10,7 @@
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <mcnla/core/la/dense/engine/gesvd.hpp>
+#include <mcnla/core/la/dense/driver/gesvd.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -34,17 +34,17 @@ inline void gesvdImpl(
     DenseMatrix<_Scalar, _trans> &u,
     DenseMatrix<_Scalar, _trans> &vt
 ) noexcept {
-  GesvdEngine<DenseMatrix<_Scalar, _trans>, _jobu, _jobvt> engine(a);
-  engine(a, s, u, vt);
+  GesvdDriver<DenseMatrix<_Scalar, _trans>, _jobu, _jobvt> driver(a);
+  driver(a, s, u, vt);
 }
 
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @copydoc  mcnla::la::GesvdEngine::compute
+/// @copydoc  mcnla::la::GesvdDriver::compute
 ///
-/// @see  mcnla::la::GesvdEngine
+/// @see  mcnla::la::GesvdDriver
 ///
 template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Trans _trans>
 inline void gesvd(

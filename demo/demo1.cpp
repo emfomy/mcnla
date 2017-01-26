@@ -77,21 +77,21 @@ int main( int argc, char **argv ) {
                 set_frerr(num_test),  set_iter(num_test);
 
   // ====================================================================================================================== //
-  // Initialize solver
+  // Initialize driver
   mcnla::matrix::DenseMatrix<ScalarType> matrix_a(m, n);
-  mcnla::isvd::Solver<ScalarType,
+  mcnla::isvd::Driver<ScalarType,
                       mcnla::isvd::GaussianProjectionSketcherTag<0>,
                       mcnla::isvd::SvdOrthogonalizerTag,
                       mcnla::isvd::KolmogorovNagumoIntegratorTag,
-                      mcnla::isvd::SvdFormerTag> solver(MPI_COMM_WORLD);
-  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-  solver.setTolerance(tolerance).setMaxIteration(maxiter).setSeeds(rand());
-  solver.initialize();
+                      mcnla::isvd::SvdFormerTag> driver(MPI_COMM_WORLD);
+  driver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  driver.setTolerance(tolerance).setMaxIteration(maxiter).setSeeds(rand());
+  driver.initialize();
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Uses " << solver.sketcher() << "." << std::endl;
-    std::cout << "Uses " << solver.orthogonalizer() << "." << std::endl;
-    std::cout << "Uses " << solver.integrator() << "." << std::endl;
-    std::cout << "Uses " << solver.former() << "." << std::endl << std::endl;
+    std::cout << "Uses " << driver.sketcher() << "." << std::endl;
+    std::cout << "Uses " << driver.orthogonalizer() << "." << std::endl;
+    std::cout << "Uses " << driver.integrator() << "." << std::endl;
+    std::cout << "Uses " << driver.former() << "." << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -111,21 +111,21 @@ int main( int argc, char **argv ) {
 
   for ( int t = -skip_test; t < num_test; ++t ) {
 
-    // Run solver
+    // Run driver
     MPI_Barrier(MPI_COMM_WORLD);
-    solver.compute(matrix_a);
+    driver.compute(matrix_a);
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Check result
     if ( mpi_rank == mpi_root  ) {
       ScalarType frerr;
-      check(matrix_a, solver.leftSingularVectors(), solver.rightSingularVectors(), solver.singularValues(), frerr);
-      auto iter    = solver.integratorIteration();
-      auto maxiter = solver.parameters().maxIteration();
-      auto time_s = solver.sketcherTime();
-      auto time_o = solver.orthogonalizerTime();
-      auto time_i = solver.integratorTime();
-      auto time_f = solver.formerTime();
+      check(matrix_a, driver.leftSingularVectors(), driver.rightSingularVectors(), driver.singularValues(), frerr);
+      auto iter    = driver.integratorIteration();
+      auto maxiter = driver.parameters().maxIteration();
+      auto time_s = driver.sketcherTime();
+      auto time_o = driver.orthogonalizerTime();
+      auto time_i = driver.integratorTime();
+      auto time_f = driver.formerTime();
       auto time = time_s + time_o + time_i + time_f;
       std::cout << std::setw(log10(num_test)+1) << t
                 << " | error: " << frerr

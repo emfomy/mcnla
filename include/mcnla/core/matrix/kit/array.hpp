@@ -117,7 +117,7 @@ void Array<_Type>::operator>>=(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Left-shift the offset.
-/// Subtract @ref offset_ from @a offset.
+/// Subtract @ref offset_ by @a offset.
 ///
 template <typename _Type>
 void Array<_Type>::operator<<=(
@@ -128,8 +128,7 @@ void Array<_Type>::operator<<=(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Right-shift the offset.
-/// Add @a offset to @ref offset_.
+/// @copydoc  operator>>=
 ///
 template <typename _Type>
 Array<_Type> Array<_Type>::operator>>(
@@ -141,8 +140,7 @@ Array<_Type> Array<_Type>::operator>>(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Right-shift the offset.
-/// Add @a offset to @ref offset_.
+/// @copydoc  operator>>=
 ///
 template <typename _Type>
 const Array<_Type> Array<_Type>::operator>>(
@@ -154,8 +152,7 @@ const Array<_Type> Array<_Type>::operator>>(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Left-shift the offset.
-/// Subtract @ref offset_ from @a offset.
+/// @copydoc  operator<<=
 ///
 template <typename _Type>
 Array<_Type> Array<_Type>::operator<<(
@@ -167,8 +164,7 @@ Array<_Type> Array<_Type>::operator<<(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Left-shift the offset.
-/// Subtract @ref offset_ from @a offset.
+/// @copydoc  operator<<=
 ///
 template <typename _Type>
 const Array<_Type> Array<_Type>::operator<<(

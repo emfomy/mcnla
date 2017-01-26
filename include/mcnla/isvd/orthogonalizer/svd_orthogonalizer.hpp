@@ -46,7 +46,7 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::initializeImpl() noexcept {
   time1_ = 0;
 
   vector_s_.reconstruct(dim_sketch);
-  gesvd_engine_.reconstruct(nrow, dim_sketch);
+  gesvd_driver_.reconstruct(nrow, dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    gesvd_engine_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
+    gesvd_driver_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
   time1_ = MPI_Wtime();
 }

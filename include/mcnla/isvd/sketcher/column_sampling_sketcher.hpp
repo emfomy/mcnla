@@ -33,7 +33,7 @@ Sketcher<_Scalar, ColumnSamplingSketcherTag>::Sketcher(
     const index_t seed
 ) noexcept
   : BaseType(parameters, mpi_comm, mpi_root),
-    random_engine_(seed) {}
+    random_driver_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
@@ -73,7 +73,7 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
   time0_ = MPI_Wtime();
 
   // Random sample Idxs using uniform distribution
-  random_engine_.uniform(vector_idxs_, 0, ncol);
+  random_driver_.uniform(vector_idxs_, 0, ncol);
   time1_ = MPI_Wtime();
 
   // Copy columns
@@ -125,7 +125,7 @@ template <typename _Scalar>
 void Sketcher<_Scalar, ColumnSamplingSketcherTag>::setSeedImpl(
     const index_t seed
 ) noexcept {
-  random_engine_.setSeed(seed);
+  random_driver_.setSeed(seed);
 }
 
 }  // namespace isvd

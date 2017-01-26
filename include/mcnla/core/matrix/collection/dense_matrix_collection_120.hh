@@ -10,7 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <tuple>
-#include <mcnla/core/matrix/collection/matrix_collection_wrapper.hpp>
+#include <mcnla/core/matrix/collection/dense_matrix_collection_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,9 +63,9 @@ namespace matrix {
 ///
 template <typename _Scalar>
 class DenseMatrixCollection120
-  : public MatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>> {
+  : public DenseMatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>>;
+  friend DenseMatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>>;
 
  public:
 
@@ -75,7 +75,7 @@ class DenseMatrixCollection120
 
  private:
 
-  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>>;
+  using BaseType = DenseMatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>>;
 
  protected:
 

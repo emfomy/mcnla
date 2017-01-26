@@ -9,7 +9,7 @@
 #define MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_HPP_
 
 #include <mcnla/core/random/def.hpp>
-#include <mcnla/core/random/engine.hpp>
+#include <mcnla/core/random/driver.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -31,17 +31,17 @@ inline void gaussianImpl(
     DenseVector<_Scalar> &vector,
     const index_t seed
 ) noexcept {
-  Engine<_Scalar> engine(seed);
-  engine.gaussian(vector);
+  Driver<_Scalar> driver(seed);
+  driver.gaussian(vector);
 }
 
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  random_module
-/// @copydoc  mcnla::random::Engine::gaussian
+/// @copydoc  mcnla::random::Driver::gaussian
 ///
-/// @see  mcnla::random::Engine
+/// @see  mcnla::random::Driver
 ///
 template <typename _Scalar>
 inline void gaussian(

@@ -69,8 +69,8 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
   /// The empty matrix.
   MatrixType matrix_empty_;
 
-  /// The random engine.
-  la::GesvdEngine<MatrixType, 'O', 'N'> gesvd_engine_;
+  /// The random driver.
+  la::GesvdDriver<MatrixType, 'O', 'N'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

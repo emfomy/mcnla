@@ -75,7 +75,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::initializeImpl() noexce
   vector_e_.reconstruct(dim_sketch);
   vector_f_.reconstruct(dim_sketch);
 
-  syev_engine_.reconstruct(dim_sketch);
+  syev_driver_.reconstruct(dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
     mpi::allreduce(matrix_z_, MPI_SUM, mpi_comm_);
 
     // Compute the eigen-decomposition of Z -> Z' * E * Z
-    syev_engine_(matrix_z_.viewSymmetric(), vector_e_);
+    syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
 
     // E := sqrt( I/2 - sqrt( I/4 - E ) )
     vector_e_.val().valarray() = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_.val().valarray()));

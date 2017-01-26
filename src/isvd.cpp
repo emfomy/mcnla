@@ -105,20 +105,20 @@ int main( int argc, char **argv ) {
   }
 
   // ====================================================================================================================== //
-  // Initialize solver
-  mcnla::isvd::Solver<ScalarType,
+  // Initialize driver
+  mcnla::isvd::Driver<ScalarType,
                       mcnla::isvd::SKETCHER,
                       mcnla::isvd::ORTHOGONALIZER,
                       mcnla::isvd::INTEGRATOR,
-                      mcnla::isvd::FORMER> solver(MPI_COMM_WORLD);
-  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(rand());
-  solver.setTolerance(tolerance).setMaxIteration(maxiter);
-  solver.initialize();
+                      mcnla::isvd::FORMER> driver(MPI_COMM_WORLD);
+  driver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(rand());
+  driver.setTolerance(tolerance).setMaxIteration(maxiter);
+  driver.initialize();
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Uses " << solver.sketcher() << "." << std::endl;
-    std::cout << "Uses " << solver.orthogonalizer() << "." << std::endl;
-    std::cout << "Uses " << solver.integrator() << "." << std::endl;
-    std::cout << "Uses " << solver.former() << "." << std::endl << std::endl;
+    std::cout << "Uses " << driver.sketcher() << "." << std::endl;
+    std::cout << "Uses " << driver.orthogonalizer() << "." << std::endl;
+    std::cout << "Uses " << driver.integrator() << "." << std::endl;
+    std::cout << "Uses " << driver.former() << "." << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -129,16 +129,16 @@ int main( int argc, char **argv ) {
   }
 
   MPI_Barrier(MPI_COMM_WORLD);
-  solver.compute(matrix_a);
+  driver.compute(matrix_a);
   MPI_Barrier(MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Display executing time
   if ( mpi_rank == mpi_root ) {
-    auto time_s = solver.sketcherTime();
-    auto time_i = solver.integratorTime();
-    auto time_o = solver.orthogonalizerTime();
-    auto time_f = solver.formerTime();
+    auto time_s = driver.sketcherTime();
+    auto time_i = driver.integratorTime();
+    auto time_o = driver.orthogonalizerTime();
+    auto time_f = driver.formerTime();
     auto time = time_s + time_o + time_i + time_f;
 
     std::cout << "Average total computing time: " << time   << " seconds." << std::endl;
@@ -153,13 +153,13 @@ int main( int argc, char **argv ) {
   // Save matrix
   if ( mpi_rank == mpi_root ) {
     std::cout << "Save S  into "  << argv[2] << "." << std::endl;
-    mcnla::io::saveMatrixMarket(solver.singularValues(), argv[2]);
+    mcnla::io::saveMatrixMarket(driver.singularValues(), argv[2]);
 
     std::cout << "Save U  into "  << argv[3] << "." << std::endl;
-    mcnla::io::saveMatrixMarket(solver.leftSingularVectors(), argv[3]);
+    mcnla::io::saveMatrixMarket(driver.leftSingularVectors(), argv[3]);
 
     std::cout << "Save Vt into " << argv[4] << "." << std::endl;
-    mcnla::io::saveMatrixMarket(solver.rightSingularVectors(), argv[4]);
+    mcnla::io::saveMatrixMarket(driver.rightSingularVectors(), argv[4]);
 
     std::cout << std::endl;
   }

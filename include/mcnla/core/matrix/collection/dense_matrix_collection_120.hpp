@@ -242,7 +242,7 @@ const DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::unfold() c
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nrow
+/// @copydoc  mcnla::matrix::DenseMatrixCollectionWrapper::nrow
 ///
 template <typename _Scalar>
 index_t DenseMatrixCollection120<_Scalar>::nrowImpl() const noexcept {
@@ -250,7 +250,7 @@ index_t DenseMatrixCollection120<_Scalar>::nrowImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixCollectionWrapper::ncol
+/// @copydoc  mcnla::matrix::DenseMatrixCollectionWrapper::ncol
 ///
 template <typename _Scalar>
 index_t DenseMatrixCollection120<_Scalar>::ncolImpl() const noexcept {
@@ -258,7 +258,7 @@ index_t DenseMatrixCollection120<_Scalar>::ncolImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nmat
+/// @copydoc  mcnla::matrix::DenseMatrixCollectionWrapper::nmat
 ///
 template <typename _Scalar>
 index_t DenseMatrixCollection120<_Scalar>::nmatImpl() const noexcept {
@@ -266,7 +266,7 @@ index_t DenseMatrixCollection120<_Scalar>::nmatImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
+/// @copydoc  mcnla::matrix::DenseMatrixCollectionWrapper::operator()( const index_t )
 ///
 template <typename _Scalar>
 DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::getMatrixImpl(
@@ -277,7 +277,7 @@ DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::getMatrixImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
+/// @copydoc  mcnla::matrix::DenseMatrixCollectionWrapper::operator()( const index_t )
 ///
 template <typename _Scalar>
 const DenseMatrixRowMajor<_Scalar> DenseMatrixCollection120<_Scalar>::getMatrixImpl(

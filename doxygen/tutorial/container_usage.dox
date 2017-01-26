@@ -39,7 +39,7 @@ namespace matrix {
   | ------------------------ | ------------------------
   | `a.viewMatrix()`         | treat `a` as a @ref DenseMatrix "general matrix"
   | `a.viewSymmetric()`      | treat `a` as a @ref DenseSymmetricMatrix "symmetric matrix"
-  | `a.viewTriangular()`     | treat `a` as a @ref DenseTriangularMatrix "symmetric matrix"
+  | `a.viewTriangular()`     | treat `a` as a @ref DenseTriangularMatrix "triangular matrix"
 
   The matrix containers also provides transpose/conjugate views:
 

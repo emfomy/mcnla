@@ -120,11 +120,11 @@ class Integrator<_Scalar, ExtrinsicMeanIntegratorTag>
   /// The empty matrix.
   DenseMatrixRowMajor<ScalarType> matrix_empty_;
 
-  /// The SYEV engine.
-  la::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
+  /// The SYEV driver.
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_driver_;
 
-  /// The GESVD engine.
-  la::GesvdEngine<DenseMatrixRowMajor<ScalarType>, 'O', 'N'> gesvd_engine_;
+  /// The GESVD driver.
+  la::GesvdDriver<DenseMatrixRowMajor<ScalarType>, 'O', 'N'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;

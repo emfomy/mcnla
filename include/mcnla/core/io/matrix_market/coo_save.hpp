@@ -41,7 +41,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix coordinate real general" << std::endl;
+  fout << "%%MatrixMarket matrix coordinate real general" << std::endl;
 
   // Write size
   fout << vector.dim0() << " 1 " << vector.nnz() << std::endl;
@@ -75,7 +75,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix coordinate real general" << std::endl;
+  fout << "%%MatrixMarket matrix coordinate real general" << std::endl;
 
   // Write size
   fout << matrix.dim0() << " " << matrix.dim1() << " " << matrix.nnz() << std::endl;

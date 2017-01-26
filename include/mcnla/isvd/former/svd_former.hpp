@@ -51,7 +51,7 @@ void Former<_Scalar, SvdFormerTag>::initializeImpl() noexcept {
   vector_s_.reconstruct(dim_sketch);
   matrix_u_.reconstruct(nrow, dim_sketch);
   matrix_vt_.reconstruct(dim_sketch, ncol);
-  gesvd_engine_.reconstruct(dim_sketch, ncol);
+  gesvd_driver_.reconstruct(dim_sketch, ncol);
 
   vector_s_cut_  = vector_s_({0, rank});
   matrix_u_cut_  = matrix_u_("", {0, rank});
@@ -86,7 +86,7 @@ void Former<_Scalar, SvdFormerTag>::formImpl(
   time1_ = MPI_Wtime();
 
   // Compute the SVD of Vt -> W * S * Vt
-  gesvd_engine_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
+  gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
   time2_ = MPI_Wtime();
 
   // U := Q * W

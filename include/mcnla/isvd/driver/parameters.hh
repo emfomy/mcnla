@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/solver/parameters.hh
-/// @brief   The definition of parameter structure of iSVD solver.
+/// @file    include/mcnla/isvd/driver/parameters.hh
+/// @brief   The definition of parameter structure of iSVD driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SOLVER_PARAMETERS_HH_
-#define MCNLA_ISVD_SOLVER_PARAMETERS_HH_
+#ifndef MCNLA_ISVD_DRIVER_PARAMETERS_HH_
+#define MCNLA_ISVD_DRIVER_PARAMETERS_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/core/mpi.hpp>
@@ -22,8 +22,8 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_solver_module
-/// The parameters of iSVD solver.
+/// @ingroup  isvd_driver_module
+/// The parameters of iSVD driver.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
@@ -31,7 +31,7 @@ template <typename _Scalar>
 class Parameters {
 
   template <class __Scalar, class __SketcherTag, class __OrthogonalizerTag, class __IntegratorTag, class __FormerTag>
-  friend class Solver;
+  friend class Driver;
 
  public:
 
@@ -46,10 +46,10 @@ class Parameters {
   /// The MPI size
   const index_t mpi_size_;
 
-  /// The tag shows if the solver is initialized or not.
+  /// The tag shows if the driver is initialized or not.
   bool initialized_ = false;
 
-  /// The tag shows if the solver is computed or not.
+  /// The tag shows if the driver is computed or not.
   bool computed_ = false;
 
   /// The number of rows of the matrix.
@@ -97,4 +97,4 @@ class Parameters {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SOLVER_PARAMETERS_HH_
+#endif  // MCNLA_ISVD_DRIVER_PARAMETERS_HH_

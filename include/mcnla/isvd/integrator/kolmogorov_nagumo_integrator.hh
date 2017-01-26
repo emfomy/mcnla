@@ -119,8 +119,8 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
   /// The vector F.
   DenseVector<ScalarType> vector_f_;
 
-  /// The SYEV engine.
-  la::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
+  /// The SYEV driver.
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;
