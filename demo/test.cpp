@@ -39,7 +39,7 @@ int main( int argc, char **argv ) {
   disp(b);
   disp(c);
 
-  mcnla::matrix::MmFunctor<mcnla::matrix::DenseMatrixColMajor<double>> functor(a);
+  mcnla::matrix::MmFunctor<decltype(a)> functor(a);
   functor(b, c);
 
   disp(c);
