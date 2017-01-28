@@ -13,6 +13,7 @@
 #include <mcnla/core/matrix/dense.hpp>
 #include <mcnla/core/matrix/coo.hpp>
 #include <mcnla/core/matrix/collection.hpp>
+#include <mcnla/core/matrix/functor.hpp>
 #include <mcnla/core/matrix/kit.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

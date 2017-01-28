@@ -21,9 +21,28 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrixCollection102<double> collection;
+  mcnla::index_t m = 5, n = 4, k = 3, i;
 
-  mcnla::io::loadMatrixMarket(collection, argv[1]);
+  mcnla::matrix::DenseMatrixColMajor<double> a(m, k);
+  mcnla::matrix::DenseMatrixColMajor<double> b(k, n);
+  mcnla::matrix::DenseMatrixColMajor<double> c(m, n);
+
+  i = 0;
+  for ( auto &v : a ) {
+    v = ++i;
+  }
+  for ( auto &v : b ) {
+    v = ++i;
+  }
+
+  disp(a);
+  disp(b);
+  disp(c);
+
+  mcnla::matrix::MmFunctor<mcnla::matrix::DenseMatrixColMajor<double>> functor(a);
+  functor(b, c);
+
+  disp(c);
 
   return 0;
 }
