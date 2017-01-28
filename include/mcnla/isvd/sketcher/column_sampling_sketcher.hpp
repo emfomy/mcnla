@@ -26,7 +26,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::SketcherWrapper::SketcherWrapper
 ///
 template <typename _Scalar>
-Sketcher<_Scalar, ColumnSamplingSketcherTag>::Sketcher(
+Sketcher<ColumnSamplingSketcherTag, _Scalar>::Sketcher(
     const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root,
@@ -39,7 +39,7 @@ Sketcher<_Scalar, ColumnSamplingSketcherTag>::Sketcher(
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
 ///
 template <typename _Scalar>
-void Sketcher<_Scalar, ColumnSamplingSketcherTag>::initializeImpl() noexcept {
+void Sketcher<ColumnSamplingSketcherTag, _Scalar>::initializeImpl() noexcept {
 
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
@@ -55,7 +55,7 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::initializeImpl() noexcept {
 /// @copydoc  mcnla::isvd::SketcherWrapper::sketch
  ///
 template <typename _Scalar> template <class _Matrix>
-void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
+void Sketcher<ColumnSamplingSketcherTag, _Scalar>::sketchImpl(
     const _Matrix &matrix_a,
           DenseMatrixCollection120<ScalarType> &collection_q
 ) noexcept {
@@ -88,7 +88,7 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
 ///
 ///
 template <typename _Scalar>
-std::ostream&Sketcher<_Scalar, ColumnSamplingSketcherTag>::outputNameImpl(
+std::ostream&Sketcher<ColumnSamplingSketcherTag, _Scalar>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_);
@@ -98,7 +98,7 @@ std::ostream&Sketcher<_Scalar, ColumnSamplingSketcherTag>::outputNameImpl(
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
 template <typename _Scalar>
-double Sketcher<_Scalar, ColumnSamplingSketcherTag>::timeImpl() const noexcept {
+double Sketcher<ColumnSamplingSketcherTag, _Scalar>::timeImpl() const noexcept {
   return time2_-time0_;
 }
 
@@ -106,7 +106,7 @@ double Sketcher<_Scalar, ColumnSamplingSketcherTag>::timeImpl() const noexcept {
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
 template <typename _Scalar>
-double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time1() const noexcept {
+double Sketcher<ColumnSamplingSketcherTag, _Scalar>::time1() const noexcept {
   return time1_-time0_;
 }
 
@@ -114,7 +114,7 @@ double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time1() const noexcept {
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
 template <typename _Scalar>
-double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time2() const noexcept {
+double Sketcher<ColumnSamplingSketcherTag, _Scalar>::time2() const noexcept {
   return time2_-time1_;
 }
 
@@ -122,7 +122,7 @@ double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time2() const noexcept {
 /// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
 ///
 template <typename _Scalar>
-void Sketcher<_Scalar, ColumnSamplingSketcherTag>::setSeedImpl(
+void Sketcher<ColumnSamplingSketcherTag, _Scalar>::setSeedImpl(
     const index_t seed
 ) noexcept {
   random_driver_.setSeed(seed);

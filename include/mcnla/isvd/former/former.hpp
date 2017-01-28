@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, class _Tag> class Former;
+template <class _Tag, typename _Scalar> class Former;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -36,8 +36,8 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The former traits.
 ///
-template <typename _Scalar, class _Tag>
-struct Traits<isvd::Former<_Scalar, _Tag>> {
+template <class _Tag, typename _Scalar>
+struct Traits<isvd::Former<_Tag, _Scalar>> {
   using ScalarType = _Scalar;
 };
 
@@ -50,14 +50,15 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-///
 /// The interface of iSVD former.
 ///
-/// @tparam  _Scalar  The scalar type.
 /// @tparam  _Tag     The former tag.
+/// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar, class _Tag>
-class Former : public FormerWrapper<Former<_Scalar, _Tag>> {};
+template <class _Tag, typename _Scalar>
+class Former : public FormerWrapper<Former<_Scalar, _Tag>> {
+  static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD former!");
+};
 
 }  // namespace isvd
 

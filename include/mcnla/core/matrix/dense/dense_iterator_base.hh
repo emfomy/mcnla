@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_iterator_base.hh
-/// @brief   The definition of  definition of dense iterator interface.
+/// @brief   The definition of dense iterator interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

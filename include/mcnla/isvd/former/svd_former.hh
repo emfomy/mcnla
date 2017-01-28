@@ -30,20 +30,19 @@ struct SvdFormerTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-///
 /// The SVD former.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class Former<_Scalar, SvdFormerTag>
-  : public FormerWrapper<Former<_Scalar, SvdFormerTag>> {
+class Former<SvdFormerTag, _Scalar>
+  : public FormerWrapper<Former<SvdFormerTag, _Scalar>> {
 
-  friend FormerWrapper<Former<_Scalar, SvdFormerTag>>;
+  friend FormerWrapper<Former<SvdFormerTag, _Scalar>>;
 
  private:
 
-  using BaseType = FormerWrapper<Former<_Scalar, SvdFormerTag>>;
+  using BaseType = FormerWrapper<Former<SvdFormerTag, _Scalar>>;
 
  public:
 
@@ -134,7 +133,7 @@ class Former<_Scalar, SvdFormerTag>
 
 /// @ingroup  isvd_former_module
 template <typename _Scalar>
-using SvdFormer = Former<_Scalar, SvdFormerTag>;
+using SvdFormer = Former<SvdFormerTag, _Scalar>;
 
 }  // namespace isvd
 

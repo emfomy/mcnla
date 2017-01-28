@@ -35,15 +35,15 @@ struct KolmogorovNagumoIntegratorTag {};
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
-  : public IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>> {
+class Integrator<KolmogorovNagumoIntegratorTag, _Scalar>
+  : public IntegratorWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Scalar>> {
 
-  friend IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>>;
+  friend IntegratorWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Scalar>>;
 
  private:
 
-  using ThisType = Integrator<_Scalar, KolmogorovNagumoIntegratorTag>;
-  using BaseType = IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>>;
+  using ThisType = Integrator<KolmogorovNagumoIntegratorTag, _Scalar>;
+  using BaseType = IntegratorWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Scalar>>;
 
  public:
 
@@ -161,7 +161,7 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
 
 /// @ingroup  isvd_integrator_module
 template <typename _Scalar>
-using KolmogorovNagumoIntegrator = Integrator<_Scalar, KolmogorovNagumoIntegratorTag>;
+using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Scalar>;
 
 }  // namespace isvd
 

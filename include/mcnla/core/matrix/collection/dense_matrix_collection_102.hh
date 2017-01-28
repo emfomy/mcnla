@@ -9,9 +9,7 @@
 #define MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_102_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <tuple>
-#include <mcnla/core/matrix/collection/dense_matrix_collection_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix.hpp>
+#include <mcnla/core/matrix/collection/dense_matrix_collection.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,37 +21,11 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseMatrixCollection102;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The traits of dense matrix collection with dimension order [1 0 2].
+/// @ingroup  matrix_collection_module
+/// The tag of dense matrix collection with dimension order [1 0 2].
 ///
-template <typename _Scalar>
-struct Traits<matrix::DenseMatrixCollection102<_Scalar>> {
-
-  using ScalarType  = _Scalar;
-  using RealType    = matrix::DenseMatrixCollection102<RealScalarT<_Scalar>>;
-  using ComplexType = matrix::DenseMatrixCollection102<ComplexScalarT<_Scalar>>;
-  using SetType     = matrix::DenseMatrixCollection102<_Scalar>;
-  using MatrixType  = matrix::DenseMatrixRowMajor<_Scalar>;
-
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
+struct DenseMatrixCollection102Tag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
@@ -62,20 +34,20 @@ namespace matrix {
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class DenseMatrixCollection102
-  : public DenseMatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>> {
+class DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>
+  : public MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>> {
 
-  friend DenseMatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>>;
 
  public:
 
-  using ScalarType = _Scalar;
-  using SetType    = DenseMatrixCollection102<_Scalar>;
-  using MatrixType = DenseMatrixRowMajor<_Scalar>;
+  using ScalarType     = _Scalar;
+  using CollectionType = DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>;
+  using MatrixType     = DenseMatrixRowMajor<_Scalar>;
 
  private:
 
-  using BaseType = DenseMatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
+  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>>;
 
  protected:
 
@@ -88,16 +60,16 @@ class DenseMatrixCollection102
  public:
 
   // Constructors
-  inline DenseMatrixCollection102() noexcept;
-  inline DenseMatrixCollection102( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline DenseMatrixCollection102( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  inline DenseMatrixCollection102( const index_t ncol, const MatrixType &data ) noexcept;
-  inline DenseMatrixCollection102( const DenseMatrixCollection102 &other ) noexcept;
-  inline DenseMatrixCollection102( DenseMatrixCollection102 &&other ) noexcept;
+  inline DenseMatrixCollection() noexcept;
+  inline DenseMatrixCollection( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline DenseMatrixCollection( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
+  inline DenseMatrixCollection( const index_t ncol, const MatrixType &data ) noexcept;
+  inline DenseMatrixCollection( const DenseMatrixCollection &other ) noexcept;
+  inline DenseMatrixCollection( DenseMatrixCollection &&other ) noexcept;
 
   // Operators
-  inline DenseMatrixCollection102& operator=( const DenseMatrixCollection102 &other ) noexcept;
-  inline DenseMatrixCollection102& operator=( DenseMatrixCollection102 &&other ) noexcept;
+  inline DenseMatrixCollection& operator=( const DenseMatrixCollection &other ) noexcept;
+  inline DenseMatrixCollection& operator=( DenseMatrixCollection &&other ) noexcept;
 
   // Gets information
   inline bool isShrunk() const noexcept;
@@ -112,12 +84,12 @@ class DenseMatrixCollection102
 
   // Gets collection
   using BaseType::operator();
-  inline       SetType operator()( const IdxRange &idxrange ) noexcept;
-  inline const SetType operator()( const IdxRange &idxrange ) const noexcept;
-  inline       SetType operator()( const char*, const char*, const IdxRange &idxrange ) noexcept;
-  inline const SetType operator()( const char*, const char*, const IdxRange &idxrange ) const noexcept;
-  inline       SetType operator()( const char*, const IdxRange &colrange, const char* ) noexcept;
-  inline const SetType operator()( const char*, const IdxRange &colrange, const char* ) const noexcept;
+  inline       CollectionType operator()( const IdxRange &idxrange ) noexcept;
+  inline const CollectionType operator()( const IdxRange &idxrange ) const noexcept;
+  inline       CollectionType operator()( const char*, const char*, const IdxRange &idxrange ) noexcept;
+  inline const CollectionType operator()( const char*, const char*, const IdxRange &idxrange ) const noexcept;
+  inline       CollectionType operator()( const char*, const IdxRange &colrange, const char* ) noexcept;
+  inline const CollectionType operator()( const char*, const IdxRange &colrange, const char* ) const noexcept;
 
   // Gets matrix
   inline       MatrixType unfold() noexcept;
@@ -135,6 +107,10 @@ class DenseMatrixCollection102
   inline const MatrixType getMatrixImpl( const index_t idx ) const noexcept;
 
 };
+
+/// @ingroup  matrix_collection_module
+template <typename _Scalar>
+using DenseMatrixCollection102 = DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>;
 
 }  // namespace matrix
 

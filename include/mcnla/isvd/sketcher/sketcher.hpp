@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, class _Tag> class Sketcher;
+template <class _Tag, typename _Scalar> class Sketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -36,8 +36,8 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The sketcher traits.
 ///
-template <typename _Scalar, class _Tag>
-struct Traits<isvd::Sketcher<_Scalar, _Tag>> {
+template <class _Tag, typename _Scalar>
+struct Traits<isvd::Sketcher<_Tag, _Scalar>> {
   using ScalarType = _Scalar;
 };
 
@@ -50,14 +50,15 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
-///
 /// The interface of iSVD sketcher.
 ///
-/// @tparam  _Scalar  The scalar type.
 /// @tparam  _Tag     The sketcher tag.
+/// @tparam  _Scalar  The scalar type.
 ///
-template <typename _Scalar, class _Tag>
-class Sketcher : public SketcherWrapper<Sketcher<_Scalar, _Tag>> {};
+template <class _Tag, typename _Scalar>
+class Sketcher : public SketcherWrapper<Sketcher<_Scalar, _Tag>> {
+  static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD sketcher!");
+};
 
 }  // namespace isvd
 

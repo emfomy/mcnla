@@ -94,9 +94,9 @@ void saveMatrixMarket(
 ///
 /// @todo  Write banner
 ///
-template <class _Derived>
+template <class _Tag, typename _Scalar>
 void saveMatrixMarket(
-    const DenseVectorCollectionWrapper<_Derived> &set,
+    const DenseVectorCollection<_Tag, _Scalar> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -110,11 +110,11 @@ void saveMatrixMarket(
   fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
-  fout << set.dim0() << " " << set.nvec() << std::endl;
+  fout << collection.dim0() << " " << collection.nvec() << std::endl;
 
   // Write values
-  for ( auto i = 0; i < set.nvec(); ++i ) {
-    auto vector = set(i);
+  for ( auto i = 0; i < collection.nvec(); ++i ) {
+    auto vector = collection(i);
     for ( auto value : vector ) {
       fout << value << std::endl;
     }
@@ -130,9 +130,9 @@ void saveMatrixMarket(
 ///
 /// @todo  Write banner
 ///
-template <class _Derived>
+template <class _Tag, typename _Scalar, Trans _trans>
 void saveMatrixMarket(
-    const DenseMatrixCollectionWrapper<_Derived> &set,
+    const DenseMatrixCollection<_Tag, _Scalar, _trans> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -146,11 +146,11 @@ void saveMatrixMarket(
   fout << "%%MatrixMarket cube array real general" << std::endl;
 
   // Write size
-  fout << set.dim0() << " " << set.dim1() << " " << set.nmat() << std::endl;
+  fout << collection.dim0() << " " << collection.dim1() << " " << collection.nmat() << std::endl;
 
   // Write values
-  for ( auto i = 0; i < set.nmat(); ++i ) {
-    auto matrix = set(i);
+  for ( auto i = 0; i < collection.nmat(); ++i ) {
+    auto matrix = collection(i);
     for ( auto value : matrix ) {
       fout << value;
     }
@@ -160,7 +160,7 @@ void saveMatrixMarket(
   fout.close();
 }
 
-}  // namespace matrix
+}  // namespace io
 
 }  // namespace mcnla
 

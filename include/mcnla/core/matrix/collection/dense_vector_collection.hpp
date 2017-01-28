@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/integrator.hpp
-/// @brief   The iSVD integrator interface.
+/// @file    include/mcnla/core/matrix/collection/dense_vector_collection.hpp
+/// @brief   The dense vector collection interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_INTEGRATOR_HPP_
-#define MCNLA_ISVD_INTEGRATOR_INTEGRATOR_HPP_
+#ifndef MCNLA_CORE_MATRIX_COLLECTION_DENSE_VECTOR_COLLECTION_HPP_
+#define MCNLA_CORE_MATRIX_COLLECTION_DENSE_VECTOR_COLLECTION_HPP_
 
-#include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/integrator/integrator_wrapper.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/collection/vector_collection_wrapper.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -18,15 +18,15 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
+//  The matrix namespace.
 //
-namespace isvd {
+namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Tag, typename _Scalar> class Integrator;
+template <class _Tag, typename _Scalar> class DenseVectorCollection;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-}  // namespace isvd
+}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -34,34 +34,38 @@ template <class _Tag, typename _Scalar> class Integrator;
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The integrator traits.
+/// The dense vector collection traits.
 ///
 template <class _Tag, typename _Scalar>
-struct Traits<isvd::Integrator<_Tag, _Scalar>> {
-  using ScalarType = _Scalar;
+struct Traits<matrix::DenseVectorCollection<_Tag, _Scalar>> {
+
+  using ScalarType     = _Scalar;
+  using CollectionType = matrix::DenseVectorCollection<_Tag, _Scalar>;
+  using VectorType     = matrix::DenseVector<_Scalar>;
+
 };
 
 }  // namespace traits
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
+//  The matrix namespace.
 //
-namespace isvd {
+namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
-/// The interface of iSVD integrator.
+/// @ingroup  matrix_collection_module
+/// The interface of dense vector collection.
 ///
-/// @tparam  _Tag     The integrator tag.
+/// @tparam  _Tag     The collection tag.
 /// @tparam  _Scalar  The scalar type.
 ///
 template <class _Tag, typename _Scalar>
-class Integrator : public IntegratorWrapper<Integrator<_Scalar, _Tag>> {
-  static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD integrator!");
+class DenseVectorCollection : public VectorCollectionWrapper<DenseVectorCollection<_Tag, _Scalar>> {
+  static_assert(traits::False<_Tag>::value, "Error using non-specialized dense vector collection!");
 };
 
-}  // namespace isvd
+}  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_INTEGRATOR_HPP_
+#endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_VECTOR_COLLECTION_HPP_

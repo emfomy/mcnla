@@ -21,5 +21,9 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
+  mcnla::matrix::DenseMatrixCollection120<double> collection;
+
+  mcnla::io::loadMatrixMarket(collection, argv[1]);
+
   return 0;
 }

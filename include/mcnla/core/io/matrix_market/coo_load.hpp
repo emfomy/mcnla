@@ -133,7 +133,7 @@ inline void loadMatrixMarket(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-}  // namespace matrix
+}  // namespace io
 
 }  // namespace mcnla
 

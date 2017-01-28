@@ -39,14 +39,14 @@ struct GaussianProjectionSketcherTag {};
 /// @tparam  _exponent  exponent of the power method.
 ///
 template <typename _Scalar, index_t _exponent>
-class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
-  : public SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>> {
+class Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>
+  : public SketcherWrapper<Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>> {
 
-  friend SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>>;
+  friend SketcherWrapper<Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>>;
 
  private:
 
-  using BaseType = SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>>;
+  using BaseType = SketcherWrapper<Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>>;
 
  public:
 
@@ -110,7 +110,7 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
 
 /// @ingroup  isvd_sketcher_module
 template <typename _Scalar, index_t _exponent = 0>
-using GaussianProjectionSketcher = Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>;
+using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>;
 
 }  // namespace isvd
 

@@ -26,7 +26,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::SketcherWrapper::SketcherWrapper
 ///
 template <typename _Scalar, index_t _exponent>
-Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::Sketcher(
+Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::Sketcher(
     const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root,
@@ -39,7 +39,7 @@ Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::Sketcher(
 /// @copydoc  mcnla::isvd::SketcherWrapper::initialize
 ///
 template <typename _Scalar, index_t _exponent>
-void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::initializeImpl() noexcept {
+void Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::initializeImpl() noexcept {
 
   const auto ncol            = parameters_.ncol();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -56,7 +56,7 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::initializeImpl
 /// @copydoc  mcnla::isvd::SketcherWrapper::sketch
 ///
 template <typename _Scalar, index_t _exponent> template <class _Matrix>
-void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::sketchImpl(
+void Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::sketchImpl(
     const _Matrix &matrix_a,
           DenseMatrixCollection120<ScalarType> &collection_q
 ) noexcept {
@@ -91,7 +91,7 @@ void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::sketchImpl(
 ///
 ///
 template <typename _Scalar, index_t _exponent>
-std::ostream& Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::outputNameImpl(
+std::ostream& Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_ << " (Power " << _exponent << ")");
@@ -101,7 +101,7 @@ std::ostream& Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::outpu
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
 template <typename _Scalar, index_t _exponent>
-double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::timeImpl() const noexcept {
+double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::timeImpl() const noexcept {
   return time2_-time0_;
 }
 
@@ -109,7 +109,7 @@ double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::timeImpl() c
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
 template <typename _Scalar, index_t _exponent>
-double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time1() const noexcept {
+double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::time1() const noexcept {
   return time1_-time0_;
 }
 
@@ -117,7 +117,7 @@ double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time1() cons
 /// @copydoc  mcnla::isvd::SketcherWrapper::time
 ///
 template <typename _Scalar, index_t _exponent>
-double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time2() const noexcept {
+double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::time2() const noexcept {
   return time2_-time1_;
 }
 
@@ -125,7 +125,7 @@ double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time2() cons
 /// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
 ///
 template <typename _Scalar, index_t _exponent>
-void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::setSeedImpl(
+void Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>::setSeedImpl(
     const index_t seed
 ) noexcept {
   random_driver_.setSeed(seed);

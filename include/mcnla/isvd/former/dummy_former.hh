@@ -30,20 +30,19 @@ struct DummyFormerTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-///
 /// The dummy former.
 ///
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class Former<_Scalar, DummyFormerTag>
-  : public FormerWrapper<Former<_Scalar, DummyFormerTag>> {
+class Former<DummyFormerTag, _Scalar>
+  : public FormerWrapper<Former<DummyFormerTag, _Scalar>> {
 
-  friend FormerWrapper<Former<_Scalar, DummyFormerTag>>;
+  friend FormerWrapper<Former<DummyFormerTag, _Scalar>>;
 
  private:
 
-  using BaseType = FormerWrapper<Former<_Scalar, DummyFormerTag>>;
+  using BaseType = FormerWrapper<Former<DummyFormerTag, _Scalar>>;
 
  public:
 
@@ -86,7 +85,7 @@ class Former<_Scalar, DummyFormerTag>
 
 /// @ingroup  isvd_former_module
 template <typename _Scalar>
-using DummyFormer = Former<_Scalar, DummyFormerTag>;
+using DummyFormer = Former<DummyFormerTag, _Scalar>;
 
 }  // namespace isvd
 

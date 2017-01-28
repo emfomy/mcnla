@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::IntegratorWrapper::IntegratorWrapper
 ///
 template <typename _Scalar>
-Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::Integrator(
+Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::Integrator(
     const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
@@ -36,7 +36,7 @@ Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::Integrator(
 /// @copydoc  mcnla::isvd::IntegratorWrapper::initialize
 ///
 template <typename _Scalar>
-void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::initializeImpl() noexcept {
+void Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::initializeImpl() noexcept {
 
   const auto mpi_size        = mpi::commSize(mpi_comm_);
   const auto nrow            = parameters_.nrow();
@@ -82,7 +82,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::initializeImpl() noexce
 /// @copydoc  mcnla::isvd::IntegratorWrapper::integrate
 ///
 template <typename _Scalar>
-void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcept {
+void Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
   const auto mpi_size        = mpi::commSize(mpi_comm_);
@@ -186,7 +186,7 @@ void Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::integrateImpl() noexcep
 ///
 ///
 template <typename _Scalar>
-std::ostream& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::outputNameImpl(
+std::ostream& Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_);
@@ -196,7 +196,7 @@ std::ostream& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::outputNameImpl
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::timeImpl() const noexcept {
+double Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::timeImpl() const noexcept {
   return time3_-time0_;
 }
 
@@ -204,7 +204,7 @@ double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::timeImpl() const noex
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time1() const noexcept {
+double Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::time1() const noexcept {
   return time1_-time0_;
 }
 
@@ -212,7 +212,7 @@ double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time1() const noexcep
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time2() const noexcept {
+double Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::time2() const noexcept {
   return time2_-time1_;
 }
 
@@ -220,7 +220,7 @@ double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time2() const noexcep
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time3() const noexcept {
+double Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::time3() const noexcept {
   return time3_-time2_;
 }
 
@@ -228,7 +228,7 @@ double Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::time3() const noexcep
 /// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
 ///
 template <typename _Scalar>
-DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::collectionQImpl() noexcept {
+DenseMatrixCollection120<_Scalar>& Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::collectionQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return collection_q_cut_;
 }
@@ -237,7 +237,7 @@ DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegrato
 /// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
 ///
 template <typename _Scalar>
-const DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::collectionQImpl() const noexcept {
+const DenseMatrixCollection120<_Scalar>& Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::collectionQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return collection_q_cut_;
 }
@@ -246,7 +246,7 @@ const DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, KolmogorovNagumoInt
 /// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
 template <typename _Scalar>
-DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::matrixQImpl() noexcept {
+DenseMatrixRowMajor<_Scalar>& Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::matrixQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_cut_;
 }
@@ -255,7 +255,7 @@ DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
 /// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
 template <typename _Scalar>
-const DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, KolmogorovNagumoIntegratorTag>::matrixQImpl() const noexcept {
+const DenseMatrixRowMajor<_Scalar>& Integrator<KolmogorovNagumoIntegratorTag, _Scalar>::matrixQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qc_cut_;
 }

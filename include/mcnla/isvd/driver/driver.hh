@@ -30,7 +30,6 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_driver_module
-///
 /// The Integrated Singular Value Decomposition driver.
 ///
 /// @tparam  _Scalar             The scalar type.
@@ -55,10 +54,10 @@ class Driver {
   using RealScalarType = RealScalarT<_Scalar>;
 
   using ParametersType     = Parameters<ScalarType>;
-  using SketcherType       = Sketcher<ScalarType, _SketcherTag>;
-  using OrthogonalizerType = Orthogonalizer<ScalarType, _OrthogonalizerTag>;
-  using IntegratorType     = Integrator<ScalarType, _IntegratorTag>;
-  using FormerType         = Former<ScalarType, _FormerTag>;
+  using SketcherType       = Sketcher<_SketcherTag, ScalarType>;
+  using OrthogonalizerType = Orthogonalizer<_OrthogonalizerTag, ScalarType>;
+  using IntegratorType     = Integrator<_IntegratorTag, ScalarType>;
+  using FormerType         = Former<_FormerTag, ScalarType>;
 
  protected:
 

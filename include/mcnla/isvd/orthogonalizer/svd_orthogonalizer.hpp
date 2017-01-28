@@ -26,7 +26,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::OrthogonalizerWrapper::OrthogonalizerWrapper
 ///
 template <typename _Scalar>
-Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::Orthogonalizer(
+Orthogonalizer<SvdOrthogonalizerTag, _Scalar>::Orthogonalizer(
     const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
@@ -37,7 +37,7 @@ Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::OrthogonalizerWrapper::initialize
 ///
 template <typename _Scalar>
-void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::initializeImpl() noexcept {
+void Orthogonalizer<SvdOrthogonalizerTag, _Scalar>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
@@ -53,7 +53,7 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::initializeImpl() noexcept {
 /// @copydoc  mcnla::isvd::OrthogonalizerWrapper::orthogonalize
 ///
 template <typename _Scalar>
-void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
+void Orthogonalizer<SvdOrthogonalizerTag, _Scalar>::orthogonalizeImpl(
           DenseMatrixCollection120<ScalarType> &collection_q
 ) noexcept {
 
@@ -79,7 +79,7 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
 ///
 ///
 template <typename _Scalar>
-std::ostream&Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::outputNameImpl(
+std::ostream&Orthogonalizer<SvdOrthogonalizerTag, _Scalar>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_);
@@ -89,7 +89,7 @@ std::ostream&Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::outputNameImpl(
 /// @copydoc  mcnla::isvd::OrthogonalizerWrapper::time
 ///
 template <typename _Scalar>
-double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::timeImpl() const noexcept {
+double Orthogonalizer<SvdOrthogonalizerTag, _Scalar>::timeImpl() const noexcept {
   return time1_-time0_;
 }
 
@@ -97,7 +97,7 @@ double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::timeImpl() const noexcept 
 /// @copydoc  mcnla::isvd::OrthogonalizerWrapper::time
 ///
 template <typename _Scalar>
-double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::time1() const noexcept {
+double Orthogonalizer<SvdOrthogonalizerTag, _Scalar>::time1() const noexcept {
   return time1_-time0_;
 }
 

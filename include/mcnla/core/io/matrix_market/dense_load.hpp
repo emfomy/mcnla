@@ -134,9 +134,9 @@ inline void loadMatrixMarket(
 ///
 /// @todo  Read banner
 ///
-template <class _Derived>
+template <class _Tag, typename _Scalar>
 void loadMatrixMarket(
-    DenseVectorCollectionWrapper<_Derived> &collection,
+    DenseVectorCollection<_Tag, _Scalar> &collection,
     const char *file
 ) noexcept {
   auto &derived = collection.derived();
@@ -173,9 +173,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Derived>
+template <class _Tag, typename _Scalar>
 inline void loadMatrixMarket(
-    DenseVectorCollectionWrapper<_Derived> &&collection,
+    DenseVectorCollection<_Tag, _Scalar> &&collection,
     const char *file
 ) noexcept {
   loadMatrixMarket(collection, file);
@@ -190,9 +190,9 @@ inline void loadMatrixMarket(
 ///
 /// @todo  Read banner
 ///
-template <class _Derived>
+template <class _Tag, typename _Scalar, Trans _trans>
 void loadMatrixMarket(
-    DenseMatrixCollectionWrapper<_Derived> &collection,
+    DenseMatrixCollection<_Tag, _Scalar, _trans> &collection,
     const char *file
 ) noexcept {
   auto &derived = collection.derived();
@@ -210,7 +210,7 @@ void loadMatrixMarket(
   index_t m, n, k;
   fin >> m >> n >> k;
   if ( derived.unfold().isEmpty() ) {
-    if ( !isTrans(MatrixT<_Derived>::trans) ) {
+    if ( !isTrans(_trans) ) {
       derived.reconstruct(m, n, k);
     } else {
       derived.reconstruct(n, m, k);
@@ -233,16 +233,16 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Derived>
+template <class _Tag, typename _Scalar, Trans _trans>
 inline void loadMatrixMarket(
-    DenseMatrixCollectionWrapper<_Derived> &&collection,
+    DenseMatrixCollection<_Tag, _Scalar, _trans> &&collection,
     const char *file
 ) noexcept {
   loadMatrixMarket(collection, file);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-}  // namespace matrix
+}  // namespace io
 
 }  // namespace mcnla
 

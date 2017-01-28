@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::IntegratorWrapper::IntegratorWrapper
 ///
 template <typename _Scalar>
-Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::Integrator(
+Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::Integrator(
     const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
@@ -36,7 +36,7 @@ Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::Integrator(
 /// @copydoc  mcnla::isvd::IntegratorWrapper::initialize
 ///
 template <typename _Scalar>
-void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::initializeImpl() noexcept {
+void Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::initializeImpl() noexcept {
 
   const auto mpi_size        = mpi::commSize(mpi_comm_);
   const auto nrow            = parameters_.nrow();
@@ -79,7 +79,7 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::initializeImpl() noexcept 
 /// @copydoc  mcnla::isvd::IntegratorWrapper::integrate
 ///
 template <typename _Scalar>
-void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
+void Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::integrateImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
 
   const auto mpi_size        = mpi::commSize(mpi_comm_);
@@ -163,7 +163,7 @@ void Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::integrateImpl() noexcept {
 ///
 ///
 template <typename _Scalar>
-std::ostream& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::outputNameImpl(
+std::ostream& Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_);
@@ -173,7 +173,7 @@ std::ostream& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::outputNameImpl(
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::timeImpl() const noexcept {
+double Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::timeImpl() const noexcept {
   return time5_-time0_;
 }
 
@@ -181,7 +181,7 @@ double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::timeImpl() const noexcep
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time1() const noexcept {
+double Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::time1() const noexcept {
   return time1_-time0_;
 }
 
@@ -189,7 +189,7 @@ double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time1() const noexcept {
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time2() const noexcept {
+double Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::time2() const noexcept {
   return time2_-time1_;
 }
 
@@ -197,7 +197,7 @@ double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time2() const noexcept {
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time3() const noexcept {
+double Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::time3() const noexcept {
   return time3_-time2_;
 }
 
@@ -205,7 +205,7 @@ double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time3() const noexcept {
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time4() const noexcept {
+double Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::time4() const noexcept {
   return time4_-time3_;
 }
 
@@ -213,7 +213,7 @@ double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time4() const noexcept {
 /// @copydoc  mcnla::isvd::IntegratorWrapper::time
 ///
 template <typename _Scalar>
-double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time5() const noexcept {
+double Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::time5() const noexcept {
   return time5_-time4_;
 }
 
@@ -221,7 +221,7 @@ double Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::time5() const noexcept {
 /// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
 ///
 template <typename _Scalar>
-DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::collectionQImpl() noexcept {
+DenseMatrixCollection120<_Scalar>& Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::collectionQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return collection_q_cut_;
 }
@@ -230,7 +230,7 @@ DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTa
 /// @copydoc  mcnla::isvd::IntegratorWrapper::collectionQ
 ///
 template <typename _Scalar>
-const DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::collectionQImpl() const noexcept {
+const DenseMatrixCollection120<_Scalar>& Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::collectionQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return collection_q_cut_;
 }
@@ -239,7 +239,7 @@ const DenseMatrixCollection120<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegr
 /// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
 template <typename _Scalar>
-DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::matrixQImpl() noexcept {
+DenseMatrixRowMajor<_Scalar>& Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::matrixQImpl() noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qbar_;
 }
@@ -248,7 +248,7 @@ DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::m
 /// @copydoc  mcnla::isvd::IntegratorWrapper::matrixQ
 ///
 template <typename _Scalar>
-const DenseMatrixRowMajor<_Scalar>& Integrator<_Scalar, ExtrinsicMeanIntegratorTag>::matrixQImpl() const noexcept {
+const DenseMatrixRowMajor<_Scalar>& Integrator<ExtrinsicMeanIntegratorTag, _Scalar>::matrixQImpl() const noexcept {
   mcnla_assert_true(parameters_.isInitialized());
   return matrix_qbar_;
 }

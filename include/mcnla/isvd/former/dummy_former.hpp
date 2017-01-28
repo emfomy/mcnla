@@ -24,7 +24,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::FormerWrapper::FormerWrapper
 ///
 template <typename _Scalar>
-Former<_Scalar, DummyFormerTag>::Former(
+Former<DummyFormerTag, _Scalar>::Former(
     const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
@@ -35,13 +35,13 @@ Former<_Scalar, DummyFormerTag>::Former(
 /// @copydoc  mcnla::isvd::FormerWrapper::initialize
 ///
 template <typename _Scalar>
-void Former<_Scalar, DummyFormerTag>::initializeImpl() noexcept {}
+void Former<DummyFormerTag, _Scalar>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::FormerWrapper::form
 ///
 template <typename _Scalar> template <class _Matrix>
-void Former<_Scalar, DummyFormerTag>::formImpl(
+void Former<DummyFormerTag, _Scalar>::formImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<ScalarType> &matrix_q
 ) noexcept {
@@ -54,7 +54,7 @@ void Former<_Scalar, DummyFormerTag>::formImpl(
 ///
 ///
 template <typename _Scalar>
-std::ostream&Former<_Scalar, DummyFormerTag>::outputNameImpl(
+std::ostream&Former<DummyFormerTag, _Scalar>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_);
@@ -64,26 +64,26 @@ std::ostream&Former<_Scalar, DummyFormerTag>::outputNameImpl(
 /// @copydoc  mcnla::isvd::FormerWrapper::time
 ///
 template <typename _Scalar>
-double Former<_Scalar, DummyFormerTag>::timeImpl() const noexcept {
+double Former<DummyFormerTag, _Scalar>::timeImpl() const noexcept {
   return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  Former<_Scalar, DummyFormerTag>::vectorSImpl
+/// @fn  Former<DummyFormerTag, _Scalar>::vectorSImpl
 /// @copydoc  mcnla::isvd::FormerWrapper::vectorS
 ///
 /// @attention  This routine is unavailable.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  Former<_Scalar, DummyFormerTag>::matrixUImpl
+/// @fn  Former<DummyFormerTag, _Scalar>::matrixUImpl
 /// @copydoc  mcnla::isvd::FormerWrapper::matrixU
 ///
 /// @attention  This routine is unavailable.
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @fn  Former<_Scalar, DummyFormerTag>::matrixVtImpl
+/// @fn  Former<DummyFormerTag, _Scalar>::matrixVtImpl
 /// @copydoc  mcnla::isvd::FormerWrapper::matrixVt
 ///
 /// @attention  This routine is unavailable.

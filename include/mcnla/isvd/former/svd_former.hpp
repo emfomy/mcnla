@@ -24,7 +24,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::FormerWrapper::FormerWrapper
 ///
 template <typename _Scalar>
-Former<_Scalar, SvdFormerTag>::Former(
+Former<SvdFormerTag, _Scalar>::Former(
     const ParametersType &parameters,
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
@@ -35,7 +35,7 @@ Former<_Scalar, SvdFormerTag>::Former(
 /// @copydoc  mcnla::isvd::FormerWrapper::initialize
 ///
 template <typename _Scalar>
-void Former<_Scalar, SvdFormerTag>::initializeImpl() noexcept {
+void Former<SvdFormerTag, _Scalar>::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -62,7 +62,7 @@ void Former<_Scalar, SvdFormerTag>::initializeImpl() noexcept {
 /// @copydoc  mcnla::isvd::FormerWrapper::form
 ///
 template <typename _Scalar> template <class _Matrix>
-void Former<_Scalar, SvdFormerTag>::formImpl(
+void Former<SvdFormerTag, _Scalar>::formImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<ScalarType> &matrix_q
 ) noexcept {
@@ -99,7 +99,7 @@ void Former<_Scalar, SvdFormerTag>::formImpl(
 ///
 ///
 template <typename _Scalar>
-std::ostream&Former<_Scalar, SvdFormerTag>::outputNameImpl(
+std::ostream&Former<SvdFormerTag, _Scalar>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_);
@@ -109,7 +109,7 @@ std::ostream&Former<_Scalar, SvdFormerTag>::outputNameImpl(
 /// @copydoc  mcnla::isvd::FormerWrapper::time
 ///
 template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::timeImpl() const noexcept {
+double Former<SvdFormerTag, _Scalar>::timeImpl() const noexcept {
   return time3_-time0_;
 }
 
@@ -117,7 +117,7 @@ double Former<_Scalar, SvdFormerTag>::timeImpl() const noexcept {
 /// @copydoc  mcnla::isvd::FormerWrapper::time
 ///
 template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::time1() const noexcept {
+double Former<SvdFormerTag, _Scalar>::time1() const noexcept {
   return time1_-time0_;
 }
 
@@ -125,7 +125,7 @@ double Former<_Scalar, SvdFormerTag>::time1() const noexcept {
 /// @copydoc  mcnla::isvd::FormerWrapper::time
 ///
 template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::time2() const noexcept {
+double Former<SvdFormerTag, _Scalar>::time2() const noexcept {
   return time2_-time1_;
 }
 
@@ -133,7 +133,7 @@ double Former<_Scalar, SvdFormerTag>::time2() const noexcept {
 /// @copydoc  mcnla::isvd::FormerWrapper::time
 ///
 template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::time3() const noexcept {
+double Former<SvdFormerTag, _Scalar>::time3() const noexcept {
   return time3_-time2_;
 }
 
@@ -141,7 +141,7 @@ double Former<_Scalar, SvdFormerTag>::time3() const noexcept {
 /// @copydoc  mcnla::isvd::FormerWrapper::vectorS
 ///
 template <typename _Scalar>
-const DenseVector<RealScalarT<_Scalar>>& Former<_Scalar, SvdFormerTag>::vectorSImpl() const noexcept {
+const DenseVector<RealScalarT<_Scalar>>& Former<SvdFormerTag, _Scalar>::vectorSImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return vector_s_cut_;
 }
@@ -150,7 +150,7 @@ const DenseVector<RealScalarT<_Scalar>>& Former<_Scalar, SvdFormerTag>::vectorSI
 /// @copydoc  mcnla::isvd::FormerWrapper::matrixU
 ///
 template <typename _Scalar>
-const DenseMatrixColMajor<_Scalar>& Former<_Scalar, SvdFormerTag>::matrixUImpl() const noexcept {
+const DenseMatrixColMajor<_Scalar>& Former<SvdFormerTag, _Scalar>::matrixUImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return matrix_u_cut_;
 }
@@ -159,7 +159,7 @@ const DenseMatrixColMajor<_Scalar>& Former<_Scalar, SvdFormerTag>::matrixUImpl()
 /// @copydoc  mcnla::isvd::FormerWrapper::matrixVt
 ///
 template <typename _Scalar>
-const DenseMatrixColMajor<_Scalar>& Former<_Scalar, SvdFormerTag>::matrixVtImpl() const noexcept {
+const DenseMatrixColMajor<_Scalar>& Former<SvdFormerTag, _Scalar>::matrixVtImpl() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return matrix_vt_cut_;
 }

@@ -81,7 +81,9 @@ namespace traits {
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-struct MpiScalarTraits {};
+struct MpiScalarTraits {
+  static_assert(std::integral_constant<_Scalar, false>::value, "Error using non-specialized MPI data type traits!");
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The 8-bit character MPI data type traits.

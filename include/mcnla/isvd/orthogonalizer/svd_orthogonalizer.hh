@@ -35,14 +35,14 @@ struct SvdOrthogonalizerTag {};
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
-  : public OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>> {
+class Orthogonalizer<SvdOrthogonalizerTag, _Scalar>
+  : public OrthogonalizerWrapper<Orthogonalizer<SvdOrthogonalizerTag, _Scalar>> {
 
-  friend OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
+  friend OrthogonalizerWrapper<Orthogonalizer<SvdOrthogonalizerTag, _Scalar>>;
 
  private:
 
-  using BaseType = OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
+  using BaseType = OrthogonalizerWrapper<Orthogonalizer<SvdOrthogonalizerTag, _Scalar>>;
 
  public:
 
@@ -104,7 +104,7 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
 
 /// @ingroup  isvd_orthogonalizer_module
 template <typename _Scalar>
-using SvdOrthogonalizer = Orthogonalizer<_Scalar, SvdOrthogonalizerTag>;
+using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Scalar>;
 
 }  // namespace isvd
 

@@ -35,14 +35,14 @@ struct ColumnSamplingSketcherTag {};
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class Sketcher<_Scalar, ColumnSamplingSketcherTag>
-  : public SketcherWrapper<Sketcher<_Scalar, ColumnSamplingSketcherTag>> {
+class Sketcher<ColumnSamplingSketcherTag, _Scalar>
+  : public SketcherWrapper<Sketcher<ColumnSamplingSketcherTag, _Scalar>> {
 
-  friend SketcherWrapper<Sketcher<_Scalar, ColumnSamplingSketcherTag>>;
+  friend SketcherWrapper<Sketcher<ColumnSamplingSketcherTag, _Scalar>>;
 
  private:
 
-  using BaseType = SketcherWrapper<Sketcher<_Scalar, ColumnSamplingSketcherTag>>;
+  using BaseType = SketcherWrapper<Sketcher<ColumnSamplingSketcherTag, _Scalar>>;
 
  public:
 
@@ -106,7 +106,7 @@ class Sketcher<_Scalar, ColumnSamplingSketcherTag>
 
 /// @ingroup  isvd_sketcher_module
 template <typename _Scalar>
-using ColumnSamplingSketcher = Sketcher<_Scalar, ColumnSamplingSketcherTag>;
+using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Scalar>;
 
 }  // namespace isvd
 

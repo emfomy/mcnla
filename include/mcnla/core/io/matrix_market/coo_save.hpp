@@ -47,7 +47,7 @@ void saveMatrixMarket(
   fout << vector.dim0() << " 1 " << vector.nnz() << std::endl;
 
   // Write values
-  for ( index_t i = 0; i < nnz; ++i ) {
+  for ( index_t i = 0; i < vector.nnz(); ++i ) {
     fout << vector.idx0Ptr()[i]+1 << 1 << vector.valPtr()[i] << std::endl;
   }
 
@@ -81,8 +81,8 @@ void saveMatrixMarket(
   fout << matrix.dim0() << " " << matrix.dim1() << " " << matrix.nnz() << std::endl;
 
   // Write
-  for ( index_t i = 0; i < nnz; ++i ) {
-    fout << matrix.idx0Ptr()[i]+1 << matrix.idx1Ptr()[i]+1 << vector.valPtr()[i] << std::endl;
+  for ( index_t i = 0; i < matrix.nnz(); ++i ) {
+    fout << matrix.idx0Ptr()[i]+1 << matrix.idx1Ptr()[i]+1 << matrix.valPtr()[i] << std::endl;
   }
 
   // Close file

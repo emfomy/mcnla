@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_wrapper.hh
-/// @brief   The definition of dense matrix collection wrapper.
+/// @file    include/mcnla/core/matrix/collection/matrix_collection_wrapper.hh
+/// @brief   The definition of matrix collection wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_WRAPPER_HH_
-#define MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_WRAPPER_HH_
+#ifndef MCNLA_CORE_MATRIX_COLLECTION_MATRIX_COLLECTION_WRAPPER_HH_
+#define MCNLA_CORE_MATRIX_COLLECTION_MATRIX_COLLECTION_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
 #include <tuple>
@@ -26,14 +26,12 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
-/// The dense matrix collection wrapper.
+/// The matrix collection wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseMatrixCollectionWrapper : public utility::CrtpBase<_Derived, DenseMatrixCollectionWrapper<_Derived>> {
-
-  assertDenseMatrix(MatrixT<_Derived>);
+class MatrixCollectionWrapper : public utility::CrtpBase<_Derived, MatrixCollectionWrapper<_Derived>> {
 
  private:
 
@@ -42,7 +40,7 @@ class DenseMatrixCollectionWrapper : public utility::CrtpBase<_Derived, DenseMat
  protected:
 
   // Constructors
-  inline DenseMatrixCollectionWrapper() noexcept;
+  inline MatrixCollectionWrapper() noexcept;
 
  public:
 
@@ -62,4 +60,4 @@ class DenseMatrixCollectionWrapper : public utility::CrtpBase<_Derived, DenseMat
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_WRAPPER_HH_
+#endif  // MCNLA_CORE_MATRIX_COLLECTION_MATRIX_COLLECTION_WRAPPER_HH_

@@ -25,7 +25,10 @@ namespace traits {
 ///
 /// @tparam  _Derived  The derived type.
 ///
-template <typename _Derived> struct Traits {};
+template <typename _Derived>
+  struct Traits {
+  static_assert(std::integral_constant<_Derived, false>::value, "Error using non-specialized traits!");
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
@@ -57,6 +60,22 @@ struct ScalarTraits<std::complex<_Scalar>> {
   static constexpr bool is_complex = true;
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The false type.
+///
+template <class _Type>
+struct True {
+  static constexpr bool value = true;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The false type.
+///
+template <class _Type>
+struct False {
+  static constexpr bool value = false;
+};
+
 }  // namespace traits
 
 /// @ingroup  utility_module
@@ -81,7 +100,7 @@ using MatrixT = typename traits::Traits<_Derived>::MatrixType;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using SetT = typename traits::Traits<_Derived>::SetType;
+using CollectionT = typename traits::Traits<_Derived>::CollectionType;
 
 /// @ingroup  utility_module
 template <class _Derived>

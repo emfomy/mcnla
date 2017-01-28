@@ -12,7 +12,7 @@ Monte Carlo Numerical Linear Algebra Package
 ### Author
 * Mu Yang <<emfomy@gmail.com>>
 
-### Tutorial
+### Documentation
 * @ref tutorial_main
 
 ## Requirements

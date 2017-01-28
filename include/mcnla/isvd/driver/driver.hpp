@@ -96,7 +96,7 @@ void Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 /// @brief  Gets the sketcher.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Sketcher<_Scalar, _SketcherTag>&
+Sketcher<_SketcherTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
 ) noexcept {
   return sketcher_;
@@ -106,7 +106,7 @@ Sketcher<_Scalar, _SketcherTag>&
 /// @copydoc  sketcher
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Sketcher<_Scalar, _SketcherTag>&
+const Sketcher<_SketcherTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
 ) const noexcept {
   return sketcher_;
@@ -116,7 +116,7 @@ const Sketcher<_Scalar, _SketcherTag>&
 /// @brief  Gets the orthogonalizer.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Orthogonalizer<_Scalar, _OrthogonalizerTag>&
+Orthogonalizer<_OrthogonalizerTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) noexcept {
   return orthogonalizer_;
@@ -126,7 +126,7 @@ Orthogonalizer<_Scalar, _OrthogonalizerTag>&
 /// @copydoc  orthogonalizer
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Orthogonalizer<_Scalar, _OrthogonalizerTag>&
+const Orthogonalizer<_OrthogonalizerTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) const noexcept {
   return orthogonalizer_;
@@ -136,7 +136,7 @@ const Orthogonalizer<_Scalar, _OrthogonalizerTag>&
 /// @brief  Gets the integrator.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Integrator<_Scalar, _IntegratorTag>&
+Integrator<_IntegratorTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
 ) noexcept {
   return integrator_;
@@ -146,7 +146,7 @@ Integrator<_Scalar, _IntegratorTag>&
 /// @copydoc  integrator
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Integrator<_Scalar, _IntegratorTag>&
+const Integrator<_IntegratorTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
 ) const noexcept {
   return integrator_;
@@ -156,7 +156,7 @@ const Integrator<_Scalar, _IntegratorTag>&
 /// @brief  Gets the former.
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Former<_Scalar, _FormerTag>&
+Former<_FormerTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
 ) noexcept {
   return former_;
@@ -166,7 +166,7 @@ Former<_Scalar, _FormerTag>&
 /// @copydoc  former
 ///
 template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Former<_Scalar, _FormerTag>&
+const Former<_FormerTag, _Scalar>&
     Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
 ) const noexcept {
   return former_;

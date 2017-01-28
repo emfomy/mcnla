@@ -35,15 +35,15 @@ struct ExtrinsicMeanIntegratorTag {};
 /// @tparam  _Scalar  The scalar type.
 ///
 template <typename _Scalar>
-class Integrator<_Scalar, ExtrinsicMeanIntegratorTag>
-  : public IntegratorWrapper<Integrator<_Scalar, ExtrinsicMeanIntegratorTag>> {
+class Integrator<ExtrinsicMeanIntegratorTag, _Scalar>
+  : public IntegratorWrapper<Integrator<ExtrinsicMeanIntegratorTag, _Scalar>> {
 
-  friend IntegratorWrapper<Integrator<_Scalar, ExtrinsicMeanIntegratorTag>>;
+  friend IntegratorWrapper<Integrator<ExtrinsicMeanIntegratorTag, _Scalar>>;
 
  private:
 
-  using ThisType = Integrator<_Scalar, ExtrinsicMeanIntegratorTag>;
-  using BaseType = IntegratorWrapper<Integrator<_Scalar, ExtrinsicMeanIntegratorTag>>;
+  using ThisType = Integrator<ExtrinsicMeanIntegratorTag, _Scalar>;
+  using BaseType = IntegratorWrapper<Integrator<ExtrinsicMeanIntegratorTag, _Scalar>>;
 
  public:
 
@@ -166,7 +166,7 @@ class Integrator<_Scalar, ExtrinsicMeanIntegratorTag>
 
 /// @ingroup  isvd_integrator_module
 template <typename _Scalar>
-using ExtrinsicMeanIntegrator = Integrator<_Scalar, ExtrinsicMeanIntegratorTag>;
+using ExtrinsicMeanIntegrator = Integrator<ExtrinsicMeanIntegratorTag, _Scalar>;
 
 }  // namespace isvd
 
