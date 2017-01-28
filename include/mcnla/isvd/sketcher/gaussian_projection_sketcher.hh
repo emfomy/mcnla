@@ -31,6 +31,10 @@ namespace isvd {
 template <index_t _exponent = 0>
 struct GaussianProjectionSketcherTag {};
 
+/// @ingroup  isvd_sketcher_module
+template <typename _Scalar, index_t _exponent = 0>
+using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher.
@@ -40,13 +44,13 @@ struct GaussianProjectionSketcherTag {};
 ///
 template <typename _Scalar, index_t _exponent>
 class Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>
-  : public SketcherWrapper<Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>> {
+  : public SketcherWrapper<GaussianProjectionSketcher<_Scalar, _exponent>> {
 
-  friend SketcherWrapper<Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>>;
+  friend SketcherWrapper<GaussianProjectionSketcher<_Scalar, _exponent>>;
 
  private:
 
-  using BaseType = SketcherWrapper<Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>>;
+  using BaseType = SketcherWrapper<GaussianProjectionSketcher<_Scalar, _exponent>>;
 
  public:
 
@@ -107,10 +111,6 @@ class Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>
   inline void setSeedImpl( const index_t seed ) noexcept;
 
 };
-
-/// @ingroup  isvd_sketcher_module
-template <typename _Scalar, index_t _exponent = 0>
-using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>;
 
 }  // namespace isvd
 

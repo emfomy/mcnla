@@ -28,6 +28,10 @@ namespace isvd {
 ///
 struct SvdOrthogonalizerTag {};
 
+/// @ingroup  isvd_orthogonalizer_module
+template <typename _Scalar>
+using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Scalar>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
 /// The SVD orthogonalizer.
@@ -36,13 +40,13 @@ struct SvdOrthogonalizerTag {};
 ///
 template <typename _Scalar>
 class Orthogonalizer<SvdOrthogonalizerTag, _Scalar>
-  : public OrthogonalizerWrapper<Orthogonalizer<SvdOrthogonalizerTag, _Scalar>> {
+  : public OrthogonalizerWrapper<SvdOrthogonalizer<_Scalar>> {
 
-  friend OrthogonalizerWrapper<Orthogonalizer<SvdOrthogonalizerTag, _Scalar>>;
+  friend OrthogonalizerWrapper<SvdOrthogonalizer<_Scalar>>;
 
  private:
 
-  using BaseType = OrthogonalizerWrapper<Orthogonalizer<SvdOrthogonalizerTag, _Scalar>>;
+  using BaseType = OrthogonalizerWrapper<SvdOrthogonalizer<_Scalar>>;
 
  public:
 
@@ -101,10 +105,6 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Scalar>
   inline double timeImpl() const noexcept;
 
 };
-
-/// @ingroup  isvd_orthogonalizer_module
-template <typename _Scalar>
-using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Scalar>;
 
 }  // namespace isvd
 

@@ -28,6 +28,10 @@ namespace isvd {
 ///
 struct ExtrinsicMeanIntegratorTag {};
 
+/// @ingroup  isvd_integrator_module
+template <typename _Scalar>
+using ExtrinsicMeanIntegrator = Integrator<ExtrinsicMeanIntegratorTag, _Scalar>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
 /// The extrinsic mean integrator.
@@ -36,14 +40,13 @@ struct ExtrinsicMeanIntegratorTag {};
 ///
 template <typename _Scalar>
 class Integrator<ExtrinsicMeanIntegratorTag, _Scalar>
-  : public IntegratorWrapper<Integrator<ExtrinsicMeanIntegratorTag, _Scalar>> {
+  : public IntegratorWrapper<ExtrinsicMeanIntegrator<_Scalar>> {
 
-  friend IntegratorWrapper<Integrator<ExtrinsicMeanIntegratorTag, _Scalar>>;
+  friend IntegratorWrapper<ExtrinsicMeanIntegrator<_Scalar>>;
 
  private:
 
-  using ThisType = Integrator<ExtrinsicMeanIntegratorTag, _Scalar>;
-  using BaseType = IntegratorWrapper<Integrator<ExtrinsicMeanIntegratorTag, _Scalar>>;
+  using BaseType = IntegratorWrapper<ExtrinsicMeanIntegrator<_Scalar>>;
 
  public:
 
@@ -163,10 +166,6 @@ class Integrator<ExtrinsicMeanIntegratorTag, _Scalar>
   inline       DenseMatrixRowMajor<ScalarType>& matrixQImpl() noexcept;
   inline const DenseMatrixRowMajor<ScalarType>& matrixQImpl() const noexcept;
 };
-
-/// @ingroup  isvd_integrator_module
-template <typename _Scalar>
-using ExtrinsicMeanIntegrator = Integrator<ExtrinsicMeanIntegratorTag, _Scalar>;
 
 }  // namespace isvd
 

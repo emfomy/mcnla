@@ -40,11 +40,12 @@ class VectorCollectionWrapper : public utility::CrtpBase<_Derived, VectorCollect
  protected:
 
   // Constructors
-  inline VectorCollectionWrapper() noexcept;
+  inline VectorCollectionWrapper() noexcept = default;
 
  public:
 
   // Gets information
+  inline bool    isEmpty() const noexcept;
   inline index_t length() const noexcept;
   inline index_t nvec() const noexcept;
   inline std::tuple<index_t, index_t> sizes() const noexcept;

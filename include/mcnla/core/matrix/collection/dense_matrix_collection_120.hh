@@ -27,6 +27,10 @@ namespace matrix {
 ///
 struct DenseMatrixCollection120Tag {};
 
+/// @ingroup  matrix_collection_module
+template <typename _Scalar>
+using DenseMatrixCollection120 = DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
 /// The dense matrix collection with dimension order [1 2 0].
@@ -35,19 +39,19 @@ struct DenseMatrixCollection120Tag {};
 ///
 template <typename _Scalar>
 class DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>
-  : public MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>> {
+  : public MatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>>;
 
  public:
 
   using ScalarType     = _Scalar;
-  using CollectionType = DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>;
+  using CollectionType = DenseMatrixCollection120<_Scalar>;
   using MatrixType     = DenseMatrixRowMajor<_Scalar>;
 
  private:
 
-  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>>;
+  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection120<_Scalar>>;
 
  protected:
 
@@ -98,19 +102,16 @@ class DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>
  protected:
 
   // Gets information
+  inline bool    isEmptyImpl() const noexcept;
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
   inline index_t nmatImpl() const noexcept;
 
   // Gets matrix
-  inline       MatrixType getMatrixImpl( const index_t idx ) noexcept;
-  inline const MatrixType getMatrixImpl( const index_t idx ) const noexcept;
+  inline       MatrixType getImpl( const index_t idx ) noexcept;
+  inline const MatrixType getImpl( const index_t idx ) const noexcept;
 
 };
-
-/// @ingroup  matrix_collection_module
-template <typename _Scalar>
-using DenseMatrixCollection120 = DenseMatrixCollection<DenseMatrixCollection120Tag, _Scalar, Trans::TRANS>;
 
 }  // namespace matrix
 

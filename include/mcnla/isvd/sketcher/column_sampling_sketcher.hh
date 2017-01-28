@@ -28,6 +28,10 @@ namespace isvd {
 ///
 struct ColumnSamplingSketcherTag {};
 
+/// @ingroup  isvd_sketcher_module
+template <typename _Scalar>
+using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Scalar>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
 /// The column sampling sketcher.
@@ -36,13 +40,13 @@ struct ColumnSamplingSketcherTag {};
 ///
 template <typename _Scalar>
 class Sketcher<ColumnSamplingSketcherTag, _Scalar>
-  : public SketcherWrapper<Sketcher<ColumnSamplingSketcherTag, _Scalar>> {
+  : public SketcherWrapper<ColumnSamplingSketcher<_Scalar>> {
 
-  friend SketcherWrapper<Sketcher<ColumnSamplingSketcherTag, _Scalar>>;
+  friend SketcherWrapper<ColumnSamplingSketcher<_Scalar>>;
 
  private:
 
-  using BaseType = SketcherWrapper<Sketcher<ColumnSamplingSketcherTag, _Scalar>>;
+  using BaseType = SketcherWrapper<ColumnSamplingSketcher<_Scalar>>;
 
  public:
 
@@ -103,10 +107,6 @@ class Sketcher<ColumnSamplingSketcherTag, _Scalar>
   inline void setSeedImpl( const index_t seed ) noexcept;
 
 };
-
-/// @ingroup  isvd_sketcher_module
-template <typename _Scalar>
-using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Scalar>;
 
 }  // namespace isvd
 

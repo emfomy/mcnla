@@ -28,6 +28,10 @@ namespace isvd {
 ///
 struct SvdFormerTag {};
 
+/// @ingroup  isvd_former_module
+template <typename _Scalar>
+using SvdFormer = Former<SvdFormerTag, _Scalar>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
 /// The SVD former.
@@ -36,13 +40,13 @@ struct SvdFormerTag {};
 ///
 template <typename _Scalar>
 class Former<SvdFormerTag, _Scalar>
-  : public FormerWrapper<Former<SvdFormerTag, _Scalar>> {
+  : public FormerWrapper<SvdFormer<_Scalar>> {
 
-  friend FormerWrapper<Former<SvdFormerTag, _Scalar>>;
+  friend FormerWrapper<SvdFormer<_Scalar>>;
 
  private:
 
-  using BaseType = FormerWrapper<Former<SvdFormerTag, _Scalar>>;
+  using BaseType = FormerWrapper<SvdFormer<_Scalar>>;
 
  public:
 
@@ -130,10 +134,6 @@ class Former<SvdFormerTag, _Scalar>
   inline const DenseMatrixColMajor<ScalarType>& matrixVtImpl() const noexcept;
 
 };
-
-/// @ingroup  isvd_former_module
-template <typename _Scalar>
-using SvdFormer = Former<SvdFormerTag, _Scalar>;
 
 }  // namespace isvd
 

@@ -21,17 +21,19 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor.
+/// @brief  Determines if the memory size is zero.
 ///
 template <class _Derived>
-VectorCollectionWrapper<_Derived>::VectorCollectionWrapper() noexcept {}
+bool VectorCollectionWrapper<_Derived>::isEmpty() const noexcept {
+  return this->derived().isEmptyImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length of vector.
 ///
 template <class _Derived>
 index_t VectorCollectionWrapper<_Derived>::length() const noexcept {
-  return this->derived().length();
+  return this->derived().lengthImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +41,7 @@ index_t VectorCollectionWrapper<_Derived>::length() const noexcept {
 ///
 template <class _Derived>
 index_t VectorCollectionWrapper<_Derived>::nvec() const noexcept {
-  return this->derived().nvec();
+  return this->derived().nvecImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +49,7 @@ index_t VectorCollectionWrapper<_Derived>::nvec() const noexcept {
 ///
 template <class _Derived>
 std::tuple<index_t, index_t> VectorCollectionWrapper<_Derived>::sizes() const noexcept {
-  return std::make_tuple(length()(), nvec());
+  return std::make_tuple(length(), nvec());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +59,7 @@ template <class _Derived>
 VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
-  return this->derived().getVector(idx);
+  return this->derived().getImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +69,7 @@ template <class _Derived>
 const VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
-  return this->derived().getVector(idx);
+  return this->derived().getImpl(idx);
 }
 
 }  // namespace matrix

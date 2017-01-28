@@ -40,11 +40,12 @@ class MatrixCollectionWrapper : public utility::CrtpBase<_Derived, MatrixCollect
  protected:
 
   // Constructors
-  inline MatrixCollectionWrapper() noexcept;
+  inline MatrixCollectionWrapper() noexcept = default;
 
  public:
 
   // Gets information
+  inline bool    isEmpty() const noexcept;
   inline index_t nrow() const noexcept;
   inline index_t ncol() const noexcept;
   inline index_t nmat() const noexcept;

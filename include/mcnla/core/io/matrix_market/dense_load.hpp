@@ -139,8 +139,6 @@ void loadMatrixMarket(
     DenseVectorCollection<_Tag, _Scalar> &collection,
     const char *file
 ) noexcept {
-  auto &derived = collection.derived();
-
   // Open file
   std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
@@ -153,10 +151,10 @@ void loadMatrixMarket(
   // Get size
   index_t m, n;
   fin >> m >> n;
-  if ( derived.unfold().isEmpty() ) {
-    derived.reconstruct(m, n);
+  if ( collection.isEmpty() ) {
+    collection.reconstruct(m, n);
   } else {
-    mcnla_assert_eq(collection.vec(), n);
+    mcnla_assert_eq(collection.nvec(), n);
     mcnla_assert_eq(collection(0).dims(), std::make_tuple(m));
   }
 
@@ -195,8 +193,6 @@ void loadMatrixMarket(
     DenseMatrixCollection<_Tag, _Scalar, _trans> &collection,
     const char *file
 ) noexcept {
-  auto &derived = collection.derived();
-
   // Open file
   std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
@@ -209,11 +205,11 @@ void loadMatrixMarket(
   // Get size
   index_t m, n, k;
   fin >> m >> n >> k;
-  if ( derived.unfold().isEmpty() ) {
+  if ( collection.isEmpty() ) {
     if ( !isTrans(_trans) ) {
-      derived.reconstruct(m, n, k);
+      collection.reconstruct(m, n, k);
     } else {
-      derived.reconstruct(n, m, k);
+      collection.reconstruct(n, m, k);
     }
   } else {
     mcnla_assert_eq(collection.nmat(), k);

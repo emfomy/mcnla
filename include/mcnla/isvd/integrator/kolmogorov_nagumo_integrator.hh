@@ -28,6 +28,10 @@ namespace isvd {
 ///
 struct KolmogorovNagumoIntegratorTag {};
 
+/// @ingroup  isvd_integrator_module
+template <typename _Scalar>
+using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Scalar>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
 /// The Kolmogorov-Nagumo-type integrator.
@@ -36,14 +40,13 @@ struct KolmogorovNagumoIntegratorTag {};
 ///
 template <typename _Scalar>
 class Integrator<KolmogorovNagumoIntegratorTag, _Scalar>
-  : public IntegratorWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Scalar>> {
+  : public IntegratorWrapper<KolmogorovNagumoIntegrator<_Scalar>> {
 
-  friend IntegratorWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Scalar>>;
+  friend IntegratorWrapper<KolmogorovNagumoIntegrator<_Scalar>>;
 
  private:
 
-  using ThisType = Integrator<KolmogorovNagumoIntegratorTag, _Scalar>;
-  using BaseType = IntegratorWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Scalar>>;
+  using BaseType = IntegratorWrapper<KolmogorovNagumoIntegrator<_Scalar>>;
 
  public:
 
@@ -158,10 +161,6 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Scalar>
   inline const DenseMatrixRowMajor<ScalarType>& matrixQImpl() const noexcept;
 
 };
-
-/// @ingroup  isvd_integrator_module
-template <typename _Scalar>
-using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Scalar>;
 
 }  // namespace isvd
 
