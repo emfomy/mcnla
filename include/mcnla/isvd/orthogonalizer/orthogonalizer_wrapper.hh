@@ -26,7 +26,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
+/// @ingroup  isvd_orthogonalizer_module_detail
 /// The iSVD orthogonalizer wrapper.
 ///
 /// @tparam  _Derived  The derived type.

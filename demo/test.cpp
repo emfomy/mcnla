@@ -24,8 +24,10 @@ int main( int argc, char **argv ) {
   mcnla::index_t m = 5, n = 4, k = 3, i;
 
   mcnla::matrix::DenseMatrixColMajor<double> a(m, k);
+  // mcnla::matrix::DenseDiagonalMatrix<double> a(k);
   mcnla::matrix::DenseMatrixColMajor<double> b(k, n);
   mcnla::matrix::DenseMatrixColMajor<double> c(m, n);
+  // mcnla::matrix::DenseVector<double> x(k);
 
   i = 0;
   for ( auto &v : a ) {
@@ -38,11 +40,16 @@ int main( int argc, char **argv ) {
   disp(a);
   disp(b);
   disp(c);
+  // disp(x);
 
-  mcnla::matrix::MmFunctor<decltype(a)> functor(a);
+  // mcnla::la::mm(a, b, c, 1.0, 0.0);
+
+  mcnla::la::MmFunctor<decltype(a)> functor(a);
   functor(b, c);
 
+  // disp(b);
   disp(c);
+  // disp(x);
 
   return 0;
 }

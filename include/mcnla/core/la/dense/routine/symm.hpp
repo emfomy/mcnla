@@ -266,8 +266,8 @@ inline void symm(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
-/// @brief  Computes a matrix-matrix product.
+/// @ingroup  la_interface_module_detail
+/// @copydoc  mcnla::la::mm
 ///
 //@{
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>

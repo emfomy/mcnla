@@ -124,8 +124,8 @@ inline void syr2k(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
-/// @brief  Performs a rank-2k update.
+/// @ingroup  la_interface_module_detail
+/// @copydoc  mcnla::la::r2k
 ///
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
 inline void r2k(

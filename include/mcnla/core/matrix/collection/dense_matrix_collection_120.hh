@@ -22,7 +22,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_collection_module
+/// @ingroup  matrix_collection_module_detail
 /// The tag of dense matrix collection with dimension order [1 2 0].
 ///
 struct DenseMatrixCollection120Tag {};

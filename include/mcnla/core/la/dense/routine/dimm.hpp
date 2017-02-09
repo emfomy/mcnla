@@ -38,7 +38,6 @@ namespace detail {
 //
 
 #ifdef MCNLA_USE_MKL
-
 template <typename _Scalar>
 inline void dimmImpl2(
     const DenseDiagonalMatrix<_Scalar> &a,
@@ -54,7 +53,6 @@ inline void dimmImpl2(
   diamm('N', c.nrow(), c.ncol(), a.size(), alpha, "D NC",
         a.valPtr(), a.size(), idiag, 1, b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
-
 #endif  // MCNLA_USE_MKL
 
 template <typename _Scalar, Trans _transb>
@@ -68,7 +66,7 @@ inline void dimmImpl2(
   mcnla_assert_eq(a.size(), c.nrow());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
-  auto da = a.vectorize();
+  auto da = a.viewVector();
   for ( index_t i = 0; i < da.length(); ++i ) {
     la::axpby(b(i, ""), c(i, ""), da(i) * alpha, beta);
   }
@@ -85,7 +83,7 @@ inline void dimmImpl2(
   mcnla_assert_eq(a.size(), c.ncol());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
-  auto da = a.vectorize();
+  auto da = a.viewVector();
   for ( index_t i = 0; i < da.length(); ++i ) {
     la::axpby(b("", i), c("", i), da(i) * alpha, beta);
   }
@@ -276,8 +274,8 @@ inline void dimm(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
-/// @brief  Computes a matrix-matrix product.
+/// @ingroup  la_interface_module_detail
+/// @copydoc  mcnla::la::mm
 ///
 //@{
 template <typename _Scalar, Trans _transb, Trans _transc>

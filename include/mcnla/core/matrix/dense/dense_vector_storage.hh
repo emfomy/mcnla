@@ -28,7 +28,7 @@ template <typename _Scalar> class DenseMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  matrix_dense_module_detail
 /// The dense vector storage class.
 ///
 /// @tparam  _Scalar  The scalar type.

@@ -53,7 +53,7 @@ struct Traits<matrix::DenseVectorIteratorBase<_Scalar, _Vector>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  matrix_dense_module_detail
 /// The dense vector iterator.
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -93,11 +93,11 @@ class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase
 
 };
 
-/// @ingroup  matrix_dense_module
+/// @ingroup  matrix_dense_module_detail
 template <typename _Scalar>
 using DenseVectorIterator = DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
 
-/// @ingroup  matrix_dense_module
+/// @ingroup  matrix_dense_module_detail
 template <typename _Scalar>
 using DenseVectorConstIterator = DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
 

@@ -23,7 +23,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  matrix_dense_module_detail
 /// The dense iterator interface.
 ///
 /// @tparam  _Derived  The derived type.

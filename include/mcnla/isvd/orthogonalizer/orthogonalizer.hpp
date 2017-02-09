@@ -49,7 +49,7 @@ struct Traits<isvd::Orthogonalizer<_Tag, _Scalar>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
+/// @ingroup  isvd_orthogonalizer_module_detail
 /// The interface of iSVD orthogonalizer.
 ///
 /// @tparam  _Tag     The orthogonalizer tag.

@@ -123,8 +123,8 @@ inline void gemm(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
-/// @brief  Computes a matrix-matrix product.
+/// @ingroup  la_interface_module_detail
+/// @copydoc  mcnla::la::mm
 ///
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
@@ -136,7 +136,6 @@ inline void mm(
 ) noexcept {
   gemm(a, b, c, alpha, beta);
 }
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(

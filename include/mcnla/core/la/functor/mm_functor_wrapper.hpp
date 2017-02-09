@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/functor/mm_functor_wrapper.hpp
+/// @file    include/mcnla/core/la/functor/mm_functor_wrapper.hpp
 /// @brief   The MM functor wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_FUNCTIR_MM_FUNCTOR_WRAPPER_HPP_
-#define MCNLA_CORE_MATRIX_FUNCTIR_MM_FUNCTOR_WRAPPER_HPP_
+#ifndef MCNLA_CORE_LA_FUNCTIR_MM_FUNCTOR_WRAPPER_HPP_
+#define MCNLA_CORE_LA_FUNCTIR_MM_FUNCTOR_WRAPPER_HPP_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix.hpp>
+#include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -17,12 +17,12 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
+//  The la namespace.
 //
-namespace matrix {
+namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_functor_module
+/// @ingroup  la_functor_module
 /// The MM functor wrapper.
 ///
 /// @tparam  _Scalar  The scalar type.
@@ -68,4 +68,4 @@ class MmFunctorWrapper {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_FUNCTIR_MM_FUNCTOR_WRAPPER_HPP_
+#endif  // MCNLA_CORE_LA_FUNCTIR_MM_FUNCTOR_WRAPPER_HPP_

@@ -137,7 +137,7 @@ inline void omatcopy(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
+/// @ingroup  la_dense_blas1m_module
 /// @brief  Copies a matrix to another matrix.
 ///
 /// @note  This routines calls @ref copy "copy"(a.vectorize(), b.vectorize()) if both @a a and @a b are shrunk,

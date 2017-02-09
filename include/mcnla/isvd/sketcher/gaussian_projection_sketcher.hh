@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
+/// @ingroup  isvd_sketcher_module_detail
 /// The Gaussian projection sketcher tag.
 ///
 /// @tparam  _exponent  exponent of the power method.

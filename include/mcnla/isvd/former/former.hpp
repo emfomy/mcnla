@@ -49,7 +49,7 @@ struct Traits<isvd::Former<_Tag, _Scalar>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_former_module
+/// @ingroup  isvd_former_module_detail
 /// The interface of iSVD former.
 ///
 /// @tparam  _Tag     The former tag.

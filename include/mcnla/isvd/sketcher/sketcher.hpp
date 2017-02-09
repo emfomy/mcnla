@@ -49,7 +49,7 @@ struct Traits<isvd::Sketcher<_Tag, _Scalar>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
+/// @ingroup  isvd_sketcher_module_detail
 /// The interface of iSVD sketcher.
 ///
 /// @tparam  _Tag     The sketcher tag.

@@ -25,7 +25,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_collection_module
+/// @ingroup  matrix_collection_module_detail
 /// The matrix collection wrapper.
 ///
 /// @tparam  _Derived  The derived type.

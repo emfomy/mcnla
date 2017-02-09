@@ -14,4 +14,10 @@
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/isvd/integrator/extrinsic_mean_integrator.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_integrator_module_detail  Integrator Module Detail
+/// @ingroup   isvd_integrator_module
+/// @brief     The Integrator Module Detail
+///
+
 #endif  // MCNLA_ISVD_INTEGRATOR_HPP_

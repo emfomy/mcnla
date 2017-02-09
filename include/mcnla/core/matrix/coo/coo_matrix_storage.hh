@@ -27,7 +27,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
+/// @ingroup  matrix_coo_module_detail
 /// The The coordinate list (COO) matrix storage class.
 ///
 /// @tparam  _Scalar  The scalar type.

@@ -115,8 +115,8 @@ inline void syrk(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
-/// @brief  Performs a rank-k update.
+/// @ingroup  la_interface_module_detail
+/// @copydoc  mcnla::la::rk
 ///
 template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
 inline void rk(

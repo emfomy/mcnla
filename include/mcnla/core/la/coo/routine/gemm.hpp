@@ -39,7 +39,6 @@ namespace detail {
 //
 
 #ifdef MCNLA_USE_MKL
-
 template <typename _Scalar, Trans _transa>
 inline void gemmImpl3(
     const DenseMatrix<_Scalar, Trans::NORMAL> &b,
@@ -55,9 +54,7 @@ inline void gemmImpl3(
   coomm(toTransChar<_Scalar>(_transa), c.ncol(), c.nrow(), a.ncol(), alpha, "G  C",
         a.valPtr(), a.rowidxPtr(), a.colidxPtr(), a.nnz(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
-
 #else  // MCNLA_USE_MKL
-
 template <typename _Scalar, Trans _transa>
 inline void gemmImpl3(
     const DenseMatrix<_Scalar, Trans::NORMAL> &b,
@@ -82,7 +79,6 @@ inline void gemmImpl3(
     la::axpy(b("", a.rowidxPtr()[i]), c("", a.colidxPtr()[i]), a.valPtr()[i] * alpha);
   }
 }
-
 #endif  // MCNLA_USE_MKL
 
 template <typename _Scalar, Trans _transa, Trans _transb, bool dummy = 0>
@@ -303,11 +299,7 @@ inline void gemm(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
-/// @brief  Computes a matrix-matrix product.
-///
-//@{
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
     const CooMatrix<_Scalar, _transa> &a,
@@ -329,9 +321,7 @@ inline void mm(
 ) noexcept {
   gemm(b, a, c, alpha, beta);
 }
-//@}
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
     const CooMatrix<_Scalar, _transa> &a,

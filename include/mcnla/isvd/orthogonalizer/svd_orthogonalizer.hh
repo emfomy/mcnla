@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
+/// @ingroup  isvd_orthogonalizer_module_detail
 /// The SVD orthogonalizer tag.
 ///
 struct SvdOrthogonalizerTag {};

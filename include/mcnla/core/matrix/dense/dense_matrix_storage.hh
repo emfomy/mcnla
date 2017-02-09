@@ -25,7 +25,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  matrix_dense_module_detail
 /// The dense matrix storage class.
 ///
 /// @tparam  _Scalar  The scalar type.

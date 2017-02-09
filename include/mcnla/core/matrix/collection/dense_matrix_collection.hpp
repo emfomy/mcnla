@@ -53,7 +53,7 @@ struct Traits<matrix::DenseMatrixCollection<_Tag, _Scalar, _trans>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_collection_module
+/// @ingroup  matrix_collection_module_detail
 /// The interface of dense matrix collection.
 ///
 /// @tparam  _Tag     The collection tag.

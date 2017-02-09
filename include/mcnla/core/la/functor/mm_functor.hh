@@ -1,16 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/functor/mm_functor.hpp
+/// @file    include/mcnla/core/la/functor/mm_functor.hh
 /// @brief   The definition MM functor.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_FUNCTIR_MM_FUNCTOR_HPP_
-#define MCNLA_CORE_MATRIX_FUNCTIR_MM_FUNCTOR_HPP_
+#ifndef MCNLA_CORE_LA_FUNCTIR_MM_FUNCTOR_HH_
+#define MCNLA_CORE_LA_FUNCTIR_MM_FUNCTOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/functor/mm_functor_wrapper.hpp>
-#include <mcnla/core/la.hpp>
+#include <mcnla/core/la/def.hpp>
+#include <mcnla/core/la/functor/mm_functor_wrapper.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -18,12 +17,12 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
+//  The la namespace.
 //
-namespace matrix {
+namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_functor_module
+/// @ingroup  la_functor_module
 /// The MM functor.
 ///
 /// @tparam  _Matrix  The type of matrix A.
@@ -50,30 +49,12 @@ class MmFunctor
 
  public:
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @copydoc  mcnla::matrix::MmFunctorWrapper::MmFunctorWrapper
-  ///
-  MmFunctor(
-      const AType &matrix
-  ) noexcept
-    : matrix_(matrix) {}
+  MmFunctor( const AType &matrix ) noexcept;
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @copydoc  mcnla::matrix::MmFunctorWrapper::~MmFunctorWrapper
-  ///
-  ~MmFunctor() noexcept override {};
+  ~MmFunctor() noexcept override;
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @copydoc  mcnla::matrix::MmFunctorWrapper::operator()
-  ///
-  void operator()(
-       const BType &b,
-       CType &c,
-       const ScalarType alpha = 1,
-       const ScalarType beta  = 0
-  ) const noexcept override {
-    la::mm(matrix_, b, c, alpha, beta);
-  }
+  virtual void operator()( const BType &b, CType &c,
+                           const ScalarType alpha = 1, const ScalarType beta  = 0 ) const noexcept override;
 
 };
 
@@ -81,4 +62,4 @@ class MmFunctor
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_FUNCTIR_MM_FUNCTOR_HPP_
+#endif  // MCNLA_CORE_LA_FUNCTIR_MM_FUNCTOR_HH_

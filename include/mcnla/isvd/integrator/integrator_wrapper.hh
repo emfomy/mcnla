@@ -26,7 +26,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
+/// @ingroup  isvd_integrator_module_detail
 /// The iSVD integrator wrapper.
 ///
 /// @tparam  _Derived  The derived type.

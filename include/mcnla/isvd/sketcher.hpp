@@ -14,4 +14,10 @@
 #include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hpp>
 #include <mcnla/isvd/sketcher/column_sampling_sketcher.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_sketcher_module_detail  Sketcher Module Detail
+/// @ingroup   isvd_sketcher_module
+/// @brief     The Sketcher Module Detail
+///
+
 #endif  // MCNLA_ISVD_SKETCHER_HPP_

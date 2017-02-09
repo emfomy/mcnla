@@ -22,7 +22,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
+/// @ingroup  matrix_coo_module_detail
 /// The coordinate list (COO) storage of the second dimension index.
 ///
 /// @tparam  _Idx  The index type.

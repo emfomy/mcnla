@@ -29,7 +29,7 @@ template <typename _Scalar> class CooMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
+/// @ingroup  matrix_coo_module_detail
 /// The coordinate list (COO) vector storage class.
 ///
 /// @tparam  _Scalar  The scalar type.
