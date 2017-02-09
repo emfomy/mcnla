@@ -9,6 +9,7 @@
 #define MCNLA_INTERFACE_CORE_LA_MV_HPP_
 
 #include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -24,11 +25,11 @@ namespace la {
 /// @ingroup  la_interface_module
 /// @brief  Computes a matrix-vector product.
 ///
-template <class _AType, class _XType, class _YType, typename _Scalar>
+template <class _A, class _X, class _Y, typename _Scalar>
 inline void mv(
-    const _AType &a,
-    const _XType &x,
-          _YType &y,
+    const MatrixWrapper<_A> &a,
+    const VectorWrapper<_X> &x,
+          VectorWrapper<_Y> &y,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;

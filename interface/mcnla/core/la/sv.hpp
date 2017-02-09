@@ -9,6 +9,7 @@
 #define MCNLA_INTERFACE_CORE_LA_SV_HPP_
 
 #include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -25,16 +26,16 @@ namespace la {
 /// @brief  Solves a system of linear equations.
 ///
 //@{
-template <class _AInvType, class _XType>
+template <class _A, class _X>
 inline void sv(
-    const _AInvType &a,
-          _XType &x
+    const InverseView<MatrixWrapper<_A>> &a,
+          VectorWrapper<_X> &x
 ) noexcept;
 
-template <class _AInvType, class _XType>
+template <class _A, class _X>
 inline void sv(
-          _XType &x,
-    const _AInvType &a
+          VectorWrapper<_X> &x,
+    const InverseView<MatrixWrapper<_A>> &a
 ) noexcept;
 //@}
 

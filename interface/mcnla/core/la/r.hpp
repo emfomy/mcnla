@@ -9,6 +9,7 @@
 #define MCNLA_INTERFACE_CORE_LA_R_HPP_
 
 #include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -24,10 +25,10 @@ namespace la {
 /// @ingroup  la_interface_module
 /// @brief  Performs a rank-1 update.
 ///
-template <class _AType, class _XType, typename _Scalar>
+template <class _A, class _X, typename _Scalar>
 inline void r(
-          _AType &a,
-    const _XType &x,
+          MatrixWrapper<_A> &a,
+    const VectorWrapper<_X> &x,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;
@@ -36,11 +37,11 @@ inline void r(
 /// @ingroup  la_interface_module
 /// @brief  Performs a rank-1 update (conjugated).
 ///
-template <class _AType, class _XType, class _YType, typename _Scalar>
+template <class _A, class _X, class _Y, typename _Scalar>
 inline void r(
-          _AType &a,
-    const _XType &x,
-    const _XType &y,
+          MatrixWrapper<_A> &a,
+    const VectorWrapper<_X> &x,
+    const VectorWrapper<_Y> &y,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;
@@ -49,11 +50,11 @@ inline void r(
 /// @ingroup  la_interface_module
 /// @brief  Performs a rank-1 update (unconjugated).
 ///
-template <class _AType, class _XType, class _YType, typename _Scalar>
+template <class _A, class _X, class _Y, typename _Scalar>
 inline void ru(
-          _AType &a,
-    const _XType &x,
-    const _XType &y,
+          MatrixWrapper<_A> &a,
+    const VectorWrapper<_X> &x,
+    const VectorWrapper<_Y> &y,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;

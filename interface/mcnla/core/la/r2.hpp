@@ -9,6 +9,7 @@
 #define MCNLA_INTERFACE_CORE_LA_R2_HPP_
 
 #include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -24,11 +25,11 @@ namespace la {
 /// @ingroup  la_interface_module
 /// @brief  Performs a rank-2 update.
 ///
-template <class _AType, class _XType, class _YType, typename _Scalar>
+template <class _A, class _X, class _Y, typename _Scalar>
 inline void r2(
-    const _AType &a,
-    const _XType &x,
-          _YType &y,
+          MatrixWrapper<_A> &a,
+    const VectorWrapper<_X> &x,
+    const VectorWrapper<_Y> &y,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;

@@ -9,6 +9,7 @@
 #define MCNLA_INTERFACE_CORE_LA_RK2_HPP_
 
 #include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -24,11 +25,11 @@ namespace la {
 /// @ingroup  la_interface_module
 /// @brief  Performs a rank-2k update.
 ///
-template <class _AType, class _BType, class _CType, typename _Scalar>
+template <class _A, class _B, class _C, typename _Scalar>
 inline void r2k(
-    const _AType &a,
-		const _BType &b,
-		const _CType &c,
+    const MatrixWrapper<_A> &a,
+		const MatrixWrapper<_B> &b,
+		      MatrixWrapper<_C> &c,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;

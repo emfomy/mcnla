@@ -49,6 +49,8 @@ namespace matrix {
   | `a.c()`                  | conjugate `a`
   | `a.h()`                  | conjugate transpose `a`
 
+  @see @ref matrix_module
+
 */
 
 }  // namespace matrix

@@ -9,6 +9,7 @@
 #define MCNLA_INTERFACE_CORE_LA_SM_HPP_
 
 #include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -25,17 +26,17 @@ namespace la {
 /// @brief  Solves a system of linear equations with multiple right-hand sides.
 ///
 //@{
-template <class _AInvType, class _BType, typename _Scalar>
+template <class _A, class _B, typename _Scalar>
 inline void sm(
-    const _AInvType &a,
-          _BType &b,
+    const InverseView<MatrixWrapper<_A>> &a,
+          MatrixWrapper<_B> &b,
     const _Scalar alpha = 1
 ) noexcept;
 
-template <class _AInvType, class _BType, typename _Scalar>
+template <class _A, class _B, typename _Scalar>
 inline void sm(
-          _BType &b,
-    const _AInvType &a,
+          MatrixWrapper<_B> &b,
+    const InverseView<MatrixWrapper<_A>> &a,
     const _Scalar alpha = 1
 ) noexcept;
 //@}

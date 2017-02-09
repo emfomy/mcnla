@@ -126,6 +126,8 @@ namespace isvd {
 
   @endcode
 
+  @see @ref isvd_module
+
 */
 
 }  // namespace isvd

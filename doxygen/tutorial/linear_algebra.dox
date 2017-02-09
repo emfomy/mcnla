@@ -5,7 +5,7 @@ namespace mcnla {
 
   <h3>BLAS/LAPACK</h3>
 
-  MCNLA provides some BLAS/LAPACK routines in Fortran 90 format. The following are some examples, where `x` and `y` are vectors, and `a`, `b`, `c` are matrices.
+  MCNLA provides some @ref la_module "BLAS/LAPACK routines" in Fortran 90 format. The following are some examples, where `x` and `y` are vectors, and `a`, `b`, `c` are matrices.
 
   Command                                                          | Detail
   ---------------------------------------------------------------- | ------------------------
@@ -22,7 +22,7 @@ namespace mcnla {
   `%la::dimm("", x.viewDiagonal(), c)`                             | @f$C \gets C \cdot \mathrm{diag}(x)@f$
   `%la::dism(x.viewDiagonal().inv(), b)`                           | @f$B \gets \mathrm{diag}(x)^{-1} \cdot B@f$
 
-  There are some smart routines that determines the types automatically:
+  There are some smart routines that determines the types automatically (See @ref la_interface_module for detail):
 
   Command                                                          | Detail
   ---------------------------------------------------------------- | ------------------------
@@ -38,6 +38,8 @@ namespace mcnla {
   `la::sm&zwnj;(b, a.inv(), alpha)`                                | @f$B \gets \alpha B A^{-1}@f$
   `la::rk&zwnj;(a, c, alpha, beta)`                                | @f$C \gets \alpha A A^* + \beta C@f$
   `la::rk2&zwnj;(a, b, c, alpha, beta)`                            | @f$C \gets \alpha A B^* + \overline{\alpha} B A^* + \beta C@f$
+
+  @see @ref la_module
 
 */
 
