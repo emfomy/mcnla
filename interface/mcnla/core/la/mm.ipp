@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    interface/mcnla/core/la/r2k.hpp
-/// @brief   The BLAS R2K routine interface.
+/// @file    interface/mcnla/core/la/mm.ipp
+/// @brief   The BLAS MM routine interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_INTERFACE_CORE_LA_RK2_HPP_
-#define MCNLA_INTERFACE_CORE_LA_RK2_HPP_
+#ifndef MCNLA_INTERFACE_CORE_LA_MM_IPP_
+#define MCNLA_INTERFACE_CORE_LA_MM_IPP_
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -23,13 +23,13 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_interface_module
-/// @brief  Performs a rank-2k update.
+/// @brief  Computes a matrix-matrix product.
 ///
 template <class _A, class _B, class _C, typename _Scalar>
-inline void r2k(
+inline void mm(
     const MatrixWrapper<_A> &a,
-		const MatrixWrapper<_B> &b,
-		      MatrixWrapper<_C> &c,
+    const MatrixWrapper<_B> &b,
+          MatrixWrapper<_C> &c,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;
@@ -38,4 +38,4 @@ inline void r2k(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_INTERFACE_CORE_LA_RK2_HPP_
+#endif  // MCNLA_INTERFACE_CORE_LA_MM_IPP_

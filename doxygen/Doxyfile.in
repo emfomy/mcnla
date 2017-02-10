@@ -285,7 +285,8 @@ OPTIMIZE_OUTPUT_VHDL   = NO
 
 EXTENSION_MAPPING      = cpp=c++ \
                          hpp=c++ \
-                         hh=c++
+                         hh=c++ \
+                         ipp=c++
 
 # If the MARKDOWN_SUPPORT tag is enabled then doxygen pre-processes all comments
 # according to the Markdown format, which allows for more readable
@@ -818,6 +819,7 @@ INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.cpp \
                          *.hpp \
                          *.hh \
+                         *.ipp \
                          *.md \
                          *.dox
 
@@ -863,7 +865,8 @@ EXCLUDE_PATTERNS       = @PROJECT_SOURCE_DIR@/include/*/plugin
 
 EXCLUDE_SYMBOLS        = *_H_ \
                          *_HPP_ \
-                         *_HPP_
+                         *_HH_ \
+                         *_IPP_
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or directories
 # that contain example code fragments that are included (see the \include

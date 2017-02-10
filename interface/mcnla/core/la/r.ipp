@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    interface/mcnla/core/la/r.hpp
+/// @file    interface/mcnla/core/la/r.ipp
 /// @brief   The BLAS R routine interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_INTERFACE_CORE_LA_R_HPP_
-#define MCNLA_INTERFACE_CORE_LA_R_HPP_
+#ifndef MCNLA_INTERFACE_CORE_LA_R_IPP_
+#define MCNLA_INTERFACE_CORE_LA_R_IPP_
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -63,4 +63,4 @@ inline void ru(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_INTERFACE_CORE_LA_R_HPP_
+#endif  // MCNLA_INTERFACE_CORE_LA_R_IPP_

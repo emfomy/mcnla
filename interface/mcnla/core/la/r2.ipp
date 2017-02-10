@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    interface/mcnla/core/la/rk.hpp
-/// @brief   The BLAS RK routine interface.
+/// @file    interface/mcnla/core/la/r2.ipp
+/// @brief   The BLAS R2 routine interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_INTERFACE_CORE_LA_RK_HPP_
-#define MCNLA_INTERFACE_CORE_LA_RK_HPP_
+#ifndef MCNLA_INTERFACE_CORE_LA_R2_IPP_
+#define MCNLA_INTERFACE_CORE_LA_R2_IPP_
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -23,12 +23,13 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_interface_module
-/// @brief  Performs a rank-k update.
+/// @brief  Performs a rank-2 update.
 ///
-template <class _A, class _C, typename _Scalar>
-inline void rk(
-    const MatrixWrapper<_A> &a,
-		      MatrixWrapper<_C> &c,
+template <class _A, class _X, class _Y, typename _Scalar>
+inline void r2(
+          MatrixWrapper<_A> &a,
+    const VectorWrapper<_X> &x,
+    const VectorWrapper<_Y> &y,
     const _Scalar alpha = 1,
     const _Scalar beta = 0
 ) noexcept;
@@ -37,4 +38,4 @@ inline void rk(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_INTERFACE_CORE_LA_RK_HPP_
+#endif  // MCNLA_INTERFACE_CORE_LA_R2_IPP_

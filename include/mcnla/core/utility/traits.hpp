@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_UTILITY_TRAITS_HPP_
 #define MCNLA_CORE_UTILITY_TRAITS_HPP_
 
-#include <mcnla/core/def.hpp>
+#include <mcnla/core/utility/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    interface/mcnla/core/la/sv.hpp
-/// @brief   The BLAS SV routine interface.
+/// @file    interface/mcnla/core/la/mv.ipp
+/// @brief   The BLAS MV routine interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_INTERFACE_CORE_LA_SV_HPP_
-#define MCNLA_INTERFACE_CORE_LA_SV_HPP_
+#ifndef MCNLA_INTERFACE_CORE_LA_MV_IPP_
+#define MCNLA_INTERFACE_CORE_LA_MV_IPP_
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -23,24 +23,19 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_interface_module
-/// @brief  Solves a system of linear equations.
+/// @brief  Computes a matrix-vector product.
 ///
-//@{
-template <class _A, class _X>
-inline void sv(
-    const InverseView<MatrixWrapper<_A>> &a,
-          VectorWrapper<_X> &x
+template <class _A, class _X, class _Y, typename _Scalar>
+inline void mv(
+    const MatrixWrapper<_A> &a,
+    const VectorWrapper<_X> &x,
+          VectorWrapper<_Y> &y,
+    const _Scalar alpha = 1,
+    const _Scalar beta = 0
 ) noexcept;
-
-template <class _A, class _X>
-inline void sv(
-          VectorWrapper<_X> &x,
-    const InverseView<MatrixWrapper<_A>> &a
-) noexcept;
-//@}
 
 }  // namespace la
 
 }  // namespace mcnla
 
-#endif  // MCNLA_INTERFACE_CORE_LA_SV_HPP_
+#endif  // MCNLA_INTERFACE_CORE_LA_MV_IPP_

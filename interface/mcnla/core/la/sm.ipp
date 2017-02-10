@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    interface/mcnla/core/la/mv.hpp
-/// @brief   The BLAS MV routine interface.
+/// @file    interface/mcnla/core/la/sm.ipp
+/// @brief   The BLAS SM routine interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_INTERFACE_CORE_LA_MV_HPP_
-#define MCNLA_INTERFACE_CORE_LA_MV_HPP_
+#ifndef MCNLA_INTERFACE_CORE_LA_SM_IPP_
+#define MCNLA_INTERFACE_CORE_LA_SM_IPP_
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -23,19 +23,26 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_interface_module
-/// @brief  Computes a matrix-vector product.
+/// @brief  Solves a system of linear equations with multiple right-hand sides.
 ///
-template <class _A, class _X, class _Y, typename _Scalar>
-inline void mv(
-    const MatrixWrapper<_A> &a,
-    const VectorWrapper<_X> &x,
-          VectorWrapper<_Y> &y,
-    const _Scalar alpha = 1,
-    const _Scalar beta = 0
+//@{
+template <class _A, class _B, typename _Scalar>
+inline void sm(
+    const InverseView<MatrixWrapper<_A>> &a,
+          MatrixWrapper<_B> &b,
+    const _Scalar alpha = 1
 ) noexcept;
+
+template <class _A, class _B, typename _Scalar>
+inline void sm(
+          MatrixWrapper<_B> &b,
+    const InverseView<MatrixWrapper<_A>> &a,
+    const _Scalar alpha = 1
+) noexcept;
+//@}
 
 }  // namespace la
 
 }  // namespace mcnla
 
-#endif  // MCNLA_INTERFACE_CORE_LA_MV_HPP_
+#endif  // MCNLA_INTERFACE_CORE_LA_SM_IPP_
