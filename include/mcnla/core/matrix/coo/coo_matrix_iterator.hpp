@@ -28,7 +28,9 @@ std::ostream& operator<<(
     std::ostream &os,
     const CooMatrixIteratorBase<__Val, __Idx, __trans, __Matrix> &it
 ) {
-  return os << *it;
+  return os << "(" << std::setw(kOsIdxWidth) << it.rowidx() << ", "
+                   << std::setw(kOsIdxWidth) << it.colidx() << ")  "
+                   << std::setw(kOsValWidth) << it.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -28,7 +28,8 @@ std::ostream& operator<<(
     std::ostream &os,
     const CooVectorIteratorBase<__Val, __Idx, __Vector> &it
 ) {
-  return os << *it;
+  return os << "(" << std::setw(kOsIdxWidth) << it.idx() << ")  "
+                   << std::setw(kOsValWidth) << it.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
