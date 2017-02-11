@@ -12,9 +12,9 @@
 #include <random>
 
 #ifdef MCNLA_USE_MKL
-  #include <mcnla/core/random/driver/driver_detail_mkl.hpp>
+  #include <mcnla/core/random/driver/driver_detail_mkl.hh>
 #else  // MCNLA_USE_MKL
-  #include <mcnla/core/random/driver/driver_detail_nomkl.hpp>
+  #include <mcnla/core/random/driver/driver_detail_nomkl.hh>
 #endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -28,7 +28,7 @@ template <class _Base> class InverseView;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
+/// @ingroup  matrix_base_module
 /// The invertible container wrapper.
 ///
 /// @tparam  _Derived  The derived type.
@@ -52,7 +52,7 @@ class InvertibleWrapper : public utility::CrtpBase<_Derived, InvertibleWrapper<_
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
+/// @ingroup  matrix_base_module
 /// The inverse view.
 ///
 /// @tparam  _Base  The base type.

@@ -26,20 +26,17 @@ namespace matrix {
 template <typename __Val, Trans __trans, class __Matrix>
 std::ostream& operator<<(
     std::ostream &os,
-    const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &iterator
+    const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &it
 ) {
-  const index_t width_r = log10(iterator.container_->nrow())+1;
-  const index_t width_c = log10(iterator.container_->ncol())+1;
-  const index_t width   = std::max(width_r, width_c);
-  return os << "(" << std::setw(width) << iterator.rowidx() << ", "
-                   << std::setw(width) << iterator.colidx() << ")  "
-                   << std::setw(kOsValWidth) << iterator.val();
+  return os << "(" << std::setw(kOsIdxWidth) << it.rowidx() << ", "
+                   << std::setw(kOsIdxWidth) << it.colidx() << ")  "
+                   << std::setw(kOsValWidth) << it.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
-/// @attention  Never call this when the iterator is at the end.
+/// @attention  Never call this method when the iterator is at the end.
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 _Val& DenseMatrixIteratorBase<_Val, _trans, _Matrix>::val() const noexcept {
@@ -66,11 +63,31 @@ index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::colidx() const noexcept 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
-/// @attention  Never call this when the iterator is at the end.
+/// @attention  Never call this method when the iterator is at the end.
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::pos() const noexcept {
   return container_->pos(rowidx(), colidx());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element reference.
+///
+/// @attention  Never call this method when the iterator is at the end.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+_Val& DenseMatrixIteratorBase<_Val, _trans, _Matrix>::elemRef() const noexcept {
+  return val();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element pointer.
+///
+/// @attention  Never call this method when the iterator is at the end.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+_Val* DenseMatrixIteratorBase<_Val, _trans, _Matrix>::elemPtr() const noexcept {
+  return &(val());
 }
 
 }  // namespace matrix

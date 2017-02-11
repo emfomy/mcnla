@@ -45,7 +45,7 @@ class CooTuple1 : public std::tuple<_Idx&> {
  protected:
 
   /// The value.
-  ValType val_;
+  ValType &val_;
 
  public:
 
@@ -78,58 +78,8 @@ class CooTuple1 : public std::tuple<_Idx&> {
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module_detail
-/// @brief  Makes a COO tuple
-///
-/// @param  val   The value.
-/// @param  idx0  The first index.
-///
-template <typename _Val, typename _Idx>
-inline CooTuple1<_Val, _Idx> makeCooTuple(
-    _Val &val,
-    _Idx &idx0
-) noexcept {
-  return CooTuple1<_Val, _Idx>(val, idx0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module_detail
-/// @brief  Makes a COO tuple
-///
-/// @param  val   The value.
-/// @param  idxs  The indices.
-///
-template <typename _Val, typename _Idx>
-inline CooTuple1<_Val, _Idx> makeCooTuple(
-    _Val &val,
-    std::tuple<_Idx&> &idxs
-) noexcept {
-  return CooTuple1<_Val, _Idx>(val, idxs);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The STL namespace.
-//
-namespace std {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module_detail
-/// @brief  Swap two COO tuples
-///
-template <typename _Val, typename _Idx>
-void swap(
-    mcnla::matrix::CooTuple1<_Val, _Idx> &a,
-    mcnla::matrix::CooTuple1<_Val, _Idx> &b
-) noexcept {
-  std::swap(a.val(), b.val());
-  std::swap(a.idxs(), b.idxs());
-}
-
-}  // namespace std
 
 #endif  // MCNLA_CORE_MATRIX_COO_COO_TUPLE1_HH_

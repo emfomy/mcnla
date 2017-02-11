@@ -19,6 +19,7 @@
 #include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
 
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
+#include <mcnla/core/matrix/coo/coo_vector_iterator.hpp>
 
 #include <mcnla/core/matrix/coo/coo_matrix.hpp>
 

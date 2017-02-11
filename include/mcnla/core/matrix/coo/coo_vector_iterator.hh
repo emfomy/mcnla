@@ -1,16 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_vector_iterator.hh
-/// @brief   The definition of dense vector iterator class.
+/// @file    include/mcnla/core/matrix/coo/coo_vector_iterator.hh
+/// @brief   The definition of COO vector iterator class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HH_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HH_
+#ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
+#define MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
-#include <mcnla/core/matrix/dense/dense_vector.hpp>
+#include <mcnla/core/matrix/coo/coo_vector.hpp>
+#include <mcnla/core/matrix/coo/coo_tuple1.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,8 +25,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseVector;
-template <typename _Val, class _Vector> class DenseVectorIteratorBase;
+template <typename _Val> class CooVector;
+template <typename _Val, typename _Idx, class _Vector> class CooVectorIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -36,14 +37,14 @@ template <typename _Val, class _Vector> class DenseVectorIteratorBase;
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
+/// The COO vector iterator traits.
 ///
-template <typename _Val, class _Vector>
-struct Traits<matrix::DenseVectorIteratorBase<_Val, _Vector>> {
+template <typename _Val, typename _Idx, class _Vector>
+struct Traits<matrix::CooVectorIteratorBase<_Val, _Idx, _Vector>> {
   static constexpr index_t ndim = 1;
-  using ElemType      = _Val;
-  using ElemRefType   = _Val&;
-  using ElemPtrType   = _Val*;
+  using ElemType      = std::tuple<_Idx>;
+  using ElemRefType   = matrix::CooTuple1<_Val, _Idx>;
+  using ElemPtrType   = matrix::CooTuple1Ptr<_Val, _Idx>;
   using ContainerType = _Vector;
 };
 
@@ -55,27 +56,30 @@ struct Traits<matrix::DenseVectorIteratorBase<_Val, _Vector>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module_detail
-/// The dense vector iterator.
+/// @ingroup  matrix_coo_module_detail
+/// The COO vector iterator.
 ///
 /// @tparam  _Val     The value type.
+/// @tparam  _Idx     The index type.
 /// @tparam  _Vector  The vector type.
 ///
-/// @see  DenseVectorIterator, DenseVectorConstIterator
+/// @see  CooVectorIterator, CooVectorConstIterator
 ///
-template <typename _Val, class _Vector>
-class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val, _Vector>> {
+template <typename _Val, typename _Idx, class _Vector>
+class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>> {
 
  private:
 
   static constexpr index_t ndim = 1;
   using ValType       = _Val;
-  using ElemType      = _Val;
-  using ElemRefType   = _Val&;
-  using ElemPtrType   = _Val*;
+  using IdxType       = _Idx;
+  using TupleType     = CooTuple1<_Val, _Idx>;
+  using ElemType      = std::tuple<_Idx>;
+  using ElemRefType   = CooTuple1<_Val, _Idx>;
+  using ElemPtrType   = CooTuple1Ptr<_Val, _Idx>;
   using ContainerType = _Vector;
 
-  using BaseType      = IteratorBase<DenseVectorIteratorBase<_Val, _Vector>>;
+  using BaseType      = IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>>;
 
  protected:
 
@@ -88,28 +92,29 @@ class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val
   using BaseType::operator=;
 
   // Operators
-  template <typename __Val, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<__Val, __Vector> &it );
+  template <typename __Val, typename __Idx, class __Vector>
+  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<__Val, __Idx, __Vector> &it );
 
   // Gets value
   inline ValType&    val() const noexcept;
-  inline index_t     idx() const noexcept;
+  inline IdxType&    idx() const noexcept;
+  inline TupleType   tuple() const noexcept;
   inline index_t     pos() const noexcept;
   inline ElemRefType elemRef() const noexcept;
   inline ElemPtrType elemPtr() const noexcept;
 
 };
 
-/// @ingroup  matrix_dense_module_detail
+/// @ingroup  matrix_coo_module_detail
 template <typename _Val>
-using DenseVectorIterator = DenseVectorIteratorBase<_Val, DenseVector<_Val>>;
+using CooVectorIterator = CooVectorIteratorBase<_Val, index_t, CooVector<_Val>>;
 
-/// @ingroup  matrix_dense_module_detail
+/// @ingroup  matrix_coo_module_detail
 template <typename _Val>
-using DenseVectorConstIterator = DenseVectorIteratorBase<const _Val, const DenseVector<_Val>>;
+using CooVectorConstIterator = CooVectorIteratorBase<const _Val, const index_t, const CooVector<_Val>>;
 
 }  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HH_
+#endif  // MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_

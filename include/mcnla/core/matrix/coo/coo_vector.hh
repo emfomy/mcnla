@@ -13,6 +13,7 @@
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_vector_storage.hpp>
+#include <mcnla/core/matrix/coo/coo_vector_iterator.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,12 +44,15 @@ template <typename _Val>
 struct Traits<matrix::CooVector<_Val>> {
   static constexpr index_t ndim = 1;
 
-  using ValType     = _Val;
+  using ValType           = _Val;
 
-  using RealType    = matrix::CooVector<RealValT<_Val>>;
-  using ComplexType = matrix::CooVector<ComplexValT<_Val>>;
+  using RealType          = matrix::CooVector<RealValT<_Val>>;
+  using ComplexType       = matrix::CooVector<ComplexValT<_Val>>;
 
-  using VectorType  = matrix::CooVector<_Val>;
+  using VectorType        = matrix::CooVector<_Val>;
+
+  using IteratorType      = matrix::CooVectorIterator<_Val>;
+  using ConstIteratorType = matrix::CooVectorConstIterator<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,24 +90,29 @@ template <typename _Val>
 class CooVector
   : public CooVectorStorage<_Val>,
     public VectorWrapper<CooVector<_Val>>,
+    public IterableWrapper<CooVector<_Val>>,
     public InvertibleWrapper<CooVector<_Val>> {
 
   friend VectorWrapper<CooVector<_Val>>;
+  friend IterableWrapper<CooVector<_Val>>;
   friend InvertibleWrapper<CooVector<_Val>>;
 
  public:
 
   static constexpr index_t ndim = 1;
 
-  using ValType      = _Val;
-  using ValArrayType = Array<_Val>;
-  using IdxArrayType = Array<index_t>;
-  using SizesType    = std::tuple<index_t>;
+  using ValType           = _Val;
+  using ValArrayType      = Array<_Val>;
+  using IdxArrayType      = Array<index_t>;
+  using SizesType         = std::tuple<index_t>;
 
-  using RealType     = CooVector<RealValT<_Val>>;
-  using ComplexType  = CooVector<ComplexValT<_Val>>;
+  using RealType          = CooVector<RealValT<_Val>>;
+  using ComplexType       = CooVector<ComplexValT<_Val>>;
 
-  using VectorType   = CooVector<_Val>;
+  using VectorType        = CooVector<_Val>;
+
+  using IteratorType      = CooVectorIterator<_Val>;
+  using ConstIteratorType = CooVectorConstIterator<_Val>;
 
  private:
 

@@ -9,6 +9,8 @@
 #define MCNLA_CORE_MATRIX_COO_COO_TUPLE2_HPP_
 
 #include <mcnla/core/matrix/coo/coo_tuple2.hh>
+#include <iomanip>
+#include <mcnla/core/matrix/coo/coo_tuple2_helper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -94,7 +96,8 @@ CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator()(
     const IdxType idx0,
     const IdxType idx1
 ) noexcept {
-  IdxType::operator=(idx0, idx1);
+  std::get<0>(*this) = idx0;
+  std::get<1>(*this) = idx1;
   val_ = val;
   return *this;
 }
@@ -107,7 +110,7 @@ CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator()(
     const ValType val,
     const IdxsType idxs
 ) noexcept {
-  IdxType::operator=(idxs);
+  IdxsType::operator=(idxs);
   val_ = val;
   return *this;
 }
@@ -120,9 +123,9 @@ std::ostream& operator<<(
     std::ostream &os,
     const CooTuple2<__Val, __Idx> &tuple
 ) {
-  return os << "( " << std::setw(kOsIdxWidth) << tuple.idx0() << ", "
-                    << std::setw(kOsIdxWidth) << tuple.idx1() << " ) "
-                    << std::setw(kOsValWidth) << tuple.val();
+  return os << "(" << std::setw(kOsIdxWidth) << tuple.idx0() << ", "
+                   << std::setw(kOsIdxWidth) << tuple.idx1() << ")  "
+                   << std::setw(kOsValWidth) << tuple.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

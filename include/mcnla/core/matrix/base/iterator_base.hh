@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_iterator_base.hh
-/// @brief   The definition of dense iterator interface.
+/// @file    include/mcnla/core/matrix/base/iterator_base.hh
+/// @brief   The definition of iterator interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_ITERATOR_BASE_HH_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_ITERATOR_BASE_HH_
+#ifndef MCNLA_CORE_MATRIX_BASE_ITERATOR_BASE_HH_
+#define MCNLA_CORE_MATRIX_BASE_ITERATOR_BASE_HH_
 
 #include <mcnla/core/matrix/def.hpp>
 #include <iterator>
@@ -23,18 +23,20 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module_detail
-/// The dense iterator interface.
+/// @ingroup  matrix_base_module
+/// The iterator interface.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseIteratorBase : public std::iterator<std::random_access_iterator_tag, ValT<_Derived>> {
+class IteratorBase : public std::iterator<std::random_access_iterator_tag, typename traits::Traits<_Derived>::ElemType> {
 
  private:
 
   static constexpr index_t ndim = traits::Traits<_Derived>::ndim;
-  using ValType       = ValT<_Derived>;
+  using ElemType      = typename traits::Traits<_Derived>::ElemType;
+  using ElemRefType   = typename traits::Traits<_Derived>::ElemRefType;
+  using ElemPtrType   = typename traits::Traits<_Derived>::ElemPtrType;
   using ContainerType = ContainerT<_Derived>;
 
  protected:
@@ -48,24 +50,24 @@ class DenseIteratorBase : public std::iterator<std::random_access_iterator_tag, 
  public:
 
   // Constructors
-  inline DenseIteratorBase() noexcept;
-  inline DenseIteratorBase( ContainerType *container, const index_t itidx = 0 ) noexcept;
-  inline DenseIteratorBase( const DenseIteratorBase &other ) noexcept;
+  inline IteratorBase() noexcept;
+  inline IteratorBase( ContainerType *container, const index_t itidx = 0 ) noexcept;
+  inline IteratorBase( const IteratorBase &other ) noexcept;
 
   // Assignment operators
-  inline _Derived& operator=( const DenseIteratorBase &other ) noexcept;
+  inline _Derived& operator=( const IteratorBase &other ) noexcept;
 
   // Member access operators
-  inline ValType& operator*() const noexcept;
-  inline ValType* operator->() const noexcept;
+  inline ElemRefType operator*() const noexcept;
+  inline ElemPtrType operator->() const noexcept;
 
   // Comparison operators
-  inline bool operator==( const DenseIteratorBase &other ) const noexcept;
-  inline bool operator!=( const DenseIteratorBase &other ) const noexcept;
-  inline bool operator>(  const DenseIteratorBase &other ) const noexcept;
-  inline bool operator<(  const DenseIteratorBase &other ) const noexcept;
-  inline bool operator>=( const DenseIteratorBase &other ) const noexcept;
-  inline bool operator<=( const DenseIteratorBase &other ) const noexcept;
+  inline bool operator==( const IteratorBase &other ) const noexcept;
+  inline bool operator!=( const IteratorBase &other ) const noexcept;
+  inline bool operator>(  const IteratorBase &other ) const noexcept;
+  inline bool operator<(  const IteratorBase &other ) const noexcept;
+  inline bool operator>=( const IteratorBase &other ) const noexcept;
+  inline bool operator<=( const IteratorBase &other ) const noexcept;
 
   // Arithmetic operators
   inline _Derived& operator++() noexcept;
@@ -77,9 +79,9 @@ class DenseIteratorBase : public std::iterator<std::random_access_iterator_tag, 
   inline _Derived  operator+(  const index_t num ) const noexcept;
   inline _Derived  operator-(  const index_t num ) const noexcept;
 
-  inline index_t operator-( const DenseIteratorBase &other ) const noexcept;
+  inline index_t operator-( const IteratorBase &other ) const noexcept;
   template <class __Derived>
-  friend inline __Derived operator+( const index_t num, const DenseIteratorBase<__Derived> iterator ) noexcept;
+  friend inline __Derived operator+( const index_t num, const IteratorBase<__Derived> iterator ) noexcept;
 
   // Gets data
   inline ContainerType* container() const noexcept;
@@ -105,4 +107,4 @@ class DenseIteratorBase : public std::iterator<std::random_access_iterator_tag, 
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_ITERATOR_BASE_HH_
+#endif  // MCNLA_CORE_MATRIX_BASE_ITERATOR_BASE_HH_
