@@ -104,7 +104,9 @@ CooVector<_Val>::CooVector( CooVector &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
-CooVector<_Val>& CooVector<_Val>::operator=( const CooVector &other ) noexcept {
+CooVector<_Val>& CooVector<_Val>::operator=(
+    const CooVector &other
+) noexcept {
   BaseType::operator=(other);
   return *this;
 }
@@ -113,7 +115,9 @@ CooVector<_Val>& CooVector<_Val>::operator=( const CooVector &other ) noexcept {
 /// @brief  Move assignment operator.
 ///
 template <typename _Val>
-CooVector<_Val>& CooVector<_Val>::operator=( CooVector &&other ) noexcept {
+CooVector<_Val>& CooVector<_Val>::operator=(
+    CooVector &&other
+) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
 }

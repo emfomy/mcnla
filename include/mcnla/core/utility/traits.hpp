@@ -92,6 +92,10 @@ using ValT = typename traits::Traits<_Derived>::ValType;
 
 /// @ingroup  utility_module
 template <class _Derived>
+using IdxT = typename traits::Traits<_Derived>::IdxType;
+
+/// @ingroup  utility_module
+template <class _Derived>
 using VectorT = typename traits::Traits<_Derived>::VectorType;
 
 /// @ingroup  utility_module

@@ -55,7 +55,7 @@ void OrthogonalizerWrapper<_Derived>::orthogonalize(
 /// @brief  Output name to stream.
 ///
 template <class __Derived>
-std::ostream& operator<< (
+std::ostream& operator<<(
     std::ostream &os,
     const OrthogonalizerWrapper<__Derived> &wrapper
 ) {

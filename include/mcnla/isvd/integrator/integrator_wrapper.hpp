@@ -54,7 +54,7 @@ void IntegratorWrapper<_Derived>::integrate() noexcept {
 /// @brief  Output name to stream.
 ///
 template <class __Derived>
-std::ostream& operator<< (
+std::ostream& operator<<(
     std::ostream &os,
     const IntegratorWrapper<__Derived> &wrapper
 ) {

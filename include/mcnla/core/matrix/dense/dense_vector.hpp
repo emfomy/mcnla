@@ -103,7 +103,9 @@ DenseVector<_Val>::DenseVector( DenseVector &&other ) noexcept
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
-DenseVector<_Val>& DenseVector<_Val>::operator=( const DenseVector &other ) noexcept {
+DenseVector<_Val>& DenseVector<_Val>::operator=(
+    const DenseVector &other
+) noexcept {
   BaseType::operator=(other);
   return *this;
 }
@@ -112,7 +114,9 @@ DenseVector<_Val>& DenseVector<_Val>::operator=( const DenseVector &other ) noex
 /// @brief  Move assignment operator.
 ///
 template <typename _Val>
-DenseVector<_Val>& DenseVector<_Val>::operator=( DenseVector &&other ) noexcept {
+DenseVector<_Val>& DenseVector<_Val>::operator=(
+    DenseVector &&other
+) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
 }

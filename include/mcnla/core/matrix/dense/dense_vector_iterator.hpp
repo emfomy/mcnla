@@ -24,12 +24,12 @@ namespace matrix {
 /// @brief  Output to stream.
 ///
 template <typename __Val, class __Vector>
-std::ostream& operator<< (
+std::ostream& operator<<(
     std::ostream &os,
     const DenseVectorIteratorBase<__Val, __Vector> &iterator
 ) {
   const index_t width = log10(iterator.container_->length())+1;
-  return os << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.val();
+  return os << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(kOsValWidth) << iterator.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -59,7 +59,7 @@ void SketcherWrapper<_Derived>::sketch(
 /// @brief  Output name to stream.
 ///
 template <class __Derived>
-std::ostream& operator<< (
+std::ostream& operator<<(
     std::ostream &os,
     const SketcherWrapper<__Derived> &wrapper
 ) {

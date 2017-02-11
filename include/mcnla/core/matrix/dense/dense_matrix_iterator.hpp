@@ -24,7 +24,7 @@ namespace matrix {
 /// @brief  Output to stream.
 ///
 template <typename __Val, Trans __trans, class __Matrix>
-std::ostream& operator<< (
+std::ostream& operator<<(
     std::ostream &os,
     const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &iterator
 ) {
@@ -33,7 +33,7 @@ std::ostream& operator<< (
   const index_t width   = std::max(width_r, width_c);
   return os << "(" << std::setw(width) << iterator.rowidx() << ", "
                    << std::setw(width) << iterator.colidx() << ")  "
-                   << std::setw(ios_width) << iterator.val();
+                   << std::setw(kOsValWidth) << iterator.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

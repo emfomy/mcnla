@@ -78,7 +78,8 @@ using index_t = std::int64_t;
 using size_t = std::size_t;
 
 /// The format width
-static constexpr size_t ios_width = 14;
+static constexpr size_t kOsValWidth = 14;
+static constexpr size_t kOsIdxWidth = 6;
 
 }  // namespace mcnla
 
