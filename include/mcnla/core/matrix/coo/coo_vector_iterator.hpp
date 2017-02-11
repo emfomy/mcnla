@@ -52,6 +52,15 @@ _Idx& CooVectorIteratorBase<_Val, _Idx, _Vector>::idx() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the first dimension index.
+///
+template <typename _Val, typename _Idx, class _Vector>
+_Idx& CooVectorIteratorBase<_Val, _Idx, _Vector>::idx0() const noexcept {
+  mcnla_assert_gelt(itidx_, 0, container_->nnz());
+  return container_->idx0Ptr()[itidx_];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the tuple.
 ///
 template <typename _Val, typename _Idx, class _Vector>

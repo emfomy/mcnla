@@ -49,6 +49,14 @@ _Val& DenseVectorIteratorBase<_Val, _Vector>::val() const noexcept {
 ///
 template <typename _Val, class _Vector>
 index_t DenseVectorIteratorBase<_Val, _Vector>::idx() const noexcept {
+  return idx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the first dimension index.
+///
+template <typename _Val, class _Vector>
+index_t DenseVectorIteratorBase<_Val, _Vector>::idx0() const noexcept {
   return itidx_;
 }
 

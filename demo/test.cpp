@@ -21,14 +21,19 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::CooVector<double> vec(10, 5);
-  int i = 0;
-  double j = 1;
-  for ( auto tuple : vec ) {
-    tuple.operator()(j, ++i);
-    j /= 2;
+  mcnla::matrix::CooMatrixColMajor<double> mat(10, 3, 5);
+  int i = 0, j = 2;
+  double v = 1;
+  for ( auto tuple : mat ) {
+    tuple.operator()(v, ++i, j);
+    v /= 2;
+    ++j;
+    j %= 3;
   }
-  std::cout << vec << std::endl;
+  for ( auto it = mat.begin(); it != mat.end(); ++it ) {
+    std::cout << *it << std::endl;
+  }
+  std::cout << mat << std::endl;
 
   return 0;
 }

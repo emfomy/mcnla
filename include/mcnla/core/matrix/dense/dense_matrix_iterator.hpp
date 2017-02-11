@@ -49,7 +49,7 @@ _Val& DenseMatrixIteratorBase<_Val, _trans, _Matrix>::val() const noexcept {
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::rowidx() const noexcept {
-  return !isTrans(_trans) ? itidx_ % container_->dim0() : itidx_ / container_->dim0();
+  return !isTrans(_trans) ? idx0() : idx1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,23 @@ index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::rowidx() const noexcept 
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::colidx() const noexcept {
-  return !isTrans(_trans) ? itidx_ / container_->dim0() : itidx_ % container_->dim0();
+  return !isTrans(_trans) ? idx1() : idx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the first dimension index.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::idx0() const noexcept {
+  return itidx_ % container_->dim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the second dimension index.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::idx1() const noexcept {
+  return itidx_ % container_->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

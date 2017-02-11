@@ -116,7 +116,7 @@ class CooVector
 
  private:
 
-  using BaseType     = CooVectorStorage<_Val>;
+  using BaseType          = CooVectorStorage<_Val>;
 
  public:
 

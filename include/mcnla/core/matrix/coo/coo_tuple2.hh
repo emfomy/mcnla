@@ -45,7 +45,7 @@ class CooTuple2 : public std::tuple<_Idx&, _Idx&> {
  protected:
 
   /// The value.
-  ValType val_;
+  ValType &val_;
 
  public:
 

@@ -13,6 +13,7 @@
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
+#include <mcnla/core/matrix/coo/coo_matrix_iterator.hpp>
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -47,13 +48,16 @@ struct Traits<matrix::CooMatrix<_Val, _trans>> {
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
-  using ValType     = _Val;
+  using ValType           = _Val;
 
-  using RealType    = matrix::CooMatrix<RealValT<_Val>, _trans>;
-  using ComplexType = matrix::CooMatrix<ComplexValT<_Val>, _trans>;
+  using RealType          = matrix::CooMatrix<RealValT<_Val>, _trans>;
+  using ComplexType       = matrix::CooMatrix<ComplexValT<_Val>, _trans>;
 
-  using VectorType  = matrix::CooVector<_Val>;
-  using MatrixType  = matrix::CooMatrix<_Val, _trans>;
+  using VectorType        = matrix::CooVector<_Val>;
+  using MatrixType        = matrix::CooMatrix<_Val, _trans>;
+
+  using IteratorType      = matrix::CooMatrixIterator<_Val, _trans>;
+  using ConstIteratorType = matrix::CooMatrixConstIterator<_Val, _trans>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,11 +96,13 @@ template <typename _Val, Trans _trans = Trans::NORMAL>
 class CooMatrix
   : public CooMatrixStorage<_Val>,
     public MatrixWrapper<CooMatrix<_Val, _trans>>,
+    public IterableWrapper<CooMatrix<_Val, _trans>>,
     public InvertibleWrapper<CooMatrix<_Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
   friend MatrixWrapper<CooMatrix<_Val, _trans>>;
+  friend IterableWrapper<CooMatrix<_Val, _trans>>;
   friend InvertibleWrapper<CooMatrix<_Val, _trans>>;
 
  public:
@@ -104,24 +110,27 @@ class CooMatrix
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
-  using ValType       = _Val;
-  using ValArrayType  = Array<_Val>;
-  using IdxArrayType  = Array<index_t>;
-  using SizesType     = std::tuple<index_t, index_t>;
+  using ValType           = _Val;
+  using ValArrayType      = Array<_Val>;
+  using IdxArrayType      = Array<index_t>;
+  using SizesType         = std::tuple<index_t, index_t>;
 
-  using RealType      = CooMatrix<RealValT<_Val>, _trans>;
-  using ComplexType   = CooMatrix<ComplexValT<_Val>, _trans>;
+  using RealType          = CooMatrix<RealValT<_Val>, _trans>;
+  using ComplexType       = CooMatrix<ComplexValT<_Val>, _trans>;
 
-  using VectorType    = CooVector<_Val>;
-  using MatrixType    = CooMatrix<_Val, _trans>;
+  using VectorType        = CooVector<_Val>;
+  using MatrixType        = CooMatrix<_Val, _trans>;
 
-  using TransposeType = CooMatrix<_Val, changeTrans(_trans)>;
-  using ConjugateType = CooMatrix<_Val, changeConj(_trans)>;
-  using HermitianType = CooMatrix<_Val, changeHerm(_trans)>;
+  using TransposeType     = CooMatrix<_Val, changeTrans(_trans)>;
+  using ConjugateType     = CooMatrix<_Val, changeConj(_trans)>;
+  using HermitianType     = CooMatrix<_Val, changeHerm(_trans)>;
+
+  using IteratorType      = CooMatrixIterator<_Val, _trans>;
+  using ConstIteratorType = CooMatrixConstIterator<_Val, _trans>;
 
  private:
 
-  using BaseType      = CooMatrixStorage<_Val>;
+  using BaseType          = CooMatrixStorage<_Val>;
 
  public:
 

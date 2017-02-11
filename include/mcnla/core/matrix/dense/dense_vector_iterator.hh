@@ -94,6 +94,7 @@ class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val
   // Gets value
   inline ValType&    val() const noexcept;
   inline index_t     idx() const noexcept;
+  inline index_t     idx0() const noexcept;
   inline index_t     pos() const noexcept;
   inline ElemRefType elemRef() const noexcept;
   inline ElemPtrType elemPtr() const noexcept;

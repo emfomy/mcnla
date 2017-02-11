@@ -1,17 +1,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/coo/coo_vector_iterator.hh
-/// @brief   The definition of COO vector iterator class.
+/// @file    include/mcnla/core/matrix/coo/coo_matrix_iterator.hh
+/// @brief   The definition of COO matrix iterator class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
-#define MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
+#ifndef MCNLA_CORE_MATRIX_COO_COO_MATRIX_ITERATOR_HH_
+#define MCNLA_CORE_MATRIX_COO_COO_MATRIX_ITERATOR_HH_
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
-#include <mcnla/core/matrix/coo/coo_vector.hpp>
-#include <mcnla/core/matrix/coo/coo_tuple1.hpp>
+#include <mcnla/core/matrix/coo/coo_matrix.hpp>
+#include <mcnla/core/matrix/coo/coo_tuple2.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,8 +25,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class CooVector;
-template <typename _Val, typename _Idx, class _Vector> class CooVectorIteratorBase;
+template <typename _Val, Trans _trans> class CooMatrix;
+template <typename _Val, typename _Idx, Trans _trans, class _Matrix> class CooMatrixIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -37,15 +37,16 @@ template <typename _Val, typename _Idx, class _Vector> class CooVectorIteratorBa
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO vector iterator traits.
+/// The COO matrix iterator traits.
 ///
-template <typename _Val, typename _Idx, class _Vector>
-struct Traits<matrix::CooVectorIteratorBase<_Val, _Idx, _Vector>> {
-  static constexpr index_t ndim = 1;
+template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
+struct Traits<matrix::CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
+  static constexpr index_t ndim = 2;
+  static constexpr Trans trans = _trans;
   using ElemType      = std::tuple<_Idx>;
-  using ElemRefType   = matrix::CooTuple1<_Val, _Idx>;
-  using ElemPtrType   = matrix::CooTuple1Ptr<_Val, _Idx>;
-  using ContainerType = _Vector;
+  using ElemRefType   = matrix::CooTuple2<_Val, _Idx>;
+  using ElemPtrType   = matrix::CooTuple2Ptr<_Val, _Idx>;
+  using ContainerType = _Matrix;
 };
 
 }  // namespace traits
@@ -57,29 +58,30 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_coo_module_detail
-/// The COO vector iterator.
+/// The COO matrix iterator.
 ///
 /// @tparam  _Val     The value type.
 /// @tparam  _Idx     The index type.
-/// @tparam  _Vector  The vector type.
+/// @tparam  _trans   The transpose storage layout.
+/// @tparam  _Matrix  The matrix type.
 ///
-/// @see  CooVectorIterator, CooVectorConstIterator
+/// @see  CooMatrixIterator, CooMatrixConstIterator
 ///
-template <typename _Val, typename _Idx, class _Vector>
-class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>> {
+template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
+class CooMatrixIteratorBase : public IteratorBase<CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
 
  private:
 
-  static constexpr index_t ndim = 1;
+  static constexpr index_t ndim = 2;
   using ValType       = _Val;
   using IdxType       = _Idx;
-  using TupleType     = CooTuple1<_Val, _Idx>;
+  using TupleType     = CooTuple2<_Val, _Idx>;
   using ElemType      = std::tuple<_Idx>;
-  using ElemRefType   = CooTuple1<_Val, _Idx>;
-  using ElemPtrType   = CooTuple1Ptr<_Val, _Idx>;
-  using ContainerType = _Vector;
+  using ElemRefType   = CooTuple2<_Val, _Idx>;
+  using ElemPtrType   = CooTuple2Ptr<_Val, _Idx>;
+  using ContainerType = _Matrix;
 
-  using BaseType      = IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>>;
+  using BaseType      = IteratorBase<CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>>;
 
  protected:
 
@@ -92,13 +94,15 @@ class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _I
   using BaseType::operator=;
 
   // Operators
-  template <typename __Val, typename __Idx, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<__Val, __Idx, __Vector> &it );
+  template <typename __Val, typename __Idx, Trans __trans, class __Matrix>
+  friend inline std::ostream& operator<<( std::ostream &os, const CooMatrixIteratorBase<__Val, __Idx, __trans, __Matrix> &it );
 
   // Gets value
   inline ValType&    val() const noexcept;
-  inline IdxType&    idx() const noexcept;
+  inline IdxType&    rowidx() const noexcept;
+  inline IdxType&    colidx() const noexcept;
   inline IdxType&    idx0() const noexcept;
+  inline IdxType&    idx1() const noexcept;
   inline TupleType   tuple() const noexcept;
   inline index_t     pos() const noexcept;
   inline ElemRefType elemRef() const noexcept;
@@ -107,15 +111,15 @@ class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _I
 };
 
 /// @ingroup  matrix_coo_module_detail
-template <typename _Val>
-using CooVectorIterator = CooVectorIteratorBase<_Val, index_t, CooVector<_Val>>;
+template <typename _Val, Trans _trans>
+using CooMatrixIterator = CooMatrixIteratorBase<_Val, index_t, _trans, CooMatrix<_Val, _trans>>;
 
 /// @ingroup  matrix_coo_module_detail
-template <typename _Val>
-using CooVectorConstIterator = CooVectorIteratorBase<const _Val, const index_t, const CooVector<_Val>>;
+template <typename _Val, Trans _trans>
+using CooMatrixConstIterator = CooMatrixIteratorBase<const _Val, const index_t, _trans, const CooMatrix<_Val, _trans>>;
 
 }  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
+#endif  // MCNLA_CORE_MATRIX_COO_COO_MATRIX_ITERATOR_HH_

@@ -22,6 +22,7 @@
 #include <mcnla/core/matrix/coo/coo_vector_iterator.hpp>
 
 #include <mcnla/core/matrix/coo/coo_matrix.hpp>
+#include <mcnla/core/matrix/coo/coo_matrix_iterator.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @defgroup  matrix_coo_module_detail  Coo Container Module Detail

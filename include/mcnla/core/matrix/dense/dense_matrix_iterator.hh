@@ -44,7 +44,6 @@ namespace traits {
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 struct Traits<matrix::DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
-
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   using ElemType      = _Val;
@@ -97,13 +96,14 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
 
   // Operators
   template <typename __Val, Trans __trans, class __Matrix>
-  friend inline std::ostream& operator<<( std::ostream &os,
-                                          const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &it );
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &it );
 
   // Gets value
   inline ValType&    val() const noexcept;
   inline index_t     rowidx() const noexcept;
   inline index_t     colidx() const noexcept;
+  inline index_t     idx0() const noexcept;
+  inline index_t     idx1() const noexcept;
   inline index_t     pos() const noexcept;
   inline ElemRefType elemRef() const noexcept;
   inline ElemPtrType elemPtr() const noexcept;
