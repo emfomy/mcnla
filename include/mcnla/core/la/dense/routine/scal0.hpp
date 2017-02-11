@@ -31,9 +31,9 @@ namespace la {
 ///             Uses memset0() instead if the out-of-range spaces are useless.
 /// @attention  However, memset0() is slow if the stride is vary large.
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void scal0(
-  DenseVector<_Scalar> &x
+  DenseVector<_Val> &x
 ) noexcept {
   if ( x.isShrunk() ) {
     memset0(x);
@@ -43,9 +43,9 @@ inline void scal0(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void scal0(
-  DenseVector<_Scalar> &&x
+  DenseVector<_Val> &&x
 ) noexcept {
   scal0(x);
 }
@@ -59,9 +59,9 @@ inline void scal0(
 ///             Uses memset0() instead if the out-of-range spaces are useless.
 /// @attention  However, memset0() is slow if the pitch much larger than the size.
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _trans> &x
+  DenseMatrix<_Val, _trans> &x
 ) noexcept {
   if ( x.isShrunk() ) {
     memset0(x);
@@ -71,9 +71,9 @@ inline void scal0(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _trans> &&x
+  DenseMatrix<_Val, _trans> &&x
 ) noexcept {
   scal0(x);
 }

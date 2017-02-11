@@ -25,17 +25,17 @@ namespace matrix {
 /// @ingroup  matrix_coo_module_detail
 /// The coordinate list (COO) storage.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class CooStorage : protected DenseStorage<_Scalar> {
+template <typename _Val>
+class CooStorage : protected DenseStorage<_Val> {
 
  private:
 
-  using ScalarType   = _Scalar;
-  using ValArrayType = Array<ScalarType>;
+  using ValType      = _Val;
+  using ValArrayType = Array<ValType>;
 
-  using BaseType     = DenseStorage<_Scalar>;
+  using BaseType     = DenseStorage<_Val>;
 
  protected:
 

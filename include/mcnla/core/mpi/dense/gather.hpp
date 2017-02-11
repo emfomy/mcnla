@@ -26,15 +26,15 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void gatherImpl(
-    const DenseStorage<_Scalar> &send,
-          DenseStorage<_Scalar> &recv,
+    const DenseStorage<_Val> &send,
+          DenseStorage<_Val> &recv,
     const mpi_int_t root,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Gather(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, root, comm);
 }
 
@@ -48,10 +48,10 @@ inline void gatherImpl(
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void gather(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
@@ -63,10 +63,10 @@ inline void gather(
   detail::gatherImpl(send, recv, root, comm, send.nelem());
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _transs, Trans _transr>
 inline void gather(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &recv,
+    const DenseMatrix<_Val, _transs> &send,
+          DenseMatrix<_Val, _transr> &recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
@@ -81,20 +81,20 @@ inline void gather(
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void gather(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &&recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &&recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   gather(send, recv, root, comm);
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _transs, Trans _transr>
 inline void gather(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &&recv,
+    const DenseMatrix<_Val, _transs> &send,
+          DenseMatrix<_Val, _transr> &&recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {

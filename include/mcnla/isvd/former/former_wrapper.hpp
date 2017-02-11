@@ -47,7 +47,7 @@ void FormerWrapper<_Derived>::initialize() noexcept {
 template <class _Derived> template <class _Matrix>
 void FormerWrapper<_Derived>::form(
     const _Matrix &matrix_a,
-    const DenseMatrixRowMajor<ScalarType> &matrix_q
+    const DenseMatrixRowMajor<ValType> &matrix_q
 ) noexcept {
   this->derived().formImpl(matrix_a, matrix_q);
 }
@@ -85,7 +85,7 @@ double FormerWrapper<_Derived>::time() const noexcept {
 /// @brief  Gets the vector S.
 ///
 template <class _Derived>
-const DenseVector<RealScalarT<ScalarT<_Derived>>>& FormerWrapper<_Derived>::vectorS() const noexcept {
+const DenseVector<RealValT<ValT<_Derived>>>& FormerWrapper<_Derived>::vectorS() const noexcept {
   return this->derived().vectorSImpl();
 }
 
@@ -93,7 +93,7 @@ const DenseVector<RealScalarT<ScalarT<_Derived>>>& FormerWrapper<_Derived>::vect
 /// @brief  Gets the matrix U.
 ///
 template <class _Derived>
-const DenseMatrixColMajor<ScalarT<_Derived>>& FormerWrapper<_Derived>::matrixU() const noexcept {
+const DenseMatrixColMajor<ValT<_Derived>>& FormerWrapper<_Derived>::matrixU() const noexcept {
   return this->derived().matrixUImpl();
 }
 
@@ -101,7 +101,7 @@ const DenseMatrixColMajor<ScalarT<_Derived>>& FormerWrapper<_Derived>::matrixU()
 /// @brief  Gets the transpose of the matrix V.
 ///
 template <class _Derived>
-const DenseMatrixColMajor<ScalarT<_Derived>>& FormerWrapper<_Derived>::matrixVt() const noexcept {
+const DenseMatrixColMajor<ValT<_Derived>>& FormerWrapper<_Derived>::matrixVt() const noexcept {
   return this->derived().matrixVtImpl();
 }
 

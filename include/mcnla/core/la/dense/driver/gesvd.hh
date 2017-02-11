@@ -42,12 +42,12 @@ class GesvdDriver {
 
   static constexpr Trans trans = _Matrix::trans;
 
-  using ScalarType     = ScalarT<_Matrix>;
+  using ValType        = ValT<_Matrix>;
   using VectorType     = VectorT<_Matrix>;
   using RealVectorType = RealT<VectorT<_Matrix>>;
   using MatrixType     = _Matrix;
 
-  static constexpr bool is_real = traits::ScalarTraits<ScalarType>::is_real;
+  static constexpr bool is_real = traits::ValTraits<ValType>::is_real;
 
  protected:
 

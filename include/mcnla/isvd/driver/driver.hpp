@@ -23,8 +23,8 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::Driver(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::Driver(
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
@@ -40,8 +40,8 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::D
 /// @brief  Initializes.
 /// Broadcasts the parameters to all MPI ranks and allocates the memories.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-void Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::initialize() noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+void Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::initialize() noexcept {
 
   // Broadcast parameters
   MPI_Bcast(&parameters_, sizeof(parameters_), MPI_BYTE, mpi_root_, mpi_comm_);
@@ -73,9 +73,9 @@ void Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 /// @attention  The driver should have be @ref initialize "initialized".
 /// @attention  @a matrix_a should be the same in each MPI node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 template <class _Matrix>
-void Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::compute(
+void Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::compute(
     const _Matrix &matrix_a
 ) noexcept {
   mcnla_assert_true(parameters_.isInitialized());
@@ -95,9 +95,9 @@ void Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTa
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sketcher.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Sketcher<_SketcherTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Sketcher<_SketcherTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
 ) noexcept {
   return sketcher_;
 }
@@ -105,9 +105,9 @@ Sketcher<_SketcherTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  sketcher
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Sketcher<_SketcherTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const Sketcher<_SketcherTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcher(
 ) const noexcept {
   return sketcher_;
 }
@@ -115,9 +115,9 @@ const Sketcher<_SketcherTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the orthogonalizer.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Orthogonalizer<_OrthogonalizerTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Orthogonalizer<_OrthogonalizerTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) noexcept {
   return orthogonalizer_;
 }
@@ -125,9 +125,9 @@ Orthogonalizer<_OrthogonalizerTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  orthogonalizer
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Orthogonalizer<_OrthogonalizerTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const Orthogonalizer<_OrthogonalizerTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizer(
 ) const noexcept {
   return orthogonalizer_;
 }
@@ -135,9 +135,9 @@ const Orthogonalizer<_OrthogonalizerTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the integrator.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Integrator<_IntegratorTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Integrator<_IntegratorTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
 ) noexcept {
   return integrator_;
 }
@@ -145,9 +145,9 @@ Integrator<_IntegratorTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  integrator
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Integrator<_IntegratorTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const Integrator<_IntegratorTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integrator(
 ) const noexcept {
   return integrator_;
 }
@@ -155,9 +155,9 @@ const Integrator<_IntegratorTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the former.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Former<_FormerTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Former<_FormerTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
 ) noexcept {
   return former_;
 }
@@ -165,9 +165,9 @@ Former<_FormerTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  former
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const Former<_FormerTag, _Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const Former<_FormerTag, _Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::former(
 ) const noexcept {
   return former_;
 }
@@ -175,8 +175,8 @@ const Former<_FormerTag, _Scalar>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of running sketcher.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcherTime() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+double Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::sketcherTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return sketcher_.time();
 }
@@ -184,8 +184,8 @@ double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of running orthogonalizer.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizerTime() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+double Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::orthogonalizerTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return orthogonalizer_.time();
 }
@@ -193,8 +193,8 @@ double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of running integrator.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorTime() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+double Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.time();
 }
@@ -202,8 +202,8 @@ double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of running former.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::formerTime() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+double Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::formerTime() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.time();
 }
@@ -211,8 +211,8 @@ double Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Former
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of iterator when running integrator.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-index_t Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorIteration() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+index_t Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratorIteration() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.iteration();
 }
@@ -222,9 +222,9 @@ index_t Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _Forme
 ///
 /// @attention  The driver should have been @ref compute "computed".
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const DenseVector<RealScalarT<_Scalar>>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::singularValues() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const DenseVector<RealValT<_Val>>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::singularValues() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.vectorS();
 }
@@ -234,9 +234,9 @@ const DenseVector<RealScalarT<_Scalar>>&
 ///
 /// @attention  The driver should have been @ref compute "computed".
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const DenseMatrixColMajor<_Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::leftSingularVectors() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const DenseMatrixColMajor<_Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::leftSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.matrixU();
 }
@@ -246,9 +246,9 @@ const DenseMatrixColMajor<_Scalar>&
 ///
 /// @attention  The driver should have be computed.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const DenseMatrixColMajor<_Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::rightSingularVectors() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const DenseMatrixColMajor<_Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::rightSingularVectors() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return former_.matrixVt();
 }
@@ -258,9 +258,9 @@ const DenseMatrixColMajor<_Scalar>&
 ///
 /// @attention  The driver should have be computed.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const DenseMatrixRowMajor<_Scalar>&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratedOrthogonalBasis() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const DenseMatrixRowMajor<_Val>&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::integratedOrthogonalBasis() const noexcept {
   mcnla_assert_true(parameters_.isComputed());
   return integrator_.matrixQ();
 }
@@ -270,9 +270,9 @@ const DenseMatrixRowMajor<_Scalar>&
 ///
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-const typename Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::ParametersType&
-    Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::parameters() const noexcept {
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+const typename Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::ParametersType&
+    Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::parameters() const noexcept {
   mcnla_assert_true(mpi::isCommRoot(mpi_root_, mpi_comm_));
   return parameters_;
 }
@@ -282,9 +282,9 @@ const typename Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag,
 ///
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
@@ -301,10 +301,10 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  setSize
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
 template <class _Matrix>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSize(
     const _Matrix &matrix
 ) noexcept {
   return setSize(matrix.nrow(), matrix.ncol());
@@ -315,9 +315,9 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setRank(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setRank(
     const index_t rank
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -334,9 +334,9 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setOverRank(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setOverRank(
     const index_t over_rank
   ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -354,9 +354,9 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 /// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size".
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketch(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketch(
     const index_t num_sketch
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -373,9 +373,9 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketchEach(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setNumSketchEach(
     const index_t num_sketch_each
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -392,9 +392,9 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setMaxIteration(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
@@ -409,10 +409,10 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 /// @attention  Only affects on root node.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setTolerance(
-    const RealScalarType tolerance
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setTolerance(
+    const RealValType tolerance
 ) noexcept {
   if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
     return *this;
@@ -426,9 +426,9 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 /// @attention  Affects on current node only.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeed(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeed(
     const index_t seed
 ) noexcept {
   sketcher_.setSeed(seed);
@@ -440,9 +440,9 @@ Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
 ///
 /// @attention  Affects on all MPI nodes.
 ///
-template <typename _Scalar, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
-Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
-  Driver<_Scalar, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeeds(
+template <typename _Val, class _SketcherTag, class _OrthogonalizerTag, class _IntegratorTag, class _FormerTag>
+Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>&
+  Driver<_Val, _SketcherTag, _OrthogonalizerTag, _IntegratorTag, _FormerTag>::setSeeds(
     const index_t seed
 ) noexcept {
   sketcher_.setSeeds(seed);

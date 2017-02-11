@@ -32,22 +32,22 @@ namespace random {
 namespace detail {
 
 
-template <typename _Scalar>
+template <typename _Val>
 static inline void uniformImpl(
           VSLStreamStatePtr stream,
-          DenseVector<_Scalar> &&vector,
-    const _Scalar a,
-    const _Scalar b
+          DenseVector<_Val> &&vector,
+    const _Val a,
+    const _Val b
 ) noexcept {
   detail::vRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, vector.length(), vector.valPtr(), a, b);
 }
 
-template <typename _Scalar>
+template <typename _Val>
 static inline void gaussianImpl(
           VSLStreamStatePtr stream,
-          DenseVector<_Scalar> &&vector,
-    const _Scalar a,
-    const _Scalar b
+          DenseVector<_Val> &&vector,
+    const _Val a,
+    const _Val b
 ) noexcept {
   detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, vector.length(), vector.valPtr(), a, b);
 }

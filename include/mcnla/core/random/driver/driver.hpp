@@ -30,8 +30,8 @@ namespace random {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given seed.
 ///
-template <typename _Scalar>
-Driver<_Scalar>::Driver(
+template <typename _Val>
+Driver<_Val>::Driver(
     const index_t seed
 ) noexcept
 #ifdef MCNLA_USE_OMP
@@ -46,8 +46,8 @@ Driver<_Scalar>::Driver(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default destructor.
 ///
-template <typename _Scalar>
-Driver<_Scalar>::~Driver() noexcept {
+template <typename _Val>
+Driver<_Val>::~Driver() noexcept {
   #ifdef MCNLA_USE_MKL
     #pragma omp parallel for
     for ( index_t i = 0; i < omp_size_; ++i ) {
@@ -59,19 +59,19 @@ Driver<_Scalar>::~Driver() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of OpenMP threads.
 ///
-template <typename _Scalar>
-index_t Driver<_Scalar>::ompSize() const noexcept {
+template <typename _Val>
+index_t Driver<_Val>::ompSize() const noexcept {
   return omp_size_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Returns a vector of random numbers from a uniform distribution.
 ///
-template <typename _Scalar>
-void Driver<_Scalar>::uniform(
+template <typename _Val>
+void Driver<_Val>::uniform(
           VectorType &vector,
-    const ScalarType a,
-    const ScalarType b
+    const ValType a,
+    const ValType b
 ) noexcept {
   #pragma omp parallel for
   for ( index_t i = 0; i < omp_size_; ++i ) {
@@ -87,11 +87,11 @@ void Driver<_Scalar>::uniform(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  uniform
 ///
-template <typename _Scalar>
-void Driver<_Scalar>::uniform(
+template <typename _Val>
+void Driver<_Val>::uniform(
           VectorType &&vector,
-    const ScalarType a,
-    const ScalarType b
+    const ValType a,
+    const ValType b
 ) noexcept {
   uniform(vector, a, b);
 }
@@ -99,11 +99,11 @@ void Driver<_Scalar>::uniform(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Returns a vector of random numbers from a normal (Gaussian) distribution.
 ///
-template <typename _Scalar>
-void Driver<_Scalar>::gaussian(
+template <typename _Val>
+void Driver<_Val>::gaussian(
           VectorType &vector,
-    const ScalarType a,
-    const ScalarType b
+    const ValType a,
+    const ValType b
 ) noexcept {
   #pragma omp parallel for
   for ( index_t i = 0; i < omp_size_; ++i ) {
@@ -119,11 +119,11 @@ void Driver<_Scalar>::gaussian(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  gaussian
 ///
-template <typename _Scalar>
-void Driver<_Scalar>::gaussian(
+template <typename _Val>
+void Driver<_Val>::gaussian(
           VectorType &&vector,
-    const ScalarType a,
-    const ScalarType b
+    const ValType a,
+    const ValType b
 ) noexcept {
   gaussian(vector, a, b);
 }
@@ -131,8 +131,8 @@ void Driver<_Scalar>::gaussian(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the random seed.
 ///
-template <typename _Scalar>
-void Driver<_Scalar>::setSeed(
+template <typename _Val>
+void Driver<_Val>::setSeed(
     const index_t seed
 ) noexcept {
 

@@ -24,8 +24,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans> class DenseMatrix;
-template <typename _Scalar, Trans _trans, class _Matrix> class DenseMatrixIteratorBase;
+template <typename _Val, Trans _trans> class DenseMatrix;
+template <typename _Val, Trans _trans, class _Matrix> class DenseMatrixIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -38,16 +38,16 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix iterator traits.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val     The value type.
 /// @tparam  _trans   The transpose storage layout.
 /// @tparam  _Matrix  The matrix type.
 ///
-template <typename _Scalar, Trans _trans, class _Matrix>
-struct Traits<matrix::DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>> {
+template <typename _Val, Trans _trans, class _Matrix>
+struct Traits<matrix::DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
 
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
-  using ScalarType    = _Scalar;
+  using ValType       = _Val;
   using ContainerType = _Matrix;
 };
 
@@ -62,23 +62,23 @@ namespace matrix {
 /// @ingroup  matrix_dense_module_detail
 /// The dense matrix iterator.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 /// @tparam  _trans  The storage layout.
 /// @tparam  _Matrix  The matrix type.
 ///
 /// @see  DenseMatrixIterator, DenseMatrixConstIterator
 ///
-template <typename _Scalar, Trans _trans, class _Matrix>
-class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>> {
+template <typename _Val, Trans _trans, class _Matrix>
+class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
 
  private:
 
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
-  using ScalarType    = _Scalar;
+  using ValType       = _Val;
   using ContainerType = _Matrix;
 
-  using BaseType      = DenseIteratorBase<DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>>;
+  using BaseType      = DenseIteratorBase<DenseMatrixIteratorBase<_Val, _trans, _Matrix>>;
 
  protected:
 
@@ -91,12 +91,12 @@ class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase
   using BaseType::operator=;
 
   // Operators
-  template <typename __Scalar, Trans __trans, class __Matrix>
+  template <typename __Val, Trans __trans, class __Matrix>
   friend inline std::ostream& operator<<( std::ostream &os,
-                                          const DenseMatrixIteratorBase<__Scalar, __trans, __Matrix> &iterator );
+                                          const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &iterator );
 
   // Gets value
-  inline ScalarType& val() const noexcept;
+  inline ValType& val() const noexcept;
   inline index_t     rowidx() const noexcept;
   inline index_t     colidx() const noexcept;
   inline index_t     pos() const noexcept;
@@ -104,12 +104,12 @@ class DenseMatrixIteratorBase : public DenseIteratorBase<DenseMatrixIteratorBase
 };
 
 /// @ingroup  matrix_dense_module_detail
-template <typename _Scalar, Trans _trans>
-using DenseMatrixIterator = DenseMatrixIteratorBase<_Scalar, _trans, DenseMatrix<_Scalar, _trans>>;
+template <typename _Val, Trans _trans>
+using DenseMatrixIterator = DenseMatrixIteratorBase<_Val, _trans, DenseMatrix<_Val, _trans>>;
 
 /// @ingroup  matrix_dense_module_detail
-template <typename _Scalar, Trans _trans>
-using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Scalar, _trans, const DenseMatrix<_Scalar, _trans>>;
+template <typename _Val, Trans _trans>
+using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Val, _trans, const DenseMatrix<_Val, _trans>>;
 
 }  // namespace matrix
 

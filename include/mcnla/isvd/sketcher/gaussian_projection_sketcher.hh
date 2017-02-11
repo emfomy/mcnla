@@ -32,31 +32,31 @@ template <index_t _exponent = 0>
 struct GaussianProjectionSketcherTag {};
 
 /// @ingroup  isvd_sketcher_module
-template <typename _Scalar, index_t _exponent = 0>
-using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>;
+template <typename _Val, index_t _exponent = 0>
+using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher.
 ///
-/// @tparam  _Scalar    The scalar type.
+/// @tparam  _Val    The value type.
 /// @tparam  _exponent  exponent of the power method.
 ///
-template <typename _Scalar, index_t _exponent>
-class Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>
-  : public SketcherWrapper<GaussianProjectionSketcher<_Scalar, _exponent>> {
+template <typename _Val, index_t _exponent>
+class Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>
+  : public SketcherWrapper<GaussianProjectionSketcher<_Val, _exponent>> {
 
-  friend SketcherWrapper<GaussianProjectionSketcher<_Scalar, _exponent>>;
+  friend SketcherWrapper<GaussianProjectionSketcher<_Val, _exponent>>;
 
  private:
 
-  using BaseType = SketcherWrapper<GaussianProjectionSketcher<_Scalar, _exponent>>;
+  using BaseType = SketcherWrapper<GaussianProjectionSketcher<_Val, _exponent>>;
 
  public:
 
-  using ScalarType = _Scalar;
+  using ValType = _Val;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -73,10 +73,10 @@ class Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>
   double time2_;
 
   /// The matrix Omega.
-  DenseMatrixRowMajor<ScalarType> matrix_omegas_;
+  DenseMatrixRowMajor<ValType> matrix_omegas_;
 
   /// The random driver
-  random::Driver<ScalarType> random_driver_;
+  random::Driver<ValType> random_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;
@@ -99,7 +99,7 @@ class Sketcher<GaussianProjectionSketcherTag<_exponent>, _Scalar>
 
   // Random sketches
   template <class _Matrix>
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
+  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ValType> &collection_q ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;

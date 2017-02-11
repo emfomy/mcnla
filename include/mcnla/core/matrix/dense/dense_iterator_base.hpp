@@ -66,7 +66,7 @@ _Derived& DenseIteratorBase<_Derived>::operator=(
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <class _Derived>
-ScalarT<_Derived>& DenseIteratorBase<_Derived>::operator*() const noexcept {
+ValT<_Derived>& DenseIteratorBase<_Derived>::operator*() const noexcept {
   return derived().val();
 }
 
@@ -76,7 +76,7 @@ ScalarT<_Derived>& DenseIteratorBase<_Derived>::operator*() const noexcept {
 /// @attention  Never call this when the iterator is at the end.
 ///
 template <class _Derived>
-ScalarT<_Derived>* DenseIteratorBase<_Derived>::operator->() const noexcept {
+ValT<_Derived>* DenseIteratorBase<_Derived>::operator->() const noexcept {
   return &(derived().val());
 }
 
@@ -264,7 +264,7 @@ __Derived operator+(
     const index_t num,
     const DenseIteratorBase<__Derived> &iterator
 ) noexcept {
-  return iterator + num;
+  return (iterator + num);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

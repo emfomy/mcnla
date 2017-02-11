@@ -9,20 +9,20 @@
 #include <mcnla.hpp>
 #include "statistics_set.hpp"
 
-using ScalarType = double;
+using ValType = double;
 
-ScalarType tolerance = 1e-4;
+ValType tolerance = 1e-4;
 mcnla::index_t maxiter = 256;
 
-void create( mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
+void create( mcnla::matrix::DenseMatrix<ValType> &matrix_a,
              const mcnla::index_t rank ) noexcept;
 
 template <mcnla::Trans _trans>
-void check( const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_a,
-            const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_u,
-            const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_vt,
-            const mcnla::matrix::DenseVector<ScalarType> &vector_s,
-            ScalarType &frerr ) noexcept;
+void check( const mcnla::matrix::DenseMatrix<ValType, _trans> &matrix_a,
+            const mcnla::matrix::DenseMatrix<ValType, _trans> &matrix_u,
+            const mcnla::matrix::DenseMatrix<ValType, _trans> &matrix_vt,
+            const mcnla::matrix::DenseVector<ValType> &vector_s,
+            ValType &frerr ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -78,8 +78,8 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize driver
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_a(m, n);
-  mcnla::isvd::Driver<ScalarType,
+  mcnla::matrix::DenseMatrix<ValType> matrix_a(m, n);
+  mcnla::isvd::Driver<ValType,
                       mcnla::isvd::GaussianProjectionSketcherTag<0>,
                       mcnla::isvd::SvdOrthogonalizerTag,
                       mcnla::isvd::KolmogorovNagumoIntegratorTag,
@@ -118,7 +118,7 @@ int main( int argc, char **argv ) {
 
     // Check result
     if ( mpi_rank == mpi_root  ) {
-      ScalarType frerr;
+      ValType frerr;
       check(matrix_a, driver.leftSingularVectors(), driver.rightSingularVectors(), driver.singularValues(), frerr);
       auto iter    = driver.integratorIteration();
       auto maxiter = driver.parameters().maxIteration();
@@ -162,13 +162,13 @@ int main( int argc, char **argv ) {
 /// Create matrix A
 ///
 void create(
-          mcnla::matrix::DenseMatrix<ScalarType> &matrix_a,
+          mcnla::matrix::DenseMatrix<ValType> &matrix_a,
     const mcnla::index_t rank
 ) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_u(matrix_a.nrow(), rank);
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_v(matrix_a.ncol(), rank);
-  mcnla::matrix::DenseMatrix<ScalarType> matrix_empty;
-  mcnla::matrix::DenseVector<ScalarType> vector_s(rank);
+  mcnla::matrix::DenseMatrix<ValType> matrix_u(matrix_a.nrow(), rank);
+  mcnla::matrix::DenseMatrix<ValType> matrix_v(matrix_a.ncol(), rank);
+  mcnla::matrix::DenseMatrix<ValType> matrix_empty;
+  mcnla::matrix::DenseVector<ValType> vector_s(rank);
 
   // Generate E & U & V using normal random
   mcnla::random::gaussian(matrix_a.vectorize(), rand());
@@ -183,7 +183,7 @@ void create(
   for ( mcnla::index_t i = 0; i < rank; ++i ) {
     mcnla::la::scal(matrix_u("", i), 1.0/(i+1));
   }
-  ScalarType beta = 1.0 / rank / mcnla::la::nrmf(matrix_a);
+  ValType beta = 1.0 / rank / mcnla::la::nrmf(matrix_a);
   mcnla::la::mm(matrix_u, matrix_v.t(), matrix_a, 1.0, beta);
 }
 
@@ -192,14 +192,14 @@ void create(
 ///
 template <mcnla::Trans _trans>
 void check(
-    const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_a,
-    const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_u,
-    const mcnla::matrix::DenseMatrix<ScalarType, _trans> &matrix_vt,
-    const mcnla::matrix::DenseVector<ScalarType>         &vector_s,
-          ScalarType &frerr
+    const mcnla::matrix::DenseMatrix<ValType, _trans> &matrix_a,
+    const mcnla::matrix::DenseMatrix<ValType, _trans> &matrix_u,
+    const mcnla::matrix::DenseMatrix<ValType, _trans> &matrix_vt,
+    const mcnla::matrix::DenseVector<ValType>         &vector_s,
+          ValType &frerr
 ) noexcept {
-  mcnla::matrix::DenseMatrix<ScalarType, _trans> matrix_a_tmp(matrix_a.sizes());
-  mcnla::matrix::DenseMatrix<ScalarType, _trans> matrix_u_tmp(matrix_u.sizes());
+  mcnla::matrix::DenseMatrix<ValType, _trans> matrix_a_tmp(matrix_a.sizes());
+  mcnla::matrix::DenseMatrix<ValType, _trans> matrix_u_tmp(matrix_u.sizes());
 
   // A_tmp := A, U_tmp = U
   mcnla::la::copy(matrix_a, matrix_a_tmp);

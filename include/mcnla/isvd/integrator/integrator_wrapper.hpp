@@ -91,7 +91,7 @@ index_t IntegratorWrapper<_Derived>::iteration() const noexcept {
 /// @brief  Gets the collection Q.
 ///
 template <class _Derived>
-DenseMatrixCollection120<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::collectionQ() noexcept {
+DenseMatrixCollection120<ValT<_Derived>>& IntegratorWrapper<_Derived>::collectionQ() noexcept {
   return this->derived().collectionQImpl();
 }
 
@@ -99,7 +99,7 @@ DenseMatrixCollection120<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::collec
 /// @copydoc  collectionQ
 ///
 template <class _Derived>
-const DenseMatrixCollection120<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::collectionQ() const noexcept {
+const DenseMatrixCollection120<ValT<_Derived>>& IntegratorWrapper<_Derived>::collectionQ() const noexcept {
   return this->derived().collectionQImpl();
 }
 
@@ -107,7 +107,7 @@ const DenseMatrixCollection120<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::
 /// @brief  Gets the matrix Q.
 ///
 template <class _Derived>
-DenseMatrixRowMajor<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::matrixQ() noexcept {
+DenseMatrixRowMajor<ValT<_Derived>>& IntegratorWrapper<_Derived>::matrixQ() noexcept {
   return this->derived().matrixQImpl();
 }
 
@@ -115,7 +115,7 @@ DenseMatrixRowMajor<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::matrixQ() n
 /// @copydoc  matrixQ
 ///
 template <class _Derived>
-const DenseMatrixRowMajor<ScalarT<_Derived>>& IntegratorWrapper<_Derived>::matrixQ() const noexcept {
+const DenseMatrixRowMajor<ValT<_Derived>>& IntegratorWrapper<_Derived>::matrixQ() const noexcept {
   return this->derived().matrixQImpl();
 }
 

@@ -26,18 +26,18 @@ namespace la {
 /// @brief  Solves a system of linear equations with multiple right-hand sides.
 ///
 //@{
-template <class _A, class _B, typename _Scalar>
+template <class _A, class _B, typename _Val>
 inline void sm(
     const InverseView<MatrixWrapper<_A>> &a,
           MatrixWrapper<_B> &b,
-    const _Scalar alpha = 1
+    const _Val alpha = 1
 ) noexcept;
 
-template <class _A, class _B, typename _Scalar>
+template <class _A, class _B, typename _Val>
 inline void sm(
           MatrixWrapper<_B> &b,
     const InverseView<MatrixWrapper<_A>> &a,
-    const _Scalar alpha = 1
+    const _Val alpha = 1
 ) noexcept;
 //@}
 

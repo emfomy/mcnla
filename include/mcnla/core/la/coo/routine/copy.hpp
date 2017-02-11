@@ -26,10 +26,10 @@ namespace la {
 /// @ingroup  la_coo_blas1_module
 /// @brief  Copies vector to another vector.
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void copy(
-    const CooVector<_Scalar> &x,
-          DenseVector<_Scalar> &y
+    const CooVector<_Val> &x,
+          DenseVector<_Val> &y
 ) noexcept {
   mcnla_assert_eq(x.sizes(), y.sizes());
 
@@ -40,10 +40,10 @@ inline void copy(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void copy(
-    const CooVector<_Scalar> &x,
-          DenseVector<_Scalar> &&y
+    const CooVector<_Val> &x,
+          DenseVector<_Val> &&y
 ) noexcept {
   copy(x, y);
 }

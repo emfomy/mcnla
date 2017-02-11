@@ -29,31 +29,31 @@ namespace isvd {
 struct SvdFormerTag {};
 
 /// @ingroup  isvd_former_module
-template <typename _Scalar>
-using SvdFormer = Former<SvdFormerTag, _Scalar>;
+template <typename _Val>
+using SvdFormer = Former<SvdFormerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
 /// The SVD former.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Former<SvdFormerTag, _Scalar>
-  : public FormerWrapper<SvdFormer<_Scalar>> {
+template <typename _Val>
+class Former<SvdFormerTag, _Val>
+  : public FormerWrapper<SvdFormer<_Val>> {
 
-  friend FormerWrapper<SvdFormer<_Scalar>>;
+  friend FormerWrapper<SvdFormer<_Val>>;
 
  private:
 
-  using BaseType = FormerWrapper<SvdFormer<_Scalar>>;
+  using BaseType = FormerWrapper<SvdFormer<_Val>>;
 
  public:
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<ScalarType>;
+  using ValType        = _Val;
+  using RealValType = RealValT<ValType>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -73,31 +73,31 @@ class Former<SvdFormerTag, _Scalar>
   double time3_;
 
   /// The matrix W.
-  DenseMatrixColMajor<ScalarType> matrix_w_;
+  DenseMatrixColMajor<ValType> matrix_w_;
 
   /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
+  DenseVector<RealValType> vector_s_;
 
   /// The cut vector S.
-  DenseVector<RealScalarType> vector_s_cut_;
+  DenseVector<RealValType> vector_s_cut_;
 
   /// The matrix U.
-  DenseMatrixColMajor<ScalarType> matrix_u_;
+  DenseMatrixColMajor<ValType> matrix_u_;
 
   /// The cut matrix U.
-  DenseMatrixColMajor<ScalarType> matrix_u_cut_;
+  DenseMatrixColMajor<ValType> matrix_u_cut_;
 
   /// The matrix Vt.
-  DenseMatrixColMajor<ScalarType> matrix_vt_;
+  DenseMatrixColMajor<ValType> matrix_vt_;
 
   /// The cut matrix Vt.
-  DenseMatrixColMajor<ScalarType> matrix_vt_cut_;
+  DenseMatrixColMajor<ValType> matrix_vt_cut_;
 
   /// The empty matrix.
-  DenseMatrixColMajor<ScalarType> matrix_empty_;
+  DenseMatrixColMajor<ValType> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixColMajor<ScalarType>, 'S', 'O'> gesvd_driver_;
+  la::GesvdDriver<DenseMatrixColMajor<ValType>, 'S', 'O'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;
@@ -120,7 +120,7 @@ class Former<SvdFormerTag, _Scalar>
 
   // Forms SVD
   template <class _Matrix>
-  void formImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ScalarType> &matrix_qc ) noexcept;
+  void formImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_qc ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
@@ -129,9 +129,9 @@ class Former<SvdFormerTag, _Scalar>
   inline double timeImpl() const noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealScalarType>& vectorSImpl() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixUImpl() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixVtImpl() const noexcept;
+  inline const DenseVector<RealValType>& vectorSImpl() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixUImpl() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixVtImpl() const noexcept;
 
 };
 

@@ -50,7 +50,7 @@ void SketcherWrapper<_Derived>::initialize() noexcept {
 template <class _Derived> template <class _Matrix>
 void SketcherWrapper<_Derived>::sketch(
     const _Matrix &matrix_a,
-          DenseMatrixCollection120<ScalarType> &collection_q
+          DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
   this->derived().sketchImpl(matrix_a, collection_q);
 }
@@ -107,7 +107,7 @@ _Derived& SketcherWrapper<_Derived>::setSeeds(
     std::seed_seq seq{seed};
     seq.generate(seeds.begin(), seeds.end());
   }
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<index_t>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
   index_t seed_tmp;
   MPI_Scatter(seeds.data(), 1, datatype, &seed_tmp, 1, datatype, mpi_root_, mpi_comm_);
   setSeed(seed_tmp);

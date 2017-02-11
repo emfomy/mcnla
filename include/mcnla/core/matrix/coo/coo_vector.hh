@@ -26,7 +26,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class CooVector;
+template <typename _Val> class CooVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -39,16 +39,16 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO vector traits.
 ///
-template <typename _Scalar>
-struct Traits<matrix::CooVector<_Scalar>> {
+template <typename _Val>
+struct Traits<matrix::CooVector<_Val>> {
   static constexpr index_t ndim = 1;
 
-  using ScalarType  = _Scalar;
+  using ValType     = _Val;
 
-  using RealType    = matrix::CooVector<RealScalarT<_Scalar>>;
-  using ComplexType = matrix::CooVector<ComplexScalarT<_Scalar>>;
+  using RealType    = matrix::CooVector<RealValT<_Val>>;
+  using ComplexType = matrix::CooVector<ComplexValT<_Val>>;
 
-  using VectorType  = matrix::CooVector<_Scalar>;
+  using VectorType  = matrix::CooVector<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +60,8 @@ struct IsCooVector : std::false_type {};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc IsCooVector
 ///
-template <typename _Scalar>
-struct IsCooVector<matrix::CooVector<_Scalar>> : std::true_type {};
+template <typename _Val>
+struct IsCooVector<matrix::CooVector<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO vector assert.
@@ -80,34 +80,34 @@ namespace matrix {
 /// @ingroup  matrix_coo_module
 /// The coordinate list (COO) vector class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class CooVector
-  : public CooVectorStorage<_Scalar>,
-    public VectorWrapper<CooVector<_Scalar>>,
-    public InvertibleWrapper<CooVector<_Scalar>> {
+  : public CooVectorStorage<_Val>,
+    public VectorWrapper<CooVector<_Val>>,
+    public InvertibleWrapper<CooVector<_Val>> {
 
-  friend VectorWrapper<CooVector<_Scalar>>;
-  friend InvertibleWrapper<CooVector<_Scalar>>;
+  friend VectorWrapper<CooVector<_Val>>;
+  friend InvertibleWrapper<CooVector<_Val>>;
 
  public:
 
   static constexpr index_t ndim = 1;
 
-  using ScalarType   = _Scalar;
-  using ValArrayType = Array<_Scalar>;
+  using ValType      = _Val;
+  using ValArrayType = Array<_Val>;
   using IdxArrayType = Array<index_t>;
   using SizesType    = std::tuple<index_t>;
 
-  using RealType     = CooVector<RealScalarT<_Scalar>>;
-  using ComplexType  = CooVector<ComplexScalarT<_Scalar>>;
+  using RealType     = CooVector<RealValT<_Val>>;
+  using ComplexType  = CooVector<ComplexValT<_Val>>;
 
-  using VectorType   = CooVector<_Scalar>;
+  using VectorType   = CooVector<_Val>;
 
  private:
 
-  using BaseType     = CooVectorStorage<_Scalar>;
+  using BaseType     = CooVectorStorage<_Val>;
 
  public:
 
@@ -137,8 +137,8 @@ class CooVector
   inline const index_t* idxPtr() const noexcept;
 
   // Gets element
-  inline       ScalarType operator()( const index_t idx ) noexcept;
-  inline const ScalarType operator()( const index_t idx ) const noexcept;
+  inline       ValType operator()( const index_t idx ) noexcept;
+  inline const ValType operator()( const index_t idx ) const noexcept;
 
   // Gets internal position
   inline index_t pos( const index_t idx ) const noexcept;

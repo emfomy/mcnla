@@ -24,8 +24,8 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>::CooVectorStorage() noexcept
+template <typename _Val>
+CooVectorStorage<_Val>::CooVectorStorage() noexcept
   : BaseType(),
     Base0Type(),
     dim0_(0) {}
@@ -33,8 +33,8 @@ CooVectorStorage<_Scalar>::CooVectorStorage() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>::CooVectorStorage(
+template <typename _Val>
+CooVectorStorage<_Val>::CooVectorStorage(
     const index_t dim0,
     const index_t nnz
 ) noexcept
@@ -47,8 +47,8 @@ CooVectorStorage<_Scalar>::CooVectorStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>::CooVectorStorage(
+template <typename _Val>
+CooVectorStorage<_Val>::CooVectorStorage(
     const index_t dim0,
     const index_t nnz,
     const index_t capacity
@@ -64,8 +64,8 @@ CooVectorStorage<_Scalar>::CooVectorStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>::CooVectorStorage(
+template <typename _Val>
+CooVectorStorage<_Val>::CooVectorStorage(
     const index_t dim0,
     const index_t nnz,
     const ValArrayType &val,
@@ -85,8 +85,8 @@ CooVectorStorage<_Scalar>::CooVectorStorage(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>::CooVectorStorage(
+template <typename _Val>
+CooVectorStorage<_Val>::CooVectorStorage(
     const CooVectorStorage &other
 ) noexcept
   : BaseType(other),
@@ -96,8 +96,8 @@ CooVectorStorage<_Scalar>::CooVectorStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>::CooVectorStorage(
+template <typename _Val>
+CooVectorStorage<_Val>::CooVectorStorage(
   CooVectorStorage &&other
 ) noexcept
   : BaseType(std::move(other)),
@@ -111,8 +111,8 @@ CooVectorStorage<_Scalar>::CooVectorStorage(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>& CooVectorStorage<_Scalar>::operator=(
+template <typename _Val>
+CooVectorStorage<_Val>& CooVectorStorage<_Val>::operator=(
     const CooVectorStorage &other
 ) noexcept {
   BaseType::operator=(other);
@@ -124,8 +124,8 @@ CooVectorStorage<_Scalar>& CooVectorStorage<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar>
-CooVectorStorage<_Scalar>& CooVectorStorage<_Scalar>::operator=(
+template <typename _Val>
+CooVectorStorage<_Val>& CooVectorStorage<_Val>::operator=(
     CooVectorStorage &&other
 ) noexcept {
   BaseType::operator=(std::move(other));
@@ -137,32 +137,32 @@ CooVectorStorage<_Scalar>& CooVectorStorage<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
-template <typename _Scalar>
-bool CooVectorStorage<_Scalar>::isEmpty() const noexcept {
+template <typename _Val>
+bool CooVectorStorage<_Val>::isEmpty() const noexcept {
   return BaseType::isEmpty() && Base0Type::isEmpty();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size in the first dimension.
 ///
-template <typename _Scalar>
-index_t CooVectorStorage<_Scalar>::dim0() const noexcept {
+template <typename _Val>
+index_t CooVectorStorage<_Val>::dim0() const noexcept {
   return dim0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size of dimensions in storage order. [ dim0 ]
 ///
-template <typename _Scalar>
-std::tuple<index_t> CooVectorStorage<_Scalar>::dims() const noexcept {
+template <typename _Val>
+std::tuple<index_t> CooVectorStorage<_Val>::dims() const noexcept {
   return std::make_tuple(dim0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
-template <typename _Scalar>
-_Scalar CooVectorStorage<_Scalar>::elemImpl(
+template <typename _Val>
+_Val CooVectorStorage<_Val>::elemImpl(
     const index_t idx0
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
@@ -173,8 +173,8 @@ _Scalar CooVectorStorage<_Scalar>::elemImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  elemImpl
 ///
-template <typename _Scalar>
-const _Scalar CooVectorStorage<_Scalar>::elemImpl(
+template <typename _Val>
+const _Val CooVectorStorage<_Val>::elemImpl(
     const index_t idx0
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
@@ -187,8 +187,8 @@ const _Scalar CooVectorStorage<_Scalar>::elemImpl(
 //
 /// @attention  Returns `-1` if the index does not exist!
 ///
-template <typename _Scalar>
-index_t CooVectorStorage<_Scalar>::posImpl(
+template <typename _Val>
+index_t CooVectorStorage<_Val>::posImpl(
     const index_t idx0
 ) const noexcept {
   index_t pos = std::find(idx0Ptr(), idx0Ptr() + nnz_, idx0) - idx0Ptr();
@@ -200,8 +200,8 @@ index_t CooVectorStorage<_Scalar>::posImpl(
 ///
 /// @attention  The new space is kept but not initialized.
 ///
-template <typename _Scalar>
-void CooVectorStorage<_Scalar>::resizeImpl(
+template <typename _Val>
+void CooVectorStorage<_Val>::resizeImpl(
     const index_t dim0,
     const index_t nnz
 ) noexcept {

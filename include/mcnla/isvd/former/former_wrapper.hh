@@ -36,10 +36,10 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
 
  public:
 
-  using ScalarType = ScalarT<_Derived>;
-  using RealScalarType = RealScalarT<ScalarType>;
+  using ValType = ValT<_Derived>;
+  using RealValType = RealValT<ValType>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -68,7 +68,7 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
 
   // Forms SVD
   template <class _Matrix>
-  inline void form( const _Matrix &matrix_a, const DenseMatrixRowMajor<ScalarType> &matrix_q ) noexcept;
+  inline void form( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_q ) noexcept;
 
   // Operators
   template <class __Derived>
@@ -78,9 +78,9 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
   inline double time() const noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealScalarType>& vectorS() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixVt() const noexcept;
+  inline const DenseVector<RealValType>& vectorS() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixU() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixVt() const noexcept;
 
 };
 

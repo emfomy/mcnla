@@ -30,9 +30,9 @@ namespace io {
 ///
 /// @todo  Read banner
 ///
-template <typename _Scalar>
+template <typename _Val>
 void loadMatrixMarket(
-    DenseVector<_Scalar> &vector,
+    DenseVector<_Val> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -63,9 +63,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void loadMatrixMarket(
-    DenseVector<_Scalar> &&vector,
+    DenseVector<_Val> &&vector,
     const char *file
 ) noexcept {
   loadMatrixMarket(vector, file);
@@ -80,9 +80,9 @@ inline void loadMatrixMarket(
 ///
 /// @todo  Read banner
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 void loadMatrixMarket(
-    DenseMatrix<_Scalar, _trans> &matrix,
+    DenseMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
@@ -117,9 +117,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void loadMatrixMarket(
-    DenseMatrix<_Scalar, _trans> &&matrix,
+    DenseMatrix<_Val, _trans> &&matrix,
     const char *file
 ) noexcept {
   loadMatrixMarket(matrix, file);
@@ -134,9 +134,9 @@ inline void loadMatrixMarket(
 ///
 /// @todo  Read banner
 ///
-template <class _Tag, typename _Scalar>
+template <class _Tag, typename _Val>
 void loadMatrixMarket(
-    DenseVectorCollection<_Tag, _Scalar> &collection,
+    DenseVectorCollection<_Tag, _Val> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -171,9 +171,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Tag, typename _Scalar>
+template <class _Tag, typename _Val>
 inline void loadMatrixMarket(
-    DenseVectorCollection<_Tag, _Scalar> &&collection,
+    DenseVectorCollection<_Tag, _Val> &&collection,
     const char *file
 ) noexcept {
   loadMatrixMarket(collection, file);
@@ -188,9 +188,9 @@ inline void loadMatrixMarket(
 ///
 /// @todo  Read banner
 ///
-template <class _Tag, typename _Scalar, Trans _trans>
+template <class _Tag, typename _Val, Trans _trans>
 void loadMatrixMarket(
-    DenseMatrixCollection<_Tag, _Scalar, _trans> &collection,
+    DenseMatrixCollection<_Tag, _Val, _trans> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -229,9 +229,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Tag, typename _Scalar, Trans _trans>
+template <class _Tag, typename _Val, Trans _trans>
 inline void loadMatrixMarket(
-    DenseMatrixCollection<_Tag, _Scalar, _trans> &&collection,
+    DenseMatrixCollection<_Tag, _Val, _trans> &&collection,
     const char *file
 ) noexcept {
   loadMatrixMarket(collection, file);

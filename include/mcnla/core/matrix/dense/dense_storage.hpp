@@ -23,15 +23,15 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-DenseStorage<_Scalar>::DenseStorage() noexcept
+template <typename _Val>
+DenseStorage<_Val>::DenseStorage() noexcept
   : val_() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
+template <typename _Val>
+DenseStorage<_Val>::DenseStorage(
     const index_t capacity
 ) noexcept
   : val_(capacity) {}
@@ -39,8 +39,8 @@ DenseStorage<_Scalar>::DenseStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
+template <typename _Val>
+DenseStorage<_Val>::DenseStorage(
     const ValArrayType &val
 ) noexcept
   : val_(val) {}
@@ -50,8 +50,8 @@ DenseStorage<_Scalar>::DenseStorage(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
+template <typename _Val>
+DenseStorage<_Val>::DenseStorage(
     const DenseStorage &other
 ) noexcept
   : val_(other.val_) {}
@@ -59,8 +59,8 @@ DenseStorage<_Scalar>::DenseStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar>
-DenseStorage<_Scalar>::DenseStorage(
+template <typename _Val>
+DenseStorage<_Val>::DenseStorage(
     DenseStorage &&other
 ) noexcept
   : val_(std::move(other.val_)) {}
@@ -70,8 +70,8 @@ DenseStorage<_Scalar>::DenseStorage(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-DenseStorage<_Scalar>& DenseStorage<_Scalar>::operator=(
+template <typename _Val>
+DenseStorage<_Val>& DenseStorage<_Val>::operator=(
     const DenseStorage &other
 ) noexcept {
   val_ = other.val_;
@@ -81,8 +81,8 @@ DenseStorage<_Scalar>& DenseStorage<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar>
-DenseStorage<_Scalar>& DenseStorage<_Scalar>::operator=(
+template <typename _Val>
+DenseStorage<_Val>& DenseStorage<_Val>::operator=(
     DenseStorage &&other
 ) noexcept {
   val_ = std::move(other.val_);
@@ -92,56 +92,56 @@ DenseStorage<_Scalar>& DenseStorage<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
-template <typename _Scalar>
-bool DenseStorage<_Scalar>::isEmpty() const noexcept {
+template <typename _Val>
+bool DenseStorage<_Val>::isEmpty() const noexcept {
   return val_.isEmpty();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the value array.
 ///
-template <typename _Scalar>
-index_t DenseStorage<_Scalar>::capacity() const noexcept {
+template <typename _Val>
+index_t DenseStorage<_Val>::capacity() const noexcept {
   return val_.capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the value array.
 ///
-template <typename _Scalar>
-index_t DenseStorage<_Scalar>::offset() const noexcept {
+template <typename _Val>
+index_t DenseStorage<_Val>::offset() const noexcept {
   return val_.offset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value array.
 ///
-template <typename _Scalar>
-Array<_Scalar>& DenseStorage<_Scalar>::val() noexcept {
+template <typename _Val>
+Array<_Val>& DenseStorage<_Val>::val() noexcept {
   return val_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  val
 ///
-template <typename _Scalar>
-const Array<_Scalar>& DenseStorage<_Scalar>::val() const noexcept {
+template <typename _Val>
+const Array<_Val>& DenseStorage<_Val>::val() const noexcept {
   return val_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw value pointer.
 ///
-template <typename _Scalar>
-_Scalar* DenseStorage<_Scalar>::valPtr() noexcept {
+template <typename _Val>
+_Val* DenseStorage<_Val>::valPtr() noexcept {
   return *val_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  valPtr
 ///
-template <typename _Scalar>
-const _Scalar* DenseStorage<_Scalar>::valPtr() const noexcept {
+template <typename _Val>
+const _Val* DenseStorage<_Val>::valPtr() const noexcept {
   return *val_;
 }
 

@@ -31,10 +31,10 @@
 #define QUOTE(str) #str
 #define MACROSTR(str) QUOTE(str)
 
-using ScalarType = double;
-using AType = mcnla::matrix::ATYPE<ScalarType>;
+using ValType = double;
+using AType = mcnla::matrix::ATYPE<ValType>;
 
-ScalarType tolerance = 1e-4;
+ValType tolerance = 1e-4;
 mcnla::index_t maxiter = 256;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize driver
-  mcnla::isvd::Driver<ScalarType,
+  mcnla::isvd::Driver<ValType,
                       mcnla::isvd::SKETCHER,
                       mcnla::isvd::ORTHOGONALIZER,
                       mcnla::isvd::INTEGRATOR,

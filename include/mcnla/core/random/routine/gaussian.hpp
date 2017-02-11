@@ -26,12 +26,12 @@ namespace random {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void gaussianImpl(
-    DenseVector<_Scalar> &vector,
+    DenseVector<_Val> &vector,
     const index_t seed
 ) noexcept {
-  Driver<_Scalar> driver(seed);
+  Driver<_Val> driver(seed);
   driver.gaussian(vector);
 }
 
@@ -43,18 +43,18 @@ inline void gaussianImpl(
 ///
 /// @see  mcnla::random::Driver
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void gaussian(
-    DenseVector<_Scalar> &vector,
+    DenseVector<_Val> &vector,
     const index_t seed
 ) noexcept {
   detail::gaussianImpl(vector, seed);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void gaussian(
-    DenseVector<_Scalar> &&vector,
+    DenseVector<_Val> &&vector,
     const index_t seed
 ) noexcept {
   detail::gaussianImpl(vector, seed);

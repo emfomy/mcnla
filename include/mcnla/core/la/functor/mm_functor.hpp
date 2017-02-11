@@ -41,8 +41,8 @@ template <class _Matrix, Trans _transb, Trans _transc>
 void MmFunctor<_Matrix, _transb, _transc>::operator()(
     const BType &b,
           CType &c,
-    const ScalarType alpha,
-    const ScalarType beta
+    const ValType alpha,
+    const ValType beta
 ) const noexcept {
   la::mm(matrix_, b, c, alpha, beta);
 }

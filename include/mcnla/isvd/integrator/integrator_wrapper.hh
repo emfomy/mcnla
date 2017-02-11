@@ -36,9 +36,9 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
 
  public:
 
-  using ScalarType = ScalarT<_Derived>;
+  using ValType = ValT<_Derived>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -82,10 +82,10 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
   inline index_t iteration() const noexcept;
 
   // Gets matrices
-  inline       DenseMatrixCollection120<ScalarType>& collectionQ() noexcept;
-  inline const DenseMatrixCollection120<ScalarType>& collectionQ() const noexcept;
-  inline       DenseMatrixRowMajor<ScalarType>& matrixQ() noexcept;
-  inline const DenseMatrixRowMajor<ScalarType>& matrixQ() const noexcept;
+  inline       DenseMatrixCollection120<ValType>& collectionQ() noexcept;
+  inline const DenseMatrixCollection120<ValType>& collectionQ() const noexcept;
+  inline       DenseMatrixRowMajor<ValType>& matrixQ() noexcept;
+  inline const DenseMatrixRowMajor<ValType>& matrixQ() const noexcept;
 
 
 };

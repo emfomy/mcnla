@@ -29,30 +29,30 @@ namespace isvd {
 struct ColumnSamplingSketcherTag {};
 
 /// @ingroup  isvd_sketcher_module
-template <typename _Scalar>
-using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Scalar>;
+template <typename _Val>
+using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
 /// The column sampling sketcher.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Sketcher<ColumnSamplingSketcherTag, _Scalar>
-  : public SketcherWrapper<ColumnSamplingSketcher<_Scalar>> {
+template <typename _Val>
+class Sketcher<ColumnSamplingSketcherTag, _Val>
+  : public SketcherWrapper<ColumnSamplingSketcher<_Val>> {
 
-  friend SketcherWrapper<ColumnSamplingSketcher<_Scalar>>;
+  friend SketcherWrapper<ColumnSamplingSketcher<_Val>>;
 
  private:
 
-  using BaseType = SketcherWrapper<ColumnSamplingSketcher<_Scalar>>;
+  using BaseType = SketcherWrapper<ColumnSamplingSketcher<_Val>>;
 
  public:
 
-  using ScalarType = _Scalar;
+  using ValType = _Val;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -95,7 +95,7 @@ class Sketcher<ColumnSamplingSketcherTag, _Scalar>
 
   // Random sketches
   template <class _Matrix>
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
+  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ValType> &collection_q ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;

@@ -27,8 +27,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans> class CooMatrix;
-template <typename _Scalar> class CooVector;
+template <typename _Val, Trans _trans> class CooMatrix;
+template <typename _Val> class CooVector;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -41,19 +41,19 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO matrix traits.
 ///
-template <typename _Scalar, Trans _trans>
-struct Traits<matrix::CooMatrix<_Scalar, _trans>> {
+template <typename _Val, Trans _trans>
+struct Traits<matrix::CooMatrix<_Val, _trans>> {
 
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
-  using ScalarType  = _Scalar;
+  using ValType     = _Val;
 
-  using RealType    = matrix::CooMatrix<RealScalarT<_Scalar>, _trans>;
-  using ComplexType = matrix::CooMatrix<ComplexScalarT<_Scalar>, _trans>;
+  using RealType    = matrix::CooMatrix<RealValT<_Val>, _trans>;
+  using ComplexType = matrix::CooMatrix<ComplexValT<_Val>, _trans>;
 
-  using VectorType  = matrix::CooVector<_Scalar>;
-  using MatrixType  = matrix::CooMatrix<_Scalar, _trans>;
+  using VectorType  = matrix::CooVector<_Val>;
+  using MatrixType  = matrix::CooMatrix<_Val, _trans>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,8 +65,8 @@ struct IsCooMatrix : std::false_type {};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc IsCooMatrix
 ///
-template <typename _Scalar, Trans _trans>
-struct IsCooMatrix<matrix::CooMatrix<_Scalar, _trans>> : std::true_type {};
+template <typename _Val, Trans _trans>
+struct IsCooMatrix<matrix::CooMatrix<_Val, _trans>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO matrix assert.
@@ -85,43 +85,43 @@ namespace matrix {
 /// @ingroup  matrix_coo_module
 /// The coordinate list (COO) matrix class.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _trans   The transpose storage layout.
+/// @tparam  _Val    The value type.
+/// @tparam  _trans  The transpose storage layout.
 ///
-template <typename _Scalar, Trans _trans = Trans::NORMAL>
+template <typename _Val, Trans _trans = Trans::NORMAL>
 class CooMatrix
-  : public CooMatrixStorage<_Scalar>,
-    public MatrixWrapper<CooMatrix<_Scalar, _trans>>,
-    public InvertibleWrapper<CooMatrix<_Scalar, _trans>> {
+  : public CooMatrixStorage<_Val>,
+    public MatrixWrapper<CooMatrix<_Val, _trans>>,
+    public InvertibleWrapper<CooMatrix<_Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
-  friend MatrixWrapper<CooMatrix<_Scalar, _trans>>;
-  friend InvertibleWrapper<CooMatrix<_Scalar, _trans>>;
+  friend MatrixWrapper<CooMatrix<_Val, _trans>>;
+  friend InvertibleWrapper<CooMatrix<_Val, _trans>>;
 
  public:
 
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
-  using ScalarType    = _Scalar;
-  using ValArrayType  = Array<_Scalar>;
+  using ValType       = _Val;
+  using ValArrayType  = Array<_Val>;
   using IdxArrayType  = Array<index_t>;
   using SizesType     = std::tuple<index_t, index_t>;
 
-  using RealType      = CooMatrix<RealScalarT<_Scalar>, _trans>;
-  using ComplexType   = CooMatrix<ComplexScalarT<_Scalar>, _trans>;
+  using RealType      = CooMatrix<RealValT<_Val>, _trans>;
+  using ComplexType   = CooMatrix<ComplexValT<_Val>, _trans>;
 
-  using VectorType    = CooVector<_Scalar>;
-  using MatrixType    = CooMatrix<_Scalar, _trans>;
+  using VectorType    = CooVector<_Val>;
+  using MatrixType    = CooMatrix<_Val, _trans>;
 
-  using TransposeType = CooMatrix<_Scalar, changeTrans(_trans)>;
-  using ConjugateType = CooMatrix<_Scalar, changeConj(_trans)>;
-  using HermitianType = CooMatrix<_Scalar, changeHerm(_trans)>;
+  using TransposeType = CooMatrix<_Val, changeTrans(_trans)>;
+  using ConjugateType = CooMatrix<_Val, changeConj(_trans)>;
+  using HermitianType = CooMatrix<_Val, changeHerm(_trans)>;
 
  private:
 
-  using BaseType      = CooMatrixStorage<_Scalar>;
+  using BaseType      = CooMatrixStorage<_Val>;
 
  public:
 
@@ -157,8 +157,8 @@ class CooMatrix
   inline const index_t* colidxPtr() const noexcept;
 
   // Gets element
-  inline       ScalarType operator()( const index_t rowidx, const index_t colidx ) noexcept;
-  inline const ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline       ValType operator()( const index_t rowidx, const index_t colidx ) noexcept;
+  inline const ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Gets internal position
   inline index_t pos( const index_t rowidx, const index_t colidx ) const noexcept;
@@ -207,12 +207,12 @@ class CooMatrix
 };
 
 /// @ingroup  matrix_coo_module
-template <typename _Scalar>
-using CooMatrixColMajor = CooMatrix<_Scalar, Trans::NORMAL>;
+template <typename _Val>
+using CooMatrixColMajor = CooMatrix<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_coo_module
-template <typename _Scalar>
-using CooMatrixRowMajor = CooMatrix<_Scalar, Trans::TRANS>;
+template <typename _Val>
+using CooMatrixRowMajor = CooMatrix<_Val, Trans::TRANS>;
 
 }  // namespace matrix
 

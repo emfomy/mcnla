@@ -28,21 +28,21 @@ namespace matrix {
 /// @ingroup  matrix_dense_module_detail
 /// The dense matrix storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class DenseMatrixStorage : public DenseStorage<_Scalar> {
+template <typename _Val>
+class DenseMatrixStorage : public DenseStorage<_Val> {
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<ScalarType>;
+  using ValType           = _Val;
+  using ValArrayType      = Array<ValType>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = DenseVectorStorage<ScalarType>;
-  using MatrixStorageType = DenseMatrixStorage<ScalarType>;
+  using VectorStorageType = DenseVectorStorage<ValType>;
+  using MatrixStorageType = DenseMatrixStorage<ValType>;
 
-  using BaseType          = DenseStorage<_Scalar>;
+  using BaseType          = DenseStorage<_Val>;
 
  protected:
 
@@ -86,8 +86,8 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
  protected:
 
   // Gets element
-  inline       ScalarType& elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
-  inline const ScalarType& elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
+  inline       ValType& elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
+  inline const ValType& elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0, const index_t idx1 ) const noexcept;

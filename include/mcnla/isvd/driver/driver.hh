@@ -32,7 +32,7 @@ namespace isvd {
 /// @ingroup  isvd_driver_module
 /// The Integrated Singular Value Decomposition driver.
 ///
-/// @tparam  _Scalar             The scalar type.
+/// @tparam  _Val                The value type.
 /// @tparam  _SketcherTag        The sketcher tag.
 /// @tparam  _OrthogonalizerTag  The orthogonalizer tag.
 /// @tparam  _IntegratorTag      The integrator tag.
@@ -41,7 +41,7 @@ namespace isvd {
 /// @attention  The driver should have been @ref initialize "initialized" before calling #compute.
 /// @attention  The driver should be @ref initialize "re-initialized" after changing parameters.
 ///
-template <typename _Scalar,
+template <typename _Val,
           class _SketcherTag       = GaussianProjectionSketcherTag<0>,
           class _OrthogonalizerTag = SvdOrthogonalizerTag,
           class _IntegratorTag     = KolmogorovNagumoIntegratorTag,
@@ -50,14 +50,14 @@ class Driver {
 
  public:
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<_Scalar>;
+  using ValType        = _Val;
+  using RealValType = RealValT<_Val>;
 
-  using ParametersType     = Parameters<ScalarType>;
-  using SketcherType       = Sketcher<_SketcherTag, ScalarType>;
-  using OrthogonalizerType = Orthogonalizer<_OrthogonalizerTag, ScalarType>;
-  using IntegratorType     = Integrator<_IntegratorTag, ScalarType>;
-  using FormerType         = Former<_FormerTag, ScalarType>;
+  using ParametersType     = Parameters<ValType>;
+  using SketcherType       = Sketcher<_SketcherTag, ValType>;
+  using OrthogonalizerType = Orthogonalizer<_OrthogonalizerTag, ValType>;
+  using IntegratorType     = Integrator<_IntegratorTag, ValType>;
+  using FormerType         = Former<_FormerTag, ValType>;
 
  protected:
 
@@ -117,10 +117,10 @@ class Driver {
   inline index_t integratorIteration() const noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealScalarType>& singularValues() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& leftSingularVectors() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& rightSingularVectors() const noexcept;
-  inline const DenseMatrixRowMajor<ScalarType>& integratedOrthogonalBasis() const noexcept;
+  inline const DenseVector<RealValType>& singularValues() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& leftSingularVectors() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& rightSingularVectors() const noexcept;
+  inline const DenseMatrixRowMajor<ValType>& integratedOrthogonalBasis() const noexcept;
 
   // Gets parameters
   const ParametersType& parameters() const noexcept;
@@ -134,7 +134,7 @@ class Driver {
   inline Driver& setNumSketch( const index_t num_sketch ) noexcept;
   inline Driver& setNumSketchEach( const index_t num_sketch_each ) noexcept;
   inline Driver& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline Driver& setTolerance( const RealScalarType tolerance ) noexcept;
+  inline Driver& setTolerance( const RealValType tolerance ) noexcept;
   inline Driver& setSeed( const index_t seed ) noexcept;
   inline Driver& setSeeds( const index_t seed ) noexcept;
 

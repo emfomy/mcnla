@@ -25,17 +25,17 @@ namespace isvd {
 /// @ingroup  isvd_driver_module
 /// The parameters of iSVD driver.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class Parameters {
 
-  template <class __Scalar, class __SketcherTag, class __OrthogonalizerTag, class __IntegratorTag, class __FormerTag>
+  template <class __Val, class __SketcherTag, class __OrthogonalizerTag, class __IntegratorTag, class __FormerTag>
   friend class Driver;
 
  public:
 
-  using RealScalarType = RealScalarT<_Scalar>;
+  using RealValType = RealValT<_Val>;
 
  protected:
 
@@ -71,7 +71,7 @@ class Parameters {
   index_t max_iteration_ = 256;
 
   /// The tolerance of converge condition.
-  RealScalarType tolerance_ = 1e-4;
+  RealValType tolerance_ = 1e-4;
 
  public:
 
@@ -89,7 +89,7 @@ class Parameters {
   inline index_t numSketch() const noexcept;
   inline index_t numSketchEach() const noexcept;
   inline index_t maxIteration() const noexcept;
-  inline RealScalarType tolerance() const noexcept;
+  inline RealValType tolerance() const noexcept;
 
 };
 

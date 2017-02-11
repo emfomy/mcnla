@@ -26,7 +26,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseDiagonalMatrix;
+template <typename _Val> class DenseDiagonalMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -39,16 +39,16 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix traits.
 ///
-template <typename _Scalar>
-struct Traits<matrix::DenseDiagonalMatrix<_Scalar>> {
+template <typename _Val>
+struct Traits<matrix::DenseDiagonalMatrix<_Val>> {
 
   static constexpr index_t ndim = 2;
 
-  using ScalarType  = _Scalar;
-  using RealType    = matrix::DenseDiagonalMatrix<RealScalarT<_Scalar>>;
-  using ComplexType = matrix::DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
-  using VectorType  = matrix::DenseVector<_Scalar>;
-  using MatrixType  = matrix::DenseDiagonalMatrix<_Scalar>;
+  using ValType     = _Val;
+  using RealType    = matrix::DenseDiagonalMatrix<RealValT<_Val>>;
+  using ComplexType = matrix::DenseDiagonalMatrix<ComplexValT<_Val>>;
+  using VectorType  = matrix::DenseVector<_Val>;
+  using MatrixType  = matrix::DenseDiagonalMatrix<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +60,8 @@ struct IsDenseDiagonalMatrix : std::false_type {};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc IsDenseDiagonalMatrix
 ///
-template <typename _Scalar>
-struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Scalar>> : std::true_type {};
+template <typename _Val>
+struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix assert.
@@ -80,35 +80,35 @@ namespace matrix {
 /// @ingroup  matrix_dense_module
 /// The dense diagonal matrix class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class DenseDiagonalMatrix
-  : public DenseVectorStorage<_Scalar>,
-    public MatrixWrapper<DenseDiagonalMatrix<_Scalar>>,
-    public InvertibleWrapper<DenseDiagonalMatrix<_Scalar>> {
+  : public DenseVectorStorage<_Val>,
+    public MatrixWrapper<DenseDiagonalMatrix<_Val>>,
+    public InvertibleWrapper<DenseDiagonalMatrix<_Val>> {
 
-  friend MatrixWrapper<DenseDiagonalMatrix<_Scalar>>;
-  friend InvertibleWrapper<DenseDiagonalMatrix<_Scalar>>;
+  friend MatrixWrapper<DenseDiagonalMatrix<_Val>>;
+  friend InvertibleWrapper<DenseDiagonalMatrix<_Val>>;
 
  public:
 
   static constexpr index_t ndim = 2;
 
-  using ScalarType    = _Scalar;
-  using ValArrayType  = Array<_Scalar>;
+  using ValType       = _Val;
+  using ValArrayType  = Array<_Val>;
 
-  using RealType      = DenseDiagonalMatrix<RealScalarT<_Scalar>>;
-  using ComplexType   = DenseDiagonalMatrix<ComplexScalarT<_Scalar>>;
+  using RealType      = DenseDiagonalMatrix<RealValT<_Val>>;
+  using ComplexType   = DenseDiagonalMatrix<ComplexValT<_Val>>;
 
-  using VectorType    = DenseVector<_Scalar>;
-  using MatrixType    = DenseDiagonalMatrix<_Scalar>;
+  using VectorType    = DenseVector<_Val>;
+  using MatrixType    = DenseDiagonalMatrix<_Val>;
 
-  using TransposeType = DenseDiagonalMatrix<_Scalar>;
+  using TransposeType = DenseDiagonalMatrix<_Val>;
 
  private:
 
-  using BaseType      = DenseVectorStorage<_Scalar>;
+  using BaseType      = DenseVectorStorage<_Val>;
 
  public:
 
@@ -131,7 +131,7 @@ class DenseDiagonalMatrix
   inline index_t nnz() const noexcept;
 
   // Gets element
-  inline ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
   template <typename... Args>

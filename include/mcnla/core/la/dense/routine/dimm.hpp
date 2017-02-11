@@ -38,13 +38,13 @@ namespace detail {
 //
 
 #ifdef MCNLA_USE_MKL
-template <typename _Scalar>
+template <typename _Val>
 inline void dimmImpl2(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, Trans::NORMAL> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, Trans::NORMAL> &b,
+          DenseMatrix<_Val, Trans::NORMAL> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   mcnla_assert_eq(a.size(), c.nrow());
   mcnla_assert_eq(b.sizes(), c.sizes());
@@ -55,13 +55,13 @@ inline void dimmImpl2(
 }
 #endif  // MCNLA_USE_MKL
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void dimmImpl2(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, Trans::NORMAL> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   mcnla_assert_eq(a.size(), c.nrow());
   mcnla_assert_eq(b.sizes(), c.sizes());
@@ -72,13 +72,13 @@ inline void dimmImpl2(
   }
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void dimmImpl2(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, Trans::NORMAL> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   mcnla_assert_eq(a.size(), c.ncol());
   mcnla_assert_eq(b.sizes(), c.sizes());
@@ -93,35 +93,35 @@ inline void dimmImpl2(
 // Impl1 Left
 //
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void dimmImpl1(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, Trans::NORMAL> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   dimmImpl2(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void dimmImpl1(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::TRANS> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, Trans::TRANS> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   dimmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void dimmImpl1(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(b);
@@ -135,35 +135,35 @@ inline void dimmImpl1(
 // Impl1 Right
 //
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void dimmImpl1(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, Trans::NORMAL> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   dimmImpl2(b, a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void dimmImpl1(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, Trans::TRANS> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, Trans::TRANS> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   dimmImpl2(a.t(), b.t(), c.t(), alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void dimmImpl1(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(b);
@@ -182,92 +182,92 @@ inline void dimmImpl1(
 /// @brief  Computes a matrix-matrix product where one input matrix is diagonal.
 ///
 //@{
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void dimm(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void dimm(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(b, a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void dimm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const DenseDiagonalMatrix<_Val> &a,
     const char*,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(a, c, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void dimm(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(c, a, c, alpha, beta);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void dimm(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void dimm(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(b, a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void dimm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const DenseDiagonalMatrix<_Val> &a,
     const char*,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(a, c, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void dimm(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::dimmImpl1(c, a, c, alpha, beta);
 }
@@ -278,92 +278,92 @@ inline void dimm(
 /// @copydoc  mcnla::la::mm
 ///
 //@{
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(b, a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void mm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const DenseDiagonalMatrix<_Val> &a,
     const char*,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(a, c, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void mm(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(c, a, c, alpha, beta);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(b, a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void mm(
-    const DenseDiagonalMatrix<_Scalar> &a,
+    const DenseDiagonalMatrix<_Val> &a,
     const char*,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(a, c, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transc>
+template <typename _Val, Trans _transc>
 inline void mm(
     const char*,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   dimm(c, a, c, alpha, beta);
 }

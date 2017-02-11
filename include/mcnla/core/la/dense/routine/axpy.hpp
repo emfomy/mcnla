@@ -26,21 +26,21 @@ namespace la {
 /// @ingroup  la_dense_blas1_module
 /// @brief  Computes a vector-scalar product and adds the result to a vector.
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void axpy(
-    const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &y,
-    const ScalarT<DenseVector<_Scalar>> alpha = 1
+    const DenseVector<_Val> &x,
+          DenseVector<_Val> &y,
+    const ValT<DenseVector<_Val>> alpha = 1
 ) noexcept {
   detail::axpy(x.length(), alpha, x.valPtr(), x.stride(), y.valPtr(), y.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void axpy(
-    const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &&y,
-    const ScalarT<DenseVector<_Scalar>> alpha = 1
+    const DenseVector<_Val> &x,
+          DenseVector<_Val> &&y,
+    const ValT<DenseVector<_Val>> alpha = 1
 ) noexcept {
   axpy(x, y, alpha);
 }

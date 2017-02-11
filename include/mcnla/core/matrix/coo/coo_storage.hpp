@@ -23,16 +23,16 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage() noexcept
+template <typename _Val>
+CooStorage<_Val>::CooStorage() noexcept
   : BaseType(),
     nnz_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
+template <typename _Val>
+CooStorage<_Val>::CooStorage(
     const index_t capacity,
     const index_t nnz
 ) noexcept
@@ -44,8 +44,8 @@ CooStorage<_Scalar>::CooStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
+template <typename _Val>
+CooStorage<_Val>::CooStorage(
     const ValArrayType &val,
     const index_t nnz
 ) noexcept
@@ -59,8 +59,8 @@ CooStorage<_Scalar>::CooStorage(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
+template <typename _Val>
+CooStorage<_Val>::CooStorage(
     const CooStorage &other
 ) noexcept
   : BaseType(other),
@@ -69,8 +69,8 @@ CooStorage<_Scalar>::CooStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
+template <typename _Val>
+CooStorage<_Val>::CooStorage(
     CooStorage &&other
 ) noexcept
   : BaseType(std::move(other)),
@@ -83,8 +83,8 @@ CooStorage<_Scalar>::CooStorage(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
+template <typename _Val>
+CooStorage<_Val>& CooStorage<_Val>::operator=(
     const CooStorage &other
 ) noexcept {
   BaseType::operator=(other);
@@ -95,8 +95,8 @@ CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
+template <typename _Val>
+CooStorage<_Val>& CooStorage<_Val>::operator=(
     CooStorage &&other
 ) noexcept {
   BaseType::operator=(std::move(other));
@@ -107,24 +107,24 @@ CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <typename _Scalar>
-index_t CooStorage<_Scalar>::nnz() const noexcept {
+template <typename _Val>
+index_t CooStorage<_Val>::nnz() const noexcept {
   return nnz_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the value array.
 ///
-template <typename _Scalar>
-index_t CooStorage<_Scalar>::valCapacity() const noexcept {
+template <typename _Val>
+index_t CooStorage<_Val>::valCapacity() const noexcept {
   return this->capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the value array.
 ///
-template <typename _Scalar>
-index_t CooStorage<_Scalar>::valOffset() const noexcept {
+template <typename _Val>
+index_t CooStorage<_Val>::valOffset() const noexcept {
   return this->offset();
 }
 

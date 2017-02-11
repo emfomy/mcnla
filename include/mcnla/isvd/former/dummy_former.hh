@@ -29,31 +29,31 @@ namespace isvd {
 struct DummyFormerTag {};
 
 /// @ingroup  isvd_former_module
-template <typename _Scalar>
-using DummyFormer = Former<DummyFormerTag, _Scalar>;
+template <typename _Val>
+using DummyFormer = Former<DummyFormerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
 /// The dummy former.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Former<DummyFormerTag, _Scalar>
-  : public FormerWrapper<DummyFormer<_Scalar>> {
+template <typename _Val>
+class Former<DummyFormerTag, _Val>
+  : public FormerWrapper<DummyFormer<_Val>> {
 
-  friend FormerWrapper<DummyFormer<_Scalar>>;
+  friend FormerWrapper<DummyFormer<_Val>>;
 
  private:
 
-  using BaseType = FormerWrapper<DummyFormer<_Scalar>>;
+  using BaseType = FormerWrapper<DummyFormer<_Val>>;
 
  public:
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<ScalarType>;
+  using ValType        = _Val;
+  using RealValType = RealValT<ValType>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -72,7 +72,7 @@ class Former<DummyFormerTag, _Scalar>
 
   // Forms SVD
   template <class _Matrix>
-  void formImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ScalarType> &matrix_qc ) noexcept;
+  void formImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_qc ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
@@ -81,9 +81,9 @@ class Former<DummyFormerTag, _Scalar>
   inline double timeImpl() const noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealScalarType>& vectorSImpl() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixUImpl() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixVtImpl() const noexcept;
+  inline const DenseVector<RealValType>& vectorSImpl() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixUImpl() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixVtImpl() const noexcept;
 
 };
 

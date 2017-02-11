@@ -29,30 +29,30 @@ namespace isvd {
 struct KolmogorovNagumoIntegratorTag {};
 
 /// @ingroup  isvd_integrator_module
-template <typename _Scalar>
-using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Scalar>;
+template <typename _Val>
+using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
 /// The Kolmogorov-Nagumo-type integrator.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Integrator<KolmogorovNagumoIntegratorTag, _Scalar>
-  : public IntegratorWrapper<KolmogorovNagumoIntegrator<_Scalar>> {
+template <typename _Val>
+class Integrator<KolmogorovNagumoIntegratorTag, _Val>
+  : public IntegratorWrapper<KolmogorovNagumoIntegrator<_Val>> {
 
-  friend IntegratorWrapper<KolmogorovNagumoIntegrator<_Scalar>>;
+  friend IntegratorWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
  private:
 
-  using BaseType = IntegratorWrapper<KolmogorovNagumoIntegrator<_Scalar>>;
+  using BaseType = IntegratorWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
  public:
 
-  using ScalarType     = _Scalar;
+  using ValType        = _Val;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -78,52 +78,52 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Scalar>
   index_t nrow_all_;
 
   /// The collection Q.
-  DenseMatrixCollection120<ScalarType> collection_q_;
+  DenseMatrixCollection120<ValType> collection_q_;
 
   /// The cut collection Q.
-  DenseMatrixCollection120<ScalarType> collection_q_cut_;
+  DenseMatrixCollection120<ValType> collection_q_cut_;
 
   /// The matrix Qs.
-  DenseMatrixRowMajor<ScalarType> matrix_qs_;
+  DenseMatrixRowMajor<ValType> matrix_qs_;
 
   /// The matrix Qjs.
-  DenseMatrixRowMajor<ScalarType> matrix_qjs_;
+  DenseMatrixRowMajor<ValType> matrix_qjs_;
 
   /// The matrix Qc.
-  DenseMatrixRowMajor<ScalarType> matrix_qc_;
+  DenseMatrixRowMajor<ValType> matrix_qc_;
 
   /// The cut matrix Qc.
-  DenseMatrixRowMajor<ScalarType> matrix_qc_cut_;
+  DenseMatrixRowMajor<ValType> matrix_qc_cut_;
 
   /// The matrix Qcj.
-  DenseMatrixRowMajor<ScalarType> matrix_qcj_;
+  DenseMatrixRowMajor<ValType> matrix_qcj_;
 
   /// The matrix Bs.
-  DenseMatrixRowMajor<ScalarType> matrix_bs_;
+  DenseMatrixRowMajor<ValType> matrix_bs_;
 
   /// The matrix D.
-  DenseMatrixRowMajor<ScalarType> matrix_d_;
+  DenseMatrixRowMajor<ValType> matrix_d_;
 
   /// The matrix Z.
-  DenseMatrixRowMajor<ScalarType> matrix_z_;
+  DenseMatrixRowMajor<ValType> matrix_z_;
 
   /// The matrix C.
-  DenseMatrixRowMajor<ScalarType> matrix_c_;
+  DenseMatrixRowMajor<ValType> matrix_c_;
 
   /// The matrix Xj.
-  DenseMatrixRowMajor<ScalarType> matrix_xj_;
+  DenseMatrixRowMajor<ValType> matrix_xj_;
 
   /// The temporary matrix.
-  DenseMatrixRowMajor<ScalarType> matrix_tmp_;
+  DenseMatrixRowMajor<ValType> matrix_tmp_;
 
   /// The vector E.
-  DenseVector<ScalarType> vector_e_;
+  DenseVector<ValType> vector_e_;
 
   /// The vector F.
-  DenseVector<ScalarType> vector_f_;
+  DenseVector<ValType> vector_f_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_driver_;
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;
@@ -155,10 +155,10 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Scalar>
   inline double timeImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseMatrixCollection120<ScalarType>& collectionQImpl() noexcept;
-  inline const DenseMatrixCollection120<ScalarType>& collectionQImpl() const noexcept;
-  inline       DenseMatrixRowMajor<ScalarType>& matrixQImpl() noexcept;
-  inline const DenseMatrixRowMajor<ScalarType>& matrixQImpl() const noexcept;
+  inline       DenseMatrixCollection120<ValType>& collectionQImpl() noexcept;
+  inline const DenseMatrixCollection120<ValType>& collectionQImpl() const noexcept;
+  inline       DenseMatrixRowMajor<ValType>& matrixQImpl() noexcept;
+  inline const DenseMatrixRowMajor<ValType>& matrixQImpl() const noexcept;
 
 };
 

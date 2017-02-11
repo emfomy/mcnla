@@ -36,9 +36,9 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
  public:
 
-  using ScalarType = ScalarT<_Derived>;
+  using ValType = ValT<_Derived>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -67,7 +67,7 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
   // Random sketches
   template <class _Matrix>
-  inline void sketch( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
+  inline void sketch( const _Matrix &matrix_a, DenseMatrixCollection120<ValType> &collection_q ) noexcept;
 
   // Operators
   template <class __Derived>

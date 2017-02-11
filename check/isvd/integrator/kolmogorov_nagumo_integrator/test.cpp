@@ -6,14 +6,14 @@
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
 
 TEST(KolmogorovNagumoIntegratorTest, Test) {
-  using ScalarType = double;
+  using ValType = double;
   const auto mpi_size = mcnla::mpi::commSize(MPI_COMM_WORLD);
   const auto mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
   const mcnla::index_t mpi_root = 0;
 
   // Reads data
-  mcnla::matrix::DenseMatrixCollection120<ScalarType> collection_q_true;
-  mcnla::matrix::DenseMatrixRowMajor<ScalarType> matrix_q_true;
+  mcnla::matrix::DenseMatrixCollection120<ValType> collection_q_true;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> matrix_q_true;
   mcnla::io::loadMatrixMarket(collection_q_true, CUBE_Q_PATH);
   mcnla::io::loadMatrixMarket(matrix_q_true, MATRIX_Q_PATH);
 
@@ -31,7 +31,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   ASSERT_EQ(N % K, 0);
 
   // Sets parameters
-  mcnla::isvd::Parameters<ScalarType> parameters(MPI_COMM_WORLD);
+  mcnla::isvd::Parameters<ValType> parameters(MPI_COMM_WORLD);
   parameters.nrow_ = m;
   parameters.rank_ = k;
   parameters.over_rank_ = p;
@@ -40,7 +40,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   parameters.max_iteration_ = 256;
 
   // Initializes
-  mcnla::isvd::KolmogorovNagumoIntegrator<ScalarType> integrator(parameters, MPI_COMM_WORLD, mpi_root);
+  mcnla::isvd::KolmogorovNagumoIntegrator<ValType> integrator(parameters, MPI_COMM_WORLD, mpi_root);
   integrator.initialize();
   parameters.initialized_ = true;
 

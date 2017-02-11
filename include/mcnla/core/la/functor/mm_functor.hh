@@ -33,14 +33,14 @@ namespace la {
 ///
 template <class _Matrix, Trans _transb = Trans::NORMAL, Trans _transc = Trans::NORMAL>
 class MmFunctor
-  : public MmFunctorWrapper<ScalarT<_Matrix>, _transb, _transc> {
+  : public MmFunctorWrapper<ValT<_Matrix>, _transb, _transc> {
 
  public:
 
-  using ScalarType = ScalarT<_Matrix>;
+  using ValType = ValT<_Matrix>;
   using AType      = _Matrix;
-  using BType      = DenseMatrix<ScalarT<_Matrix>, _transb>;
-  using CType      = DenseMatrix<ScalarT<_Matrix>, _transc>;
+  using BType      = DenseMatrix<ValT<_Matrix>, _transb>;
+  using CType      = DenseMatrix<ValT<_Matrix>, _transc>;
 
  protected:
 
@@ -54,7 +54,7 @@ class MmFunctor
   ~MmFunctor() noexcept override;
 
   virtual void operator()( const BType &b, CType &c,
-                           const ScalarType alpha = 1, const ScalarType beta  = 0 ) const noexcept override;
+                           const ValType alpha = 1, const ValType beta  = 0 ) const noexcept override;
 
 };
 

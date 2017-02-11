@@ -30,28 +30,28 @@ namespace matrix {
 /// @ingroup  matrix_coo_module_detail
 /// The The coordinate list (COO) matrix storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class CooMatrixStorage
-  : public CooStorage<_Scalar>,
+  : public CooStorage<_Val>,
     public CooIdx0Storage<index_t>,
     public CooIdx1Storage<index_t> {
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<ScalarType>;
+  using ValType           = _Val;
+  using ValArrayType      = Array<ValType>;
   using IdxArrayType      = Array<index_t>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = CooVectorStorage<ScalarType>;
-  using MatrixStorageType = CooMatrixStorage<ScalarType>;
+  using VectorStorageType = CooVectorStorage<ValType>;
+  using MatrixStorageType = CooMatrixStorage<ValType>;
 
-  using BaseType          = CooStorage<_Scalar>;
+  using BaseType          = CooStorage<_Val>;
   using Base0Type         = CooIdx0Storage<index_t>;
   using Base1Type         = CooIdx1Storage<index_t>;
 
@@ -98,8 +98,8 @@ class CooMatrixStorage
  protected:
 
   // Gets element
-  inline       ScalarType elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
-  inline const ScalarType elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
+  inline       ValType elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
+  inline const ValType elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0, const index_t idx1 ) const noexcept;

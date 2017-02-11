@@ -23,10 +23,10 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <typename __Scalar, class __Vector>
+template <typename __Val, class __Vector>
 std::ostream& operator<< (
     std::ostream &os,
-    const DenseVectorIteratorBase<__Scalar, __Vector> &iterator
+    const DenseVectorIteratorBase<__Val, __Vector> &iterator
 ) {
   const index_t width = log10(iterator.container_->length())+1;
   return os << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.val();
@@ -37,8 +37,8 @@ std::ostream& operator<< (
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
-template <typename _Scalar, class _Vector>
-_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::val() const noexcept {
+template <typename _Val, class _Vector>
+_Val& DenseVectorIteratorBase<_Val, _Vector>::val() const noexcept {
   mcnla_assert_gelt(itidx_, 0, container_->nelem());
   return container_->valPtr()[pos()];
 }
@@ -46,8 +46,8 @@ _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::val() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the index.
 ///
-template <typename _Scalar, class _Vector>
-index_t DenseVectorIteratorBase<_Scalar, _Vector>::idx() const noexcept {
+template <typename _Val, class _Vector>
+index_t DenseVectorIteratorBase<_Val, _Vector>::idx() const noexcept {
   return itidx_;
 }
 
@@ -56,8 +56,8 @@ index_t DenseVectorIteratorBase<_Scalar, _Vector>::idx() const noexcept {
 ///
 /// @attention  Never call this when the iterator is at the end.
 ///
-template <typename _Scalar, class _Vector>
-index_t DenseVectorIteratorBase<_Scalar, _Vector>::pos() const noexcept {
+template <typename _Val, class _Vector>
+index_t DenseVectorIteratorBase<_Val, _Vector>::pos() const noexcept {
   return container_->pos(itidx_);
 }
 

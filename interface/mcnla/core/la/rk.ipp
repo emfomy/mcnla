@@ -25,12 +25,12 @@ namespace la {
 /// @ingroup  la_interface_module
 /// @brief  Performs a rank-k update.
 ///
-template <class _A, class _C, typename _Scalar>
+template <class _A, class _C, typename _Val>
 inline void rk(
     const MatrixWrapper<_A> &a,
 		      MatrixWrapper<_C> &c,
-    const _Scalar alpha = 1,
-    const _Scalar beta = 0
+    const _Val alpha = 1,
+    const _Val beta = 0
 ) noexcept;
 
 }  // namespace la

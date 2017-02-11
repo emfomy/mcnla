@@ -28,9 +28,9 @@ namespace io {
 ///
 /// @todo  Write banner
 ///
-template <typename _Scalar>
+template <typename _Val>
 void saveMatrixMarket(
-    const matrix::DenseVector<_Scalar> &vector,
+    const matrix::DenseVector<_Val> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -61,9 +61,9 @@ void saveMatrixMarket(
 ///
 /// @todo  Write banner
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 void saveMatrixMarket(
-    const matrix::DenseMatrix<_Scalar, _trans> &matrix,
+    const matrix::DenseMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
@@ -94,9 +94,9 @@ void saveMatrixMarket(
 ///
 /// @todo  Write banner
 ///
-template <class _Tag, typename _Scalar>
+template <class _Tag, typename _Val>
 void saveMatrixMarket(
-    const DenseVectorCollection<_Tag, _Scalar> &collection,
+    const DenseVectorCollection<_Tag, _Val> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -130,9 +130,9 @@ void saveMatrixMarket(
 ///
 /// @todo  Write banner
 ///
-template <class _Tag, typename _Scalar, Trans _trans>
+template <class _Tag, typename _Val, Trans _trans>
 void saveMatrixMarket(
-    const DenseMatrixCollection<_Tag, _Scalar, _trans> &collection,
+    const DenseMatrixCollection<_Tag, _Val, _trans> &collection,
     const char *file
 ) noexcept {
   // Open file

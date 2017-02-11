@@ -25,15 +25,15 @@ namespace matrix {
 /// @ingroup  matrix_dense_module_detail
 /// The dense storage.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class DenseStorage {
 
  private:
 
-  using ScalarType   = _Scalar;
-  using ValArrayType = Array<ScalarType>;
+  using ValType      = _Val;
+  using ValArrayType = Array<ValType>;
 
  protected:
 
@@ -63,8 +63,8 @@ class DenseStorage {
   // Gets array
   inline       ValArrayType& val() noexcept;
   inline const ValArrayType& val() const noexcept;
-  inline       ScalarType* valPtr() noexcept;
-  inline const ScalarType* valPtr() const noexcept;
+  inline       ValType* valPtr() noexcept;
+  inline const ValType* valPtr() const noexcept;
 
 };
 

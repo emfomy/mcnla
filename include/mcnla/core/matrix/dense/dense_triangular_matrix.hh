@@ -27,7 +27,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
+template <typename _Val, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -40,20 +40,20 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix traits.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-struct Traits<matrix::DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
+template <typename _Val, Trans _trans, Uplo _uplo>
+struct Traits<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> {
 
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
-  using ScalarType = _Scalar;
+  using ValType = _Val;
 
-  using RealType    = matrix::DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType = matrix::DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+  using RealType    = matrix::DenseTriangularMatrix<RealValT<_Val>, _trans, _uplo>;
+  using ComplexType = matrix::DenseTriangularMatrix<ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType  = matrix::DenseVector<_Scalar>;
-  using MatrixType  = matrix::DenseTriangularMatrix<_Scalar, _trans, _uplo>;
+  using VectorType  = matrix::DenseVector<_Val>;
+  using MatrixType  = matrix::DenseTriangularMatrix<_Val, _trans, _uplo>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,8 +65,8 @@ struct IsDenseTriangularMatrix : std::false_type {};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc IsDenseTriangularMatrix
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-struct IsDenseTriangularMatrix<matrix::DenseTriangularMatrix<_Scalar, _trans, _uplo>> : std::true_type {};
+template <typename _Val, Trans _trans, Uplo _uplo>
+struct IsDenseTriangularMatrix<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix assert.
@@ -85,20 +85,20 @@ namespace matrix {
 /// @ingroup  matrix_dense_module
 /// The dense triangular matrix class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 /// @tparam  _trans   The transpose storage layout.
 /// @tparam  _uplo    The triangular storage layout.
 ///
-template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
 class DenseTriangularMatrix
-  : public DenseMatrixStorage<_Scalar>,
-    public MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>,
-    public InvertibleWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>> {
+  : public DenseMatrixStorage<_Val>,
+    public MatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>,
+    public InvertibleWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
-  friend MatrixWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>;
-  friend InvertibleWrapper<DenseTriangularMatrix<_Scalar, _trans, _uplo>>;
+  friend MatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>;
+  friend InvertibleWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>;
 
  public:
 
@@ -106,22 +106,22 @@ class DenseTriangularMatrix
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
-  using ScalarType    = _Scalar;
-  using ValArrayType  = Array<_Scalar>;
+  using ValType       = _Val;
+  using ValArrayType  = Array<_Val>;
 
-  using RealType      = DenseTriangularMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType   = DenseTriangularMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
+  using RealType      = DenseTriangularMatrix<RealValT<_Val>, _trans, _uplo>;
+  using ComplexType   = DenseTriangularMatrix<ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType    = DenseVector<_Scalar>;
-  using MatrixType    = DenseTriangularMatrix<_Scalar, _trans, _uplo>;
+  using VectorType    = DenseVector<_Val>;
+  using MatrixType    = DenseTriangularMatrix<_Val, _trans, _uplo>;
 
-  using TransposeType = DenseTriangularMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>;
+  using TransposeType = DenseTriangularMatrix<_Val, changeTrans(_trans), changeUplo(_uplo)>;
 
-  using GeneralType   = DenseMatrix<_Scalar, _trans>;
+  using GeneralType   = DenseMatrix<_Val, _trans>;
 
  private:
 
-  using BaseType      = DenseMatrixStorage<_Scalar>;
+  using BaseType      = DenseMatrixStorage<_Val>;
 
  public:
 
@@ -144,7 +144,7 @@ class DenseTriangularMatrix
   inline index_t nnz() const noexcept;
 
   // Gets element
-  inline ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
+  inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
   template <typename... Args>
@@ -172,12 +172,12 @@ class DenseTriangularMatrix
 };
 
 /// @ingroup  matrix_dense_module
-template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
-using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Scalar, Trans::NORMAL, _uplo>;
+template <typename _Val, Uplo _uplo = Uplo::UPPER>
+using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
-template <typename _Scalar, Uplo _uplo = Uplo::LOWER>
-using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Scalar, Trans::TRANS, _uplo>;
+template <typename _Val, Uplo _uplo = Uplo::LOWER>
+using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix
 

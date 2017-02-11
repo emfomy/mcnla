@@ -28,9 +28,9 @@ namespace io {
 ///
 /// @todo  Write banner
 ///
-template <typename _Scalar>
+template <typename _Val>
 void saveMatrixMarket(
-    const matrix::CooVector<_Scalar> &vector,
+    const matrix::CooVector<_Val> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -61,9 +61,9 @@ void saveMatrixMarket(
 ///
 /// @todo  Write banner
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 void saveMatrixMarket(
-    const matrix::CooMatrix<_Scalar, _trans> &matrix,
+    const matrix::CooMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
 

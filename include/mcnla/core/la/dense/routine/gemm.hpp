@@ -32,19 +32,19 @@ namespace detail {
 // ========================================================================================================================== //
 // Impl2
 //
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void gemmImpl2(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, Trans::NORMAL> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   mcnla_assert_eq(c.nrow(), a.nrow());
   mcnla_assert_eq(c.ncol(), b.ncol());
   mcnla_assert_eq(a.ncol(), b.nrow());
 
-  gemm(toTransChar<_Scalar>(_transa), toTransChar<_Scalar>(_transb), c.nrow(), c.ncol(), a.ncol(),
+  gemm(toTransChar<_Val>(_transa), toTransChar<_Val>(_transb), c.nrow(), c.ncol(), a.ncol(),
        alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 
@@ -52,35 +52,35 @@ inline void gemmImpl2(
 // Impl1
 //
 
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void gemmImpl1(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, Trans::NORMAL> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   gemmImpl2(a, b, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void gemmImpl1(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::TRANS> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, Trans::TRANS> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   gemmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
 inline void gemmImpl1(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(b);
@@ -98,25 +98,25 @@ inline void gemmImpl1(
 /// @ingroup  la_dense_blas3_module
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
 inline void gemm(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::gemmImpl1(a, b, c, alpha, beta);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
 inline void gemm(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   detail::gemmImpl1(a, b, c, alpha, beta);
 }
@@ -126,24 +126,24 @@ inline void gemm(
 /// @ingroup  la_interface_module_detail
 /// @copydoc  mcnla::la::mm
 ///
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   gemm(a, b, c, alpha, beta);
 }
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
 inline void mm(
-    const DenseMatrix<_Scalar, _transa> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+    const DenseMatrix<_Val, _transb> &b,
+          DenseMatrix<_Val, _transc> &&c,
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
+    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
 ) noexcept {
   gemm(a, b, c, alpha, beta);
 }

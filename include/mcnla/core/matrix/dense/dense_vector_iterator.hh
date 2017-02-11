@@ -24,8 +24,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseVector;
-template <typename _Scalar, class _Vector> class DenseVectorIteratorBase;
+template <typename _Val> class DenseVector;
+template <typename _Val, class _Vector> class DenseVectorIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -38,10 +38,10 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator traits.
 ///
-template <typename _Scalar, class _Vector>
-struct Traits<matrix::DenseVectorIteratorBase<_Scalar, _Vector>> {
+template <typename _Val, class _Vector>
+struct Traits<matrix::DenseVectorIteratorBase<_Val, _Vector>> {
   static constexpr index_t ndim = 1;
-  using ScalarType    = _Scalar;
+  using ValType       = _Val;
   using ContainerType = _Vector;
 };
 
@@ -56,21 +56,21 @@ namespace matrix {
 /// @ingroup  matrix_dense_module_detail
 /// The dense vector iterator.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val     The value type.
 /// @tparam  _Vector  The vector type.
 ///
 /// @see  DenseVectorIterator, DenseVectorConstIterator
 ///
-template <typename _Scalar, class _Vector>
-class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>> {
+template <typename _Val, class _Vector>
+class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase<_Val, _Vector>> {
 
  private:
 
   static constexpr index_t ndim = 1;
-  using ScalarType    = _Scalar;
+  using ValType       = _Val;
   using ContainerType = _Vector;
 
-  using BaseType      = DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>;
+  using BaseType      = DenseIteratorBase<DenseVectorIteratorBase<_Val, _Vector>>;
 
  protected:
 
@@ -83,23 +83,23 @@ class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase
   using BaseType::operator=;
 
   // Operators
-  template <typename __Scalar, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
+  template <typename __Val, class __Vector>
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<__Val, __Vector> &iterator );
 
   // Gets value
-  inline ScalarType& val() const noexcept;
+  inline ValType& val() const noexcept;
   inline index_t     idx() const noexcept;
   inline index_t     pos() const noexcept;
 
 };
 
 /// @ingroup  matrix_dense_module_detail
-template <typename _Scalar>
-using DenseVectorIterator = DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
+template <typename _Val>
+using DenseVectorIterator = DenseVectorIteratorBase<_Val, DenseVector<_Val>>;
 
 /// @ingroup  matrix_dense_module_detail
-template <typename _Scalar>
-using DenseVectorConstIterator = DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+template <typename _Val>
+using DenseVectorConstIterator = DenseVectorIteratorBase<const _Val, const DenseVector<_Val>>;
 
 }  // namespace matrix
 

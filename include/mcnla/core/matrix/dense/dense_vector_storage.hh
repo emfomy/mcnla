@@ -24,29 +24,29 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseMatrixStorage;
+template <typename _Val> class DenseMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_dense_module_detail
 /// The dense vector storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class DenseVectorStorage : public DenseStorage<_Scalar> {
+template <typename _Val>
+class DenseVectorStorage : public DenseStorage<_Val> {
 
-  friend class DenseMatrixStorage<_Scalar>;
+  friend class DenseMatrixStorage<_Val>;
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<_Scalar>;
+  using ValType           = _Val;
+  using ValArrayType      = Array<_Val>;
   using DimsType          = std::tuple<index_t>;
 
-  using VectorStorageType = DenseVectorStorage<_Scalar>;
+  using VectorStorageType = DenseVectorStorage<_Val>;
 
-  using BaseType          = DenseStorage<_Scalar>;
+  using BaseType          = DenseStorage<_Val>;
 
  protected:
 
@@ -84,8 +84,8 @@ class DenseVectorStorage : public DenseStorage<_Scalar> {
  protected:
 
   // Gets element
-  inline       ScalarType& elemImpl( const index_t idx0 ) noexcept;
-  inline const ScalarType& elemImpl( const index_t idx0 ) const noexcept;
+  inline       ValType& elemImpl( const index_t idx0 ) noexcept;
+  inline const ValType& elemImpl( const index_t idx0 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0 ) const noexcept;

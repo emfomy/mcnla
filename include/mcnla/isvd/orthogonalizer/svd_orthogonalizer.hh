@@ -29,32 +29,32 @@ namespace isvd {
 struct SvdOrthogonalizerTag {};
 
 /// @ingroup  isvd_orthogonalizer_module
-template <typename _Scalar>
-using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Scalar>;
+template <typename _Val>
+using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
 /// The SVD orthogonalizer.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Orthogonalizer<SvdOrthogonalizerTag, _Scalar>
-  : public OrthogonalizerWrapper<SvdOrthogonalizer<_Scalar>> {
+template <typename _Val>
+class Orthogonalizer<SvdOrthogonalizerTag, _Val>
+  : public OrthogonalizerWrapper<SvdOrthogonalizer<_Val>> {
 
-  friend OrthogonalizerWrapper<SvdOrthogonalizer<_Scalar>>;
+  friend OrthogonalizerWrapper<SvdOrthogonalizer<_Val>>;
 
  private:
 
-  using BaseType = OrthogonalizerWrapper<SvdOrthogonalizer<_Scalar>>;
+  using BaseType = OrthogonalizerWrapper<SvdOrthogonalizer<_Val>>;
 
  public:
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<ScalarType>;
-  using MatrixType     = MatrixT<DenseMatrixCollection120<ScalarType>>;
+  using ValType        = _Val;
+  using RealValType = RealValT<ValType>;
+  using MatrixType     = MatrixT<DenseMatrixCollection120<ValType>>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -68,7 +68,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Scalar>
   double time1_;
 
   /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
+  DenseVector<RealValType> vector_s_;
 
   /// The empty matrix.
   MatrixType matrix_empty_;
@@ -96,7 +96,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Scalar>
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void orthogonalizeImpl( DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
+  void orthogonalizeImpl( DenseMatrixCollection120<ValType> &collection_q ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;

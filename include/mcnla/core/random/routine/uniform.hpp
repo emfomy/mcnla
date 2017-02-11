@@ -26,12 +26,12 @@ namespace random {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void uniformImpl(
-    DenseVector<_Scalar> &vector,
+    DenseVector<_Val> &vector,
     const index_t seed
 ) noexcept {
-  Driver<_Scalar> driver(seed);
+  Driver<_Val> driver(seed);
   driver.uniform(vector);
 }
 
@@ -43,18 +43,18 @@ inline void uniformImpl(
 ///
 /// @see  mcnla::random::Driver
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void uniform(
-    DenseVector<_Scalar> &vector,
+    DenseVector<_Val> &vector,
     const index_t seed
 ) noexcept {
   detail::uniformImpl(vector, seed);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void uniform(
-    DenseVector<_Scalar> &&vector,
+    DenseVector<_Val> &&vector,
     const index_t seed
 ) noexcept {
   detail::uniformImpl(vector, seed);

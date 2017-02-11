@@ -34,28 +34,28 @@ template <typename _Derived>
 /// @ingroup  utility_module
 /// The scalar type traits.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-struct ScalarTraits {
-  static_assert(std::is_arithmetic<_Scalar>::value, "'_Scalar' must be a arithmetic type!");
-  using RealType = _Scalar;
-  using ComplexType = std::complex<_Scalar>;
+template <typename _Val>
+struct ValTraits {
+  static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
+  using RealType = _Val;
+  using ComplexType = std::complex<_Val>;
   static constexpr bool is_real = true;
   static constexpr bool is_complex = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
-/// @copydoc ScalarTraits
+/// @copydoc ValTraits
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-struct ScalarTraits<std::complex<_Scalar>> {
-  static_assert(std::is_arithmetic<_Scalar>::value, "'_Scalar' must be a arithmetic type!");
-  using RealType = _Scalar;
-  using ComplexType = std::complex<_Scalar>;
+template <typename _Val>
+struct ValTraits<std::complex<_Val>> {
+  static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
+  using RealType = _Val;
+  using ComplexType = std::complex<_Val>;
   static constexpr bool is_real = false;
   static constexpr bool is_complex = true;
 };
@@ -88,7 +88,7 @@ using ComplexT = typename traits::Traits<_Derived>::ComplexType;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using ScalarT = typename traits::Traits<_Derived>::ScalarType;
+using ValT = typename traits::Traits<_Derived>::ValType;
 
 /// @ingroup  utility_module
 template <class _Derived>
@@ -115,12 +115,12 @@ template <class _Derived>
 using ConstIteratorT = typename traits::Traits<_Derived>::ConstIteratorType;
 
 /// @ingroup  utility_module
-template <typename _Scalar>
-using RealScalarT = typename traits::ScalarTraits<_Scalar>::RealType;
+template <typename _Val>
+using RealValT = typename traits::ValTraits<_Val>::RealType;
 
 /// @ingroup  utility_module
-template <typename _Scalar>
-using ComplexScalarT = typename traits::ScalarTraits<_Scalar>::ComplexType;
+template <typename _Val>
+using ComplexValT = typename traits::ValTraits<_Val>::ComplexType;
 
 }  // namespace mcnla
 

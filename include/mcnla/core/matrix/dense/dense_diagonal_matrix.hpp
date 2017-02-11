@@ -23,15 +23,15 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix() noexcept
+template <typename _Val>
+DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
     const index_t size
 ) noexcept
   : BaseType(size) {
@@ -40,8 +40,8 @@ DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -50,8 +50,8 @@ DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -61,8 +61,8 @@ DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
     const index_t size,
     const index_t pitch,
     const ValArrayType &val,
@@ -75,8 +75,8 @@ DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
     const DenseDiagonalMatrix &other
 ) noexcept
   : BaseType(other) {}
@@ -84,8 +84,8 @@ DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
     DenseDiagonalMatrix &&other
 ) noexcept
   : BaseType(std::move(other)) {}
@@ -95,8 +95,8 @@ DenseDiagonalMatrix<_Scalar>::DenseDiagonalMatrix(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::operator=(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>& DenseDiagonalMatrix<_Val>::operator=(
     const DenseDiagonalMatrix &other
 ) noexcept {
   BaseType::operator=(other);
@@ -106,8 +106,8 @@ DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::operator=(
+template <typename _Val>
+DenseDiagonalMatrix<_Val>& DenseDiagonalMatrix<_Val>::operator=(
     DenseDiagonalMatrix &&other
 ) noexcept {
   BaseType::operator=(std::move(other));
@@ -117,24 +117,24 @@ DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
-template <typename _Scalar>
-index_t DenseDiagonalMatrix<_Scalar>::size() const noexcept {
+template <typename _Val>
+index_t DenseDiagonalMatrix<_Val>::size() const noexcept {
   return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <typename _Scalar>
-index_t DenseDiagonalMatrix<_Scalar>::nnz() const noexcept {
+template <typename _Val>
+index_t DenseDiagonalMatrix<_Val>::nnz() const noexcept {
   return this->size();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
-template <typename _Scalar>
-_Scalar DenseDiagonalMatrix<_Scalar>::operator()(
+template <typename _Val>
+_Val DenseDiagonalMatrix<_Val>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -146,11 +146,11 @@ _Scalar DenseDiagonalMatrix<_Scalar>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Scalar> template <typename... Args>
-void DenseDiagonalMatrix<_Scalar>::reconstruct(
+template <typename _Val> template <typename... Args>
+void DenseDiagonalMatrix<_Val>::reconstruct(
     Args... args
 ) noexcept {
-  *this = DenseDiagonalMatrix<_Scalar>(args...);
+  *this = DenseDiagonalMatrix<_Val>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,80 +158,80 @@ void DenseDiagonalMatrix<_Scalar>::reconstruct(
 ///
 /// @attention  The storage layout is also changed.
 ///
-template <typename _Scalar>
-DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::t() noexcept {
+template <typename _Val>
+DenseDiagonalMatrix<_Val>& DenseDiagonalMatrix<_Val>::t() noexcept {
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  t
 ///
-template <typename _Scalar>
-const DenseDiagonalMatrix<_Scalar>& DenseDiagonalMatrix<_Scalar>::t() const noexcept {
+template <typename _Val>
+const DenseDiagonalMatrix<_Val>& DenseDiagonalMatrix<_Val>::t() const noexcept {
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the vector view of the matrix.
 ///
-template <typename _Scalar>
-DenseVector<_Scalar>& DenseDiagonalMatrix<_Scalar>::viewVector() noexcept {
+template <typename _Val>
+DenseVector<_Val>& DenseDiagonalMatrix<_Val>::viewVector() noexcept {
   return static_cast<VectorType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  viewVector
 ///
-template <typename _Scalar>
-const DenseVector<_Scalar>& DenseDiagonalMatrix<_Scalar>::viewVector() const noexcept {
+template <typename _Val>
+const DenseVector<_Val>& DenseDiagonalMatrix<_Val>::viewVector() const noexcept {
   return static_cast<const VectorType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  viewVector
 ///
-template <typename _Scalar>
-DenseVector<_Scalar>& DenseDiagonalMatrix<_Scalar>::vectorize() noexcept {
+template <typename _Val>
+DenseVector<_Val>& DenseDiagonalMatrix<_Val>::vectorize() noexcept {
   return viewVector();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  vectorize
 ///
-template <typename _Scalar>
-const DenseVector<_Scalar>& DenseDiagonalMatrix<_Scalar>::vectorize() const noexcept {
+template <typename _Val>
+const DenseVector<_Val>& DenseDiagonalMatrix<_Val>::vectorize() const noexcept {
   return viewVector();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
-template <typename _Scalar>
-index_t DenseDiagonalMatrix<_Scalar>::nrowImpl() const noexcept {
+template <typename _Val>
+index_t DenseDiagonalMatrix<_Val>::nrowImpl() const noexcept {
   return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::ncol
 ///
-template <typename _Scalar>
-index_t DenseDiagonalMatrix<_Scalar>::ncolImpl() const noexcept {
+template <typename _Val>
+index_t DenseDiagonalMatrix<_Val>::ncolImpl() const noexcept {
   return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert to base class.
 ///
-template <typename _Scalar>
-DenseVectorStorage<_Scalar>& DenseDiagonalMatrix<_Scalar>::base() noexcept {
+template <typename _Val>
+DenseVectorStorage<_Val>& DenseDiagonalMatrix<_Val>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  base
 ///
-template <typename _Scalar>
-const DenseVectorStorage<_Scalar>& DenseDiagonalMatrix<_Scalar>::base() const noexcept {
+template <typename _Val>
+const DenseVectorStorage<_Val>& DenseDiagonalMatrix<_Val>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 

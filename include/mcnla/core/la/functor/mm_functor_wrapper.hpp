@@ -25,19 +25,19 @@ namespace la {
 /// @ingroup  la_functor_module
 /// The MM functor wrapper.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val     The value type.
 /// @tparam  _transb  The transpose layout of matrix B.
 /// @tparam  _transc  The transpose layout of matrix C.
 ///
 /// @see  mcnla::la::mm
 ///
-template <class _Scalar, Trans _transb = Trans::NORMAL, Trans _transc = Trans::NORMAL>
+template <class _Val, Trans _transb = Trans::NORMAL, Trans _transc = Trans::NORMAL>
 class MmFunctorWrapper {
 
  protected:
 
-  using BType = DenseMatrix<_Scalar, _transb>;
-  using CType = DenseMatrix<_Scalar, _transc>;
+  using BType = DenseMatrix<_Val, _transb>;
+  using CType = DenseMatrix<_Val, _transc>;
 
  public:
 
@@ -54,10 +54,10 @@ class MmFunctorWrapper {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /// @brief  Apply the functor.
   ///
-  virtual void operator()( const BType &b, CType &c, const _Scalar alpha = 1, const _Scalar beta = 0 ) const noexcept = 0;
+  virtual void operator()( const BType &b, CType &c, const _Val alpha = 1, const _Val beta = 0 ) const noexcept = 0;
 
   #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  inline void operator()( const BType &b, CType &&c, const _Scalar alpha = 1, const _Scalar beta = 0 ) const noexcept {
+  inline void operator()( const BType &b, CType &&c, const _Val alpha = 1, const _Val beta = 0 ) const noexcept {
     (*this)(b, c, alpha, beta);
   }
   #endif  // DOXYGEN_SHOULD_SKIP_THIS

@@ -32,15 +32,15 @@ namespace random {
 /// @ingroup  random_module
 /// @brief  The random generator driver.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class Driver {
 
  private:
 
-  using ScalarType = _Scalar;
-  using VectorType = DenseVector<ScalarType>;
+  using ValType = _Val;
+  using VectorType = DenseVector<ValType>;
 
  protected:
 
@@ -71,10 +71,10 @@ class Driver {
   inline index_t ompSize() const noexcept;
 
   // Computes
-  inline void uniform( VectorType &vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
-  inline void uniform( VectorType &&vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
-  inline void gaussian( VectorType &vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
-  inline void gaussian( VectorType &&vector, const ScalarType a = 0, const ScalarType b = 1 ) noexcept;
+  inline void uniform( VectorType &vector, const ValType a = 0, const ValType b = 1 ) noexcept;
+  inline void uniform( VectorType &&vector, const ValType a = 0, const ValType b = 1 ) noexcept;
+  inline void gaussian( VectorType &vector, const ValType a = 0, const ValType b = 1 ) noexcept;
+  inline void gaussian( VectorType &&vector, const ValType a = 0, const ValType b = 1 ) noexcept;
 
   // Sets seed
   inline void setSeed( const index_t seed ) noexcept;

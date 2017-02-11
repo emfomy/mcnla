@@ -27,9 +27,9 @@ namespace la {
 /// @brief  Computes the Euclidean norm of a vector.
 ///
 //@{
-template <typename _Scalar>
-inline RealScalarT<_Scalar> nrm2(
-    const DenseVector<_Scalar> &x
+template <typename _Val>
+inline RealValT<_Val> nrm2(
+    const DenseVector<_Val> &x
 ) noexcept {
   return detail::nrm2(x.length(), x.valPtr(), x.stride());
 }

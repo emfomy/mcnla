@@ -79,18 +79,18 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The MPI data type traits.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-struct MpiScalarTraits {
-  static_assert(std::integral_constant<_Scalar, false>::value, "Error using non-specialized MPI data type traits!");
+template <typename _Val>
+struct MpiValTraits {
+  static_assert(std::integral_constant<_Val, false>::value, "Error using non-specialized MPI data type traits!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The 8-bit character MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<char> {
+struct MpiValTraits<char> {
   static constexpr const MPI_Datatype &datatype = MPI_CHARACTER;
 };
 
@@ -98,7 +98,7 @@ struct MpiScalarTraits<char> {
 /// The 8-bit integer MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<int8_t> {
+struct MpiValTraits<int8_t> {
   static constexpr const MPI_Datatype &datatype = MPI_INTEGER1;
 };
 
@@ -106,7 +106,7 @@ struct MpiScalarTraits<int8_t> {
 /// The 16-bit integer MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<int16_t> {
+struct MpiValTraits<int16_t> {
   static constexpr const MPI_Datatype &datatype = MPI_INTEGER2;
 };
 
@@ -114,7 +114,7 @@ struct MpiScalarTraits<int16_t> {
 /// The 32-bit integer MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<int32_t> {
+struct MpiValTraits<int32_t> {
   static constexpr const MPI_Datatype &datatype = MPI_INTEGER4;
 };
 
@@ -122,7 +122,7 @@ struct MpiScalarTraits<int32_t> {
 /// The 64-bit integer MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<int64_t> {
+struct MpiValTraits<int64_t> {
   static constexpr const MPI_Datatype &datatype = MPI_INTEGER8;
 };
 
@@ -130,7 +130,7 @@ struct MpiScalarTraits<int64_t> {
 /// The 32-bit floating point MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<float> {
+struct MpiValTraits<float> {
   static constexpr const MPI_Datatype &datatype = MPI_REAL4;
 };
 
@@ -138,7 +138,7 @@ struct MpiScalarTraits<float> {
 /// The 64-bit floating point MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<double> {
+struct MpiValTraits<double> {
   static constexpr const MPI_Datatype &datatype = MPI_REAL8;
 };
 
@@ -146,7 +146,7 @@ struct MpiScalarTraits<double> {
 /// The complex float MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<std::complex<float>> {
+struct MpiValTraits<std::complex<float>> {
   static constexpr const MPI_Datatype &datatype = MPI_COMPLEX8;
 };
 
@@ -154,7 +154,7 @@ struct MpiScalarTraits<std::complex<float>> {
 /// The complex double MPI data type traits.
 ///
 template <>
-struct MpiScalarTraits<std::complex<double>> {
+struct MpiValTraits<std::complex<double>> {
   static constexpr const MPI_Datatype &datatype = MPI_COMPLEX16;
 };
 

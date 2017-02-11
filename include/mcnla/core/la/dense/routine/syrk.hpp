@@ -33,16 +33,16 @@ namespace detail {
 // Impl2
 //
 
-template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
 inline void syrkImpl2(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, _transc, _uplo> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   mcnla_assert_eq(c.size(), a.nrow());
 
-  syrk(toUploChar(_uplo, _transc), toTransChar<_Scalar>(_transa), c.nrow(), a.ncol(),
+  syrk(toUploChar(_uplo, _transc), toTransChar<_Val>(_transa), c.nrow(), a.ncol(),
        alpha, a.valPtr(), a.pitch(), beta, c.valPtr(), c.pitch());
 }
 
@@ -50,32 +50,32 @@ inline void syrkImpl2(
 // Impl1
 //
 
-template <typename _Scalar, Trans _transa, Uplo _uplo>
+template <typename _Val, Trans _transa, Uplo _uplo>
 inline void syrkImpl1(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, Trans::NORMAL, _uplo> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, Trans::NORMAL, _uplo> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   syrkImpl2(a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Uplo _uplo>
+template <typename _Val, Trans _transa, Uplo _uplo>
 inline void syrkImpl1(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, Trans::TRANS, _uplo> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, Trans::TRANS, _uplo> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   syrkImpl2(a, c, alpha, beta);
 }
 
-template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
 inline void syrkImpl1(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const _Scalar alpha,
-    const _Scalar beta
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, _transc, _uplo> &c,
+    const _Val alpha,
+    const _Val beta
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(c);
@@ -92,23 +92,23 @@ inline void syrkImpl1(
 /// @ingroup  la_dense_blas3_module
 /// @brief  Performs a symmetric/Hermitian rank-k update.
 ///
-template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
 inline void syrk(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, _transc, _uplo> &c,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> alpha = 1,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> beta  = 0
 ) noexcept {
   detail::syrkImpl1(a, c, alpha, beta);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
 inline void syrk(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, _transc, _uplo> &&c,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> alpha = 1,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> beta  = 0
 ) noexcept {
   detail::syrkImpl1(a, c, alpha, beta);
 }
@@ -118,23 +118,23 @@ inline void syrk(
 /// @ingroup  la_interface_module_detail
 /// @copydoc  mcnla::la::rk
 ///
-template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
 inline void rk(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &c,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, _transc, _uplo> &c,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> alpha = 1,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> beta  = 0
 ) noexcept {
   syrk(a, c, alpha, beta);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
 inline void rk(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseSymmetricMatrix<_Scalar, _transc, _uplo> &&c,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> alpha = 1,
-    const ScalarT<DenseSymmetricMatrix<_Scalar, _transc, _uplo>> beta  = 0
+    const DenseMatrix<_Val, _transa> &a,
+          DenseSymmetricMatrix<_Val, _transc, _uplo> &&c,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> alpha = 1,
+    const ValT<DenseSymmetricMatrix<_Val, _transc, _uplo>> beta  = 0
 ) noexcept {
   syrk(a, c, alpha, beta);
 }

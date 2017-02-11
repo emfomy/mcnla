@@ -28,30 +28,30 @@ namespace matrix {
 struct DenseMatrixCollection102Tag {};
 
 /// @ingroup  matrix_collection_module
-template <typename _Scalar>
-using DenseMatrixCollection102 = DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>;
+template <typename _Val>
+using DenseMatrixCollection102 = DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
 /// The dense matrix collection with dimension order [1 0 2].
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class DenseMatrixCollection<DenseMatrixCollection102Tag, _Scalar, Trans::TRANS>
-  : public MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>> {
+template <typename _Val>
+class DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>
+  : public MatrixCollectionWrapper<DenseMatrixCollection102<_Val>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection102<_Val>>;
 
  public:
 
-  using ScalarType     = _Scalar;
-  using CollectionType = DenseMatrixCollection102<_Scalar>;
-  using MatrixType     = DenseMatrixRowMajor<_Scalar>;
+  using ValType        = _Val;
+  using CollectionType = DenseMatrixCollection102<_Val>;
+  using MatrixType     = DenseMatrixRowMajor<_Val>;
 
  private:
 
-  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
+  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection102<_Val>>;
 
  protected:
 

@@ -25,13 +25,13 @@ namespace la {
 /// @ingroup  la_interface_module
 /// @brief  Computes a matrix-vector product.
 ///
-template <class _A, class _X, class _Y, typename _Scalar>
+template <class _A, class _X, class _Y, typename _Val>
 inline void mv(
     const MatrixWrapper<_A> &a,
     const VectorWrapper<_X> &x,
           VectorWrapper<_Y> &y,
-    const _Scalar alpha = 1,
-    const _Scalar beta = 0
+    const _Val alpha = 1,
+    const _Val beta = 0
 ) noexcept;
 
 }  // namespace la

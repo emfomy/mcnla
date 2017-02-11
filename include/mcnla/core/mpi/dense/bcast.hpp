@@ -26,14 +26,14 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void bcastImpl(
-          DenseStorage<_Scalar> &buffer,
+          DenseStorage<_Val> &buffer,
     const mpi_int_t root,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Bcast(buffer.valPtr(), count, datatype, root, comm);
 }
 
@@ -47,9 +47,9 @@ inline void bcastImpl(
 /// @attention  @a buffer should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void bcast(
-          DenseVector<_Scalar> &buffer,
+          DenseVector<_Val> &buffer,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
@@ -57,9 +57,9 @@ inline void bcast(
   detail::bcastImpl(buffer, root, comm, buffer.nelem());
 }
 
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void bcast(
-          DenseMatrix<_Scalar, _trans> &buffer,
+          DenseMatrix<_Val, _trans> &buffer,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
@@ -69,18 +69,18 @@ inline void bcast(
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void bcast(
-          DenseVector<_Scalar> &&buffer,
+          DenseVector<_Val> &&buffer,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   bcast(buffer, root, comm);
 }
 
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void bcast(
-          DenseMatrix<_Scalar, _trans> &&buffer,
+          DenseMatrix<_Val, _trans> &&buffer,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {

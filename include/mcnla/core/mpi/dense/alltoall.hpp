@@ -26,24 +26,24 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void alltoallImpl(
-    const DenseStorage<_Scalar> &send,
-          DenseStorage<_Scalar> &recv,
+    const DenseStorage<_Val> &send,
+          DenseStorage<_Val> &recv,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Alltoall(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, comm);
 }
 
-template <typename _Scalar>
+template <typename _Val>
 inline void alltoallImpl(
-          DenseStorage<_Scalar> &buffer,
+          DenseStorage<_Val> &buffer,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.valPtr(), count, datatype, comm);
 }
 
@@ -58,10 +58,10 @@ inline void alltoallImpl(
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void alltoall(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &recv,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
@@ -71,10 +71,10 @@ inline void alltoall(
   detail::alltoallImpl(send, recv, comm, send.nelem() / commSize(comm));
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _transs, Trans _transr>
 inline void alltoall(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &recv,
+    const DenseMatrix<_Val, _transs> &send,
+          DenseMatrix<_Val, _transr> &recv,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
@@ -86,19 +86,19 @@ inline void alltoall(
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void alltoall(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &&recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &&recv,
     const MPI_Comm comm
 ) noexcept {
   alltoall(send, recv, comm);
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _transs, Trans _transr>
 inline void alltoall(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &&recv,
+    const DenseMatrix<_Val, _transs> &send,
+          DenseMatrix<_Val, _transr> &&recv,
     const MPI_Comm comm
 ) noexcept {
   alltoall(send, recv, comm);
@@ -113,9 +113,9 @@ inline void alltoall(
 /// @attention  @a buffer should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void alltoall(
-          DenseVector<_Scalar> &buffer,
+          DenseVector<_Val> &buffer,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
@@ -123,9 +123,9 @@ inline void alltoall(
   detail::alltoallImpl(buffer, comm, buffer.nelem() / commSize(comm));
 }
 
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void alltoall(
-          DenseMatrix<_Scalar, _trans> &buffer,
+          DenseMatrix<_Val, _trans> &buffer,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
@@ -135,17 +135,17 @@ inline void alltoall(
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void alltoall(
-          DenseVector<_Scalar> &&buffer,
+          DenseVector<_Val> &&buffer,
     const MPI_Comm comm
 ) noexcept {
   alltoall(buffer, comm);
 }
 
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void alltoall(
-          DenseMatrix<_Scalar, _trans> &&buffer,
+          DenseMatrix<_Val, _trans> &&buffer,
     const MPI_Comm comm
 ) noexcept {
   alltoall(buffer, comm);

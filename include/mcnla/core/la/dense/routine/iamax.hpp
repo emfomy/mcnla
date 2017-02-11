@@ -27,9 +27,9 @@ namespace la {
 /// @brief  Finds the index of the element with maximum absolute value.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline index_t iamax(
-    const DenseVector<_Scalar> &x
+    const DenseVector<_Val> &x
 ) noexcept {
   return detail::iamax(x.length(), x.valPtr(), x.stride());
 }
@@ -40,9 +40,9 @@ inline index_t iamax(
 /// @brief  Finds the element with maximum absolute value.
 ///
 //@{
-template <typename _Scalar>
-inline RealScalarT<_Scalar> amax(
-    const DenseVector<_Scalar> &x
+template <typename _Val>
+inline RealValT<_Val> amax(
+    const DenseVector<_Val> &x
 ) noexcept {
   index_t idx = detail::iamax(x.length(), x.valPtr(), x.stride());
   return std::abs(x(idx));

@@ -29,31 +29,31 @@ namespace isvd {
 struct ExtrinsicMeanIntegratorTag {};
 
 /// @ingroup  isvd_integrator_module
-template <typename _Scalar>
-using ExtrinsicMeanIntegrator = Integrator<ExtrinsicMeanIntegratorTag, _Scalar>;
+template <typename _Val>
+using ExtrinsicMeanIntegrator = Integrator<ExtrinsicMeanIntegratorTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
 /// The extrinsic mean integrator.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Integrator<ExtrinsicMeanIntegratorTag, _Scalar>
-  : public IntegratorWrapper<ExtrinsicMeanIntegrator<_Scalar>> {
+template <typename _Val>
+class Integrator<ExtrinsicMeanIntegratorTag, _Val>
+  : public IntegratorWrapper<ExtrinsicMeanIntegrator<_Val>> {
 
-  friend IntegratorWrapper<ExtrinsicMeanIntegrator<_Scalar>>;
+  friend IntegratorWrapper<ExtrinsicMeanIntegrator<_Val>>;
 
  private:
 
-  using BaseType = IntegratorWrapper<ExtrinsicMeanIntegrator<_Scalar>>;
+  using BaseType = IntegratorWrapper<ExtrinsicMeanIntegrator<_Val>>;
 
  public:
 
-  using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<_Scalar>;
+  using ValType        = _Val;
+  using RealValType = RealValT<_Val>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -85,49 +85,49 @@ class Integrator<ExtrinsicMeanIntegratorTag, _Scalar>
   index_t nrow_all_;
 
   /// The collection Q.
-  DenseMatrixCollection120<ScalarType> collection_q_;
+  DenseMatrixCollection120<ValType> collection_q_;
 
   /// The cut collection Q.
-  DenseMatrixCollection120<ScalarType> collection_q_cut_;
+  DenseMatrixCollection120<ValType> collection_q_cut_;
 
   /// The matrix Qjs.
-  DenseMatrixRowMajor<ScalarType> matrix_qjs_;
+  DenseMatrixRowMajor<ValType> matrix_qjs_;
 
   /// The matrix Qbar.
-  DenseMatrixRowMajor<ScalarType> matrix_qbar_;
+  DenseMatrixRowMajor<ValType> matrix_qbar_;
 
   /// The matrix Bjs.
-  DenseMatrixRowMajor<ScalarType> matrix_bjs_;
+  DenseMatrixRowMajor<ValType> matrix_bjs_;
 
   /// The collection Bi.
-  DenseMatrixCollection102<ScalarType> collection_bi_;
+  DenseMatrixCollection102<ValType> collection_bi_;
 
   /// The collection Bi0.
-  DenseMatrixCollection102<ScalarType> collection_bi0_;
+  DenseMatrixCollection102<ValType> collection_bi0_;
 
   /// The collection G.
-  DenseMatrixCollection120<ScalarType> collection_g_;
+  DenseMatrixCollection120<ValType> collection_g_;
 
   /// The matrix G0.
-  DenseMatrixRowMajor<ScalarType> matrix_g0_;
+  DenseMatrixRowMajor<ValType> matrix_g0_;
 
   /// The matrix GB (= G0 * Bi0').
-  DenseMatrixRowMajor<ScalarType> matrix_gb_;
+  DenseMatrixRowMajor<ValType> matrix_gb_;
 
   /// The vector S.
-  DenseVector<ScalarType> vector_s_;
+  DenseVector<ValType> vector_s_;
 
   /// The temporary matrix.
-  DenseMatrixRowMajor<ScalarType> matrix_tmp_;
+  DenseMatrixRowMajor<ValType> matrix_tmp_;
 
   /// The empty matrix.
-  DenseMatrixRowMajor<ScalarType> matrix_empty_;
+  DenseMatrixRowMajor<ValType> matrix_empty_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_driver_;
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixRowMajor<ScalarType>, 'O', 'N'> gesvd_driver_;
+  la::GesvdDriver<DenseMatrixRowMajor<ValType>, 'O', 'N'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::mpi_comm_;
@@ -161,10 +161,10 @@ class Integrator<ExtrinsicMeanIntegratorTag, _Scalar>
   inline double timeImpl() const noexcept;
 
   // Gets matrices
-  inline       DenseMatrixCollection120<ScalarType>& collectionQImpl() noexcept;
-  inline const DenseMatrixCollection120<ScalarType>& collectionQImpl() const noexcept;
-  inline       DenseMatrixRowMajor<ScalarType>& matrixQImpl() noexcept;
-  inline const DenseMatrixRowMajor<ScalarType>& matrixQImpl() const noexcept;
+  inline       DenseMatrixCollection120<ValType>& collectionQImpl() noexcept;
+  inline const DenseMatrixCollection120<ValType>& collectionQImpl() const noexcept;
+  inline       DenseMatrixRowMajor<ValType>& matrixQImpl() noexcept;
+  inline const DenseMatrixRowMajor<ValType>& matrixQImpl() const noexcept;
 };
 
 }  // namespace isvd

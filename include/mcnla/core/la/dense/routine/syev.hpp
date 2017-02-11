@@ -28,12 +28,12 @@ namespace la {
 ///
 /// @see  mcnla::la::SyevDriver
 ///
-template <JobOption _jobz, typename _Scalar, Trans _trans, Uplo _uplo>
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
 inline void syev(
-    DenseSymmetricMatrix<_Scalar, _trans, _uplo> &a,
-    DenseVector<RealScalarT<_Scalar>> &w
+    DenseSymmetricMatrix<_Val, _trans, _uplo> &a,
+    DenseVector<RealValT<_Val>> &w
 ) noexcept {
-  SyevDriver<DenseSymmetricMatrix<_Scalar, _trans, _uplo>, _jobz> driver(a);
+  SyevDriver<DenseSymmetricMatrix<_Val, _trans, _uplo>, _jobz> driver(a);
   driver(a, w);
 }
 

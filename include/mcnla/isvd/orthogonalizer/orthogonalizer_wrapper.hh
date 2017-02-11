@@ -36,9 +36,9 @@ class OrthogonalizerWrapper : public utility::CrtpBase<_Derived, OrthogonalizerW
 
  public:
 
-  using ScalarType = ScalarT<_Derived>;
+  using ValType = ValT<_Derived>;
 
-  using ParametersType = Parameters<ScalarType>;
+  using ParametersType = Parameters<ValType>;
 
  protected:
 
@@ -66,7 +66,7 @@ class OrthogonalizerWrapper : public utility::CrtpBase<_Derived, OrthogonalizerW
   inline void initialize() noexcept;
 
   // Orthogonalizes
-  inline void orthogonalize( DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
+  inline void orthogonalize( DenseMatrixCollection120<ValType> &collection_q ) noexcept;
 
   // Operators
   template <class __Derived>

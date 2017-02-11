@@ -28,8 +28,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseVector;
-template <typename _Scalar> class DenseDiagonalMatrix;
+template <typename _Val> class DenseVector;
+template <typename _Val> class DenseDiagonalMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -42,19 +42,19 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector traits.
 ///
-template <typename _Scalar>
-struct Traits<matrix::DenseVector<_Scalar>> {
+template <typename _Val>
+struct Traits<matrix::DenseVector<_Val>> {
   static constexpr index_t ndim = 1;
 
-  using ScalarType        = _Scalar;
+  using ValType           = _Val;
 
-  using RealType          = matrix::DenseVector<RealScalarT<_Scalar>>;
-  using ComplexType       = matrix::DenseVector<ComplexScalarT<_Scalar>>;
+  using RealType          = matrix::DenseVector<RealValT<_Val>>;
+  using ComplexType       = matrix::DenseVector<ComplexValT<_Val>>;
 
-  using VectorType        = matrix::DenseVector<_Scalar>;
+  using VectorType        = matrix::DenseVector<_Val>;
 
-  using IteratorType      = matrix::DenseVectorIterator<_Scalar>;
-  using ConstIteratorType = matrix::DenseVectorConstIterator<_Scalar>;
+  using IteratorType      = matrix::DenseVectorIterator<_Val>;
+  using ConstIteratorType = matrix::DenseVectorConstIterator<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,8 +66,8 @@ struct IsDenseVector : std::false_type {};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc IsDenseVector
 ///
-template <typename _Scalar>
-struct IsDenseVector<matrix::DenseVector<_Scalar>> : std::true_type {};
+template <typename _Val>
+struct IsDenseVector<matrix::DenseVector<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector assert.
@@ -86,40 +86,40 @@ namespace matrix {
 /// @ingroup  matrix_dense_module
 /// The dense vector class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class DenseVector
-  : public DenseVectorStorage<_Scalar>,
-    public VectorWrapper<DenseVector<_Scalar>>,
-    public IterableWrapper<DenseVector<_Scalar>>,
-    public InvertibleWrapper<DenseVector<_Scalar>> {
+  : public DenseVectorStorage<_Val>,
+    public VectorWrapper<DenseVector<_Val>>,
+    public IterableWrapper<DenseVector<_Val>>,
+    public InvertibleWrapper<DenseVector<_Val>> {
 
-  friend VectorWrapper<DenseVector<_Scalar>>;
-  friend IterableWrapper<DenseVector<_Scalar>>;
-  friend InvertibleWrapper<DenseVector<_Scalar>>;
+  friend VectorWrapper<DenseVector<_Val>>;
+  friend IterableWrapper<DenseVector<_Val>>;
+  friend InvertibleWrapper<DenseVector<_Val>>;
 
  public:
 
   static constexpr index_t ndim = 1;
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<_Scalar>;
+  using ValType           = _Val;
+  using ValArrayType      = Array<_Val>;
   using SizesType         = std::tuple<index_t>;
 
-  using RealType          = DenseVector<RealScalarT<_Scalar>>;
-  using ComplexType       = DenseVector<ComplexScalarT<_Scalar>>;
+  using RealType          = DenseVector<RealValT<_Val>>;
+  using ComplexType       = DenseVector<ComplexValT<_Val>>;
 
-  using VectorType        = DenseVector<_Scalar>;
+  using VectorType        = DenseVector<_Val>;
 
-  using DiagonalType      = DenseDiagonalMatrix<_Scalar>;
+  using DiagonalType      = DenseDiagonalMatrix<_Val>;
 
-  using IteratorType      = DenseVectorIterator<_Scalar>;
-  using ConstIteratorType = DenseVectorConstIterator<_Scalar>;
+  using IteratorType      = DenseVectorIterator<_Val>;
+  using ConstIteratorType = DenseVectorConstIterator<_Val>;
 
  private:
 
-  using BaseType          = DenseVectorStorage<_Scalar>;
+  using BaseType          = DenseVectorStorage<_Val>;
 
  public:
 
@@ -141,8 +141,8 @@ class DenseVector
   inline index_t nnz() const noexcept;
 
   // Gets element
-  inline       ScalarType& operator()( const index_t idx ) noexcept;
-  inline const ScalarType& operator()( const index_t idx ) const noexcept;
+  inline       ValType& operator()( const index_t idx ) noexcept;
+  inline const ValType& operator()( const index_t idx ) const noexcept;
 
   // Gets internal position
   inline index_t pos( const index_t idx ) const noexcept;

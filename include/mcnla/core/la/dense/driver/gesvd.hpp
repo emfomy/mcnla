@@ -185,7 +185,7 @@ template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 index_t GesvdDriver<_Matrix, _jobu, _jobvt>::query(
     const index_t nrow, const index_t ncol
 ) noexcept {
-  ScalarType lwork;
+  ValType lwork;
   if ( !isTrans(trans) ) {
     mcnla_assert_eq(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
                                   nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr), 0);

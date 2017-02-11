@@ -151,7 +151,7 @@ template <class _Matrix, JobOption _jobz>
 index_t SyevDriver<_Matrix, _jobz>::query(
     const index_t size
 ) noexcept {
-  ScalarType lwork;
+  ValType lwork;
   mcnla_assert_eq(detail::syev(_jobz, toUploChar(uplo, trans), size, nullptr, size, nullptr, &lwork, -1, nullptr), 0);
   return lwork;
 }

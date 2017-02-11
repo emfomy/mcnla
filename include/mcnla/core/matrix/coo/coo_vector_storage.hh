@@ -25,35 +25,35 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class CooMatrixStorage;
+template <typename _Val> class CooMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_coo_module_detail
 /// The coordinate list (COO) vector storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Scalar>
+template <typename _Val>
 class CooVectorStorage
-  : public CooStorage<_Scalar>,
+  : public CooStorage<_Val>,
     public CooIdx0Storage<index_t> {
 
-  friend class CooMatrixStorage<_Scalar>;
+  friend class CooMatrixStorage<_Val>;
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<_Scalar>;
+  using ValType           = _Val;
+  using ValArrayType      = Array<_Val>;
   using IdxArrayType      = Array<index_t>;
   using DimsType          = std::tuple<index_t>;
 
-  using VectorStorageType = CooVectorStorage<_Scalar>;
+  using VectorStorageType = CooVectorStorage<_Val>;
 
-  using BaseType          = CooStorage<_Scalar>;
+  using BaseType          = CooStorage<_Val>;
   using Base0Type      = CooIdx0Storage<index_t>;
 
  protected:
@@ -94,8 +94,8 @@ class CooVectorStorage
  protected:
 
   // Gets element
-  inline       ScalarType elemImpl( const index_t idx0 ) noexcept;
-  inline const ScalarType elemImpl( const index_t idx0 ) const noexcept;
+  inline       ValType elemImpl( const index_t idx0 ) noexcept;
+  inline const ValType elemImpl( const index_t idx0 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0 ) const noexcept;

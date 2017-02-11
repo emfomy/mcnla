@@ -26,28 +26,28 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void reduceImpl(
-    const DenseStorage<_Scalar> &send,
-          DenseStorage<_Scalar> &recv,
+    const DenseStorage<_Val> &send,
+          DenseStorage<_Val> &recv,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Reduce(send.valPtr(), recv.valPtr(), count, datatype, op, root, comm);
 }
 
-template <typename _Scalar>
+template <typename _Val>
 inline void reduceImpl(
-          DenseStorage<_Scalar> &buffer,
+          DenseStorage<_Val> &buffer,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   if ( isCommRoot(root, comm) ) {
     MPI_Reduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, root, comm);
   } else {
@@ -65,10 +65,10 @@ inline void reduceImpl(
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void reduce(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &recv,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -79,10 +79,10 @@ inline void reduce(
   detail::reduceImpl(send, recv, op, root, comm, send.nelem());
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _transs, Trans _transr>
 inline void reduce(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &recv,
+    const DenseMatrix<_Val, _transs> &send,
+          DenseMatrix<_Val, _transr> &recv,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -95,10 +95,10 @@ inline void reduce(
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void reduce(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &&recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &&recv,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -106,10 +106,10 @@ inline void reduce(
   reduce(send, recv, op, root, comm);
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _transs, Trans _transr>
 inline void reduce(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &&recv,
+    const DenseMatrix<_Val, _transs> &send,
+          DenseMatrix<_Val, _transr> &&recv,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -126,9 +126,9 @@ inline void reduce(
 /// @attention  @a buffer should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void reduce(
-          DenseVector<_Scalar> &buffer,
+          DenseVector<_Val> &buffer,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -137,9 +137,9 @@ inline void reduce(
   detail::reduceImpl(buffer, op, root, comm, buffer.nelem());
 }
 
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void reduce(
-          DenseMatrix<_Scalar, _trans> &buffer,
+          DenseMatrix<_Val, _trans> &buffer,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -150,9 +150,9 @@ inline void reduce(
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void reduce(
-          DenseVector<_Scalar> &&buffer,
+          DenseVector<_Val> &&buffer,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -160,9 +160,9 @@ inline void reduce(
   reduce(buffer, op, root, comm);
 }
 
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void reduce(
-          DenseMatrix<_Scalar, _trans> &&buffer,
+          DenseMatrix<_Val, _trans> &&buffer,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm

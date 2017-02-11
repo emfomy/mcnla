@@ -26,15 +26,15 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void sendImpl(
-    const DenseStorage<_Scalar> &buffer,
+    const DenseStorage<_Val> &buffer,
     const mpi_int_t dest,
     const mpi_int_t tag,
     const MPI_Comm comm,
     const index_t count
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Send(buffer.valPtr(), count, datatype, dest, tag, comm);
 }
 
@@ -47,9 +47,9 @@ inline void sendImpl(
 /// @attention  @a buffer should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void send(
-    const DenseVector<_Scalar> &buffer,
+    const DenseVector<_Val> &buffer,
     const mpi_int_t dest,
     const mpi_int_t tag,
     const MPI_Comm comm
@@ -58,9 +58,9 @@ inline void send(
   detail::sendImpl(buffer, dest, tag, comm, buffer.nelem());
 }
 
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void send(
-    const DenseMatrix<_Scalar, _trans> &buffer,
+    const DenseMatrix<_Val, _trans> &buffer,
     const mpi_int_t dest,
     const mpi_int_t tag,
     const MPI_Comm comm

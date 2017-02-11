@@ -27,9 +27,9 @@ namespace la {
 /// @brief  Computes the sum of magnitudes of the vector elements.
 ///
 //@{
-template <typename _Scalar>
-inline _Scalar asum(
-    const DenseVector<_Scalar> &x
+template <typename _Val>
+inline _Val asum(
+    const DenseVector<_Val> &x
 ) noexcept {
   return detail::asum(x.length(), x.valPtr(), x.stride());
 }

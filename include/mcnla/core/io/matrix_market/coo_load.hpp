@@ -30,9 +30,9 @@ namespace io {
 ///
 /// @todo  Read banner
 ///
-template <typename _Scalar>
+template <typename _Val>
 void loadMatrixMarket(
-    CooVector<_Scalar> &vector,
+    CooVector<_Val> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -66,9 +66,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void loadMatrixMarket(
-    CooVector<_Scalar> &&vector,
+    CooVector<_Val> &&vector,
     const char *file
 ) noexcept {
   loadMatrixMarket(vector, file);
@@ -83,9 +83,9 @@ inline void loadMatrixMarket(
 ///
 /// @todo  Read banner
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 void loadMatrixMarket(
-    CooMatrix<_Scalar, _trans> &matrix,
+    CooMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
@@ -124,9 +124,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void loadMatrixMarket(
-    CooMatrix<_Scalar, _trans> &&matrix,
+    CooMatrix<_Val, _trans> &&matrix,
     const char *file
 ) noexcept {
   loadMatrixMarket(matrix, file);

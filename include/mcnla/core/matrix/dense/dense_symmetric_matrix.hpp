@@ -23,15 +23,15 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix() noexcept
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
     const index_t size
 ) noexcept
   : BaseType(size, size) {
@@ -40,8 +40,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -50,8 +50,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -61,8 +61,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
     const index_t size,
     const index_t pitch,
     const ValArrayType &val,
@@ -75,8 +75,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
     const DenseSymmetricMatrix &other
 ) noexcept
   : BaseType(other) {}
@@ -84,8 +84,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
     DenseSymmetricMatrix &&other
 ) noexcept
   : BaseType(std::move(other)) {}
@@ -95,8 +95,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>::DenseSymmetricMatrix(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::operator=(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>& DenseSymmetricMatrix<_Val, _trans, _uplo>::operator=(
     const DenseSymmetricMatrix &other
 ) noexcept {
   BaseType::operator=(other);
@@ -106,8 +106,8 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>& DenseSymmetricMatrix<_Scalar, _tra
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, _trans, _uplo>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::operator=(
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo>& DenseSymmetricMatrix<_Val, _trans, _uplo>::operator=(
     DenseSymmetricMatrix &&other
 ) noexcept {
   BaseType::operator=(std::move(other));
@@ -117,24 +117,24 @@ DenseSymmetricMatrix<_Scalar, _trans, _uplo>& DenseSymmetricMatrix<_Scalar, _tra
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::size() const noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrix<_Val, _trans, _uplo>::size() const noexcept {
   return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::nnz() const noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrix<_Val, _trans, _uplo>::nnz() const noexcept {
   return !isUnitDiag(_uplo) ? (this->size()*(this->size()+1)/2) : (this->size()*(this->size()-1)/2);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-_Scalar DenseSymmetricMatrix<_Scalar, _trans, _uplo>::operator()(
+template <typename _Val, Trans _trans, Uplo _uplo>
+_Val DenseSymmetricMatrix<_Val, _trans, _uplo>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -148,18 +148,18 @@ _Scalar DenseSymmetricMatrix<_Scalar, _trans, _uplo>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo> template <typename... Args>
-void DenseSymmetricMatrix<_Scalar, _trans, _uplo>::reconstruct(
+template <typename _Val, Trans _trans, Uplo _uplo> template <typename... Args>
+void DenseSymmetricMatrix<_Val, _trans, _uplo>::reconstruct(
     Args... args
 ) noexcept {
-  *this = DenseSymmetricMatrix<_Scalar, _trans, _uplo>(args...);
+  *this = DenseSymmetricMatrix<_Val, _trans, _uplo>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-void DenseSymmetricMatrix<_Scalar, _trans, _uplo>::resize(
+template <typename _Val, Trans _trans, Uplo _uplo>
+void DenseSymmetricMatrix<_Val, _trans, _uplo>::resize(
     const index_t size
 ) noexcept {
   this->resizeImpl(size, size);
@@ -170,66 +170,66 @@ void DenseSymmetricMatrix<_Scalar, _trans, _uplo>::resize(
 ///
 /// @attention  The storage layout is also changed.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>&
-    DenseSymmetricMatrix<_Scalar, _trans, _uplo>::t() noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, changeTrans(_trans), changeUplo(_uplo)>&
+    DenseSymmetricMatrix<_Val, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  t
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-const DenseSymmetricMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>&
-    DenseSymmetricMatrix<_Scalar, _trans, _uplo>::t() const noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+const DenseSymmetricMatrix<_Val, changeTrans(_trans), changeUplo(_uplo)>&
+    DenseSymmetricMatrix<_Val, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the general view of the matrix.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseMatrix<_Scalar, _trans>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::viewGeneral() noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseMatrix<_Val, _trans>& DenseSymmetricMatrix<_Val, _trans, _uplo>::viewGeneral() noexcept {
   return static_cast<GeneralType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  viewGeneral
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-const DenseMatrix<_Scalar, _trans>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::viewGeneral() const noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+const DenseMatrix<_Val, _trans>& DenseSymmetricMatrix<_Val, _trans, _uplo>::viewGeneral() const noexcept {
   return static_cast<const GeneralType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::nrowImpl() const noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrix<_Val, _trans, _uplo>::nrowImpl() const noexcept {
   return !isTrans(_trans) ? this->dim0() : this->dim1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::ncol
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-index_t DenseSymmetricMatrix<_Scalar, _trans, _uplo>::ncolImpl() const noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrix<_Val, _trans, _uplo>::ncolImpl() const noexcept {
   return !isTrans(_trans) ? this->dim1() : this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert to base class.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-DenseMatrixStorage<_Scalar>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::base() noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseMatrixStorage<_Val>& DenseSymmetricMatrix<_Val, _trans, _uplo>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  base
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-const DenseMatrixStorage<_Scalar>& DenseSymmetricMatrix<_Scalar, _trans, _uplo>::base() const noexcept {
+template <typename _Val, Trans _trans, Uplo _uplo>
+const DenseMatrixStorage<_Val>& DenseSymmetricMatrix<_Val, _trans, _uplo>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 

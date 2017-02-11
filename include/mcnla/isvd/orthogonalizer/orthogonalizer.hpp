@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Tag, typename _Scalar> class Orthogonalizer;
+template <class _Tag, typename _Val> class Orthogonalizer;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -36,9 +36,9 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The orthogonalizer traits.
 ///
-template <class _Tag, typename _Scalar>
-struct Traits<isvd::Orthogonalizer<_Tag, _Scalar>> {
-  using ScalarType = _Scalar;
+template <class _Tag, typename _Val>
+struct Traits<isvd::Orthogonalizer<_Tag, _Val>> {
+  using ValType = _Val;
 };
 
 }  // namespace traits
@@ -52,11 +52,11 @@ namespace isvd {
 /// @ingroup  isvd_orthogonalizer_module_detail
 /// The interface of iSVD orthogonalizer.
 ///
-/// @tparam  _Tag     The orthogonalizer tag.
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Tag  The orthogonalizer tag.
+/// @tparam  _Val  The value type.
 ///
-template <class _Tag, typename _Scalar>
-class Orthogonalizer : public OrthogonalizerWrapper<Orthogonalizer<_Scalar, _Tag>> {
+template <class _Tag, typename _Val>
+class Orthogonalizer : public OrthogonalizerWrapper<Orthogonalizer<_Val, _Tag>> {
   static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD orthogonalizer!");
 };
 

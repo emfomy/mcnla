@@ -43,12 +43,12 @@ static inline void uniformImpl(
   }
 }
 
-template <typename _Scalar>
+template <typename _Val>
 static inline void uniformImpl(
           index_t iseed[4],
-          DenseVector<_Scalar> &&vector,
-    const _Scalar a,
-    const _Scalar b
+          DenseVector<_Val> &&vector,
+    const _Val a,
+    const _Val b
 ) noexcept {
   std::seed_seq seq({iseed[0], iseed[1], iseed[2], iseed[3]});
   std::mt19937 gen(seq);
@@ -58,12 +58,12 @@ static inline void uniformImpl(
   }
 }
 
-template <typename _Scalar>
+template <typename _Val>
 static inline void gaussianImpl(
           index_t iseed[4],
-          DenseVector<_Scalar> &&vector,
-    const _Scalar a,
-    const _Scalar b
+          DenseVector<_Val> &&vector,
+    const _Val a,
+    const _Val b
 ) noexcept {
   std::seed_seq seq({iseed[0], iseed[1], iseed[2], iseed[3]});
   std::mt19937 gen(seq);

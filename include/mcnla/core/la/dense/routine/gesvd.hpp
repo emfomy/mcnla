@@ -27,14 +27,14 @@ namespace la {
 //
 namespace detail {
 
-template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Trans _trans>
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
 inline void gesvdImpl(
-    DenseMatrix<_Scalar, _trans> &a,
-    DenseVector<RealScalarT<_Scalar>> &s,
-    DenseMatrix<_Scalar, _trans> &u,
-    DenseMatrix<_Scalar, _trans> &vt
+    DenseMatrix<_Val, _trans> &a,
+    DenseVector<RealValT<_Val>> &s,
+    DenseMatrix<_Val, _trans> &u,
+    DenseMatrix<_Val, _trans> &vt
 ) noexcept {
-  GesvdDriver<DenseMatrix<_Scalar, _trans>, _jobu, _jobvt> driver(a);
+  GesvdDriver<DenseMatrix<_Val, _trans>, _jobu, _jobvt> driver(a);
   driver(a, s, u, vt);
 }
 
@@ -46,12 +46,12 @@ inline void gesvdImpl(
 ///
 /// @see  mcnla::la::GesvdDriver
 ///
-template <JobOption _jobu, JobOption _jobvt, typename _Scalar, Trans _trans>
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
 inline void gesvd(
-    DenseMatrix<_Scalar, _trans> &a,
-    DenseVector<RealScalarT<_Scalar>> &s,
-    DenseMatrix<_Scalar, _trans> &u,
-    DenseMatrix<_Scalar, _trans> &vt
+    DenseMatrix<_Val, _trans> &a,
+    DenseVector<RealValT<_Val>> &s,
+    DenseMatrix<_Val, _trans> &u,
+    DenseMatrix<_Val, _trans> &vt
 ) noexcept {
   detail::gesvdImpl<_jobu, _jobvt>(a, s, u, vt);
 }

@@ -26,23 +26,23 @@ namespace la {
 /// @ingroup  la_dense_blas1_module
 /// @brief  Scales two vectors, adds them to one another and stores result in the vector.
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void axpby(
-    const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &y,
-    const ScalarT<DenseVector<_Scalar>> alpha = 1,
-    const ScalarT<DenseVector<_Scalar>> beta  = 1
+    const DenseVector<_Val> &x,
+          DenseVector<_Val> &y,
+    const ValT<DenseVector<_Val>> alpha = 1,
+    const ValT<DenseVector<_Val>> beta  = 1
 ) noexcept {
   detail::axpby(x.length(), alpha, x.valPtr(), x.stride(), beta, y.valPtr(), y.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void axpby(
-    const DenseVector<_Scalar> &x,
-          DenseVector<_Scalar> &&y,
-    const ScalarT<DenseVector<_Scalar>> alpha = 1,
-    const ScalarT<DenseVector<_Scalar>> beta  = 1
+    const DenseVector<_Val> &x,
+          DenseVector<_Val> &&y,
+    const ValT<DenseVector<_Val>> alpha = 1,
+    const ValT<DenseVector<_Val>> beta  = 1
 ) noexcept {
   axpby(x, y, alpha, beta);
 }
