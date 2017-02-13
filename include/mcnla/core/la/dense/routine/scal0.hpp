@@ -38,7 +38,9 @@ inline void scal0(
   if ( x.isShrunk() ) {
     memset0(x);
   } else {
-    x.valValarray()[x.valMask()] = 0;
+#pragma warning not-implemented!
+    // x.valValarray()[x.valMask()] = 0;
+    memset0(x);
   }
 }
 
@@ -61,21 +63,23 @@ inline void scal0(
 ///
 template <typename _Scalar, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _trans> &x
+  DenseMatrix<_Scalar, _trans> &a
 ) noexcept {
-  if ( x.isShrunk() ) {
-    memset0(x);
+  if ( a.isShrunk() ) {
+    memset0(a);
   } else {
-    x.valValarray()[x.valMask()] = 0;
+#pragma warning not-implemented!
+    // a.valValarray()[a.valMask()] = 0;
+    memset0(a);
   }
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _trans> &&x
+  DenseMatrix<_Scalar, _trans> &&a
 ) noexcept {
-  scal0(x);
+  scal0(a);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

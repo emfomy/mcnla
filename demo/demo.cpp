@@ -167,10 +167,11 @@ int main( int argc, char **argv ) {
     std::cout << "mean(iter)  = " << set_iter.mean() << std::endl;
     std::cout << "sd(iter)    = " << set_iter.sd() << std::endl;
     std::cout << std::endl;
-    std::cout << "validity = svd(U_true' U)_2" << std::endl;
-    std::cout << "error    = norm(A-USV')_F/norm(A)_F" << std::endl;
     std::cout << "excepted validity = 1" << std::endl;
     std::cout << "excepted error    = " << error0 << std::endl;
+    std::cout << std::endl;
+    std::cout << "validity := svd(U_true' U)_2" << std::endl;
+    std::cout << "error    := norm(A-USV')_F/norm(A)_F" << std::endl;
     std::cout << std::endl;
   }
 

@@ -1,0 +1,42 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/mcnla/core/la/coo/routine/nrmf.hpp
+/// @brief   The BLAS NRMF routine for COO format.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_CORE_LA_COO_ROUTINE_NRMF_HPP_
+#define MCNLA_CORE_LA_COO_ROUTINE_NRMF_HPP_
+
+#include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
+#include <mcnla/core/la/raw/blas/nrm2.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The MCNLA namespace
+//
+namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The linear algebra namespace
+//
+namespace la {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_coo_blas1m_module
+/// @brief  Computes the Frobenius norm of a matrix.
+///
+//@{
+template <typename _Scalar, Trans _trans>
+inline RealScalarT<_Scalar> nrmf(
+    const CooMatrix<_Scalar, _trans> &a
+) noexcept {
+  return detail::nrm2(a.nnz(), a.valPtr(), 1);
+}
+//@}
+
+}  // namespace la
+
+}  // namespace mcnla
+
+#endif  // MCNLA_CORE_LA_COO_ROUTINE_NRMF_HPP_

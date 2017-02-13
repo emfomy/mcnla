@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/isvd.cpp
+/// @file    src/isvd.cpp
 /// @brief   The iSVD driver
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
@@ -36,6 +36,12 @@ using AType = mcnla::matrix::ATYPE<ScalarType>;
 
 ScalarType tolerance = 1e-4;
 mcnla::index_t maxiter = 256;
+
+void check( const AType &matrix_a,
+            const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u,
+            const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_vt,
+            const mcnla::matrix::DenseVector<ScalarType> &vector_s,
+            ScalarType &frerr ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -133,19 +139,27 @@ int main( int argc, char **argv ) {
   MPI_Barrier(MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
-  // Display executing time
+  // Display results
   if ( mpi_rank == mpi_root ) {
+    ScalarType frerr;
+    check(matrix_a, solver.leftSingularVectors(), solver.rightSingularVectors(), solver.singularValues(), frerr);
+    auto iter   = solver.integratorIteration();
     auto time_s = solver.sketcherTime();
     auto time_i = solver.integratorTime();
     auto time_o = solver.orthogonalizerTime();
     auto time_f = solver.formerTime();
     auto time = time_s + time_o + time_i + time_f;
 
-    std::cout << "Average total computing time: " << time   << " seconds." << std::endl;
-    std::cout << "Average sketching time:       " << time_s << " seconds." << std::endl;
-    std::cout << "Average orthogonalizing time: " << time_o << " seconds." << std::endl;
-    std::cout << "Average integrating time:     " << time_i << " seconds." << std::endl;
-    std::cout << "Average forming time:         " << time_f << " seconds." << std::endl;
+    std::cout << "Total computing time: " << time   << " seconds." << std::endl;
+    std::cout << "Sketching time:       " << time_s << " seconds." << std::endl;
+    std::cout << "Orthogonalizing time: " << time_o << " seconds." << std::endl;
+    std::cout << "Integrating time:     " << time_i << " seconds." << std::endl;
+    std::cout << "Forming time:         " << time_f << " seconds." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Iteration = " << iter << std::endl;
+    std::cout << "Error     = " << frerr << std::endl;
+    std::cout << std::endl;
+    std::cout << "Error := norm(A-USV')_F/norm(A)_F" << std::endl;
     std::cout << std::endl;
   }
 
@@ -167,4 +181,29 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Finalize MPI
   MPI_Finalize();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Check the result (A)
+///
+void check(
+    const AType &matrix_a,
+    const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u,
+    const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_vt,
+    const mcnla::matrix::DenseVector<ScalarType> &vector_s,
+          ScalarType &frerr
+) noexcept {
+  mcnla::matrix::DenseMatrixColMajor<ScalarType> matrix_a_tmp(matrix_a.sizes());
+  mcnla::matrix::DenseMatrixColMajor<ScalarType> matrix_u_tmp(matrix_u.sizes());
+
+  // A_tmp := A, U_tmp = U
+  mcnla::la::copy(matrix_a, matrix_a_tmp);
+  mcnla::la::copy(matrix_u, matrix_u_tmp);
+
+  // A_tmp -= U * S * V'
+  mcnla::la::mm("", vector_s.viewDiagonal(), matrix_u_tmp);
+  mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
+
+  // frerr := norm(A_tmp)_F / norm(A)_F
+  frerr = mcnla::la::nrmf(matrix_a_tmp) / mcnla::la::nrmf(matrix_a);
 }
