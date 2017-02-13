@@ -7,12 +7,8 @@
 
 #define MCNLA_TEST
 
-#include <cstdio>
 #include <iostream>
 #include <mcnla.hpp>
-
-// #define MTX_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
-#define MTX_PATH MCNLA_DATA_PATH "/../demo/b1_ss.mtx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -23,9 +19,16 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::CooMatrixColMajor<double> a;
+  mcnla::matrix::DenseMatrixColMajor<double> a(10, 5);
 
-  mcnla::io::loadMatrixMarket(a, MTX_PATH);
+  int i = 0;
+  for ( auto &v : a ) {
+    v = i++;
+  }
+
+  std::cout << a << std::endl;
+
+  mcnla::la::scal0(a({2, 7}, {1, 3}));
 
   std::cout << a << std::endl;
 

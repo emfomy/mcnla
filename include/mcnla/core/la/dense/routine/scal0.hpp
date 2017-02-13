@@ -38,9 +38,7 @@ inline void scal0(
   if ( x.isShrunk() ) {
     memset0(x);
   } else {
-#pragma warning not-implemented!
-    // x.valValarray()[x.valMask()] = 0;
-    memset0(x);
+    x.val().valarray()[std::slice(x.offset(), x.dim0(), x.stride())] = 0;
   }
 }
 
@@ -68,9 +66,8 @@ inline void scal0(
   if ( a.isShrunk() ) {
     memset0(a);
   } else {
-#pragma warning not-implemented!
-    // a.valValarray()[a.valMask()] = 0;
-    memset0(a);
+    std::size_t dim0 = a.dim0(), dim1 = a.dim1(), pitch = a.pitch();
+    a.val().valarray()[std::gslice(a.offset(), {dim1, dim0}, {pitch, 1})] = 0;
   }
 }
 
