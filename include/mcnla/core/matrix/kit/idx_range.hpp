@@ -52,46 +52,46 @@ bool IdxRange::operator!=(
 /// @brief  Addition operator.
 ///
 IdxRange IdxRange::operator+(
-    const index_t scalar
+    const index_t idx
 ) const noexcept {
-  return {this->begin + scalar, this->end + scalar};
+  return {this->begin + idx, this->end + idx};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction operator.
 ///
 IdxRange IdxRange::operator-(
-    const index_t scalar
+    const index_t idx
 ) const noexcept {
-  return {this->begin - scalar, this->end - scalar};
+  return {this->begin - idx, this->end - idx};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Multiplication operator.
 ///
 IdxRange IdxRange::operator*(
-    const index_t scalar
+    const index_t idx
 ) const noexcept {
-  return {this->begin * scalar, this->end * scalar};
+  return {this->begin * idx, this->end * idx};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Division operator.
 ///
 IdxRange IdxRange::operator/(
-    const index_t scalar
+    const index_t idx
 ) const noexcept {
-  return {this->begin / scalar, this->end / scalar};
+  return {this->begin / idx, this->end / idx};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition assignment operator.
 ///
 IdxRange& IdxRange::operator+=(
-    const index_t scalar
+    const index_t idx
 ) noexcept {
-  this->begin += scalar;
-  this->end   += scalar;
+  this->begin += idx;
+  this->end   += idx;
   return *this;
 }
 
@@ -99,10 +99,10 @@ IdxRange& IdxRange::operator+=(
 /// @brief  Subtraction assignment operator.
 ///
 IdxRange& IdxRange::operator-=(
-    const index_t scalar
+    const index_t idx
 ) noexcept {
-  this->begin -= scalar;
-  this->end   -= scalar;
+  this->begin -= idx;
+  this->end   -= idx;
   return *this;
 }
 
@@ -110,10 +110,10 @@ IdxRange& IdxRange::operator-=(
 /// @brief  Multiplication assignment operator.
 ///
 IdxRange& IdxRange::operator*=(
-    const index_t scalar
+    const index_t idx
 ) noexcept {
-  this->begin *= scalar;
-  this->end   *= scalar;
+  this->begin *= idx;
+  this->end   *= idx;
   return *this;
 }
 
@@ -121,10 +121,10 @@ IdxRange& IdxRange::operator*=(
 /// @brief  Division assignment operator.
 ///
 IdxRange& IdxRange::operator/=(
-    const index_t scalar
+    const index_t idx
 ) noexcept {
-  this->begin /= scalar;
-  this->end   /= scalar;
+  this->begin /= idx;
+  this->end   /= idx;
   return *this;
 }
 

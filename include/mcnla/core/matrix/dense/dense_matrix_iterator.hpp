@@ -73,7 +73,7 @@ index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::idx0() const noexcept {
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::idx1() const noexcept {
-  return itidx_ % container_->dim0();
+  return itidx_ / container_->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

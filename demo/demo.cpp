@@ -61,8 +61,8 @@ int main( int argc, char **argv ) {
   mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
   mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
-  ValType     tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
-  mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
+  ValType        tol       = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
+  mcnla::index_t maxiter   = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m

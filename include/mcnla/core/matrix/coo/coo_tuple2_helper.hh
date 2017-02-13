@@ -37,6 +37,7 @@ class CooTuple2Ptr {
 
  protected:
 
+  /// The tuple.
   TupleType tuple_;
 
  public:
@@ -110,10 +111,10 @@ namespace std {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_coo_module_detail
-/// @brief  Swap two tuples
+/// @brief  Swap two COO tuples
 ///
 template <typename _Val, typename _Idx>
-void swap(
+inline void swap(
     mcnla::matrix::CooTuple2<_Val, _Idx> &a,
     mcnla::matrix::CooTuple2<_Val, _Idx> &b
 ) noexcept {

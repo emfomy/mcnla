@@ -98,7 +98,7 @@ int main( int argc, char **argv ) {
   mcnla::index_t n       = matrix_a.ncol();
   mcnla::index_t k       = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t p       = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
-  ValType     tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
+  ValType        tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
   mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
