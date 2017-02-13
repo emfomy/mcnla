@@ -38,7 +38,7 @@ inline void scal0(
   if ( x.isShrunk() ) {
     memset0(x);
   } else {
-    x.valValarray()[x.valMask()] = 0;
+    x.val().valarray()[std::slice(x.offset(), x.dim0(), x.stride())] = 0;
   }
 }
 
@@ -61,21 +61,22 @@ inline void scal0(
 ///
 template <typename _Scalar, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _trans> &x
+  DenseMatrix<_Scalar, _trans> &a
 ) noexcept {
-  if ( x.isShrunk() ) {
-    memset0(x);
+  if ( a.isShrunk() ) {
+    memset0(a);
   } else {
-    x.valValarray()[x.valMask()] = 0;
+    std::size_t dim0 = a.dim0(), dim1 = a.dim1(), pitch = a.pitch();
+    a.val().valarray()[std::gslice(a.offset(), {dim1, dim0}, {pitch, 1})] = 0;
   }
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Scalar, Trans _trans>
 inline void scal0(
-  DenseMatrix<_Scalar, _trans> &&x
+  DenseMatrix<_Scalar, _trans> &&a
 ) noexcept {
-  scal0(x);
+  scal0(a);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

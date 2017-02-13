@@ -10,6 +10,7 @@
 
 // BLAS 1
 #include <mcnla/core/la/coo/routine/copy.hpp>
+#include <mcnla/core/la/coo/routine/nrm2.hpp>
 
 // BLAS 2
 
@@ -17,6 +18,7 @@
 #include <mcnla/core/la/coo/routine/gemm.hpp>
 
 // BLAS-like
+#include <mcnla/core/la/coo/routine/nrmf.hpp>
 
 // LAPACK linear equation
 

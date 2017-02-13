@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/la/dense/routine/nrm2.hpp
-/// @brief   The BLAS NRM2 routine.
+/// @file    include/mcnla/core/la/coo/routine/nrmf.hpp
+/// @brief   The BLAS NRMF routine for COO format.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LA_DENSE_ROUTINE_NRM2_HPP_
-#define MCNLA_CORE_LA_DENSE_ROUTINE_NRM2_HPP_
+#ifndef MCNLA_CORE_LA_COO_ROUTINE_NRMF_HPP_
+#define MCNLA_CORE_LA_COO_ROUTINE_NRMF_HPP_
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -23,29 +23,20 @@ namespace mcnla {
 namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_blas1_module
-/// @brief  Computes the Euclidean norm of a vector.
+/// @ingroup  la_coo_blas1m_module
+/// @brief  Computes the Frobenius norm of a matrix.
 ///
-template <typename _Val>
-inline RealScalarT<_Val> nrm2(
-    const DenseVector<_Val> &x
+//@{
+template <typename _Scalar, Trans _trans>
+inline RealScalarT<_Scalar> nrmf(
+    const CooMatrix<_Scalar, _trans> &a
 ) noexcept {
-  return detail::nrm2(x.length(), x.valPtr(), x.stride());
+  return detail::nrm2(a.nnz(), a.valPtr(), 1);
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_blas1_module
-/// @brief  Computes the Frobenius norm of a vector.
-///
-template <typename _Val>
-inline RealScalarT<_Val> nrmf(
-    const DenseVector<_Val> &x
-) noexcept {
-  return nrm2(x);
-}
+//@}
 
 }  // namespace la
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_DENSE_ROUTINE_NRM2_HPP_
+#endif  // MCNLA_CORE_LA_COO_ROUTINE_NRMF_HPP_
