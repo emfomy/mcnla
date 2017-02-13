@@ -49,6 +49,36 @@ inline void copy(
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_coo_blas1m_module
+/// @brief  Copies matrix to another matrix.
+///
+template <typename _Val, Trans _transa, Trans _transb>
+inline void copy(
+    const CooMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &b
+) noexcept {
+  static_assert(!isConj(_transa), "COO COPY does not support conjugate matrices!");
+  static_assert(!isConj(_transb), "COO COPY does not support conjugate matrices!");
+
+  mcnla_assert_eq(a.sizes(), b.sizes());
+
+  scal0(b);
+  for ( index_t i = 0; i < a.nnz(); ++i ) {
+    b(a.rowidxPtr()[i], a.colidxPtr()[i]) = a.valPtr()[i];
+  }
+}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, Trans _transa, Trans _transb>
+inline void copy(
+    const CooMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &&b
+) noexcept {
+  copy(a, b);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 }  // namespace la
 
 }  // namespace mcnla

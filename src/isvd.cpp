@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/isvd.cpp
+/// @file    src/isvd.cpp
 /// @brief   The iSVD driver
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
@@ -34,8 +34,11 @@
 using ValType = double;
 using AType = mcnla::matrix::ATYPE<ValType>;
 
-ValType tolerance = 1e-4;
-mcnla::index_t maxiter = 256;
+void check( const AType &matrix_a,
+            const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
+            const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_vt,
+            const mcnla::matrix::DenseVector<ValType> &vector_s,
+            ValType &frerr ) noexcept;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -62,7 +65,8 @@ int main( int argc, char **argv ) {
   // Check input
   if ( argc < 5 && mpi_rank == mpi_root ) {
     std::cout << "Usage: " << argv[0]
-              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <Vt-mtx-file> [#sketch-per-node] [rank] [over-sampling-rank]"
+              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <Vt-mtx-file>"
+                 " [#sketch-per-node] [rank] [over-sampling-rank] [tolerance] [maxiter]"
               << std::endl << std::endl;
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
@@ -89,11 +93,13 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 4;
-  mcnla::index_t Nj = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m  = matrix_a.nrow();
-  mcnla::index_t n  = matrix_a.ncol();
-  mcnla::index_t k  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t p  = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
+  mcnla::index_t Nj      = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  mcnla::index_t m       = matrix_a.nrow();
+  mcnla::index_t n       = matrix_a.ncol();
+  mcnla::index_t k       = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  mcnla::index_t p       = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
+  ValType     tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
+  mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
@@ -101,7 +107,9 @@ int main( int argc, char **argv ) {
             << ", k = " << k
             << ", p = " << p
             << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size << std::endl << std::endl;
+            << ", K = " << mpi_size
+            << ", tol = " << tol
+            << ", maxiter = " << maxiter << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -112,7 +120,7 @@ int main( int argc, char **argv ) {
                       mcnla::isvd::INTEGRATOR,
                       mcnla::isvd::FORMER> driver(MPI_COMM_WORLD);
   driver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(rand());
-  driver.setTolerance(tolerance).setMaxIteration(maxiter);
+  driver.setTolerance(tol).setMaxIteration(maxiter);
   driver.initialize();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << driver.sketcher() << "." << std::endl;
@@ -133,19 +141,27 @@ int main( int argc, char **argv ) {
   MPI_Barrier(MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
-  // Display executing time
+  // Display results
   if ( mpi_rank == mpi_root ) {
+    ValType frerr;
+    check(matrix_a, driver.leftSingularVectors(), driver.rightSingularVectors(), driver.singularValues(), frerr);
+    auto iter   = driver.integratorIteration();
     auto time_s = driver.sketcherTime();
     auto time_i = driver.integratorTime();
     auto time_o = driver.orthogonalizerTime();
     auto time_f = driver.formerTime();
     auto time = time_s + time_o + time_i + time_f;
 
-    std::cout << "Average total computing time: " << time   << " seconds." << std::endl;
-    std::cout << "Average sketching time:       " << time_s << " seconds." << std::endl;
-    std::cout << "Average orthogonalizing time: " << time_o << " seconds." << std::endl;
-    std::cout << "Average integrating time:     " << time_i << " seconds." << std::endl;
-    std::cout << "Average forming time:         " << time_f << " seconds." << std::endl;
+    std::cout << "Total computing time: " << time   << " seconds." << std::endl;
+    std::cout << "Sketching time:       " << time_s << " seconds." << std::endl;
+    std::cout << "Orthogonalizing time: " << time_o << " seconds." << std::endl;
+    std::cout << "Integrating time:     " << time_i << " seconds." << std::endl;
+    std::cout << "Forming time:         " << time_f << " seconds." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Iteration = " << iter << std::endl;
+    std::cout << "Error     = " << frerr << std::endl;
+    std::cout << std::endl;
+    std::cout << "Error := norm(A-USV')_F/norm(A)_F" << std::endl;
     std::cout << std::endl;
   }
 
@@ -167,4 +183,29 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Finalize MPI
   MPI_Finalize();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Check the result (A)
+///
+void check(
+    const AType &matrix_a,
+    const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
+    const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_vt,
+    const mcnla::matrix::DenseVector<ValType> &vector_s,
+          ValType &frerr
+) noexcept {
+  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_a_tmp(matrix_a.sizes());
+  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_u_tmp(matrix_u.sizes());
+
+  // A_tmp := A, U_tmp = U
+  mcnla::la::copy(matrix_a, matrix_a_tmp);
+  mcnla::la::copy(matrix_u, matrix_u_tmp);
+
+  // A_tmp -= U * S * V'
+  mcnla::la::mm("", vector_s.viewDiagonal(), matrix_u_tmp);
+  mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
+
+  // frerr := norm(A_tmp)_F / norm(A)_F
+  frerr = mcnla::la::nrmf(matrix_a_tmp) / mcnla::la::nrmf(matrix_a);
 }
