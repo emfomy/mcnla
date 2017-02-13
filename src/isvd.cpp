@@ -34,9 +34,6 @@
 using ScalarType = double;
 using AType = mcnla::matrix::ATYPE<ScalarType>;
 
-ScalarType tolerance = 1e-4;
-mcnla::index_t maxiter = 256;
-
 void check( const AType &matrix_a,
             const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u,
             const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_vt,
@@ -68,7 +65,8 @@ int main( int argc, char **argv ) {
   // Check input
   if ( argc < 5 && mpi_rank == mpi_root ) {
     std::cout << "Usage: " << argv[0]
-              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <Vt-mtx-file> [#sketch-per-node] [rank] [over-sampling-rank]"
+              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <Vt-mtx-file>"
+                 " [#sketch-per-node] [rank] [over-sampling-rank] [tolerance] [maxiter]"
               << std::endl << std::endl;
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
@@ -95,11 +93,13 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 4;
-  mcnla::index_t Nj = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m  = matrix_a.nrow();
-  mcnla::index_t n  = matrix_a.ncol();
-  mcnla::index_t k  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t p  = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
+  mcnla::index_t Nj      = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  mcnla::index_t m       = matrix_a.nrow();
+  mcnla::index_t n       = matrix_a.ncol();
+  mcnla::index_t k       = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
+  mcnla::index_t p       = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
+  ScalarType     tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
+  mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
@@ -107,7 +107,9 @@ int main( int argc, char **argv ) {
             << ", k = " << k
             << ", p = " << p
             << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size << std::endl << std::endl;
+            << ", K = " << mpi_size
+            << ", tol = " << tol
+            << ", maxiter = " << maxiter << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -118,7 +120,7 @@ int main( int argc, char **argv ) {
                       mcnla::isvd::INTEGRATOR,
                       mcnla::isvd::FORMER> solver(MPI_COMM_WORLD);
   solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(rand());
-  solver.setTolerance(tolerance).setMaxIteration(maxiter);
+  solver.setTolerance(tol).setMaxIteration(maxiter);
   solver.initialize();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << solver.sketcher() << "." << std::endl;

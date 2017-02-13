@@ -19,18 +19,5 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  mcnla::matrix::DenseMatrixColMajor<double> a(10, 5);
-
-  int i = 0;
-  for ( auto &v : a ) {
-    v = i++;
-  }
-
-  std::cout << a << std::endl;
-
-  mcnla::la::scal0(a({2, 7}, {1, 3}));
-
-  std::cout << a << std::endl;
-
   return 0;
 }

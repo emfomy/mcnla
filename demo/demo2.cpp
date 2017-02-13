@@ -11,9 +11,6 @@
 
 using ScalarType = double;
 
-ScalarType tolerance = 1e-4;
-mcnla::index_t maxiter = 256;
-
 void create( mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_a,
              mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u_true,
              ScalarType &error0,
@@ -65,6 +62,8 @@ int main( int argc, char **argv ) {
   mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
   mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
+  ScalarType     tol       = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
+  mcnla::index_t maxiter   = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
   double         k_scale   = ( argc > ++argi ) ? atof(argv[argi]) : 2.0;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
@@ -73,8 +72,8 @@ int main( int argc, char **argv ) {
             << ", k = " << k
             << ", p = " << p
             << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size << std::endl
-            << "tolerance = " << tolerance
+            << ", K = " << mpi_size
+            << ", tol " << tol
             << ", maxiter = " << maxiter << std::endl << std::endl;
   }
 
@@ -93,7 +92,7 @@ int main( int argc, char **argv ) {
                       mcnla::isvd::KolmogorovNagumoIntegratorTag,
                       mcnla::isvd::SvdFormerTag> driver(MPI_COMM_WORLD);
   driver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-  driver.setTolerance(tolerance).setMaxIteration(maxiter).setSeeds(rand());
+  driver.setTolerance(tol).setMaxIteration(maxiter).setSeeds(rand());
   driver.initialize();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << driver.sketcher() << "." << std::endl;
