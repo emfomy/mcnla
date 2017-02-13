@@ -25,10 +25,10 @@ macro(SET_TARGET target files)
 endmacro()
 
 # Set target (isvd_dense)
-set_target(isvd_dense isvd.cpp "-DATYPE=DenseMatrix")
+set_target(isvd_dense isvd.cpp "-DATYPE=DenseMatrixColMajor")
 
 # Set target (isvd_coo)
-set_target(isvd_coo isvd.cpp "-DATYPE=CooMatrix")
+set_target(isvd_coo isvd.cpp "-DATYPE=CooMatrixColMajor")
 
 # Set target (isvd)
 add_custom_target(

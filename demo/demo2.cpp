@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/demo.cpp
-/// @brief   The demo code kind
+/// @file    demo/demo2.cpp
+/// @brief   The demo code kind 2
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -17,7 +17,8 @@ mcnla::index_t maxiter = 256;
 void create( mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_a,
              mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u_true,
              ScalarType &error0,
-             const mcnla::index_t rank ) noexcept;
+             const mcnla::index_t rank,
+             const double k_scale ) noexcept;
 
 void check_u( const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u,
               const mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u_true,
@@ -47,7 +48,7 @@ int main( int argc, char **argv ) {
     std::cout << "MCNLA "
               << MCNLA_MAJOR_VERSION << "."
               << MCNLA_MINOR_VERSION << "."
-              << MCNLA_PATCH_VERSION << " demo kind 1" << std::endl << std::endl;
+              << MCNLA_PATCH_VERSION << " demo kind 2" << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -64,6 +65,7 @@ int main( int argc, char **argv ) {
   mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
   mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
   mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
+  double         k_scale   = ( argc > ++argi ) ? atof(argv[argi]) : 2.0;
   assert(k <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
@@ -104,8 +106,9 @@ int main( int argc, char **argv ) {
   // Generate matrix
   ScalarType error0;
   if ( mpi_rank == mpi_root ) {
-    std::cout << "A = U0 S0 V0', s0 = 1, 1/2, 1/3, ..., 1/k, 0.01/(k+1), ..., 0.01/m" << std::endl << std::endl;
-    create(matrix_a, matrix_u_true, error0, k);
+    std::cout << "A = U0 S0 V0', s0 = 1, 1/2, 1/3, ...1/k, 0.01/(k+1), ..., 0.01/" << k_scale << "k, 0, ..."
+              << std::endl << std::endl;
+    create(matrix_a, matrix_u_true, error0, k, k_scale);
   }
   mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
@@ -184,16 +187,20 @@ void create(
           mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_a,
           mcnla::matrix::DenseMatrixColMajor<ScalarType> &matrix_u_true,
           ScalarType &error0,
-    const mcnla::index_t rank
+    const mcnla::index_t rank,
+    const double k_scale
 ) noexcept {
+  assert(k_scale >= 1.0);
+
   matrix_u_true = mcnla::matrix::DenseMatrixColMajor<ScalarType>(matrix_a.nrow(), rank);
 
-  mcnla::matrix::DenseMatrixColMajor<ScalarType> matrix_u(matrix_a.nrow(), matrix_a.nrow());
-  mcnla::matrix::DenseMatrixColMajor<ScalarType> matrix_v(matrix_a.ncol(), matrix_a.nrow());
+  mcnla::index_t totalrank = k_scale * rank;
+  mcnla::matrix::DenseMatrixColMajor<ScalarType> matrix_u(matrix_a.nrow(), totalrank);
+  mcnla::matrix::DenseMatrixColMajor<ScalarType> matrix_v(matrix_a.ncol(), totalrank);
   mcnla::matrix::DenseMatrixColMajor<ScalarType> matrix_empty;
-  mcnla::matrix::DenseVector<ScalarType> vector_s(matrix_a.nrow());
+  mcnla::matrix::DenseVector<ScalarType> vector_s(totalrank);
 
-  // Generate U & V using normal random
+  // Generate E & U & V using normal random
   mcnla::random::gaussian(matrix_u.vectorize(), rand());
   mcnla::random::gaussian(matrix_v.vectorize(), rand());
 
@@ -208,7 +215,7 @@ void create(
   for ( mcnla::index_t i = 0; i < rank; ++i ) {
     vector_s(i) = 1.0/(i+1);
   }
-  for ( mcnla::index_t i = rank; i < matrix_a.nrow(); ++i ) {
+  for ( mcnla::index_t i = rank; i < totalrank; ++i ) {
     vector_s(i) = 1e-2/(i+1);
   }
 
@@ -217,7 +224,7 @@ void create(
   mcnla::la::mm(matrix_u, matrix_v.t(), matrix_a);
 
   // Compute excepted error
-  error0 = mcnla::la::nrmf(vector_s({rank, matrix_a.nrow()})) / mcnla::la::nrmf(vector_s);
+  error0 = mcnla::la::nrmf(vector_s({rank, totalrank})) / mcnla::la::nrmf(vector_s);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

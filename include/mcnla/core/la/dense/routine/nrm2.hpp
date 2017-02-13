@@ -26,14 +26,23 @@ namespace la {
 /// @ingroup  la_dense_blas1_module
 /// @brief  Computes the Euclidean norm of a vector.
 ///
-//@{
-template <typename _Scalar>
-inline RealScalarT<_Scalar> nrm2(
-    const DenseVector<_Scalar> &x
+template <typename _Val>
+inline RealScalarT<_Val> nrm2(
+    const DenseVector<_Val> &x
 ) noexcept {
   return detail::nrm2(x.length(), x.valPtr(), x.stride());
 }
-//@}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_dense_blas1_module
+/// @brief  Computes the Frobenius norm of a vector.
+///
+template <typename _Val>
+inline RealScalarT<_Val> nrmf(
+    const DenseVector<_Val> &x
+) noexcept {
+  return nrm2(x);
+}
 
 }  // namespace la
 
