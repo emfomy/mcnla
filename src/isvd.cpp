@@ -93,24 +93,25 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 4;
-  mcnla::index_t Nj      = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  mcnla::index_t Nj      = ( argc > ++argi ) ? atof(argv[argi]) : 4;
   mcnla::index_t m       = matrix_a.nrow();
   mcnla::index_t n       = matrix_a.ncol();
-  mcnla::index_t k       = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t p       = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
+  mcnla::index_t k       = ( argc > ++argi ) ? atof(argv[argi]) : 10;
+  mcnla::index_t p       = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   ScalarType     tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
-  mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
-  assert((k+p) <= m && m <= n);
+  mcnla::index_t maxiter = ( argc > ++argi ) ? atof(argv[argi]) : 256;
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
             << ", n = " << n
             << ", k = " << k
             << ", p = " << p
             << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size
             << ", tol = " << tol
-            << ", maxiter = " << maxiter << std::endl << std::endl;
+            << ", maxiter = " << maxiter << std::endl;
+    std::cout << mpi_size << " nodes / "
+              << omp_get_max_threads() << " threads per node" << std::endl << std::endl;
   }
+  assert((k+p) <= m && m <= n);
 
   // ====================================================================================================================== //
   // Initialize solver

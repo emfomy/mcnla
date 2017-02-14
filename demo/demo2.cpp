@@ -55,27 +55,28 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 0;
-  mcnla::index_t Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m         = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  mcnla::index_t n         = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  mcnla::index_t k         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
-  mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
-  mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
+  mcnla::index_t Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
+  mcnla::index_t m         = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
+  mcnla::index_t n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
+  mcnla::index_t k         = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  mcnla::index_t p         = ( argc > ++argi ) ? atof(argv[argi]) : 12;
+  mcnla::index_t num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;
+  mcnla::index_t skip_test = ( argc > ++argi ) ? atof(argv[argi]) : 5;
   ScalarType     tol       = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
-  mcnla::index_t maxiter   = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
+  mcnla::index_t maxiter   = ( argc > ++argi ) ? atof(argv[argi]) : 256;
   double         k_scale   = ( argc > ++argi ) ? atof(argv[argi]) : 2.0;
-  assert((k+p) <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
             << ", n = " << n
             << ", k = " << k
             << ", p = " << p
             << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size
             << ", tol = " << tol
-            << ", maxiter = " << maxiter << std::endl << std::endl;
+            << ", maxiter = " << maxiter << std::endl;
+    std::cout << mpi_size << " nodes / "
+              << omp_get_max_threads() << " threads per node" << std::endl << std::endl;
   }
+  assert((k+p) <= m && m <= n);
 
   // ====================================================================================================================== //
   // Create statistics collector

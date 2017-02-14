@@ -39,22 +39,23 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 0;
-  mcnla::index_t Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m         = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  mcnla::index_t l         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
-  mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
+  mcnla::index_t Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
+  mcnla::index_t m         = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
+  mcnla::index_t l         = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  mcnla::index_t num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;
+  mcnla::index_t skip_test = ( argc > ++argi ) ? atof(argv[argi]) : 5;
   ScalarType     tol       = ( argc > ++argi ) ? atof(argv[argi]) : -1;
-  mcnla::index_t maxiter   = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
-  assert(l <= m);
+  mcnla::index_t maxiter   = ( argc > ++argi ) ? atof(argv[argi]) : 16;
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
             << ", l = " << l
             << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size
             << ", tol = " << tol
-            << ", maxiter = " << maxiter << std::endl << std::endl;
+            << ", maxiter = " << maxiter << std::endl;
+    std::cout << mpi_size << " nodes / "
+              << omp_get_max_threads() << " threads per node" << std::endl << std::endl;
   }
+  assert(l <= m);
 
   // ====================================================================================================================== //
   // Create statistics collector

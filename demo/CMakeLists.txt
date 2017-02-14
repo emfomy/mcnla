@@ -8,7 +8,11 @@ endif()
 # Macro
 macro(SET_TARGET target files)
   # Set target
-  add_executable(mcnla_${target} EXCLUDE_FROM_ALL ${files})
+  if(MCNLA_INSTALL_DEMO)
+    add_executable(mcnla_${target} ${files})
+  else()
+    add_executable(mcnla_${target} EXCLUDE_FROM_ALL ${files})
+  endif()
   target_include_directories(mcnla_${target} PUBLIC "${PROJECT_BINARY_DIR}/include")
   target_include_directories(mcnla_${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
   target_include_directories(mcnla_${target} PUBLIC SYSTEM ${INCS})
@@ -25,10 +29,14 @@ macro(SET_TARGET target files)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Running ${target}"
   )
+
+  if(MCNLA_INSTALL_DEMO)
+    install(TARGETS mcnla_${target} RUNTIME DESTINATION bin/demo)
+  endif()
 endmacro()
 
-# Set target (demo)
-set_target(demo demo.cpp)
+# Set target (demo1)
+set_target(demo1 demo1.cpp)
 
 # Set target (demo2)
 set_target(demo2 demo2.cpp)

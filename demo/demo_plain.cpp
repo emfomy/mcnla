@@ -12,13 +12,14 @@
 #include "statistics_set.hpp"
 #include <mpi.h>
 #include <mkl.h>
+#include <omp.h>
 
 using namespace std;
 
 int mpi_size;
 int mpi_rank;
 
-double tolerance = 1e-4;
+double tol = 1e-4;
 int maxiter = 256;
 
 void createA( const int m0, const int n, const int k, double *matrix_a, double *matrix_u_true, int seed[4] );
@@ -51,13 +52,13 @@ int main( int argc, char **argv ) {
   }
 
   int argi = 0;
-  int Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  int m0        = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  int n         = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  int k         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
-  int q         = ( argc > ++argi ) ? atoi(argv[argi]) : 0;
-  int num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  int skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
+  int Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
+  int m0        = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
+  int n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
+  int k         = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  int q         = ( argc > ++argi ) ? atof(argv[argi]) : 0;
+  int num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;
+  int skip_test = ( argc > ++argi ) ? atof(argv[argi]) : 5;
 
   // ====================================================================================================================== //
   // Initialize random seed
@@ -75,14 +76,15 @@ int main( int argc, char **argv ) {
 
   if ( mpi_rank == 0 ) {
     cout << "m = " << m
-       << ", n = " << n
-       << ", k = " << k
-       << ", p = " << 0
-       << ", q = " << q
-       << ", N = " << Nj*mpi_size
-       << ", K = " << mpi_size << endl
-       << "tolerance = " << tolerance
-       << ", maxiter = " << maxiter << endl << endl;
+         << ", n = " << n
+         << ", k = " << k
+         << ", p = " << 0
+         << ", q = " << q
+         << ", N = " << Nj*mpi_size
+         << ", tol = " << tol
+         << ", maxiter = " << maxiter << endl;
+    cout << mpi_size << " nodes / "
+         << omp_get_max_threads() << " threads per node" << endl << endl;
   }
 
   // ====================================================================================================================== //
@@ -364,7 +366,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     for ( auto i = 0; i < k; ++i ) {
       vector_e[i] = vector_e[i] - 1.0;
     }
-    is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tolerance);
+    is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tol);
   }
 
   // Free memory
