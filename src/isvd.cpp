@@ -100,7 +100,7 @@ int main( int argc, char **argv ) {
   mcnla::index_t p       = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
   ScalarType     tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
   mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
-  assert(k <= m && m <= n);
+  assert((k+p) <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
             << ", n = " << n

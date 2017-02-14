@@ -65,7 +65,7 @@ int main( int argc, char **argv ) {
   ScalarType     tol       = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
   mcnla::index_t maxiter   = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
   double         k_scale   = ( argc > ++argi ) ? atof(argv[argi]) : 2.0;
-  assert(k <= m && m <= n);
+  assert((k+p) <= m && m <= n);
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
             << ", n = " << n
@@ -73,7 +73,7 @@ int main( int argc, char **argv ) {
             << ", p = " << p
             << ", N = " << Nj*mpi_size
             << ", K = " << mpi_size
-            << ", tol " << tol
+            << ", tol = " << tol
             << ", maxiter = " << maxiter << std::endl << std::endl;
   }
 
