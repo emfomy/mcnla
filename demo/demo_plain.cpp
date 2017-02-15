@@ -28,9 +28,9 @@ void sketch( const int Nj, const int m, const int m0, const int n, const int k, 
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter );
 void form( const int m0, const int n, const int k,
            const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
-void check_u( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
+void check_u( const int m0, const int k0, const double *matrix_u_true, const double *matrix_u,
               double &smax, double &smin, double &smean );
-void check( const int m0, const int n, const int k, const double *matrix_a,
+void check( const int m0, const int n, const int k, const int k0, const double *matrix_a,
             const double *matrix_u, const double *matrix_vt, const double *vector_s, double &frerr );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,8 @@ int main( int argc, char **argv ) {
   int Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
   int m0        = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
   int n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
-  int k         = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  int k0        = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  int p         = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   int q         = ( argc > ++argi ) ? atof(argv[argi]) : 0;
   int num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;
   int skip_test = ( argc > ++argi ) ? atof(argv[argi]) : 5;
@@ -72,13 +73,14 @@ int main( int argc, char **argv ) {
   int N = Nj * mpi_size;
   int mj = (m0-1) / mpi_size + 1;
   int m = mj * mpi_size;
+  int k = k0 + p;
   assert(k <= m && m <= n);
 
   if ( mpi_rank == 0 ) {
     cout << "m = " << m
          << ", n = " << n
-         << ", k = " << k
-         << ", p = " << 0
+         << ", k = " << k0
+         << ", p = " << p
          << ", q = " << q
          << ", N = " << Nj*mpi_size
          << ", tol = " << tol
@@ -90,7 +92,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Allocate memory
   auto matrix_a      = static_cast<double*>(malloc(m0 * n      * sizeof(double)));
-  auto matrix_u_true = static_cast<double*>(malloc(m0 * k      * sizeof(double)));
+  auto matrix_u_true = static_cast<double*>(malloc(m0 * k0     * sizeof(double)));
   auto matrix_qt     = static_cast<double*>(malloc(k  * m      * sizeof(double)));
   auto matrix_u      = static_cast<double*>(malloc(m0 * k      * sizeof(double)));
   auto matrix_vt     = static_cast<double*>(malloc(k  * n      * sizeof(double)));
@@ -107,7 +109,7 @@ int main( int argc, char **argv ) {
   // Generate matrix
   if ( verbose && mpi_rank == 0 )  {cout << "Generating matrix .............. " << flush; }
   if ( mpi_rank == 0 ) {
-    createA(m0, n, k, matrix_a, matrix_u_true, seed);
+    createA(m0, n, k0, matrix_a, matrix_u_true, seed);
   }
   MPI_Bcast(matrix_a, m0*n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
   if ( verbose && mpi_rank == 0 ) { cout << "done" << endl << endl; }
@@ -160,8 +162,8 @@ int main( int argc, char **argv ) {
     // ================================================================================================================== //
     // Check result
     if ( mpi_rank == 0  ) {
-      check_u(m0, k, matrix_u_true, matrix_u, smax, smin, smean);
-      check(m0, n, k, matrix_a, matrix_u, matrix_vt, vector_s, frerr);
+      check_u(m0, k0, matrix_u_true, matrix_u, smax, smin, smean);
+      check(m0, n, k, k0, matrix_a, matrix_u, matrix_vt, vector_s, frerr);
 
       time = time_s + time_i + time_f;
       cout << setw(log10(num_test)+1) << t
@@ -397,20 +399,20 @@ void form( const int m0, const int n, const int k,
   free(vector_tmp);
 }
 
-void check_u( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
+void check_u( const int m0, const int k0, const double *matrix_u_true, const double *matrix_u,
               double &smax, double &smin, double &smean ) {
-  auto matrix_tmp  = static_cast<double*>(malloc(k * k * sizeof(double)));
-  auto vector_tmp1 = static_cast<double*>(malloc(k     * sizeof(double)));
-  auto vector_tmp2 = static_cast<double*>(malloc(k     * sizeof(double)));
+  auto matrix_tmp  = static_cast<double*>(malloc(k0 * k0 * sizeof(double)));
+  auto vector_tmp1 = static_cast<double*>(malloc(k0     * sizeof(double)));
+  auto vector_tmp2 = static_cast<double*>(malloc(k0     * sizeof(double)));
 
   // TMP := Utrue' * U
-  cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, k, k, m0, 1.0, matrix_u_true, m0, matrix_u, m0, 0.0, matrix_tmp, k);
+  cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, k0, k0, m0, 1.0, matrix_u_true, m0, matrix_u, m0, 0.0, matrix_tmp, k0);
 
   // Compute the SVD of TMP
-  LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'N', 'N', k, k, matrix_tmp, k, vector_tmp1, nullptr, 1, nullptr, 1, vector_tmp2);
-  smax = abs(vector_tmp1[cblas_idamax(k, vector_tmp1, 1)]);
-  smin = abs(vector_tmp1[cblas_idamin(k, vector_tmp1, 1)]);
-  smean = cblas_dasum(k, vector_tmp1, 1) / k;
+  LAPACKE_dgesvd(LAPACK_COL_MAJOR, 'N', 'N', k0, k0, matrix_tmp, k0, vector_tmp1, nullptr, 1, nullptr, 1, vector_tmp2);
+  smax = abs(vector_tmp1[cblas_idamax(k0, vector_tmp1, 1)]);
+  smin = abs(vector_tmp1[cblas_idamin(k0, vector_tmp1, 1)]);
+  smean = cblas_dasum(k0, vector_tmp1, 1) / k0;
 
   // Free memory
   free(matrix_tmp);
@@ -418,20 +420,20 @@ void check_u( const int m0, const int k, const double *matrix_u_true, const doub
   free(vector_tmp2);
 }
 
-void check( const int m0, const int n, const int k, const double *matrix_a,
+void check( const int m0, const int n, const int k, const int k0, const double *matrix_a,
             const double *matrix_u, const double *matrix_vt, const double *vector_s, double &frerr ) {
   auto matrix_a_tmp = static_cast<double*>(malloc(m0 * n * sizeof(double)));
-  auto matrix_u_tmp = static_cast<double*>(malloc(m0 * k * sizeof(double)));
+  auto matrix_u_tmp = static_cast<double*>(malloc(m0 * k0 * sizeof(double)));
 
   // A_tmp := A, U_tmp := U
   cblas_dcopy(m0*n, matrix_a, 1, matrix_a_tmp, 1);
-  cblas_dcopy(m0*k, matrix_u, 1, matrix_u_tmp, 1);
+  cblas_dcopy(m0*k0, matrix_u, 1, matrix_u_tmp, 1);
 
   // A_tmp -= U * S * V'
-  for ( auto i = 0; i < k; ++i ) {
+  for ( auto i = 0; i < k0; ++i ) {
     cblas_dscal(m0, vector_s[i], matrix_u_tmp+i*m0, 1);
   }
-  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, m0, n, k,
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, m0, n, k0,
               -1.0, matrix_u_tmp, m0, matrix_vt, k, 1.0, matrix_a_tmp, m0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
