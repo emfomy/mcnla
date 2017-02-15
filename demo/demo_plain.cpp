@@ -27,7 +27,7 @@ void sketch( const int Nj, const int m, const int m0, const int n, const int k, 
              const double *matrix_a, double *matrices_qjt, int seed[4] );
 void integrate( const int N, const int mj, const int k, const double *matrices_qjt, double *matrix_qjt, int &iter );
 void form( const int m0, const int n, const int k,
-                  const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
+           const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s );
 void check_u( const int m0, const int k, const double *matrix_u_true, const double *matrix_u,
               double &smax, double &smin, double &smean );
 void check( const int m0, const int n, const int k, const double *matrix_a,
@@ -379,7 +379,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
 }
 
 void form( const int m0, const int n, const int k,
-                  const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s ) {
+           const double *matrix_a, const double *matrix_qt, double *matrix_u, double *matrix_vt, double *vector_s ) {
   auto matrix_w   = static_cast<double*>(malloc(k * k * sizeof(double)));
   auto vector_tmp = static_cast<double*>(malloc(k     * sizeof(double)));
 

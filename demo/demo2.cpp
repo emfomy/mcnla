@@ -165,13 +165,13 @@ int main( int argc, char **argv ) {
     std::cout << "sd(validity):   max = " << set_smax.sd()
                            << ", mean = " << set_smean.sd()
                             << ", min = " << set_smin.sd() << std::endl;
-    std::cout << "mean(error) = " << set_frerr.mean() << std::endl;
-    std::cout << "sd(error)   = " << set_frerr.sd() << std::endl;
-    std::cout << "mean(iter)  = " << set_iter.mean() << std::endl;
-    std::cout << "sd(iter)    = " << set_iter.sd() << std::endl;
+    std::cout << "mean(error)         = " << set_frerr.mean() << std::endl;
+    std::cout << "sd(error)           = " << set_frerr.sd() << std::endl;
+    std::cout << "mean(iter)          = " << set_iter.mean() << std::endl;
+    std::cout << "sd(iter)            = " << set_iter.sd() << std::endl;
     std::cout << std::endl;
-    std::cout << "excepted validity = 1" << std::endl;
-    std::cout << "excepted error    = " << error0 << std::endl;
+    std::cout << "excepted validity   = 1" << std::endl;
+    std::cout << "excepted error      = " << error0 << std::endl;
     std::cout << std::endl;
     std::cout << "validity := svd(U_true' U)_2" << std::endl;
     std::cout << "error    := norm(A-USV')_F/norm(A)_F" << std::endl;
