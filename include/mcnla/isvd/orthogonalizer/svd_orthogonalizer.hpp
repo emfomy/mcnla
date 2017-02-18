@@ -42,8 +42,8 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::initializeImpl() noexcept {
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  time0_ = 0;
-  time1_ = 0;
+  moment0_ = 0;
+  moment1_ = 0;
 
   vector_s_.reconstruct(dim_sketch);
   gesvd_engine_.reconstruct(nrow, dim_sketch);
@@ -65,13 +65,13 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  time0_ = MPI_Wtime();
+  moment0_ = MPI_Wtime();
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
     gesvd_engine_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
-  time1_ = MPI_Wtime();
+  moment1_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ std::ostream&Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::outputNameImpl(
 ///
 template <typename _Scalar>
 double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::timeImpl() const noexcept {
-  return time1_-time0_;
+  return moment1_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::timeImpl() const noexcept 
 ///
 template <typename _Scalar>
 double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::time1() const noexcept {
-  return time1_-time0_;
+  return moment1_-moment0_;
 }
 
 }  // namespace isvd

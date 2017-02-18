@@ -58,16 +58,16 @@ class Former<_Scalar, SvdFormerTag>
   static constexpr const char* name_= "Standard Former";
 
   /// The starting time
-  double time0_;
+  double moment0_;
 
   /// The ending time of Q' * A
-  double time1_;
+  double moment1_;
 
   /// The ending time of SVD
-  double time2_;
+  double moment2_;
 
   /// The ending time of Q * W
-  double time3_;
+  double moment3_;
 
   /// The matrix W.
   DenseMatrixColMajor<ScalarType> matrix_w_;

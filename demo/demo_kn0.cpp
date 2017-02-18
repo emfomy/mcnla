@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/demo_kn.cpp
-/// @brief   The demo code of Kolmogorov-Nagumo-type integrator
+/// @file    demo/demo_kn0.cpp
+/// @brief   The demo code of naive Kolmogorov-Nagumo-type integrator
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -66,7 +66,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::Solver<ScalarType,
                       mcnla::isvd::GaussianProjectionSketcherTag<0>,
                       mcnla::isvd::SvdOrthogonalizerTag,
-                      mcnla::isvd::KolmogorovNagumoIntegratorTag,
+                      mcnla::isvd::NaiveKolmogorovNagumoIntegratorTag,
                       mcnla::isvd::DummyFormerTag> driver(MPI_COMM_WORLD);
   driver.setSize(m, m).setRank(l).setOverRank(0).setNumSketchEach(Nj);
   driver.setTolerance(tol).setMaxIteration(maxiter).setSeeds(rand());

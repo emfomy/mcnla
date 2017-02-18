@@ -60,13 +60,13 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
   static constexpr const char* name_= "Gaussian Projection Sketcher";
 
   /// The starting time
-  double time0_;
+  double moment0_;
 
   /// The ending time of random generating
-  double time1_;
+  double moment1_;
 
   /// The ending time of random sketching
-  double time2_;
+  double moment2_;
 
   /// The matrix Omega.
   DenseMatrixRowMajor<ScalarType> matrix_omegas_;
