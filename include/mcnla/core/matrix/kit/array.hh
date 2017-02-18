@@ -26,12 +26,14 @@ namespace matrix {
 /// @ingroup  matrix_module
 /// The array.
 ///
-template <typename _Type>
-class Array : public std::shared_ptr<std::valarray<_Type>> {
+/// @tparam  _Val  The value type.
+///
+template <typename _Val>
+class Array : public std::shared_ptr<std::valarray<_Val>> {
 
  private:
 
-  using BaseType = std::shared_ptr<std::valarray<_Type>>;
+  using BaseType = std::shared_ptr<std::valarray<_Val>>;
 
  protected:
 
@@ -67,19 +69,19 @@ class Array : public std::shared_ptr<std::valarray<_Type>> {
   inline index_t offset() const noexcept;
 
   // Gets data
-  inline       _Type* operator*() noexcept;
-  inline const _Type* operator*() const noexcept;
-  inline       _Type& operator[]( const index_t idx ) noexcept;
-  inline const _Type& operator[]( const index_t idx ) const noexcept;
+  inline       _Val* operator*() noexcept;
+  inline const _Val* operator*() const noexcept;
+  inline       _Val& operator[]( const index_t idx ) noexcept;
+  inline const _Val& operator[]( const index_t idx ) const noexcept;
 
   // Gets Valarray
-  inline       std::valarray<_Type>& valarray() noexcept;
-  inline const std::valarray<_Type>& valarray() const noexcept;
+  inline       std::valarray<_Val>& valarray() noexcept;
+  inline const std::valarray<_Val>& valarray() const noexcept;
 
 };
 
-template <typename _Type>
-const typename Array<_Type>::BaseType Array<_Type>::kNullPtr = std::make_shared<std::valarray<_Type>>();
+template <typename _Val>
+const typename Array<_Val>::BaseType Array<_Val>::kNullPtr = std::make_shared<std::valarray<_Val>>();
 
 }  // namespace matrix
 

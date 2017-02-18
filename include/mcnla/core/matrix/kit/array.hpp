@@ -23,27 +23,27 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Type>
-Array<_Type>::Array() noexcept
+template <typename _Val>
+Array<_Val>::Array() noexcept
   : BaseType(kNullPtr),
     offset_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Type>
-Array<_Type>::Array(
+template <typename _Val>
+Array<_Val>::Array(
     const index_t capacity,
     const index_t offset
 ) noexcept
-  : BaseType(new std::valarray<_Type>(capacity)),
+  : BaseType(new std::valarray<_Val>(capacity)),
     offset_(offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Type>
-Array<_Type>::Array(
+template <typename _Val>
+Array<_Val>::Array(
     const BaseType &ptr,
     const index_t offset
 ) noexcept
@@ -57,8 +57,8 @@ Array<_Type>::Array(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Type>
-Array<_Type>::Array(
+template <typename _Val>
+Array<_Val>::Array(
     const Array &other
 ) noexcept
   : BaseType(other),
@@ -67,8 +67,8 @@ Array<_Type>::Array(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
 ///
-template <typename _Type>
-Array<_Type>::Array(
+template <typename _Val>
+Array<_Val>::Array(
     Array &&other
 ) noexcept
   : BaseType(std::move(other)),
@@ -82,8 +82,8 @@ Array<_Type>::Array(
 ///
 /// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Type>
-Array<_Type>& Array<_Type>::operator=(
+template <typename _Val>
+Array<_Val>& Array<_Val>::operator=(
     const Array &other
 ) noexcept {
   BaseType::operator=(other);
@@ -94,8 +94,8 @@ Array<_Type>& Array<_Type>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move assignment operator.
 ///
-template <typename _Type>
-Array<_Type>& Array<_Type>::operator=(
+template <typename _Val>
+Array<_Val>& Array<_Val>::operator=(
     Array &&other
 ) noexcept {
   BaseType::operator=(std::move(other)); static_cast<BaseType&>(other) = kNullPtr;
@@ -107,8 +107,8 @@ Array<_Type>& Array<_Type>::operator=(
 /// @brief  Right-shift the offset.
 /// Add @a offset to @ref offset_.
 ///
-template <typename _Type>
-void Array<_Type>::operator>>=(
+template <typename _Val>
+void Array<_Val>::operator>>=(
     const index_t offset
 ) noexcept {
   offset_ += offset;
@@ -119,8 +119,8 @@ void Array<_Type>::operator>>=(
 /// @brief  Left-shift the offset.
 /// Subtract @ref offset_ by @a offset.
 ///
-template <typename _Type>
-void Array<_Type>::operator<<=(
+template <typename _Val>
+void Array<_Val>::operator<<=(
     const index_t offset
 ) noexcept {
   offset_ -= offset;
@@ -130,8 +130,8 @@ void Array<_Type>::operator<<=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator>>=
 ///
-template <typename _Type>
-Array<_Type> Array<_Type>::operator>>(
+template <typename _Val>
+Array<_Val> Array<_Val>::operator>>(
     const index_t offset
 ) noexcept {
   auto retval = *this;
@@ -142,8 +142,8 @@ Array<_Type> Array<_Type>::operator>>(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator>>=
 ///
-template <typename _Type>
-const Array<_Type> Array<_Type>::operator>>(
+template <typename _Val>
+const Array<_Val> Array<_Val>::operator>>(
     const index_t offset
 ) const noexcept {
   auto retval = *this;
@@ -154,8 +154,8 @@ const Array<_Type> Array<_Type>::operator>>(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator<<=
 ///
-template <typename _Type>
-Array<_Type> Array<_Type>::operator<<(
+template <typename _Val>
+Array<_Val> Array<_Val>::operator<<(
     const index_t offset
 ) noexcept {
   auto retval = *this;
@@ -166,8 +166,8 @@ Array<_Type> Array<_Type>::operator<<(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator<<=
 ///
-template <typename _Type>
-const Array<_Type> Array<_Type>::operator<<(
+template <typename _Val>
+const Array<_Val> Array<_Val>::operator<<(
     const index_t offset
 ) const noexcept {
   auto retval = *this;
@@ -178,8 +178,8 @@ const Array<_Type> Array<_Type>::operator<<(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
-template <typename _Type>
-bool Array<_Type>::isEmpty() const noexcept {
+template <typename _Val>
+bool Array<_Val>::isEmpty() const noexcept {
   return (size() == 0);
 }
 
@@ -188,8 +188,8 @@ bool Array<_Type>::isEmpty() const noexcept {
 ///
 /// @note  #capacity + #offset = #size.
 ///
-template <typename _Type>
-index_t Array<_Type>::size() const noexcept {
+template <typename _Val>
+index_t Array<_Val>::size() const noexcept {
   return this->valarray().size();
 }
 
@@ -198,8 +198,8 @@ index_t Array<_Type>::size() const noexcept {
 ///
 /// @note  #capacity + #offset = #size.
 ///
-template <typename _Type>
-index_t Array<_Type>::capacity() const noexcept {
+template <typename _Val>
+index_t Array<_Val>::capacity() const noexcept {
   return size() - offset();
 }
 
@@ -208,32 +208,32 @@ index_t Array<_Type>::capacity() const noexcept {
 ///
 /// @note  #capacity + #offset = #size.
 ///
-template <typename _Type>
-index_t Array<_Type>::offset() const noexcept {
+template <typename _Val>
+index_t Array<_Val>::offset() const noexcept {
   return offset_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data pointer.
 ///
-template <typename _Type>
-_Type* Array<_Type>::operator*() noexcept {
+template <typename _Val>
+_Val* Array<_Val>::operator*() noexcept {
   return &(this->valarray()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data pointer.
 ///
-template <typename _Type>
-const _Type* Array<_Type>::operator*() const noexcept {
+template <typename _Val>
+const _Val* Array<_Val>::operator*() const noexcept {
   return &(this->valarray()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data of given index.
 ///
-template <typename _Type>
-_Type& Array<_Type>::operator[](
+template <typename _Val>
+_Val& Array<_Val>::operator[](
     const index_t idx
 ) noexcept {
   return this->valarray()[idx+offset_];
@@ -242,8 +242,8 @@ _Type& Array<_Type>::operator[](
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data of given index.
 ///
-template <typename _Type>
-const _Type& Array<_Type>::operator[](
+template <typename _Val>
+const _Val& Array<_Val>::operator[](
     const index_t idx
 ) const noexcept {
   return this->valarray()[idx+offset_];
@@ -252,16 +252,16 @@ const _Type& Array<_Type>::operator[](
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the valarray.
 ///
-template <typename _Type>
-std::valarray<_Type>& Array<_Type>::valarray() noexcept {
+template <typename _Val>
+std::valarray<_Val>& Array<_Val>::valarray() noexcept {
   return *(this->get());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the valarray.
 ///
-template <typename _Type>
-const std::valarray<_Type>& Array<_Type>::valarray() const noexcept {
+template <typename _Val>
+const std::valarray<_Val>& Array<_Val>::valarray() const noexcept {
   return *(this->get());
 }
 
