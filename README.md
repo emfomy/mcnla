@@ -34,7 +34,7 @@ Please use the following commands to create Makefiles
 ```
 mkdir build
 cd build
-cmake ..
+cmake <path-to-source>
 ```
 
 ### Options
@@ -42,7 +42,7 @@ cmake ..
 Use the following command to set options
 
 ```
-ccmake ..
+ccmake <path-to-source>
 ```
 
 * Set `MCNLA_BUILD_DRIVER` to build driver codes.
@@ -50,25 +50,26 @@ ccmake ..
 * Set `MCNLA_BUILD_TEST`   to build test codes.
 * Set `MCNLA_BUILD_DOC`    to build documentation.
 
-* Set `MCNLA_USE_ILP64` to change the system integer size. (`OFF`: 32bit / `ON`: 64bit)
-* Set `MCNLA_USE_MKL`   to enable Intel MKL.
-* Set `MKL_USE_OMP`     to enable multithread MKL. (Require `MCNLA_USE_MKL`)
-* Set `MKL_USE_IOMP`    to enable Intel OMP.       (Require `MKL_USE_OMP`)
+* Set `MCNLA_USE_ILP64`    to change the system integer size. (`OFF`: 32bit / `ON`: 64bit)
+* Set `MCNLA_USE_MKL`      to enable Intel MKL.
+* Set `MKL_USE_OMP`        to enable multithread MKL. (Require `MCNLA_USE_MKL`)
+* Set `MKL_USE_IOMP`       to enable Intel OMP.       (Require `MKL_USE_OMP`)
 
-* Set `MPI_PROCS`       to set the number of MPI processes. (Default: 4)
+* Set `MCNLA_INSTALL_DEMO` to install demos.
 
 * Set `MKL_ROOT`   for the root path of Intel MKL. (Automatically set if environment variable `MKLROOT` is set.)
 * Set `GTEST_ROOT` for the root path of Google Test.
 
 ### Makefile
 
-| Command      | Detail                   |
-|--------------|--------------------------|
-| `make all`   | build all drivers        |
-| `make run`   | run demo code            |
-| `make check` | build and run test codes |
-| `make doc`   | build documentation      |
-| `make help`  | display make-rules       |
+| Command        | Detail                   |
+|----------------|--------------------------|
+| `make all`     | build all drivers        |
+| `make install` | install package          |
+| `make run`     | run demo code            |
+| `make check`   | build and run test codes |
+| `make doc`     | build documentation      |
+| `make help`    | display make-rules       |
 
 ## Q&amp;A
 
