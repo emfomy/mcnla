@@ -78,9 +78,10 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
     mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
+    std::cout << "Loaded A." << std::endl << std::endl;
     sizes = matrix_a.sizes();
   }
-  MPI_Bcast(&sizes, 2, MPI_INT, mpi_root, MPI_COMM_WORLD);
+  MPI_Bcast(&sizes, 2, mcnla::traits::MpiScalarTraits<mcnla::index_t>::datatype, mpi_root, MPI_COMM_WORLD);
   if ( mpi_rank != mpi_root ) {
     matrix_a.reconstruct(sizes);
   }
