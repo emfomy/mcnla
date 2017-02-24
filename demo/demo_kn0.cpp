@@ -29,7 +29,7 @@ int main( int argc, char **argv ) {
     std::cout << "MCNLA "
               << MCNLA_MAJOR_VERSION << "."
               << MCNLA_MINOR_VERSION << "."
-              << MCNLA_PATCH_VERSION << " KN demo" << std::endl << std::endl;
+              << MCNLA_PATCH_VERSION << " Naive KN demo" << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
