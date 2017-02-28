@@ -34,7 +34,7 @@ Please use the following commands to create Makefiles
 ```
 mkdir build
 cd build
-cmake ..
+cmake <path-to-source>
 ```
 
 ### Options
@@ -42,7 +42,7 @@ cmake ..
 Use the following command to set options
 
 ```
-ccmake ..
+ccmake <path-to-source>
 ```
 
 * Set `MCNLA_BUILD_DRIVER` to build driver codes.
@@ -50,25 +50,26 @@ ccmake ..
 * Set `MCNLA_BUILD_TEST`   to build test codes.
 * Set `MCNLA_BUILD_DOC`    to build documentation.
 
-* Set `MCNLA_USE_ILP64` to change the system integer size. (`OFF`: 32bit / `ON`: 64bit)
-* Set `MCNLA_USE_MKL`   to enable Intel MKL.
-* Set `MKL_USE_OMP`     to enable multithread MKL. (Require `MCNLA_USE_MKL`)
-* Set `MKL_USE_IOMP`    to enable Intel OMP.       (Require `MKL_USE_OMP`)
+* Set `MCNLA_USE_ILP64`    to change the system integer size. (`OFF`: 32-bit / `ON`: 64-bit)
+* Set `MCNLA_USE_MKL`      to enable Intel MKL.
+* Set `MKL_USE_OMP`        to enable multithread MKL. (Require `MCNLA_USE_MKL`)
+* Set `MKL_USE_IOMP`       to enable Intel OMP.       (Require `MKL_USE_OMP`)
 
-* Set `MPI_PROCS`       to set the number of MPI processes. (Default: 4)
+* Set `MCNLA_INSTALL_DEMO` to install demos.
 
 * Set `MKL_ROOT`   for the root path of Intel MKL. (Automatically set if environment variable `MKLROOT` is set.)
 * Set `GTEST_ROOT` for the root path of Google Test.
 
 ### Makefile
 
-| Command      | Detail                   |
-|--------------|--------------------------|
-| `make all`   | build all drivers        |
-| `make run`   | run demo code            |
-| `make check` | build and run test codes |
-| `make doc`   | build documentation      |
-| `make help`  | display make-rules       |
+| Command        | Detail                   |
+|----------------|--------------------------|
+| `make all`     | build all drivers        |
+| `make install` | install package          |
+| `make run`     | run demo code            |
+| `make check`   | build and run test codes |
+| `make doc`     | build documentation      |
+| `make help`    | display make-rules       |
 
 ## Q&amp;A
 
@@ -87,11 +88,17 @@ ccmake ..
 
 * Set `GTEST_ROOT` to a folder containing `include` and `lib` of Google Test.
 
-### How to use 64 bit integer?
+### How to use 64-bit integer?
 
 * Set `MCNLA_USE_ILP64` with `ccmake`.
 * If you want to compile directly, add `-DMCNLA_USE_ILP64` to compiler flag.
-* Make sure your LAPACK&amp;BLAS / Intel MKL uses 64bit integer. Make sure you uses the correct library and flags of Intel MKl.
+* Make sure your LAPACK&amp;BLAS / Intel MKL uses 64bit integer. Make sure you uses the correct library and flags of Intel MKL.
+
+### `std::bad_alloc` occurs. What should I do?
+
+* Possible issues:
+	- Not enough memory. You might request a vector/matrix which size exceed your memory size.
+	- Index overflow. Use 64-bit integer instead of 32-bit integer. For example, if you request a `1e5` x `1e5` matrix, there will `1e10` elements, which is larger than the maximum number in 32-bit integer (about `2.1e9`). Using 64-bit integer may solve this problem.
 
 ## Reference
 * [Ting-Li Chen, Dawei D. Chang, Su-Yun Huang, Hung Chen, Chienyao Lin, Weichung Wang, “Integrating Multiple Random Sketches for Singular Value Decomposition”](https://arxiv.org/abs/1608.08285)

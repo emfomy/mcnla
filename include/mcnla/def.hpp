@@ -21,11 +21,6 @@
 #include <type_traits>
 #include <mcnla/config.hpp>
 
-#ifdef MCNLA_USE_MKL
-#define MKL_Complex8 std::complex<float>
-#define MKL_Complex16 std::complex<double>
-#endif  // MCNLA_USE_MKL
-
 #ifndef MCNLA_USE_GTEST
 
 #define mcnla_assert_true( condition )   assert(condition);
@@ -70,9 +65,9 @@ namespace mcnla {
 /// The type of index.
 #ifndef MCNLA_USE_ILP64
 using index_t = std::int32_t;
-#else
+#else  // MCNLA_USE_ILP64
 using index_t = std::int64_t;
-#endif
+#endif  // MCNLA_USE_ILP64
 
 /// The type of size.
 using size_t = std::size_t;
@@ -81,5 +76,12 @@ using size_t = std::size_t;
 static constexpr size_t ios_width = 14;
 
 }  // namespace mcnla
+
+
+#ifdef MCNLA_USE_MKL
+#define MKL_Complex8 std::complex<float>
+#define MKL_Complex16 std::complex<double>
+#define MKL_INT mcnla::index_t
+#endif  // MCNLA_USE_MKL
 
 #endif  // MCNLA_DEF_HPP_

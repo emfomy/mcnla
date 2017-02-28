@@ -5,11 +5,6 @@ if(NOT MCNLA_BUILD_DEMO)
   return()
 endif()
 
-# Set output directories
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
 # Macro
 macro(SET_TARGET target files)
   # Set target

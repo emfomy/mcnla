@@ -12,6 +12,7 @@
   #error 'MCNLA_USE_MKL' should be set!
 #endif
 
+#include <random>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/random/vsl/vrnguniform.hpp>
 #include <mcnla/core/random/vsl/vrnggaussian.hpp>
@@ -30,7 +31,6 @@ namespace random {
 //  The detail namespace
 //
 namespace detail {
-
 
 template <typename _Scalar>
 static inline void uniformImpl(

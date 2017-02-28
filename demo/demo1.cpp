@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    demo/demo.cpp
-/// @brief   The demo code kind
+/// @brief   The demo code kind 1
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -54,26 +54,27 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 0;
-  mcnla::index_t Nj        = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
-  mcnla::index_t m         = ( argc > ++argi ) ? atoi(argv[argi]) : 1000;
-  mcnla::index_t n         = ( argc > ++argi ) ? atoi(argv[argi]) : 10000;
-  mcnla::index_t k         = ( argc > ++argi ) ? atoi(argv[argi]) : 100;
-  mcnla::index_t p         = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
-  mcnla::index_t num_test  = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t skip_test = ( argc > ++argi ) ? atoi(argv[argi]) : 5;
-  ScalarType     tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
-  mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
-  assert(k <= m && m <= n);
+  mcnla::index_t Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
+  mcnla::index_t m         = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
+  mcnla::index_t n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
+  mcnla::index_t k         = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  mcnla::index_t p         = ( argc > ++argi ) ? atof(argv[argi]) : 12;
+  mcnla::index_t num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;
+  mcnla::index_t skip_test = ( argc > ++argi ) ? atof(argv[argi]) : 5;
+  ScalarType     tol       = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
+  mcnla::index_t maxiter   = ( argc > ++argi ) ? atof(argv[argi]) : 256;
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
-            << ", n = " << n
-            << ", k = " << k
-            << ", p = " << p
-            << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size
-            << ", tol " << tol
-            << ", maxiter = " << maxiter << std::endl << std::endl;
+              << ", n = " << n
+              << ", k = " << k
+              << ", p = " << p
+              << ", N = " << Nj*mpi_size
+              << ", tol = " << tol
+              << ", maxiter = " << maxiter << std::endl;
+    std::cout << mpi_size << " nodes / "
+              << omp_get_max_threads() << " threads per node" << std::endl << std::endl;
   }
+  assert((k+p) <= m && m <= n);
 
   // ====================================================================================================================== //
   // Create statistics collector
@@ -161,13 +162,13 @@ int main( int argc, char **argv ) {
     std::cout << "sd(validity):   max = " << set_smax.sd()
                            << ", mean = " << set_smean.sd()
                             << ", min = " << set_smin.sd() << std::endl;
-    std::cout << "mean(error) = " << set_frerr.mean() << std::endl;
-    std::cout << "sd(error)   = " << set_frerr.sd() << std::endl;
-    std::cout << "mean(iter)  = " << set_iter.mean() << std::endl;
-    std::cout << "sd(iter)    = " << set_iter.sd() << std::endl;
+    std::cout << "mean(error)         = " << set_frerr.mean() << std::endl;
+    std::cout << "sd(error)           = " << set_frerr.sd() << std::endl;
+    std::cout << "mean(iter)          = " << set_iter.mean() << std::endl;
+    std::cout << "sd(iter)            = " << set_iter.sd() << std::endl;
     std::cout << std::endl;
-    std::cout << "excepted validity = 1" << std::endl;
-    std::cout << "excepted error    = " << error0 << std::endl;
+    std::cout << "excepted validity   = 1" << std::endl;
+    std::cout << "excepted error      = " << error0 << std::endl;
     std::cout << std::endl;
     std::cout << "validity := svd(U_true' U)_2" << std::endl;
     std::cout << "error    := norm(A-USV')_F/norm(A)_F" << std::endl;

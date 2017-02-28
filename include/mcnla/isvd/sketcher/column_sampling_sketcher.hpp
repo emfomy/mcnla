@@ -44,9 +44,9 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::initializeImpl() noexcept {
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  time0_ = 0;
-  time1_ = 0;
-  time2_ = 0;
+  moment0_ = 0;
+  moment1_ = 0;
+  moment2_ = 0;
 
   vector_idxs_.reconstruct(dim_sketch * num_sketch_each);
 }
@@ -70,17 +70,17 @@ void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  time0_ = MPI_Wtime();
+  moment0_ = MPI_Wtime();
 
   // Random sample Idxs using uniform distribution
   random_engine_.uniform(vector_idxs_, 0, ncol);
-  time1_ = MPI_Wtime();
+  moment1_ = MPI_Wtime();
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
     la::copy(matrix_a("", vector_idxs_(i)), collection_q.unfold()("", i));
   }
-  time2_ = MPI_Wtime();
+  moment2_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ std::ostream&Sketcher<_Scalar, ColumnSamplingSketcherTag>::outputNameImpl(
 ///
 template <typename _Scalar>
 double Sketcher<_Scalar, ColumnSamplingSketcherTag>::timeImpl() const noexcept {
-  return time2_-time0_;
+  return moment2_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ double Sketcher<_Scalar, ColumnSamplingSketcherTag>::timeImpl() const noexcept {
 ///
 template <typename _Scalar>
 double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time1() const noexcept {
-  return time1_-time0_;
+  return moment1_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,7 +115,7 @@ double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time1() const noexcept {
 ///
 template <typename _Scalar>
 double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time2() const noexcept {
-  return time2_-time1_;
+  return moment2_-moment1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -41,7 +41,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix array real general" << std::endl;
+  fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
   fout << vector.dim0() << " 1" << std::endl;
@@ -74,7 +74,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix array real general" << std::endl;
+  fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
   fout << matrix.dim0() << " " << matrix.dim1() << std::endl;
@@ -112,7 +112,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket matrix array real general" << std::endl;
+  fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
   fout << set.dim0() << " " << set.nvec() << std::endl;
@@ -154,7 +154,7 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%%%MatrixMarket cube array real general" << std::endl;
+  fout << "%%MatrixMarket cube array real general" << std::endl;
 
   // Write size
   fout << set.dim0() << " " << set.dim1() << " " << set.nmat() << std::endl;

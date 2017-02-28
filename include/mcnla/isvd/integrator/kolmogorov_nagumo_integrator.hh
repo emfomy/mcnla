@@ -57,16 +57,19 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
   static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
 
   /// The starting time
-  double time0_;
+  double moment0_;
 
   /// The ending time of rearrangeing Q
-  double time1_;
+  double moment1_;
 
   /// The ending time of integrating
-  double time2_;
+  double moment2_;
 
   /// The ending time of gathering Qc
-  double time3_;
+  double moment3_;
+
+  /// The communication time of integrating
+  double time2c_;
 
   /// The number of rows of the matrix per MPI node.
   index_t nrow_each_;
@@ -135,6 +138,7 @@ class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
   // Gets time
   inline double time1() const noexcept;
   inline double time2() const noexcept;
+  inline double time2c() const noexcept;
   inline double time3() const noexcept;
 
  protected:
