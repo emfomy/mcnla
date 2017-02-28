@@ -50,7 +50,7 @@ class Driver {
 
  public:
 
-  using ValType        = _Val;
+  using ValType     = _Val;
   using RealValType = RealValT<_Val>;
 
   using ParametersType     = Parameters<ValType>;

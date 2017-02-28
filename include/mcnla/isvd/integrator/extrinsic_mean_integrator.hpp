@@ -40,15 +40,15 @@ void Integrator<ExtrinsicMeanIntegratorTag, _Val>::initializeImpl() noexcept {
 
   const auto mpi_size        = mpi::commSize(mpi_comm_);
   const auto nrow            = parameters_.nrow();
+  const auto dim_sketch      = parameters_.dimSketch();
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
-  const auto dim_sketch      = parameters_.dimSketch();
 
-  time0_ = 0;
-  time1_ = 0;
-  time2_ = 0;
-  time3_ = 0;
-  time4_ = 0;
+  moment0_ = 0;
+  moment1_ = 0;
+  moment2_ = 0;
+  moment3_ = 0;
+  moment4_ = 0;
 
   nrow_each_ = (nrow-1) / mpi_size + 1;
   nrow_all_  = nrow_each_ * mpi_size;
@@ -88,7 +88,7 @@ void Integrator<ExtrinsicMeanIntegratorTag, _Val>::integrateImpl() noexcept {
   const auto dim_sketch      = parameters_.dimSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
-  time0_ = MPI_Wtime();
+  moment0_ = MPI_Wtime();
 
   // Exchange Q
   la::memset0(collection_q_({nrow, nrow_all_}, "", "").unfold());
@@ -100,13 +100,13 @@ void Integrator<ExtrinsicMeanIntegratorTag, _Val>::integrateImpl() noexcept {
                matrix_qjs_("", IdxRange{j, j+1} * dim_sketch * num_sketch_each));
   }
 
-  time1_ = MPI_Wtime();
+  moment1_ = MPI_Wtime();
 
   // Bs := sum( Qjs' * Qjs )
   la::mm(matrix_qjs_.t(), matrix_qjs_, matrix_bjs_);
   mpi::reduceScatterBlock(matrix_bjs_, collection_bi_.unfold(), MPI_SUM, mpi_comm_);
 
-  time2_ = MPI_Wtime();
+  moment2_ = MPI_Wtime();
 
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
@@ -124,7 +124,7 @@ void Integrator<ExtrinsicMeanIntegratorTag, _Val>::integrateImpl() noexcept {
   }
   mpi::bcast(matrix_g0_, 0, mpi_comm_);
 
-  time3_ = MPI_Wtime();
+  moment3_ = MPI_Wtime();
 
   // Qbar := 0
   la::memset0(matrix_qbar_);
@@ -145,7 +145,7 @@ void Integrator<ExtrinsicMeanIntegratorTag, _Val>::integrateImpl() noexcept {
 
   }
 
-  time4_ = MPI_Wtime();
+  moment4_ = MPI_Wtime();
 
   // Qbar := sum( Qbar )
   mpi::reduce(matrix_qbar_, MPI_SUM, mpi_root_, mpi_comm_);
@@ -155,7 +155,7 @@ void Integrator<ExtrinsicMeanIntegratorTag, _Val>::integrateImpl() noexcept {
     gesvd_driver_(matrix_qbar_, vector_s_, matrix_empty_, matrix_empty_);
   }
 
-  time5_ = MPI_Wtime();
+  moment5_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ std::ostream& Integrator<ExtrinsicMeanIntegratorTag, _Val>::outputNameImpl(
 ///
 template <typename _Val>
 double Integrator<ExtrinsicMeanIntegratorTag, _Val>::timeImpl() const noexcept {
-  return time5_-time0_;
+  return moment5_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ double Integrator<ExtrinsicMeanIntegratorTag, _Val>::timeImpl() const noexcept {
 ///
 template <typename _Val>
 double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time1() const noexcept {
-  return time1_-time0_;
+  return moment1_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@ double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time1() const noexcept {
 ///
 template <typename _Val>
 double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time2() const noexcept {
-  return time2_-time1_;
+  return moment2_-moment1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,7 +198,7 @@ double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time2() const noexcept {
 ///
 template <typename _Val>
 double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time3() const noexcept {
-  return time3_-time2_;
+  return moment3_-moment2_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +206,7 @@ double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time3() const noexcept {
 ///
 template <typename _Val>
 double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time4() const noexcept {
-  return time4_-time3_;
+  return moment4_-moment3_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time4() const noexcept {
 ///
 template <typename _Val>
 double Integrator<ExtrinsicMeanIntegratorTag, _Val>::time5() const noexcept {
-  return time5_-time4_;
+  return moment5_-moment4_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

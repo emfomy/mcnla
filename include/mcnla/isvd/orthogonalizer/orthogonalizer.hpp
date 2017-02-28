@@ -56,7 +56,7 @@ namespace isvd {
 /// @tparam  _Val  The value type.
 ///
 template <class _Tag, typename _Val>
-class Orthogonalizer : public OrthogonalizerWrapper<Orthogonalizer<_Val, _Tag>> {
+class Orthogonalizer : public OrthogonalizerWrapper<Orthogonalizer<_Tag, _Val>> {
   static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD orthogonalizer!");
 };
 

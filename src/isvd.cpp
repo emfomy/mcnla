@@ -78,9 +78,10 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
     mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
+    std::cout << "Loaded A." << std::endl << std::endl;
     sizes = matrix_a.sizes();
   }
-  MPI_Bcast(&sizes, 2, MPI_INT, mpi_root, MPI_COMM_WORLD);
+  MPI_Bcast(&sizes, 2, mcnla::traits::MpiValTraits<mcnla::index_t>::datatype, mpi_root, MPI_COMM_WORLD);
   if ( mpi_rank != mpi_root ) {
     matrix_a.reconstruct(sizes);
   }
@@ -93,24 +94,25 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 4;
-  mcnla::index_t Nj      = ( argc > ++argi ) ? atoi(argv[argi]) : 4;
+  mcnla::index_t Nj      = ( argc > ++argi ) ? atof(argv[argi]) : 4;
   mcnla::index_t m       = matrix_a.nrow();
   mcnla::index_t n       = matrix_a.ncol();
-  mcnla::index_t k       = ( argc > ++argi ) ? atoi(argv[argi]) : 10;
-  mcnla::index_t p       = ( argc > ++argi ) ? atoi(argv[argi]) : 12;
+  mcnla::index_t k       = ( argc > ++argi ) ? atof(argv[argi]) : 10;
+  mcnla::index_t p       = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   ValType        tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
-  mcnla::index_t maxiter = ( argc > ++argi ) ? atoi(argv[argi]) : 256;
-  assert(k <= m && m <= n);
+  mcnla::index_t maxiter = ( argc > ++argi ) ? atof(argv[argi]) : 256;
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
             << ", n = " << n
             << ", k = " << k
             << ", p = " << p
             << ", N = " << Nj*mpi_size
-            << ", K = " << mpi_size
             << ", tol = " << tol
-            << ", maxiter = " << maxiter << std::endl << std::endl;
+            << ", maxiter = " << maxiter << std::endl;
+    std::cout << mpi_size << " nodes / "
+              << omp_get_max_threads() << " threads per node" << std::endl << std::endl;
   }
+  assert((k+p) <= m && m <= n);
 
   // ====================================================================================================================== //
   // Initialize driver

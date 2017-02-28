@@ -31,7 +31,7 @@ namespace detail {
 ///
 //@{
 static inline index_t vRngUniform(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, index_t *r, const index_t a, const index_t b
+    const index_t method, VSLStreamStatePtr stream, const index_t n, int *r, const int a, const int b
 ) noexcept { return viRngUniform(method, stream, n, r, a, b); }
 static inline index_t vRngUniform(
     const index_t method, VSLStreamStatePtr stream, const index_t n, float *r, const float a, const float b

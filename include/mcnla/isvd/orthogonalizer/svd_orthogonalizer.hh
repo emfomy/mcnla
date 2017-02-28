@@ -62,10 +62,10 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
   static constexpr const char* name_= "SVD Orthogonalizer";
 
   /// The starting time
-  double time0_;
+  double moment0_;
 
   /// The ending time of orthogonalization
-  double time1_;
+  double moment1_;
 
   /// The vector S.
   DenseVector<RealValType> vector_s_;

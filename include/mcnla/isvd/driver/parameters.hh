@@ -65,7 +65,7 @@ class Parameters {
   index_t over_rank_ = 12;
 
   /// The number of random sketches per MPI node.
-  index_t num_sketch_each_ = 0;
+  index_t num_sketch_each_ = 1;
 
   /// The maximum iteration.
   index_t max_iteration_ = 256;

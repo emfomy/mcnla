@@ -42,10 +42,10 @@ void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
   const auto dim_sketch = parameters_.dimSketch();
   const auto rank       = parameters_.rank();
 
-  time0_ = 0;
-  time1_ = 0;
-  time2_ = 0;
-  time3_ = 0;
+  moment0_ = 0;
+  moment1_ = 0;
+  moment2_ = 0;
+  moment3_ = 0;
 
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
@@ -79,19 +79,19 @@ void Former<SvdFormerTag, _Val>::formImpl(
   mcnla_assert_eq(matrix_a.sizes(),  std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  time0_ = MPI_Wtime();
+  moment0_ = MPI_Wtime();
 
   // Vt := Q' * A
   la::gemm(matrix_q.t(), matrix_a, matrix_vt_);
-  time1_ = MPI_Wtime();
+  moment1_ = MPI_Wtime();
 
   // Compute the SVD of Vt -> W * S * Vt
   gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
-  time2_ = MPI_Wtime();
+  moment2_ = MPI_Wtime();
 
   // U := Q * W
   la::gemm(matrix_q, matrix_w_, matrix_u_);
-  time3_ = MPI_Wtime();
+  moment3_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ std::ostream&Former<SvdFormerTag, _Val>::outputNameImpl(
 ///
 template <typename _Val>
 double Former<SvdFormerTag, _Val>::timeImpl() const noexcept {
-  return time3_-time0_;
+  return moment3_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ double Former<SvdFormerTag, _Val>::timeImpl() const noexcept {
 ///
 template <typename _Val>
 double Former<SvdFormerTag, _Val>::time1() const noexcept {
-  return time1_-time0_;
+  return moment1_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ double Former<SvdFormerTag, _Val>::time1() const noexcept {
 ///
 template <typename _Val>
 double Former<SvdFormerTag, _Val>::time2() const noexcept {
-  return time2_-time1_;
+  return moment2_-moment1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ double Former<SvdFormerTag, _Val>::time2() const noexcept {
 ///
 template <typename _Val>
 double Former<SvdFormerTag, _Val>::time3() const noexcept {
-  return time3_-time2_;
+  return moment3_-moment2_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

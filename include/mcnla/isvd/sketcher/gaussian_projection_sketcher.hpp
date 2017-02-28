@@ -45,9 +45,9 @@ void Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::initializeImpl() 
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  time0_ = 0;
-  time1_ = 0;
-  time2_ = 0;
+  moment0_ = 0;
+  moment1_ = 0;
+  moment2_ = 0;
 
   matrix_omegas_.reconstruct(ncol, dim_sketch * num_sketch_each);
 }
@@ -71,11 +71,11 @@ void Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::sketchImpl(
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  time0_ = MPI_Wtime();
+  moment0_ = MPI_Wtime();
 
   // Random sample Omega using normal Gaussian distribution
   random_driver_.gaussian(matrix_omegas_.vectorize());
-  time1_ = MPI_Wtime();
+  moment1_ = MPI_Wtime();
 
   // Q := A * Omega
   la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
@@ -83,7 +83,7 @@ void Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::sketchImpl(
     la::mm(matrix_a.t(), collection_q.unfold(), matrix_omegas_);
     la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
   }
-  time2_ = MPI_Wtime();
+  moment2_ = MPI_Wtime();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ std::ostream& Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::outputNa
 ///
 template <typename _Val, index_t _exponent>
 double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::timeImpl() const noexcept {
-  return time2_-time0_;
+  return moment2_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::timeImpl() cons
 ///
 template <typename _Val, index_t _exponent>
 double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::time1() const noexcept {
-  return time1_-time0_;
+  return moment1_-moment0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::time1() const n
 ///
 template <typename _Val, index_t _exponent>
 double Sketcher<GaussianProjectionSketcherTag<_exponent>, _Val>::time2() const noexcept {
-  return time2_-time1_;
+  return moment2_-moment1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh
-/// @brief   The definition of Kolmogorov-Nagumo-type integrator.
+/// @file    include/mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.hh
+/// @brief   The definition of naive Kolmogorov-Nagumo-type integrator.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
-#define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#ifndef MCNLA_ISVD_INTEGRATOR_NAIVE_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#define MCNLA_ISVD_INTEGRATOR_NAIVE_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
@@ -23,41 +23,38 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module_detail
-/// The Kolmogorov-Nagumo-type integrator tag.
-///
-struct KolmogorovNagumoIntegratorTag {};
-
 /// @ingroup  isvd_integrator_module
-template <typename _Val>
-using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Val>;
+/// The naive Kolmogorov-Nagumo-type integrator tag.
+///
+struct NaiveKolmogorovNagumoIntegratorTag {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
-/// The Kolmogorov-Nagumo-type integrator.
+/// The naive Kolmogorov-Nagumo-type integrator.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val  The scalar type.
 ///
 template <typename _Val>
-class Integrator<KolmogorovNagumoIntegratorTag, _Val>
-  : public IntegratorWrapper<KolmogorovNagumoIntegrator<_Val>> {
+class Integrator<NaiveKolmogorovNagumoIntegratorTag, _Val>
+  : public IntegratorWrapper<Integrator<NaiveKolmogorovNagumoIntegratorTag, _Val>> {
 
-  friend IntegratorWrapper<KolmogorovNagumoIntegrator<_Val>>;
+  friend IntegratorWrapper<Integrator<NaiveKolmogorovNagumoIntegratorTag, _Val>>;
 
  private:
 
-  using BaseType = IntegratorWrapper<KolmogorovNagumoIntegrator<_Val>>;
+  using ThisType = Integrator<NaiveKolmogorovNagumoIntegratorTag, _Val>;
+  using BaseType = IntegratorWrapper<Integrator<NaiveKolmogorovNagumoIntegratorTag, _Val>>;
 
  public:
 
-  using ValType        = _Val;
+  using ValType     = _Val;
 
   using ParametersType = Parameters<ValType>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
+  static constexpr const char* name_= "Naive Kolmogorov-Nagumo-Type Integrator";
 
   /// The starting time
   double moment0_;
@@ -74,32 +71,14 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
   /// The communication time of integrating
   double time2c_;
 
-  /// The number of rows of the matrix per MPI node.
-  index_t nrow_each_;
-
-  /// The number of rows of the matrix of all MPI nodes.
-  index_t nrow_all_;
-
   /// The collection Q.
   DenseMatrixCollection120<ValType> collection_q_;
-
-  /// The cut collection Q.
-  DenseMatrixCollection120<ValType> collection_q_cut_;
 
   /// The matrix Qs.
   DenseMatrixRowMajor<ValType> matrix_qs_;
 
-  /// The matrix Qjs.
-  DenseMatrixRowMajor<ValType> matrix_qjs_;
-
   /// The matrix Qc.
   DenseMatrixRowMajor<ValType> matrix_qc_;
-
-  /// The cut matrix Qc.
-  DenseMatrixRowMajor<ValType> matrix_qc_cut_;
-
-  /// The matrix Qcj.
-  DenseMatrixRowMajor<ValType> matrix_qcj_;
 
   /// The matrix Bs.
   DenseMatrixRowMajor<ValType> matrix_bs_;
@@ -113,8 +92,8 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
   /// The matrix C.
   DenseMatrixRowMajor<ValType> matrix_c_;
 
-  /// The matrix Xj.
-  DenseMatrixRowMajor<ValType> matrix_xj_;
+  /// The matrix X.
+  DenseMatrixRowMajor<ValType> matrix_x_;
 
   /// The temporary matrix.
   DenseMatrixRowMajor<ValType> matrix_tmp_;
@@ -125,7 +104,7 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
   /// The vector F.
   DenseVector<ValType> vector_f_;
 
-  /// The SYEV driver.
+  /// The SYEV engine.
   la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
@@ -166,8 +145,12 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
 
 };
 
+/// @ingroup  isvd_integrator_module
+template <typename _Val>
+using NaiveKolmogorovNagumoIntegrator = Integrator<NaiveKolmogorovNagumoIntegratorTag, _Val>;
+
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#endif  // MCNLA_ISVD_INTEGRATOR_NAIVE_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_

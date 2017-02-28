@@ -41,7 +41,7 @@ namespace isvd {
     mcnla::io::loadMatrixMarket(matrix_a, "a.mtx");
     sizes = matrix_a.sizes();
   }
-  MPI_Bcast(&sizes, 2, MPI_INT, mpi_root, MPI_COMM_WORLD);
+  MPI_Bcast(&sizes, 2, mcnla::traits::MpiValTraits<mcnla::index_t>::datatype, mpi_root, MPI_COMM_WORLD);
   if ( !mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
     matrix_a.reconstruct(sizes);
   }

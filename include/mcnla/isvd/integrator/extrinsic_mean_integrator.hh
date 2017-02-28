@@ -61,22 +61,22 @@ class Integrator<ExtrinsicMeanIntegratorTag, _Val>
   static constexpr const char* name_= "Extrinsic Mean Integrator";
 
   /// The starting time
-  double time0_;
+  double moment0_;
 
   /// The ending time of rearranging Q
-  double time1_;
+  double moment1_;
 
   /// The ending time of computing B
-  double time2_;
+  double moment2_;
 
   /// The ending time of computing G
-  double time3_;
+  double moment3_;
 
   /// The ending time of rotating Qi
-  double time4_;
+  double moment4_;
 
   /// The ending time of average Q
-  double time5_;
+  double moment5_;
 
   /// The number of rows of the matrix per MPI node.
   index_t nrow_each_;

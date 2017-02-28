@@ -38,9 +38,9 @@ class MmFunctor
  public:
 
   using ValType = ValT<_Matrix>;
-  using AType      = _Matrix;
-  using BType      = DenseMatrix<ValT<_Matrix>, _transb>;
-  using CType      = DenseMatrix<ValT<_Matrix>, _transc>;
+  using AType   = _Matrix;
+  using BType   = DenseMatrix<ValT<_Matrix>, _transb>;
+  using CType   = DenseMatrix<ValT<_Matrix>, _transc>;
 
  protected:
 

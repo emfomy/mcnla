@@ -60,13 +60,13 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
   static constexpr const char* name_= "Column Sampling Sketcher";
 
   /// The starting time
-  double time0_;
+  double moment0_;
 
   /// The ending time of random generating
-  double time1_;
+  double moment1_;
 
   /// The ending time of random sketching
-  double time2_;
+  double moment2_;
 
   /// The matrix Omega.
   DenseVector<index_t> vector_idxs_;

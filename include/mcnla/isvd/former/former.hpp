@@ -56,7 +56,7 @@ namespace isvd {
 /// @tparam  _Val  The value type.
 ///
 template <class _Tag, typename _Val>
-class Former : public FormerWrapper<Former<_Val, _Tag>> {
+class Former : public FormerWrapper<Former<_Tag, _Val>> {
   static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD former!");
 };
 

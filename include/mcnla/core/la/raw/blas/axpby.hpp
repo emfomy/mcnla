@@ -78,12 +78,12 @@ static inline void axpby(
 #else  // MCNLA_USE_MKL
 
 template <typename _Val>
-inline void axpby(
+static inline void axpby(
     const index_t n, const _Val alpha, const _Val* x, const index_t incx,
     const _Val beta, _Val* y, const index_t incy
 ) noexcept {
   scal(n, beta, y, incy);
-  axpy(n, alpha, x, incx, 1, y, incy);
+  axpy(n, alpha, x, incx, y, incy);
 }
 
 #endif  // MCNLA_USE_MKL
