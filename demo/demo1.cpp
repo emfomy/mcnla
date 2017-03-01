@@ -255,12 +255,9 @@ void check(
     const mcnla::matrix::DenseVector<ValType>         &vector_s,
           ValType &frerr
 ) noexcept {
-  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_a_tmp(matrix_a.sizes());
-  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_u_tmp(matrix_u.sizes());
-
   // A_tmp := A, U_tmp = U
-  mcnla::la::copy(matrix_a, matrix_a_tmp);
-  mcnla::la::copy(matrix_u, matrix_u_tmp);
+  auto matrix_a_tmp = matrix_a.copy();
+  auto matrix_u_tmp = matrix_u.copy();
 
   // A_tmp -= U * S * V'
   mcnla::la::mm("", vector_s.viewDiagonal(), matrix_u_tmp);

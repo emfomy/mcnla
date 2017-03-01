@@ -74,18 +74,13 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load matrix
   AType matrix_a;
-  auto sizes = matrix_a.sizes();
   if ( mpi_rank == mpi_root ) {
     std::cout << "Load A from " << argv[1] << "." << std::endl << std::endl;
-    mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
+  }
+  mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
+  if ( mpi_rank == mpi_root ) {
     std::cout << "Loaded A." << std::endl << std::endl;
-    sizes = matrix_a.sizes();
   }
-  MPI_Bcast(&sizes, 2, mcnla::traits::MpiValTraits<mcnla::index_t>::datatype, mpi_root, MPI_COMM_WORLD);
-  if ( mpi_rank != mpi_root ) {
-    matrix_a.reconstruct(sizes);
-  }
-  mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Initialize random seed
@@ -197,12 +192,9 @@ void check(
     const mcnla::matrix::DenseVector<ValType> &vector_s,
           ValType &frerr
 ) noexcept {
-  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_a_tmp(matrix_a.sizes());
-  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_u_tmp(matrix_u.sizes());
-
   // A_tmp := A, U_tmp = U
-  mcnla::la::copy(matrix_a, matrix_a_tmp);
-  mcnla::la::copy(matrix_u, matrix_u_tmp);
+  auto matrix_a_tmp = matrix_a.copy();
+  auto matrix_u_tmp = matrix_u.copy();
 
   // A_tmp -= U * S * V'
   mcnla::la::mm("", vector_s.viewDiagonal(), matrix_u_tmp);
