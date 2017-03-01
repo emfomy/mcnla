@@ -55,7 +55,7 @@ Array<_Val>::Array(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, use `dst.#valarray() = src.#valarray()`.
 ///
 template <typename _Val>
 Array<_Val>::Array(
@@ -80,7 +80,7 @@ Array<_Val>::Array(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, use `dst.#valarray() = src.#valarray()`.
 ///
 template <typename _Val>
 Array<_Val>& Array<_Val>::operator=(

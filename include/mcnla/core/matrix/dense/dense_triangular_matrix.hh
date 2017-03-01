@@ -47,7 +47,7 @@ struct Traits<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> {
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
-  using ValType = _Val;
+  using ValType     = _Val;
 
   using RealType    = matrix::DenseTriangularMatrix<RealValT<_Val>, _trans, _uplo>;
   using ComplexType = matrix::DenseTriangularMatrix<ComplexValT<_Val>, _trans, _uplo>;
@@ -138,6 +138,9 @@ class DenseTriangularMatrix
   // Operators
   inline DenseTriangularMatrix& operator=( const DenseTriangularMatrix &other ) noexcept;
   inline DenseTriangularMatrix& operator=( DenseTriangularMatrix &&other ) noexcept;
+
+  // Copy
+  inline DenseTriangularMatrix copy() const noexcept;
 
   // Gets information
   inline index_t size() const noexcept;

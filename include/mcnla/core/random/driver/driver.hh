@@ -39,7 +39,7 @@ class Driver {
 
  private:
 
-  using ValType = _Val;
+  using ValType    = _Val;
   using VectorType = DenseVector<ValType>;
 
  protected:

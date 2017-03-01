@@ -107,7 +107,7 @@ DenseMatrix<_Val, _trans>::DenseMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val, Trans _trans>
 DenseMatrix<_Val, _trans>::DenseMatrix(
@@ -127,7 +127,7 @@ DenseMatrix<_Val, _trans>::DenseMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val, Trans _trans>
 DenseMatrix<_Val, _trans>& DenseMatrix<_Val, _trans>::operator=(
@@ -146,6 +146,16 @@ DenseMatrix<_Val, _trans>& DenseMatrix<_Val, _trans>::operator=(
 ) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the matrix.
+///
+template <typename _Val, Trans _trans>
+DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::copy() const noexcept {
+  DenseMatrix retval(this->sizes(), this->pitch(), this->capacity());
+  retval.val().valarray() = this->val().valarray();
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

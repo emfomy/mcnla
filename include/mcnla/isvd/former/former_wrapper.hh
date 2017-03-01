@@ -36,7 +36,7 @@ class FormerWrapper : public utility::CrtpBase<_Derived, FormerWrapper<_Derived>
 
  public:
 
-  using ValType = ValT<_Derived>;
+  using ValType     = ValT<_Derived>;
   using RealValType = RealValT<ValType>;
 
   using ParametersType = Parameters<ValType>;

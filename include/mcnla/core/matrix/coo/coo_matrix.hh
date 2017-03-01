@@ -149,6 +149,9 @@ class CooMatrix
   inline CooMatrix& operator=( const CooMatrix &other ) noexcept;
   inline CooMatrix& operator=( CooMatrix &&other ) noexcept;
 
+  // Copy
+  inline CooMatrix copy() const noexcept;
+
   // Gets information
   inline index_t rowidxCapacity() const noexcept;
   inline index_t colidxCapacity() const noexcept;

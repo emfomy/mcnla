@@ -84,7 +84,7 @@ DenseVector<_Val>::DenseVector(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseVector<_Val>::DenseVector( const DenseVector &other ) noexcept
@@ -100,7 +100,7 @@ DenseVector<_Val>::DenseVector( DenseVector &&other ) noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseVector<_Val>& DenseVector<_Val>::operator=(
@@ -119,6 +119,16 @@ DenseVector<_Val>& DenseVector<_Val>::operator=(
 ) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the vector.
+///
+template <typename _Val>
+DenseVector<_Val> DenseVector<_Val>::copy() const noexcept {
+  DenseVector retval(this->sizes(), this->stride(), this->capacity());
+  retval.val().valarray() = this->val().valarray();
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

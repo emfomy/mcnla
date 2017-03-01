@@ -48,7 +48,7 @@ DenseStorage<_Val>::DenseStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseStorage<_Val>::DenseStorage(
@@ -68,7 +68,7 @@ DenseStorage<_Val>::DenseStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseStorage<_Val>& DenseStorage<_Val>::operator=(

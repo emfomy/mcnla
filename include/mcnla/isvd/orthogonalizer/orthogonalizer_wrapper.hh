@@ -36,7 +36,7 @@ class OrthogonalizerWrapper : public utility::CrtpBase<_Derived, OrthogonalizerW
 
  public:
 
-  using ValType = ValT<_Derived>;
+  using ValType        = ValT<_Derived>;
 
   using ParametersType = Parameters<ValType>;
 

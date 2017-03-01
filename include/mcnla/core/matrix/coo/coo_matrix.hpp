@@ -90,7 +90,7 @@ CooMatrix<_Val, _trans>::CooMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias).
 ///
 template <typename _Val, Trans _trans>
 CooMatrix<_Val, _trans>::CooMatrix(
@@ -110,7 +110,7 @@ CooMatrix<_Val, _trans>::CooMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias).
 ///
 template <typename _Val, Trans _trans>
 CooMatrix<_Val, _trans>& CooMatrix<_Val, _trans>::operator=(
@@ -129,6 +129,16 @@ CooMatrix<_Val, _trans>& CooMatrix<_Val, _trans>::operator=(
 ) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the matrix.
+///
+template <typename _Val, Trans _trans>
+CooMatrix<_Val, _trans> CooMatrix<_Val, _trans>::copy() const noexcept {
+  CooMatrix retval(this->sizes(), this->nnz(), this->capacity());
+  retval.val().valarray() = this->val().valarray();
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

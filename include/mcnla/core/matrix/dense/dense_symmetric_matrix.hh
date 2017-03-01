@@ -140,6 +140,9 @@ class DenseSymmetricMatrix
   inline DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other ) noexcept;
   inline DenseSymmetricMatrix& operator=( DenseSymmetricMatrix &&other ) noexcept;
 
+  // Copy
+  inline DenseSymmetricMatrix copy() const noexcept;
+
   // Gets information
   inline index_t size() const noexcept;
   inline index_t nnz() const noexcept;

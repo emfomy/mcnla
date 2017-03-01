@@ -47,7 +47,7 @@ class Integrator<NaiveKolmogorovNagumoIntegratorTag, _Val>
 
  public:
 
-  using ValType     = _Val;
+  using ValType        = _Val;
 
   using ParametersType = Parameters<ValType>;
 

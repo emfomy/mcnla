@@ -135,6 +135,9 @@ class CooVector
   inline CooVector& operator=( const CooVector &other ) noexcept;
   inline CooVector& operator=( CooVector &&other ) noexcept;
 
+  // Copy
+  inline CooVector copy() const noexcept;
+
   // Gets information
   inline index_t idxCapacity() const noexcept;
   inline index_t idxOffset() const noexcept;

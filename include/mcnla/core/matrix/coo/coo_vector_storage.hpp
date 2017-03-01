@@ -83,7 +83,7 @@ CooVectorStorage<_Val>::CooVectorStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 CooVectorStorage<_Val>::CooVectorStorage(
@@ -109,7 +109,7 @@ CooVectorStorage<_Val>::CooVectorStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 CooVectorStorage<_Val>& CooVectorStorage<_Val>::operator=(

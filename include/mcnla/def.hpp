@@ -21,6 +21,33 @@
 #include <type_traits>
 #include <mcnla/config.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The MCNLA namespace
+///
+namespace mcnla {
+
+/// The type of index.
+#ifndef MCNLA_USE_ILP64
+using index_t = std::int32_t;
+#else  // MCNLA_USE_ILP64
+using index_t = std::int64_t;
+#endif  // MCNLA_USE_ILP64
+
+/// The type of size.
+using size_t = std::size_t;
+
+/// The format width
+static constexpr size_t kOsValWidth = 14;
+static constexpr size_t kOsIdxWidth = 6;
+
+}  // namespace mcnla
+
+#ifdef MCNLA_USE_MKL
+#define MKL_Complex8 std::complex<float>
+#define MKL_Complex16 std::complex<double>
+#define MKL_INT mcnla::index_t
+#endif  // MCNLA_USE_MKL
+
 #ifndef MCNLA_USE_GTEST
 
 #define mcnla_assert_true( condition )   assert(condition);
@@ -56,33 +83,5 @@
 #define mcnla_assert_gele( val, bound1, bound2 )  { EXPECT_GE(val, bound1); EXPECT_LE(val, bound2); }
 
 #endif  // MCNLA_USE_GTEST
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The MCNLA namespace
-///
-namespace mcnla {
-
-/// The type of index.
-#ifndef MCNLA_USE_ILP64
-using index_t = std::int32_t;
-#else  // MCNLA_USE_ILP64
-using index_t = std::int64_t;
-#endif  // MCNLA_USE_ILP64
-
-/// The type of size.
-using size_t = std::size_t;
-
-/// The format width
-static constexpr size_t kOsValWidth = 14;
-static constexpr size_t kOsIdxWidth = 6;
-
-}  // namespace mcnla
-
-
-#ifdef MCNLA_USE_MKL
-#define MKL_Complex8 std::complex<float>
-#define MKL_Complex16 std::complex<double>
-#define MKL_INT mcnla::index_t
-#endif  // MCNLA_USE_MKL
 
 #endif  // MCNLA_DEF_HPP_

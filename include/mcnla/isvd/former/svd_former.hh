@@ -51,7 +51,7 @@ class Former<SvdFormerTag, _Val>
  public:
 
   using ValType        = _Val;
-  using RealValType = RealValT<ValType>;
+  using RealValType    = RealValT<ValType>;
 
   using ParametersType = Parameters<ValType>;
 

@@ -126,9 +126,13 @@ class DenseDiagonalMatrix
   inline DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other ) noexcept;
   inline DenseDiagonalMatrix& operator=( DenseDiagonalMatrix &&other ) noexcept;
 
+  // Copy
+  inline DenseDiagonalMatrix copy() const noexcept;
+
   // Gets information
   inline index_t size() const noexcept;
   inline index_t nnz() const noexcept;
+  inline index_t pitch() const noexcept;
 
   // Gets element
   inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;

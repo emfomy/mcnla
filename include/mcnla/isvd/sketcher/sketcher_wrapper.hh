@@ -36,7 +36,7 @@ class SketcherWrapper : public utility::CrtpBase<_Derived, SketcherWrapper<_Deri
 
  public:
 
-  using ValType = ValT<_Derived>;
+  using ValType        = ValT<_Derived>;
 
   using ParametersType = Parameters<ValType>;
 

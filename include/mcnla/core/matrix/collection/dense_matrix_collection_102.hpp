@@ -71,7 +71,7 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMatrixCollection(
@@ -95,7 +95,7 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseMatrixCollection102<_Val>& DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator=(

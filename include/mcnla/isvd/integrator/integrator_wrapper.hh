@@ -36,7 +36,7 @@ class IntegratorWrapper : public utility::CrtpBase<_Derived, IntegratorWrapper<_
 
  public:
 
-  using ValType = ValT<_Derived>;
+  using ValType        = ValT<_Derived>;
 
   using ParametersType = Parameters<ValType>;
 

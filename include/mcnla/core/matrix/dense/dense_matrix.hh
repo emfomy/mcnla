@@ -164,6 +164,9 @@ class DenseMatrix
   inline DenseMatrix& operator=( const DenseMatrix &other ) noexcept;
   inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
 
+  // Copy
+  inline DenseMatrix copy() const noexcept;
+
   // Gets information
   inline index_t nnz() const noexcept;
 

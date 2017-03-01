@@ -85,7 +85,7 @@ CooVector<_Val>::CooVector(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 CooVector<_Val>::CooVector( const CooVector &other ) noexcept
@@ -101,7 +101,7 @@ CooVector<_Val>::CooVector( CooVector &&other ) noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 CooVector<_Val>& CooVector<_Val>::operator=(
@@ -120,6 +120,16 @@ CooVector<_Val>& CooVector<_Val>::operator=(
 ) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the vector.
+///
+template <typename _Val>
+CooVector<_Val> CooVector<_Val>::copy() const noexcept {
+  CooVector retval(this->sizes(), this->nnz(), this->capacity());
+  retval.val().valarray() = this->val().valarray();
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

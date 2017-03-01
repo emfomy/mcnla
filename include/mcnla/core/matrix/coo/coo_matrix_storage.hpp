@@ -100,7 +100,7 @@ CooMatrixStorage<_Val>::CooMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, mcnla::la::copy.
 ///
 template <typename _Val>
 CooMatrixStorage<_Val>::CooMatrixStorage(
@@ -131,7 +131,7 @@ CooMatrixStorage<_Val>::CooMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, mcnla::la::copy.
 ///
 template <typename _Val>
 CooMatrixStorage<_Val>& CooMatrixStorage<_Val>::operator=(

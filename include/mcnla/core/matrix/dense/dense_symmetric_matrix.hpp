@@ -73,7 +73,7 @@ DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
@@ -93,7 +93,7 @@ DenseSymmetricMatrix<_Val, _trans, _uplo>::DenseSymmetricMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 DenseSymmetricMatrix<_Val, _trans, _uplo>& DenseSymmetricMatrix<_Val, _trans, _uplo>::operator=(
@@ -112,6 +112,16 @@ DenseSymmetricMatrix<_Val, _trans, _uplo>& DenseSymmetricMatrix<_Val, _trans, _u
 ) noexcept {
   BaseType::operator=(std::move(other));
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the matrix.
+///
+template <typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrix<_Val, _trans, _uplo> DenseSymmetricMatrix<_Val, _trans, _uplo>::copy() const noexcept {
+  DenseSymmetricMatrix retval(this->sizes(), this->pitch(), this->capacity());
+  retval.val().valarray() = this->val().valarray();
+  return retval;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

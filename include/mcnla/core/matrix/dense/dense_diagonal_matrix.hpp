@@ -73,7 +73,7 @@ DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
@@ -93,7 +93,7 @@ DenseDiagonalMatrix<_Val>::DenseDiagonalMatrix(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseDiagonalMatrix<_Val>& DenseDiagonalMatrix<_Val>::operator=(
@@ -115,6 +115,16 @@ DenseDiagonalMatrix<_Val>& DenseDiagonalMatrix<_Val>::operator=(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the matrix.
+///
+template <typename _Val>
+DenseDiagonalMatrix<_Val> DenseDiagonalMatrix<_Val>::copy() const noexcept {
+  DenseDiagonalMatrix retval(this->sizes(), this->pitch(), this->capacity());
+  retval.val().valarray() = this->val().valarray();
+  return retval;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
 template <typename _Val>
@@ -128,6 +138,14 @@ index_t DenseDiagonalMatrix<_Val>::size() const noexcept {
 template <typename _Val>
 index_t DenseDiagonalMatrix<_Val>::nnz() const noexcept {
   return this->size();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum size in the first dimension.
+///
+template <typename _Val>
+index_t DenseDiagonalMatrix<_Val>::pitch() const noexcept {
+  return this->stride()-1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

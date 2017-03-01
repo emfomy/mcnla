@@ -108,7 +108,7 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseMatrixStorage<_Val>::DenseMatrixStorage(
@@ -138,7 +138,7 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <typename _Val>
 DenseMatrixStorage<_Val>& DenseMatrixStorage<_Val>::operator=(

@@ -137,6 +137,9 @@ class DenseVector
   inline DenseVector& operator=( const DenseVector &other ) noexcept;
   inline DenseVector& operator=( DenseVector &&other ) noexcept;
 
+  // Copy
+  inline DenseVector copy() const noexcept;
+
   // Gets information
   inline index_t nnz() const noexcept;
 
