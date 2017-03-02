@@ -72,15 +72,15 @@ class CooTuple1Ptr {
 /// @ingroup  matrix_coo_module_detail
 /// @brief  Makes a COO tuple
 ///
-/// @param  val   The value.
-/// @param  idx0  The first index.
+/// @param  val  The value.
+/// @param  idx  The index.
 ///
 template <typename _Val, typename _Idx>
 inline CooTuple1<_Val, _Idx> makeCooTuple(
     _Val &val,
-    _Idx &idx0
+    _Idx &idx
 ) noexcept {
-  return CooTuple1<_Val, _Idx>(val, idx0);
+  return CooTuple1<_Val, _Idx>(val, idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

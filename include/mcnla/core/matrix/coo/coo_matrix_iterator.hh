@@ -44,8 +44,8 @@ struct Traits<matrix::CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   using ElemType      = std::tuple<_Idx>;
-  using ElemRefType   = matrix::CooTuple2<_Val, _Idx>;
-  using ElemPtrType   = matrix::CooTuple2Ptr<_Val, _Idx>;
+  using ElemRefType   = matrix::CooTuple2<_Val, _Idx, _trans>;
+  using ElemPtrType   = matrix::CooTuple2Ptr<_Val, _Idx, _trans>;
   using ContainerType = _Matrix;
 };
 
@@ -75,10 +75,10 @@ class CooMatrixIteratorBase : public IteratorBase<CooMatrixIteratorBase<_Val, _I
   static constexpr index_t ndim = 2;
   using ValType       = _Val;
   using IdxType       = _Idx;
-  using TupleType     = CooTuple2<_Val, _Idx>;
+  using TupleType     = CooTuple2<_Val, _Idx, _trans>;
   using ElemType      = std::tuple<_Idx>;
-  using ElemRefType   = CooTuple2<_Val, _Idx>;
-  using ElemPtrType   = CooTuple2Ptr<_Val, _Idx>;
+  using ElemRefType   = CooTuple2<_Val, _Idx, _trans>;
+  using ElemPtrType   = CooTuple2Ptr<_Val, _Idx, _trans>;
   using ContainerType = _Matrix;
 
   using BaseType      = IteratorBase<CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>>;

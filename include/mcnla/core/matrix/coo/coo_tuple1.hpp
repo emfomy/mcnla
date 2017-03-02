@@ -28,9 +28,9 @@ namespace matrix {
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>::CooTuple1(
     ValType& val,
-    IdxType& idx0
+    IdxType& idx
 ) noexcept
-  : IdxsType(idx0),
+  : IdxsType(idx),
     val_(val) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,9 +92,9 @@ CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator()(
     const ValType val,
-    const IdxType idx0
+    const IdxType idx
 ) noexcept {
-  std::get<0>(*this) = idx0;
+  std::get<0>(*this) = idx;
   val_ = val;
   return *this;
 }
@@ -120,7 +120,7 @@ std::ostream& operator<<(
     std::ostream &os,
     const CooTuple1<__Val, __Idx> &tuple
 ) {
-  return os << "(" << std::setw(kOsIdxWidth) << tuple.idx0() << ")  "
+  return os << "(" << std::setw(kOsIdxWidth) << tuple.idx() << ")  "
                    << std::setw(kOsValWidth) << tuple.val();
 }
 
@@ -138,6 +138,22 @@ _Val& CooTuple1<_Val, _Idx>::val() noexcept {
 template <typename _Val, typename _Idx>
 const _Val& CooTuple1<_Val, _Idx>::val() const noexcept {
   return val_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the index.
+///
+template <typename _Val, typename _Idx>
+_Idx& CooTuple1<_Val, _Idx>::idx() noexcept {
+  return this->idx();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  idx
+///
+template <typename _Val, typename _Idx>
+const _Idx& CooTuple1<_Val, _Idx>::idx() const noexcept {
+  return this->idx();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

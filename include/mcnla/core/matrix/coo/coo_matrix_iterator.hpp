@@ -84,8 +84,8 @@ _Idx& CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::idx1() const noexcept 
 /// @brief  Gets the tuple.
 ///
 template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
-CooTuple2<_Val, _Idx> CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::tuple() const noexcept {
-  return TupleType(val(), idx0(), idx1());
+CooTuple2<_Val, _Idx, _trans> CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::tuple() const noexcept {
+  return TupleType(val(), rowidx(), colidx());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ index_t CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::pos() const noexcept
 /// @brief  Gets the element reference.
 ///
 template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
-CooTuple2<_Val, _Idx> CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::elemRef() const noexcept {
+CooTuple2<_Val, _Idx, _trans> CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::elemRef() const noexcept {
   return tuple();
 }
 
@@ -110,7 +110,7 @@ CooTuple2<_Val, _Idx> CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::elemRe
 /// @brief  Gets the element pointer.
 ///
 template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
-CooTuple2Ptr<_Val, _Idx> CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::elemPtr() const noexcept {
+CooTuple2Ptr<_Val, _Idx, _trans> CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>::elemPtr() const noexcept {
   return ElemPtrType(tuple());
 }
 

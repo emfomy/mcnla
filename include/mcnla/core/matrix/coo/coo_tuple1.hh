@@ -51,7 +51,7 @@ class CooTuple1 : public std::tuple<_Idx&> {
 
   // Constructors
   CooTuple1() = delete;
-  CooTuple1( ValType& val, IdxType& idx0 ) noexcept;
+  CooTuple1( ValType& val, IdxType& idx ) noexcept;
   CooTuple1( ValType& val, IdxsType& idxs ) noexcept;
   CooTuple1( const CooTuple1 &other ) noexcept;
 
@@ -61,7 +61,7 @@ class CooTuple1 : public std::tuple<_Idx&> {
   inline CooTuple1& operator=( const IdxsType idxs ) noexcept;
 
   // Assigns value
-  inline CooTuple1& operator()( const ValType val, const IdxType idx0 ) noexcept;
+  inline CooTuple1& operator()( const ValType val, const IdxType idx ) noexcept;
   inline CooTuple1& operator()( const ValType val, const IdxsType idxs ) noexcept;
 
   // Operators
@@ -71,6 +71,8 @@ class CooTuple1 : public std::tuple<_Idx&> {
   // Gets data
   inline       ValType& val() noexcept;
   inline const ValType& val() const noexcept;
+  inline       IdxType& idx() noexcept;
+  inline const IdxType& idx() const noexcept;
   inline       IdxType& idx0() noexcept;
   inline const IdxType& idx0() const noexcept;
   inline       IdxsType& idxs() noexcept;

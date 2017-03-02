@@ -25,22 +25,22 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given data.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>::CooTuple2(
-    ValType& val,
-    IdxType& idx0,
-    IdxType& idx1
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>::CooTuple2(
+    ValType &val,
+    IdxType &rowidx,
+    IdxType &colidx
 ) noexcept
-  : IdxsType(idx0, idx1),
+  : IdxsType(toIdxs(rowidx, colidx)),
     val_(val) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given data.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>::CooTuple2(
-    ValType& val,
-    IdxsType& idxs
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>::CooTuple2(
+    ValType  &val,
+    IdxsType &idxs
 ) noexcept
   : IdxsType(idxs),
     val_(val) {}
@@ -48,16 +48,16 @@ CooTuple2<_Val, _Idx>::CooTuple2(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>::CooTuple2( const CooTuple2 &other ) noexcept
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>::CooTuple2( const CooTuple2 &other ) noexcept
   : IdxsType(other),
     val_(other.val_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator=(
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
     const CooTuple2 &other
 ) noexcept {
   IdxsType::operator=(other);
@@ -68,8 +68,8 @@ CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Assignment operator.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator=(
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
     const ValType val
 ) noexcept {
   val_ = val;
@@ -79,8 +79,8 @@ CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Assignment operator.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator=(
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
     const IdxsType idxs
 ) noexcept {
   IdxsType::operator=(idxs);
@@ -90,14 +90,14 @@ CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Assign value.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator()(
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator()(
     const ValType val,
-    const IdxType idx0,
-    const IdxType idx1
+    const IdxType rowidx,
+    const IdxType colidx
 ) noexcept {
-  std::get<0>(*this) = idx0;
-  std::get<1>(*this) = idx1;
+  this->rowidx() = rowidx;
+  this->colidx() = rowidx;
   val_ = val;
   return *this;
 }
@@ -105,8 +105,8 @@ CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Assign value.
 ///
-template <typename _Val, typename _Idx>
-CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator()(
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator()(
     const ValType val,
     const IdxsType idxs
 ) noexcept {
@@ -118,78 +118,121 @@ CooTuple2<_Val, _Idx>& CooTuple2<_Val, _Idx>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <typename __Val, typename __Idx>
+template <typename __Val, typename __Idx, Trans __trans>
 std::ostream& operator<<(
     std::ostream &os,
-    const CooTuple2<__Val, __Idx> &tuple
+    const CooTuple2<__Val, __Idx, __trans> &tuple
 ) {
-  return os << "(" << std::setw(kOsIdxWidth) << tuple.idx0() << ", "
-                   << std::setw(kOsIdxWidth) << tuple.idx1() << ")  "
+  return os << "(" << std::setw(kOsIdxWidth) << tuple.rowidx() << ", "
+                   << std::setw(kOsIdxWidth) << tuple.colidx() << ")  "
                    << std::setw(kOsValWidth) << tuple.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
-template <typename _Val, typename _Idx>
-_Val& CooTuple2<_Val, _Idx>::val() noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+_Val& CooTuple2<_Val, _Idx, _trans>::val() noexcept {
   return val_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  val
 ///
-template <typename _Val, typename _Idx>
-const _Val& CooTuple2<_Val, _Idx>::val() const noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+const _Val& CooTuple2<_Val, _Idx, _trans>::val() const noexcept {
   return val_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the row index.
+///
+template <typename _Val, typename _Idx, Trans _trans>
+_Idx& CooTuple2<_Val, _Idx, _trans>::rowidx() noexcept {
+  return !isTrans(_trans) ? this->idx0() : this->idx1();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  rowidx
+///
+template <typename _Val, typename _Idx, Trans _trans>
+const _Idx& CooTuple2<_Val, _Idx, _trans>::rowidx() const noexcept {
+  return !isTrans(_trans) ? this->idx0() : this->idx1();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the column index.
+///
+template <typename _Val, typename _Idx, Trans _trans>
+_Idx& CooTuple2<_Val, _Idx, _trans>::colidx() noexcept {
+  return !isTrans(_trans) ? this->idx1() : this->idx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  colidx
+///
+template <typename _Val, typename _Idx, Trans _trans>
+const _Idx& CooTuple2<_Val, _Idx, _trans>::colidx() const noexcept {
+  return !isTrans(_trans) ? this->idx1() : this->idx0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the first index.
 ///
-template <typename _Val, typename _Idx>
-_Idx& CooTuple2<_Val, _Idx>::idx0() noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+_Idx& CooTuple2<_Val, _Idx, _trans>::idx0() noexcept {
   return std::get<0>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  idx0
 ///
-template <typename _Val, typename _Idx>
-const _Idx& CooTuple2<_Val, _Idx>::idx0() const noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+const _Idx& CooTuple2<_Val, _Idx, _trans>::idx0() const noexcept {
   return std::get<0>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second index.
 ///
-template <typename _Val, typename _Idx>
-_Idx& CooTuple2<_Val, _Idx>::idx1() noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+_Idx& CooTuple2<_Val, _Idx, _trans>::idx1() noexcept {
   return std::get<1>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  idx1
 ///
-template <typename _Val, typename _Idx>
-const _Idx& CooTuple2<_Val, _Idx>::idx1() const noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+const _Idx& CooTuple2<_Val, _Idx, _trans>::idx1() const noexcept {
   return std::get<1>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the indices.
+/// @brief  Gets the indices (storage order).
 ///
-template <typename _Val, typename _Idx>
-std::tuple<_Idx&, _Idx&>& CooTuple2<_Val, _Idx>::idxs() noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+std::tuple<_Idx&, _Idx&>& CooTuple2<_Val, _Idx, _trans>::idxs() noexcept {
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  idxs
 ///
-template <typename _Val, typename _Idx>
-const std::tuple<_Idx&, _Idx&>& CooTuple2<_Val, _Idx>::idxs() const noexcept {
+template <typename _Val, typename _Idx, Trans _trans>
+const std::tuple<_Idx&, _Idx&>& CooTuple2<_Val, _Idx, _trans>::idxs() const noexcept {
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to the indices (storage order).
+///
+template <typename _Val, typename _Idx, Trans _trans>
+std::tuple<_Idx&, _Idx&> CooTuple2<_Val, _Idx, _trans>::toIdxs(
+    IdxType &rowidx,
+    IdxType &colidx
+) const noexcept {
+  return !isTrans(_trans) ? IdxsType(rowidx, colidx) : IdxsType(colidx, rowidx);
 }
 
 }  // namespace matrix
