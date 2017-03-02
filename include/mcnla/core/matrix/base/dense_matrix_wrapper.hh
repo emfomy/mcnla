@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/base/vector_wrapper.hh
-/// @brief   The definition of vector wrapper.
+/// @file    include/mcnla/core/matrix/base/dense_matrix_wrapper.hh
+/// @brief   The definition of dense matrix wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HH_
-#define MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HH_
+#ifndef MCNLA_CORE_MATRIX_BASE_DENSE_MATRIX_WRAPPER_HH_
+#define MCNLA_CORE_MATRIX_BASE_DENSE_MATRIX_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <tuple>
-#include <mcnla/core/utility/crtp.hpp>
+#include <iostream>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,28 +25,23 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_base_module
-/// The vector wrapper.
+/// The dense matrix wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>> {
-
- private:
-
-  using SizesType = std::tuple<index_t>;
+class DenseMatrixWrapper : public MatrixWrapper<_Derived> {
 
  protected:
 
   // Constructors
-  inline VectorWrapper() noexcept = default;
+  inline DenseMatrixWrapper() noexcept = default;
 
  public:
 
-  // Gets information
-  inline index_t   length() const noexcept;
-  inline index_t   nelem() const noexcept;
-  inline SizesType sizes() const noexcept;
+  // Operators
+  template <class __Derived>
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixWrapper<__Derived> &wrapper );
 
 };
 
@@ -54,4 +49,4 @@ class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HH_
+#endif  // MCNLA_CORE_MATRIX_BASE_DENSE_MATRIX_WRAPPER_HH_

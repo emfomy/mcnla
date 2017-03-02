@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -85,10 +85,11 @@ namespace matrix {
 template <typename _Val>
 class DenseDiagonalMatrix
   : public DenseVectorStorage<_Val>,
-    public MatrixWrapper<DenseDiagonalMatrix<_Val>>,
+    public DenseMatrixWrapper<DenseDiagonalMatrix<_Val>>,
     public InvertibleWrapper<DenseDiagonalMatrix<_Val>> {
 
   friend MatrixWrapper<DenseDiagonalMatrix<_Val>>;
+  friend DenseMatrixWrapper<DenseDiagonalMatrix<_Val>>;
   friend InvertibleWrapper<DenseDiagonalMatrix<_Val>>;
 
  public:

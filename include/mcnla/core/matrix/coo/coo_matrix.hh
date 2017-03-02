@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/sparse_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
@@ -96,12 +97,14 @@ template <typename _Val, Trans _trans = Trans::NORMAL>
 class CooMatrix
   : public CooMatrixStorage<_Val>,
     public MatrixWrapper<CooMatrix<_Val, _trans>>,
+    public SparseWrapper<CooMatrix<_Val, _trans>>,
     public IterableWrapper<CooMatrix<_Val, _trans>>,
     public InvertibleWrapper<CooMatrix<_Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
   friend MatrixWrapper<CooMatrix<_Val, _trans>>;
+  friend SparseWrapper<CooMatrix<_Val, _trans>>;
   friend IterableWrapper<CooMatrix<_Val, _trans>>;
   friend InvertibleWrapper<CooMatrix<_Val, _trans>>;
 

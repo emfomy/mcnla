@@ -9,7 +9,6 @@
 #define MCNLA_CORE_MATRIX_BASE_MATRIX_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <iostream>
 #include <tuple>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -43,10 +42,6 @@ class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>
   inline MatrixWrapper() noexcept = default;
 
  public:
-
-  // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const MatrixWrapper<__Derived> &wrapper );
 
   // Gets information
   inline index_t   nrow() const noexcept;

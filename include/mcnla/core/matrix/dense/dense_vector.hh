@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/vector_wrapper.hpp>
+#include <mcnla/core/matrix/base/dense_vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -91,11 +91,12 @@ namespace matrix {
 template <typename _Val>
 class DenseVector
   : public DenseVectorStorage<_Val>,
-    public VectorWrapper<DenseVector<_Val>>,
+    public DenseVectorWrapper<DenseVector<_Val>>,
     public IterableWrapper<DenseVector<_Val>>,
     public InvertibleWrapper<DenseVector<_Val>> {
 
   friend VectorWrapper<DenseVector<_Val>>;
+  friend DenseVectorWrapper<DenseVector<_Val>>;
   friend IterableWrapper<DenseVector<_Val>>;
   friend InvertibleWrapper<DenseVector<_Val>>;
 

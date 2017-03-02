@@ -22,21 +22,6 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Output to stream.
-///
-template <class __Derived>
-std::ostream& operator<<(
-    std::ostream &os,
-    const VectorWrapper<__Derived> &wrapper
-) {
-  auto &vector = wrapper.derived();
-  for ( index_t i = 0; i < vector.length(); ++i ) {
-    os << std::setw(kOsValWidth) << vector(i) << "  ";
-  }
-  return os << '\n';
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the length.
 ///
 template <class _Derived>

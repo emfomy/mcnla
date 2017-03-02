@@ -145,7 +145,7 @@ const _Val& CooTuple1<_Val, _Idx>::val() const noexcept {
 ///
 template <typename _Val, typename _Idx>
 _Idx& CooTuple1<_Val, _Idx>::idx() noexcept {
-  return this->idx();
+  return this->idx0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ _Idx& CooTuple1<_Val, _Idx>::idx() noexcept {
 ///
 template <typename _Val, typename _Idx>
 const _Idx& CooTuple1<_Val, _Idx>::idx() const noexcept {
-  return this->idx();
+  return this->idx0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

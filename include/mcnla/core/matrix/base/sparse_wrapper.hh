@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/base/vector_wrapper.hh
-/// @brief   The definition of vector wrapper.
+/// @file    include/mcnla/core/matrix/base/sparse_wrapper.hh
+/// @brief   The definition of sparse wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HH_
-#define MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HH_
+#ifndef MCNLA_CORE_MATRIX_BASE_SPARSE_WRAPPER_HH_
+#define MCNLA_CORE_MATRIX_BASE_SPARSE_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <tuple>
+#include <iostream>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -25,28 +25,23 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_base_module
-/// The vector wrapper.
+/// The sparse wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>> {
-
- private:
-
-  using SizesType = std::tuple<index_t>;
+class SparseWrapper : public utility::CrtpBase<_Derived, SparseWrapper<_Derived>> {
 
  protected:
 
   // Constructors
-  inline VectorWrapper() noexcept = default;
+  inline SparseWrapper() noexcept = default;
 
  public:
 
-  // Gets information
-  inline index_t   length() const noexcept;
-  inline index_t   nelem() const noexcept;
-  inline SizesType sizes() const noexcept;
+  // Operators
+  template <class __Derived>
+  friend inline std::ostream& operator<<( std::ostream &os, const SparseWrapper<__Derived> &wrapper );
 
 };
 
@@ -54,4 +49,4 @@ class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HH_
+#endif  // MCNLA_CORE_MATRIX_BASE_SPARSE_WRAPPER_HH_

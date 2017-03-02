@@ -22,24 +22,6 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Output to stream.
-///
-template <class __Derived>
-std::ostream& operator<<(
-    std::ostream &os,
-    const MatrixWrapper<__Derived> &wrapper
-) {
-  auto &matrix = wrapper.derived();
-  for ( index_t i = 0; i < matrix.nrow(); ++i ) {
-    for ( index_t j = 0; j < matrix.ncol(); ++j ) {
-      os << std::setw(kOsValWidth) << matrix(i, j) << "  ";
-    }
-    os << '\n';
-  }
-  return os;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived>
