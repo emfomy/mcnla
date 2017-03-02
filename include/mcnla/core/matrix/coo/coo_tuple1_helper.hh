@@ -113,8 +113,8 @@ namespace std {
 ///
 template <typename _Val, typename _Idx>
 inline void swap(
-    mcnla::matrix::CooTuple1<_Val, _Idx> &a,
-    mcnla::matrix::CooTuple1<_Val, _Idx> &b
+    mcnla::matrix::CooTuple1<_Val, _Idx> a,
+    mcnla::matrix::CooTuple1<_Val, _Idx> b
 ) noexcept {
   std::swap(a.val(), b.val());
   std::swap(a.idxs(), b.idxs());

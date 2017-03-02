@@ -43,7 +43,7 @@ template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
 struct Traits<matrix::CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
   static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
-  using ElemType      = std::tuple<_Idx>;
+  using ElemType      = std::tuple<_Idx, _Idx>;
   using ElemRefType   = matrix::CooTuple2<_Val, _Idx, _trans>;
   using ElemPtrType   = matrix::CooTuple2Ptr<_Val, _Idx, _trans>;
   using ContainerType = _Matrix;

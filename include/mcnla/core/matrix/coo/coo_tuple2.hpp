@@ -31,7 +31,7 @@ CooTuple2<_Val, _Idx, _trans>::CooTuple2(
     IdxType &rowidx,
     IdxType &colidx
 ) noexcept
-  : IdxsType(toIdxs(rowidx, colidx)),
+  : BaseType(toIdxs(rowidx, colidx)),
     val_(val) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,9 +40,9 @@ CooTuple2<_Val, _Idx, _trans>::CooTuple2(
 template <typename _Val, typename _Idx, Trans _trans>
 CooTuple2<_Val, _Idx, _trans>::CooTuple2(
     ValType  &val,
-    IdxsType &idxs
+    BaseType &idxs
 ) noexcept
-  : IdxsType(idxs),
+  : BaseType(idxs),
     val_(val) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ CooTuple2<_Val, _Idx, _trans>::CooTuple2(
 ///
 template <typename _Val, typename _Idx, Trans _trans>
 CooTuple2<_Val, _Idx, _trans>::CooTuple2( const CooTuple2 &other ) noexcept
-  : IdxsType(other),
+  : BaseType(other),
     val_(other.val_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ template <typename _Val, typename _Idx, Trans _trans>
 CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
     const CooTuple2 &other
 ) noexcept {
-  IdxsType::operator=(other);
+  BaseType::operator=(other);
   val_ = (other.val_);
   return *this;
 }
@@ -70,7 +70,7 @@ CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
 ///
 template <typename _Val, typename _Idx, Trans _trans>
 CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
-    const ValType val
+    const ValType &val
 ) noexcept {
   val_ = val;
   return *this;
@@ -81,9 +81,20 @@ CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
 ///
 template <typename _Val, typename _Idx, Trans _trans>
 CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
-    const IdxsType idxs
+    const IdxsType &idxs
 ) noexcept {
-  IdxsType::operator=(idxs);
+  BaseType::operator=(idxs);
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Assignment operator.
+///
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
+    const BaseType &idxs
+) noexcept {
+  BaseType::operator=(idxs);
   return *this;
 }
 
@@ -92,12 +103,12 @@ CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator=(
 ///
 template <typename _Val, typename _Idx, Trans _trans>
 CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator()(
-    const ValType val,
-    const IdxType rowidx,
-    const IdxType colidx
+    const ValType &val,
+    const IdxType &rowidx,
+    const IdxType &colidx
 ) noexcept {
   this->rowidx() = rowidx;
-  this->colidx() = rowidx;
+  this->colidx() = colidx;
   val_ = val;
   return *this;
 }
@@ -107,10 +118,23 @@ CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator()(
 ///
 template <typename _Val, typename _Idx, Trans _trans>
 CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator()(
-    const ValType val,
-    const IdxsType idxs
+    const ValType  &val,
+    const IdxsType &idxs
 ) noexcept {
-  IdxsType::operator=(idxs);
+  BaseType::operator=(idxs);
+  val_ = val;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Assign value.
+///
+template <typename _Val, typename _Idx, Trans _trans>
+CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator()(
+    const ValType  &val,
+    const BaseType &idxs
+) noexcept {
+  BaseType::operator=(idxs);
   val_ = val;
   return *this;
 }
@@ -232,7 +256,7 @@ std::tuple<_Idx&, _Idx&> CooTuple2<_Val, _Idx, _trans>::toIdxs(
     IdxType &rowidx,
     IdxType &colidx
 ) const noexcept {
-  return !isTrans(_trans) ? IdxsType(rowidx, colidx) : IdxsType(colidx, rowidx);
+  return !isTrans(_trans) ? BaseType(rowidx, colidx) : BaseType(colidx, rowidx);
 }
 
 }  // namespace matrix

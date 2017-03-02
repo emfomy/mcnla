@@ -41,7 +41,8 @@ class CooTuple2 : public std::tuple<_Idx&, _Idx&> {
 
   using ValType  = _Val;
   using IdxType  = _Idx;
-  using IdxsType = std::tuple<_Idx&, _Idx&>;
+  using IdxsType = std::tuple<_Idx, _Idx>;
+  using BaseType = std::tuple<_Idx&, _Idx&>;
 
  protected:
 
@@ -53,17 +54,19 @@ class CooTuple2 : public std::tuple<_Idx&, _Idx&> {
   // Constructors
   CooTuple2() = delete;
   CooTuple2( ValType &val, IdxType &rowidx, IdxType &colidx ) noexcept;
-  CooTuple2( ValType &val, IdxsType &idxs ) noexcept;
+  CooTuple2( ValType &val, BaseType &idxs ) noexcept;
   CooTuple2( const CooTuple2 &other ) noexcept;
 
   // Assignment operators
   inline CooTuple2& operator=( const CooTuple2 &other ) noexcept;
-  inline CooTuple2& operator=( const ValType val ) noexcept;
-  inline CooTuple2& operator=( const IdxsType idxs ) noexcept;
+  inline CooTuple2& operator=( const ValType &val ) noexcept;
+  inline CooTuple2& operator=( const IdxsType &idxs ) noexcept;
+  inline CooTuple2& operator=( const BaseType &idxs ) noexcept;
 
   // Assigns value
-  inline CooTuple2& operator()( const ValType val, const IdxType rowidx, const IdxType colidx ) noexcept;
-  inline CooTuple2& operator()( const ValType val, const IdxsType idxs ) noexcept;
+  inline CooTuple2& operator()( const ValType &val, const IdxType &rowidx, const IdxType &colidx ) noexcept;
+  inline CooTuple2& operator()( const ValType &val, const IdxsType &idxs ) noexcept;
+  inline CooTuple2& operator()( const ValType &val, const BaseType &idxs ) noexcept;
 
   // Operators
   template <typename __Val, typename __Idx, Trans __Trans>
@@ -80,13 +83,13 @@ class CooTuple2 : public std::tuple<_Idx&, _Idx&> {
   inline const IdxType& idx0() const noexcept;
   inline       IdxType& idx1() noexcept;
   inline const IdxType& idx1() const noexcept;
-  inline       IdxsType& idxs() noexcept;
-  inline const IdxsType& idxs() const noexcept;
+  inline       BaseType& idxs() noexcept;
+  inline const BaseType& idxs() const noexcept;
 
  protected:
 
   // Convert to storage order
-  inline IdxsType toIdxs( IdxType &rowidx, IdxType &colidx ) const noexcept;
+  inline BaseType toIdxs( IdxType &rowidx, IdxType &colidx ) const noexcept;
 
 };
 

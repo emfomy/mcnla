@@ -30,7 +30,7 @@ CooTuple1<_Val, _Idx>::CooTuple1(
     ValType& val,
     IdxType& idx
 ) noexcept
-  : IdxsType(idx),
+  : BaseType(idx),
     val_(val) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,9 +39,9 @@ CooTuple1<_Val, _Idx>::CooTuple1(
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>::CooTuple1(
     ValType& val,
-    IdxsType& idxs
+    BaseType& idxs
 ) noexcept
-  : IdxsType(idxs),
+  : BaseType(idxs),
     val_(val) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ CooTuple1<_Val, _Idx>::CooTuple1(
 ///
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>::CooTuple1( const CooTuple1 &other ) noexcept
-  : IdxsType(other),
+  : BaseType(other),
     val_(other.val_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
     const CooTuple1 &other
 ) noexcept {
-  IdxsType::operator=(other);
+  BaseType::operator=(other);
   val_ = (other.val_);
   return *this;
 }
@@ -69,7 +69,7 @@ CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
 ///
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
-    const ValType val
+    const ValType &val
 ) noexcept {
   val_ = val;
   return *this;
@@ -80,9 +80,20 @@ CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
 ///
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
-    const IdxsType idxs
+    const IdxsType &idxs
 ) noexcept {
-  IdxsType::operator=(idxs);
+  BaseType::operator=(idxs);
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Assignment operator.
+///
+template <typename _Val, typename _Idx>
+CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
+    const BaseType &idxs
+) noexcept {
+  BaseType::operator=(idxs);
   return *this;
 }
 
@@ -91,8 +102,8 @@ CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator=(
 ///
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator()(
-    const ValType val,
-    const IdxType idx
+    const ValType &val,
+    const IdxType &idx
 ) noexcept {
   std::get<0>(*this) = idx;
   val_ = val;
@@ -104,10 +115,23 @@ CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator()(
 ///
 template <typename _Val, typename _Idx>
 CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator()(
-    const ValType val,
-    const IdxsType idxs
+    const ValType  &val,
+    const IdxsType &idxs
 ) noexcept {
-  IdxsType::operator=(idxs);
+  BaseType::operator=(idxs);
+  val_ = val;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Assign value.
+///
+template <typename _Val, typename _Idx>
+CooTuple1<_Val, _Idx>& CooTuple1<_Val, _Idx>::operator()(
+    const ValType  &val,
+    const BaseType &idxs
+) noexcept {
+  BaseType::operator=(idxs);
   val_ = val;
   return *this;
 }
