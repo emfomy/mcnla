@@ -98,7 +98,10 @@ ccmake <path-to-source>
 
 * Possible issues:
 	- Not enough memory. You might request a vector/matrix which size exceed your memory size.
-	- Index overflow. Use 64-bit integer instead of 32-bit integer. For example, if you request a `1e5` x `1e5` matrix, there will `1e10` elements, which is larger than the maximum number in 32-bit integer (about `2.1e9`). Using 64-bit integer may solve this problem.
+	- Index overflow. Use 64-bit integer instead of 32-bit integer. For example, if you request a `1e5` x `1e5` matrix, there will be `1e10` elements, which is larger than the maximum number in 32-bit integer (about `2.1e9`). Using 64-bit integer may solve this problem.
 
 ## Reference
 * [Ting-Li Chen, Dawei D. Chang, Su-Yun Huang, Hung Chen, Chienyao Lin, Weichung Wang, “Integrating Multiple Random Sketches for Singular Value Decomposition”](https://arxiv.org/abs/1608.08285)
+
+## License
+* @ref LICENSE.md "MIT License"
