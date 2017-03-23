@@ -22,11 +22,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, typename _Idx> class CooTuple1;
-template <typename _Val, typename _Idx> class CooValueTuple1;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_coo_module_detail
 /// The 1-dimensional COO tuple.
@@ -85,48 +80,6 @@ class CooTuple1 : public std::tuple<_Idx&> {
   inline const IdxType& idx0() const noexcept;
   inline       BaseType& idxs() noexcept;
   inline const BaseType& idxs() const noexcept;
-
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module_detail
-/// The 1-dimensional COO value tuple.
-///
-/// @tparam  _Val  The value type.
-/// @tparam  _Idx  The index type.
-///
-/// @note  The comparison operators only compare the indices.
-///
-template <typename _Val, typename _Idx>
-class CooValueTuple1 : public std::tuple<_Idx> {
-
-  static_assert(std::is_integral<_Idx>::value, "'_Idx' is not a integer!");
-
- private:
-
-  using ValType  = _Val;
-  using IdxType  = _Idx;
-  using IdxsType = std::tuple<_Idx>;
-  using BaseType = std::tuple<_Idx&>;
-
- protected:
-
-  /// The value.
-  ValType val_;
-
- public:
-
-  // Constructors
-  CooTuple1() = delete;
-  CooTuple1( ValType &val, IdxType &idx ) noexcept;
-  CooTuple1( ValType &val, BaseType &idxs ) noexcept;
-  CooTuple1( const CooTuple1 &other ) noexcept;
-
-  // Assignment operators
-  inline CooTuple1& operator=( const CooTuple1 &other ) noexcept;
-  inline CooTuple1& operator=( const ValType &val ) noexcept;
-  inline CooTuple1& operator=( const IdxsType &idxs ) noexcept;
-  inline CooTuple1& operator=( const BaseType &idxs ) noexcept;
 
 };
 
