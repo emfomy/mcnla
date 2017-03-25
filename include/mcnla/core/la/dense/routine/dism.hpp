@@ -102,7 +102,7 @@ inline void dismImpl1(
   dismImpl2(b.t(), a.t(), alpha);
 }
 
-template <typename _Val, Trans _transb>
+template <typename _Val, Trans _transb, bool dummy = 0>
 inline void dismImpl1(
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transb> &b,
@@ -111,7 +111,7 @@ inline void dismImpl1(
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(alpha);
-  static_assert(!isConj(_transb), "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM does not support conjugate matrices!");
 }
 
 // ========================================================================================================================== //
@@ -136,7 +136,7 @@ inline void dismImpl1(
   dismImpl2(a.t(), b.t(), alpha);
 }
 
-template <typename _Val, Trans _transb>
+template <typename _Val, Trans _transb, bool dummy = 0>
 inline void dismImpl1(
           DenseMatrix<_Val, _transb> &b,
     const DenseDiagonalMatrix<_Val> &a,
@@ -145,7 +145,7 @@ inline void dismImpl1(
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(alpha);
-  static_assert(!isConj(_transb), "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM does not support conjugate matrices!");
 }
 
 //@}

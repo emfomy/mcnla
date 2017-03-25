@@ -52,7 +52,7 @@ inline void gemmImpl3(
   mcnla_assert_eq(a.nrow(), b.ncol());
 
   coomm(toTransChar<_Val>(_transa), c.ncol(), c.nrow(), a.ncol(), alpha, "G  C",
-        a.valPtr(), a.rowidxPtr(), a.colidxPtr(), a.nnz(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
+        a.valPtr(), a.idx1Ptr(), a.idx0Ptr(), a.nnz(), b.valPtr(), b.pitch(), beta, c.valPtr(), c.pitch());
 }
 #else  // MCNLA_USE_MKL
 template <typename _Val, Trans _transa>
@@ -81,7 +81,7 @@ inline void gemmImpl3(
 }
 #endif  // MCNLA_USE_MKL
 
-template <typename _Val, Trans _transa, Trans _transb, bool dummy = 0>
+template <typename _Val, Trans _transa, bool dummy = 0>
 inline void gemmImpl3(
     const CooMatrix<_Val, _transa> &a,
     const DenseMatrix<_Val, Trans::NORMAL> &b,
@@ -112,7 +112,7 @@ inline void gemmImpl2(
   gemmImpl3(a, b, c, alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb, bool dummy = 0>
 inline void gemmImpl2(
     const CooMatrix<_Val, _transa> &a,
     const DenseMatrix<_Val, _transb> &b,
@@ -125,7 +125,7 @@ inline void gemmImpl2(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(_transb == Trans::NORMAL, "The layout of B and C in COO GEMM must be the same!");
+  static_assert(dummy && false, "The layout of B and C in COO GEMM must be the same!");
 }
 
 // ========================================================================================================================== //
@@ -143,7 +143,7 @@ inline void gemmImpl2(
   gemmImpl3(b, a, c, alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb, bool dummy = 0>
 inline void gemmImpl2(
     const DenseMatrix<_Val, _transb> &b,
     const CooMatrix<_Val, _transa> &a,
@@ -156,7 +156,7 @@ inline void gemmImpl2(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(_transb == Trans::NORMAL, "The layout of B and C in COO GEMM must be the same!");
+  static_assert(dummy && false, "The layout of B and C in COO GEMM must be the same!");
 }
 
 // ========================================================================================================================== //
@@ -185,7 +185,7 @@ inline void gemmImpl1(
   gemmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc, bool dummy = 0>
 inline void gemmImpl1(
     const CooMatrix<_Val, _transa> &a,
     const DenseMatrix<_Val, _transb> &b,
@@ -198,7 +198,7 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "COO GEMM does not support conjugate matrices!");
+  static_assert(dummy && false, "COO GEMM does not support conjugate matrices!");
 }
 
 // ========================================================================================================================== //
@@ -227,7 +227,7 @@ inline void gemmImpl1(
   gemmImpl2(a.t(), b.t(), c.t(), alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc, bool dummy = 0>
 inline void gemmImpl1(
     const DenseMatrix<_Val, _transb> &b,
     const CooMatrix<_Val, _transa> &a,
@@ -240,7 +240,7 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "COO GEMM does not support conjugate matrices!");
+  static_assert(dummy && false, "COO GEMM does not support conjugate matrices!");
 }
 
 //@}

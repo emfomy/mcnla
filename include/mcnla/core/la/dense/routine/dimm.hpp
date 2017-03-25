@@ -115,7 +115,7 @@ inline void dimmImpl1(
   dimmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
-template <typename _Val, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc, bool dummy = 0>
 inline void dimmImpl1(
     const DenseDiagonalMatrix<_Val> &a,
     const DenseMatrix<_Val, _transb> &b,
@@ -128,7 +128,7 @@ inline void dimmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "DIMM does not support conjugate matrices!");
+  static_assert(dummy && false, "DIMM does not support conjugate matrices!");
 }
 
 // ========================================================================================================================== //
@@ -157,7 +157,7 @@ inline void dimmImpl1(
   dimmImpl2(a.t(), b.t(), c.t(), alpha, beta);
 }
 
-template <typename _Val, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, Trans _transc, bool dummy = 0>
 inline void dimmImpl1(
     const DenseMatrix<_Val, _transb> &b,
     const DenseDiagonalMatrix<_Val> &a,
@@ -170,7 +170,7 @@ inline void dimmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "DIMM does not support conjugate matrices!");
+  static_assert(dummy && false, "DIMM does not support conjugate matrices!");
 }
 
 //@}

@@ -76,7 +76,7 @@ inline void syr2kImpl1(
   syr2kImpl2(a, b, c, alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo, bool dummy = 0>
 inline void syr2kImpl1(
     const DenseMatrix<_Val, _transa> &a,
     const DenseMatrix<_Val, _transb> &b,
@@ -88,7 +88,7 @@ inline void syr2kImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "SYR2K does not support conjugate matrices!");
+  static_assert(dummy && false, "SYR2K does not support conjugate matrices!");
 }
 
 //@}

@@ -78,7 +78,7 @@ inline void symmImpl2(
   symmImpl3(a, b, c, alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transb, Uplo _uplo, bool dummy = 0>
 inline void symmImpl2(
     const DenseSymmetricMatrix<_Val, _transa, _uplo> &a,
     const DenseMatrix<_Val, _transb> &b,
@@ -91,7 +91,7 @@ inline void symmImpl2(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(_transb == Trans::NORMAL, "The layout of B and C in SYMM must be the same!");
+  static_assert(dummy && false, "The layout of B and C in SYMM must be the same!");
 }
 
 // ========================================================================================================================== //
@@ -109,7 +109,7 @@ inline void symmImpl2(
   symmImpl3(b, a, c, alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transb, Uplo _uplo, bool dummy = 0>
 inline void symmImpl2(
     const DenseMatrix<_Val, _transb> &b,
     const DenseSymmetricMatrix<_Val, _transa, _uplo> &a,
@@ -122,7 +122,7 @@ inline void symmImpl2(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(_transb == Trans::NORMAL, "The layout of B and C in SYMM must be the same!");
+  static_assert(dummy && false, "The layout of B and C in SYMM must be the same!");
 }
 
 // ========================================================================================================================== //
@@ -151,7 +151,7 @@ inline void symmImpl1(
   symmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo, bool dummy = 0>
 inline void symmImpl1(
     const DenseSymmetricMatrix<_Val, _transa, _uplo> &a,
     const DenseMatrix<_Val, _transb> &b,
@@ -164,7 +164,7 @@ inline void symmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "SYMM does not support conjugate matrices!");
+  static_assert(dummy && false, "SYMM does not support conjugate matrices!");
 }
 
 // ========================================================================================================================== //
@@ -193,7 +193,7 @@ inline void symmImpl1(
   symmImpl2(a.t(), b.t(), c.t(), alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo, bool dummy = 0>
 inline void symmImpl1(
     const DenseMatrix<_Val, _transb> &b,
     const DenseSymmetricMatrix<_Val, _transa, _uplo> &a,
@@ -206,7 +206,7 @@ inline void symmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "SYMM does not support conjugate matrices!");
+  static_assert(dummy && false, "SYMM does not support conjugate matrices!");
 }
 
 //@}

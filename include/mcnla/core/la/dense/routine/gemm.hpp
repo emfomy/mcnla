@@ -74,7 +74,7 @@ inline void gemmImpl1(
   gemmImpl2(b.t(), a.t(), c.t(), alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transa, Trans _transb, Trans _transc, bool dummy = 0>
 inline void gemmImpl1(
     const DenseMatrix<_Val, _transa> &a,
     const DenseMatrix<_Val, _transb> &b,
@@ -87,7 +87,7 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "GEMM does not support conjugate matrices!");
+  static_assert(dummy && false, "GEMM does not support conjugate matrices!");
 }
 
 //@}

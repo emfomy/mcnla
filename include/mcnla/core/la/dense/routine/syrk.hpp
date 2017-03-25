@@ -70,7 +70,7 @@ inline void syrkImpl1(
   syrkImpl2(a, c, alpha, beta);
 }
 
-template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
+template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo, bool dummy = 0>
 inline void syrkImpl1(
     const DenseMatrix<_Val, _transa> &a,
           DenseSymmetricMatrix<_Val, _transc, _uplo> &c,
@@ -81,7 +81,7 @@ inline void syrkImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(!isConj(_transc), "SYRK does not support conjugate matrices!");
+  static_assert(dummy && false, "SYRK does not support conjugate matrices!");
 }
 
 //@}
