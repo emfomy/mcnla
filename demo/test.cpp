@@ -19,5 +19,13 @@ int main( int argc, char **argv ) {
             << MCNLA_MINOR_VERSION << "."
             << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
+  MPI_Init(&argc, &argv);
+
+  mcnla::isvd::Parameters<double> param(MPI_COMM_WORLD, 0);
+
+  param.sync();
+
+  MPI_Finalize();
+
   return 0;
 }

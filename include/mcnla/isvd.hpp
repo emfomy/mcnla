@@ -8,8 +8,8 @@
 #ifndef MCNLA_ISVD_HPP_
 #define MCNLA_ISVD_HPP_
 
-// #include <mcnla/isvd/def.hpp>
-// #include <mcnla/isvd/driver.hpp>
+#include <mcnla/isvd/def.hpp>
+#include <mcnla/isvd/core.hpp>
 // #include <mcnla/isvd/sketcher.hpp>
 // #include <mcnla/isvd/orthogonalizer.hpp>
 // #include <mcnla/isvd/integrator.hpp>
@@ -17,39 +17,39 @@
 // #include <mcnla/isvd/converter.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_driver_module  Driver Module
+/// @defgroup  isvd_core_module  iSVD Core Module
 /// @ingroup   isvd_module
-/// @brief     The Driver Module
+/// @brief     The iSVD Core Module
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_sketcher_module  Sketcher Module
+/// @defgroup  isvd_sketcher_module  iSVD Sketcher Module
 /// @ingroup   isvd_module
-/// @brief     The Sketcher Module
+/// @brief     The iSVD Sketcher Module
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_orthogonalizer_module  Orthogonalizer Module
+/// @defgroup  isvd_orthogonalizer_module  iSVD Orthogonalizer Module
 /// @ingroup   isvd_module
-/// @brief     The Orthogonalizer Module
+/// @brief     The iSVD Orthogonalizer Module
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_integrator_module  Integrator Module
+/// @defgroup  isvd_integrator_module  iSVD Integrator Module
 /// @ingroup   isvd_module
-/// @brief     The Integrator Module
+/// @brief     The iSVD Integrator Module
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_former_module  Former Module
+/// @defgroup  isvd_former_module  iSVD Former Module
 /// @ingroup   isvd_module
-/// @brief     The Former Module
+/// @brief     The iSVD Former Module
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_converter_module  Converter Module
+/// @defgroup  isvd_converter_module  iSVD Converter Module
 /// @ingroup   isvd_module
-/// @brief     The Converter Module
+/// @brief     The iSVD Converter Module
 ///
 
 #endif  // MCNLA_ISVD_HPP_
