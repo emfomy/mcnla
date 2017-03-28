@@ -18,15 +18,3 @@ macro(SET_TARGET target files)
   set_target_properties(${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
   install(TARGETS ${target} RUNTIME DESTINATION bin)
 endmacro()
-
-# Set target (isvd_dense)
-set_target(isvd_dense isvd.cpp "-DATYPE=DenseMatrix")
-
-# Set target (isvd_coo)
-set_target(isvd_coo isvd.cpp "-DATYPE=CooMatrix")
-
-# Set target (isvd)
-add_custom_target(
-  isvd
-  DEPENDS isvd_dense isvd_coo
-)
