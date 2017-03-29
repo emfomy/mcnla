@@ -21,9 +21,10 @@ int main( int argc, char **argv ) {
 
   MPI_Init(&argc, &argv);
 
-  mcnla::isvd::Parameters<double> param(MPI_COMM_WORLD, 0);
+  auto x = new double[100];
+  mcnla::random::Streams streams(1);
 
-  param.sync();
+  mcnla::random::gaussian(streams, 100, x);
 
   MPI_Finalize();
 
