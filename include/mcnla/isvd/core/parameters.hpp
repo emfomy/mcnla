@@ -23,8 +23,7 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
 ///
-template <typename _Val>
-Parameters<_Val>::Parameters(
+Parameters::Parameters(
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root
 ) noexcept
@@ -36,8 +35,7 @@ Parameters<_Val>::Parameters(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
 ///
-template <typename _Val>
-void Parameters<_Val>::sync() noexcept {
+void Parameters::sync() noexcept {
   const MPI_Comm comm_tmp = mpi_comm;
   const index_t  rank_tmp = mpi_rank;
 
@@ -50,108 +48,94 @@ void Parameters<_Val>::sync() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::nrow() const noexcept {
+index_t Parameters::nrow() const noexcept {
   return nrow_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix per MPI node.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::nrowEach() const noexcept {
+index_t Parameters::nrowEach() const noexcept {
   return (nrow_-1) / mpi_size + 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of total allocated rows of the matrix.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::nrowTotal() const noexcept {
+index_t Parameters::nrowTotal() const noexcept {
   return nrowEach() * mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of column of the matrix.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::ncol() const noexcept {
+index_t Parameters::ncol() const noexcept {
   return ncol_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the desired rank of approximate SVD.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::rank() const noexcept {
+index_t Parameters::rank() const noexcept {
   return rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the oversampling dimension.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::overRank() const noexcept {
+index_t Parameters::overRank() const noexcept {
   return over_rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the dimension of random sketches.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::dimSketch() const noexcept {
+index_t Parameters::dimSketch() const noexcept {
   return rank_ + over_rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches of all MPI nodes.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::numSketch() const noexcept {
+index_t Parameters::numSketch() const noexcept {
   return num_sketch_each_ * mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches per MPI node.
 ///
-template <typename _Val>
-index_t Parameters<_Val>::numSketchEach() const noexcept {
+index_t Parameters::numSketchEach() const noexcept {
   return num_sketch_each_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix.
 ///
-template <typename _Val>
-index_t& Parameters<_Val>::nrow() noexcept {
+index_t& Parameters::nrow() noexcept {
   return nrow_;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of column of the matrix.
 ///
-template <typename _Val>
-index_t& Parameters<_Val>::ncol() noexcept {
+index_t& Parameters::ncol() noexcept {
   return ncol_;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the desired rank of approximate SVD.
 ///
-template <typename _Val>
-index_t& Parameters<_Val>::rank() noexcept {
+index_t& Parameters::rank() noexcept {
   return rank_;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the oversampling dimension.
 ///
-template <typename _Val>
-index_t& Parameters<_Val>::overRank() noexcept {
+index_t& Parameters::overRank() noexcept {
   return over_rank_;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches per MPI node.
 ///
-template <typename _Val>
-index_t& Parameters<_Val>::numSketchEach() noexcept {
+index_t& Parameters::numSketchEach() noexcept {
   return num_sketch_each_;
 }
 

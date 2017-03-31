@@ -25,9 +25,6 @@ namespace isvd {
 /// @ingroup  isvd_core_module
 /// The parameters of iSVD driver.
 ///
-/// @tparam  _Val  The value type.
-///
-template <typename _Val>
 struct Parameters {
 
  public:
@@ -45,10 +42,6 @@ struct Parameters {
   const index_t mpi_rank;
 
  protected:
-
-#if defined(MCNLA_TEST) || defined(MCNLA_USE_GTEST)
- public:
-#endif  // MCNLA_TEST or MCNLA_USE_GTEST
 
   /// The number of rows of the matrix.
   index_t nrow_ = 0;

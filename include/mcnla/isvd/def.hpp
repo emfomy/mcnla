@@ -9,8 +9,7 @@
 #define MCNLA_ISVD_DEF_HPP_
 
 #include <mcnla/def.hpp>
-#pragma warning
-// #include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -23,8 +22,7 @@ namespace mcnla {
 ///
 namespace isvd {
 
-#pragma warning
-// using namespace matrix;
+using namespace matrix;
 
 }  // namespace isvd
 
