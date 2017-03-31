@@ -258,7 +258,7 @@ void DenseMatrix<_Val, _trans>::resize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
-  this->resizeImpl(toDim0(nrow, ncol), toDim1(nrow, ncol), nnz);
+  this->resizeImpl(toDim0(nrow, ncol), toDim1(nrow, ncol));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

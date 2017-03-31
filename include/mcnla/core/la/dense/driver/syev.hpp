@@ -140,6 +140,9 @@ void SyevDriver<_Matrix, _jobz>::compute(
   mcnla_assert_gt(size_, 0);
   mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
   mcnla_assert_eq(w.length(), size_);
+  mcnla_assert_true(w.isShrunk());
+
+
   mcnla_assert_eq(detail::syev(__jobz, toUploChar(uplo, trans), a.nrow(), a.valPtr(), a.pitch(),
                                w.valPtr(), work_.valPtr(), work_.length(), rwork_.valPtr()), 0);
 }
