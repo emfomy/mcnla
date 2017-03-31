@@ -56,7 +56,7 @@ std::vector<double> kolmogorovNagumoIntegrator(
   const auto dim_sketch      = parameters.dimSketch();
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
-  mcnla_assert_eq(matrix_qbar.sizes(), std::make_tuple(nrow, dim_sketch));
+  matrix_qbar.resize(nrow, dim_sketch);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

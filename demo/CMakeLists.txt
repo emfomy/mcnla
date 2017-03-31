@@ -35,8 +35,20 @@ macro(SET_TARGET target files)
   endif()
 endmacro()
 
-# Set target (demo_plain)
-set_target(demo_plain demo_plain.cpp)
+# # Set target (demo1)
+# set_target(demo1 demo1.cpp)
+
+# Set target (demo2)
+set_target(demo2 demo2.cpp)
+
+# # Set target (demo_plain)
+# set_target(demo_plain demo_plain.cpp)
+
+# # Set target (demo_kn)
+# set_target(demo_kn demo_kn.cpp)
+
+# # Set target (demo_kn0)
+# set_target(demo_kn0 demo_kn0.cpp)
 
 # Set target (test)
 set_target(test test.cpp)

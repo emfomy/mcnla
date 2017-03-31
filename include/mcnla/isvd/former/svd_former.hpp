@@ -52,9 +52,9 @@ std::vector<double> svdFormer(
   const auto rank       = parameters.rank();
 
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
-  mcnla_assert_eq(vector_s.sizes(), std::make_tuple(dim_sketch));
-  mcnla_assert_eq(matrix_u.sizes(), std::make_tuple(nrow, dim_sketch));
-  mcnla_assert_eq(matrix_vt.sizes(), std::make_tuple(dim_sketch, ncol));
+  vector_s.resize(dim_sketch);;
+  matrix_u.resize(nrow, dim_sketch);
+  matrix_vt.resize(dim_sketch, ncol);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
