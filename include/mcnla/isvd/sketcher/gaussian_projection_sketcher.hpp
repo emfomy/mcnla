@@ -29,15 +29,16 @@ namespace isvd {
 /// The Gaussian projection sketcher.
 ///
 /// @tparam  _Val  The value type.
+/// @tparam  _Matrix  The matrix type.
 ///
 /// @param   parameters    The parameters.
 /// @param   matrix_a      The matrix A.
 /// @param   collection_q  The matrix collection Q.
-/// @param   seed          The random seed.
+/// @param   mpi_streams   The MPI random streams.
 /// @param   exponent      The exponent of the power method.
 ///
 template <typename _Val, class _Matrix>
-std::vector<double> sketcherGaussianProjection(
+std::vector<double> gaussianProjectionSketcher(
     const Parameters &parameters,
     const _Matrix &matrix_a,
           DenseMatrixCollection120<_Val> &collection_q,
@@ -45,14 +46,16 @@ std::vector<double> sketcherGaussianProjection(
     const index_t exponent = 0
 ) noexcept {
 
-  const auto nrow             = parameters.nrow();
-  const auto ncol             = parameters.ncol();
-  const auto num_sketch_each  = parameters.numSketchEach();
-  const auto dim_sketch       = parameters.dimSketch();
+  // Parameters
+  const auto nrow            = parameters.nrow();
+  const auto ncol            = parameters.ncol();
+  const auto num_sketch_each = parameters.numSketchEach();
+  const auto dim_sketch      = parameters.dimSketch();
 
   mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
+  // The matrix Omegas
   DenseMatrixRowMajor<_Val> matrix_omegas(ncol, dim_sketch * num_sketch_each);
 
   double moment0 = MPI_Wtime();

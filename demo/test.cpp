@@ -33,11 +33,18 @@ int main( int argc, char **argv ) {
   mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, seed);
   mcnla::random::gaussian(mpi_streams, a.vectorize());
 
-  // mcnla::isvd::sketcherGaussianProjection<double>(parameters, a, qs, mpi_streams, 2);
-  mcnla::isvd::sketcherColumnSampling<double>(parameters, a, qs, mpi_streams);
+  // mcnla::isvd::gaussianProjectionSketcher<double>(parameters, a, qs, mpi_streams, 2);
+  mcnla::isvd::columnSamplingSketcher<double>(parameters, a, qs, mpi_streams);
+
+  mcnla::isvd::svdOrthogonalizer<double>(parameters, qs);
 
   disp(a);
   disp(qs(0));
+
+  mcnla::matrix::DenseMatrixColMajor<double> qq(l, l);
+  mcnla::la::mm(qs(0).t(), qs(0), qq);
+
+  disp(qq);
 
   MPI_Finalize();
 

@@ -11,7 +11,7 @@
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/core.hpp>
 #include <mcnla/isvd/sketcher.hpp>
-// #include <mcnla/isvd/orthogonalizer.hpp>
+#include <mcnla/isvd/orthogonalizer.hpp>
 // #include <mcnla/isvd/integrator.hpp>
 // #include <mcnla/isvd/former.hpp>
 // #include <mcnla/isvd/converter.hpp>
