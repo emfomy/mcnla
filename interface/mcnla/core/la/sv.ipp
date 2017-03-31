@@ -1,0 +1,46 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    interface/mcnla/core/la/sv.ipp
+/// @brief   The BLAS SV routine interface.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_INTERFACE_CORE_LA_SV_IPP_
+#define MCNLA_INTERFACE_CORE_LA_SV_IPP_
+
+#include <mcnla/core/la/def.hpp>
+#include <mcnla/core/matrix.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The MCNLA namespace
+//
+namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The linear algebra namespace
+//
+namespace la {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_interface_module
+/// @brief  Solves a system of linear equations.
+///
+//@{
+template <class _A, class _X>
+inline void sv(
+    const InverseView<MatrixWrapper<_A>> &a,
+          VectorWrapper<_X> &x
+) noexcept;
+
+template <class _A, class _X>
+inline void sv(
+          VectorWrapper<_X> &x,
+    const InverseView<MatrixWrapper<_A>> &a
+) noexcept;
+//@}
+
+}  // namespace la
+
+}  // namespace mcnla
+
+#endif  // MCNLA_INTERFACE_CORE_LA_SV_IPP_

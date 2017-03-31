@@ -33,23 +33,21 @@ namespace detail {
 template <typename _Val>
 static inline void uniformImpl(
           VSLStreamStatePtr stream,
-    const index_t n,
-          _Val *x,
+          DenseVector<_Val> &&vector,
     const _Val a,
     const _Val b
 ) noexcept {
-  detail::vRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, n, x, a, b);
+  detail::vRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, vector.length(), vector.valPtr(), a, b);
 }
 
 template <typename _Val>
 static inline void gaussianImpl(
           VSLStreamStatePtr stream,
-    const index_t n,
-          _Val *x,
+          DenseVector<_Val> &&vector,
     const _Val a,
     const _Val sigma
 ) noexcept {
-  detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, n, x, a, sigma);
+  detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, vector.length(), vector.valPtr(), a, sigma);
 }
 
 }  // namespace detail

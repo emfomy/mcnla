@@ -38,8 +38,7 @@ namespace random {
 template <typename _Val>
 inline void uniform(
     const Streams &streams,
-    const index_t n,
-          _Val *x,
+          DenseVector<_Val> &vector,
     const _Val a = 0,
     const _Val b = 1
 ) noexcept {
@@ -47,14 +46,26 @@ inline void uniform(
   #pragma omp parallel for
 #endif  // MCNLA_USE_OMP
   for ( index_t i = 0; i < streams.ompSize(); ++i ) {
-    index_t length = n / streams.ompSize();
+    index_t length = vector.length() / streams.ompSize();
     index_t start = length * i;
     if ( i == streams.ompSize()-1 ) {
-      length = n - start;
+      length = vector.length() - start;
     }
-    detail::uniformImpl(streams[i], length, x+start, a, b);
+    detail::uniformImpl(streams[i], vector({start, start+length}), a, b);
   }
 }
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val>
+inline void uniform(
+    const Streams &streams,
+          DenseVector<_Val> &&vector,
+    const _Val a = 0,
+    const _Val b = 1
+) noexcept {
+  gaussian(streams, vector);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  random_module
@@ -63,8 +74,7 @@ inline void uniform(
 template <typename _Val>
 inline void gaussian(
     const Streams &streams,
-    const index_t n,
-          _Val *x,
+          DenseVector<_Val> &vector,
     const _Val a = 0,
     const _Val sigma = 1
 ) noexcept {
@@ -72,14 +82,26 @@ inline void gaussian(
   #pragma omp parallel for
 #endif  // MCNLA_USE_OMP
   for ( index_t i = 0; i < streams.ompSize(); ++i ) {
-    index_t length = n / streams.ompSize();
+    index_t length = vector.length() / streams.ompSize();
     index_t start = length * i;
     if ( i == streams.ompSize()-1 ) {
-      length = n - start;
+      length = vector.length() - start;
     }
-    detail::gaussianImpl(streams[i], length, x+start, a, sigma);
+    detail::gaussianImpl(streams[i], vector({start, start+length}), a, sigma);
   }
 }
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val>
+inline void gaussian(
+    const Streams &streams,
+          DenseVector<_Val> &&vector,
+    const _Val a = 0,
+    const _Val sigma = 1
+) noexcept {
+  gaussian(streams, vector);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace random
 
