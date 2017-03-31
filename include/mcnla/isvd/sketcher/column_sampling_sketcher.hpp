@@ -53,22 +53,26 @@ std::vector<double> columnSamplingSketcher(
   mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   // The index vector
   DenseVector<index_t> vector_idxs(dim_sketch * num_sketch_each);
 
-  double moment0 = MPI_Wtime();
+  double moment0 = MPI_Wtime();  // random generating
 
   // Random sample Idxs using uniform distribution
   random::uniform(mpi_streams, vector_idxs, 0, ncol);
 
-  double moment1 = MPI_Wtime();
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  double moment1 = MPI_Wtime();  // random sketching
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
     la::copy(matrix_a("", vector_idxs(i)), collection_q.unfold()("", i));
   }
 
-  double moment2 = MPI_Wtime();
+  double moment2 = MPI_Wtime();  // end
 
   return {moment0, moment1, moment2};
 }

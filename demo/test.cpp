@@ -30,6 +30,7 @@ int main( int argc, char **argv ) {
 
   mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
   mcnla::matrix::DenseMatrixCollection120<double> qs(m, l, Nj);
+  mcnla::matrix::DenseMatrixRowMajor<double> qbar(m, l);
   mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, seed);
   mcnla::random::gaussian(mpi_streams, a.vectorize());
 
@@ -38,11 +39,15 @@ int main( int argc, char **argv ) {
 
   mcnla::isvd::svdOrthogonalizer<double>(parameters, qs);
 
+  mcnla::index_t iteration;
+  double time2c;
+  mcnla::isvd::kolmogorovNagumoIntegrator<double>(parameters, qs, qbar, iteration, time2c);
+
   disp(a);
-  disp(qs(0));
+  disp(qbar);
 
   mcnla::matrix::DenseMatrixColMajor<double> qq(l, l);
-  mcnla::la::mm(qs(0).t(), qs(0), qq);
+  mcnla::la::mm(qbar.t(), qbar, qq);
 
   disp(qq);
 

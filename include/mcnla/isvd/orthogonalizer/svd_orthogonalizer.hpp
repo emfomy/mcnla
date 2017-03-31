@@ -48,6 +48,8 @@ std::vector<double> svdOrthogonalizer(
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   // The vector S
   DenseVector<RealValType> vector_s(dim_sketch);
 
@@ -57,14 +59,16 @@ std::vector<double> svdOrthogonalizer(
   // The GESVD driver.
   la::GesvdDriver<MatrixType, 'O', 'N'> gesvd_driver(nrow, dim_sketch);
 
-  double moment0 = MPI_Wtime();
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  double moment0 = MPI_Wtime();  // orthogonalization
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
     gesvd_driver(collection_q(i), vector_s, matrix_empty, matrix_empty);
   }
 
-  double moment1 = MPI_Wtime();
+  double moment1 = MPI_Wtime();  // end
 
   return {moment0, moment1};
 }

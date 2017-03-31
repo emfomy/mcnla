@@ -55,15 +55,19 @@ std::vector<double> gaussianProjectionSketcher(
   mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   // The matrix Omegas
   DenseMatrixRowMajor<_Val> matrix_omegas(ncol, dim_sketch * num_sketch_each);
 
-  double moment0 = MPI_Wtime();
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  double moment0 = MPI_Wtime();  // random generating
 
   // Random sample Omega using normal Gaussian distribution
   random::gaussian(mpi_streams, matrix_omegas.vectorize());
 
-  double moment1 = MPI_Wtime();
+  double moment1 = MPI_Wtime();  // random sketching
 
   // Q := A * Omega
   la::mm(matrix_a, matrix_omegas, collection_q.unfold());
@@ -72,7 +76,7 @@ std::vector<double> gaussianProjectionSketcher(
     la::mm(matrix_a, matrix_omegas, collection_q.unfold());
   }
 
-  double moment2 = MPI_Wtime();
+  double moment2 = MPI_Wtime();  // end
 
   return {moment0, moment1, moment2};
 }
