@@ -30,10 +30,11 @@ int main( int argc, char **argv ) {
 
   mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
   mcnla::matrix::DenseMatrixCollection120<double> qs(m, l, Nj);
-  mcnla::random::Streams streams(seed);
-  mcnla::random::gaussian(streams, a.vectorize());
+  mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, seed);
+  mcnla::random::gaussian(mpi_streams, a.vectorize());
 
-  mcnla::isvd::sketcherColumnSampling<double>(parameters, a, qs, seed);
+  // mcnla::isvd::sketcherGaussianProjection<double>(parameters, a, qs, mpi_streams, 2);
+  mcnla::isvd::sketcherColumnSampling<double>(parameters, a, qs, mpi_streams);
 
   disp(a);
   disp(qs(0));

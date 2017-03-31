@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/streams.hh
+/// @file    include/mcnla/core/random/streams/streams.hh
 /// @brief   The definition of random streams.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_STREAMS_HH_
-#define MCNLA_CORE_RANDOM_STREAMS_HH_
+#ifndef MCNLA_CORE_RANDOM_STREAMS_STREAMS_HH_
+#define MCNLA_CORE_RANDOM_STREAMS_STREAMS_HH_
 
 #include <mcnla/core/random/def.hpp>
 #include <vector>
@@ -35,16 +35,18 @@ namespace random {
 ///
 class Streams {
 
- protected:
-
-  /// The number of threads
-  const index_t omp_size_;
+ public:
 
 #ifdef MCNLA_USE_MKL
   using StreamType = VSLStreamStatePtr;
 #else  // MCNLA_USE_MKL
   using StreamType = index_t;
 #endif  // MCNLA_USE_MKL
+
+ protected:
+
+  /// The number of threads
+  const index_t omp_size_;
 
   /// The random streams
   std::vector<StreamType> streams_;
@@ -70,4 +72,4 @@ class Streams {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_STREAMS_HH_
+#endif  // MCNLA_CORE_RANDOM_STREAMS_STREAMS_HH_

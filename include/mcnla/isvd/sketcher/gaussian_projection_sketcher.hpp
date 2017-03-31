@@ -41,7 +41,7 @@ std::vector<double> sketcherGaussianProjection(
     const Parameters &parameters,
     const _Matrix &matrix_a,
           DenseMatrixCollection120<_Val> &collection_q,
-    const index_t seed,
+    const random::MpiStreams &mpi_streams,
     const index_t exponent = 0
 ) noexcept {
 
@@ -54,12 +54,11 @@ std::vector<double> sketcherGaussianProjection(
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   DenseMatrixRowMajor<_Val> matrix_omegas(ncol, dim_sketch * num_sketch_each);
-  random::Streams streams(seed);
 
   double moment0 = MPI_Wtime();
 
   // Random sample Omega using normal Gaussian distribution
-  random::gaussian(streams, matrix_omegas.vectorize());
+  random::gaussian(mpi_streams, matrix_omegas.vectorize());
 
   double moment1 = MPI_Wtime();
 

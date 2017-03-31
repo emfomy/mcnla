@@ -40,7 +40,7 @@ std::vector<double> sketcherColumnSampling(
     const Parameters &parameters,
     const _Matrix &matrix_a,
           DenseMatrixCollection120<_Val> &collection_q,
-    const index_t seed
+    const random::MpiStreams &mpi_streams
 ) noexcept {
 
   const auto nrow             = parameters.nrow();
@@ -52,12 +52,11 @@ std::vector<double> sketcherColumnSampling(
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   DenseVector<index_t> vector_idxs(dim_sketch * num_sketch_each);
-  random::Streams streams(seed);
 
   double moment0 = MPI_Wtime();
 
   // Random sample Idxs using uniform distribution
-  random::uniform(streams, vector_idxs, 0, ncol);
+  random::uniform(mpi_streams, vector_idxs, 0, ncol);
 
   double moment1 = MPI_Wtime();
 

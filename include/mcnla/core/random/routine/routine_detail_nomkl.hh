@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/routine_detail_nomkl.hh
+/// @file    include/mcnla/core/random/routine/routine_detail_nomkl.hh
 /// @brief   The detail of distribution generators without MKL.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ROUTINE_DETAIL_HH_
-#define MCNLA_CORE_RANDOM_ROUTINE_DETAIL_HH_
+#ifndef MCNLA_CORE_RANDOM_ROUTINE_ROUTINE_DETAIL_HH_
+#define MCNLA_CORE_RANDOM_ROUTINE_ROUTINE_DETAIL_HH_
 
 #ifdef MCNLA_USE_MKL
   #error 'MCNLA_USE_MKL' should not be set!
@@ -76,4 +76,4 @@ static inline void gaussianImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ROUTINE_DETAIL_HH_
+#endif  // MCNLA_CORE_RANDOM_ROUTINE_ROUTINE_DETAIL_HH_
