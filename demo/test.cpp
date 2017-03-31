@@ -19,7 +19,7 @@ int main( int argc, char **argv ) {
 
   MPI_Init(&argc, &argv);
 
-  mcnla::index_t m = 10, n = 20, k = 5, p = 1, l = k+p, Nj = 2, seed = 1;
+  mcnla::index_t m = 10, n = 10, k = 5, p = 1, l = k+p, Nj = 2, seed = 1;
 
   mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
   parameters.nrow() = m;
@@ -33,8 +33,9 @@ int main( int argc, char **argv ) {
   mcnla::random::Streams streams(seed);
   mcnla::random::gaussian(streams, a.vectorize());
 
-  mcnla::isvd::sketcherGaussianProjection<double>(parameters, a, qs, seed);
+  mcnla::isvd::sketcherColumnSampling<double>(parameters, a, qs, seed);
 
+  disp(a);
   disp(qs(0));
 
   MPI_Finalize();
