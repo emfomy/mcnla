@@ -25,24 +25,20 @@ namespace isvd {
 ///
 Parameters::Parameters(
     const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root
+    const mpi_int_t mpi_root,
+    const index_t seed
 ) noexcept
   : mpi_comm(mpi_comm),
     mpi_size(mpi::commSize(mpi_comm)),
     mpi_root(mpi_root),
-    mpi_rank(mpi::commRank(mpi_comm)) {}
+    mpi_rank(mpi::commRank(mpi_comm)),
+    streams_(seed) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Synchronize the parameters
 ///
 void Parameters::sync() noexcept {
-  const MPI_Comm comm_tmp = mpi_comm;
-  const index_t  rank_tmp = mpi_rank;
-
-  MPI_Bcast(this, sizeof(*this), MPI_BYTE, mpi_root, mpi_comm);
-
-  const_cast<MPI_Comm&>(mpi_comm) = comm_tmp;
-  const_cast<index_t&>(mpi_rank)  = rank_tmp;
+  MPI_Bcast(&params_, sizeof(params_), MPI_BYTE, mpi_root, mpi_comm);
   synchronized_ = true;
 }
 
@@ -57,14 +53,14 @@ bool Parameters::isSynchronized() const noexcept {
 /// @brief  Gets the number of rows of the matrix.
 ///
 index_t Parameters::nrow() const noexcept {
-  return nrow_;
+  return params_.nrow_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix per MPI node.
 ///
 index_t Parameters::nrowEach() const noexcept {
-  return (nrow_-1) / mpi_size + 1;
+  return (params_.nrow_-1) / mpi_size + 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,42 +74,49 @@ index_t Parameters::nrowTotal() const noexcept {
 /// @brief  Gets the number of column of the matrix.
 ///
 index_t Parameters::ncol() const noexcept {
-  return ncol_;
+  return params_.ncol_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the desired rank of approximate SVD.
 ///
 index_t Parameters::rank() const noexcept {
-  return rank_;
+  return params_.rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the oversampling dimension.
 ///
 index_t Parameters::overRank() const noexcept {
-  return over_rank_;
+  return params_.over_rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the dimension of random sketches.
 ///
 index_t Parameters::dimSketch() const noexcept {
-  return rank_ + over_rank_;
+  return params_.rank_ + params_.over_rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches of all MPI nodes.
 ///
 index_t Parameters::numSketch() const noexcept {
-  return num_sketch_each_ * mpi_size;
+  return params_.num_sketch_each_ * mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches per MPI node.
 ///
 index_t Parameters::numSketchEach() const noexcept {
-  return num_sketch_each_;
+  return params_.num_sketch_each_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the random streams.
+///
+const random::Streams& Parameters::streams() const noexcept {
+  return streams_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,8 +136,8 @@ Parameters& Parameters::setSize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
-  nrow_ = nrow;
-  ncol_ = ncol;
+  params_.nrow_ = nrow;
+  params_.ncol_ = ncol;
   synchronized_ = false;
   return *this;
 }
@@ -145,7 +148,7 @@ Parameters& Parameters::setSize(
 Parameters& Parameters::setRank(
     const index_t rank
 ) noexcept {
-  rank_ = rank;
+  params_.rank_ = rank;
   synchronized_ = false;
   return *this;
 }
@@ -156,21 +159,20 @@ Parameters& Parameters::setRank(
 Parameters& Parameters::setOverRank(
     const index_t over_rank
   ) noexcept {
-  over_rank_ = over_rank;
+  params_.over_rank_ = over_rank;
   synchronized_ = false;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Sets the number of total random sketches
+/// @brief  Sets the number of total random sketches.
 ///
 /// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size".
-/// @attention  Only affects on root node.
 ///
 Parameters& Parameters::setNumSketch(
     const index_t num_sketch
 ) noexcept {
-  num_sketch_each_ = num_sketch / mpi_rank;
+  params_.num_sketch_each_ = num_sketch / mpi_rank;
   synchronized_ = false;
   return *this;
 }
@@ -181,8 +183,28 @@ Parameters& Parameters::setNumSketch(
 Parameters& Parameters::setNumSketchEach(
     const index_t num_sketch_each
 ) noexcept {
-  num_sketch_each_ = num_sketch_each;
+  params_.num_sketch_each_ = num_sketch_each;
   synchronized_ = false;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  random::Streams::setSeed
+///
+Parameters& Parameters::setSeed(
+    const index_t seed
+) noexcept {
+  streams_.setSeed(seed);
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  random::Streams::setSeeds
+///
+Parameters& Parameters::setSeeds(
+    const index_t seed
+) noexcept {
+  streams_.setSeeds(seed, mpi_root, mpi_comm);
   return *this;
 }
 

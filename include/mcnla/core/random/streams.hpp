@@ -9,6 +9,5 @@
 #define MCNLA_CORE_RANDOM_STREAMS_HPP_
 
 #include <mcnla/core/random/streams/streams.hpp>
-#include <mcnla/core/random/streams/mpi_streams.hpp>
 
 #endif  // MCNLA_CORE_RANDOM_STREAMS_HPP_

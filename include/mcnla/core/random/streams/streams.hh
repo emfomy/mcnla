@@ -10,6 +10,7 @@
 
 #include <mcnla/core/random/def.hpp>
 #include <vector>
+#include <mcnla/core/mpi.hpp>
 
 #ifdef MCNLA_USE_OMP
   #include <omp.h>
@@ -55,6 +56,10 @@ class Streams {
 
   // Constructors
   inline Streams( const index_t seed ) noexcept;
+  inline Streams( const Streams &other ) noexcept = delete;
+
+  // Operators
+  Streams& operator=( const Streams &other ) const noexcept = delete;
 
   // Destructor
   inline ~Streams() noexcept;
@@ -65,6 +70,7 @@ class Streams {
 
   // Sets seed
   inline void setSeed( const index_t seed ) noexcept;
+  inline void setSeeds( const index_t seed, const mpi_int_t mpi_root, const MPI_Comm mpi_comm ) noexcept;
 
 };
 

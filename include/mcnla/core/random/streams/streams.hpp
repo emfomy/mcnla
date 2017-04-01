@@ -82,6 +82,25 @@ void Streams::setSeed(
 #endif  // MCNLA_USE_MKL
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Generate the random seeds and send to each MPI nodes.
+///
+void Streams::setSeeds(
+    const index_t seed,
+    const mpi_int_t mpi_root,
+    const MPI_Comm mpi_comm
+) noexcept {
+  std::vector<index_t> seeds(mpi::commSize(mpi_comm));
+  if ( mpi::isCommRoot(mpi_root, mpi_comm) ) {
+    std::seed_seq seq{seed};
+    seq.generate(seeds.begin(), seeds.end());
+  }
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
+  index_t seed_tmp;
+  MPI_Scatter(seeds.data(), 1, datatype, &seed_tmp, 1, datatype, mpi_root, mpi_comm);
+  setSeed(seed_tmp);
+}
+
 }  // namespace random
 
 }  // namespace mcnla

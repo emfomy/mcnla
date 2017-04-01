@@ -20,8 +20,9 @@ int main( int argc, char **argv ) {
   MPI_Init(&argc, &argv);
 
   mcnla::index_t m = 10, n = 10, k = 5, p = 1, l = k+p, Nj = 2, seed = 1;
+  mcnla::mpi_int_t mpi_root = 0;
 
-  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, mpi_root);
   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
 
@@ -31,11 +32,12 @@ int main( int argc, char **argv ) {
   mcnla::matrix::DenseVector<double> s(l);
   mcnla::matrix::DenseMatrixColMajor<double> u(m, l);
   mcnla::matrix::DenseMatrixColMajor<double> vt(l, n);
-  mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, seed);
-  mcnla::random::gaussian(mpi_streams, a.vectorize());
+  mcnla::random::Streams streams(0);
+  mcnla::random::gaussian(streams, a.vectorize());
+  mcnla::mpi::bcast(a, mpi_root, MPI_COMM_WORLD);
 
-  // mcnla::isvd::gaussianProjectionSketcher<double>(parameters, a, qs, mpi_streams, 2);
-  mcnla::isvd::columnSamplingSketcher<double>(parameters, a, qs, mpi_streams);
+  mcnla::isvd::gaussianProjectionSketcher<double>(parameters, a, qs, 2);
+  // mcnla::isvd::columnSamplingSketcher<double>(parameters, a, qs);
 
   mcnla::isvd::svdOrthogonalizer<double>(parameters, qs);
 

@@ -55,7 +55,7 @@ namespace isvd {
 
   @code{.cpp}
   // Variable allocation
-  mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, rand());
+  mcnla::random::Streams streams(MPI_COMM_WORLD, 0, rand());
   mcnla::matrix::DenseMatrixCollection120<double> collection_qs(m, k+p, Nj);
   mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m, k+p);
   mcnla::matrix::DenseVector<double> vector_s(k+p);
@@ -71,7 +71,7 @@ namespace isvd {
   // Run iSVD
   mcnla::index_t iter; double time2c;
 
-  auto moments_s = mcnla::isvd::gaussianProjectionSketcher<double>(parameters, matrix_a, collection_qs, mpi_streams);
+  auto moments_s = mcnla::isvd::gaussianProjectionSketcher<double>(parameters, matrix_a, collection_qs, streams);
   auto moments_o = mcnla::isvd::svdOrthogonalizer<double>(parameters, collection_qs);
   auto moments_i = mcnla::isvd::kolmogorovNagumoIntegrator<double>(parameters, collection_qs, matrix_q, iter, time2c, maxiter, tol);
   auto moments_f = mcnla::isvd::svdFormer<double>(parameters, matrix_a, matrix_q, vector_s, matrix_u, matrix_vt);

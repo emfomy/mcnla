@@ -87,15 +87,9 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize parameters
-  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
-  parameters.nrow() = m;
-  parameters.ncol() = n;
-  parameters.rank() = k;
-  parameters.overRank() = p;
-  parameters.numSketchEach() = Nj;
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0, rand());
+  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
-
-  mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, rand());
 
   // if ( mpi_rank == mpi_root ) {
   //   std::cout << "Uses " << driver.sketcher() << "." << std::endl;
@@ -133,7 +127,7 @@ int main( int argc, char **argv ) {
     // Run iSVD
     MPI_Barrier(MPI_COMM_WORLD);
 
-    auto moments_s = mcnla::isvd::gaussianProjectionSketcher<double>(parameters, matrix_a, collection_qs, mpi_streams);
+    auto moments_s = mcnla::isvd::gaussianProjectionSketcher<double>(parameters, matrix_a, collection_qs);
 
     MPI_Barrier(MPI_COMM_WORLD);
 
