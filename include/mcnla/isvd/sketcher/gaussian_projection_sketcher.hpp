@@ -43,10 +43,6 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  moment0_ = 0;
-  moment1_ = 0;
-  moment2_ = 0;
-
   matrix_omegas_.reconstruct(ncol, dim_sketch * num_sketch_each);
 }
 
@@ -59,6 +55,8 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::sketchImpl(
           DenseMatrixCollection120<_Val> &collection_q
 ) noexcept {
 
+  moments_.clear();
+
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -68,12 +66,12 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::sketchImpl(
   mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  moment0_ = MPI_Wtime();
+  moments_.emplace_back(MPI_Wtime());  // random generating
 
   // Random sample Omega using normal Gaussian distribution
   random::gaussian(streams, matrix_omegas_.vectorize());
 
-  moment1_ = MPI_Wtime();
+  moments_.emplace_back(MPI_Wtime());  // random sketching
 
   // Q := A * Omega
   la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
@@ -82,7 +80,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::sketchImpl(
     la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
   }
 
-  moment2_ = MPI_Wtime();
+  moments_.emplace_back(MPI_Wtime()); // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,30 +92,6 @@ std::ostream& Sketcher<GaussianProjectionSketcherTag, _Val>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_ << " (Power " << exponent_ << ")");
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::time
-///
-template <typename _Val>
-double Sketcher<GaussianProjectionSketcherTag, _Val>::timeImpl() const noexcept {
-  return moment2_ - moment0_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::times
-///
-template <typename _Val>
-std::vector<double> Sketcher<GaussianProjectionSketcherTag, _Val>::timesImpl() const noexcept {
-  return {moment0_, moment1_, moment2_};
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::moments
-///
-template <typename _Val>
-std::vector<double> Sketcher<GaussianProjectionSketcherTag, _Val>::momentsImpl() const noexcept {
-  return {moment1_ - moment0_, moment2_ - moment1_};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

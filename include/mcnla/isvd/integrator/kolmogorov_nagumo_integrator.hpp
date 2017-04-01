@@ -52,7 +52,6 @@ std::vector<double> kolmogorovNagumoIntegrator(
   const auto mpi_comm        = parameters.mpi_comm;
   const auto mpi_root        = parameters.mpi_root;
   const auto nrow            = parameters.nrow();
-  const auto nrow_total      = parameters.nrowTotal();
   const auto num_sketch      = parameters.numSketch();
   const auto num_sketch_each = parameters.numSketchEach();
   const auto dim_sketch      = parameters.dimSketch();

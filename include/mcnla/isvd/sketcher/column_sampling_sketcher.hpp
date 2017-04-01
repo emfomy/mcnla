@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/sketcher/column_sampling_sketcher.hpp
-/// @brief   The column sampling sketcher.
+/// @brief   The Gaussian projection sketcher.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,11 +8,8 @@
 #ifndef MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
 #define MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
 
-#include <mcnla/isvd/core/parameters.hpp>
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/isvd/sketcher/column_sampling_sketcher.hh>
 #include <mcnla/core/la.hpp>
-#include <mcnla/core/random.hpp>
-#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,55 +22,59 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
-/// The column sampling sketcher.
+/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
-/// @tparam  _Val     The value type.
-/// @tparam  _Matrix  The matrix type.
+template <typename _Val>
+Sketcher<ColumnSamplingSketcherTag, _Val>::Sketcher(
+    const Parameters &parameters
+) noexcept
+  : BaseType(parameters) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
-/// @param   parameters    The parameters.
-/// @param   matrix_a      The matrix A.
-/// @param   collection_q  The matrix collection Q.
+template <typename _Val>
+void Sketcher<ColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
+
+  const auto dim_sketch      = parameters_.dimSketch();
+  const auto num_sketch_each = parameters_.numSketchEach();
+
+  vector_idxs_.reconstruct(dim_sketch * num_sketch_each);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::ComponentWrapper::sketch
 ///
-template <typename _Val, class _Matrix>
-std::vector<double> columnSamplingSketcher(
-    const Parameters &parameters,
+template <typename _Val> template <class _Matrix>
+void Sketcher<ColumnSamplingSketcherTag, _Val>::sketchImpl(
     const _Matrix &matrix_a,
           DenseMatrixCollection120<_Val> &collection_q
 ) noexcept {
 
-  // Parameters
-  const auto nrow            = parameters.nrow();
-  const auto ncol            = parameters.ncol();
-  const auto num_sketch_each = parameters.numSketchEach();
-  const auto dim_sketch      = parameters.dimSketch();
-  const auto &streams        = parameters.streams();
+  moments_.clear();
+
+  const auto nrow            = parameters_.nrow();
+  const auto ncol            = parameters_.ncol();
+  const auto dim_sketch      = parameters_.dimSketch();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto &streams        = parameters_.streams();
 
   mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // The index vector
-  DenseVector<index_t> vector_idxs(dim_sketch * num_sketch_each);
-
-  double moment0 = MPI_Wtime();  // random generating
+  moments_.emplace_back(MPI_Wtime());  // random generating
 
   // Random sample Idxs using uniform distribution
-  random::uniform(streams, vector_idxs, 0, ncol);
+  random::uniform(streams, vector_idxs_, 0, ncol);
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  double moment1 = MPI_Wtime();  // random sketching
+  moments_.emplace_back(MPI_Wtime());  // random sketching
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
-    la::copy(matrix_a("", vector_idxs(i)), collection_q.unfold()("", i));
+    la::copy(matrix_a("", vector_idxs_(i)), collection_q.unfold()("", i));
   }
 
-  double moment2 = MPI_Wtime();  // end
-
-  return {moment0, moment1, moment2};
+  moments_.emplace_back(MPI_Wtime()); // end
 }
 
 }  // namespace isvd

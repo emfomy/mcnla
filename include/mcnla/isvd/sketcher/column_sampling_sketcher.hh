@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/sketcher/gaussian_projection_sketcher.hh
-/// @brief   The definition of Gaussian projection sketcher.
+/// @file    include/mcnla/isvd/sketcher/column_sampling_sketcher.hh
+/// @brief   The definition of column sampling sketcher.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
-#define MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
+#ifndef MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HH_
+#define MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
@@ -23,40 +23,37 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module_detail
-/// The Gaussian projection sketcher tag.
+/// The column sampling sketcher tag.
 ///
-struct GaussianProjectionSketcherTag {};
+struct ColumnSamplingSketcherTag {};
 
 /// @ingroup  isvd_sketcher_module
 template <typename _Val>
-using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag, _Val>;
+using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
-/// The Gaussian projection sketcher.
+/// The column sampling sketcher.
 ///
 /// @tparam  _Val    The value type.
 ///
 template <typename _Val>
-class Sketcher<GaussianProjectionSketcherTag, _Val>
-  : public ComponentWrapper<GaussianProjectionSketcher<_Val>> {
+class Sketcher<ColumnSamplingSketcherTag, _Val>
+  : public ComponentWrapper<ColumnSamplingSketcher<_Val>> {
 
-  friend ComponentWrapper<GaussianProjectionSketcher<_Val>>;
+  friend ComponentWrapper<ColumnSamplingSketcher<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<GaussianProjectionSketcher<_Val>>;
+  using BaseType = ComponentWrapper<ColumnSamplingSketcher<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Gaussian Projection Sketcher";
+  static constexpr const char* name_ = "Column Sampling Sketcher";
 
-  /// The exponent of power method.
-  index_t exponent_;
-
-  /// The matrix Omega.
-  DenseMatrixRowMajor<_Val> matrix_omegas_;
+  // The index vector
+  DenseVector<index_t> vector_idxs_;
 
   using BaseType::parameters_;
   using BaseType::moments_;
@@ -64,12 +61,7 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters &parameters, const index_t exponent = 0 ) noexcept;
-
-  // Get parameters
-  inline index_t exponent() const noexcept;
-  inline Sketcher& setExponent( const index_t exponent ) noexcept;
-
+  inline Sketcher( const Parameters &parameters ) noexcept;
 
  protected:
 
@@ -80,13 +72,10 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
   template <class _Matrix>
   void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<_Val> &collection_q ) noexcept;
 
-  // Outputs name
-  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
-
 };
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
+#endif  // MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HH_

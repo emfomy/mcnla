@@ -47,8 +47,6 @@ std::vector<double> svdFormer(
           DenseMatrixColMajor<_Val> &matrix_vt
 ) noexcept {
 
-  using RealValType = RealValT<_Val>;
-
   // Parameters
   const auto nrow       = parameters.nrow();
   const auto ncol       = parameters.ncol();

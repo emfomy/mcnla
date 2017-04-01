@@ -16,9 +16,9 @@
 #endif  // MCNLA_USE_MKL
 
 #ifdef MCNLA_USE_MKL
-  #include <mcnla/core/random/routine_detail_mkl.hh>
+  #include <mcnla/core/random/routine/routine_detail_mkl.hh>
 #else  // MCNLA_USE_MKL
-  #include <mcnla/core/random/routine_detail_nomkl.hh>
+  #include <mcnla/core/random/routine/routine_detail_nomkl.hh>
 #endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ inline void uniform(
     const _Val a = 0,
     const _Val b = 1
 ) noexcept {
-  gaussian(streams, vector);
+  gaussian(streams, vector, a, b);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -99,7 +99,7 @@ inline void gaussian(
     const _Val a = 0,
     const _Val sigma = 1
 ) noexcept {
-  gaussian(streams, vector);
+  gaussian(streams, vector, a, sigma);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HPP_
 
 #include <mcnla/isvd/core/component_wrapper.hh>
-#include <vector>
+#include <numeric>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -77,27 +77,14 @@ std::ostream& ComponentWrapper<_Derived>::outputName(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the time of running component.
+/// @copydoc  outputName
+///
 ///
 template <class _Derived>
-double ComponentWrapper<_Derived>::time() const noexcept {
-  return this->derived().timeImpl();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the times of running each part of the component.
-///
-template <class _Derived>
-std::vector<double> ComponentWrapper<_Derived>::times() const noexcept {
-  return this->derived().timesImpl();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the moments of running each part of the component.
-///
-template <class _Derived>
-std::vector<double> ComponentWrapper<_Derived>::moments() const noexcept {
-  return this->derived().momentsImpl();
+std::ostream& ComponentWrapper<_Derived>::outputNameImpl(
+    std::ostream &os
+) const noexcept {
+  return (os << this->derived().name_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +101,32 @@ bool ComponentWrapper<_Derived>::isInitialized() const noexcept {
 template <class _Derived>
 bool ComponentWrapper<_Derived>::isComputed() const noexcept {
   return computed_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the time of running component.
+///
+template <class _Derived>
+double ComponentWrapper<_Derived>::time() const noexcept {
+  return moments_.back() - moments_.front();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the times of running each part of the component.
+///
+template <class _Derived>
+std::vector<double> ComponentWrapper<_Derived>::times() const noexcept {
+  std::vector<double> times;
+  std::adjacent_difference(moments_.begin(), moments_.end(), times.begin());
+  return times;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the moments of running each part of the component.
+///
+template <class _Derived>
+std::vector<double> ComponentWrapper<_Derived>::moments() const noexcept {
+  return moments_;
 }
 
 }  // namespace isvd

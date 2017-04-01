@@ -50,6 +50,9 @@ class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_De
   /// The tag shows if the component is computed.
   bool computed_ = false;
 
+  /// The moments of running each part of the component.
+  std::vector<double> moments_;
+
  protected:
 
   // Constructor
@@ -67,6 +70,10 @@ class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_De
   template <class __Derived>
   friend inline std::ostream& operator<<( std::ostream &os, const ComponentWrapper<__Derived> &wrapper );
 
+  // Gets data
+  inline bool isInitialized() const noexcept;
+  inline bool isComputed() const noexcept;
+
   // Gets compute time
   inline double time() const noexcept;
   inline std::vector<double> times() const noexcept;
@@ -76,10 +83,7 @@ class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_De
 
   // Outputs name
   inline std::ostream& outputName( std::ostream &os ) const noexcept;
-
-  // Gets data
-  inline bool isInitialized() const noexcept;
-  inline bool isComputed() const noexcept;
+  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
 
 };
