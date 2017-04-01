@@ -32,6 +32,8 @@ namespace isvd {
 /// @param   parameters     The parameters.
 /// @param   collection_q   The matrix collection Q.
 /// @param   matrix_qbar    The matrix Qbar.
+/// @param   iteration      The iteration.
+/// @param   time2c         The time of communication in iteration.
 /// @param   max_iteration  The maximum iteration.
 /// @param   tolerance      The tolerance.
 ///

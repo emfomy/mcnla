@@ -22,11 +22,8 @@ int main( int argc, char **argv ) {
   mcnla::index_t m = 10, n = 10, k = 5, p = 1, l = k+p, Nj = 2, seed = 1;
 
   mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
-  parameters.nrow() = m;
-  parameters.ncol() = n;
-  parameters.rank() = k;
-  parameters.overRank() = p;
-  parameters.numSketchEach() = Nj;
+  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.sync();
 
   mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
   mcnla::matrix::DenseMatrixCollection120<double> qs(m, l, Nj);

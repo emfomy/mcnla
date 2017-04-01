@@ -93,6 +93,7 @@ int main( int argc, char **argv ) {
   parameters.rank() = k;
   parameters.overRank() = p;
   parameters.numSketchEach() = Nj;
+  parameters.sync();
 
   mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, rand());
 

@@ -33,7 +33,7 @@ Parameters::Parameters(
     mpi_rank(mpi::commRank(mpi_comm)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor
+/// @brief  Synchronize the parameters
 ///
 void Parameters::sync() noexcept {
   const MPI_Comm comm_tmp = mpi_comm;
@@ -43,6 +43,14 @@ void Parameters::sync() noexcept {
 
   const_cast<MPI_Comm&>(mpi_comm) = comm_tmp;
   const_cast<index_t&>(mpi_rank)  = rank_tmp;
+  synchronized_ = true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Check if the parameters is synchronized.
+///
+bool Parameters::isSynchronized() const noexcept {
+  return synchronized_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,34 +117,73 @@ index_t Parameters::numSketchEach() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of rows of the matrix.
+/// @brief  Sets the sizes of the matrix.
 ///
-index_t& Parameters::nrow() noexcept {
-  return nrow_;
+template <class _Matrix>
+Parameters& Parameters::setSize(
+    const _Matrix &matrix
+) noexcept {
+  return setSize(matrix.nrow(), matrix.ncol());
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of column of the matrix.
+/// @copydoc  setSize
 ///
-index_t& Parameters::ncol() noexcept {
-  return ncol_;
+Parameters& Parameters::setSize(
+    const index_t nrow,
+    const index_t ncol
+) noexcept {
+  nrow_ = nrow;
+  ncol_ = ncol;
+  synchronized_ = false;
+  return *this;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the desired rank of approximate SVD.
+/// @brief  Sets the desired rank of approximate SVD.
 ///
-index_t& Parameters::rank() noexcept {
-  return rank_;
+Parameters& Parameters::setRank(
+    const index_t rank
+) noexcept {
+  rank_ = rank;
+  synchronized_ = false;
+  return *this;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the oversampling dimension.
+/// @brief  Sets the dimension of random sketches.
 ///
-index_t& Parameters::overRank() noexcept {
-  return over_rank_;
+Parameters& Parameters::setOverRank(
+    const index_t over_rank
+  ) noexcept {
+  over_rank_ = over_rank;
+  synchronized_ = false;
+  return *this;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of random sketches per MPI node.
+/// @brief  Sets the number of total random sketches
 ///
-index_t& Parameters::numSketchEach() noexcept {
-  return num_sketch_each_;
+/// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size".
+/// @attention  Only affects on root node.
+///
+Parameters& Parameters::setNumSketch(
+    const index_t num_sketch
+) noexcept {
+  num_sketch_each_ = num_sketch / mpi_rank;
+  synchronized_ = false;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the number of random sketches per MPI node.
+///
+Parameters& Parameters::setNumSketchEach(
+    const index_t num_sketch_each
+) noexcept {
+  num_sketch_each_ = num_sketch_each;
+  synchronized_ = false;
+  return *this;
 }
 
 }  // namespace isvd

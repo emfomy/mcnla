@@ -31,7 +31,11 @@ namespace isvd {
 /// @tparam  _Matrix  The matrix type.
 ///
 /// @param   parameters  The parameters.
+/// @param   matrix_a    The matrix A.
 /// @param   matrix_q    The matrix Q.
+/// @param   vector_s    The matrix S.
+/// @param   matrix_u    The matrix U.
+/// @param   matrix_vt   The matrix Vt.
 ///
 template <typename _Val, class _Matrix>
 std::vector<double> svdFormer(

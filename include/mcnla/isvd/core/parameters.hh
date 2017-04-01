@@ -43,6 +43,9 @@ struct Parameters {
 
  protected:
 
+  /// The tag shows if the parameter is synchronized.
+  bool synchronized_ = false;
+
   /// The number of rows of the matrix.
   index_t nrow_ = 0;
 
@@ -67,22 +70,25 @@ struct Parameters {
   inline void sync() noexcept;
 
   // Gets parameter
-  inline index_t  nrow() const noexcept;
-  inline index_t  nrowEach() const noexcept;
-  inline index_t  nrowTotal() const noexcept;
-  inline index_t  ncol() const noexcept;
-  inline index_t  rank() const noexcept;
-  inline index_t  overRank() const noexcept;
-  inline index_t  dimSketch() const noexcept;
-  inline index_t  numSketch() const noexcept;
-  inline index_t  numSketchEach() const noexcept;
+  inline bool    isSynchronized() const noexcept;
+  inline index_t nrow() const noexcept;
+  inline index_t nrowEach() const noexcept;
+  inline index_t nrowTotal() const noexcept;
+  inline index_t ncol() const noexcept;
+  inline index_t rank() const noexcept;
+  inline index_t overRank() const noexcept;
+  inline index_t dimSketch() const noexcept;
+  inline index_t numSketch() const noexcept;
+  inline index_t numSketchEach() const noexcept;
 
   // Sets parameter
-  inline index_t& nrow() noexcept;
-  inline index_t& ncol() noexcept;
-  inline index_t& rank() noexcept;
-  inline index_t& overRank() noexcept;
-  inline index_t& numSketchEach() noexcept;
+  template <class _Matrix>
+  inline Parameters& setSize( const _Matrix &matrix ) noexcept;
+  inline Parameters& setSize( const index_t nrow, const index_t ncol ) noexcept;
+  inline Parameters& setRank( const index_t rank ) noexcept;
+  inline Parameters& setOverRank( const index_t over_rank ) noexcept;
+  inline Parameters& setNumSketch( const index_t num_sketch ) noexcept;
+  inline Parameters& setNumSketchEach( const index_t num_sketch_each ) noexcept;
 
 };
 

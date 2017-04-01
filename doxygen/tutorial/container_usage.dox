@@ -1,0 +1,58 @@
+namespace mcnla {
+
+namespace matrix {
+
+/**
+  @page tutorial_container_usage Container Usage
+
+  <h3>MATLAB-Like Operation</h3>
+
+  MCNLA provides MATLAB-Like parenthesis operators. Here we use `{i,j}` for `i:(j-1)` in MATLAB (the elements from `i` to `j-1`), and `""` for `:` in MATLAB (all the elements). For example, `a(1, {2,5})` represents `a(1, 2:4)` in MATLAB, and `a("", {2,5})` represents `a(:, 2:4)` in MATLAB. Note that all the indices are <b>zero-based</b> in MCNLA.
+
+  The following are the common operators of vector `x` and matrix `a`:
+
+  Command                  | Detail
+  ------------------------ | ------------------------
+  `x(i)`                   | the `i`-th element
+  `x({i,j})`               | a sub-vector containing `x(i), ..., x(j)`
+  `a(i, j)`                | the `(i, j)`-th element
+  `a({i,k}, {j,l})`        | a sub-matrix containing the `i:(k-1)`-th rows and the `j:(l-1)`-th columns
+  `a("", {j,l})`           | a sub-matrix containing the `j:(l-1)`-th columns
+  `a({i,k}, "")`           | a sub-matrix containing the `i:(k-1)`-th rows
+  `a("", j)`               | the `j`-th column
+  `a(i, "")`               | the `i`-th row
+  `a({i,k}, j)`            | the `j`-th column containing the `i:(k-1)`-th elements
+  `a(i, {j,l})`            | the `i`-th row containing the `j:(l-1)`-th elements
+
+  <h3>Storage View</h3>
+
+  The storage views of @ref DenseVectorStorage "dense-vector-based" containers:
+
+  | Command                  | Detail
+  | ------------------------ | ------------------------
+  | `x.viewVector()`         | treat `x` as a @ref DenseVector "general vector"
+  | `x.viewDiagonal()`       | treat `x` as a @ref DenseDiagonalMatrix "diagonal matrix"
+
+  The storage views of @ref DenseMatrixStorage "dense-matrix-based" containers:
+
+  | Command                  | Detail
+  | ------------------------ | ------------------------
+  | `a.viewMatrix()`         | treat `a` as a @ref DenseMatrix "general matrix"
+  | `a.viewSymmetric()`      | treat `a` as a @ref DenseSymmetricMatrix "symmetric matrix"
+  | `a.viewTriangular()`     | treat `a` as a @ref DenseTriangularMatrix "triangular matrix"
+
+  The matrix containers also provides transpose/conjugate views:
+
+  | Command                  | Detail
+  | ------------------------ | ------------------------
+  | `a.t()`                  | transpose `a`
+  | `a.c()`                  | conjugate `a`
+  | `a.h()`                  | conjugate transpose `a`
+
+  @see @ref matrix_module
+
+*/
+
+}  // namespace matrix
+
+}  // namespace mcnla

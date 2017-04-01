@@ -1,0 +1,130 @@
+namespace mcnla {
+
+namespace isvd {
+
+/**
+  @page tutorial_isvd iSVD
+
+  <h3>iSVD</h3>
+
+  iSVD solves a approximate low-rank singular value decomposition of matrix `a`.
+
+  <h3>Example</h3>
+
+  The following is an example of using iSVD:
+
+  <h4>Initialize Environment</h4>
+
+  The MPI environment and random seed should be set up before calling iSVD.
+
+  @code{.cpp}
+  // Initialize MPI
+  MPI_Init(&argc, &argv);
+  mcnla::mpi_int_t mpi_root = 0;
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
+
+  // Initialize random seed
+  srand(time(NULL));
+  mcnla::index_t seed = rand();
+  @endcode
+
+  <h4>Load Data</h4>
+
+  One may use @ref mcnla::io::loadMatrixMarket to load a matrix from a Matrix Market format file. Note the all the MPI nodes should load the matrix.
+
+  @code{.cpp}
+  // Load matrix
+  mcnla::DenseMatrix<double> matrix_a;
+  mcnla::io::loadMatrixMarket(matrix_a, "a.mtx");
+  @endcode
+
+  <h4>Initialize %Prarmeters</h4>
+
+  Set @ref Parameters before calling iSVD. Note that one should call @ref Parameters::sync to broadcast parameters from root node.
+
+  @code{.cpp}
+  // Set parameters
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
+  parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.sync();
+  @endcode
+
+  <h4>Allocate variables</h4>
+
+  Allocate the variables.
+
+  @code{.cpp}
+  // Variable allocation
+  mcnla::random::MpiStreams mpi_streams(MPI_COMM_WORLD, 0, rand());
+  mcnla::matrix::DenseMatrixCollection120<double> collection_qs(m, k+p, Nj);
+  mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m, k+p);
+  mcnla::matrix::DenseVector<double> vector_s(k+p);
+  mcnla::matrix::DenseMatrixColMajor<double> matrix_u(m, k+p);
+  mcnla::matrix::DenseMatrixColMajor<double> matrix_vt(k+p, n);
+  @endcode
+
+  <h4>Run iSVD</h4>
+
+  The iSVD compute the approximate low-rank singular value decomposition.
+
+  @code{.cpp}
+  // Run iSVD
+  mcnla::index_t iter; double time2c;
+
+  auto moments_s = mcnla::isvd::gaussianProjectionSketcher<double>(parameters, matrix_a, collection_qs, mpi_streams);
+  auto moments_o = mcnla::isvd::svdOrthogonalizer<double>(parameters, collection_qs);
+  auto moments_i = mcnla::isvd::kolmogorovNagumoIntegrator<double>(parameters, collection_qs, matrix_q, iter, time2c, maxiter, tol);
+  auto moments_f = mcnla::isvd::svdFormer<double>(parameters, matrix_a, matrix_q, vector_s, matrix_u, matrix_vt);
+  @endcode
+
+  <h4>Get Executing Time</h4>
+
+  iSVD also records the executing time of each step.
+
+  @code{.cpp}
+  // Display executing time
+  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
+    auto time_s = moments_s.back() - moments_s.front();
+    auto time_o = moments_o.back() - moments_o.front();
+    auto time_i = moments_i.back() - moments_i.front();
+    auto time_f = moments_f.back() - moments_f.front();
+    auto time = time_s + time_o + time_i + time_f;
+
+    std::cout << "Average total computing time: " << time   << " seconds." << std::endl;
+    std::cout << "Average sketching time:       " << time_s << " seconds." << std::endl;
+    std::cout << "Average orthogonalizing time: " << time_o << " seconds." << std::endl;
+    std::cout << "Average integrating time:     " << time_i << " seconds." << std::endl;
+    std::cout << "Average forming time:         " << time_f << " seconds." << std::endl;
+  }
+  @endcode
+
+  <h4>Save Data</h4>
+
+  One may use @ref mcnla::io::saveMatrixMarket to save the results into Matrix Market format files.
+
+  @code{.cpp}
+  // Save matrix
+  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
+    mcnla::io::saveMatrixMarket(vector_s,  "s.mtx");
+    mcnla::io::saveMatrixMarket(matrix_u,  "u.mtx");
+    mcnla::io::saveMatrixMarket(matrix_vt, "vt.mtx");
+  }
+  @endcode
+
+  <h4>Finalize</h4>
+
+  Remember to finalize the MPI.
+
+  @code{.cpp}
+  // Finalize MPI
+  MPI_Finalize();
+
+  @endcode
+
+  @see @ref isvd_module
+
+*/
+
+}  // namespace isvd
+
+}  // namespace mcnla
