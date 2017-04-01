@@ -54,10 +54,11 @@ void CollectionQToRowBlockConverter<_Val>::runImpl(
   const auto nrow_total      = parameters_.nrowTotal();
   const auto nrow_each       = parameters_.nrowEach();
   const auto dim_sketch      = parameters_.dimSketch();
+  const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
   mcnla_assert_eq(collection_q.sizes(),  std::make_tuple(nrow, dim_sketch, num_sketch_each));
-  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_each, dim_sketch, num_sketch_each));
+  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_each, dim_sketch, num_sketch));
 
   auto matrix_qs_full = collection_q.unfold();
   matrix_qs_full.resize(nrow_total, matrix_qs_full.ncol());

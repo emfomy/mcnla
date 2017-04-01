@@ -35,9 +35,10 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize MPI
   MPI_Init(&argc, &argv);
+  auto             mpi_comm = MPI_COMM_WORLD;
+  auto             mpi_size = mcnla::mpi::commSize(mpi_comm);
+  auto             mpi_rank = mcnla::mpi::commRank(mpi_comm);
   mcnla::mpi_int_t mpi_root = 0;
-  mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(MPI_COMM_WORLD);
-  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
 
   // ====================================================================================================================== //
   // Display program information
@@ -65,7 +66,6 @@ int main( int argc, char **argv ) {
   ValType        tol       = ( argc > ++argi ) ? atof(argv[argi]) : 1e-4;
   mcnla::index_t maxiter   = ( argc > ++argi ) ? atof(argv[argi]) : 256;
   double         k_scale   = ( argc > ++argi ) ? atof(argv[argi]) : 2.0;
-  mcnla::index_t l         = k + p;
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << m
             << ", n = " << n
@@ -80,6 +80,17 @@ int main( int argc, char **argv ) {
   assert((k+p) <= m && m <= n);
 
   // ====================================================================================================================== //
+  // Generate matrix
+  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_a(m, n), matrix_u_true;
+  ValType error0;
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "A = U0 S0 V0', s0 = 1, 1/2, 1/3, ...1/k, 0.01/(k+1), ..., 0.01/" << k_scale << "k, 0, ..."
+              << std::endl << std::endl;
+    create(matrix_a, matrix_u_true, error0, k, k_scale);
+  }
+  mcnla::mpi::bcast(matrix_a, mpi_root, mpi_comm);
+
+  // ====================================================================================================================== //
   // Create statistics collector
   StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frerr(num_test),
                 set_time(num_test), set_time_s(num_test), set_time_o(num_test), set_time_i(num_test), set_time_f(num_test),
@@ -87,17 +98,13 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate driver
-  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, mpi_root, rand());
+  mcnla::isvd::Parameters parameters(mpi_comm, mpi_root, rand());
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
-  mcnla::isvd::KolmogorovNagumoIntegrator<double> integrator(parameters);
+  mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
-
-  // ====================================================================================================================== //
-  // Allocate matrices
-  mcnla::matrix::DenseMatrixColMajor<ValType> matrix_a(m, n), matrix_u_true;
-  mcnla::matrix::DenseMatrixCollection120<double> collection_q(m, l, Nj);
-  mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m, l);
+  mcnla::isvd::CollectionQToRowBlockConverter<double> oi_converter(parameters);
+  mcnla::isvd::MatrixQFromRowBlockConverter<double> if_converter(parameters);
 
   // ====================================================================================================================== //
   // Initialize parameters
@@ -108,6 +115,21 @@ int main( int argc, char **argv ) {
   orthogonalizer.initialize();
   integrator.initialize();
   former.initialize();
+  oi_converter.initialize();
+  if_converter.initialize();
+
+  // ====================================================================================================================== //
+  // Allocate matrices
+  auto mj = parameters.nrowEach();
+  auto m1 = parameters.nrowTotal();
+  auto l  = parameters.dimSketch();
+  auto N  = parameters.numSketch();
+  mcnla::matrix::DenseMatrixCollection120<double> collection_q(m1, l, Nj);
+  mcnla::matrix::DenseMatrixCollection120<double> collection_qj(mj, l, N);
+  mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m1, l);
+  mcnla::matrix::DenseMatrixRowMajor<double> matrix_qj(mj, l);
+  collection_q = collection_q({0, m}, "", "");
+  matrix_q = matrix_q({0, m}, "");
 
   // ====================================================================================================================== //
   // Display driver
@@ -119,16 +141,6 @@ int main( int argc, char **argv ) {
   }
 
   // ====================================================================================================================== //
-  // Generate matrix
-  ValType error0;
-  if ( mpi_rank == mpi_root ) {
-    std::cout << "A = U0 S0 V0', s0 = 1, 1/2, 1/3, ...1/k, 0.01/(k+1), ..., 0.01/" << k_scale << "k, 0, ..."
-              << std::endl << std::endl;
-    create(matrix_a, matrix_u_true, error0, k, k_scale);
-  }
-  mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
-
-  // ====================================================================================================================== //
   // Run MCNLA
   if ( mpi_rank == mpi_root ) {
     std::cout << "Start iSVD." << std::endl << std::endl;
@@ -138,14 +150,16 @@ int main( int argc, char **argv ) {
   for ( int t = -skip_test; t < num_test; ++t ) {
 
     // Run iSVD
-    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(mpi_comm);
 
     sketcher(matrix_a, collection_q);
     orthogonalizer(collection_q);
-    integrator(collection_q, matrix_q);
+    oi_converter(collection_q, collection_qj);
+    integrator(collection_qj, matrix_qj);
+    if_converter(matrix_qj, matrix_q);
     former(matrix_a, matrix_q);
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(mpi_comm);
 
     // Check result
     if ( mpi_rank == mpi_root  ) {
