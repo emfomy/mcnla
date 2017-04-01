@@ -1,0 +1,123 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/mcnla/isvd/core/component_wrapper.hpp
+/// @brief   The iSVD component wrapper.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HPP_
+#define MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HPP_
+
+#include <mcnla/isvd/core/component_wrapper.hh>
+#include <vector>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The MCNLA namespace.
+//
+namespace mcnla {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The iSVD namespace.
+//
+namespace isvd {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given parameters.
+///
+template <class _Derived>
+ComponentWrapper<_Derived>::ComponentWrapper(
+    const Parameters &parameters
+) noexcept
+  : parameters_(parameters) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Initializes.
+///
+template <class _Derived> template <typename... Args>
+void ComponentWrapper<_Derived>::initialize(
+    Args... args
+) noexcept {
+  mcnla_assert_true(parameters_.isSynchronized());
+  this->derived().initializeImpl(args...);
+  initialized_ = true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Random sketches.
+///
+template <class _Derived> template <typename... Args>
+void ComponentWrapper<_Derived>::operator()(
+    Args... args
+) noexcept {
+  mcnla_assert_true(parameters_.isSynchronized());
+  mcnla_assert_true(isInitialized());
+  this->derived().sketchImpl(args...);
+  computed_ = true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Output name to stream.
+///
+template <class __Derived>
+std::ostream& operator<<(
+    std::ostream &os,
+    const ComponentWrapper<__Derived> &wrapper
+) {
+  return wrapper.outputName(os);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator<<
+///
+template <class _Derived>
+std::ostream& ComponentWrapper<_Derived>::outputName(
+    std::ostream &os
+) const noexcept {
+  return this->derived().outputNameImpl(os);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the time of running component.
+///
+template <class _Derived>
+double ComponentWrapper<_Derived>::time() const noexcept {
+  return this->derived().timeImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the times of running each part of the component.
+///
+template <class _Derived>
+std::vector<double> ComponentWrapper<_Derived>::times() const noexcept {
+  return this->derived().timesImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the moments of running each part of the component.
+///
+template <class _Derived>
+std::vector<double> ComponentWrapper<_Derived>::moments() const noexcept {
+  return this->derived().momentsImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Check if the parameters is initialized.
+///
+template <class _Derived>
+bool ComponentWrapper<_Derived>::isInitialized() const noexcept {
+  return initialized_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Check if the parameters is computed.
+///
+template <class _Derived>
+bool ComponentWrapper<_Derived>::isComputed() const noexcept {
+  return computed_;
+}
+
+}  // namespace isvd
+
+}  // namespace mcnla
+
+#endif  // MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HPP_

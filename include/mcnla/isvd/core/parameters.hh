@@ -73,11 +73,11 @@ class Parameters {
   // Constructors
   inline Parameters( const MPI_Comm mpi_comm, const mpi_int_t mpi_root, const index_t seed = rand() ) noexcept;
 
-  // Boardcast
+  // Synchronize
   inline void sync() noexcept;
 
   // Gets parameter
-  inline bool    isSynchronized() const noexcept;
+  inline bool isSynchronized() const noexcept;
   inline index_t nrow() const noexcept;
   inline index_t nrowEach() const noexcept;
   inline index_t nrowTotal() const noexcept;

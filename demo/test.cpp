@@ -19,8 +19,11 @@ int main( int argc, char **argv ) {
 
   MPI_Init(&argc, &argv);
 
-  mcnla::index_t m = 10, n = 10, k = 5, p = 1, l = k+p, Nj = 2, seed = 1;
   mcnla::mpi_int_t mpi_root = 0;
+  mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
+
+  mcnla::index_t m = 10, n = 10, k = 5, p = 1, l = k+p, Nj = 2, seed = 1;
 
   mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, mpi_root);
   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
@@ -36,7 +39,17 @@ int main( int argc, char **argv ) {
   mcnla::random::gaussian(streams, a.vectorize());
   mcnla::mpi::bcast(a, mpi_root, MPI_COMM_WORLD);
 
-  mcnla::isvd::gaussianProjectionSketcher<double>(parameters, a, qs, 2);
+  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, 2);
+  sketcher.initialize();
+
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "Uses " << sketcher << "." << std::endl;
+  //   std::cout << "Uses " << orthogonalizer << "." << std::endl;
+  //   std::cout << "Uses " << integrator << "." << std::endl;
+  //   std::cout << "Uses " << former << "." << std::endl << std::endl;
+  }
+
+  sketcher(a, qs);
   // mcnla::isvd::columnSamplingSketcher<double>(parameters, a, qs);
 
   mcnla::isvd::svdOrthogonalizer<double>(parameters, qs);
