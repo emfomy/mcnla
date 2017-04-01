@@ -54,8 +54,6 @@ void Orthogonalizer<SvdOrthogonalizerTag, _Val>::runImpl(
           DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
 
-  moments_.clear();
-
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();

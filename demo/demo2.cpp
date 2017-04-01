@@ -86,24 +86,37 @@ int main( int argc, char **argv ) {
                 set_iter(num_test);
 
   // ====================================================================================================================== //
-  // Initialize parameters
-  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0, rand());
-  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-  parameters.sync();
+  // Allocate driver
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, mpi_root, rand());
+  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
+  mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::KolmogorovNagumoIntegrator<double> integrator(parameters);
+  mcnla::isvd::SvdFormer<double> former(parameters);
 
-  // if ( mpi_rank == mpi_root ) {
-  //   std::cout << "Uses " << driver.sketcher() << "." << std::endl;
-  //   std::cout << "Uses " << driver.orthogonalizer() << "." << std::endl;
-  //   std::cout << "Uses " << driver.integrator() << "." << std::endl;
-  //   std::cout << "Uses " << driver.former() << "." << std::endl << std::endl;
-  // }
-
+  // ====================================================================================================================== //
+  // Allocate matrices
   mcnla::matrix::DenseMatrixColMajor<ValType> matrix_a(m, n), matrix_u_true;
-  mcnla::matrix::DenseMatrixCollection120<double> collection_qs(m, l, Nj);
+  mcnla::matrix::DenseMatrixCollection120<double> collection_q(m, l, Nj);
   mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m, l);
-  mcnla::matrix::DenseVector<double> vector_s(l);
-  mcnla::matrix::DenseMatrixColMajor<double> matrix_u(m, l);
-  mcnla::matrix::DenseMatrixColMajor<double> matrix_vt(l, n);
+
+  // ====================================================================================================================== //
+  // Initialize parameters
+  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  integrator.setMaxIteration(maxiter).setTolerance(tol);
+  parameters.sync();
+  sketcher.initialize();
+  orthogonalizer.initialize();
+  integrator.initialize();
+  former.initialize();
+
+  // ====================================================================================================================== //
+  // Display driver
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "Uses " << sketcher << "." << std::endl;
+    std::cout << "Uses " << orthogonalizer << "." << std::endl;
+    std::cout << "Uses " << integrator << "." << std::endl;
+    std::cout << "Uses " << former << "." << std::endl << std::endl;
+  }
 
   // ====================================================================================================================== //
   // Generate matrix
@@ -127,34 +140,24 @@ int main( int argc, char **argv ) {
     // Run iSVD
     MPI_Barrier(MPI_COMM_WORLD);
 
-    auto moments_s = mcnla::isvd::gaussianProjectionSketcher<double>(parameters, matrix_a, collection_qs);
-
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    auto moments_o = mcnla::isvd::svdOrthogonalizer<double>(parameters, collection_qs);
-
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    mcnla::index_t iter; double time2c;
-    auto moments_i = mcnla::isvd::kolmogorovNagumoIntegrator<double>(parameters, collection_qs, matrix_q,
-                                                                     iter, time2c, maxiter, tol);
-
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    auto moments_f = mcnla::isvd::svdFormer<double>(parameters, matrix_a, matrix_q, vector_s, matrix_u, matrix_vt);
+    sketcher(matrix_a, collection_q);
+    orthogonalizer(collection_q);
+    integrator(collection_q, matrix_q);
+    former(matrix_a, matrix_q);
 
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Check result
     if ( mpi_rank == mpi_root  ) {
       ValType smax, smin, smean, frerr;
-      check_u(matrix_u, matrix_u_true, smax, smin, smean);
-      check(matrix_a, matrix_u, matrix_vt, vector_s, frerr);
-      auto time_s = moments_s.back() - moments_s.front();
-      auto time_o = moments_o.back() - moments_o.front();
-      auto time_i = moments_i.back() - moments_i.front();
-      auto time_f = moments_f.back() - moments_f.front();
-      auto time = time_s + time_o + time_i + time_f;
+      check_u(former.matrixU(), matrix_u_true, smax, smin, smean);
+      check(matrix_a, former.matrixU(), former.matrixVt(), former.vectorS(), frerr);
+      auto iter   = integrator.iteration();
+      auto time_s = sketcher.time();
+      auto time_o = orthogonalizer.time();
+      auto time_i = integrator.time();
+      auto time_f = former.time();
+      auto time   = time_s + time_o + time_i + time_f;
       std::cout << std::setw(log10(num_test)+1) << t
                 << " | validity: " << smax << " / " << smean << " / " << smin
                 << " | error: " << frerr

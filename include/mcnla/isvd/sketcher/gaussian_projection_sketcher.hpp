@@ -58,8 +58,6 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
           DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
 
-  moments_.clear();
-
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
   const auto num_sketch_each = parameters_.numSketchEach();

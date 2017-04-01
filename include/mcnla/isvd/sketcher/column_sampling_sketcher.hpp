@@ -54,8 +54,6 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
           DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
 
-  moments_.clear();
-
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
   const auto dim_sketch      = parameters_.dimSketch();

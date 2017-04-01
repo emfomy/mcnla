@@ -52,6 +52,7 @@ void ComponentWrapper<_Derived>::operator()(
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
   mcnla_assert_true(isInitialized());
+  moments_.clear();
   this->derived().runImpl(args...);
   computed_ = true;
 }
