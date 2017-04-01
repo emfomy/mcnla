@@ -37,23 +37,26 @@ int main( int argc, char **argv ) {
 
   auto m_full = parameters.nrowTotal(), mj = parameters.nrowEach();
 
-  mcnla::matrix::DenseMatrixCollection120<double> qi_full(m_full, l, Nj);
+  mcnla::matrix::DenseMatrixCollection120<double> qi(m_full, l, Nj);
   mcnla::matrix::DenseMatrixCollection120<double> qij(mj, l, N);
-  mcnla::matrix::DenseMatrixRowMajor<double> qbar_full(m_full, l);
+  mcnla::matrix::DenseMatrixRowMajor<double> qbar(m, l);
   mcnla::matrix::DenseMatrixRowMajor<double> qbarj(mj, l);
-  auto qi = qi_full({0, m}, "", "");
-  auto qbar = qbar_full({0, m}, "");
+  qi   = qi({0, m}, "", "");
+  qbar = qbar({0, m}, "");
 
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
-  // mcnla::isvd::ColumnSamplingSketcher<double> sketcher(parameters);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
-
   sketcher.initialize();
   orthogonalizer.initialize();
   integrator.initialize();
   former.initialize();
+
+  mcnla::isvd::CollectionQToRowBlockConverter<double> oi_converter(parameters);
+  mcnla::isvd::MatrixQFromRowBlockConverter<double> if_converter(parameters);
+  oi_converter.initialize();
+  if_converter.initialize();
 
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << sketcher << "." << std::endl;
@@ -64,23 +67,9 @@ int main( int argc, char **argv ) {
 
   sketcher(a, qi);
   orthogonalizer(qi);
-
-  // Exchange Q
-  mcnla::la::memset0(qi_full({m, m_full}, "", "").unfold());
-  mcnla::mpi::alltoall(qi_full.unfold(), mpi_comm);
-
-  // Rearrange Qj
-  auto qs = qi_full.unfold();
-  for ( auto j = 0; j < mpi_size; ++j ) {
-    mcnla::la::copy(qs(mcnla::matrix::IdxRange{j, j+1} * mj, ""),
-                    qij(mcnla::matrix::IdxRange{j, j+1} * Nj).unfold());
-  }
-
+  oi_converter(qi, qij);
   integrator(qij, qbarj);
-
-  // Gather Qc
-  mcnla::mpi::gather(qbarj, qbar_full, mpi_root, mpi_comm);
-
+  if_converter(qbarj, qbar);
   former(a, qbar);
 
   auto &u = former.matrixU();

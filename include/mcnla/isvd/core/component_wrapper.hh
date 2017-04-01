@@ -14,7 +14,6 @@
 #include <mcnla/isvd/core/parameters.hpp>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

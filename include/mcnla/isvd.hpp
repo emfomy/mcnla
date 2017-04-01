@@ -14,7 +14,7 @@
 #include <mcnla/isvd/orthogonalizer.hpp>
 #include <mcnla/isvd/integrator.hpp>
 #include <mcnla/isvd/former.hpp>
-// #include <mcnla/isvd/converter.hpp>
+#include <mcnla/isvd/converter.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @defgroup  isvd_core_module  iSVD Core Module

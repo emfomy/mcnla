@@ -22,7 +22,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::FormerWrapper
+/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
 Former<SvdFormerTag, _Val>::Former(
@@ -31,7 +31,7 @@ Former<SvdFormerTag, _Val>::Former(
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::initialize
+/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
 void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
@@ -53,7 +53,7 @@ void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Integrates.
+/// @brief  Forms SVD.
 ///
 /// @param   matrix_a    The matrix A.
 /// @param   matrix_q    The matrix Q.
@@ -96,7 +96,7 @@ void Former<SvdFormerTag, _Val>::runImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::vectorS
+/// @copydoc  mcnla::isvd::ComponentWrapper::vectorS
 ///
 template <typename _Val>
 const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const noexcept {
@@ -105,7 +105,7 @@ const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const n
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::matrixU
+/// @copydoc  mcnla::isvd::ComponentWrapper::matrixU
 ///
 template <typename _Val>
 const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noexcept {
@@ -114,7 +114,7 @@ const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noe
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::matrixVt
+/// @copydoc  mcnla::isvd::ComponentWrapper::matrixVt
 ///
 template <typename _Val>
 const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixVt() const noexcept {
