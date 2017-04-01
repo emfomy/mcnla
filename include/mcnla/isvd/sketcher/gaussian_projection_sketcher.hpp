@@ -81,7 +81,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
     la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
   }
 
-  moments_.emplace_back(MPI_Wtime()); // end
+  moments_.emplace_back(MPI_Wtime());  // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

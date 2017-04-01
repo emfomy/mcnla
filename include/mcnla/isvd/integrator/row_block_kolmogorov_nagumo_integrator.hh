@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh
-/// @brief   The definition of Kolmogorov-Nagumo-type integrator.
+/// @file    include/mcnla/isvd/integrator/row_block_kolmogorov_nagumo_integrator.hh
+/// @brief   The definition of Kolmogorov-Nagumo-type integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
-#define MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
@@ -23,30 +23,30 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
+/// @ingroup  isvd_integrator_module_detail
 /// The Kolmogorov-Nagumo-type integrator tag.
 ///
-struct KolmogorovNagumoIntegratorTag {};
+struct RowBlockKolmogorovNagumoIntegratorTag {};
 
 /// @ingroup  isvd_integrator_module
 template <typename _Val>
-using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Val>;
+using RowBlockKolmogorovNagumoIntegrator = Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
 /// The Kolmogorov-Nagumo-type integrator.
 ///
-/// @tparam  _Val  The scalar type.
+/// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Integrator<KolmogorovNagumoIntegratorTag, _Val>
-  : public ComponentWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>> {
+class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
+  : public ComponentWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>> {
 
-  friend ComponentWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
+  friend ComponentWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
+  using BaseType = ComponentWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
  public:
 
@@ -56,7 +56,7 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
+  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator (Row-Block Version)";
 
   /// The maximum number of iteration.
   index_t max_iteration_;
@@ -70,6 +70,15 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
   /// The communication time of iterating.
   double time2c_;
 
+  /// The matrix Qs.
+  DenseMatrixRowMajor<ValType> matrix_qs_;
+
+  /// The matrix Qjs.
+  DenseMatrixRowMajor<ValType> matrix_qjs_;
+
+  /// The matrix Qcj.
+  DenseMatrixRowMajor<ValType> matrix_qcj_;
+
   /// The matrix Bs.
   DenseMatrixRowMajor<ValType> matrix_bs_;
 
@@ -82,8 +91,8 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
   /// The matrix C.
   DenseMatrixRowMajor<ValType> matrix_c_;
 
-  /// The matrix X.
-  DenseMatrixRowMajor<ValType> matrix_x_;
+  /// The matrix Xj.
+  DenseMatrixRowMajor<ValType> matrix_xj_;
 
   /// The temporary matrix.
   DenseMatrixRowMajor<ValType> matrix_tmp_;
@@ -94,7 +103,7 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
   /// The vector F.
   DenseVector<ValType> vector_f_;
 
-  /// The SYEV engine.
+  /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
@@ -130,4 +139,4 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_

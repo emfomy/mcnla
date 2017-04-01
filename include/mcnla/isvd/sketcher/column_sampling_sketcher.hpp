@@ -75,7 +75,7 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
     la::copy(matrix_a("", vector_idxs_(i)), collection_q.unfold()("", i));
   }
 
-  moments_.emplace_back(MPI_Wtime()); // end
+  moments_.emplace_back(MPI_Wtime());  // end
 }
 
 }  // namespace isvd

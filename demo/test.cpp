@@ -19,27 +19,35 @@ int main( int argc, char **argv ) {
 
   MPI_Init(&argc, &argv);
 
+  auto mpi_comm = MPI_COMM_WORLD;
   mcnla::mpi_int_t mpi_root = 0;
-  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
+  mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(mpi_comm);
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
 
-  mcnla::index_t m = 10, n = 10, k = 5, p = 1, l = k+p, Nj = 2, seed = rand();
+  mcnla::index_t m = 10, n = 10, k = 5, p = 1, l = k+p, Nj = 2, K = mpi_size, N = Nj*K, seed = rand();
 
   mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
-  mcnla::matrix::DenseMatrixCollection120<double> qs(m, l, Nj);
-  mcnla::matrix::DenseMatrixRowMajor<double> qbar(m, l);
-
   mcnla::random::Streams streams(0);
   mcnla::random::gaussian(streams, a.vectorize());
-  mcnla::mpi::bcast(a, mpi_root, MPI_COMM_WORLD);
+  mcnla::mpi::bcast(a, mpi_root, mpi_comm);
 
-  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, mpi_root, seed);
-  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  mcnla::isvd::Parameters parameters(mpi_comm, mpi_root, seed);
+  parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
+
+  auto m_full = parameters.nrowTotal(), mj = parameters.nrowEach();
+
+  mcnla::matrix::DenseMatrixCollection120<double> qi_full(m_full, l, Nj);
+  mcnla::matrix::DenseMatrixCollection120<double> qij(mj, l, N);
+  mcnla::matrix::DenseMatrixRowMajor<double> qbar_full(m_full, l);
+  mcnla::matrix::DenseMatrixRowMajor<double> qbarj(mj, l);
+  auto qi = qi_full({0, m}, "", "");
+  auto qbar = qbar_full({0, m}, "");
 
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
   // mcnla::isvd::ColumnSamplingSketcher<double> sketcher(parameters);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
-  mcnla::isvd::KolmogorovNagumoIntegrator<double> integrator(parameters);
+  mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
 
   sketcher.initialize();
@@ -54,12 +62,28 @@ int main( int argc, char **argv ) {
     std::cout << "Uses " << former << "." << std::endl << std::endl;
   }
 
-  sketcher(a, qs);
-  orthogonalizer(qs);
-  integrator(qs, qbar);
+  sketcher(a, qi);
+  orthogonalizer(qi);
+
+  // Exchange Q
+  mcnla::la::memset0(qi_full({m, m_full}, "", "").unfold());
+  mcnla::mpi::alltoall(qi_full.unfold(), mpi_comm);
+
+  // Rearrange Qj
+  auto qs = qi_full.unfold();
+  for ( auto j = 0; j < mpi_size; ++j ) {
+    mcnla::la::copy(qs(mcnla::matrix::IdxRange{j, j+1} * mj, ""),
+                    qij(mcnla::matrix::IdxRange{j, j+1} * Nj).unfold());
+  }
+
+  integrator(qij, qbarj);
+
+  // Gather Qc
+  mcnla::mpi::gather(qbarj, qbar_full, mpi_root, mpi_comm);
+
   former(a, qbar);
 
-  auto u = former.matrixU();
+  auto &u = former.matrixU();
 
   disp(a);
   disp(u);
