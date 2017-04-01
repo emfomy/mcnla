@@ -8,10 +8,7 @@
 #ifndef MCNLA_ISVD_FORMER_SVD_FORMER_HPP_
 #define MCNLA_ISVD_FORMER_SVD_FORMER_HPP_
 
-#include <mcnla/isvd/core/parameters.hpp>
-#include <mcnla/core/matrix.hpp>
-#include <mcnla/core/la.hpp>
-#include <vector>
+#include <mcnla/isvd/former/svd_former.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,75 +21,104 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_former_module
-/// The SVD former.
+/// @copydoc  mcnla::isvd::FormerWrapper::FormerWrapper
 ///
-/// @tparam  _Val     The value type.
-/// @tparam  _Matrix  The matrix type.
+template <typename _Val>
+Former<SvdFormerTag, _Val>::Former(
+    const Parameters &parameters
+) noexcept
+  : BaseType(parameters) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerWrapper::initialize
 ///
-/// @param   parameters  The parameters.
+template <typename _Val>
+void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
+
+  const auto nrow       = parameters_.nrow();
+  const auto ncol       = parameters_.ncol();
+  const auto dim_sketch = parameters_.dimSketch();
+  const auto rank       = parameters_.rank();
+
+  matrix_w_.reconstruct(dim_sketch, dim_sketch);
+  vector_s_.reconstruct(dim_sketch);
+  matrix_u_.reconstruct(nrow, dim_sketch);
+  matrix_vt_.reconstruct(dim_sketch, ncol);
+  gesvd_driver_.reconstruct(dim_sketch, ncol);
+
+  vector_s_cut_  = vector_s_({0, rank});
+  matrix_u_cut_  = matrix_u_("", {0, rank});
+  matrix_vt_cut_ = matrix_vt_({0, rank}, "");
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Integrates.
+///
 /// @param   matrix_a    The matrix A.
 /// @param   matrix_q    The matrix Q.
-/// @param   vector_s    The matrix S.
-/// @param   matrix_u    The matrix U.
-/// @param   matrix_vt   The matrix Vt.
 ///
-template <typename _Val, class _Matrix>
-std::vector<double> svdFormer(
-    const Parameters &parameters,
+template <typename _Val> template <class _Matrix>
+void Former<SvdFormerTag, _Val>::runImpl(
     const _Matrix &matrix_a,
-    const DenseMatrixRowMajor<_Val> &matrix_q,
-          DenseVector<RealValT<_Val>> &vector_s,
-          DenseMatrixColMajor<_Val> &matrix_u,
-          DenseMatrixColMajor<_Val> &matrix_vt
+    const DenseMatrixRowMajor<ValType> &matrix_q
 ) noexcept {
 
-  // Parameters
-  const auto nrow       = parameters.nrow();
-  const auto ncol       = parameters.ncol();
-  const auto dim_sketch = parameters.dimSketch();
-  const auto rank       = parameters.rank();
+  const auto mpi_root   = parameters_.mpi_root;
+  const auto mpi_rank   = parameters_.mpi_rank;
+  const auto nrow       = parameters_.nrow();
+  const auto ncol       = parameters_.ncol();
+  const auto dim_sketch = parameters_.dimSketch();
 
+  if ( mpi_rank != mpi_root ) {
+    return;
+  }
+
+  mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
-  vector_s.resize(dim_sketch);;
-  matrix_u.resize(nrow, dim_sketch);
-  matrix_vt.resize(dim_sketch, ncol);
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // The matrix W.
-  DenseMatrixColMajor<_Val> matrix_w(dim_sketch, dim_sketch);
-
-  // The empty matrix.
-  DenseMatrixColMajor<_Val> matrix_empty;
-
-  // The GESVD driver.
-  la::GesvdDriver<DenseMatrixColMajor<_Val>, 'S', 'O'> gesvd_driver(dim_sketch, ncol);
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  double moment0 = MPI_Wtime();  // Q' * A
+  moments_.emplace_back(MPI_Wtime());  // Q' * A
 
   // Vt := Q' * A
-  la::gemm(matrix_q.t(), matrix_a, matrix_vt);
+  la::gemm(matrix_q.t(), matrix_a, matrix_vt_);
 
-  double moment1 = MPI_Wtime();  // SVD
+  moments_.emplace_back(MPI_Wtime());  // SVD
 
   // Compute the SVD of Vt -> W * S * Vt
-  gesvd_driver(matrix_vt, vector_s, matrix_w, matrix_empty);
+  gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
 
-  double moment2 = MPI_Wtime();  // Q * W
+  moments_.emplace_back(MPI_Wtime());  // Q * W
 
   // U := Q * W
-  la::gemm(matrix_q, matrix_w, matrix_u);
+  la::gemm(matrix_q, matrix_w_, matrix_u_);  // end
 
-  double moment3 = MPI_Wtime();  // end
+  moments_.emplace_back(MPI_Wtime());
+}
 
-  vector_s.resize(rank);
-  matrix_u.resize(nrow, rank);
-  matrix_vt.resize(rank, ncol);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerWrapper::vectorS
+///
+template <typename _Val>
+const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const noexcept {
+  mcnla_assert_true(this->isComputed());
+  return vector_s_cut_;
+}
 
-  return {moment0, moment1, moment2, moment3};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerWrapper::matrixU
+///
+template <typename _Val>
+const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noexcept {
+  mcnla_assert_true(this->isComputed());
+  return matrix_u_cut_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::FormerWrapper::matrixVt
+///
+template <typename _Val>
+const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixVt() const noexcept {
+  mcnla_assert_true(this->isComputed());
+  return matrix_vt_cut_;
 }
 
 }  // namespace isvd
