@@ -8,10 +8,9 @@
 #ifndef MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HPP_
 #define MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HPP_
 
-#include <mcnla/isvd/core/parameters.hpp>
-#include <mcnla/core/matrix.hpp>
+#include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hh>
+#include <ctime>
 #include <mcnla/core/la.hpp>
-#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,53 +23,52 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
-/// The SVD orthogonalizer.
-///
-/// @tparam  _Val  The value type.
-///
-/// @param   parameters    The parameters.
-/// @param   collection_q  The matrix collection Q.
+/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-std::vector<double> svdOrthogonalizer(
-    const Parameters &parameters,
-          DenseMatrixCollection120<_Val> &collection_q
+Orthogonalizer<SvdOrthogonalizerTag, _Val>::Orthogonalizer(
+    const Parameters &parameters
+) noexcept
+  : BaseType(parameters) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+///
+template <typename _Val>
+void Orthogonalizer<SvdOrthogonalizerTag, _Val>::initializeImpl() noexcept {
+
+  const auto nrow            = parameters_.nrow();
+  const auto dim_sketch      = parameters_.dimSketch();
+
+  vector_s_.reconstruct(dim_sketch);
+  gesvd_driver_.reconstruct(nrow, dim_sketch);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Orthogonalizes.
+///
+/// @param  collection_q  The matrix collection Q.
+///
+template <typename _Val>
+void Orthogonalizer<SvdOrthogonalizerTag, _Val>::runImpl(
+          DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
 
-  using RealValType = RealValT<_Val>;
-  using MatrixType  = MatrixT<DenseMatrixCollection120<_Val>>;
+  moments_.clear();
 
-  // Parameters
-  const auto nrow            = parameters.nrow();
-  const auto num_sketch_each = parameters.numSketchEach();
-  const auto dim_sketch      = parameters.dimSketch();
+  const auto nrow            = parameters_.nrow();
+  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch      = parameters_.dimSketch();
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // The vector S
-  DenseVector<RealValType> vector_s(dim_sketch);
-
-  // The empty matrix
-  MatrixType matrix_empty;
-
-  // The GESVD driver.
-  la::GesvdDriver<MatrixType, 'O', 'N'> gesvd_driver(nrow, dim_sketch);
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  double moment0 = MPI_Wtime();  // orthogonalization
+  moments_.emplace_back(MPI_Wtime());  // orthogonalization
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    gesvd_driver(collection_q(i), vector_s, matrix_empty, matrix_empty);
+    gesvd_driver_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
-
-  double moment1 = MPI_Wtime();  // end
-
-  return {moment0, moment1};
+  moments_.emplace_back(MPI_Wtime());  // end
 }
 
 }  // namespace isvd

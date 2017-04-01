@@ -47,6 +47,10 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
 
   using BaseType = ComponentWrapper<ColumnSamplingSketcher<_Val>>;
 
+ public:
+
+  using ValType = _Val;
+
  protected:
 
   /// The name.
@@ -70,7 +74,7 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
 
   // Random sketches
   template <class _Matrix>
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<_Val> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ValType> &collection_q ) noexcept;
 
 };
 

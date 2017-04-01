@@ -47,6 +47,10 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
 
   using BaseType = ComponentWrapper<GaussianProjectionSketcher<_Val>>;
 
+ public:
+
+  using ValType = _Val;
+
  protected:
 
   /// The name.
@@ -56,7 +60,7 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
   index_t exponent_;
 
   /// The matrix Omega.
-  DenseMatrixRowMajor<_Val> matrix_omegas_;
+  DenseMatrixRowMajor<ValType> matrix_omegas_;
 
   using BaseType::parameters_;
   using BaseType::moments_;
@@ -78,7 +82,7 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
 
   // Random sketches
   template <class _Matrix>
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<_Val> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection120<_Val> &collection_q ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;

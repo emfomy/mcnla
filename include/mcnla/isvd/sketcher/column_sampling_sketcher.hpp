@@ -43,12 +43,15 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::sketch
+/// @brief  Sketches.
+///
+/// @param  matrix_a      The matrix A.
+/// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val> template <class _Matrix>
-void Sketcher<ColumnSamplingSketcherTag, _Val>::sketchImpl(
+void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
     const _Matrix &matrix_a,
-          DenseMatrixCollection120<_Val> &collection_q
+          DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
 
   moments_.clear();

@@ -43,7 +43,7 @@ void ComponentWrapper<_Derived>::initialize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Random sketches.
+/// @brief  Run the component.
 ///
 template <class _Derived> template <typename... Args>
 void ComponentWrapper<_Derived>::operator()(
@@ -51,7 +51,7 @@ void ComponentWrapper<_Derived>::operator()(
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
   mcnla_assert_true(isInitialized());
-  this->derived().sketchImpl(args...);
+  this->derived().runImpl(args...);
   computed_ = true;
 }
 

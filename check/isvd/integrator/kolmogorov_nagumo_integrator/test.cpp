@@ -31,7 +31,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   ASSERT_EQ(N % K, 0);
 
   // Sets parameters
-  mcnla::isvd::Parameters<ValType> parameters(MPI_COMM_WORLD);
+  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD);
   parameters.nrow_ = m;
   parameters.rank_ = k;
   parameters.over_rank_ = p;

@@ -35,10 +35,6 @@ namespace isvd {
 template <class _Derived>
 class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_Derived>> {
 
- public:
-
-  using ValType = ValT<_Derived>;
-
  protected:
 
   /// The parameters
