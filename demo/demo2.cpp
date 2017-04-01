@@ -92,9 +92,9 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Create statistics collector
-  StatisticsSet set_smax(num_test), set_smean(num_test),  set_smin(num_test),   set_frerr(num_test),
-                set_time(num_test), set_time_s(num_test), set_time_o(num_test), set_time_i(num_test), set_time_f(num_test),
-                set_iter(num_test);
+  StatisticsSet set_smax(num_test), set_smean(num_test),   set_smin(num_test),    set_frerr(num_test),
+                set_time(num_test), set_time_s(num_test),  set_time_o(num_test),  set_time_i(num_test),  set_time_f(num_test),
+                set_iter(num_test), set_time_so(num_test), set_time_oi(num_test), set_time_if(num_test);
 
   // ====================================================================================================================== //
   // Allocate driver
@@ -160,21 +160,26 @@ int main( int argc, char **argv ) {
       ValType smax, smin, smean, frerr;
       check_u(former.matrixU(), matrix_u_true, smax, smin, smean);
       check(matrix_a, former.matrixU(), former.matrixVt(), former.vectorS(), frerr);
-      auto iter   = integrator.iteration();
-      auto time_s = sketcher.time();
-      auto time_o = orthogonalizer.time();
-      auto time_i = integrator.time();
-      auto time_f = former.time();
-      auto time   = time_s + time_o + time_i + time_f;
+      auto iter    = integrator.iteration();
+      auto time_s  = sketcher.time();
+      auto time_o  = orthogonalizer.time();
+      auto time_i  = integrator.time();
+      auto time_f  = former.time();
+      auto time_so = 0.0;
+      auto time_oi = oi_converter.time();
+      auto time_if = if_converter.time();
+      auto time    = time_s + time_o + time_i + time_f;
       std::cout << std::setw(log10(num_test)+1) << t
                 << " | validity: " << smax << " / " << smean << " / " << smin
                 << " | error: " << frerr
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
                 << " | time: " << time << " (" << time_s << " / " << time_o << " / "
-                                               << time_i << " / " << time_f << ")" << std::endl;
+                                               << time_i << " / " << time_f << ")"
+                << " | converting time: " << time_so << " / " << time_o << " / " << time_if << ")" << std::endl;
       if ( t >= 0 ) {
-        set_smax(smax); set_smean(smean);   set_smin(smin);     set_frerr(frerr);
-        set_time(time); set_time_s(time_s); set_time_o(time_o); set_time_i(time_i); set_time_f(time_f); set_iter(iter);
+        set_smax(smax); set_smean(smean);     set_smin(smin);       set_frerr(frerr);
+        set_time(time); set_time_s(time_s);   set_time_o(time_o);   set_time_i(time_i);   set_time_f(time_f);
+        set_iter(iter); set_time_so(time_so); set_time_oi(time_oi); set_time_if(time_if);
       }
     }
   }
@@ -182,11 +187,14 @@ int main( int argc, char **argv ) {
   // Display statistics results
   if ( mpi_rank == mpi_root ) {
     std::cout << std::endl;
-    std::cout << "Average total computing time: " << set_time.mean()   << " seconds." << std::endl;
-    std::cout << "Average sketching time:       " << set_time_s.mean() << " seconds." << std::endl;
-    std::cout << "Average orthogonaling time:   " << set_time_o.mean() << " seconds." << std::endl;
-    std::cout << "Average integrating time:     " << set_time_i.mean() << " seconds." << std::endl;
-    std::cout << "Average forming time:         " << set_time_f.mean() << " seconds." << std::endl;
+    std::cout << "Average total computing time:   " << set_time.mean()   << " seconds." << std::endl;
+    std::cout << "Average sketching time:         " << set_time_s.mean() << " seconds." << std::endl;
+    std::cout << "Average orthogonaling time:     " << set_time_o.mean() << " seconds." << std::endl;
+    std::cout << "Average integrating time:       " << set_time_i.mean() << " seconds." << std::endl;
+    std::cout << "Average forming time:           " << set_time_f.mean() << " seconds." << std::endl;
+    std::cout << "Average converting time (S->O): " << set_time_so.mean() << " seconds." << std::endl;
+    std::cout << "Average converting time (O->I): " << set_time_oi.mean() << " seconds." << std::endl;
+    std::cout << "Average converting time (I->F): " << set_time_if.mean() << " seconds." << std::endl;
     std::cout << "mean(validity): max = " << set_smax.mean()
                            << ", mean = " << set_smean.mean()
                             << ", min = " << set_smin.mean() << std::endl;
