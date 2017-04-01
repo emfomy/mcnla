@@ -72,6 +72,8 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
 
   // Get parameters
   inline index_t exponent() const noexcept;
+
+  // Sets parameters
   inline Sketcher& setExponent( const index_t exponent ) noexcept;
 
 

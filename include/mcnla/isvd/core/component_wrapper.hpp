@@ -40,6 +40,7 @@ void ComponentWrapper<_Derived>::initialize(
   mcnla_assert_true(parameters_.isSynchronized());
   this->derived().initializeImpl(args...);
   initialized_ = true;
+  computed_ = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

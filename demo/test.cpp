@@ -41,23 +41,22 @@ int main( int argc, char **argv ) {
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
   // mcnla::isvd::ColumnSamplingSketcher<double> sketcher(parameters);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::KolmogorovNagumoIntegrator<double> integrator(parameters);
 
   sketcher.initialize();
   orthogonalizer.initialize();
+  integrator.initialize();
 
   if ( mpi_rank == mpi_root ) {
     std::cout << "Uses " << sketcher << "." << std::endl;
     std::cout << "Uses " << orthogonalizer << "." << std::endl;
-  //   std::cout << "Uses " << integrator << "." << std::endl;
+    std::cout << "Uses " << integrator << "." << std::endl;
   //   std::cout << "Uses " << former << "." << std::endl << std::endl;
   }
 
   sketcher(a, qs);
   orthogonalizer(qs);
-
-  mcnla::index_t iteration;
-  double time2c;
-  mcnla::isvd::kolmogorovNagumoIntegrator<double>(parameters, qs, qbar, iteration, time2c);
+  integrator(qs, qbar);
 
   mcnla::isvd::svdFormer<double>(parameters, a, qbar, s, u, vt);
 
