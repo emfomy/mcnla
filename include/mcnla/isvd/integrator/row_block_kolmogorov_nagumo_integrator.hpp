@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::Integrator(
-    const Parameters &parameters,
+    const Parameters<ValType> &parameters,
     const index_t max_iteration,
     const RealValType tolerance
 ) noexcept
@@ -64,7 +64,7 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::initializeImpl() n
 /// @brief  Integrates.
 ///
 /// @param  collection_qj  The matrix collection Qj (row-block).
-/// @param  matrix_qbarj   The matrix Qjbar (row-block)..
+/// @param  matrix_qbarj   The matrix Qjbar (row-block).
 ///
 template <typename _Val>
 void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(

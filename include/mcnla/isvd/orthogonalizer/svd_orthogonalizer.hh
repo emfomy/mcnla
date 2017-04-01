@@ -74,7 +74,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters &parameters ) noexcept;
+  inline Orthogonalizer( const Parameters<ValType> &parameters ) noexcept;
 
  protected:
 

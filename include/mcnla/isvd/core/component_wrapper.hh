@@ -34,10 +34,14 @@ namespace isvd {
 template <class _Derived>
 class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_Derived>> {
 
+ public:
+
+  using ValType = ValT<_Derived>;
+
  protected:
 
   /// The parameters
-  const Parameters &parameters_;
+  const Parameters<ValType> &parameters_;
 
   /// The tag shows if the component is initialized.
   bool initialized_ = false;
@@ -51,7 +55,7 @@ class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_De
  protected:
 
   // Constructor
-  inline ComponentWrapper( const Parameters &parameters ) noexcept;
+  inline ComponentWrapper( const Parameters<ValType> &parameters ) noexcept;
 
  public:
 

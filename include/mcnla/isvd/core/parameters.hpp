@@ -22,8 +22,9 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor
-///
-Parameters::Parameters(
+
+template<typename _Val>
+Parameters<_Val>::Parameters(
     const MPI_Comm mpi_comm,
     const mpi_int_t mpi_root,
     const index_t seed
@@ -37,7 +38,8 @@ Parameters::Parameters(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Synchronize the parameters
 ///
-void Parameters::sync() noexcept {
+template<typename _Val>
+void Parameters<_Val>::sync() noexcept {
   MPI_Bcast(&params_, sizeof(params_), MPI_BYTE, mpi_root, mpi_comm);
   synchronized_ = true;
 }
@@ -45,85 +47,96 @@ void Parameters::sync() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Check if the parameters is synchronized.
 ///
-bool Parameters::isSynchronized() const noexcept {
+template<typename _Val>
+bool Parameters<_Val>::isSynchronized() const noexcept {
   return synchronized_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix.
 ///
-index_t Parameters::nrow() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::nrow() const noexcept {
   return params_.nrow_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of the matrix per MPI node.
 ///
-index_t Parameters::nrowEach() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::nrowEach() const noexcept {
   return (params_.nrow_-1) / mpi_size + 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of total allocated rows of the matrix.
 ///
-index_t Parameters::nrowTotal() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::nrowTotal() const noexcept {
   return nrowEach() * mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of column of the matrix.
 ///
-index_t Parameters::ncol() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::ncol() const noexcept {
   return params_.ncol_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the desired rank of approximate SVD.
 ///
-index_t Parameters::rank() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::rank() const noexcept {
   return params_.rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the oversampling dimension.
 ///
-index_t Parameters::overRank() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::overRank() const noexcept {
   return params_.over_rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the dimension of random sketches.
 ///
-index_t Parameters::dimSketch() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::dimSketch() const noexcept {
   return params_.rank_ + params_.over_rank_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches of all MPI nodes.
 ///
-index_t Parameters::numSketch() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::numSketch() const noexcept {
   return params_.num_sketch_each_ * mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of random sketches per MPI node.
 ///
-index_t Parameters::numSketchEach() const noexcept {
+template<typename _Val>
+index_t Parameters<_Val>::numSketchEach() const noexcept {
   return params_.num_sketch_each_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the random streams.
 ///
-const random::Streams& Parameters::streams() const noexcept {
+template<typename _Val>
+const random::Streams& Parameters<_Val>::streams() const noexcept {
   return streams_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the sizes of the matrix.
 ///
-template <class _Matrix>
-Parameters& Parameters::setSize(
+template<typename _Val> template <class _Matrix>
+Parameters<_Val>& Parameters<_Val>::setSize(
     const _Matrix &matrix
 ) noexcept {
   return setSize(matrix.nrow(), matrix.ncol());
@@ -132,7 +145,8 @@ Parameters& Parameters::setSize(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  setSize
 ///
-Parameters& Parameters::setSize(
+template<typename _Val>
+Parameters<_Val>& Parameters<_Val>::setSize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
@@ -145,7 +159,8 @@ Parameters& Parameters::setSize(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the desired rank of approximate SVD.
 ///
-Parameters& Parameters::setRank(
+template<typename _Val>
+Parameters<_Val>& Parameters<_Val>::setRank(
     const index_t rank
 ) noexcept {
   params_.rank_ = rank;
@@ -156,7 +171,8 @@ Parameters& Parameters::setRank(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the dimension of random sketches.
 ///
-Parameters& Parameters::setOverRank(
+template<typename _Val>
+Parameters<_Val>& Parameters<_Val>::setOverRank(
     const index_t over_rank
   ) noexcept {
   params_.over_rank_ = over_rank;
@@ -169,7 +185,8 @@ Parameters& Parameters::setOverRank(
 ///
 /// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size".
 ///
-Parameters& Parameters::setNumSketch(
+template<typename _Val>
+Parameters<_Val>& Parameters<_Val>::setNumSketch(
     const index_t num_sketch
 ) noexcept {
   params_.num_sketch_each_ = num_sketch / mpi_rank;
@@ -180,7 +197,8 @@ Parameters& Parameters::setNumSketch(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of random sketches per MPI node.
 ///
-Parameters& Parameters::setNumSketchEach(
+template<typename _Val>
+Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
     const index_t num_sketch_each
 ) noexcept {
   params_.num_sketch_each_ = num_sketch_each;
@@ -191,7 +209,8 @@ Parameters& Parameters::setNumSketchEach(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  random::Streams::setSeed
 ///
-Parameters& Parameters::setSeed(
+template<typename _Val>
+Parameters<_Val>& Parameters<_Val>::setSeed(
     const index_t seed
 ) noexcept {
   streams_.setSeed(seed);
@@ -201,11 +220,48 @@ Parameters& Parameters::setSeed(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  random::Streams::setSeeds
 ///
-Parameters& Parameters::setSeeds(
+template<typename _Val>
+Parameters<_Val>& Parameters<_Val>::setSeeds(
     const index_t seed
 ) noexcept {
   streams_.setSeeds(seed, mpi_root, mpi_comm);
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix collection Q.
+///
+template<typename _Val>
+DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQ() const noexcept {
+  DenseMatrixCollection120<_Val> retval(nrowTotal(), dimSketch(), numSketchEach());
+  return retval({0, nrow()}, "", "");
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix collection Qj (row-block).
+///
+template<typename _Val>
+DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
+  DenseMatrixCollection120<_Val> retval(nrowEach(), dimSketch(), numSketch());
+  return retval;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix Q.
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(nrowTotal(), dimSketch());
+  return retval({0, nrow()}, "");
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix Qj (row-block).
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQj() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(nrowEach(), dimSketch());
+  return retval;
 }
 
 }  // namespace isvd

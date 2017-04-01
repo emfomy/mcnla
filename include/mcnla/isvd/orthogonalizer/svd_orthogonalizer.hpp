@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 Orthogonalizer<SvdOrthogonalizerTag, _Val>::Orthogonalizer(
-    const Parameters &parameters
+    const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
 

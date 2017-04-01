@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_CONVERTER_COLLECTION_Q_TO_ROWBLOCK_CONVERTER_HH_
 
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/core/component_wrapper.hpp>
+#include <mcnla/isvd/converter/converter.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,20 +22,30 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  isvd_converter_module_detail
+/// The tag of converter that converts collection Q to row-block version.
+///
+struct CollectionQToRowBlockConverterTag {};
+
+/// @ingroup  isvd_converter_module
+template <typename _Val>
+using CollectionQToRowBlockConverter = Converter<CollectionQToRowBlockConverterTag, _Val>;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module
 /// The converter that converts collection Q to row-block version.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <class _Val>
-class CollectionQToRowBlockConverter
-  : public ComponentWrapper<CollectionQToRowBlockConverter<_Val>> {
+class Converter<CollectionQToRowBlockConverterTag, _Val>
+  : public ComponentWrapper<Converter<CollectionQToRowBlockConverterTag, _Val>> {
 
-  friend ComponentWrapper<CollectionQToRowBlockConverter<_Val>>;
+  friend ComponentWrapper<Converter<CollectionQToRowBlockConverterTag, _Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<CollectionQToRowBlockConverter<_Val>>;
+  using BaseType = ComponentWrapper<Converter<CollectionQToRowBlockConverterTag, _Val>>;
 
  public:
 
@@ -49,7 +59,7 @@ class CollectionQToRowBlockConverter
  public:
 
   // Constructor
-  inline CollectionQToRowBlockConverter( const Parameters &parameters ) noexcept;
+  inline Converter( const Parameters<ValType> &parameters ) noexcept;
 
  protected:
 

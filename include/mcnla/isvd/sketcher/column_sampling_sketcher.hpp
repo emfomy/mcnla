@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 Sketcher<ColumnSamplingSketcherTag, _Val>::Sketcher(
-    const Parameters &parameters
+    const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
 

@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 Sketcher<GaussianProjectionSketcherTag, _Val>::Sketcher(
-    const Parameters &parameters,
+    const Parameters<ValType> &parameters,
     const index_t exponent
 ) noexcept
   : BaseType(parameters) {

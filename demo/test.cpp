@@ -31,18 +31,14 @@ int main( int argc, char **argv ) {
   mcnla::random::gaussian(streams, a.vectorize());
   mcnla::mpi::bcast(a, mpi_root, mpi_comm);
 
-  mcnla::isvd::Parameters parameters(mpi_comm, mpi_root, seed);
+  mcnla::isvd::Parameters<ValType> parameters(mpi_comm, mpi_root, seed);
   parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
 
-  auto m_full = parameters.nrowTotal(), mj = parameters.nrowEach();
-
-  mcnla::matrix::DenseMatrixCollection120<double> qi(m_full, l, Nj);
-  mcnla::matrix::DenseMatrixCollection120<double> qij(mj, l, N);
-  mcnla::matrix::DenseMatrixRowMajor<double> qbar(m, l);
-  mcnla::matrix::DenseMatrixRowMajor<double> qbarj(mj, l);
-  qi   = qi({0, m}, "", "");
-  qbar = qbar({0, m}, "");
+  auto qi    = parameters.createCollectionQ();
+  auto qij   = parameters.createCollectionQj();
+  auto qbar  = parameters.createMatrixQ();
+  auto qbarj = parameters.createMatrixQj();
 
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);

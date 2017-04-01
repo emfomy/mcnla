@@ -65,7 +65,7 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters &parameters ) noexcept;
+  inline Sketcher( const Parameters<ValType> &parameters ) noexcept;
 
  protected:
 

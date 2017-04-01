@@ -68,7 +68,7 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters &parameters, const index_t exponent = 0 ) noexcept;
+  inline Sketcher( const Parameters<ValType> &parameters, const index_t exponent = 0 ) noexcept;
 
   // Get parameters
   inline index_t exponent() const noexcept;

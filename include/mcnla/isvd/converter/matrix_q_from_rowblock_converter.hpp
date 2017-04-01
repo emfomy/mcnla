@@ -25,8 +25,8 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-MatrixQFromRowBlockConverter<_Val>::MatrixQFromRowBlockConverter(
-    const Parameters &parameters
+Converter<MatrixQFromRowBlockConverterTag, _Val>::Converter(
+    const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -34,7 +34,7 @@ MatrixQFromRowBlockConverter<_Val>::MatrixQFromRowBlockConverter(
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
-void MatrixQFromRowBlockConverter<_Val>::initializeImpl() noexcept {}
+void Converter<MatrixQFromRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,7 +43,7 @@ void MatrixQFromRowBlockConverter<_Val>::initializeImpl() noexcept {}
 /// @param  matrix_q   The matrix matrix Q.
 ///
 template <typename _Val>
-void MatrixQFromRowBlockConverter<_Val>::runImpl(
+void Converter<MatrixQFromRowBlockConverterTag, _Val>::runImpl(
     DenseMatrixRowMajor<ValType> &matrix_qj,
     DenseMatrixRowMajor<ValType> &matrix_q
 ) noexcept {

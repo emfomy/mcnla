@@ -9,6 +9,7 @@
 #define MCNLA_ISVD_CORE_PARAMETERS_HH_
 
 #include <mcnla/isvd/def.hpp>
+#include <mcnla/core/matrix.hpp>
 #include <mcnla/core/mpi.hpp>
 #include <mcnla/core/random.hpp>
 
@@ -26,7 +27,14 @@ namespace isvd {
 /// @ingroup  isvd_core_module
 /// The parameters of iSVD driver.
 ///
+/// @tparam  _Val  The value type.
+///
+template <typename _Val>
 class Parameters {
+
+ public:
+
+  using ValType = _Val;
 
  public:
 
@@ -99,6 +107,12 @@ class Parameters {
   inline Parameters& setNumSketchEach( const index_t num_sketch_each ) noexcept;
   inline Parameters& setSeed( const index_t seed ) noexcept;
   inline Parameters& setSeeds( const index_t seed ) noexcept;
+
+  // Create matrices
+  inline DenseMatrixCollection120<ValType> createCollectionQ() const noexcept;
+  inline DenseMatrixCollection120<ValType> createCollectionQj() const noexcept;
+  inline DenseMatrixRowMajor<ValType> createMatrixQ() const noexcept;
+  inline DenseMatrixRowMajor<ValType> createMatrixQj() const noexcept;
 
 };
 

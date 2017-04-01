@@ -44,7 +44,7 @@ namespace isvd {
 
   @code{.cpp}
   // Set parameters
-  mcnla::isvd::Parameters parameters(MPI_COMM_WORLD, 0);
+  mcnla::isvd::Parameters<ValType> parameters(MPI_COMM_WORLD, 0);
   parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
   @endcode

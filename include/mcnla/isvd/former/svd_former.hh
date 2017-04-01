@@ -91,7 +91,7 @@ class Former<SvdFormerTag, _Val>
  public:
 
   // Constructor
-  inline Former( const Parameters &parameters ) noexcept;
+  inline Former( const Parameters<ValType> &parameters ) noexcept;
 
   // Gets matrices
   inline const DenseVector<RealValType>& vectorS() const noexcept;

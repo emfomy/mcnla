@@ -112,7 +112,7 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
  public:
 
   // Constructor
-  inline Integrator( const Parameters &parameters,
+  inline Integrator( const Parameters<ValType> &parameters,
                      const index_t max_iteration = 256, const RealValType tolerance = 1e-4 ) noexcept;
 
   // Gets parameters

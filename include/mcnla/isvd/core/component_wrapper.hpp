@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <class _Derived>
 ComponentWrapper<_Derived>::ComponentWrapper(
-    const Parameters &parameters
+    const Parameters<ValType> &parameters
 ) noexcept
   : parameters_(parameters) {}
 

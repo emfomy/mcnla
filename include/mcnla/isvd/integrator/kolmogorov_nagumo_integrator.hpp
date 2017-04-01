@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 Integrator<KolmogorovNagumoIntegratorTag, _Val>::Integrator(
-    const Parameters &parameters,
+    const Parameters<ValType> &parameters,
     const index_t max_iteration,
     const RealValType tolerance
 ) noexcept

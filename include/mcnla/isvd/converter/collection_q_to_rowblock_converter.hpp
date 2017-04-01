@@ -25,8 +25,8 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-CollectionQToRowBlockConverter<_Val>::CollectionQToRowBlockConverter(
-    const Parameters &parameters
+Converter<CollectionQToRowBlockConverterTag, _Val>::Converter(
+    const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -34,16 +34,16 @@ CollectionQToRowBlockConverter<_Val>::CollectionQToRowBlockConverter(
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
-void CollectionQToRowBlockConverter<_Val>::initializeImpl() noexcept {}
+void Converter<CollectionQToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
 ///
 /// @param  collection_q   The matrix collection Q.
-/// @param  collection_qj  The matrix collection Qj.
+/// @param  collection_qj  The matrix collection Qj (row-block).
 ///
 template <typename _Val>
-void CollectionQToRowBlockConverter<_Val>::runImpl(
+void Converter<CollectionQToRowBlockConverterTag, _Val>::runImpl(
     DenseMatrixCollection120<ValType> &collection_q,
     DenseMatrixCollection120<ValType> &collection_qj
 ) noexcept {

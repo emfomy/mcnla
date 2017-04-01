@@ -98,7 +98,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate driver
-  mcnla::isvd::Parameters parameters(mpi_comm, mpi_root, rand());
+  mcnla::isvd::Parameters<ValType> parameters(mpi_comm, mpi_root, rand());
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
@@ -120,16 +120,10 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate matrices
-  auto mj = parameters.nrowEach();
-  auto m1 = parameters.nrowTotal();
-  auto l  = parameters.dimSketch();
-  auto N  = parameters.numSketch();
-  mcnla::matrix::DenseMatrixCollection120<double> collection_q(m1, l, Nj);
-  mcnla::matrix::DenseMatrixCollection120<double> collection_qj(mj, l, N);
-  mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m1, l);
-  mcnla::matrix::DenseMatrixRowMajor<double> matrix_qj(mj, l);
-  collection_q = collection_q({0, m}, "", "");
-  matrix_q = matrix_q({0, m}, "");
+  auto collection_q  = parameters.createCollectionQ();
+  auto collection_qj = parameters.createCollectionQj();
+  auto matrix_q      = parameters.createMatrixQ();
+  auto matrix_qj     = parameters.createMatrixQj();
 
   // ====================================================================================================================== //
   // Display driver

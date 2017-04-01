@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 Former<SvdFormerTag, _Val>::Former(
-    const Parameters &parameters
+    const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
