@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/integrator/naive_kolmogorov_nagumo_integrator.hpp>
+#include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
 
-TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
+TEST(KolmogorovNagumoIntegratorTest, Test) {
   using ValType = double;
   const auto mpi_size = mcnla::mpi::commSize(MPI_COMM_WORLD);
   const auto mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
@@ -40,7 +40,7 @@ TEST(NaiveKolmogorovNagumoIntegratorTest, Test) {
   parameters.max_iteration_ = 256;
 
   // Initializes
-  mcnla::isvd::NaiveKolmogorovNagumoIntegrator<ValType> integrator(parameters, MPI_COMM_WORLD, mpi_root);
+  mcnla::isvd::KolmogorovNagumoIntegrator<ValType> integrator(parameters, MPI_COMM_WORLD, mpi_root);
   integrator.initialize();
   parameters.initialized_ = true;
 
