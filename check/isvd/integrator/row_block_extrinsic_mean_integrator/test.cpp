@@ -5,7 +5,7 @@
 #define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_em.mtx"
 
-TEST(KolmogorovNagumoIntegratorTest, Test) {
+TEST(ExtrinsicMeanIntegratorTest, Test) {
   using ValType = double;
   const auto mpi_size = mcnla::mpi::commSize(MPI_COMM_WORLD);
   const auto mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
