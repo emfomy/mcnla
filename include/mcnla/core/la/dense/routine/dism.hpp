@@ -61,7 +61,7 @@ inline void dismImpl2(
 
   auto da = a.viewVector();
   for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b(i, ""), b(i, ""), alpha / da(i), 0.0);
+    la::scal(b(i, ""), alpha / da(i));
   }
 }
 #endif  // MCNLA_USE_MKL
@@ -76,7 +76,7 @@ inline void dismImpl2(
 
   auto da = a.viewVector();
   for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b("", i), b("", i), alpha / da(i), 0.0);
+    la::scal(b("", i), alpha / da(i));
   }
 }
 

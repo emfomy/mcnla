@@ -12,8 +12,6 @@
   #error 'MCNLA_USE_MKL' should not be set!
 #endif
 
-#include <random>
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
 //
@@ -30,12 +28,11 @@ namespace random {
 namespace detail {
 
 static inline void uniformImpl(
-          index_t seed,
+          std::mt19937 gen,
           DenseVector<index_t> &&vector,
     const index_t a,
     const index_t b
 ) noexcept {
-  std::mt19937 gen(seed);
   std::uniform_int_distribution<> dis(a, b);
   for ( auto &v : vector ) {
     v = dis(gen);
@@ -44,12 +41,11 @@ static inline void uniformImpl(
 
 template <typename _Val>
 static inline void uniformImpl(
-          index_t seed,
+          std::mt19937 gen,
           DenseVector<_Val> &&vector,
     const _Val a,
     const _Val b
 ) noexcept {
-  std::mt19937 gen(seed);
   std::uniform_real_distribution<> dis(a, b);
   for ( auto &v : vector ) {
     v = dis(gen);
@@ -58,12 +54,11 @@ static inline void uniformImpl(
 
 template <typename _Val>
 static inline void gaussianImpl(
-          index_t seed,
+          std::mt19937 gen,
           DenseVector<_Val> &&vector,
     const _Val a,
     const _Val sigma
 ) noexcept {
-  std::mt19937 gen(seed);
   std::normal_distribution<> dis(a, sigma);
   for ( auto &v : vector ) {
     v = dis(gen);

@@ -77,6 +77,7 @@ static inline void axpby(
 
 #else  // MCNLA_USE_MKL
 
+/// @attention  @p x and @p y must not overlap!
 template <typename _Val>
 static inline void axpby(
     const index_t n, const _Val alpha, const _Val* x, const index_t incx,

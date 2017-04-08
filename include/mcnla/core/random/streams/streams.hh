@@ -18,6 +18,8 @@
 
 #ifdef MCNLA_USE_MKL
   #include <mkl.h>
+#else
+  #include <random>
 #endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +43,7 @@ class Streams {
 #ifdef MCNLA_USE_MKL
   using StreamType = VSLStreamStatePtr;
 #else  // MCNLA_USE_MKL
-  using StreamType = index_t;
+  using StreamType = std::mt19937;
 #endif  // MCNLA_USE_MKL
 
  protected:
@@ -66,7 +68,7 @@ class Streams {
 
   // Gets information
   inline index_t ompSize() const noexcept;
-  inline StreamType operator[]( const index_t i ) const noexcept;
+  inline StreamType& operator[]( const index_t i ) const noexcept;
 
   // Sets seed
   inline void setSeed( const index_t seed ) noexcept;

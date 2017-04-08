@@ -96,7 +96,7 @@ void Former<SvdFormerTag, _Val>::runImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::vectorS
+/// @brief  Gets the singular values.
 ///
 template <typename _Val>
 const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const noexcept {
@@ -105,7 +105,7 @@ const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const n
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::matrixU
+/// @brief  Gets the left singular vectors.
 ///
 template <typename _Val>
 const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noexcept {
@@ -114,7 +114,7 @@ const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noe
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::matrixVt
+/// @brief  Gets the right singular vectors.
 ///
 template <typename _Val>
 const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixVt() const noexcept {

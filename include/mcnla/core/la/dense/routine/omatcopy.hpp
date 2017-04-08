@@ -41,8 +41,7 @@ inline void omatcopyImpl2(
 ) noexcept {
   mcnla_assert_eq(a.sizes(), b.sizes());
 
-  omatcopy('C', toTransChar<_Val>(_transb), a.nrow(), a.ncol(),
-           alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
+  omatcopy('C', toTransChar<_Val>(_transb), a.nrow(), a.ncol(), alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
 }
 
 // ========================================================================================================================== //
@@ -95,8 +94,12 @@ inline void omatcopyImpl0(
           DenseMatrix<_Val, _transb> &b,
     const _Val alpha
 ) noexcept {
-  for ( auto ait = a.cbegin(), bit = b.begin(); ait != a.cend(); ++ait, ++bit ) {
-    *bit = alpha * (*ait);
+  mcnla_assert_eq(a.sizes(), b.sizes());
+
+  for ( index_t i = 0; i < a.nrow(); ++i ) {
+    for ( index_t j = 0; j < a.ncol(); ++j ) {
+      b(i, j) = alpha * a(i, j);
+    }
   }
 }
 

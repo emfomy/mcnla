@@ -57,10 +57,10 @@ index_t Streams::ompSize() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw random stream.
 ///
-Streams::StreamType Streams::operator[](
+Streams::StreamType& Streams::operator[](
     const index_t i
 ) const noexcept {
-  return streams_[i];
+  return const_cast<StreamType&>(streams_[i]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,17 +69,16 @@ Streams::StreamType Streams::operator[](
 void Streams::setSeed(
     const index_t seed
 ) noexcept {
-#ifdef MCNLA_USE_MKL
   std::seed_seq seq{seed};
   std::vector<index_t> seeds(omp_size_);
   seq.generate(seeds.begin(), seeds.end());
   for ( index_t i = 0; i < omp_size_; ++i ) {
-    vslNewStream(&(streams_[i]), VSL_BRNG_MCG31, seeds[i]);
-  }
+#ifdef MCNLA_USE_MKL
+    vslNewStream(&(streams_[i]), VSL_BRNG_MT19937, seeds[i]);
 #else  // MCNLA_USE_MKL
-  std::seed_seq seq{seed};
-  seq.generate(streams_, streams_ + omp_size_);
+    streams_[i].seed(seeds[i]);
 #endif  // MCNLA_USE_MKL
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

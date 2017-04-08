@@ -20,7 +20,6 @@ add_check_death(core/matrix/dense/dense_matrix "Dense Matrix death test")
 
 add_mpi_check(isvd/integrator/kolmogorov_nagumo_integrator "Kolmogorov-Nagumo-Type Integrator test" "KolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_kolmogorov_nagumo_integrator "Row-Block Kolmogorov-Nagumo-Type Integrator test" "RowBlockKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
-# add_mpi_check(isvd/integrator/row_block_extrinsic_mean_integrator "Row-Block Entrinsic Mean Integrator test" "RowBlockEntrinsicMeanIntegratorTest" 1 2 3 4 6 12)
 
 # Add rule 'build_test'
 add_custom_target(
