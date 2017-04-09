@@ -209,6 +209,8 @@ Integrator<KolmogorovNagumoIntegratorTag, _Val>& Integrator<KolmogorovNagumoInte
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
   max_iteration_ = max_iteration;
+  initialized_ = false;
+  computed_ = false;
   return *this;
 }
 
@@ -221,6 +223,8 @@ Integrator<KolmogorovNagumoIntegratorTag, _Val>& Integrator<KolmogorovNagumoInte
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
   tolerance_ = tolerance;
+  initialized_ = false;
+  computed_ = false;
   return *this;
 }
 

@@ -66,6 +66,8 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
   DenseMatrixRowMajor<ValType> matrix_omegas_;
 
   using BaseType::parameters_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
   using BaseType::moments_;
 
  public:

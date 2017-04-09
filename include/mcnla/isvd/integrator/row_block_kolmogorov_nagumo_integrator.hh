@@ -24,7 +24,7 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module_detail
-/// The Kolmogorov-Nagumo-type integrator tag.
+/// The row-block Kolmogorov-Nagumo-type integrator tag.
 ///
 struct RowBlockKolmogorovNagumoIntegratorTag {};
 
@@ -34,7 +34,7 @@ using RowBlockKolmogorovNagumoIntegrator = Integrator<RowBlockKolmogorovNagumoIn
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
-/// The Kolmogorov-Nagumo-type integrator.
+/// The Kolmogorov-Nagumo-type integrator (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
@@ -107,6 +107,8 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
   la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
   using BaseType::moments_;
 
  public:

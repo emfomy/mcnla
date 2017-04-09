@@ -11,6 +11,7 @@
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
 #include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hpp>
+#include <mcnla/isvd/sketcher/row_block_gaussian_projection_sketcher.hpp>
 #include <mcnla/isvd/sketcher/column_sampling_sketcher.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

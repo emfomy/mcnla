@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/sketcher/column_sampling_sketcher.hh
-/// @brief   The definition of column sampling sketcher.
+/// @file    include/mcnla/isvd/sketcher/row_block_gaussian_projection_sketcher.hh
+/// @brief   The definition of Gaussian projection sketcher (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HH_
-#define MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HH_
+#ifndef MCNLA_ISVD_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HH_
+#define MCNLA_ISVD_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
@@ -23,29 +23,29 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module_detail
-/// The column sampling sketcher tag.
+/// The row-block Gaussian projection sketcher tag.
 ///
-struct ColumnSamplingSketcherTag {};
+struct RowBlockGaussianProjectionSketcherTag {};
 
 /// @ingroup  isvd_sketcher_module
 template <typename _Val>
-using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Val>;
+using RowBlockGaussianProjectionSketcher = Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
-/// The column sampling sketcher.
+/// The Gaussian projection sketcher (row-block version).
 ///
 /// @tparam  _Val    The value type.
 ///
 template <typename _Val>
-class Sketcher<ColumnSamplingSketcherTag, _Val>
-  : public ComponentWrapper<ColumnSamplingSketcher<_Val>> {
+class Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
+  : public ComponentWrapper<RowBlockGaussianProjectionSketcher<_Val>> {
 
-  friend ComponentWrapper<ColumnSamplingSketcher<_Val>>;
+  friend ComponentWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<ColumnSamplingSketcher<_Val>>;
+  using BaseType = ComponentWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
 
  public:
 
@@ -54,13 +54,16 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Column Sampling Sketcher";
+  static constexpr const char* name_ = "Gaussian Projection Sketcher (Row-Block Version)";
 
   /// The random seed.
   index_t seed_;
 
-  // The index vector
-  DenseVector<index_t> vector_idxs_;
+  /// The exponent of power method.
+  index_t exponent_;
+
+  /// The matrix Omega.
+  DenseMatrixRowMajor<ValType> matrix_omegas_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -70,13 +73,16 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand() ) noexcept;
+  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
+  inline index_t exponent() const noexcept;
 
   // Sets parameters
   inline Sketcher& setSeed( const index_t seed ) noexcept;
+  inline Sketcher& setExponent( const index_t exponent ) noexcept;
+
 
  protected:
 
@@ -85,7 +91,10 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ValType> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_aj, DenseMatrixCollection120<_Val> &collection_qj ) noexcept;
+
+  // Outputs name
+  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
 };
 
@@ -93,4 +102,4 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HH_
+#endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HH_

@@ -22,24 +22,28 @@ int main( int argc, char **argv ) {
   const auto mpi_comm = MPI_COMM_WORLD;
   mcnla::index_t mpi_root = 0;
   mcnla::index_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
+  mcnla::index_t mpi_size = mcnla::mpi::commSize(mpi_comm);
 
-  mcnla::index_t m = 10, n = 10, k = 5, p = 1, Nj = 2;
+  mcnla::index_t m = 10, n = 10, k = 5, p = 1, Nj = 2, K = mpi_size;
 
-  mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
+  mcnla::isvd::Parameters<double> parameters(mpi_comm, mpi_root);
+  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.sync();
+
+  auto mj = parameters.nrowEach();
+  mcnla::matrix::DenseMatrixCollection102<double> a_full(mj, n, K);
+  auto a = (a_full.unfold())({0, m}, "");
   mcnla::random::Streams streams(0);
   mcnla::random::gaussian(streams, a.vectorize());
   mcnla::mpi::bcast(a, mpi_root, mpi_comm);
 
-  mcnla::isvd::Parameters<double> parameters(mpi_comm, mpi_root);
-  parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-  parameters.sync();
-
+  auto aj    = a_full(mpi_rank);
   auto qi    = parameters.createCollectionQ();
   auto qij   = parameters.createCollectionQj();
   auto qbar  = parameters.createMatrixQ();
   auto qbarj = parameters.createMatrixQj();
 
-  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
+  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
@@ -60,22 +64,23 @@ int main( int argc, char **argv ) {
     std::cout << "Uses " << former << "." << std::endl << std::endl;
   }
 
-  sketcher(a, qi);
-  orthogonalizer(qi);
-  oi_converter(qi, qij);
-  integrator(qij, qbarj);
-  if_converter(qbarj, qbar);
-  former(a, qbar);
+  sketcher(aj, qij);
+  disp(qij.unfold());
+  // orthogonalizer(qi);
+  // oi_converter(qi, qij);
+  // integrator(qij, qbarj);
+  // if_converter(qbarj, qbar);
+  // former(a, qbar);
 
-  auto &u = former.matrixU();
+  // auto &u = former.matrixU();
 
-  disp(a);
-  disp(u);
+  // disp(a);
+  // disp(u);
 
-  mcnla::matrix::DenseMatrixColMajor<double> uu(k, k);
-  mcnla::la::mm(u.t(), u, uu);
+  // mcnla::matrix::DenseMatrixColMajor<double> uu(k, k);
+  // mcnla::la::mm(u.t(), u, uu);
 
-  disp(uu);
+  // disp(uu);
 
   MPI_Finalize();
 

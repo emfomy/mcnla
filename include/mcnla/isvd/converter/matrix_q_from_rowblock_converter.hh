@@ -54,6 +54,8 @@ class Converter<MatrixQFromRowBlockConverterTag, _Val>
  protected:
 
   using BaseType::parameters_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
   using BaseType::moments_;
 
  public:

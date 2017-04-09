@@ -86,6 +86,8 @@ class Former<SvdFormerTag, _Val>
   la::GesvdDriver<DenseMatrixColMajor<ValType>, 'S', 'O'> gesvd_driver_;
 
   using BaseType::parameters_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
   using BaseType::moments_;
 
  public:

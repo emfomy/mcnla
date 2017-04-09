@@ -101,6 +101,8 @@ Sketcher<ColumnSamplingSketcherTag, _Val>& Sketcher<ColumnSamplingSketcherTag, _
     const index_t seed
 ) noexcept {
   seed_ = seed;
+  initialized_ = false;
+  computed_ = false;
   return *this;
 }
 

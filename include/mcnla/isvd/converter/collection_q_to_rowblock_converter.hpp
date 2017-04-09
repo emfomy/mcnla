@@ -40,7 +40,7 @@ void Converter<CollectionQToRowBlockConverterTag, _Val>::initializeImpl() noexce
 /// @brief  Converts data.
 ///
 /// @param  collection_q   The matrix collection Q.
-/// @param  collection_qj  The matrix collection Qj (row-block).
+/// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
 void Converter<CollectionQToRowBlockConverterTag, _Val>::runImpl(

@@ -69,6 +69,8 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
   la::GesvdDriver<MatrixType, 'O', 'N'> gesvd_driver_;
 
   using BaseType::parameters_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
   using BaseType::moments_;
 
  public:

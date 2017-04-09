@@ -63,8 +63,8 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::initializeImpl() n
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Integrates.
 ///
-/// @param  collection_qj  The matrix collection Qj (row-block).
-/// @param  matrix_qbarj   The matrix Qjbar (row-block).
+/// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
+/// @param  matrix_qbarj   The matrix Qjbar (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
 void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
@@ -206,6 +206,8 @@ Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>&
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
   max_iteration_ = max_iteration;
+  initialized_ = false;
+  computed_ = false;
   return *this;
 }
 
@@ -219,6 +221,8 @@ Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>&
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
   tolerance_ = tolerance;
+  initialized_ = false;
+  computed_ = false;
   return *this;
 }
 

@@ -206,7 +206,7 @@ DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQ() const noexc
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Creates matrix collection Qj (row-block).
+/// @brief  Creates matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template<typename _Val>
 DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
@@ -224,7 +224,7 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Creates matrix Qj (row-block).
+/// @brief  Creates matrix Qj (j-th row-block, where j is the MPI rank).
 ///
 template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQj() const noexcept {

@@ -98,6 +98,8 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
   la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
   using BaseType::moments_;
 
  public:
