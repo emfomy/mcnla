@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/converter/collection_q_to_rowblock_converter.hpp
-/// @brief   The converter that converts collection Q to row-block version.
+/// @file    include/mcnla/isvd/converter/collection_q_from_rowblock_converter.hpp
+/// @brief   The converter that converts collection Q from row-block version.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_COLLECTION_Q_TO_ROWBLOCK_CONVERTER_HPP_
-#define MCNLA_ISVD_CONVERTER_COLLECTION_Q_TO_ROWBLOCK_CONVERTER_HPP_
+#ifndef MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HPP_
+#define MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HPP_
 
-#include <mcnla/isvd/converter/collection_q_to_rowblock_converter.hh>
+#include <mcnla/isvd/converter/collection_q_from_rowblock_converter.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-Converter<CollectionQToRowBlockConverterTag, _Val>::Converter(
+Converter<CollectionQFromRowBlockConverterTag, _Val>::Converter(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Converter<CollectionQToRowBlockConverterTag, _Val>::Converter(
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
-void Converter<CollectionQToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
+void Converter<CollectionQFromRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,9 +43,9 @@ void Converter<CollectionQToRowBlockConverterTag, _Val>::initializeImpl() noexce
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void Converter<CollectionQToRowBlockConverterTag, _Val>::runImpl(
-    DenseMatrixCollection120<ValType> &collection_q,
-    DenseMatrixCollection120<ValType> &collection_qj
+void Converter<CollectionQFromRowBlockConverterTag, _Val>::runImpl(
+    DenseMatrixCollection120<ValType> &collection_qj,
+    DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
@@ -57,22 +57,21 @@ void Converter<CollectionQToRowBlockConverterTag, _Val>::runImpl(
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
-  mcnla_assert_eq(collection_q.sizes(),  std::make_tuple(nrow, dim_sketch, num_sketch_each));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_each, dim_sketch, num_sketch));
+  mcnla_assert_eq(collection_q.sizes(),  std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   auto matrix_qs_full = collection_q.unfold();
   matrix_qs_full.resize(nrow_total, matrix_qs_full.ncol());
 
   moments_.emplace_back(MPI_Wtime());  // start
 
-  // Exchange Q
-  la::memset0(matrix_qs_full({nrow, nrow_total}, ""));
-  mpi::alltoall(matrix_qs_full, mpi_comm);
-
   // Rearrange Qj
   for ( auto j = 0; j < mpi_size; ++j ) {
-    la::copy(matrix_qs_full(IdxRange{j, j+1} * nrow_each, ""), collection_qj(IdxRange{j, j+1} * num_sketch_each).unfold());
+    la::copy(collection_qj(IdxRange{j, j+1} * num_sketch_each).unfold(), matrix_qs_full(IdxRange{j, j+1} * nrow_each, ""))  ;
   }
+
+  // Exchange Q
+  mpi::alltoall(matrix_qs_full, mpi_comm);
 
   moments_.emplace_back(MPI_Wtime());  // end
 
@@ -82,4 +81,4 @@ void Converter<CollectionQToRowBlockConverterTag, _Val>::runImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CONVERTER_COLLECTION_Q_TO_ROWBLOCK_CONVERTER_HPP_
+#endif  // MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HPP_

@@ -24,7 +24,7 @@ int main( int argc, char **argv ) {
   mcnla::index_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
   mcnla::index_t mpi_size = mcnla::mpi::commSize(mpi_comm);
 
-  mcnla::index_t m = 10, n = 10, k = 5, p = 1, Nj = 2, K = mpi_size;
+  mcnla::index_t m = 6, n = 10, k = 3, p = 1, Nj = 2, K = mpi_size;
 
   mcnla::isvd::Parameters<double> parameters(mpi_comm, mpi_root);
   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
@@ -52,8 +52,10 @@ int main( int argc, char **argv ) {
   integrator.initialize();
   former.initialize();
 
+  mcnla::isvd::CollectionQFromRowBlockConverter<double> so_converter(parameters);
   mcnla::isvd::CollectionQToRowBlockConverter<double> oi_converter(parameters);
   mcnla::isvd::MatrixQFromRowBlockConverter<double> if_converter(parameters);
+  so_converter.initialize();
   oi_converter.initialize();
   if_converter.initialize();
 
@@ -66,7 +68,9 @@ int main( int argc, char **argv ) {
 
   sketcher(aj, qij);
   disp(qij.unfold());
-  // orthogonalizer(qi);
+  so_converter(qij, qi);
+  disp(qi.unfold());
+  orthogonalizer(qi);
   // oi_converter(qi, qij);
   // integrator(qij, qbarj);
   // if_converter(qbarj, qbar);
