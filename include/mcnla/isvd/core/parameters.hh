@@ -11,7 +11,6 @@
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/mpi.hpp>
-#include <mcnla/core/random.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -55,9 +54,6 @@ class Parameters {
   /// The tag shows if the parameter is synchronized.
   bool synchronized_ = false;
 
-  /// The random streams.
-  random::Streams streams_;
-
   /// The sub-parameters.
   struct {
     /// The number of rows of the matrix.
@@ -79,7 +75,7 @@ class Parameters {
  public:
 
   // Constructors
-  inline Parameters( const MPI_Comm mpi_comm, const mpi_int_t mpi_root, const index_t seed = rand() ) noexcept;
+  inline Parameters( const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
 
   // Synchronize
   inline void sync() noexcept;
@@ -95,7 +91,6 @@ class Parameters {
   inline index_t dimSketch() const noexcept;
   inline index_t numSketch() const noexcept;
   inline index_t numSketchEach() const noexcept;
-  inline const random::Streams& streams() const noexcept;
 
   // Sets parameter
   template <class _Matrix>
@@ -105,8 +100,6 @@ class Parameters {
   inline Parameters& setOverRank( const index_t over_rank ) noexcept;
   inline Parameters& setNumSketch( const index_t num_sketch ) noexcept;
   inline Parameters& setNumSketchEach( const index_t num_sketch_each ) noexcept;
-  inline Parameters& setSeed( const index_t seed ) noexcept;
-  inline Parameters& setSeeds( const index_t seed ) noexcept;
 
   // Create matrices
   inline DenseMatrixCollection120<ValType> createCollectionQ() const noexcept;

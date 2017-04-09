@@ -58,6 +58,7 @@ class Streams {
 
   // Constructors
   inline Streams( const index_t seed ) noexcept;
+  inline Streams( const index_t seed, const mpi_int_t mpi_root, const MPI_Comm mpi_comm ) noexcept;
   inline Streams( const Streams &other ) noexcept = delete;
 
   // Operators

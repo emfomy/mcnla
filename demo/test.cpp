@@ -23,14 +23,14 @@ int main( int argc, char **argv ) {
   mcnla::index_t mpi_root = 0;
   mcnla::index_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
 
-  mcnla::index_t m = 10, n = 10, k = 5, p = 1, Nj = 2, seed = rand();
+  mcnla::index_t m = 10, n = 10, k = 5, p = 1, Nj = 2;
 
   mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
   mcnla::random::Streams streams(0);
   mcnla::random::gaussian(streams, a.vectorize());
   mcnla::mpi::bcast(a, mpi_root, mpi_comm);
 
-  mcnla::isvd::Parameters<double> parameters(mpi_comm, mpi_root, seed);
+  mcnla::isvd::Parameters<double> parameters(mpi_comm, mpi_root);
   parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
 

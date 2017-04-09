@@ -56,6 +56,9 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Column Sampling Sketcher";
 
+  /// The random seed.
+  index_t seed_;
+
   // The index vector
   DenseVector<index_t> vector_idxs_;
 
@@ -65,7 +68,13 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ValType> &parameters ) noexcept;
+  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand() ) noexcept;
+
+  // Gets parameters
+  inline index_t seed() const noexcept;
+
+  // Sets parameters
+  inline Sketcher& setSeed( const index_t seed ) noexcept;
 
  protected:
 

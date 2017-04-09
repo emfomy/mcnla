@@ -26,14 +26,12 @@ namespace isvd {
 template<typename _Val>
 Parameters<_Val>::Parameters(
     const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root,
-    const index_t seed
+    const mpi_int_t mpi_root
 ) noexcept
   : mpi_comm(mpi_comm),
     mpi_size(mpi::commSize(mpi_comm)),
     mpi_root(mpi_root),
-    mpi_rank(mpi::commRank(mpi_comm)),
-    streams_(seed) {}
+    mpi_rank(mpi::commRank(mpi_comm)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Synchronize the parameters
@@ -125,14 +123,6 @@ index_t Parameters<_Val>::numSketchEach() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the random streams.
-///
-template<typename _Val>
-const random::Streams& Parameters<_Val>::streams() const noexcept {
-  return streams_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the sizes of the matrix.
 ///
 template<typename _Val> template <class _Matrix>
@@ -203,28 +193,6 @@ Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
 ) noexcept {
   params_.num_sketch_each_ = num_sketch_each;
   synchronized_ = false;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  random::Streams::setSeed
-///
-template<typename _Val>
-Parameters<_Val>& Parameters<_Val>::setSeed(
-    const index_t seed
-) noexcept {
-  streams_.setSeed(seed);
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  random::Streams::setSeeds
-///
-template<typename _Val>
-Parameters<_Val>& Parameters<_Val>::setSeeds(
-    const index_t seed
-) noexcept {
-  streams_.setSeeds(seed, mpi_root, mpi_comm);
   return *this;
 }
 

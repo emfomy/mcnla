@@ -98,7 +98,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate driver
-  mcnla::isvd::Parameters<ValType> parameters(mpi_comm, mpi_root, rand());
+  mcnla::isvd::Parameters<ValType> parameters(mpi_comm, mpi_root);
   mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
   mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
@@ -109,6 +109,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize parameters
   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  sketcher.setSeed(rand());
   integrator.setMaxIteration(maxiter).setTolerance(tol);
   parameters.sync();
   sketcher.initialize();

@@ -37,6 +37,23 @@ Streams::Streams(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given seed.
+///
+Streams::Streams(
+    const index_t seed,
+    const mpi_int_t mpi_root,
+    const MPI_Comm mpi_comm
+) noexcept
+#ifdef MCNLA_USE_OMP
+  : omp_size_(omp_get_max_threads()),
+#else  // MCNLA_USE_OMP
+  : omp_size_(1),
+#endif  // MCNLA_USE_OMP
+    streams_(omp_size_) {
+  setSeeds(seed, mpi_root, mpi_comm);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default destructor.
 ///
 Streams::~Streams() noexcept {
@@ -74,6 +91,7 @@ void Streams::setSeed(
   seq.generate(seeds.begin(), seeds.end());
   for ( index_t i = 0; i < omp_size_; ++i ) {
 #ifdef MCNLA_USE_MKL
+    vslDeleteStream(&(streams_[i]));
     vslNewStream(&(streams_[i]), VSL_BRNG_MT19937, seeds[i]);
 #else  // MCNLA_USE_MKL
     streams_[i].seed(seeds[i]);

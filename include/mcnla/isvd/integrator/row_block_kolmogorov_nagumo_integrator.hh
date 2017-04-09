@@ -131,7 +131,7 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollection120<ValType> &collection_q, DenseMatrixRowMajor<ValType> &matrix_qbar ) noexcept;
+  void runImpl( const DenseMatrixCollection120<ValType> &collection_qj, DenseMatrixRowMajor<ValType> &matrix_qbarj ) noexcept;
 
 };
 

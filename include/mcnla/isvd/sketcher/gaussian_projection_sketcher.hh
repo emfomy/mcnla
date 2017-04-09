@@ -56,6 +56,9 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Gaussian Projection Sketcher";
 
+  /// The random seed.
+  index_t seed_;
+
   /// The exponent of power method.
   index_t exponent_;
 
@@ -68,12 +71,14 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ValType> &parameters, const index_t exponent = 0 ) noexcept;
+  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
 
-  // Get parameters
+  // Gets parameters
+  inline index_t seed() const noexcept;
   inline index_t exponent() const noexcept;
 
   // Sets parameters
+  inline Sketcher& setSeed( const index_t seed ) noexcept;
   inline Sketcher& setExponent( const index_t exponent ) noexcept;
 
 

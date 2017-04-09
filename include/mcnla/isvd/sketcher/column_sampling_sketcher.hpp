@@ -10,6 +10,7 @@
 
 #include <mcnla/isvd/sketcher/column_sampling_sketcher.hh>
 #include <mcnla/core/la.hpp>
+#include <mcnla/core/random.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -26,9 +27,12 @@ namespace isvd {
 ///
 template <typename _Val>
 Sketcher<ColumnSamplingSketcherTag, _Val>::Sketcher(
-    const Parameters<ValType> &parameters
+    const Parameters<ValType> &parameters,
+    const index_t seed
 ) noexcept
-  : BaseType(parameters) {}
+  : BaseType(parameters) {
+  setSeed(seed);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
@@ -54,14 +58,17 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
           DenseMatrixCollection120<ValType> &collection_q
 ) noexcept {
 
+  const auto mpi_comm        = parameters_.mpi_comm;
+  const auto mpi_root        = parameters_.mpi_root;
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
   const auto dim_sketch      = parameters_.dimSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
-  const auto &streams        = parameters_.streams();
 
   mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
+
+  random::Streams streams(seed_, mpi_root, mpi_comm);
 
   moments_.emplace_back(MPI_Wtime());  // random generating
 
@@ -76,6 +83,25 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
   }
 
   moments_.emplace_back(MPI_Wtime());  // end
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the random seed.
+///
+template <typename _Val>
+index_t Sketcher<ColumnSamplingSketcherTag, _Val>::seed() const noexcept {
+  return seed_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the random seed.
+///
+template <typename _Val>
+Sketcher<ColumnSamplingSketcherTag, _Val>& Sketcher<ColumnSamplingSketcherTag, _Val>::setSeed(
+    const index_t seed
+) noexcept {
+  seed_ = seed;
+  return *this;
 }
 
 }  // namespace isvd
