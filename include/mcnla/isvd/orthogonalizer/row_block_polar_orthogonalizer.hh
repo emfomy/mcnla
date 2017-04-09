@@ -57,11 +57,11 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   /// The name.
   static constexpr const char* name_= "Polar Orthogonalizer (Row-Block Version)";
 
-  /// The matrix V.
-  DenseMatrixCollection102<ValType> collection_v_;
+  /// The matrix P.
+  DenseMatrixCollection102<ValType> collection_p_;
 
-  /// The vector E.
-  DenseVector<ValType> vector_e_;
+  /// The matrix E.
+  DenseMatrixColMajor<ValType> matrix_e_;
 
   /// The temporary matrices.
   DenseMatrixCollection120<ValType> collection_tmp_;

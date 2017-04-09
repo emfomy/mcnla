@@ -40,8 +40,8 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noex
   const auto num_sketch = parameters_.numSketch();
   const auto dim_sketch = parameters_.dimSketch();
 
-  collection_v_.reconstruct(dim_sketch, dim_sketch, num_sketch);
-  vector_e_.reconstruct(dim_sketch);
+  collection_p_.reconstruct(dim_sketch, dim_sketch, num_sketch);
+  matrix_e_.reconstruct(dim_sketch, num_sketch);
   collection_tmp_.reconstruct(nrow_each, dim_sketch, num_sketch);
   syev_driver_.reconstruct(dim_sketch);
 }
@@ -67,29 +67,25 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 
   moments_.emplace_back(MPI_Wtime());  // orthogonalization
 
-  // Vi := Qi' * Qi
+  // Pi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    la::rk(collection_qj(i).t(), collection_v_(i).viewSymmetric());
+    la::rk(collection_qj(i).t(), collection_p_(i).viewSymmetric());
   }
 
-  // Reduce sum Vi
-  mpi::allreduce(collection_v_.unfold(), MPI_SUM, mpi_comm);
+  // Reduce sum Pi
+  mpi::allreduce(collection_p_.unfold(), MPI_SUM, mpi_comm);
 
-  // Compute the eigen-decomposition of V -> V' * E * V
+  // Compute the eigen-decomposition of Pi -> Pi' * Ei * Pi
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    syev_driver_(collection_v_(i).viewSymmetric(), vector_e_);
+    syev_driver_(collection_p_(i).viewSymmetric(), matrix_e_("", i));
   }
 
-  // Q *= V
+  // Qi := Qi * Pi' / sqrt( Ei )
+  matrix_e_.val().valarray() = std::sqrt(matrix_e_.val().valarray());
   la::copy(matrix_qjs.vectorize(), collection_tmp_.unfold().vectorize());
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    la::mm(collection_tmp_(i), collection_v_(i).viewSymmetric(), collection_qj(i));
-  }
-
-  // Normalize columns of Q
-  for ( index_t i = 0; i < collection_qj.unfold().ncol(); ++i ) {
-    auto nrm = la::nrm2(matrix_qjs("", i));
-    la::scal(matrix_qjs("", i), 1.0/nrm);
+    la::sm(matrix_e_("", i).viewDiagonal().inv(), collection_p_(i));
+    la::mm(collection_tmp_(i), collection_p_(i).t(), collection_qj(i));
   }
 
   moments_.emplace_back(MPI_Wtime());  // end
