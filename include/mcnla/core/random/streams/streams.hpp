@@ -33,7 +33,7 @@ Streams::Streams(
   : omp_size_(1),
 #endif  // MCNLA_USE_OMP
     streams_(omp_size_) {
-  setSeed(seed);
+  setSeedImpl(seed);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ Streams::Streams(
   : omp_size_(1),
 #endif  // MCNLA_USE_OMP
     streams_(omp_size_) {
-  setSeeds(seed, mpi_root, mpi_comm);
+  setSeedsImpl(seed, mpi_root, mpi_comm);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,12 +86,41 @@ Streams::StreamType& Streams::operator[](
 void Streams::setSeed(
     const index_t seed
 ) noexcept {
+#ifdef MCNLA_USE_MKL
+  for ( index_t i = 0; i < omp_size_; ++i ) {
+    vslDeleteStream(&(streams_[i]));
+  }
+#endif  // MCNLA_USE_MKL
+  setSeedImpl(seed);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Generate the random seeds and send to each MPI nodes.
+///
+void Streams::setSeeds(
+    const index_t seed,
+    const mpi_int_t mpi_root,
+    const MPI_Comm mpi_comm
+) noexcept {
+#ifdef MCNLA_USE_MKL
+  for ( index_t i = 0; i < omp_size_; ++i ) {
+    vslDeleteStream(&(streams_[i]));
+  }
+#endif  // MCNLA_USE_MKL
+  setSeedsImpl(seed, mpi_root, mpi_comm);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  sedSeed
+///
+void Streams::setSeedImpl(
+    const index_t seed
+) noexcept {
   std::seed_seq seq{seed};
   std::vector<index_t> seeds(omp_size_);
   seq.generate(seeds.begin(), seeds.end());
   for ( index_t i = 0; i < omp_size_; ++i ) {
 #ifdef MCNLA_USE_MKL
-    vslDeleteStream(&(streams_[i]));
     vslNewStream(&(streams_[i]), VSL_BRNG_MT19937, seeds[i]);
 #else  // MCNLA_USE_MKL
     streams_[i].seed(seeds[i]);
@@ -100,9 +129,9 @@ void Streams::setSeed(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Generate the random seeds and send to each MPI nodes.
+/// @copydoc  sedSeeds
 ///
-void Streams::setSeeds(
+void Streams::setSeedsImpl(
     const index_t seed,
     const mpi_int_t mpi_root,
     const MPI_Comm mpi_comm
@@ -115,7 +144,7 @@ void Streams::setSeeds(
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
   index_t seed_tmp;
   MPI_Scatter(seeds.data(), 1, datatype, &seed_tmp, 1, datatype, mpi_root, mpi_comm);
-  setSeed(seed_tmp);
+  setSeedImpl(seed_tmp);
 }
 
 }  // namespace random

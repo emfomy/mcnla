@@ -41,13 +41,13 @@ class Parameters {
   const MPI_Comm mpi_comm;
 
   /// The MPI size
-  const index_t mpi_size;
+  const mpi_int_t mpi_size;
 
   /// The MPI root
-  const index_t mpi_root;
+  const mpi_int_t mpi_root;
 
   /// The MPI rank
-  const index_t mpi_rank;
+  const mpi_int_t mpi_rank;
 
  protected:
 
@@ -75,7 +75,7 @@ class Parameters {
  public:
 
   // Constructors
-  inline Parameters( const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Parameters( const mpi_int_t mpi_root, const MPI_Comm mpi_comm ) noexcept;
 
   // Synchronize
   inline void sync() noexcept;

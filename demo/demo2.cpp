@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <mcnla.hpp>
+#include <omp.h>
 #include "statistics_set.hpp"
 
 using ValType = double;
@@ -35,10 +36,10 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize MPI
   MPI_Init(&argc, &argv);
-  auto             mpi_comm = MPI_COMM_WORLD;
-  auto             mpi_size = mcnla::mpi::commSize(mpi_comm);
-  auto             mpi_rank = mcnla::mpi::commRank(mpi_comm);
-  mcnla::mpi_int_t mpi_root = 0;
+  auto mpi_comm = MPI_COMM_WORLD;
+  auto mpi_size = mcnla::mpi::commSize(mpi_comm);
+  auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
+  auto mpi_root = 0;
 
   // ====================================================================================================================== //
   // Display program information
@@ -75,7 +76,12 @@ int main( int argc, char **argv ) {
             << ", tol = " << tol
             << ", maxiter = " << maxiter << std::endl;
     std::cout << mpi_size << " nodes / "
-              << omp_get_max_threads() << " threads per node" << std::endl << std::endl;
+#ifdef MCNLA_USE_OMP
+              << omp_get_max_threads()
+#else  //MCNLA_USE_OMP
+              << 1
+#endif  // MCNLA_USE_OMP
+              << " threads per node" << std::endl << std::endl;
   }
   assert((k+p) <= m && m <= n);
 
@@ -98,17 +104,27 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate driver
-  mcnla::isvd::Parameters<ValType> parameters(mpi_comm, mpi_root);
-  mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
-  mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::Parameters<ValType> parameters(mpi_root, mpi_comm);
+
+  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters);
+  mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
-  mcnla::isvd::CollectionQToRowBlockConverter<double> oi_converter(parameters);
+  mcnla::isvd::DummyConverter<double> so_converter(parameters);
+  mcnla::isvd::DummyConverter<double> oi_converter(parameters);
   mcnla::isvd::MatrixQFromRowBlockConverter<double> if_converter(parameters);
+
+  // mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
+  // mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
+  // mcnla::isvd::KolmogorovNagumoIntegrator<double> integrator(parameters);
+  // mcnla::isvd::SvdFormer<double> former(parameters);
+  // mcnla::isvd::DummyConverter<double> so_converter(parameters);
+  // mcnla::isvd::DummyConverter<double> oi_converter(parameters);
+  // mcnla::isvd::DummyConverter<double> if_converter(parameters);
 
   // ====================================================================================================================== //
   // Initialize parameters
-  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   sketcher.setSeed(rand());
   integrator.setMaxIteration(maxiter).setTolerance(tol);
   parameters.sync();
@@ -116,6 +132,7 @@ int main( int argc, char **argv ) {
   orthogonalizer.initialize();
   integrator.initialize();
   former.initialize();
+  so_converter.initialize();
   oi_converter.initialize();
   if_converter.initialize();
 
@@ -147,12 +164,17 @@ int main( int argc, char **argv ) {
     // Run iSVD
     MPI_Barrier(mpi_comm);
 
-    sketcher(matrix_a, collection_q);
-    orthogonalizer(collection_q);
-    oi_converter(collection_q, collection_qj);
+    auto mj = (m-1) / mpi_size + 1;
+    sketcher(matrix_a(mcnla::matrix::IdxRange{mpi_rank, mpi_rank+1} * mj, ""), collection_qj);
+    orthogonalizer(collection_qj);
     integrator(collection_qj, matrix_qj);
     if_converter(matrix_qj, matrix_q);
     former(matrix_a, matrix_q);
+
+    // sketcher(matrix_a, collection_q);
+    // orthogonalizer(collection_q);
+    // integrator(collection_q, matrix_q);
+    // former(matrix_a, matrix_q);
 
     MPI_Barrier(mpi_comm);
 
@@ -166,7 +188,7 @@ int main( int argc, char **argv ) {
       auto time_o  = orthogonalizer.time();
       auto time_i  = integrator.time();
       auto time_f  = former.time();
-      auto time_so = 0.0;
+      auto time_so = so_converter.time();
       auto time_oi = oi_converter.time();
       auto time_if = if_converter.time();
       auto time    = time_s + time_o + time_i + time_f;
@@ -176,7 +198,7 @@ int main( int argc, char **argv ) {
                 << " | iter: " << std::setw(log10(maxiter)+1) << iter
                 << " | time: " << time << " (" << time_s << " / " << time_o << " / "
                                                << time_i << " / " << time_f << ")"
-                << " | converting time: " << time_so << " / " << time_o << " / " << time_if << ")" << std::endl;
+                << " | converting time: " << time_so << " / " << time_oi << " / " << time_if << ")" << std::endl;
       if ( t >= 0 ) {
         set_smax(smax); set_smean(smean);     set_smin(smin);       set_frerr(frerr);
         set_time(time); set_time_s(time_s);   set_time_o(time_o);   set_time_i(time_i);   set_time_f(time_f);

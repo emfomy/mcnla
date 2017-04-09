@@ -110,6 +110,9 @@ bool ComponentWrapper<_Derived>::isComputed() const noexcept {
 ///
 template <class _Derived>
 double ComponentWrapper<_Derived>::time() const noexcept {
+  if ( moments_.empty() ) {
+    return 0;
+  }
   return moments_.back() - moments_.front();
 }
 

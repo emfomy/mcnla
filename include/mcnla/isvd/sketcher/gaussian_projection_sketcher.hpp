@@ -32,6 +32,7 @@ Sketcher<GaussianProjectionSketcherTag, _Val>::Sketcher(
     const index_t exponent
 ) noexcept
   : BaseType(parameters) {
+  setSeed(seed);
   setExponent(exponent);
 }
 

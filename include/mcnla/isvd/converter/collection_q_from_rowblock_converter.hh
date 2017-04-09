@@ -23,7 +23,7 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module_detail
-/// The tag of converter that converts collection Q from row-block version.
+/// The tag of the converter that converts collection Q from row-block version.
 ///
 struct CollectionQFromRowBlockConverterTag {};
 

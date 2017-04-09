@@ -32,7 +32,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   ASSERT_EQ(N % K, 0);
 
   // Sets parameters
-  mcnla::isvd::Parameters<ValType> parameters(mpi_comm, mpi_root);
+  mcnla::isvd::Parameters<ValType> parameters(mpi_root, mpi_comm);
   parameters.setSize(m, k+p).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
 

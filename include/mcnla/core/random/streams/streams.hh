@@ -75,6 +75,12 @@ class Streams {
   inline void setSeed( const index_t seed ) noexcept;
   inline void setSeeds( const index_t seed, const mpi_int_t mpi_root, const MPI_Comm mpi_comm ) noexcept;
 
+ protected:
+
+  // Sets seed
+  inline void setSeedImpl( const index_t seed ) noexcept;
+  inline void setSeedsImpl( const index_t seed, const mpi_int_t mpi_root, const MPI_Comm mpi_comm ) noexcept;
+
 };
 
 }  // namespace random

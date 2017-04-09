@@ -72,10 +72,10 @@ inline void allreduce(
   detail::allreduceImpl(send, recv, op, comm, send.nelem());
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void allreduce(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
@@ -97,10 +97,10 @@ inline void allreduce(
   allreduce(send, recv, op, comm);
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void allreduce(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &&recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &&recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {

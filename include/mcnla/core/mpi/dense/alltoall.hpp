@@ -71,10 +71,10 @@ inline void alltoall(
   detail::alltoallImpl(send, recv, comm, send.nelem() / commSize(comm));
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void alltoall(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &recv,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
@@ -95,10 +95,10 @@ inline void alltoall(
   alltoall(send, recv, comm);
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void alltoall(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &&recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &&recv,
     const MPI_Comm comm
 ) noexcept {
   alltoall(send, recv, comm);

@@ -79,10 +79,10 @@ inline void reduce(
   detail::reduceImpl(send, recv, op, root, comm, send.nelem());
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void reduce(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &recv,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm
@@ -106,10 +106,10 @@ inline void reduce(
   reduce(send, recv, op, root, comm);
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void reduce(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &&recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &&recv,
     const MPI_Op op,
     const mpi_int_t root,
     const MPI_Comm comm

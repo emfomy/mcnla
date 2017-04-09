@@ -25,8 +25,8 @@ namespace isvd {
 
 template<typename _Val>
 Parameters<_Val>::Parameters(
-    const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root
+    const mpi_int_t mpi_root,
+    const MPI_Comm mpi_comm
 ) noexcept
   : mpi_comm(mpi_comm),
     mpi_size(mpi::commSize(mpi_comm)),

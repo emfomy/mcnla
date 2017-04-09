@@ -63,10 +63,10 @@ inline void gather(
   detail::gatherImpl(send, recv, root, comm, send.nelem());
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void gather(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
@@ -91,10 +91,10 @@ inline void gather(
   gather(send, recv, root, comm);
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void gather(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &&recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &&recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {

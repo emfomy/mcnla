@@ -63,10 +63,10 @@ inline void reduceScatterBlock(
   detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void reduceScatterBlock(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
@@ -88,10 +88,10 @@ inline void reduceScatterBlock(
   reduceScatterBlock(send, recv, op, comm);
 }
 
-template <typename _Val, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void reduceScatterBlock(
-    const DenseMatrix<_Val, _transs> &send,
-          DenseMatrix<_Val, _transr> &&recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &&recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
