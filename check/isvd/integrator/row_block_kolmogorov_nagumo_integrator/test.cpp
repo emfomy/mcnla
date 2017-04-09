@@ -3,7 +3,7 @@
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
-#define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
+#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
 
 TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
@@ -16,7 +16,7 @@ TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   // Reads data
   mcnla::matrix::DenseMatrixCollection120<ValType> qi_true;
   mcnla::matrix::DenseMatrixRowMajor<ValType> qbar_true;
-  mcnla::io::loadMatrixMarket(qi_true, CUBE_Q_PATH);
+  mcnla::io::loadMatrixMarket(qi_true, COLLECTION_Q_PATH);
   mcnla::io::loadMatrixMarket(qbar_true, MATRIX_Q_PATH);
 
   // Checks size
@@ -42,10 +42,10 @@ TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   integrator.initialize();
 
   // Initializes converter
-  mcnla::isvd::CollectionQToRowBlockConverter<double> oi_converter(parameters);
-  mcnla::isvd::MatrixQFromRowBlockConverter<double> if_converter(parameters);
-  oi_converter.initialize();
-  if_converter.initialize();
+  mcnla::isvd::CollectionQToRowBlockConverter<double> pre_converter(parameters);
+  mcnla::isvd::MatrixQFromRowBlockConverter<double> post_converter(parameters);
+  pre_converter.initialize();
+  post_converter.initialize();
 
   // Creates matrices
   auto qi    = parameters.createCollectionQ();
@@ -59,17 +59,17 @@ TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   }
 
   // Integrates
-  oi_converter(qi, qij);
+  pre_converter(qi, qij);
   integrator(qij, qbarj);
-  if_converter(qbarj, qbar);
+  post_converter(qbarj, qbar);
 
   // Checks result
-  if ( mcnla::mpi::isCommRoot(0, mpi_comm) ) {
+  if ( mpi_rank == mpi_root ) {
     ASSERT_EQ(qbar.sizes(), qbar_true.sizes());
     ASSERT_EQ(integrator.iteration(), 41);
-    for ( auto i = 0; i < m; ++i ) {
-      for ( auto j = 0; j < k; ++j ) {
-        ASSERT_NEAR(qbar(i, j), qbar_true(i, j), 1e-8) << "(i, j) = (" << i << ", " << j << ")";
+    for ( auto ir = 0; ir < m; ++ir ) {
+      for ( auto ic = 0; ic < k; ++ic ) {
+        ASSERT_NEAR(qbar(ir, ic), qbar_true(ir, ic), 1e-8) << "(ir, ic) =  (" << ir << ", " << ic << ")";
       }
     }
   }

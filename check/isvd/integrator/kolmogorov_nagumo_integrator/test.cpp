@@ -1,9 +1,8 @@
 #include <gtest/gtest.h>
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp>
-#include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
-#define CUBE_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
+#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
 
 TEST(KolmogorovNagumoIntegratorTest, Test) {
@@ -16,7 +15,7 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   // Reads data
   mcnla::matrix::DenseMatrixCollection120<ValType> qi_true;
   mcnla::matrix::DenseMatrixRowMajor<ValType> qbar_true;
-  mcnla::io::loadMatrixMarket(qi_true, CUBE_Q_PATH);
+  mcnla::io::loadMatrixMarket(qi_true, COLLECTION_Q_PATH);
   mcnla::io::loadMatrixMarket(qbar_true, MATRIX_Q_PATH);
 
   // Checks size
@@ -56,12 +55,12 @@ TEST(KolmogorovNagumoIntegratorTest, Test) {
   integrator(qi, qbar);
 
   // Checks result
-  if ( mcnla::mpi::isCommRoot(0, mpi_comm) ) {
+  if ( mpi_rank == mpi_root ) {
     ASSERT_EQ(qbar.sizes(), qbar_true.sizes());
     ASSERT_EQ(integrator.iteration(), 41);
-    for ( auto i = 0; i < m; ++i ) {
-      for ( auto j = 0; j < k; ++j ) {
-        ASSERT_NEAR(qbar(i, j), qbar_true(i, j), 1e-8) << "(i, j) = (" << i << ", " << j << ")";
+    for ( auto ir = 0; ir < m; ++ir ) {
+      for ( auto ic = 0; ic < k; ++ic ) {
+        ASSERT_NEAR(qbar(ir, ic), qbar_true(ir, ic), 1e-8) << "(ir, ic) =  (" << ir << ", " << ic << ")";
       }
     }
   }

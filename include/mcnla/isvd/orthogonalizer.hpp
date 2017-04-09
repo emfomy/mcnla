@@ -11,6 +11,7 @@
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
 
 #include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hpp>
+#include <mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @defgroup  isvd_orthogonalizer_module_detail  Orthogonalizer Module Detail

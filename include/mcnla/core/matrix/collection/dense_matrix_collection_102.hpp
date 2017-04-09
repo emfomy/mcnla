@@ -228,7 +228,7 @@ const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection
 /// @brief  Unfolds the collection.
 ///
 template <typename _Val>
-DenseMatrixRowMajor<_Val>
+DenseMatrixRowMajor<_Val>&
     DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::unfold() noexcept {
   return data_;
 }
@@ -237,7 +237,7 @@ DenseMatrixRowMajor<_Val>
 /// @copydoc  unfold
 ///
 template <typename _Val>
-const DenseMatrixRowMajor<_Val>
+const DenseMatrixRowMajor<_Val>&
     DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::unfold() const noexcept {
   return data_;
 }

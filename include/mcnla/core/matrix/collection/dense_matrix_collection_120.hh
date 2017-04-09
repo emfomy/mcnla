@@ -96,8 +96,8 @@ class DenseMatrixCollection<DenseMatrixCollection120Tag, _Val, Trans::TRANS>
   inline const CollectionType operator()( const IdxRange &rowrange, const char*, const char* ) const noexcept;
 
   // Gets matrix
-  inline       MatrixType unfold() noexcept;
-  inline const MatrixType unfold() const noexcept;
+  inline       MatrixType& unfold() noexcept;
+  inline const MatrixType& unfold() const noexcept;
 
  protected:
 

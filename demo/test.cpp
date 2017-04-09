@@ -8,6 +8,13 @@
 #include <iostream>
 #include <mcnla.hpp>
 
+struct A {
+  int v;
+  int& foo() {
+    return v;
+  }
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
@@ -44,7 +51,7 @@ int main( int argc, char **argv ) {
   auto qbarj = parameters.createMatrixQj();
 
   mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
-  mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
   sketcher.initialize();
@@ -68,9 +75,9 @@ int main( int argc, char **argv ) {
 
   sketcher(aj, qij);
   disp(qij.unfold());
+  orthogonalizer(qij);
   so_converter(qij, qi);
   disp(qi.unfold());
-  orthogonalizer(qi);
   // oi_converter(qi, qij);
   // integrator(qij, qbarj);
   // if_converter(qbarj, qbar);

@@ -49,51 +49,55 @@ inline void recvImpl(
 ///
 //@{
 template <typename _Val>
-inline void recv(
+inline MPI_Status recv(
           DenseVector<_Val> &buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
+  MPI_Status status;
   detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
+  return status;
 }
 
 template <typename _Val, Trans _trans>
-inline void recv(
+inline MPI_Status recv(
           DenseMatrix<_Val, _trans> &buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
+  MPI_Status status;
   detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
+  return status;
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
-inline void recv(
+inline MPI_Status recv(
           DenseVector<_Val> &&buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
+  MPI_Status status;
   recv(buffer, source, tag, comm, status);
+  return status;
 }
 
 template <typename _Val, Trans _trans>
-inline void recv(
+inline MPI_Status recv(
           DenseMatrix<_Val, _trans> &&buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
+  MPI_Status status;
   recv(buffer, source, tag, comm, status);
+  return status;
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

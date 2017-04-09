@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/orthogonalizer/svd_orthogonalizer.hh
-/// @brief   The definition of SVD orthogonalizer.
+/// @file    include/mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hh
+/// @brief   The definition of polar orthogonalizer (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HH_
-#define MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HH_
+#ifndef MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HH_
+#define MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
@@ -24,49 +24,50 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module_detail
-/// The SVD orthogonalizer tag.
+/// The row-block polar orthogonalizer tag.
 ///
-struct SvdOrthogonalizerTag {};
+struct RowBlockPolarOrthogonalizerTag {};
 
 /// @ingroup  isvd_orthogonalizer_module
 template <typename _Val>
-using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Val>;
+using RowBlockPolarOrthogonalizer = Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
-/// The SVD orthogonalizer.
+/// The polar orthogonalizer (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Orthogonalizer<SvdOrthogonalizerTag, _Val>
-  : public ComponentWrapper<SvdOrthogonalizer<_Val>> {
+class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
+  : public ComponentWrapper<RowBlockPolarOrthogonalizer<_Val>> {
 
-  friend ComponentWrapper<SvdOrthogonalizer<_Val>>;
+  friend ComponentWrapper<RowBlockPolarOrthogonalizer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<SvdOrthogonalizer<_Val>>;
+  using BaseType = ComponentWrapper<RowBlockPolarOrthogonalizer<_Val>>;
 
  public:
 
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
-  using MatrixType  = MatrixT<DenseMatrixCollection120<ValType>>;
+  using ValType = _Val;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_= "SVD Orthogonalizer";
+  static constexpr const char* name_= "Polar Orthogonalizer (Row-Block Version)";
 
-  /// The vector S.
-  DenseVector<RealValType> vector_s_;
+  /// The matrix V.
+  DenseMatrixCollection102<ValType> collection_v_;
 
-  /// The empty matrix.
-  MatrixType matrix_empty_;
+  /// The vector E.
+  DenseVector<ValType> vector_e_;
 
-  /// The GESVD driver.
-  la::GesvdDriver<MatrixType, 'O', 'N'> gesvd_driver_;
+  /// The temporary matrices.
+  DenseMatrixCollection120<ValType> collection_tmp_;
+
+  /// The SYEV driver.
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -84,7 +85,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection120<ValType> &collection_q ) noexcept;
+  void runImpl( DenseMatrixCollection120<ValType> &collection_qj ) noexcept;
 
 };
 
@@ -92,4 +93,4 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HH_
+#endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HH_
