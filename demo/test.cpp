@@ -7,22 +7,34 @@
 
 #include <iostream>
 #include <mcnla.hpp>
+#include <omp.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
-  std::cout << "MCNLA "
-            << MCNLA_MAJOR_VERSION << "."
-            << MCNLA_MINOR_VERSION << "."
-            << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
   MPI_Init(&argc, &argv);
 
   const auto mpi_comm = MPI_COMM_WORLD;
-  mcnla::mpi_int_t mpi_root = 0;
   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
   mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(mpi_comm);
+  mcnla::mpi_int_t mpi_root = 0;
+
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "MCNLA "
+              << MCNLA_MAJOR_VERSION << "."
+              << MCNLA_MINOR_VERSION << "."
+              << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
+
+    std::cout << mpi_size << " nodes / "
+#ifdef MCNLA_USE_OMP
+              << omp_get_max_threads()
+#else  //MCNLA_USE_OMP
+              << 1
+#endif  // MCNLA_USE_OMP
+              << " threads per node" << std::endl << std::endl;
+  }
 
   mcnla::index_t m = 6, n = 10, k = 3, p = 1, Nj = 2, K = mpi_size;
 
