@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hpp
-/// @brief   The SVD orthogonalizer.
+/// @brief   The polar orthogonalizer (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
