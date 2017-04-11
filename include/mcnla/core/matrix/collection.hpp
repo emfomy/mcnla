@@ -17,10 +17,4 @@
 #include <mcnla/core/matrix/collection/dense_matrix_collection_102.hpp>
 #include <mcnla/core/matrix/collection/dense_matrix_collection_120.hpp>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_collection_module_detail  Container Collection Module Detail
-/// @ingroup   matrix_collection_module
-/// @brief     The Container Collection Module Detail
-///
-
 #endif  // MCNLA_CORE_MATRIX_COLLECTION_HPP_

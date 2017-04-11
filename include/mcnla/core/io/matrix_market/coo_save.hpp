@@ -26,6 +26,8 @@ namespace io {
 /// @ingroup  io_module
 /// Save a COO vector into a Matrix Market file.
 ///
+/// @note  The file storage major will be the same as @a vector.
+///
 /// @todo  Write banner
 ///
 template <typename _Val>
@@ -58,6 +60,8 @@ void saveMatrixMarket(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
 /// Save a COO matrix into a Matrix Market file.
+///
+/// @note  The file storage major will be the same as @a matrix.
 ///
 /// @todo  Write banner
 ///

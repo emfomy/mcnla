@@ -3,8 +3,8 @@
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
-#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
-#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
+#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qi.mtx"
+#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_kn.mtx"
 
 TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   using ValType = double;

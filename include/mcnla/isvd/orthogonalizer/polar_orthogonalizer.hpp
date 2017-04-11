@@ -76,7 +76,7 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
     syev_driver_(collection_p_(i).viewSymmetric(), matrix_e_("", i));
   }
 
-  // Qi := Qi * Pi' / sqrt( Ei )
+  // Qi := Qi * Pi' / sqrt(Ei)
   matrix_e_.val().valarray() = std::sqrt(matrix_e_.val().valarray());
   la::copy(matrix_qs.vectorize(), collection_tmp_.unfold().vectorize());
   for ( index_t i = 0; i < num_sketch_each; ++i ) {

@@ -3,8 +3,8 @@
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
-#define COLLECTION_Y_PATH MCNLA_DATA_PATH "/yit.mtx"
-#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
+#define COLLECTION_Y_PATH MCNLA_DATA_PATH "/yi.mtx"
+#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qi.mtx"
 
 TEST(RowBlockPolarOrthogonalizerTest, Test) {
   using ValType = double;

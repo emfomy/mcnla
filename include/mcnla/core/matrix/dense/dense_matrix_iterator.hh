@@ -60,7 +60,6 @@ struct Traits<matrix::DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module_detail
 /// The dense matrix iterator.
 ///
 /// @tparam  _Val  The value type.
@@ -110,11 +109,9 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
 
 };
 
-/// @ingroup  matrix_dense_module_detail
 template <typename _Val, Trans _trans>
 using DenseMatrixIterator = DenseMatrixIteratorBase<_Val, _trans, DenseMatrix<_Val, _trans>>;
 
-/// @ingroup  matrix_dense_module_detail
 template <typename _Val, Trans _trans>
 using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Val, _trans, const DenseMatrix<_Val, _trans>>;
 

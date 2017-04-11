@@ -56,7 +56,6 @@ struct Traits<matrix::CooVectorIteratorBase<_Val, _Idx, _Vector>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module_detail
 /// The COO vector iterator.
 ///
 /// @tparam  _Val     The value type.
@@ -106,11 +105,9 @@ class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _I
 
 };
 
-/// @ingroup  matrix_coo_module_detail
 template <typename _Val>
 using CooVectorIterator = CooVectorIteratorBase<_Val, index_t, CooVector<_Val>>;
 
-/// @ingroup  matrix_coo_module_detail
 template <typename _Val>
 using CooVectorConstIterator = CooVectorIteratorBase<const _Val, const index_t, const CooVector<_Val>>;
 

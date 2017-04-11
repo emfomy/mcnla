@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/svd_former.hpp
-/// @brief   The SVD former.
+/// @file    include/mcnla/isvd/former/polar_former.hpp
+/// @brief   The Polar former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_SVD_FORMER_HPP_
-#define MCNLA_ISVD_FORMER_SVD_FORMER_HPP_
+#ifndef MCNLA_ISVD_FORMER_POLAR_FORMER_HPP_
+#define MCNLA_ISVD_FORMER_POLAR_FORMER_HPP_
 
-#include <mcnla/isvd/former/svd_former.hh>
+#include <mcnla/isvd/former/polar_former.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-Former<SvdFormerTag, _Val>::Former(
+Former<PolarFormerTag, _Val>::Former(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Former<SvdFormerTag, _Val>::Former(
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
-void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
+void Former<PolarFormerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -43,14 +43,13 @@ void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
 
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
-  matrix_vt_.reconstruct(dim_sketch, ncol);
-  gesvd_driver_.reconstruct(dim_sketch, ncol);
+  matrix_qta_.reconstruct(dim_sketch, ncol);
+  syev_driver_.reconstruct(dim_sketch);
 
   matrix_u_cut_.reconstruct(nrow, rank);
 
   matrix_w_cut_  = matrix_w_("", {0, rank});
   vector_s_cut_  = vector_s_({0, rank});
-  matrix_vt_cut_ = matrix_vt_({0, rank}, "");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +59,7 @@ void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
 /// @param   matrix_q    The matrix Q.
 ///
 template <typename _Val> template <class _Matrix>
-void Former<SvdFormerTag, _Val>::runImpl(
+void Former<PolarFormerTag, _Val>::runImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<ValType> &matrix_q
 ) noexcept {
@@ -80,11 +79,17 @@ void Former<SvdFormerTag, _Val>::runImpl(
 
   moments_.emplace_back(MPI_Wtime());  // start
 
-  // Vt := Q' * A
-  la::mm(matrix_q.t(), matrix_a, matrix_vt_);
+  // QtA := Q' * A
+  la::mm(matrix_q.t(), matrix_a, matrix_qta_);
 
-  // Compute the SVD of Vt -> W * S * Vt
-  gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
+  // W := QtA * QtA'
+  la::rk(matrix_qta_, matrix_w_.viewSymmetric());
+
+  // Compute the eigen-decomposition of W -> W * S * W'
+  syev_driver_(matrix_w_.viewSymmetric(), vector_s_);
+
+  // S := sqrt(S)
+  vector_s_.val().valarray() = std::sqrt(vector_s_.val().valarray());
 
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
@@ -96,7 +101,7 @@ void Former<SvdFormerTag, _Val>::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& Former<PolarFormerTag, _Val>::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -105,22 +110,13 @@ const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const n
 /// @brief  Gets the left singular vectors.
 ///
 template <typename _Val>
-const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noexcept {
+const DenseMatrixColMajor<_Val>& Former<PolarFormerTag, _Val>::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the right singular vectors.
-///
-template <typename _Val>
-const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixVt() const noexcept {
-  mcnla_assert_true(this->isComputed());
-  return matrix_vt_cut_;
 }
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_SVD_FORMER_HPP_
+#endif  // MCNLA_ISVD_FORMER_POLAR_FORMER_HPP_

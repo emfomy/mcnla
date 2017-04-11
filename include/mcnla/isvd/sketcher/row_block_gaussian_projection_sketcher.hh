@@ -22,7 +22,6 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module_detail
 /// The row-block Gaussian projection sketcher tag.
 ///
 struct RowBlockGaussianProjectionSketcherTag {};

@@ -24,10 +24,4 @@
 #include <mcnla/core/matrix/coo/coo_matrix.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix_iterator.hpp>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_coo_module_detail  Coo Container Module Detail
-/// @ingroup   matrix_coo_module
-/// @brief     The Coo Container Module Detail
-///
-
 #endif  // MCNLA_CORE_MATRIX_COO_HPP_

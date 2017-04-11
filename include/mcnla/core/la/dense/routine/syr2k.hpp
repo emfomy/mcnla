@@ -124,7 +124,6 @@ inline void syr2k(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_interface_module_detail
 /// @copydoc  mcnla::la::r2k
 ///
 template <typename _Val, Trans _transa, Trans _transb, Trans _transc, Uplo _uplo>

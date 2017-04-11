@@ -83,12 +83,15 @@ int main( int argc, char **argv ) {
     auto &u = former.matrixU();
 
     disp(a);
+    disp(qbar);
     disp(u);
 
-    mcnla::matrix::DenseMatrixColMajor<double> uu(k, k);
-    mcnla::la::mm(u.t(), u, uu);
+    mcnla::matrix::DenseMatrixColMajor<double> utu(k, k), uut(m, m);
+    mcnla::la::mm(u.t(), u, utu);
+    mcnla::la::mm(u, u.t(), uut);
 
-    disp(uu);
+    disp(utu);
+    disp(uut);
   }
 
   MPI_Finalize();

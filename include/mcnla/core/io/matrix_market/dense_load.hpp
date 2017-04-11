@@ -27,6 +27,7 @@ namespace io {
 /// Load a dense vector from a Matrix Market file.
 ///
 /// @note  If @a vector is empty, the memory will be allocated.
+/// @note  The file should be stored in column-major.
 ///
 /// @todo  Read banner
 ///
@@ -50,12 +51,12 @@ void loadMatrixMarket(
   if ( vector.isEmpty() ) {
     vector.reconstruct(m);
   } else {
-    mcnla_assert_eq(vector.dims(), std::make_tuple(m));
+    mcnla_assert_eq(vector.sizes(), std::make_tuple(m));
   }
 
   // Read values
-  for ( auto &value : vector ) {
-    fin >> value;
+  for ( index_t i = 0; i < m; ++i ) {
+    fin >> vector(i);
   }
 
   // Close file
@@ -77,6 +78,7 @@ inline void loadMatrixMarket(
 /// Load a dense matrix from a Matrix Market file.
 ///
 /// @note  If @a matrix is empty, the memory will be allocated.
+/// @note  The file should be stored in column-major.
 ///
 /// @todo  Read banner
 ///
@@ -98,18 +100,16 @@ void loadMatrixMarket(
   index_t m, n;
   fin >> m >> n;
   if ( matrix.isEmpty() ) {
-    if ( !isTrans(_trans) ) {
-      matrix.reconstruct(m, n);
-    } else {
-      matrix.reconstruct(n, m);
-    }
+    matrix.reconstruct(m, n);
   } else {
-    mcnla_assert_eq(matrix.dims(), std::make_tuple(m, n));
+    mcnla_assert_eq(matrix.sizes(), std::make_tuple(m, n));
   }
 
   // Read values
-  for ( auto &value : matrix ) {
-    fin >> value;
+  for ( index_t j = 0; j < n; ++j ) {
+    for ( index_t i = 0; i < m; ++i ) {
+      fin >> matrix(i, j);
+    }
   }
 
   // Close file
@@ -131,6 +131,7 @@ inline void loadMatrixMarket(
 /// Load a dense vector collection from a Matrix Market file.
 ///
 /// @note  If @a collection is empty, the memory will be allocated.
+/// @note  The file should be stored in column-major.
 ///
 /// @todo  Read banner
 ///
@@ -154,15 +155,14 @@ void loadMatrixMarket(
   if ( collection.isEmpty() ) {
     collection.reconstruct(m, n);
   } else {
-    mcnla_assert_eq(collection.nvec(), n);
-    mcnla_assert_eq(collection(0).dims(), std::make_tuple(m));
+    mcnla_assert_eq(collection.sizes(), std::make_tuple(m, n));
   }
 
   // Read values
-  for ( auto i = 0; i < n; ++i ) {
-    auto vector = collection(i);
-    for ( auto &value : vector ) {
-      fin >> value;
+  for ( index_t j = 0; j < n; ++j ) {
+    auto vector = collection(j);
+    for ( index_t i = 0; i < m; ++i ) {
+      fin >> vector(i);
     }
   }
 
@@ -185,6 +185,7 @@ inline void loadMatrixMarket(
 /// Load a dense matrix collection from a Matrix Market file.
 ///
 /// @note  If @a collection is empty, the memory will be allocated.
+/// @note  The file should be stored in column-major.
 ///
 /// @todo  Read banner
 ///
@@ -203,24 +204,21 @@ void loadMatrixMarket(
   }
 
   // Get size
-  index_t m, n, k;
-  fin >> m >> n >> k;
+  index_t m, n, l;
+  fin >> m >> n >> l;
   if ( collection.isEmpty() ) {
-    if ( !isTrans(_trans) ) {
-      collection.reconstruct(m, n, k);
-    } else {
-      collection.reconstruct(n, m, k);
-    }
+    collection.reconstruct(m, n, l);
   } else {
-    mcnla_assert_eq(collection.nmat(), k);
-    mcnla_assert_eq(collection(0).dims(), std::make_tuple(m, n));
+    mcnla_assert_eq(collection.sizes(), std::make_tuple(m, n, l));
   }
 
   // Read values
-  for ( auto i = 0; i < k; ++i ) {
-    auto matrix = collection(i);
-    for ( auto &value : matrix ) {
-      fin >> value;
+  for ( auto k = 0; k < l; ++k ) {
+    auto matrix = collection(k);
+    for ( index_t j = 0; j < n; ++j ) {
+      for ( index_t i = 0; i < m; ++i ) {
+        fin >> matrix(i, j);
+      }
     }
   }
 

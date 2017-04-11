@@ -28,7 +28,6 @@ template <typename _Val> class DenseMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module_detail
 /// The dense vector storage class.
 ///
 /// @tparam  _Val  The value type.

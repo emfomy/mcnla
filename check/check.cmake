@@ -10,7 +10,9 @@ macro(_ADD_CHECK_PREDO checktype)
   set(checktarget mcnla_test_${checkname})
 
   # Set target
-  file(GLOB_RECURSE files "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}/${checktype}/*.cpp")
+  file(GLOB_RECURSE files "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}.cpp"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}/${checktype}.cpp"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}/${checktype}/*.cpp")
   list(SORT files)
   list(REVERSE files)
   add_executable(${checktarget} EXCLUDE_FROM_ALL ${checkmain} ${files})

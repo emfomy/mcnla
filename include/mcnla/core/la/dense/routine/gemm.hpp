@@ -123,7 +123,6 @@ inline void gemm(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_interface_module_detail
 /// @copydoc  mcnla::la::mm
 ///
 template <typename _Val, Trans _transa, Trans _transb, Trans _transc>

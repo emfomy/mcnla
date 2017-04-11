@@ -14,10 +14,4 @@
 #include <mcnla/isvd/orthogonalizer/polar_orthogonalizer.hpp>
 #include <mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hpp>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  isvd_orthogonalizer_module_detail  Orthogonalizer Module Detail
-/// @ingroup   isvd_orthogonalizer_module
-/// @brief     The Orthogonalizer Module Detail
-///
-
 #endif  // MCNLA_ISVD_OTRHOGONALIZER_HPP_

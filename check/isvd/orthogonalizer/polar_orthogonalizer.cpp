@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hpp>
+#include <mcnla/isvd/orthogonalizer/polar_orthogonalizer.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
-#define COLLECTION_Y_PATH MCNLA_DATA_PATH "/yit.mtx"
-#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
+#define COLLECTION_Y_PATH MCNLA_DATA_PATH "/yi.mtx"
+#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qi.mtx"
 
-TEST(SvdOrthogonalizerTest, Test) {
+TEST(PolarOrthogonalizerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_root = 0;
@@ -36,7 +36,7 @@ TEST(SvdOrthogonalizerTest, Test) {
   parameters.sync();
 
   // Initializes orthogonalizer
-  mcnla::isvd::SvdOrthogonalizer<ValType> orthogonalizer(parameters);
+  mcnla::isvd::PolarOrthogonalizer<ValType> orthogonalizer(parameters);
   orthogonalizer.initialize();
 
   // Creates matrices

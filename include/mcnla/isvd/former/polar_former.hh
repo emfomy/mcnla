@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/svd_former.hh
-/// @brief   The definition of SVD former.
+/// @file    include/mcnla/isvd/former/polar_former.hh
+/// @brief   The definition of Polar former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_SVD_FORMER_HH_
-#define MCNLA_ISVD_FORMER_SVD_FORMER_HH_
+#ifndef MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
+#define MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/former/former.hpp>
@@ -23,29 +23,29 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The SVD former tag.
+/// The Polar former tag.
 ///
-struct SvdFormerTag {};
+struct PolarFormerTag {};
 
 /// @ingroup  isvd_former_module
 template <typename _Val>
-using SvdFormer = Former<SvdFormerTag, _Val>;
+using PolarFormer = Former<PolarFormerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-/// The SVD former.
+/// The Polar former.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Former<SvdFormerTag, _Val>
-  : public ComponentWrapper<SvdFormer<_Val>> {
+class Former<PolarFormerTag, _Val>
+  : public ComponentWrapper<PolarFormer<_Val>> {
 
-  friend ComponentWrapper<SvdFormer<_Val>>;
+  friend ComponentWrapper<PolarFormer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<SvdFormer<_Val>>;
+  using BaseType = ComponentWrapper<PolarFormer<_Val>>;
 
  public:
 
@@ -55,7 +55,7 @@ class Former<SvdFormerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "SVD Former";
+  static constexpr const char* name_= "Polar Former";
 
   /// The matrix W.
   DenseMatrixColMajor<ValType> matrix_w_;
@@ -72,17 +72,11 @@ class Former<SvdFormerTag, _Val>
   /// The cut matrix U.
   DenseMatrixColMajor<ValType> matrix_u_cut_;
 
-  /// The matrix Vt.
-  DenseMatrixColMajor<ValType> matrix_vt_;
+  /// The matrix Q'*A.
+  DenseMatrixRowMajor<ValType> matrix_qta_;
 
-  /// The cut matrix Vt.
-  DenseMatrixColMajor<ValType> matrix_vt_cut_;
-
-  /// The empty matrix.
-  DenseMatrixColMajor<ValType> matrix_empty_;
-
-  /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixColMajor<ValType>, 'S', 'O'> gesvd_driver_;
+  /// The SYEV driver.
+  la::SyevDriver<DenseSymmetricMatrixColMajor<ValType>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -97,7 +91,7 @@ class Former<SvdFormerTag, _Val>
   // Gets matrices
   inline const DenseVector<RealValType>& vectorS() const noexcept;
   inline const DenseMatrixColMajor<ValType>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixVt() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixVt() const noexcept = delete;
 
  protected:
 
@@ -114,4 +108,4 @@ class Former<SvdFormerTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_SVD_FORMER_HH_
+#endif  // MCNLA_ISVD_FORMER_POLAR_FORMER_HH_

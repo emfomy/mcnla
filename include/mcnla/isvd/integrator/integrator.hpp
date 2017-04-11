@@ -49,7 +49,6 @@ struct Traits<isvd::Integrator<_Tag, _Val>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module_detail
 /// The interface of iSVD integrator.
 ///
 /// @tparam  _Tag  The integrator tag.

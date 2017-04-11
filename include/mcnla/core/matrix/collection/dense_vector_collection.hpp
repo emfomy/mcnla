@@ -53,7 +53,6 @@ struct Traits<matrix::DenseVectorCollection<_Tag, _Val>> {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_collection_module_detail
 /// The interface of dense vector collection.
 ///
 /// @tparam  _Tag  The collection tag.

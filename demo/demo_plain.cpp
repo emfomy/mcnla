@@ -86,7 +86,12 @@ int main( int argc, char **argv ) {
          << ", tol = " << tol
          << ", maxiter = " << maxiter << endl;
     cout << mpi_size << " nodes / "
-         << omp_get_max_threads() << " threads per node" << endl << endl;
+#ifdef MCNLA_USE_OMP
+         << omp_get_max_threads()
+#else  //MCNLA_USE_OMP
+         << 1
+#endif  // MCNLA_USE_OMP
+         << " threads per node" << endl << endl;
   }
 
   // ====================================================================================================================== //

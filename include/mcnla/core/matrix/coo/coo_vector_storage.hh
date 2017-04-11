@@ -29,7 +29,6 @@ template <typename _Val> class CooMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module_detail
 /// The coordinate list (COO) vector storage class.
 ///
 /// @tparam  _Val  The value type.

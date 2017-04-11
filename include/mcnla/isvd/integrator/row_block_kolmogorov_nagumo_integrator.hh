@@ -23,7 +23,6 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module_detail
 /// The row-block Kolmogorov-Nagumo-type integrator tag.
 ///
 struct RowBlockKolmogorovNagumoIntegratorTag {};

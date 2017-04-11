@@ -23,10 +23,4 @@
 #include <mcnla/core/matrix/dense/dense_triangular_matrix.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix.hpp>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_dense_module_detail  Dense Container Module Detail
-/// @ingroup   matrix_dense_module
-/// @brief     The Dense Container Module Detail
-///
-
 #endif  // MCNLA_CORE_MATRIX_DENSE_HPP_

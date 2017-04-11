@@ -157,7 +157,7 @@ void DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::rec
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a collection of rows.
+/// @brief  Gets a subcollection.
 ///
 template <typename _Val>
 DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(

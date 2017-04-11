@@ -2,8 +2,8 @@
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
-#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qit.mtx"
-#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qbt_kn.mtx"
+#define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qi.mtx"
+#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_kn.mtx"
 
 TEST(KolmogorovNagumoIntegratorTest, Test) {
   using ValType = double;

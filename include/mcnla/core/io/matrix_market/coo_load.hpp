@@ -27,6 +27,7 @@ namespace io {
 /// Load a COO vector from a Matrix Market file.
 ///
 /// @note  If @a vector is empty, the memory will be allocated.
+/// @note  The file storage major should be the same as @a vector.
 ///
 /// @todo  Read banner
 ///
@@ -80,6 +81,7 @@ inline void loadMatrixMarket(
 /// Load a COO matrix from a Matrix Market file.
 ///
 /// @note  If @a matrix is empty, the memory will be allocated.
+/// @note  The file storage major should be the same as @a matrix.
 ///
 /// @todo  Read banner
 ///

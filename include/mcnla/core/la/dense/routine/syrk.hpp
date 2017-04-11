@@ -115,7 +115,6 @@ inline void syrk(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_interface_module_detail
 /// @copydoc  mcnla::la::rk
 ///
 template <typename _Val, Trans _transa, Trans _transc, Uplo _uplo>
