@@ -57,7 +57,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
   mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
-  mcnla::isvd::SvdFormer<double> former(parameters);
+  mcnla::isvd::PolarFormer<double> former(parameters);
   sketcher.initialize();
   orthogonalizer.initialize();
   integrator.initialize();
@@ -83,7 +83,6 @@ int main( int argc, char **argv ) {
     auto &u = former.matrixU();
 
     disp(a);
-    disp(qbar);
     disp(u);
 
     mcnla::matrix::DenseMatrixColMajor<double> utu(k, k), uut(m, m);

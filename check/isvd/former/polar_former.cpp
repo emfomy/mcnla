@@ -10,7 +10,6 @@ TEST(PolarFormerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_root = 0;
-  const auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
 
   // Reads data
@@ -28,8 +27,8 @@ TEST(PolarFormerTest, Test) {
   // Gets size
   const mcnla::index_t m  = a.nrow();
   const mcnla::index_t n  = a.ncol();
-  const mcnla::index_t k  = qbar_true.ncol();
-  const mcnla::index_t p  = 0;
+  const mcnla::index_t k  = qbar_true.ncol() / 2;
+  const mcnla::index_t p  = qbar_true.ncol() - k;
   const mcnla::index_t Nj = 1;
 
   // Sets parameters
@@ -43,6 +42,7 @@ TEST(PolarFormerTest, Test) {
 
   // Creates matrices
   auto qbar = parameters.createMatrixQ();
+  auto u_true_cut = u_true("", {0, k});
 
   // Copies data
   mcnla::la::copy(qbar_true, qbar);
@@ -55,11 +55,11 @@ TEST(PolarFormerTest, Test) {
 
   // Checks result
   if ( mpi_rank == mpi_root ) {
-    ASSERT_EQ(u.sizes(), u_true.sizes());
+    ASSERT_EQ(u.sizes(), u_true_cut.sizes());
     mcnla::matrix::DenseSymmetricMatrixRowMajor<ValType> uut(m);
     mcnla::matrix::DenseSymmetricMatrixRowMajor<ValType> uut_true(m);
     mcnla::la::rk(u, uut);
-    mcnla::la::rk(u_true, uut_true);
+    mcnla::la::rk(u_true_cut, uut_true);
     for ( auto ir = 0; ir < m; ++ir ) {
       for ( auto ic = 0; ic <= ir; ++ic ) {
         ASSERT_NEAR(uut(ir, ic), uut_true(ir, ic), 1e-8) << "(ir, ic) =  (" << ir << ", " << ic << ")";
