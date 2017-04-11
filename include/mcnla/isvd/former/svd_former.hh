@@ -55,7 +55,7 @@ class Former<SvdFormerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "SVD Former";
+  static constexpr const char* name_ = "SVD Former";
 
   /// The matrix W.
   DenseMatrixColMajor<ValType> matrix_w_;

@@ -31,7 +31,7 @@ inline void bcastImpl(
           CooStorage<_Val> &buffer,
     const mpi_int_t root,
     const MPI_Comm comm,
-    const index_t count
+    const mpi_int_t count
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Bcast(buffer.valPtr(), count, datatype, root, comm);
@@ -53,7 +53,7 @@ inline void bcast(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  const index_t count = buffer.nelem();
+  const mpi_int_t count = buffer.nelem();
   MPI_Bcast(buffer.valPtr(),  count, traits::MpiValTraits<_Val>::datatype, root, comm);
   MPI_Bcast(buffer.idx0Ptr(), count, traits::MpiValTraits<index_t>::datatype, root, comm);
 }
@@ -64,7 +64,7 @@ inline void bcast(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  const index_t count = buffer.nelem();
+  const mpi_int_t count = buffer.nelem();
   MPI_Bcast(buffer.valPtr(),  count, traits::MpiValTraits<_Val>::datatype, root, comm);
   MPI_Bcast(buffer.idx0Ptr(), count, traits::MpiValTraits<index_t>::datatype, root, comm);
   MPI_Bcast(buffer.idx1Ptr(), count, traits::MpiValTraits<index_t>::datatype, root, comm);

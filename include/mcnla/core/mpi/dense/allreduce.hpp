@@ -30,9 +30,9 @@ template <typename _Val>
 inline void allreduceImpl(
     const DenseStorage<_Val> &send,
           DenseStorage<_Val> &recv,
+    const mpi_int_t count,
     const MPI_Op op,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Allreduce(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
@@ -41,9 +41,9 @@ inline void allreduceImpl(
 template <typename _Val>
 inline void allreduceImpl(
           DenseStorage<_Val> &buffer,
+    const mpi_int_t count,
     const MPI_Op op,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Allreduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, comm);
@@ -69,7 +69,7 @@ inline void allreduce(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  detail::allreduceImpl(send, recv, op, comm, send.nelem());
+  detail::allreduceImpl(send, recv, send.nelem(), op, comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -82,7 +82,7 @@ inline void allreduce(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  detail::allreduceImpl(send, recv, op, comm, send.nelem());
+  detail::allreduceImpl(send, recv, send.nelem(), op, comm);
 }
 //@}
 
@@ -123,7 +123,7 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::allreduceImpl(buffer, op, comm, buffer.nelem());
+  detail::allreduceImpl(buffer, buffer.nelem(), op, comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -133,7 +133,7 @@ inline void allreduce(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::allreduceImpl(buffer, op, comm, buffer.nelem());
+  detail::allreduceImpl(buffer, buffer.nelem(), op, comm);
 }
 //@}
 

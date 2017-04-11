@@ -29,10 +29,10 @@ namespace detail {
 template <typename _Val>
 inline void sendImpl(
     const DenseStorage<_Val> &buffer,
+    const mpi_int_t count,
     const mpi_int_t dest,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Send(buffer.valPtr(), count, datatype, dest, tag, comm);
@@ -55,7 +55,7 @@ inline void send(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::sendImpl(buffer, dest, tag, comm, buffer.nelem());
+  detail::sendImpl(buffer, buffer.nelem(), dest, tag, comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -66,7 +66,7 @@ inline void send(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::sendImpl(buffer, dest, tag, comm, buffer.nelem());
+  detail::sendImpl(buffer, buffer.nelem(), dest, tag, comm);
 }
 //@}
 

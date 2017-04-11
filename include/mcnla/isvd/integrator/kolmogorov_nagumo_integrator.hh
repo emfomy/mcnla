@@ -56,7 +56,7 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
+  static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator";
 
   /// The maximum number of iteration.
   index_t max_iteration_;

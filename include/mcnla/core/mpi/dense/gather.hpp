@@ -30,9 +30,9 @@ template <typename _Val>
 inline void gatherImpl(
     const DenseStorage<_Val> &send,
           DenseStorage<_Val> &recv,
+    const mpi_int_t count,
     const mpi_int_t root,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Gather(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, root, comm);
@@ -60,7 +60,7 @@ inline void gather(
   if ( isCommRoot(root, comm) ) {
     mcnla_assert_eq(send.dim0() * commSize(comm), recv.dim0());
   }
-  detail::gatherImpl(send, recv, root, comm, send.nelem());
+  detail::gatherImpl(send, recv, send.nelem(), root, comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -73,10 +73,10 @@ inline void gather(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   if ( isCommRoot(root, comm) ) {
-    mcnla_assert_eq(send.dim0(),                     recv.dim0());
+    mcnla_assert_eq(send.dim0(),                  recv.dim0());
     mcnla_assert_eq(send.dim1() * commSize(comm), recv.dim1());
   }
-  detail::gatherImpl(send, recv, root, comm, send.nelem());
+  detail::gatherImpl(send, recv, send.nelem(), root, comm);
 }
 //@}
 

@@ -9,9 +9,9 @@
 TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
-  const auto mpi_root = 0;
-  const auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
+  const auto mpi_size = mcnla::mpi::commSize(mpi_comm);
+  const auto mpi_root = 0;
 
   // Reads data
   mcnla::matrix::DenseMatrixCollection120<ValType> qi_true;

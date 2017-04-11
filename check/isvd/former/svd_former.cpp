@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <mcnla/isvd/former/svd_former.hpp>
+#include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define MATRIX_A_PATH MCNLA_DATA_PATH "/a.mtx"
@@ -9,8 +10,8 @@
 TEST(SvdFormerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
-  const auto mpi_root = 0;
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
+  const auto mpi_root = 0;
 
   // Reads data
   mcnla::matrix::DenseMatrixColMajor<ValType> a;

@@ -86,6 +86,8 @@ class Parameters {
   inline index_t nrowEach() const noexcept;
   inline index_t nrowTotal() const noexcept;
   inline index_t ncol() const noexcept;
+  inline index_t ncolEach() const noexcept;
+  inline index_t ncolTotal() const noexcept;
   inline index_t rank() const noexcept;
   inline index_t overRank() const noexcept;
   inline index_t dimSketch() const noexcept;

@@ -25,6 +25,7 @@ add_mpi_check(isvd/integrator/kolmogorov_nagumo_integrator "Kolmogorov-Nagumo-Ty
 add_mpi_check(isvd/integrator/row_block_kolmogorov_nagumo_integrator "Row-Block Kolmogorov-Nagumo-Type Integrator test" "RowBlockKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/former/svd_former "SVD Former test" "SvdFormerTest" 1)
 add_mpi_check(isvd/former/polar_former "Polar Former test" "PolarFormerTest" 1)
+add_mpi_check(isvd/former/row_block_polar_former "Row-BLock Polar Former test" "RowBlockPolarFormerTest" 1 2 3 4 6 12)
 
 # Add rule 'build_test'
 add_custom_target(

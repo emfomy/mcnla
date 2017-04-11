@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/former/polar_former.hpp>
+#include <mcnla/isvd/former/row_block_polar_former.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
@@ -7,16 +7,17 @@
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_kn.mtx"
 #define MATRIX_U_PATH MCNLA_DATA_PATH "/u_kn.mtx"
 
-TEST(PolarFormerTest, Test) {
+TEST(RowBlockPolarFormerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
+  const auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   const auto mpi_root = 0;
 
   // Reads data
-  mcnla::matrix::DenseMatrixColMajor<ValType> a;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> a;
   mcnla::matrix::DenseMatrixRowMajor<ValType> qbar_true;
-  mcnla::matrix::DenseMatrixColMajor<ValType> u_true;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> u_true;
   mcnla::io::loadMatrixMarket(a, MATRIX_A_PATH);
   mcnla::io::loadMatrixMarket(qbar_true, MATRIX_Q_PATH);
   mcnla::io::loadMatrixMarket(u_true, MATRIX_U_PATH);
@@ -38,21 +39,39 @@ TEST(PolarFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::PolarFormer<ValType> former(parameters);
+  mcnla::isvd::RowBlockPolarFormer<ValType> former(parameters);
   former.initialize();
 
+  // Initializes converter
+  mcnla::isvd::MatrixQToRowBlockConverter<double> pre_converter(parameters);
+  mcnla::isvd::MatrixQFromRowBlockConverter<double> post_converter(parameters);
+  pre_converter.initialize();
+  post_converter.initialize();
+
   // Creates matrices
-  auto qbar = parameters.createMatrixQ();
+  auto mj = parameters.nrowEach();
+  auto mm = parameters.nrowTotal();
+  auto qbar  = parameters.createMatrixQ();
+  auto qbarj = parameters.createMatrixQj();
   auto u_true_cut = u_true("", {0, k});
+  mcnla::matrix::DenseMatrixRowMajor<ValType> aj(mj, n);
 
   // Copies data
   mcnla::la::copy(qbar_true, qbar);
+  if ( mpi_rank != mpi_size ) {
+    mcnla::la::copy(a({mpi_rank*mj, (mpi_rank+1)*mj}, ""), aj);
+  } else {
+    mcnla::la::copy(a({mpi_rank*mj, m}, ""), aj({0, mj-(mm-m)}, ""));
+  }
 
   // Integrates
-  former(a, qbar);
+  pre_converter(qbar, qbarj);
+  former(aj, qbarj);
 
   // Gets results
-  auto u = former.matrixU();
+  auto u  = qbar;
+  auto uj = former.matrixUj();
+  post_converter(uj, u);
 
   // Checks result
   if ( mpi_rank == mpi_root ) {

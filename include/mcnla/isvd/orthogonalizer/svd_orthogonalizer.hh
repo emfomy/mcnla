@@ -56,7 +56,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "SVD Orthogonalizer";
+  static constexpr const char* name_ = "SVD Orthogonalizer";
 
   /// The vector S.
   DenseVector<RealValType> vector_s_;

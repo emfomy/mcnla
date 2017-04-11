@@ -1,17 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/dense/reduce_scatter_block.hpp
-/// @brief   The MPI RECUDE_SCATTER_BLOCK routine.
+/// @file    include/mcnla/core/mpi/dense/scatter.hpp
+/// @brief   The MPI SCATTER routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MPI_DENSE_RECUDESCATTER_HPP_
-#define MCNLA_CORE_MPI_DENSE_RECUDESCATTER_HPP_
+#ifndef MCNLA_CORE_MPI_DENSE_SCATTER_HPP_
+#define MCNLA_CORE_MPI_DENSE_SCATTER_HPP_
 
 #include <mcnla/core/mpi/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <algorithm>
-#include <numeric>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -29,73 +27,78 @@ namespace mpi {
 namespace detail {
 
 template <typename _Val>
-inline void reduceScatterBlockImpl(
+inline void scatterImpl(
     const DenseStorage<_Val> &send,
           DenseStorage<_Val> &recv,
     const mpi_int_t count,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
-  MPI_Reduce_scatter_block(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
+  MPI_Scatter(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, root, comm);
 }
 
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_dense_module
-/// @brief  Combines values and scatters the results (same-size version).
+/// @brief  Sends data from one process to all other processes in a communicator.
 ///
-/// @attention  The size of @a send should be equal to the size of @a recv &times the number of MPI rank.
+/// @attention  The dimensions of @a recv should be the same for all MPI nodes.
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
 template <typename _Val>
-inline void reduceScatterBlock(
+inline void scatter(
     const DenseVector<_Val> &send,
           DenseVector<_Val> &recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
-  mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
-  detail::reduceScatterBlockImpl(send, recv, recv.nelem(), op, comm);
+  if ( isCommRoot(root, comm) ) {
+    mcnla_assert_eq(send.dim0(), recv.dim0() * commSize(comm));
+  }
+  detail::scatterImpl(send, recv, recv.nelem(), root, comm);
 }
 
 template <typename _Val, Trans _trans>
-inline void reduceScatterBlock(
+inline void scatter(
     const DenseMatrix<_Val, _trans> &send,
           DenseMatrix<_Val, _trans> &recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
-  mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
-  detail::reduceScatterBlockImpl(send, recv, recv.nelem(), op, comm);
+  if ( isCommRoot(root, comm) ) {
+    mcnla_assert_eq(send.dim0(), recv.dim0());
+    mcnla_assert_eq(send.dim1(), recv.dim1() * commSize(comm));
+  }
+  detail::scatterImpl(send, recv, recv.nelem(), root, comm);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
-inline void reduceScatterBlock(
+inline void scatter(
     const DenseVector<_Val> &send,
           DenseVector<_Val> &&recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  reduceScatterBlock(send, recv, op, comm);
+  scatter(send, recv, root, comm);
 }
 
 template <typename _Val, Trans _trans>
-inline void reduceScatterBlock(
+inline void scatter(
     const DenseMatrix<_Val, _trans> &send,
           DenseMatrix<_Val, _trans> &&recv,
-    const MPI_Op op,
+    const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  reduceScatterBlock(send, recv, op, comm);
+  scatter(send, recv, root, comm);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -103,4 +106,4 @@ inline void reduceScatterBlock(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MPI_DENSE_RECUDESCATTER_HPP_
+#endif  // MCNLA_CORE_MPI_DENSE_SCATTER_HPP_

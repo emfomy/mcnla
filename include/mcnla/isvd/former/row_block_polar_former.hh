@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/polar_former.hh
-/// @brief   The definition of polar former.
+/// @file    include/mcnla/isvd/former/row_block_polar_former.hh
+/// @brief   The definition of polar former (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
-#define MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
+#ifndef MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HH_
+#define MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/former/former.hpp>
@@ -23,29 +23,29 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The polar former tag.
+/// The row-block polar former tag.
 ///
-struct PolarFormerTag {};
+struct RowBlockPolarFormerTag {};
 
 /// @ingroup  isvd_former_module
 template <typename _Val>
-using PolarFormer = Former<PolarFormerTag, _Val>;
+using RowBlockPolarFormer = Former<RowBlockPolarFormerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-/// The polar former.
+/// The polar former (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Former<PolarFormerTag, _Val>
-  : public ComponentWrapper<PolarFormer<_Val>> {
+class Former<RowBlockPolarFormerTag, _Val>
+  : public ComponentWrapper<RowBlockPolarFormer<_Val>> {
 
-  friend ComponentWrapper<PolarFormer<_Val>>;
+  friend ComponentWrapper<RowBlockPolarFormer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<PolarFormer<_Val>>;
+  using BaseType = ComponentWrapper<RowBlockPolarFormer<_Val>>;
 
  public:
 
@@ -55,7 +55,7 @@ class Former<PolarFormerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Polar Former";
+  static constexpr const char* name_ = "Polar Former (Row-Block Version)";
 
   /// The matrix W.
   DenseMatrixColMajor<ValType> matrix_w_;
@@ -69,11 +69,14 @@ class Former<PolarFormerTag, _Val>
   /// The cut vector S.
   DenseVector<RealValType> vector_s_cut_;
 
-  /// The cut matrix U.
-  DenseMatrixColMajor<ValType> matrix_u_cut_;
+  /// The cut matrix U (row-block).
+  DenseMatrixRowMajor<ValType> matrix_uj_cut_;
 
   /// The matrix Q'*A.
   DenseMatrixRowMajor<ValType> matrix_qta_;
+
+  /// The matrix Q'*A (row-block).
+  DenseMatrixRowMajor<ValType> matrix_qtaj_;
 
   /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixColMajor<ValType>, 'V'> syev_driver_;
@@ -90,8 +93,8 @@ class Former<PolarFormerTag, _Val>
 
   // Gets matrices
   inline const DenseVector<RealValType>& vectorS() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixVt() const noexcept = delete;
+  inline const DenseMatrixRowMajor<ValType>& matrixUj() const noexcept;
+  inline const DenseMatrixColMajor<ValType>& matrixVtj() const noexcept = delete;
 
  protected:
 
@@ -100,7 +103,7 @@ class Former<PolarFormerTag, _Val>
 
   // Forms SVD
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_aj, const DenseMatrixRowMajor<ValType> &matrix_qj ) noexcept;
+  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_q ) noexcept;
 
 };
 
@@ -108,4 +111,4 @@ class Former<PolarFormerTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
+#endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HH_

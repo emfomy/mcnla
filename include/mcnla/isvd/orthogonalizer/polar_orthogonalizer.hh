@@ -54,7 +54,7 @@ class Orthogonalizer<PolarOrthogonalizerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Polar Orthogonalizer";
+  static constexpr const char* name_ = "Polar Orthogonalizer";
 
   /// The matrix P.
   DenseMatrixCollection102<ValType> collection_p_;

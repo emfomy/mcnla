@@ -30,8 +30,8 @@ template <typename _Val>
 inline void alltoallImpl(
     const DenseStorage<_Val> &send,
           DenseStorage<_Val> &recv,
-    const MPI_Comm comm,
-    const index_t count
+    const mpi_int_t count,
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Alltoall(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, comm);
@@ -40,8 +40,8 @@ inline void alltoallImpl(
 template <typename _Val>
 inline void alltoallImpl(
           DenseStorage<_Val> &buffer,
-    const MPI_Comm comm,
-    const index_t count
+    const mpi_int_t count,
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.valPtr(), count, datatype, comm);
@@ -68,7 +68,7 @@ inline void alltoall(
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
   mcnla_assert_eq(send.dim0() % commSize(comm), 0);
-  detail::alltoallImpl(send, recv, comm, send.nelem() / commSize(comm));
+  detail::alltoallImpl(send, recv, send.nelem() / commSize(comm), comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -81,7 +81,7 @@ inline void alltoall(
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
   mcnla_assert_eq(send.dim1() % commSize(comm), 0);
-  detail::alltoallImpl(send, recv, comm, send.nelem() / commSize(comm));
+  detail::alltoallImpl(send, recv, send.nelem() / commSize(comm), comm);
 }
 //@}
 
@@ -120,7 +120,7 @@ inline void alltoall(
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
   mcnla_assert_eq(buffer.dim0() % commSize(comm), 0);
-  detail::alltoallImpl(buffer, comm, buffer.nelem() / commSize(comm));
+  detail::alltoallImpl(buffer, buffer.nelem() / commSize(comm), comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -130,7 +130,7 @@ inline void alltoall(
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
   mcnla_assert_eq(buffer.dim1() % commSize(comm), 0);
-  detail::alltoallImpl(buffer, comm, buffer.nelem() / commSize(comm));
+  detail::alltoallImpl(buffer, buffer.nelem() / commSize(comm), comm);
 }
 //@}
 

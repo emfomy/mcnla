@@ -37,7 +37,7 @@ index_t MatrixCollectionWrapper<_Derived>::nrow() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of column of matrix.
+/// @brief  Gets the number of columns of matrix.
 ///
 template <class _Derived>
 index_t MatrixCollectionWrapper<_Derived>::ncol() const noexcept {

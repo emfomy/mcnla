@@ -54,7 +54,7 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Polar Orthogonalizer (Row-Block Version)";
+  static constexpr const char* name_ = "Polar Orthogonalizer (Row-Block Version)";
 
   /// The matrix P.
   DenseMatrixCollection102<ValType> collection_p_;

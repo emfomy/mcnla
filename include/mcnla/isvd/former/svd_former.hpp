@@ -56,8 +56,8 @@ void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Forms SVD.
 ///
-/// @param   matrix_a    The matrix A.
-/// @param   matrix_q    The matrix Q.
+/// @param  matrix_a  The matrix A.
+/// @param  matrix_q  The matrix Q.
 ///
 template <typename _Val> template <class _Matrix>
 void Former<SvdFormerTag, _Val>::runImpl(

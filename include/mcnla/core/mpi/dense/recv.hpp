@@ -29,11 +29,11 @@ namespace detail {
 template <typename _Val>
 inline void recvImpl(
           DenseStorage<_Val> &buffer,
+    const mpi_int_t count,
     const mpi_int_t source,
     const mpi_int_t tag,
     const MPI_Comm comm,
-          MPI_Status &status,
-    const index_t count
+          MPI_Status &status
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Recv(buffer.valPtr(), count, datatype, source, tag, comm, &status);
@@ -57,7 +57,7 @@ inline MPI_Status recv(
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
   MPI_Status status;
-  detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
+  detail::recvImpl(buffer, buffer.nelem(), source, tag, comm, status);
   return status;
 }
 
@@ -70,7 +70,7 @@ inline MPI_Status recv(
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
   MPI_Status status;
-  detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
+  detail::recvImpl(buffer, buffer.nelem(), source, tag, comm, status);
   return status;
 }
 //@}

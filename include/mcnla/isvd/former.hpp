@@ -12,5 +12,6 @@
 
 #include <mcnla/isvd/former/svd_former.hpp>
 #include <mcnla/isvd/former/polar_former.hpp>
+#include <mcnla/isvd/former/row_block_polar_former.hpp>
 
 #endif  // MCNLA_ISVD_FORMER_HPP_

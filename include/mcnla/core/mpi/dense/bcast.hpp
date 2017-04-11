@@ -29,9 +29,9 @@ namespace detail {
 template <typename _Val>
 inline void bcastImpl(
           DenseStorage<_Val> &buffer,
+    const mpi_int_t count,
     const mpi_int_t root,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Bcast(buffer.valPtr(), count, datatype, root, comm);
@@ -54,7 +54,7 @@ inline void bcast(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::bcastImpl(buffer, root, comm, buffer.nelem());
+  detail::bcastImpl(buffer, buffer.nelem(), root, comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -64,7 +64,7 @@ inline void bcast(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::bcastImpl(buffer, root, comm, buffer.nelem());
+  detail::bcastImpl(buffer, buffer.nelem(), root, comm);
 }
 //@}
 

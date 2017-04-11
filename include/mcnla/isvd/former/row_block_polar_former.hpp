@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/polar_former.hpp
-/// @brief   The polar former.
+/// @file    include/mcnla/isvd/former/row_block_polar_former.hpp
+/// @brief   The polar former (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_POLAR_FORMER_HPP_
-#define MCNLA_ISVD_FORMER_POLAR_FORMER_HPP_
+#ifndef MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HPP_
+#define MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HPP_
 
-#include <mcnla/isvd/former/polar_former.hh>
+#include <mcnla/isvd/former/row_block_polar_former.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-Former<PolarFormerTag, _Val>::Former(
+Former<RowBlockPolarFormerTag, _Val>::Former(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,19 +34,22 @@ Former<PolarFormerTag, _Val>::Former(
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
-void Former<PolarFormerTag, _Val>::initializeImpl() noexcept {
+void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
 
-  const auto nrow       = parameters_.nrow();
+  const auto nrow_each  = parameters_.nrowEach();
   const auto ncol       = parameters_.ncol();
+  const auto ncol_each  = parameters_.ncolEach();
+  const auto ncol_total = parameters_.ncolTotal();
   const auto dim_sketch = parameters_.dimSketch();
   const auto rank       = parameters_.rank();
 
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
-  matrix_qta_.reconstruct(dim_sketch, ncol);
+  matrix_qta_.reconstruct(dim_sketch, ncol, ncol_total);
+  matrix_qtaj_.reconstruct(dim_sketch, ncol_each);
   syev_driver_.reconstruct(dim_sketch);
 
-  matrix_u_cut_.reconstruct(nrow, rank);
+  matrix_uj_cut_.reconstruct(nrow_each, rank);
 
   matrix_w_cut_  = matrix_w_("", {dim_sketch-rank, dim_sketch});
   vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});
@@ -55,35 +58,37 @@ void Former<PolarFormerTag, _Val>::initializeImpl() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Forms SVD.
 ///
-/// @param  matrix_a    The matrix A.
-/// @param  matrix_q    The matrix Q.
+/// @param  matrix_ajj  The matrix Aj (j-th row-block, where j is the MPI rank).
+/// @param  matrix_qj  The matrix Qjbar (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void Former<PolarFormerTag, _Val>::runImpl(
-    const _Matrix &matrix_a,
-    const DenseMatrixRowMajor<ValType> &matrix_q
+void Former<RowBlockPolarFormerTag, _Val>::runImpl(
+    const _Matrix &matrix_aj,
+    const DenseMatrixRowMajor<ValType> &matrix_qj
 ) noexcept {
 
-  const auto mpi_root   = parameters_.mpi_root;
-  const auto mpi_rank   = parameters_.mpi_rank;
-  const auto nrow       = parameters_.nrow();
+  const auto mpi_comm   = parameters_.mpi_comm;
+  const auto nrow_each  = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
+  const auto ncol_total = parameters_.ncolTotal();
   const auto dim_sketch = parameters_.dimSketch();
 
-  if ( mpi_rank != mpi_root ) {
-    return;
-  }
+  mcnla_assert_eq(matrix_aj.sizes(), std::make_tuple(nrow_each, ncol));
+  mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_each, dim_sketch));
 
-  mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
-  mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
+  auto matrix_qta_full = matrix_qta_;
+  matrix_qta_full.resize(dim_sketch, ncol_total);
 
   moments_.emplace_back(MPI_Wtime());  // start
 
-  // QtA := Q' * A
-  la::mm(matrix_q.t(), matrix_a, matrix_qta_);
+  // QtA := sum( Qj' * Aj )
+  la::mm(matrix_qj.t(), matrix_aj, matrix_qta_);
+  la::memset0(matrix_qta_full("", {ncol, ncol_total}));
+  mpi::reduceScatterBlock(matrix_qta_full, matrix_qtaj_, MPI_SUM, mpi_comm);
 
-  // W := QtA * QtA'
-  la::rk(matrix_qta_, matrix_w_.viewSymmetric());
+  // W := sum( QtAj * QtAj' )
+  la::rk(matrix_qtaj_, matrix_w_.viewSymmetric());
+  mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
 
   // Compute the eigen-decomposition of W -> W * S * W'
   syev_driver_(matrix_w_.viewSymmetric(), vector_s_);
@@ -92,7 +97,7 @@ void Former<PolarFormerTag, _Val>::runImpl(
   vector_s_.val().valarray() = std::sqrt(vector_s_.val().valarray());
 
   // U := Q * W
-  la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
+  la::mm(matrix_qj, matrix_w_cut_, matrix_uj_cut_);
 
   moments_.emplace_back(MPI_Wtime());  // end
 }
@@ -101,22 +106,22 @@ void Former<PolarFormerTag, _Val>::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& Former<PolarFormerTag, _Val>::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& Former<RowBlockPolarFormerTag, _Val>::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the left singular vectors.
+/// @brief  Gets the left singular vectors (row-block).
 ///
 template <typename _Val>
-const DenseMatrixColMajor<_Val>& Former<PolarFormerTag, _Val>::matrixU() const noexcept {
+const DenseMatrixRowMajor<_Val>& Former<RowBlockPolarFormerTag, _Val>::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
-  return matrix_u_cut_;
+  return matrix_uj_cut_;
 }
 
 }  // namespace isvd
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_POLAR_FORMER_HPP_
+#endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HPP_

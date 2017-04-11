@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hpp>
+#include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define COLLECTION_Y_PATH MCNLA_DATA_PATH "/yi.mtx"
@@ -8,9 +9,9 @@
 TEST(SvdOrthogonalizerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
-  const auto mpi_root = 0;
-  const auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
+  const auto mpi_size = mcnla::mpi::commSize(mpi_comm);
+  const auto mpi_root = 0;
 
   // Reads data
   mcnla::matrix::DenseMatrixCollection120<ValType> yi_true;

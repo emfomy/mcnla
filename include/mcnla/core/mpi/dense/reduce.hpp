@@ -30,10 +30,10 @@ template <typename _Val>
 inline void reduceImpl(
     const DenseStorage<_Val> &send,
           DenseStorage<_Val> &recv,
+    const mpi_int_t count,
     const MPI_Op op,
     const mpi_int_t root,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Reduce(send.valPtr(), recv.valPtr(), count, datatype, op, root, comm);
@@ -42,10 +42,10 @@ inline void reduceImpl(
 template <typename _Val>
 inline void reduceImpl(
           DenseStorage<_Val> &buffer,
+    const mpi_int_t count,
     const MPI_Op op,
     const mpi_int_t root,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   if ( isCommRoot(root, comm) ) {
@@ -76,7 +76,7 @@ inline void reduce(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  detail::reduceImpl(send, recv, op, root, comm, send.nelem());
+  detail::reduceImpl(send, recv, send.nelem(), op, root, comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -90,7 +90,7 @@ inline void reduce(
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.dims(), recv.dims());
-  detail::reduceImpl(send, recv, op, root, comm, send.nelem());
+  detail::reduceImpl(send, recv, send.nelem(), op, root, comm);
 }
 //@}
 
@@ -134,7 +134,7 @@ inline void reduce(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::reduceImpl(buffer, op, root, comm, buffer.nelem());
+  detail::reduceImpl(buffer, buffer.nelem(), op, root, comm);
 }
 
 template <typename _Val, Trans _trans>
@@ -145,7 +145,7 @@ inline void reduce(
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::reduceImpl(buffer, op, root, comm, buffer.nelem());
+  detail::reduceImpl(buffer, buffer.nelem(), op, root, comm);
 }
 //@}
 
