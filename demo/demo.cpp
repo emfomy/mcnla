@@ -112,7 +112,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::SvdFormer<double> former(parameters);
   mcnla::isvd::DummyConverter<double> so_converter(parameters);
   mcnla::isvd::DummyConverter<double> oi_converter(parameters);
-  mcnla::isvd::MatrixQFromRowBlockConverter<double> if_converter(parameters);
+  mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
 
   // mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
   // mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);

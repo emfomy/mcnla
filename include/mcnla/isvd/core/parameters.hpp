@@ -68,123 +68,73 @@ index_t Parameters<_Val>::ncol() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of rows of the matrix in this MPI node.
+/// @brief  Gets the number of rows in per MPI node.
 ///
 template<typename _Val>
 index_t Parameters<_Val>::nrowEach() const noexcept {
-  return (mpi_rank != (mpi_size-1) ? nrowEach0() : nrowEachLast());
+  return (nrow()-1) / mpi_size + 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of columns of the matrix in this MPI node.
+/// @brief  Gets the number of columns in per MPI node.
 ///
 template<typename _Val>
 index_t Parameters<_Val>::ncolEach() const noexcept {
-  return (mpi_rank != (mpi_size-1) ? ncolEach0() : ncolEachLast());
+  return (ncol()-1) / mpi_size + 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of rows of the matrix in per MPI node (except last one).
+/// @brief  Gets the total number of rows in all MPI nodes.
 ///
 template<typename _Val>
-index_t Parameters<_Val>::nrowEach0() const noexcept {
-  return nrow() / mpi_size;
+index_t Parameters<_Val>::nrowTotal() const noexcept {
+  return nrowEach() * mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of columns of the matrix in per MPI node (except last one).
+/// @brief  Gets the total number of columns in all MPI nodes.
 ///
 template<typename _Val>
-index_t Parameters<_Val>::ncolEach0() const noexcept {
-  return ncol() / mpi_size;
+index_t Parameters<_Val>::ncolTotal() const noexcept {
+  return ncolEach() * mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of rows of the matrix in the last MPI node.
+/// @brief  Gets the number of rows in this MPI node.
 ///
 template<typename _Val>
-index_t Parameters<_Val>::nrowEachLast() const noexcept {
-  return nrow() / mpi_size + nrow() % mpi_size;
+index_t Parameters<_Val>::nrowRank() const noexcept {
+  return rowrange().length();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of columns of the matrix in the last MPI node.
+/// @brief  Gets the number of columns in this MPI node.
 ///
 template<typename _Val>
-index_t Parameters<_Val>::ncolEachLast() const noexcept {
-  return ncol() / mpi_size + ncol() % mpi_size;
+index_t Parameters<_Val>::ncolRank() const noexcept {
+  return colrange().length();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index range of the rows of the matrix in this MPI node.
+/// @brief  Gets the index range of the rows in this MPI node.
 ///
 template<typename _Val>
 IdxRange Parameters<_Val>::rowrange() const noexcept {
-  return (mpi_rank != (mpi_size-1) ? IdxRange{mpi_rank, mpi_rank+1} * nrowEach0() : IdxRange{mpi_rank * nrowEach0(), nrow()});
+  auto range = IdxRange{mpi_rank, mpi_rank+1} * nrowEach();
+  if ( range.begin > nrow() ) { range.begin = nrow(); }
+  if ( range.end > nrow() ) { range.end = nrow(); }
+  return range;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the index range of the columns of the matrix in this MPI node.
+/// @brief  Gets the index range of the columns in this MPI node.
 ///
 template<typename _Val>
 IdxRange Parameters<_Val>::colrange() const noexcept {
-  return (mpi_rank != (mpi_size-1) ? IdxRange{mpi_rank, mpi_rank+1} * ncolEach0() : IdxRange{mpi_rank * ncolEach0(), ncol()});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a list of the staring row index of the matrix in each MPI node.
-///
-template<typename _Val>
-std::vector<index_t> Parameters<_Val>::nrowEachs(
-     const index_t size
-) const noexcept {
-  std::vector<index_t> retval(mpi_size);
-  std::fill(retval.begin(), retval.end()-1, nrowEach0() * size);
-  retval.back() = nrowEachLast() * size;
-  return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a list of the staring column index of the matrix in each MPI node.
-///
-template<typename _Val>
-std::vector<index_t> Parameters<_Val>::ncolEachs(
-     const index_t size
-) const noexcept {
-  std::vector<index_t> retval(mpi_size);
-  std::fill(retval.begin(), retval.end()-1, ncolEach0() * size);
-  retval.back() = ncolEachLast() * size;
-  return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a list of the number of rows of the matrix in each MPI node.
-///
-template<typename _Val>
-std::vector<index_t> Parameters<_Val>::rowidxs(
-     const index_t size
-) const noexcept {
-  std::vector<index_t> retval(mpi_size);
-  auto count = nrowEach0() * size;
-  for ( index_t i = 0; i < mpi_size; ++i ) {
-    retval[i] = count * i;
-  }
-  return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a list of the number of columns of the matrix in each MPI node.
-///
-template<typename _Val>
-std::vector<index_t> Parameters<_Val>::colidxs(
-     const index_t size
-) const noexcept {
-  std::vector<index_t> retval(mpi_size);
-  auto count = ncolEach0() * size;
-  for ( index_t i = 0; i < mpi_size; ++i ) {
-    retval[i] = count * i;
-  }
-  return retval;
+  auto range = IdxRange{mpi_rank, mpi_rank+1} * ncolEach();
+  if ( range.begin > ncol() ) { range.begin = ncol(); }
+  if ( range.end > ncol() ) { range.end = ncol(); }
+  return range;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -306,7 +256,8 @@ Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
 ///
 template<typename _Val>
 DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQ() const noexcept {
-  return DenseMatrixCollection120<_Val>(nrow(), dimSketch(), numSketchEach());
+  DenseMatrixCollection120<_Val> retval(nrowTotal(), dimSketch(), numSketchEach());
+  return retval({0, nrow()}, "", "");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,7 +265,8 @@ DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQ() const noexc
 ///
 template<typename _Val>
 DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
-  return DenseMatrixCollection120<_Val>(nrowEach(), dimSketch(), numSketch());
+  DenseMatrixCollection120<_Val> retval(nrowEach(), dimSketch(), numSketch());
+  return retval({0, nrowRank()}, "", "");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -322,7 +274,8 @@ DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQj() const noex
 ///
 template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
-  return DenseMatrixRowMajor<_Val>(nrow(), dimSketch());
+  DenseMatrixRowMajor<_Val> retval(nrowTotal(), dimSketch());
+  return retval({0, nrow()}, "");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,7 +283,8 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
 ///
 template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQj() const noexcept {
-  return DenseMatrixRowMajor<_Val>(nrowEach(), dimSketch());
+  DenseMatrixRowMajor<_Val> retval(nrowEach(), dimSketch());
+  return retval({0, nrowRank()}, "");
 }
 
 }  // namespace isvd

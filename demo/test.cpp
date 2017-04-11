@@ -39,79 +39,60 @@ int main( int argc, char **argv ) {
               << " threads per node" << std::endl << std::endl;
   }
 
-  mcnla::index_t m = 11, n = 20, k = 3, p = 1, Nj = 2, K = mpi_size;
+  mcnla::index_t m = 11, n = 20, k = 3, p = 1, Nj = 2;
 
   mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
 
-  mcnla::isvd::MatrixQToRowBlockConverter<double> converter0(parameters);
-  mcnla::isvd::MatrixQFromRowBlockConverter<double> converter1(parameters);
-  converter0.initialize();
-  converter1.initialize();
+  mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
+  mcnla::random::Streams streams(0);
+  mcnla::random::gaussian(streams, a.vectorize());
+  mcnla::mpi::bcast(a, mpi_root, mpi_comm);
 
+  auto aj    = a(parameters.rowrange(), "");
+  auto qij   = parameters.createCollectionQj();
   auto qbar  = parameters.createMatrixQ();
   auto qbarj = parameters.createMatrixQj();
-  auto qbar1 = parameters.createMatrixQ();
 
-  std::iota(qbar.begin(), qbar.end(), 0);
+  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
+  mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
+  mcnla::isvd::PolarFormer<double> former(parameters);
+  sketcher.initialize();
+  orthogonalizer.initialize();
+  integrator.initialize();
+  former.initialize();
 
-  converter0(qbar, qbarj);
-  converter1(qbarj, qbar1);
+  mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
+  if_converter.initialize();
 
-  sleep(mpi_rank);
-  std::cout << mpi_rank << ": \n" << qbar1 << std::endl;
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "Uses " << sketcher << "." << std::endl;
+    std::cout << "Uses " << orthogonalizer << "." << std::endl;
+    std::cout << "Uses " << integrator << "." << std::endl;
+    std::cout << "Uses " << former << "." << std::endl << std::endl;
+  }
 
-//   auto mj = parameters.nrowEach();
-//   mcnla::matrix::DenseMatrixCollection102<double> a_full(mj, n, K);
-//   auto a = (a_full.unfold())({0, m}, "");
-//   mcnla::random::Streams streams(0);
-//   mcnla::random::gaussian(streams, a.vectorize());
-//   mcnla::mpi::bcast(a, mpi_root, mpi_comm);
+  sketcher(aj, qij);;
+  orthogonalizer(qij);
+  integrator(qij, qbarj);
+  if_converter(qbarj, qbar);
+  former(a, qbar);
 
-//   auto aj    = a_full(mpi_rank);
-//   auto qij   = parameters.createCollectionQj();
-//   auto qbar  = parameters.createMatrixQ();
-//   auto qbarj = parameters.createMatrixQj();
+  if ( mpi_rank == mpi_root ) {
+    auto &u = former.matrixU();
 
-//   mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
-//   mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
-//   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
-//   mcnla::isvd::PolarFormer<double> former(parameters);
-//   sketcher.initialize();
-//   orthogonalizer.initialize();
-//   integrator.initialize();
-//   former.initialize();
+    disp(a);
+    disp(u);
 
-//   mcnla::isvd::MatrixQFromRowBlockConverter<double> if_converter(parameters);
-//   if_converter.initialize();
+    mcnla::matrix::DenseMatrixColMajor<double> utu(k, k), uut(m, m);
+    mcnla::la::mm(u.t(), u, utu);
+    mcnla::la::mm(u, u.t(), uut);
 
-//   if ( mpi_rank == mpi_root ) {
-//     std::cout << "Uses " << sketcher << "." << std::endl;
-//     std::cout << "Uses " << orthogonalizer << "." << std::endl;
-//     std::cout << "Uses " << integrator << "." << std::endl;
-//     std::cout << "Uses " << former << "." << std::endl << std::endl;
-//   }
-
-//   sketcher(aj, qij);;
-//   orthogonalizer(qij);
-//   integrator(qij, qbarj);
-//   if_converter(qbarj, qbar);
-//   former(a, qbar);
-
-//   if ( mpi_rank == mpi_root ) {
-//     auto &u = former.matrixU();
-
-//     disp(a);
-//     disp(u);
-
-//     mcnla::matrix::DenseMatrixColMajor<double> utu(k, k), uut(m, m);
-//     mcnla::la::mm(u.t(), u, utu);
-//     mcnla::la::mm(u, u.t(), uut);
-
-//     disp(utu);
-//     disp(uut);
-//   }
+    disp(utu);
+    disp(uut);
+  }
 
   MPI_Finalize();
 

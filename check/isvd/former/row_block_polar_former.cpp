@@ -43,8 +43,8 @@ TEST(RowBlockPolarFormerTest, Test) {
   former.initialize();
 
   // Initializes converter
-  mcnla::isvd::MatrixQToRowBlockConverter<double> pre_converter(parameters);
-  mcnla::isvd::MatrixQFromRowBlockConverter<double> post_converter(parameters);
+  mcnla::isvd::MatrixToRowBlockConverter<double> pre_converter(parameters);
+  mcnla::isvd::MatrixFromRowBlockConverter<double> post_converter(parameters);
   pre_converter.initialize();
   post_converter.initialize();
 

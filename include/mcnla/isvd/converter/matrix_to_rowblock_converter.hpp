@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/converter/matrix_q_from_rowblock_converter.hpp
-/// @brief   The converter that converts matrix Q from row-block version.
+/// @file    include/mcnla/isvd/converter/matrix_to_rowblock_converter.hpp
+/// @brief   The converter that converts a matrix to row-block version.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_MATRIX_Q_FROM_ROWBLOCK_CONVERTER_HPP_
-#define MCNLA_ISVD_CONVERTER_MATRIX_Q_FROM_ROWBLOCK_CONVERTER_HPP_
+#ifndef MCNLA_ISVD_CONVERTER_MATRIX_TO_ROWBLOCK_CONVERTER_HPP_
+#define MCNLA_ISVD_CONVERTER_MATRIX_TO_ROWBLOCK_CONVERTER_HPP_
 
-#include <mcnla/isvd/converter/matrix_q_from_rowblock_converter.hh>
+#include <mcnla/isvd/converter/matrix_to_rowblock_converter.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-Converter<MatrixQFromRowBlockConverterTag, _Val>::Converter(
+Converter<MatrixToRowBlockConverterTag, _Val>::Converter(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,35 +34,37 @@ Converter<MatrixQFromRowBlockConverterTag, _Val>::Converter(
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
-void Converter<MatrixQFromRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
+void Converter<MatrixToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
 ///
-/// @param  matrix_qj  The matrix Qj (j-th row-block, where j is the MPI rank).
-/// @param  matrix_q   The matrix Q.
+/// @param  matrix_q   The matrix.
+/// @param  matrix_qj  The matrix (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void Converter<MatrixQFromRowBlockConverterTag, _Val>::runImpl(
-    DenseMatrixRowMajor<ValType> &matrix_qj,
-    DenseMatrixRowMajor<ValType> &matrix_q
+void Converter<MatrixToRowBlockConverterTag, _Val>::runImpl(
+    const DenseMatrixRowMajor<ValType> &matrix,
+          DenseMatrixRowMajor<ValType> &matrix_j
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;
   const auto mpi_root   = parameters_.mpi_root;
   const auto nrow       = parameters_.nrow();
   const auto nrow_each  = parameters_.nrowEach();
-  const auto dim_sketch = parameters_.dimSketch();
-  const auto counts     = parameters_.nrowEachs(dim_sketch);
-  const auto displs     = parameters_.rowidxs(dim_sketch);
+  const auto nrow_total = parameters_.nrowTotal();
+  const auto ncol       = matrix.ncol();
 
-  mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_each, dim_sketch));
-  mcnla_assert_eq(matrix_q.sizes(),  std::make_tuple(nrow, dim_sketch));
+  mcnla_assert_eq(matrix.sizes(),   std::make_tuple(nrow, ncol));
+  mcnla_assert_eq(matrix_j.sizes(), std::make_tuple(nrow_each, ncol));
+
+  auto matrix_full = matrix;
+  matrix_full.resize(nrow_total, ncol);
 
   moments_.emplace_back(MPI_Wtime());  // start
 
-  // Gather Qc
-  mcnla::mpi::gatherv(matrix_qj, matrix_q, counts.data(), displs.data(), mpi_root, mpi_comm);
+  // Scatter Qc
+  mcnla::mpi::scatter(matrix_full, matrix_j, mpi_root, mpi_comm);
 
   moments_.emplace_back(MPI_Wtime());  // end
 
@@ -72,4 +74,4 @@ void Converter<MatrixQFromRowBlockConverterTag, _Val>::runImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CONVERTER_MATRIX_Q_FROM_ROWBLOCK_CONVERTER_HPP_
+#endif  // MCNLA_ISVD_CONVERTER_MATRIX_TO_ROWBLOCK_CONVERTER_HPP_
