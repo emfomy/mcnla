@@ -39,8 +39,8 @@ void Converter<MatrixQFromRowBlockConverterTag, _Val>::initializeImpl() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
 ///
-/// @param  matrix_qj  The matrix matrix Qj.
-/// @param  matrix_q   The matrix matrix Q.
+/// @param  matrix_qj  The matrix Qj (j-th row-block, where j is the MPI rank).
+/// @param  matrix_q   The matrix Q.
 ///
 template <typename _Val>
 void Converter<MatrixQFromRowBlockConverterTag, _Val>::runImpl(
@@ -48,23 +48,21 @@ void Converter<MatrixQFromRowBlockConverterTag, _Val>::runImpl(
     DenseMatrixRowMajor<ValType> &matrix_q
 ) noexcept {
 
-  const auto mpi_comm        = parameters_.mpi_comm;
-  const auto mpi_root        = parameters_.mpi_root;
-  const auto nrow            = parameters_.nrow();
-  const auto nrow_total      = parameters_.nrowTotal();
-  const auto nrow_each       = parameters_.nrowEach();
-  const auto dim_sketch      = parameters_.dimSketch();
+  const auto mpi_comm   = parameters_.mpi_comm;
+  const auto mpi_root   = parameters_.mpi_root;
+  const auto nrow       = parameters_.nrow();
+  const auto nrow_each  = parameters_.nrowEach();
+  const auto dim_sketch = parameters_.dimSketch();
+  const auto counts     = parameters_.nrowEachs(dim_sketch);
+  const auto displs     = parameters_.rowidxs(dim_sketch);
 
   mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_each, dim_sketch));
   mcnla_assert_eq(matrix_q.sizes(),  std::make_tuple(nrow, dim_sketch));
 
-  auto matrix_q_full = matrix_q;
-  matrix_q_full.resize(nrow_total, matrix_q_full.ncol());
-
   moments_.emplace_back(MPI_Wtime());  // start
 
   // Gather Qc
-  mcnla::mpi::gather(matrix_qj, matrix_q_full, mpi_root, mpi_comm);
+  mcnla::mpi::gatherv(matrix_qj, matrix_q, counts.data(), displs.data(), mpi_root, mpi_comm);
 
   moments_.emplace_back(MPI_Wtime());  // end
 

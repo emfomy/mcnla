@@ -9,6 +9,7 @@
 #define MCNLA_ISVD_CORE_PARAMETERS_HH_
 
 #include <mcnla/isvd/def.hpp>
+#include <vector>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/mpi.hpp>
 
@@ -83,11 +84,19 @@ class Parameters {
   // Gets parameter
   inline bool isSynchronized() const noexcept;
   inline index_t nrow() const noexcept;
-  inline index_t nrowEach() const noexcept;
-  inline index_t nrowTotal() const noexcept;
   inline index_t ncol() const noexcept;
+  inline index_t nrowEach() const noexcept;
   inline index_t ncolEach() const noexcept;
-  inline index_t ncolTotal() const noexcept;
+  inline index_t nrowEach0() const noexcept;
+  inline index_t ncolEach0() const noexcept;
+  inline index_t nrowEachLast() const noexcept;
+  inline index_t ncolEachLast() const noexcept;
+  inline IdxRange rowrange() const noexcept;
+  inline IdxRange colrange() const noexcept;
+  inline std::vector<index_t> nrowEachs( const index_t size = 1 ) const noexcept;
+  inline std::vector<index_t> ncolEachs( const index_t size = 1 ) const noexcept;
+  inline std::vector<index_t> rowidxs( const index_t size = 1 ) const noexcept;
+  inline std::vector<index_t> colidxs( const index_t size = 1 ) const noexcept;
   inline index_t rank() const noexcept;
   inline index_t overRank() const noexcept;
   inline index_t dimSketch() const noexcept;

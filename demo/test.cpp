@@ -9,6 +9,9 @@
 #include <mcnla.hpp>
 #include <omp.h>
 
+#pragma warning
+#include <unistd.h>
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
@@ -21,26 +24,43 @@ int main( int argc, char **argv ) {
   mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(mpi_comm);
   mcnla::mpi_int_t mpi_root = 0;
 
-//   if ( mpi_rank == mpi_root ) {
-//     std::cout << "MCNLA "
-//               << MCNLA_MAJOR_VERSION << "."
-//               << MCNLA_MINOR_VERSION << "."
-//               << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "MCNLA "
+              << MCNLA_MAJOR_VERSION << "."
+              << MCNLA_MINOR_VERSION << "."
+              << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-//     std::cout << mpi_size << " nodes / "
-// #ifdef MCNLA_USE_OMP
-//               << omp_get_max_threads()
-// #else  //MCNLA_USE_OMP
-//               << 1
-// #endif  // MCNLA_USE_OMP
-//               << " threads per node" << std::endl << std::endl;
-//   }
+    std::cout << mpi_size << " nodes / "
+#ifdef MCNLA_USE_OMP
+              << omp_get_max_threads()
+#else  //MCNLA_USE_OMP
+              << 1
+#endif  // MCNLA_USE_OMP
+              << " threads per node" << std::endl << std::endl;
+  }
 
-//   mcnla::index_t m = 6, n = 10, k = 3, p = 1, Nj = 2, K = mpi_size;
+  mcnla::index_t m = 11, n = 20, k = 3, p = 1, Nj = 2, K = mpi_size;
 
-//   mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
-//   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-//   parameters.sync();
+  mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
+  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.sync();
+
+  mcnla::isvd::MatrixQToRowBlockConverter<double> converter0(parameters);
+  mcnla::isvd::MatrixQFromRowBlockConverter<double> converter1(parameters);
+  converter0.initialize();
+  converter1.initialize();
+
+  auto qbar  = parameters.createMatrixQ();
+  auto qbarj = parameters.createMatrixQj();
+  auto qbar1 = parameters.createMatrixQ();
+
+  std::iota(qbar.begin(), qbar.end(), 0);
+
+  converter0(qbar, qbarj);
+  converter1(qbarj, qbar1);
+
+  sleep(mpi_rank);
+  std::cout << mpi_rank << ": \n" << qbar1 << std::endl;
 
 //   auto mj = parameters.nrowEach();
 //   mcnla::matrix::DenseMatrixCollection102<double> a_full(mj, n, K);
