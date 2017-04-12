@@ -51,7 +51,7 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
 ///
 template <typename _Val>
 DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMatrixCollection(
-    const std::tuple<index_t, index_t, index_t> sizes
+    const SizesType sizes
 ) noexcept
   : DenseMatrixCollection(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
 
@@ -79,7 +79,7 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
 ///
 template <typename _Val>
 DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMatrixCollection(
-    const std::tuple<index_t, index_t, index_t> sizes,
+    const SizesType sizes,
     const index_t mrow
 ) noexcept
   : DenseMatrixCollection(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), mrow) {}

@@ -1,3 +1,4 @@
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/converter/matrix_to_rowblock_converter.hpp
 /// @brief   The converter that converts a matrix to row-block version.
@@ -39,8 +40,8 @@ void Converter<MatrixToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
 ///
-/// @param  matrix_q   The matrix.
-/// @param  matrix_qj  The matrix (j-th row-block, where j is the MPI rank).
+/// @param  matrix    The matrix.
+/// @param  matrix_j  The matrix (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
 void Converter<MatrixToRowBlockConverterTag, _Val>::runImpl(

@@ -33,10 +33,4 @@
 /// @brief     The Container Collection Module
 ///
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_base_module  Container Wrapper Module
-/// @ingroup   matrix_module
-/// @brief     The Container Wrapper Module
-///
-
 #endif  // MCNLA_CORE_MATRIX_HPP_
