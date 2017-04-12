@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_102.hpp
-/// @brief   The the dense matrix collection with dimension order [1 0 2].
+/// @brief   The the dense matrix collection with dimension order (dim1, dim0, dim2).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

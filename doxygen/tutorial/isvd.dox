@@ -56,7 +56,7 @@ namespace isvd {
   @code{.cpp}
   // Variable allocation
   mcnla::random::Streams streams(MPI_COMM_WORLD, 0, rand());
-  mcnla::matrix::DenseMatrixCollection120<double> collection_qs(m, k+p, Nj);
+  mcnla::matrix::DenseMatrixCollection201<double> collection_qs(m, k+p, Nj);
   mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m, k+p);
   mcnla::matrix::DenseVector<double> vector_s(k+p);
   mcnla::matrix::DenseMatrixColMajor<double> matrix_u(m, k+p);

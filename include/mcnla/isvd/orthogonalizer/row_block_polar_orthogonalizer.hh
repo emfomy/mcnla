@@ -63,7 +63,7 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   DenseMatrixColMajor<ValType> matrix_e_;
 
   /// The temporary matrices.
-  DenseMatrixCollection120<ValType> collection_tmp_;
+  DenseMatrixCollection201<ValType> collection_tmp_;
 
   /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
@@ -84,7 +84,7 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection120<ValType> &collection_qj ) noexcept;
+  void runImpl( DenseMatrixCollection201<ValType> &collection_qj ) noexcept;
 
 };
 

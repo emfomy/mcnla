@@ -84,7 +84,7 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ValType> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection201<ValType> &collection_q ) noexcept;
 
 };
 

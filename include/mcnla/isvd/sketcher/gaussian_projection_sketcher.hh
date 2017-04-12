@@ -90,7 +90,7 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection120<_Val> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection201<_Val> &collection_q ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;

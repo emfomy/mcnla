@@ -53,7 +53,7 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
-    DenseMatrixCollection120<ValType> &collection_q
+    DenseMatrixCollection201<ValType> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();

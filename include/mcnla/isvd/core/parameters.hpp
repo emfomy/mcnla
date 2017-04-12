@@ -255,8 +255,8 @@ Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
 /// @brief  Creates matrix collection Q.
 ///
 template<typename _Val>
-DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQ() const noexcept {
-  DenseMatrixCollection120<_Val> retval(nrowTotal(), dimSketch(), numSketchEach());
+DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQ() const noexcept {
+  DenseMatrixCollection201<_Val> retval(nrowTotal(), dimSketch(), numSketchEach());
   return retval({0, nrow()}, "", "");
 }
 
@@ -264,8 +264,8 @@ DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQ() const noexc
 /// @brief  Creates matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template<typename _Val>
-DenseMatrixCollection120<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
-  DenseMatrixCollection120<_Val> retval(nrowEach(), dimSketch(), numSketch());
+DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
+  DenseMatrixCollection201<_Val> retval(nrowEach(), dimSketch(), numSketch());
   return retval({0, nrowRank()}, "", "");
 }
 

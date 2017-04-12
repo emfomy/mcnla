@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_102.hh
-/// @brief   The definition of dense matrix collection with dimension order [1 0 2].
+/// @brief   The definition of dense matrix collection with dimension order (dim1, dim0, dim2).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -22,7 +22,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The tag of dense matrix collection with dimension order [1 0 2].
+/// The tag of dense matrix collection with dimension order (dim1, dim0, dim2).
 ///
 struct DenseMatrixCollection102Tag {};
 
@@ -32,7 +32,7 @@ using DenseMatrixCollection102 = DenseMatrixCollection<DenseMatrixCollection102T
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
-/// The dense matrix collection with dimension order [1 0 2].
+/// The dense matrix collection with dimension order (dim1, dim0, dim2).
 ///
 /// @tparam  _Val  The value type.
 ///

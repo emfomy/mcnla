@@ -69,7 +69,7 @@ class Converter<CollectionQToRowBlockConverterTag, _Val>
   void initializeImpl() noexcept;
 
   // Converts data
-  void runImpl( DenseMatrixCollection120<ValType> &collection_q, DenseMatrixCollection120<ValType> &collection_qj ) noexcept;
+  void runImpl( DenseMatrixCollection201<ValType> &collection_q, DenseMatrixCollection201<ValType> &collection_qj ) noexcept;
 
 };
 

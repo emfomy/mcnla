@@ -58,7 +58,7 @@ void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::initializeImpl() noe
 template <typename _Val> template <class _Matrix>
 void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::runImpl(
     const _Matrix &matrix_aj,
-          DenseMatrixCollection120<ValType> &collection_qj
+          DenseMatrixCollection201<ValType> &collection_qj
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;

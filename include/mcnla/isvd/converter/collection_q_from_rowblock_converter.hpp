@@ -44,8 +44,8 @@ void Converter<CollectionQFromRowBlockConverterTag, _Val>::initializeImpl() noex
 ///
 template <typename _Val>
 void Converter<CollectionQFromRowBlockConverterTag, _Val>::runImpl(
-    DenseMatrixCollection120<ValType> &collection_qj,
-    DenseMatrixCollection120<ValType> &collection_q
+    DenseMatrixCollection201<ValType> &collection_qj,
+    DenseMatrixCollection201<ValType> &collection_q
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;

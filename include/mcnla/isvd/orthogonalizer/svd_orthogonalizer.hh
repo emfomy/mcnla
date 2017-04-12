@@ -51,7 +51,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
 
   using ValType     = _Val;
   using RealValType = RealValT<ValType>;
-  using MatrixType  = MatrixT<DenseMatrixCollection120<ValType>>;
+  using MatrixType  = MatrixT<DenseMatrixCollection201<ValType>>;
 
  protected:
 
@@ -83,7 +83,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection120<ValType> &collection_q ) noexcept;
+  void runImpl( DenseMatrixCollection201<ValType> &collection_q ) noexcept;
 
 };
 

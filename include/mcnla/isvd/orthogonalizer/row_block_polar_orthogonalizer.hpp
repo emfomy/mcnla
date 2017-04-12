@@ -53,7 +53,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noex
 ///
 template <typename _Val>
 void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
-    DenseMatrixCollection120<ValType> &collection_qj
+    DenseMatrixCollection201<ValType> &collection_qj
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;

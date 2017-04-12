@@ -58,7 +58,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
 template <typename _Val> template <class _Matrix>
 void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
     const _Matrix &matrix_a,
-          DenseMatrixCollection120<ValType> &collection_q
+          DenseMatrixCollection201<ValType> &collection_q
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;

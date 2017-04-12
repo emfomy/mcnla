@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_120.hh
-/// @brief   The definition of dense matrix collection with dimension order [1 2 0].
+/// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_201.hh
+/// @brief   The definition of dense matrix collection with dimension order (dim2, dim0, dim1).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_120_HH_
-#define MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_120_HH_
+#ifndef MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_201_HH_
+#define MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_201_HH_
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/matrix/collection/dense_matrix_collection.hpp>
@@ -22,35 +22,35 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The tag of dense matrix collection with dimension order [1 2 0].
+/// The tag of dense matrix collection with dimension order (dim2, dim0, dim1).
 ///
-struct DenseMatrixCollection120Tag {};
+struct DenseMatrixCollection201Tag {};
 
 /// @ingroup  matrix_collection_module
 template <typename _Val>
-using DenseMatrixCollection120 = DenseMatrixCollection<DenseMatrixCollection120Tag, _Val, Trans::TRANS>;
+using DenseMatrixCollection201 = DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
-/// The dense matrix collection with dimension order [1 2 0].
+/// The dense matrix collection with dimension order (dim2, dim0, dim1).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class DenseMatrixCollection<DenseMatrixCollection120Tag, _Val, Trans::TRANS>
-  : public MatrixCollectionWrapper<DenseMatrixCollection120<_Val>> {
+class DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>
+  : public MatrixCollectionWrapper<DenseMatrixCollection201<_Val>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection120<_Val>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection201<_Val>>;
 
  public:
 
   using ValType        = _Val;
-  using CollectionType = DenseMatrixCollection120<_Val>;
+  using CollectionType = DenseMatrixCollection201<_Val>;
   using MatrixType     = DenseMatrixRowMajor<_Val>;
 
  private:
 
-  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection120<_Val>>;
+  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection201<_Val>>;
 
  protected:
 
@@ -116,4 +116,4 @@ class DenseMatrixCollection<DenseMatrixCollection120Tag, _Val, Trans::TRANS>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_120_HH_
+#endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_201_HH_

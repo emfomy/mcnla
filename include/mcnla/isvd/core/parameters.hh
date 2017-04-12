@@ -108,8 +108,8 @@ class Parameters {
   inline Parameters& setNumSketchEach( const index_t num_sketch_each ) noexcept;
 
   // Create matrices
-  inline DenseMatrixCollection120<ValType> createCollectionQ() const noexcept;
-  inline DenseMatrixCollection120<ValType> createCollectionQj() const noexcept;
+  inline DenseMatrixCollection201<ValType> createCollectionQ() const noexcept;
+  inline DenseMatrixCollection201<ValType> createCollectionQj() const noexcept;
   inline DenseMatrixRowMajor<ValType> createMatrixQ() const noexcept;
   inline DenseMatrixRowMajor<ValType> createMatrixQj() const noexcept;
 

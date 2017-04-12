@@ -14,8 +14,8 @@ TEST(SvdOrthogonalizerTest, Test) {
   const auto mpi_root = 0;
 
   // Reads data
-  mcnla::matrix::DenseMatrixCollection120<ValType> yi_true;
-  mcnla::matrix::DenseMatrixCollection120<ValType> qi_true;
+  mcnla::matrix::DenseMatrixCollection201<ValType> yi_true;
+  mcnla::matrix::DenseMatrixCollection201<ValType> qi_true;
   mcnla::io::loadMatrixMarket(yi_true, COLLECTION_Y_PATH);
   mcnla::io::loadMatrixMarket(qi_true, COLLECTION_Q_PATH);
 
