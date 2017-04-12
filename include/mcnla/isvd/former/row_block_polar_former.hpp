@@ -37,19 +37,21 @@ template <typename _Val>
 void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
+  const auto nrow_each  = parameters_.nrowEach();
   const auto ncol       = parameters_.ncol();
   const auto ncol_rank  = parameters_.ncolRank();
+  const auto ncol_each  = parameters_.ncolEach();
   const auto ncol_total = parameters_.ncolTotal();
   const auto dim_sketch = parameters_.dimSketch();
   const auto rank       = parameters_.rank();
 
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
-  matrix_qta_.reconstruct(dim_sketch, ncol, ncol_total);
-  matrix_qtaj_.reconstruct(dim_sketch, ncol_rank);
   syev_driver_.reconstruct(dim_sketch);
 
-  matrix_uj_cut_.reconstruct(nrow_rank, rank);
+  matrix_qta_.reconstruct(dim_sketch, ncol_total); matrix_qta_.resize("", ncol);
+  matrix_qtaj_.reconstruct(dim_sketch, ncol_each); matrix_qtaj_.resize("", ncol_rank);
+  matrix_uj_cut_.reconstruct(nrow_each, rank);     matrix_uj_cut_.resize(nrow_rank, "");
 
   matrix_w_cut_  = matrix_w_("", {dim_sketch-rank, dim_sketch});
   vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});

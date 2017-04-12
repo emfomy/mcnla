@@ -73,10 +73,10 @@ class Former<RowBlockPolarFormerTag, _Val>
   DenseMatrixRowMajor<ValType> matrix_uj_cut_;
 
   /// The matrix Q'*A.
-  DenseMatrixRowMajor<ValType> matrix_qta_;
+  DenseMatrixColMajor<ValType> matrix_qta_;
 
   /// The matrix Q'*A (row-block).
-  DenseMatrixRowMajor<ValType> matrix_qtaj_;
+  DenseMatrixColMajor<ValType> matrix_qtaj_;
 
   /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixColMajor<ValType>, 'V'> syev_driver_;

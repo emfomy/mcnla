@@ -112,6 +112,8 @@ class Parameters {
   inline DenseMatrixCollection201<ValType> createCollectionQj() const noexcept;
   inline DenseMatrixRowMajor<ValType> createMatrixQ() const noexcept;
   inline DenseMatrixRowMajor<ValType> createMatrixQj() const noexcept;
+  inline DenseMatrixRowMajor<ValType> createMatrixU() const noexcept;
+  inline DenseMatrixRowMajor<ValType> createMatrixUj() const noexcept;
 
 };
 

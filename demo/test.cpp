@@ -80,9 +80,7 @@ int main( int argc, char **argv ) {
   }
 
   sketcher(aj, qij);;
-  so_converter(qij, qi);
   orthogonalizer(qi);
-  oi_converter(qi, qij);
   integrator(qij, qbarj);
   if_converter(qbarj, qbar);
   former(a, qbar);

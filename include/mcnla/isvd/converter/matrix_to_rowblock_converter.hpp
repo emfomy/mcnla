@@ -57,7 +57,7 @@ void Converter<MatrixToRowBlockConverterTag, _Val>::runImpl(
 
   mcnla_assert_eq(matrix.ncol(),   matrix_j.ncol());
   mcnla_assert_eq(matrix.nrow(),   nrow);
-  mcnla_assert_eq(matrix_j.nrow(), nrow_each);
+  mcnla_assert_eq(matrix_j.nrow(), nrow_rank);
 
   auto matrix_full = matrix;
   matrix_full.resize(nrow_total, "");
