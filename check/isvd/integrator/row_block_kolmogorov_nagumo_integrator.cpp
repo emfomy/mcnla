@@ -42,7 +42,7 @@ TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   integrator.initialize();
 
   // Initializes converter
-  mcnla::isvd::CollectionQToRowBlockConverter<double> pre_converter(parameters);
+  mcnla::isvd::CollectionToRowBlockConverter<double> pre_converter(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> post_converter(parameters);
   pre_converter.initialize();
   post_converter.initialize();

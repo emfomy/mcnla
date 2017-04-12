@@ -218,6 +218,16 @@ void DenseVector<_Val>::reconstruct(
 ///
 template <typename _Val>
 void DenseVector<_Val>::resize(
+    const index_t length
+) noexcept {
+  this->resizeImpl(length, this->stride());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseVectorStorage::resizeImpl
+///
+template <typename _Val>
+void DenseVector<_Val>::resize(
     const index_t length,
     const index_t stride
 ) noexcept {

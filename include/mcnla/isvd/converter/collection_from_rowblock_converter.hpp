@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/converter/collection_q_from_rowblock_converter.hpp
+/// @file    include/mcnla/isvd/converter/collection_from_rowblock_converter.hpp
 /// @brief   The converter that converts collection Q from row-block version.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HPP_
-#define MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HPP_
+#ifndef MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROWBLOCK_CONVERTER_HPP_
+#define MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROWBLOCK_CONVERTER_HPP_
 
-#include <mcnla/isvd/converter/collection_q_from_rowblock_converter.hh>
+#include <mcnla/isvd/converter/collection_from_rowblock_converter.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
 ///
 template <typename _Val>
-Converter<CollectionQFromRowBlockConverterTag, _Val>::Converter(
+Converter<CollectionFromRowBlockConverterTag, _Val>::Converter(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Converter<CollectionQFromRowBlockConverterTag, _Val>::Converter(
 /// @copydoc  mcnla::isvd::ComponentWrapper::initialize
 ///
 template <typename _Val>
-void Converter<CollectionQFromRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
+void Converter<CollectionFromRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,7 +43,7 @@ void Converter<CollectionQFromRowBlockConverterTag, _Val>::initializeImpl() noex
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void Converter<CollectionQFromRowBlockConverterTag, _Val>::runImpl(
+void Converter<CollectionFromRowBlockConverterTag, _Val>::runImpl(
     DenseMatrixCollection201<ValType> &collection_qj,
     DenseMatrixCollection201<ValType> &collection_q
 ) noexcept {
@@ -51,23 +51,27 @@ void Converter<CollectionQFromRowBlockConverterTag, _Val>::runImpl(
   const auto mpi_comm        = parameters_.mpi_comm;
   const auto mpi_size        = parameters_.mpi_size;
   const auto nrow            = parameters_.nrow();
-  const auto nrow_total      = parameters_.nrowTotal();
+  const auto nrow_rank       = parameters_.nrowRank();
   const auto nrow_each       = parameters_.nrowEach();
+  const auto nrow_total      = parameters_.nrowTotal();
   const auto dim_sketch      = parameters_.dimSketch();
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
-  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_each, dim_sketch, num_sketch));
+  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
   mcnla_assert_eq(collection_q.sizes(),  std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
   auto matrix_qs_full = collection_q.unfold();
-  matrix_qs_full.resize(nrow_total, matrix_qs_full.ncol());
+  matrix_qs_full.resize(nrow_total, "");
+
+  DenseMatrixCollection201<ValType> collection_qj_tmp(dim_sketch * num_sketch_each, collection_qj.unfold());
+  DenseMatrixCollection102<ValType> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
 
   moments_.emplace_back(MPI_Wtime());  // start
 
   // Rearrange Qj
   for ( auto j = 0; j < mpi_size; ++j ) {
-    la::copy(collection_qj(IdxRange{j, j+1} * num_sketch_each).unfold(), matrix_qs_full(IdxRange{j, j+1} * nrow_each, ""))  ;
+    la::copy(collection_qj_tmp(j), collection_q_tmp(j));
   }
 
   // Exchange Q
@@ -81,4 +85,4 @@ void Converter<CollectionQFromRowBlockConverterTag, _Val>::runImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HPP_
+#endif  // MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROWBLOCK_CONVERTER_HPP_

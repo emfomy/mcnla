@@ -41,8 +41,8 @@ TEST(RowBlockPolarOrthogonalizerTest, Test) {
   orthogonalizer.initialize();
 
   // Initializes converter
-  mcnla::isvd::CollectionQToRowBlockConverter<double> pre_converter(parameters);
-  mcnla::isvd::CollectionQFromRowBlockConverter<double> post_converter(parameters);
+  mcnla::isvd::CollectionToRowBlockConverter<double> pre_converter(parameters);
+  mcnla::isvd::CollectionFromRowBlockConverter<double> post_converter(parameters);
   pre_converter.initialize();
   post_converter.initialize();
 

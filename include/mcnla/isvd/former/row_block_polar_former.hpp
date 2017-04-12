@@ -36,9 +36,9 @@ Former<RowBlockPolarFormerTag, _Val>::Former(
 template <typename _Val>
 void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
 
-  const auto nrow_each  = parameters_.nrowEach();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto ncol       = parameters_.ncol();
-  const auto ncol_each  = parameters_.ncolEach();
+  const auto ncol_rank  = parameters_.ncolRank();
   const auto ncol_total = parameters_.ncolTotal();
   const auto dim_sketch = parameters_.dimSketch();
   const auto rank       = parameters_.rank();
@@ -46,10 +46,10 @@ void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
   matrix_qta_.reconstruct(dim_sketch, ncol, ncol_total);
-  matrix_qtaj_.reconstruct(dim_sketch, ncol_each);
+  matrix_qtaj_.reconstruct(dim_sketch, ncol_rank);
   syev_driver_.reconstruct(dim_sketch);
 
-  matrix_uj_cut_.reconstruct(nrow_each, rank);
+  matrix_uj_cut_.reconstruct(nrow_rank, rank);
 
   matrix_w_cut_  = matrix_w_("", {dim_sketch-rank, dim_sketch});
   vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});
@@ -68,23 +68,25 @@ void Former<RowBlockPolarFormerTag, _Val>::runImpl(
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;
-  const auto nrow_each  = parameters_.nrow();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto ncol       = parameters_.ncol();
+  const auto ncol_each  = parameters_.ncolEach();
   const auto ncol_total = parameters_.ncolTotal();
   const auto dim_sketch = parameters_.dimSketch();
 
-  mcnla_assert_eq(matrix_aj.sizes(), std::make_tuple(nrow_each, ncol));
-  mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_each, dim_sketch));
+  mcnla_assert_eq(matrix_aj.sizes(), std::make_tuple(nrow_rank, ncol));
+  mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch));
 
   auto matrix_qta_full = matrix_qta_;
-  matrix_qta_full.resize(dim_sketch, ncol_total);
+  matrix_qta_full.resize("", ncol_total);
+  auto matrix_qtaj_full = matrix_qtaj_;
+  matrix_qtaj_full.resize("", ncol_each);
 
   moments_.emplace_back(MPI_Wtime());  // start
 
   // QtA := sum( Qj' * Aj )
   la::mm(matrix_qj.t(), matrix_aj, matrix_qta_);
-  la::memset0(matrix_qta_full("", {ncol, ncol_total}));
-  mpi::reduceScatterBlock(matrix_qta_full, matrix_qtaj_, MPI_SUM, mpi_comm);
+  mpi::reduceScatterBlock(matrix_qta_full, matrix_qtaj_full, MPI_SUM, mpi_comm);
 
   // W := sum( QtAj * QtAj' )
   la::rk(matrix_qtaj_, matrix_w_.viewSymmetric());

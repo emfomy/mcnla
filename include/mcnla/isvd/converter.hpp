@@ -10,8 +10,8 @@
 
 #include <mcnla/isvd/converter/converter.hpp>
 
-#include <mcnla/isvd/converter/collection_q_to_rowblock_converter.hpp>
-#include <mcnla/isvd/converter/collection_q_from_rowblock_converter.hpp>
+#include <mcnla/isvd/converter/collection_to_rowblock_converter.hpp>
+#include <mcnla/isvd/converter/collection_from_rowblock_converter.hpp>
 #include <mcnla/isvd/converter/matrix_to_rowblock_converter.hpp>
 #include <mcnla/isvd/converter/matrix_from_rowblock_converter.hpp>
 #include <mcnla/isvd/converter/dummy_converter.hpp>

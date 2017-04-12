@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/converter/collection_q_from_rowblock_converter.hh
-/// @brief   The definition of the converter that converts collection Q from row-block version.
+/// @file    include/mcnla/isvd/converter/collection_to_rowblock_converter.hh
+/// @brief   The definition of the converter that converts a matrix collection to row-block version.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HH_
-#define MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HH_
+#ifndef MCNLA_ISVD_CONVERTER_COLLECTION_TO_ROWBLOCK_CONVERTER_HH_
+#define MCNLA_ISVD_CONVERTER_COLLECTION_TO_ROWBLOCK_CONVERTER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/converter/converter.hpp>
@@ -23,29 +23,29 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module_detail
-/// The tag of the converter that converts collection Q from row-block version.
+/// The tag of the converter that converts a matrix collection to row-block version.
 ///
-struct CollectionQFromRowBlockConverterTag {};
+struct CollectionToRowBlockConverterTag {};
 
 /// @ingroup  isvd_converter_module
 template <typename _Val>
-using CollectionQFromRowBlockConverter = Converter<CollectionQFromRowBlockConverterTag, _Val>;
+using CollectionToRowBlockConverter = Converter<CollectionToRowBlockConverterTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module
-/// The converter that converts collection Q from row-block version.
+/// The converter that converts a matrix collection to row-block version.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <class _Val>
-class Converter<CollectionQFromRowBlockConverterTag, _Val>
-  : public ComponentWrapper<Converter<CollectionQFromRowBlockConverterTag, _Val>> {
+class Converter<CollectionToRowBlockConverterTag, _Val>
+  : public ComponentWrapper<Converter<CollectionToRowBlockConverterTag, _Val>> {
 
-  friend ComponentWrapper<Converter<CollectionQFromRowBlockConverterTag, _Val>>;
+  friend ComponentWrapper<Converter<CollectionToRowBlockConverterTag, _Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<Converter<CollectionQFromRowBlockConverterTag, _Val>>;
+  using BaseType = ComponentWrapper<Converter<CollectionToRowBlockConverterTag, _Val>>;
 
  public:
 
@@ -69,7 +69,7 @@ class Converter<CollectionQFromRowBlockConverterTag, _Val>
   void initializeImpl() noexcept;
 
   // Converts data
-  void runImpl( DenseMatrixCollection201<ValType> &collection_qj, DenseMatrixCollection201<ValType> &collection_q ) noexcept;
+  void runImpl( DenseMatrixCollection201<ValType> &collection_q, DenseMatrixCollection201<ValType> &collection_qj ) noexcept;
 
 };
 
@@ -77,4 +77,4 @@ class Converter<CollectionQFromRowBlockConverterTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CONVERTER_COLLECTION_Q_FORM_ROWBLOCK_CONVERTER_HH_
+#endif  // MCNLA_ISVD_CONVERTER_COLLECTION_TO_ROWBLOCK_CONVERTER_HH_

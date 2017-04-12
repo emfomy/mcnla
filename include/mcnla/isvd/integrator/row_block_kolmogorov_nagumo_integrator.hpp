@@ -41,7 +41,7 @@ Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::Integrator(
 template <typename _Val>
 void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::initializeImpl() noexcept {
 
-  const auto nrow_each  = parameters_.nrowEach();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto dim_sketch = parameters_.dimSketch();
   const auto num_sketch = parameters_.numSketch();
 
@@ -51,8 +51,8 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::initializeImpl() n
   matrix_z_.reconstruct(dim_sketch, dim_sketch);
   matrix_c_.reconstruct(dim_sketch, dim_sketch);
 
-  matrix_xj_.reconstruct(nrow_each, dim_sketch);
-  matrix_tmp_.reconstruct(nrow_each, dim_sketch);
+  matrix_xj_.reconstruct(nrow_rank, dim_sketch);
+  matrix_tmp_.reconstruct(nrow_rank, dim_sketch);
 
   vector_e_.reconstruct(dim_sketch);
   vector_f_.reconstruct(dim_sketch);
@@ -73,12 +73,12 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;
-  const auto nrow_each  = parameters_.nrowEach();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto dim_sketch = parameters_.dimSketch();
   const auto num_sketch = parameters_.numSketch();
 
-  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_each, dim_sketch, num_sketch));
-  mcnla_assert_eq(matrix_qbarj.sizes(),  std::make_tuple(nrow_each, dim_sketch));
+  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
+  mcnla_assert_eq(matrix_qbarj.sizes(),  std::make_tuple(nrow_rank, dim_sketch));
 
   auto &matrix_qjs = collection_qj.unfold();  // matrix Qs.
   auto &matrix_qcj = matrix_qbarj;  // matrix Qc.

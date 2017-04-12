@@ -187,6 +187,8 @@ class DenseMatrix
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
+  inline void resize( const index_t nrow, const char* ) noexcept;
+  inline void resize( const char*, const index_t ncol ) noexcept;
 
   // Transpose
   inline       TransposeType& t() noexcept;

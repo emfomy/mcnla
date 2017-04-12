@@ -36,13 +36,13 @@ Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::Orthogonalizer(
 template <typename _Val>
 void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
 
-  const auto nrow_each  = parameters_.nrowEach();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto num_sketch = parameters_.numSketch();
   const auto dim_sketch = parameters_.dimSketch();
 
   collection_p_.reconstruct(dim_sketch, dim_sketch, num_sketch);
   matrix_e_.reconstruct(dim_sketch, num_sketch);
-  collection_tmp_.reconstruct(nrow_each, dim_sketch, num_sketch);
+  collection_tmp_.reconstruct(nrow_rank, dim_sketch, num_sketch);
   syev_driver_.reconstruct(dim_sketch);
 }
 
@@ -57,11 +57,11 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;
-  const auto nrow_each  = parameters_.nrowEach();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto num_sketch = parameters_.numSketch();
   const auto dim_sketch = parameters_.dimSketch();
 
-  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_each, dim_sketch, num_sketch));
+  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
   auto &matrix_qjs = collection_qj.unfold();  // matrix Qs.
 

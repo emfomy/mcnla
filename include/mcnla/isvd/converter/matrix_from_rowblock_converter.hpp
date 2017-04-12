@@ -51,20 +51,23 @@ void Converter<MatrixFromRowBlockConverterTag, _Val>::runImpl(
   const auto mpi_comm   = parameters_.mpi_comm;
   const auto mpi_root   = parameters_.mpi_root;
   const auto nrow       = parameters_.nrow();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto nrow_each  = parameters_.nrowEach();
   const auto nrow_total = parameters_.nrowTotal();
-  const auto ncol       = matrix.ncol();
 
-  mcnla_assert_eq(matrix_j.sizes(), std::make_tuple(nrow_each, ncol));
-  mcnla_assert_eq(matrix.sizes(),   std::make_tuple(nrow, ncol));
+  mcnla_assert_eq(matrix_j.ncol(), matrix.ncol());
+  mcnla_assert_eq(matrix_j.nrow(), nrow_rank);
+  mcnla_assert_eq(matrix.nrow(),   nrow);
 
+  auto matrix_j_full = matrix_j;
+  matrix_j_full.resize(nrow_each, "");
   auto matrix_full = matrix;
-  matrix_full.resize(nrow_total, ncol);
+  matrix_full.resize(nrow_total, "");
 
   moments_.emplace_back(MPI_Wtime());  // start
 
   // Gather Qc
-  mcnla::mpi::gather(matrix_j, matrix_full, mpi_root, mpi_comm);
+  mcnla::mpi::gather(matrix_j_full, matrix_full, mpi_root, mpi_comm);
 
   moments_.emplace_back(MPI_Wtime());  // end
 

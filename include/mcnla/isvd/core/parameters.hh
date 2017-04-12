@@ -84,12 +84,12 @@ class Parameters {
   inline bool isSynchronized() const noexcept;
   inline index_t nrow() const noexcept;
   inline index_t ncol() const noexcept;
+  inline index_t nrowRank() const noexcept;
+  inline index_t ncolRank() const noexcept;
   inline index_t nrowEach() const noexcept;
   inline index_t ncolEach() const noexcept;
   inline index_t nrowTotal() const noexcept;
   inline index_t ncolTotal() const noexcept;
-  inline index_t nrowRank() const noexcept;
-  inline index_t ncolRank() const noexcept;
   inline IdxRange rowrange() const noexcept;
   inline IdxRange colrange() const noexcept;
   inline index_t rank() const noexcept;

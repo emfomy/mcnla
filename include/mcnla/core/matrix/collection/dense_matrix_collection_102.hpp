@@ -26,7 +26,8 @@ namespace matrix {
 template <typename _Val>
 DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMatrixCollection() noexcept
   : data_(),
-    nrow_(0) {}
+    nrow_(0),
+    mrow_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -38,7 +39,8 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
     const index_t nmat
 ) noexcept
   : data_(nrow*nmat, ncol),
-    nrow_(nrow) {
+    nrow_(nrow),
+    mrow_(nrow) {
   mcnla_assert_ge(this->nrow(), 0);
   mcnla_assert_ge(this->ncol(), 0);
   mcnla_assert_ge(this->nmat(), 0);
@@ -54,6 +56,35 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
   : DenseMatrixCollection(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Val>
+DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMatrixCollection(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t nmat,
+    const index_t mrow
+) noexcept
+  : data_(mrow*nmat, ncol),
+    nrow_(nrow),
+    mrow_(mrow) {
+  mcnla_assert_ge(this->nrow(), 0);
+  mcnla_assert_ge(this->ncol(), 0);
+  mcnla_assert_ge(this->nmat(), 0);
+  mcnla_assert_ge(mrow_, nrow_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <typename _Val>
+DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMatrixCollection(
+    const std::tuple<index_t, index_t, index_t> sizes,
+    const index_t mrow
+) noexcept
+  : DenseMatrixCollection(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), mrow) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
 template <typename _Val>
@@ -62,10 +93,29 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
     const MatrixType &data
 ) noexcept
   : data_(data),
-    nrow_(nrow) {
+    nrow_(nrow),
+    mrow_(nrow) {
   mcnla_assert_ge(this->nrow(), 0);
   mcnla_assert_ge(this->ncol(), 0);
   mcnla_assert_ge(this->nmat(), 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <typename _Val>
+DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMatrixCollection(
+    const index_t nrow,
+    const index_t mrow,
+    const MatrixType &data
+) noexcept
+  : data_(data),
+    nrow_(nrow),
+    mrow_(mrow) {
+  mcnla_assert_ge(this->nrow(), 0);
+  mcnla_assert_ge(this->ncol(), 0);
+  mcnla_assert_ge(this->nmat(), 0);
+  mcnla_assert_ge(mrow_, nrow_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +128,8 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
     const DenseMatrixCollection &other
 ) noexcept
   : data_(other.data_),
-    nrow_(other.nrow_) {}
+    nrow_(other.nrow_),
+    mrow_(other.mrow_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Move constructor.
@@ -88,8 +139,10 @@ DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::DenseMat
     DenseMatrixCollection &&other
 ) noexcept
   : data_(std::move(other.data_)),
-    nrow_(other.nrow_) {
+    nrow_(other.nrow_),
+    mrow_(other.mrow_) {
   other.nrow_ = 0;
+  other.mrow_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +156,7 @@ DenseMatrixCollection102<_Val>& DenseMatrixCollection<DenseMatrixCollection102Ta
 ) noexcept {
   data_ = other.data_;
   nrow_ = other.nrow_;
+  mrow_ = other.mrow_;
   return *this;
 }
 
@@ -115,6 +169,7 @@ DenseMatrixCollection102<_Val>& DenseMatrixCollection<DenseMatrixCollection102Ta
 ) noexcept {
   data_ = std::move(other.data_);
   nrow_ = other.nrow_; other.nrow_ = 0;
+  mrow_ = other.mrow_; other.mrow_ = 0;
   return *this;
 }
 
@@ -123,7 +178,15 @@ DenseMatrixCollection102<_Val>& DenseMatrixCollection<DenseMatrixCollection102Ta
 ///
 template <typename _Val>
 bool DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::isShrunk() const noexcept {
-  return (data_.nrow() % nrow_ == 0) && data_.isShrunk();
+  return (nrow_ == mrow_) && (data_.pitch() % mrow_ == 0) && data_.isShrunk();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum number of rows.
+///
+template <typename _Val>
+index_t DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::mrow() const noexcept {
+  return mrow_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,7 +226,7 @@ template <typename _Val>
 DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
     const IdxRange &idxrange
 ) noexcept {
-  return CollectionType(nrow_, data_(idxrange * nrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +236,7 @@ template <typename _Val>
 const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
     const IdxRange &idxrange
 ) const noexcept {
-  return CollectionType(nrow_, data_(idxrange * nrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +248,7 @@ DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag
     const char*,
     const IdxRange &idxrange
 ) noexcept {
-  return CollectionType(nrow_, data_(idxrange * nrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +260,7 @@ const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection
     const char*,
     const IdxRange &idxrange
 ) const noexcept {
-  return CollectionType(nrow_, data_(idxrange * nrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +272,7 @@ DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag
     const IdxRange &colrange,
     const char*
 ) noexcept {
-  return CollectionType(nrow_, data_("", colrange));
+  return CollectionType(nrow_, mrow_, data_("", colrange));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,7 +284,7 @@ const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection
     const IdxRange &colrange,
     const char*
 ) const noexcept {
-  return CollectionType(nrow_, data_("", colrange));
+  return CollectionType(nrow_, mrow_, data_("", colrange));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,7 +334,7 @@ index_t DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::
 ///
 template <typename _Val>
 index_t DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::nmatImpl() const noexcept {
-  return nrow_ ? (data_.nrow() / nrow_) : 0;
+  return mrow_ ? ((data_.nrow() + mrow_ - nrow_) / mrow_) : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -282,7 +345,7 @@ DenseMatrixRowMajor<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Va
     const index_t idx
 ) noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
-  return data_(IdxRange{idx, (idx+1)} * nrow_, "");
+  return data_({idx*mrow_, idx*mrow_ + nrow_}, "");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,7 +356,7 @@ const DenseMatrixRowMajor<_Val> DenseMatrixCollection<DenseMatrixCollection102Ta
     const index_t idx
 ) const noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
-  return data_(IdxRange{idx, (idx+1)} * nrow_, "");
+  return data_({idx*mrow_, idx*mrow_ + nrow_}, "");
 }
 
 }  // namespace matrix

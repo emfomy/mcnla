@@ -63,13 +63,13 @@ void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::runImpl(
 
   const auto mpi_comm   = parameters_.mpi_comm;
   const auto mpi_root   = parameters_.mpi_root;
-  const auto nrow_each  = parameters_.nrowEach();
+  const auto nrow_rank  = parameters_.nrowRank();
   const auto ncol       = parameters_.ncol();
   const auto num_sketch = parameters_.numSketch();
   const auto dim_sketch = parameters_.dimSketch();
 
-  mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_each, ncol));
-  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_each, dim_sketch, num_sketch));
+  mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
+  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
   constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
   index_t seed_tmp = seed_;

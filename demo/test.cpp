@@ -5,12 +5,12 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
+#pragma warning
+#include <mcnla/core/utility.hpp>
+
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
-
-#pragma warning
-#include <unistd.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
@@ -51,12 +51,13 @@ int main( int argc, char **argv ) {
   mcnla::mpi::bcast(a, mpi_root, mpi_comm);
 
   auto aj    = a(parameters.rowrange(), "");
+  auto qi    = parameters.createCollectionQ();
   auto qij   = parameters.createCollectionQj();
   auto qbar  = parameters.createMatrixQ();
   auto qbarj = parameters.createMatrixQj();
 
   mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
-  mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::PolarOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::PolarFormer<double> former(parameters);
   sketcher.initialize();
@@ -64,7 +65,11 @@ int main( int argc, char **argv ) {
   integrator.initialize();
   former.initialize();
 
+  mcnla::isvd::CollectionFromRowBlockConverter<double> so_converter(parameters);
+  mcnla::isvd::CollectionToRowBlockConverter<double> oi_converter(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
+  so_converter.initialize();
+  oi_converter.initialize();
   if_converter.initialize();
 
   if ( mpi_rank == mpi_root ) {
@@ -75,7 +80,9 @@ int main( int argc, char **argv ) {
   }
 
   sketcher(aj, qij);;
-  orthogonalizer(qij);
+  so_converter(qij, qi);
+  orthogonalizer(qi);
+  oi_converter(qi, qij);
   integrator(qij, qbarj);
   if_converter(qbarj, qbar);
   former(a, qbar);

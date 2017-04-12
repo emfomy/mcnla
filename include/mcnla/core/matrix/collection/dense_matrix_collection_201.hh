@@ -50,7 +50,8 @@ class DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>
 
  private:
 
-  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection201<_Val>>;
+  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollection201<_Val>>;
+  using SizesType = std::tuple<index_t, index_t, index_t>;
 
  protected:
 
@@ -60,13 +61,19 @@ class DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>
   /// The number of columns in each matrix.
   index_t ncol_;
 
+  /// The maximum number of the columns.
+  index_t mcol_;
+
  public:
 
   // Constructors
   inline DenseMatrixCollection() noexcept;
   inline DenseMatrixCollection( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline DenseMatrixCollection( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
+  inline DenseMatrixCollection( const SizesType sizes ) noexcept;
+  inline DenseMatrixCollection( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mcol ) noexcept;
+  inline DenseMatrixCollection( const SizesType sizes, const index_t mcol ) noexcept;
   inline DenseMatrixCollection( const index_t ncol, const MatrixType &data ) noexcept;
+  inline DenseMatrixCollection( const index_t ncol, const index_t mcol, const MatrixType &data ) noexcept;
   inline DenseMatrixCollection( const DenseMatrixCollection &other ) noexcept;
   inline DenseMatrixCollection( DenseMatrixCollection &&other ) noexcept;
 
@@ -76,6 +83,8 @@ class DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>
 
   // Gets information
   inline bool isShrunk() const noexcept;
+  inline index_t mrow() const noexcept;
+  inline index_t mcol() const noexcept;
 
   // Gets data
   inline       MatrixType& data() noexcept;

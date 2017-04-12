@@ -262,6 +262,28 @@ void DenseMatrix<_Val, _trans>::resize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
+///
+template <typename _Val, Trans _trans>
+void DenseMatrix<_Val, _trans>::resize(
+    const index_t nrow,
+    const char*
+) noexcept {
+  this->resizeImpl(toDim0(nrow, this->ncol()), toDim1(nrow, this->ncol()));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
+///
+template <typename _Val, Trans _trans>
+void DenseMatrix<_Val, _trans>::resize(
+    const char*,
+    const index_t ncol
+) noexcept {
+  this->resizeImpl(toDim0(this->nrow(), ncol), toDim1(this->nrow(), ncol));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the transpose of the matrix.
 ///
 /// @attention  The storage layout is also changed.

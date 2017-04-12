@@ -159,7 +159,8 @@ class DenseVector
   // Resizes
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t length, const index_t stride = 1 ) noexcept;
+  inline void resize( const index_t length ) noexcept;
+  inline void resize( const index_t length, const index_t stride ) noexcept;
 
   // Changes view
   inline       DiagonalType& viewDiagonal() noexcept;
