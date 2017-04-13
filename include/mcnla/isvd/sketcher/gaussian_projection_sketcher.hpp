@@ -125,7 +125,6 @@ Sketcher<GaussianProjectionSketcherTag, _Val>& Sketcher<GaussianProjectionSketch
     const index_t seed
 ) noexcept {
   seed_ = seed;
-  initialized_ = false;
   computed_ = false;
   return *this;
 }
@@ -139,7 +138,6 @@ Sketcher<GaussianProjectionSketcherTag, _Val>& Sketcher<GaussianProjectionSketch
 ) noexcept {
   mcnla_assert_ge(exponent, 0);
   exponent_ = exponent;
-  initialized_ = false;
   computed_ = false;
   return *this;
 }

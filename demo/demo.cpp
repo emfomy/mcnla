@@ -106,12 +106,12 @@ int main( int argc, char **argv ) {
   // Allocate driver
   mcnla::isvd::Parameters<ValType> parameters(mpi_root, mpi_comm);
 
-  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters);
-  mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
+  mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
-  mcnla::isvd::DummyConverter<double> so_converter(parameters);
-  mcnla::isvd::DummyConverter<double> oi_converter(parameters);
+  mcnla::isvd::CollectionFromRowBlockConverter<double> so_converter(parameters);
+  mcnla::isvd::CollectionToRowBlockConverter<double> oi_converter(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
 
   // mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
@@ -125,7 +125,6 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize parameters
   parameters.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-  sketcher.setSeed(rand());
   integrator.setMaxIteration(maxiter).setTolerance(tol);
   parameters.sync();
   sketcher.initialize();
@@ -138,6 +137,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate matrices
+  auto matrix_aj     = matrix_a(parameters.rowrange(), "");
   auto collection_q  = parameters.createCollectionQ();
   auto collection_qj = parameters.createCollectionQj();
   auto matrix_q      = parameters.createMatrixQ();
@@ -161,12 +161,15 @@ int main( int argc, char **argv ) {
 
   for ( int t = -skip_test; t < num_test; ++t ) {
 
+    sketcher.setSeed(rand());
+
     // Run iSVD
     MPI_Barrier(mpi_comm);
 
-    auto mj = (m-1) / mpi_size + 1;
-    sketcher(matrix_a(mcnla::matrix::IdxRange{mpi_rank, mpi_rank+1} * mj, ""), collection_qj);
-    orthogonalizer(collection_qj);
+    sketcher(matrix_aj, collection_qj);
+    so_converter(collection_qj, collection_q);
+    orthogonalizer(collection_q);
+    oi_converter(collection_q, collection_qj);
     integrator(collection_qj, matrix_qj);
     if_converter(matrix_qj, matrix_q);
     former(matrix_a, matrix_q);

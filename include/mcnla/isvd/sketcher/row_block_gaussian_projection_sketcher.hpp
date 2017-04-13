@@ -43,8 +43,8 @@ template <typename _Val>
 void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
 
   const auto ncol       = parameters_.ncol();
-  const auto num_sketch = parameters_.numSketch();
   const auto dim_sketch = parameters_.dimSketch();
+  const auto num_sketch = parameters_.numSketch();
 
   matrix_omegas_.reconstruct(ncol, dim_sketch * num_sketch);
 }
@@ -65,8 +65,8 @@ void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::runImpl(
   const auto mpi_root   = parameters_.mpi_root;
   const auto nrow_rank  = parameters_.nrowRank();
   const auto ncol       = parameters_.ncol();
-  const auto num_sketch = parameters_.numSketch();
   const auto dim_sketch = parameters_.dimSketch();
+  const auto num_sketch = parameters_.numSketch();
 
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
@@ -124,7 +124,6 @@ Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>& Sketcher<RowBlockGaussian
     const index_t seed
 ) noexcept {
   seed_ = seed;
-  initialized_ = false;
   computed_ = false;
   return *this;
 }
@@ -140,7 +139,6 @@ Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>& Sketcher<RowBlockGaussian
 ) noexcept {
   mcnla_assert_eq(exponent, 0);
   exponent_ = exponent;
-  initialized_ = false;
   computed_ = false;
   return *this;
 }
