@@ -107,11 +107,11 @@ int main( int argc, char **argv ) {
   mcnla::isvd::Parameters<ValType> parameters(mpi_root, mpi_comm);
 
   mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
-  mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
-  mcnla::isvd::CollectionFromRowBlockConverter<double> so_converter(parameters);
-  mcnla::isvd::CollectionToRowBlockConverter<double> oi_converter(parameters);
+  mcnla::isvd::DummyConverter<double> so_converter(parameters);
+  mcnla::isvd::DummyConverter<double> oi_converter(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
 
   // mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters);
@@ -167,9 +167,7 @@ int main( int argc, char **argv ) {
     MPI_Barrier(mpi_comm);
 
     sketcher(matrix_aj, collection_qj);
-    so_converter(collection_qj, collection_q);
-    orthogonalizer(collection_q);
-    oi_converter(collection_q, collection_qj);
+    orthogonalizer(collection_qj);
     integrator(collection_qj, matrix_qj);
     if_converter(matrix_qj, matrix_q);
     former(matrix_a, matrix_q);

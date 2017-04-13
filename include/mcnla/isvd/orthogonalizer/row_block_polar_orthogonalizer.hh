@@ -65,8 +65,11 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   /// The temporary matrices.
   DenseMatrixCollection201<ValType> collection_tmp_;
 
-  /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
+  /// The empty matrix.
+  DenseMatrixRowMajor<ValType> matrix_empty_;
+
+  /// The GESVD driver.
+  la::GesvdDriver<DenseMatrixRowMajor<ValType>, 'N', 'O'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

@@ -43,7 +43,7 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
   collection_p_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
   matrix_e_.reconstruct(dim_sketch, num_sketch_each);
   collection_tmp_.reconstruct(nrow, dim_sketch, num_sketch_each);
-  syev_driver_.reconstruct(dim_sketch);
+  gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,12 +68,12 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
 
   // Pi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    la::rk(collection_q(i).t(), collection_p_(i).viewSymmetric());
+    la::mm(collection_q(i).t(), collection_q(i), collection_p_(i));
   }
 
   // Compute the eigen-decomposition of Pi -> Pi' * Ei * Pi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    syev_driver_(collection_p_(i).viewSymmetric(), matrix_e_("", i));
+    gesvd_driver_(collection_p_(i), matrix_e_("", i), matrix_empty_, matrix_empty_);
   }
 
   // Qi := Qi * Pi' / sqrt(Ei)

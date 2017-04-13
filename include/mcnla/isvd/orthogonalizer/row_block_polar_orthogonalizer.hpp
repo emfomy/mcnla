@@ -43,7 +43,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noex
   collection_p_.reconstruct(dim_sketch, dim_sketch, num_sketch);
   matrix_e_.reconstruct(dim_sketch, num_sketch);
   collection_tmp_.reconstruct(nrow_rank, dim_sketch, num_sketch);
-  syev_driver_.reconstruct(dim_sketch);
+  gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 
   // Pi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    la::rk(collection_qj(i).t(), collection_p_(i).viewSymmetric());
+    la::mm(collection_qj(i).t(), collection_qj(i), collection_p_(i));
   }
 
   // Reduce sum Pi
@@ -77,7 +77,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 
   // Compute the eigen-decomposition of Pi -> Pi' * Ei * Pi
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    syev_driver_(collection_p_(i).viewSymmetric(), matrix_e_("", i));
+    gesvd_driver_(collection_p_(i), matrix_e_("", i), matrix_empty_, matrix_empty_);
   }
 
   // Qi := Qi * Pi' / sqrt( Ei )
