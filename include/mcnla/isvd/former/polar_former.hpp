@@ -22,7 +22,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Former<PolarFormerTag, _Val>::Former(
@@ -31,7 +31,7 @@ Former<PolarFormerTag, _Val>::Former(
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Former<PolarFormerTag, _Val>::initializeImpl() noexcept {

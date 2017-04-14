@@ -8,11 +8,11 @@ option(MCNLA_BUILD_DRIVER "Build driver codes."                           "ON")
 option(MCNLA_BUILD_DEMO   "Build demo codes."                             "ON")
 option(MCNLA_BUILD_TEST   "Build test codes."                             "OFF")
 option(MCNLA_BUILD_DOC    "Build documentation."                          "OFF")
+option(MCNLA_INSTALL_DEMO "Install demos."                                "OFF")
 option(MCNLA_USE_ILP64    "Uses 64bit integer."                           "OFF")
 option(MCNLA_USE_MKL      "Uses Intel MKL."                               "OFF")
 option(MKL_USE_OMP        "Uses multithread MKL. (Require MCNLA_USE_MKL)" "OFF")
 option(MKL_USE_IOMP       "Uses Intel OMP. (Require MKL_USE_OMP)"         "OFF")
-option(MCNLA_INSTALL_DEMO "Install demos."                                "OFF")
 
 # Set variables
 if(MCNLA_BUILD_DRIVER OR MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)

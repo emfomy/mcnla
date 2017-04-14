@@ -39,13 +39,13 @@ using DummyConverter = Converter<DummyConverterTag, _Val>;
 ///
 template <class _Val>
 class Converter<DummyConverterTag, _Val>
-  : public ComponentWrapper<Converter<DummyConverterTag, _Val>> {
+  : public StageWrapper<Converter<DummyConverterTag, _Val>> {
 
-  friend ComponentWrapper<Converter<DummyConverterTag, _Val>>;
+  friend StageWrapper<Converter<DummyConverterTag, _Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<Converter<DummyConverterTag, _Val>>;
+  using BaseType = StageWrapper<Converter<DummyConverterTag, _Val>>;
 
  public:
 

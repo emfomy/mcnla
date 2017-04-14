@@ -40,13 +40,13 @@ using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Va
 ///
 template <typename _Val>
 class Integrator<KolmogorovNagumoIntegratorTag, _Val>
-  : public ComponentWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>> {
+  : public StageWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>> {
 
-  friend ComponentWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
+  friend StageWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
+  using BaseType = StageWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
 
  public:
 

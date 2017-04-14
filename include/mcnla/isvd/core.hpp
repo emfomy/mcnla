@@ -9,6 +9,6 @@
 #define MCNLA_ISVD_CORE_HPP_
 
 #include <mcnla/isvd/core/parameters.hpp>
-#include <mcnla/isvd/core/component_wrapper.hpp>
+#include <mcnla/isvd/core/stage_wrapper.hpp>
 
 #endif  // MCNLA_ISVD_CORE_HPP_

@@ -39,13 +39,13 @@ using RowBlockKolmogorovNagumoIntegrator = Integrator<RowBlockKolmogorovNagumoIn
 ///
 template <typename _Val>
 class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
-  : public ComponentWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>> {
+  : public StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>> {
 
-  friend ComponentWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
+  friend StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
+  using BaseType = StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
  public:
 

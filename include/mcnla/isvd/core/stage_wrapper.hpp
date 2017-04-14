@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/core/component_wrapper.hpp
-/// @brief   The iSVD component wrapper.
+/// @file    include/mcnla/isvd/core/stage_wrapper.hpp
+/// @brief   The iSVD stage wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HPP_
-#define MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HPP_
+#ifndef MCNLA_ISVD_CORE_STAGE_WRAPPER_HPP_
+#define MCNLA_ISVD_CORE_STAGE_WRAPPER_HPP_
 
-#include <mcnla/isvd/core/component_wrapper.hh>
+#include <mcnla/isvd/core/stage_wrapper.hh>
 #include <numeric>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @brief  Construct with given parameters.
 ///
 template <class _Derived>
-ComponentWrapper<_Derived>::ComponentWrapper(
+StageWrapper<_Derived>::StageWrapper(
     const Parameters<ValType> &parameters
 ) noexcept
   : parameters_(parameters) {}
@@ -34,7 +34,7 @@ ComponentWrapper<_Derived>::ComponentWrapper(
 /// @brief  Initializes.
 ///
 template <class _Derived> template <typename... Args>
-void ComponentWrapper<_Derived>::initialize(
+void StageWrapper<_Derived>::initialize(
     Args... args
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
@@ -44,10 +44,10 @@ void ComponentWrapper<_Derived>::initialize(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Run the component.
+/// @brief  Run the stage.
 ///
 template <class _Derived> template <typename... Args>
-void ComponentWrapper<_Derived>::operator()(
+void StageWrapper<_Derived>::operator()(
     Args... args
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
@@ -63,7 +63,7 @@ void ComponentWrapper<_Derived>::operator()(
 template <class __Derived>
 std::ostream& operator<<(
     std::ostream &os,
-    const ComponentWrapper<__Derived> &wrapper
+    const StageWrapper<__Derived> &wrapper
 ) {
   return wrapper.outputName(os);
 }
@@ -72,7 +72,7 @@ std::ostream& operator<<(
 /// @copydoc  operator<<
 ///
 template <class _Derived>
-std::ostream& ComponentWrapper<_Derived>::outputName(
+std::ostream& StageWrapper<_Derived>::outputName(
     std::ostream &os
 ) const noexcept {
   return this->derived().outputNameImpl(os);
@@ -83,7 +83,7 @@ std::ostream& ComponentWrapper<_Derived>::outputName(
 ///
 ///
 template <class _Derived>
-std::ostream& ComponentWrapper<_Derived>::outputNameImpl(
+std::ostream& StageWrapper<_Derived>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << this->derived().name_);
@@ -93,7 +93,7 @@ std::ostream& ComponentWrapper<_Derived>::outputNameImpl(
 /// @brief  Check if the parameters is initialized.
 ///
 template <class _Derived>
-bool ComponentWrapper<_Derived>::isInitialized() const noexcept {
+bool StageWrapper<_Derived>::isInitialized() const noexcept {
   return initialized_;
 }
 
@@ -101,15 +101,15 @@ bool ComponentWrapper<_Derived>::isInitialized() const noexcept {
 /// @brief  Check if the parameters is computed.
 ///
 template <class _Derived>
-bool ComponentWrapper<_Derived>::isComputed() const noexcept {
+bool StageWrapper<_Derived>::isComputed() const noexcept {
   return computed_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the time of running component.
+/// @brief  Gets the time of running the stage.
 ///
 template <class _Derived>
-double ComponentWrapper<_Derived>::time() const noexcept {
+double StageWrapper<_Derived>::time() const noexcept {
   if ( moments_.empty() ) {
     return 0;
   }
@@ -117,20 +117,20 @@ double ComponentWrapper<_Derived>::time() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the times of running each part of the component.
+/// @brief  Gets the times of running each part of the stage.
 ///
 template <class _Derived>
-std::vector<double> ComponentWrapper<_Derived>::times() const noexcept {
+std::vector<double> StageWrapper<_Derived>::times() const noexcept {
   std::vector<double> times;
   std::adjacent_difference(moments_.begin(), moments_.end(), times.begin());
   return times;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the moments of running each part of the component.
+/// @brief  Gets the moments of running each part of the stage.
 ///
 template <class _Derived>
-std::vector<double> ComponentWrapper<_Derived>::moments() const noexcept {
+std::vector<double> StageWrapper<_Derived>::moments() const noexcept {
   return moments_;
 }
 
@@ -138,4 +138,4 @@ std::vector<double> ComponentWrapper<_Derived>::moments() const noexcept {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HPP_
+#endif  // MCNLA_ISVD_CORE_STAGE_WRAPPER_HPP_

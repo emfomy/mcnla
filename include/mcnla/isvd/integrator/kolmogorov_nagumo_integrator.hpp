@@ -22,7 +22,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Integrator<KolmogorovNagumoIntegratorTag, _Val>::Integrator(
@@ -36,7 +36,7 @@ Integrator<KolmogorovNagumoIntegratorTag, _Val>::Integrator(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Integrator<KolmogorovNagumoIntegratorTag, _Val>::initializeImpl() noexcept {

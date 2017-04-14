@@ -38,13 +38,13 @@ using RowBlockGaussianProjectionSketcher = Sketcher<RowBlockGaussianProjectionSk
 ///
 template <typename _Val>
 class Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
-  : public ComponentWrapper<RowBlockGaussianProjectionSketcher<_Val>> {
+  : public StageWrapper<RowBlockGaussianProjectionSketcher<_Val>> {
 
-  friend ComponentWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
+  friend StageWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
+  using BaseType = StageWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
 
  public:
 

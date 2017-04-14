@@ -38,13 +38,13 @@ using RowBlockColumnSamplingSketcher = Sketcher<RowBlockColumnSamplingSketcherTa
 ///
 template <typename _Val>
 class Sketcher<RowBlockColumnSamplingSketcherTag, _Val>
-  : public ComponentWrapper<RowBlockColumnSamplingSketcher<_Val>> {
+  : public StageWrapper<RowBlockColumnSamplingSketcher<_Val>> {
 
-  friend ComponentWrapper<RowBlockColumnSamplingSketcher<_Val>>;
+  friend StageWrapper<RowBlockColumnSamplingSketcher<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<RowBlockColumnSamplingSketcher<_Val>>;
+  using BaseType = StageWrapper<RowBlockColumnSamplingSketcher<_Val>>;
 
  public:
 

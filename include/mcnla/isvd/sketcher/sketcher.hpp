@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_SKETCHER_SKETCHER_HPP_
 
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/core/component_wrapper.hpp>
+#include <mcnla/isvd/core/stage_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ namespace isvd {
 /// @tparam  _Val  The value type.
 ///
 template <class _Tag, typename _Val>
-class Sketcher : public ComponentWrapper<Sketcher<_Tag, _Val>> {
+class Sketcher : public StageWrapper<Sketcher<_Tag, _Val>> {
   static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD sketcher!");
 };
 

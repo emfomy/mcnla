@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Converter<MatrixToRowBlockConverterTag, _Val>::Converter(
@@ -32,7 +32,7 @@ Converter<MatrixToRowBlockConverterTag, _Val>::Converter(
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Converter<MatrixToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}

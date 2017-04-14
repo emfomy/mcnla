@@ -39,13 +39,13 @@ using RowBlockPolarFormer = Former<RowBlockPolarFormerTag, _Val>;
 ///
 template <typename _Val>
 class Former<RowBlockPolarFormerTag, _Val>
-  : public ComponentWrapper<RowBlockPolarFormer<_Val>> {
+  : public StageWrapper<RowBlockPolarFormer<_Val>> {
 
-  friend ComponentWrapper<RowBlockPolarFormer<_Val>>;
+  friend StageWrapper<RowBlockPolarFormer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<RowBlockPolarFormer<_Val>>;
+  using BaseType = StageWrapper<RowBlockPolarFormer<_Val>>;
 
  public:
 

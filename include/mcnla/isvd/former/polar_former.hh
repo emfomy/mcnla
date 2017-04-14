@@ -39,13 +39,13 @@ using PolarFormer = Former<PolarFormerTag, _Val>;
 ///
 template <typename _Val>
 class Former<PolarFormerTag, _Val>
-  : public ComponentWrapper<PolarFormer<_Val>> {
+  : public StageWrapper<PolarFormer<_Val>> {
 
-  friend ComponentWrapper<PolarFormer<_Val>>;
+  friend StageWrapper<PolarFormer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<PolarFormer<_Val>>;
+  using BaseType = StageWrapper<PolarFormer<_Val>>;
 
  public:
 

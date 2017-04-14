@@ -22,7 +22,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Orthogonalizer<PolarOrthogonalizerTag, _Val>::Orthogonalizer(
@@ -31,7 +31,7 @@ Orthogonalizer<PolarOrthogonalizerTag, _Val>::Orthogonalizer(
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Orthogonalizer<PolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
@@ -40,8 +40,8 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  collection_p_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
-  matrix_e_.reconstruct(dim_sketch, num_sketch_each);
+  collection_w_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
+  matrix_s_.reconstruct(dim_sketch, num_sketch_each);
   collection_tmp_.reconstruct(nrow, dim_sketch, num_sketch_each);
   gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 }
@@ -66,22 +66,22 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
 
   moments_.emplace_back(MPI_Wtime());  // orthogonalization
 
-  // Pi := Qi' * Qi
+  // Wi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    la::mm(collection_q(i).t(), collection_q(i), collection_p_(i));
+    la::mm(collection_q(i).t(), collection_q(i), collection_w_(i));
   }
 
-  // Compute the eigen-decomposition of Pi -> Pi' * Ei * Pi
+  // Compute the eigen-decomposition of Wi -> Wi' * Si * Wi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    gesvd_driver_(collection_p_(i), matrix_e_("", i), matrix_empty_, matrix_empty_);
+    gesvd_driver_(collection_w_(i), matrix_s_("", i), matrix_empty_, matrix_empty_);
   }
 
-  // Qi := Qi * Pi' / sqrt(Ei)
-  matrix_e_.val().valarray() = std::sqrt(matrix_e_.val().valarray());
+  // Qi := Qi * Wi' / sqrt(Si)
+  matrix_s_.val().valarray() = std::sqrt(matrix_s_.val().valarray());
   la::copy(matrix_qs.vectorize(), collection_tmp_.unfold().vectorize());
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    la::sm(matrix_e_("", i).viewDiagonal().inv(), collection_p_(i));
-    la::mm(collection_tmp_(i), collection_p_(i).t(), collection_q(i));
+    la::sm(matrix_s_("", i).viewDiagonal().inv(), collection_w_(i));
+    la::mm(collection_tmp_(i), collection_w_(i).t(), collection_q(i));
   }
 
   moments_.emplace_back(MPI_Wtime());  // end

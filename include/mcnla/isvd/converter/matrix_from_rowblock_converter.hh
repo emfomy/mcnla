@@ -39,13 +39,13 @@ using MatrixFromRowBlockConverter = Converter<MatrixFromRowBlockConverterTag, _V
 ///
 template <class _Val>
 class Converter<MatrixFromRowBlockConverterTag, _Val>
-  : public ComponentWrapper<Converter<MatrixFromRowBlockConverterTag, _Val>> {
+  : public StageWrapper<Converter<MatrixFromRowBlockConverterTag, _Val>> {
 
-  friend ComponentWrapper<Converter<MatrixFromRowBlockConverterTag, _Val>>;
+  friend StageWrapper<Converter<MatrixFromRowBlockConverterTag, _Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<Converter<MatrixFromRowBlockConverterTag, _Val>>;
+  using BaseType = StageWrapper<Converter<MatrixFromRowBlockConverterTag, _Val>>;
 
  public:
 

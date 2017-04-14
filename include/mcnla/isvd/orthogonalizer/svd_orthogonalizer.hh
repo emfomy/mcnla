@@ -39,13 +39,13 @@ using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Val>;
 ///
 template <typename _Val>
 class Orthogonalizer<SvdOrthogonalizerTag, _Val>
-  : public ComponentWrapper<SvdOrthogonalizer<_Val>> {
+  : public StageWrapper<SvdOrthogonalizer<_Val>> {
 
-  friend ComponentWrapper<SvdOrthogonalizer<_Val>>;
+  friend StageWrapper<SvdOrthogonalizer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<SvdOrthogonalizer<_Val>>;
+  using BaseType = StageWrapper<SvdOrthogonalizer<_Val>>;
 
  public:
 

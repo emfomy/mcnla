@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Sketcher<GaussianProjectionSketcherTag, _Val>::Sketcher(
@@ -37,7 +37,7 @@ Sketcher<GaussianProjectionSketcherTag, _Val>::Sketcher(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Sketcher<GaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
@@ -91,7 +91,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::outputName
+/// @copydoc  mcnla::isvd::StageWrapper::outputName
 ///
 ///
 template <typename _Val>

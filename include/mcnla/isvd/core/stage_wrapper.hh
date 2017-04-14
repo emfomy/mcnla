@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/core/component_wrapper.hh
-/// @brief   The definition of iSVD component wrapper.
+/// @file    include/mcnla/isvd/core/stage_wrapper.hh
+/// @brief   The definition of iSVD stage wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HH_
-#define MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HH_
+#ifndef MCNLA_ISVD_CORE_STAGE_WRAPPER_HH_
+#define MCNLA_ISVD_CORE_STAGE_WRAPPER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <iostream>
@@ -27,12 +27,12 @@ namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_core_module_detail
-/// The iSVD component wrapper.
+/// The iSVD stage wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_Derived>> {
+class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> {
 
  public:
 
@@ -55,7 +55,7 @@ class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_De
  protected:
 
   // Constructor
-  inline ComponentWrapper( const Parameters<ValType> &parameters ) noexcept;
+  inline StageWrapper( const Parameters<ValType> &parameters ) noexcept;
 
  public:
 
@@ -67,7 +67,7 @@ class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_De
   template <typename... Args>
   inline void operator()( Args... arg ) noexcept;
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const ComponentWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper );
 
   // Gets data
   inline bool isInitialized() const noexcept;
@@ -91,4 +91,4 @@ class ComponentWrapper : public utility::CrtpBase<_Derived, ComponentWrapper<_De
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CORE_COMPONENT_WRAPPER_HH_
+#endif  // MCNLA_ISVD_CORE_STAGE_WRAPPER_HH_

@@ -39,13 +39,13 @@ using SvdFormer = Former<SvdFormerTag, _Val>;
 ///
 template <typename _Val>
 class Former<SvdFormerTag, _Val>
-  : public ComponentWrapper<SvdFormer<_Val>> {
+  : public StageWrapper<SvdFormer<_Val>> {
 
-  friend ComponentWrapper<SvdFormer<_Val>>;
+  friend StageWrapper<SvdFormer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<SvdFormer<_Val>>;
+  using BaseType = StageWrapper<SvdFormer<_Val>>;
 
  public:
 

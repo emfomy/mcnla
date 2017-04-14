@@ -22,7 +22,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Orthogonalizer<SvdOrthogonalizerTag, _Val>::Orthogonalizer(
@@ -31,7 +31,7 @@ Orthogonalizer<SvdOrthogonalizerTag, _Val>::Orthogonalizer(
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Orthogonalizer<SvdOrthogonalizerTag, _Val>::initializeImpl() noexcept {

@@ -39,13 +39,13 @@ using PolarOrthogonalizer = Orthogonalizer<PolarOrthogonalizerTag, _Val>;
 ///
 template <typename _Val>
 class Orthogonalizer<PolarOrthogonalizerTag, _Val>
-  : public ComponentWrapper<PolarOrthogonalizer<_Val>> {
+  : public StageWrapper<PolarOrthogonalizer<_Val>> {
 
-  friend ComponentWrapper<PolarOrthogonalizer<_Val>>;
+  friend StageWrapper<PolarOrthogonalizer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<PolarOrthogonalizer<_Val>>;
+  using BaseType = StageWrapper<PolarOrthogonalizer<_Val>>;
 
  public:
 
@@ -56,11 +56,11 @@ class Orthogonalizer<PolarOrthogonalizerTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Polar Orthogonalizer";
 
-  /// The matrix P.
-  DenseMatrixCollection102<ValType> collection_p_;
+  /// The matrices W.
+  DenseMatrixCollection102<ValType> collection_w_;
 
-  /// The matrix E.
-  DenseMatrixColMajor<ValType> matrix_e_;
+  /// The matrix S.
+  DenseMatrixColMajor<ValType> matrix_s_;
 
   /// The temporary matrices.
   DenseMatrixCollection201<ValType> collection_tmp_;

@@ -39,13 +39,13 @@ using CollectionToRowBlockConverter = Converter<CollectionToRowBlockConverterTag
 ///
 template <class _Val>
 class Converter<CollectionToRowBlockConverterTag, _Val>
-  : public ComponentWrapper<Converter<CollectionToRowBlockConverterTag, _Val>> {
+  : public StageWrapper<Converter<CollectionToRowBlockConverterTag, _Val>> {
 
-  friend ComponentWrapper<Converter<CollectionToRowBlockConverterTag, _Val>>;
+  friend StageWrapper<Converter<CollectionToRowBlockConverterTag, _Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<Converter<CollectionToRowBlockConverterTag, _Val>>;
+  using BaseType = StageWrapper<Converter<CollectionToRowBlockConverterTag, _Val>>;
 
  public:
 

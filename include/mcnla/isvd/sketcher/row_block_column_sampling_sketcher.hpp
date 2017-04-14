@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::Sketcher(
@@ -35,7 +35,7 @@ Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::Sketcher(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {

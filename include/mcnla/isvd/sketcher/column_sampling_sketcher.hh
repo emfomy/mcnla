@@ -38,13 +38,13 @@ using ColumnSamplingSketcher = Sketcher<ColumnSamplingSketcherTag, _Val>;
 ///
 template <typename _Val>
 class Sketcher<ColumnSamplingSketcherTag, _Val>
-  : public ComponentWrapper<ColumnSamplingSketcher<_Val>> {
+  : public StageWrapper<ColumnSamplingSketcher<_Val>> {
 
-  friend ComponentWrapper<ColumnSamplingSketcher<_Val>>;
+  friend StageWrapper<ColumnSamplingSketcher<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<ColumnSamplingSketcher<_Val>>;
+  using BaseType = StageWrapper<ColumnSamplingSketcher<_Val>>;
 
  public:
 

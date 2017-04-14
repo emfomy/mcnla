@@ -39,13 +39,13 @@ using RowBlockPolarOrthogonalizer = Orthogonalizer<RowBlockPolarOrthogonalizerTa
 ///
 template <typename _Val>
 class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
-  : public ComponentWrapper<RowBlockPolarOrthogonalizer<_Val>> {
+  : public StageWrapper<RowBlockPolarOrthogonalizer<_Val>> {
 
-  friend ComponentWrapper<RowBlockPolarOrthogonalizer<_Val>>;
+  friend StageWrapper<RowBlockPolarOrthogonalizer<_Val>>;
 
  private:
 
-  using BaseType = ComponentWrapper<RowBlockPolarOrthogonalizer<_Val>>;
+  using BaseType = StageWrapper<RowBlockPolarOrthogonalizer<_Val>>;
 
  public:
 
@@ -56,11 +56,11 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Polar Orthogonalizer (Row-Block Version)";
 
-  /// The matrix P.
-  DenseMatrixCollection102<ValType> collection_p_;
+  /// The matrices W.
+  DenseMatrixCollection102<ValType> collection_w_;
 
-  /// The matrix E.
-  DenseMatrixColMajor<ValType> matrix_e_;
+  /// The matrix S.
+  DenseMatrixColMajor<ValType> matrix_s_;
 
   /// The temporary matrices.
   DenseMatrixCollection201<ValType> collection_tmp_;

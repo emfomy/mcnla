@@ -22,7 +22,7 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::ComponentWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
 Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::Orthogonalizer(
@@ -31,7 +31,7 @@ Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::Orthogonalizer(
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::ComponentWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
 void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
@@ -40,8 +40,8 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noex
   const auto num_sketch = parameters_.numSketch();
   const auto dim_sketch = parameters_.dimSketch();
 
-  collection_p_.reconstruct(dim_sketch, dim_sketch, num_sketch);
-  matrix_e_.reconstruct(dim_sketch, num_sketch);
+  collection_w_.reconstruct(dim_sketch, dim_sketch, num_sketch);
+  matrix_s_.reconstruct(dim_sketch, num_sketch);
   collection_tmp_.reconstruct(nrow_rank, dim_sketch, num_sketch);
   gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 }
@@ -67,25 +67,25 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 
   moments_.emplace_back(MPI_Wtime());  // orthogonalization
 
-  // Pi := Qi' * Qi
+  // Wi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    la::mm(collection_qj(i).t(), collection_qj(i), collection_p_(i));
+    la::mm(collection_qj(i).t(), collection_qj(i), collection_w_(i));
   }
 
-  // Reduce sum Pi
-  mpi::allreduce(collection_p_.unfold(), MPI_SUM, mpi_comm);
+  // Reduce sum Wi
+  mpi::allreduce(collection_w_.unfold(), MPI_SUM, mpi_comm);
 
-  // Compute the eigen-decomposition of Pi -> Pi' * Ei * Pi
+  // Compute the eigen-decomposition of Wi -> Wi' * Si * Wi
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    gesvd_driver_(collection_p_(i), matrix_e_("", i), matrix_empty_, matrix_empty_);
+    gesvd_driver_(collection_w_(i), matrix_s_("", i), matrix_empty_, matrix_empty_);
   }
 
-  // Qi := Qi * Pi' / sqrt( Ei )
-  matrix_e_.val().valarray() = std::sqrt(matrix_e_.val().valarray());
+  // Qi := Qi * Wi' / sqrt( Si )
+  matrix_s_.val().valarray() = std::sqrt(matrix_s_.val().valarray());
   la::copy(matrix_qjs.vectorize(), collection_tmp_.unfold().vectorize());
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    la::sm(matrix_e_("", i).viewDiagonal().inv(), collection_p_(i));
-    la::mm(collection_tmp_(i), collection_p_(i).t(), collection_qj(i));
+    la::sm(matrix_s_("", i).viewDiagonal().inv(), collection_w_(i));
+    la::mm(collection_tmp_(i), collection_w_(i).t(), collection_qj(i));
   }
 
   moments_.emplace_back(MPI_Wtime());  // end
