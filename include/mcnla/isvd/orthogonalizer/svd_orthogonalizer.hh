@@ -58,6 +58,9 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
   /// The name.
   static constexpr const char* name_ = "SVD Orthogonalizer";
 
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "orthogonalization";
+
   /// The vector S.
   DenseVector<RealValType> vector_s_;
 
@@ -71,6 +74,7 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
   using BaseType::initialized_;
   using BaseType::computed_;
   using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 

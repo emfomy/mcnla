@@ -4,6 +4,7 @@ message(STATUS "================================================================
 message(STATUS "")
 message(STATUS "Set 'MCNLA_BUILD_DRIVER' to build driver codes.")
 message(STATUS "Set 'MCNLA_BUILD_DEMO'   to build demo codes.")
+message(STATUS "Set 'MCNLA_BUILD_REPORT' to build report codes.")
 message(STATUS "Set 'MCNLA_BUILD_TEST'   to build test codes.")
 message(STATUS "Set 'MCNLA_BUILD_DOC'    to build documentation.")
 message(STATUS "")

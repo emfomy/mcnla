@@ -39,6 +39,8 @@ void StageWrapper<_Derived>::initialize(
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
   this->derived().initializeImpl(args...);
+  moments_.clear();
+  comm_times_.clear();
   initialized_ = true;
   computed_ = false;
 }
@@ -53,6 +55,7 @@ void StageWrapper<_Derived>::operator()(
   mcnla_assert_true(parameters_.isSynchronized());
   mcnla_assert_true(isInitialized());
   moments_.clear();
+  comm_times_.clear();
   this->derived().runImpl(args...);
   computed_ = true;
 }
@@ -117,21 +120,47 @@ double StageWrapper<_Derived>::time() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the time of communication.
+///
+template <class _Derived>
+double StageWrapper<_Derived>::commTime() const noexcept {
+  return std::accumulate(comm_times_.begin(), comm_times_.end(), 0.0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the times of running each part of the stage.
 ///
 template <class _Derived>
 std::vector<double> StageWrapper<_Derived>::times() const noexcept {
-  std::vector<double> times;
+  mcnla_assert_true(isComputed());
+  std::vector<double> times(moments_.size());
   std::adjacent_difference(moments_.begin(), moments_.end(), times.begin());
+  times.erase(times.begin());
   return times;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the moments of running each part of the stage.
+/// @brief  Gets the time of communication of each part of the stage.
+///
+template <class _Derived>
+std::vector<double> StageWrapper<_Derived>::commTimes() const noexcept {
+  return comm_times_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the moment of running each part of the stage.
 ///
 template <class _Derived>
 std::vector<double> StageWrapper<_Derived>::moments() const noexcept {
   return moments_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the name of each part of the stage.
+///
+template <class _Derived>
+const char* StageWrapper<_Derived>::names() const noexcept {
+  return this->derived().names_;
 }
 
 }  // namespace isvd

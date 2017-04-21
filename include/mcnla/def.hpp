@@ -84,4 +84,6 @@ static constexpr size_t kOsIdxWidth = 6;
 
 #endif  // MCNLA_USE_GTEST
 
+#define mcnla_assert_pass( condition )  { auto err = condition; static_cast<void>(err); mcnla_assert_eq(err, 0); }
+
 #endif  // MCNLA_DEF_HPP_

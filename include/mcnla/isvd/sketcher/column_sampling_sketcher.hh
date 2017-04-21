@@ -55,6 +55,9 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Column Sampling Sketcher";
 
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "random generating / projection";
+
   /// The random seed.
   index_t seed_;
 
@@ -65,6 +68,7 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
   using BaseType::initialized_;
   using BaseType::computed_;
   using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 

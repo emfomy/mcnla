@@ -11,8 +11,9 @@ if(GTEST_FOUND)
   list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")
 endif()
 
-# Add check folders
+# Add check tests
 include(check.cmake)
+
 add_check_test(core/matrix/dense/dense_vector  "Dense Vector test")
 add_check_death(core/matrix/dense/dense_vector "Dense Vector death test")
 add_check_test(core/matrix/dense/dense_matrix  "Dense Matrix test")

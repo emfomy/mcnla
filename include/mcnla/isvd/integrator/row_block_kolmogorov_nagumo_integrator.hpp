@@ -83,16 +83,17 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
   auto &matrix_qjs = collection_qj.unfold();  // matrix Qs.
   auto &matrix_qcj = matrix_qbarj;  // matrix Qc.
 
+  double comm_moment, comm_time = 0;
   moments_.emplace_back(MPI_Wtime());  // copying Qc
 
   // Qc := Q0
   la::copy(collection_qj(0), matrix_qcj);
 
+  comm_times_.emplace_back(comm_time);
   moments_.emplace_back(MPI_Wtime());  // iterating
+  comm_time = 0;
 
-  time2c_ = 0;
   bool is_converged = false;
-  double moment2c;
   for ( iteration_ = 0; iteration_ < max_iteration_ && !is_converged; ++iteration_ ) {
 
     // ================================================================================================================== //
@@ -100,9 +101,9 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
 
     // Bs := sum( Qcj' * Qjs )
     la::mm(matrix_qcj.t(), matrix_qjs, matrix_bs_);
-    moment2c = MPI_Wtime();
+    comm_moment = MPI_Wtime();
     mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
-    time2c_ += MPI_Wtime() - moment2c;
+    comm_time += MPI_Wtime() - comm_moment;
 
     // D := Bs * Bs'
     la::rk(matrix_bs_, matrix_d_.viewSymmetric());
@@ -118,9 +119,9 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
 
     // Z := sum(Xj' * Xj)
     la::rk(matrix_xj_.t(), matrix_z_.viewSymmetric());
-    moment2c = MPI_Wtime();
+    comm_moment = MPI_Wtime();
     mpi::allreduce(matrix_z_, MPI_SUM, mpi_comm);
-    time2c_ += MPI_Wtime() - moment2c;
+    comm_time += MPI_Wtime() - comm_moment;
 
     // Compute the eigen-decomposition of Z -> Z' * E * Z
     syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
@@ -159,6 +160,7 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
     is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
   }
 
+  comm_times_.emplace_back(comm_time);
   moments_.emplace_back(MPI_Wtime());  // end
 }
 
@@ -185,15 +187,6 @@ template <typename _Val>
 index_t Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the communication time of iterating.
-///
-template <typename _Val>
-double Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::time2c() const noexcept {
-  mcnla_assert_true(this->isComputed());
-  return time2c_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

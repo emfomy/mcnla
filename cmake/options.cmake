@@ -6,6 +6,7 @@ endif()
 # Set options
 option(MCNLA_BUILD_DRIVER "Build driver codes."                           "ON")
 option(MCNLA_BUILD_DEMO   "Build demo codes."                             "ON")
+option(MCNLA_BUILD_REPOET "Build report codes."                           "ON")
 option(MCNLA_BUILD_TEST   "Build test codes."                             "OFF")
 option(MCNLA_BUILD_DOC    "Build documentation."                          "OFF")
 option(MCNLA_INSTALL_DEMO "Install demos."                                "OFF")
@@ -15,7 +16,7 @@ option(MKL_USE_OMP        "Uses multithread MKL. (Require MCNLA_USE_MKL)" "OFF")
 option(MKL_USE_IOMP       "Uses Intel OMP. (Require MKL_USE_OMP)"         "OFF")
 
 # Set variables
-if(MCNLA_BUILD_DRIVER OR MCNLA_BUILD_DEMO OR MCNLA_BUILD_TEST)
+if(MCNLA_BUILD_DRIVER OR MCNLA_BUILD_DEMO OR MCNLA_BUILD_REPOET OR MCNLA_BUILD_TEST)
   set(MCNLA_BUILD_BIN "ON")
 endif()
 

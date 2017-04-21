@@ -56,6 +56,9 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Polar Orthogonalizer (Row-Block Version)";
 
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "orthogonalization";
+
   /// The matrices W.
   DenseMatrixCollection102<ValType> collection_w_;
 
@@ -75,6 +78,7 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   using BaseType::initialized_;
   using BaseType::computed_;
   using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 

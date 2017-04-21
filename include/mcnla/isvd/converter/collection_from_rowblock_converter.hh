@@ -57,6 +57,7 @@ class Converter<CollectionFromRowBlockConverterTag, _Val>
   using BaseType::initialized_;
   using BaseType::computed_;
   using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 

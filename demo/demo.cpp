@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    demo/demo2.cpp
-/// @brief   The demo code kind 2
+/// @file    demo/demo.cpp
+/// @brief   The demo code
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -103,7 +103,7 @@ int main( int argc, char **argv ) {
                 set_iter(num_test), set_time_so(num_test), set_time_oi(num_test), set_time_if(num_test);
 
   // ====================================================================================================================== //
-  // Allocate driver
+  // Allocate stages
   mcnla::isvd::Parameters<ValType> parameters(mpi_root, mpi_comm);
 
   mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);

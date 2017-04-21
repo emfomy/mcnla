@@ -10,6 +10,7 @@
 
 #include <mcnla/isvd/def.hpp>
 #include <iostream>
+#include <array>
 #include <vector>
 #include <mcnla/isvd/core/parameters.hpp>
 #include <mcnla/core/matrix.hpp>
@@ -43,14 +44,17 @@ class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> 
   /// The parameters
   const Parameters<ValType> &parameters_;
 
-  /// The tag shows if the component is initialized.
+  /// The tag shows if the stage is initialized.
   bool initialized_ = false;
 
-  /// The tag shows if the component is computed.
+  /// The tag shows if the stage is computed.
   bool computed_ = false;
 
-  /// The moments of running each part of the component.
+  /// The moment of running each part of the stage.
   std::vector<double> moments_;
+
+  /// The time of communication of each part of the stage.
+  std::vector<double> comm_times_;
 
  protected:
 
@@ -75,8 +79,11 @@ class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> 
 
   // Gets compute time
   inline double time() const noexcept;
+  inline double commTime() const noexcept;
   inline std::vector<double> times() const noexcept;
+  inline std::vector<double> commTimes() const noexcept;
   inline std::vector<double> moments() const noexcept;
+  inline const char* names() const noexcept;
 
  protected:
 

@@ -55,6 +55,9 @@ class Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Gaussian Projection Sketcher (Row-Block Version)";
 
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "random generating / projection";
+
   /// The random seed.
   index_t seed_;
 
@@ -68,6 +71,7 @@ class Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
   using BaseType::initialized_;
   using BaseType::computed_;
   using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 

@@ -1,4 +1,10 @@
 if(MCNLA_BUILD_BIN)
+  # Set default variables
+  set(INCS "")
+  set(LIBS "")
+  set(COMFLGS "")
+  set(LNKFLGS "")
+
   # Set complier flags
   set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -pedantic")
   # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -pedantic")

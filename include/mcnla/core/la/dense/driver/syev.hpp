@@ -142,8 +142,8 @@ void SyevDriver<_Matrix, _jobz>::compute(
   mcnla_assert_eq(w.length(), size_);
   mcnla_assert_true(w.isShrunk());
 
-  mcnla_assert_eq(detail::syev(__jobz, toUploChar(uplo, trans), a.nrow(), a.valPtr(), a.pitch(),
-                               w.valPtr(), work_.valPtr(), work_.length(), rwork_.valPtr()), 0);
+  mcnla_assert_pass(detail::syev(__jobz, toUploChar(uplo, trans), a.nrow(), a.valPtr(), a.pitch(),
+                                 w.valPtr(), work_.valPtr(), work_.length(), rwork_.valPtr()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ index_t SyevDriver<_Matrix, _jobz>::query(
     const index_t size
 ) noexcept {
   ValType lwork;
-  mcnla_assert_eq(detail::syev(_jobz, toUploChar(uplo, trans), size, nullptr, size, nullptr, &lwork, -1, nullptr), 0);
+  mcnla_assert_pass(detail::syev(_jobz, toUploChar(uplo, trans), size, nullptr, size, nullptr, &lwork, -1, nullptr));
   return lwork;
 }
 

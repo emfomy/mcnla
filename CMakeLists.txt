@@ -30,6 +30,7 @@ include(cmake/packages.cmake)
 # Add subdirectories
 add_subdirectory(src)
 add_subdirectory(demo)
+add_subdirectory(report)
 add_subdirectory(check)
 add_subdirectory(doxygen)
 

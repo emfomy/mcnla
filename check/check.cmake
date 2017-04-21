@@ -1,6 +1,5 @@
 # check/check.cmake
 
-# Macro
 macro(_ADD_CHECK_PREDO checktype)
   # Set target name
   get_filename_component(checkname ${checkpath} NAME)
@@ -38,13 +37,13 @@ macro(_ADD_CHECK checktype)
 
   # Add rule
   add_custom_target(
-    run_${checkname}
+    run_test_${checkname}
     COMMAND ./${checktarget}
     DEPENDS ${checktarget}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Check test ${checkpath}"
   )
-  set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_${checkname} PARENT_SCOPE)
+  set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_test_${checkname} PARENT_SCOPE)
 endmacro()
 
 macro(_ADD_MPI_CHECK checktype)
@@ -60,13 +59,13 @@ macro(_ADD_MPI_CHECK checktype)
 
     # Add rule
     add_custom_target(
-      run_${checkname}_${procs}
+      run_test_${checkname}_${procs}
       COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ./${checktarget}
       DEPENDS ${checktarget}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      COMMENT "Check test ${checkpath}"
+      COMMENT "Run test ${checkpath}"
     )
-    set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_${checkname0}_${procs} PARENT_SCOPE)
+    set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_test_${checkname0}_${procs} PARENT_SCOPE)
   endforeach()
 endmacro()
 

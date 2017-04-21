@@ -57,6 +57,9 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
   /// The name.
   static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Row-Block Version)";
 
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "copying Qc / iterating";
+
   /// The maximum number of iteration.
   index_t max_iteration_;
 
@@ -65,9 +68,6 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
 
   /// The number of iteration.
   index_t iteration_;
-
-  /// The communication time of iterating.
-  double time2c_;
 
   /// The matrix Qs.
   DenseMatrixRowMajor<ValType> matrix_qs_;
@@ -109,6 +109,7 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
   using BaseType::initialized_;
   using BaseType::computed_;
   using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 
@@ -120,7 +121,6 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
   inline index_t     maxIteration() const noexcept;
   inline RealValType tolerance() const noexcept;
   inline index_t     iteration() const noexcept;
-  inline double      time2c() const noexcept;
 
   // Sets parameters
   inline Integrator& setMaxIteration( const index_t max_iteration ) noexcept;

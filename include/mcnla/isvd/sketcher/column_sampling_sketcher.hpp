@@ -75,7 +75,7 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
   // Random sample Idxs using uniform distribution
   random::uniform(streams, vector_idxs_, 0, ncol);
 
-  moments_.emplace_back(MPI_Wtime());  // random sketching
+  moments_.emplace_back(MPI_Wtime());  // projection
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {

@@ -169,13 +169,13 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   auto vt_pitch = (vt.pitch() > 0) ? vt.pitch() : 1;
 
   if ( !isTrans(trans) ) {
-    mcnla_assert_eq(detail::gesvd(__jobu, __jobvt, a.nrow(), a.ncol(), a.valPtr(), a.pitch(),
-                                  s.valPtr(), u.valPtr(), u_pitch, vt.valPtr(), vt_pitch,
-                                  work_.valPtr(), work_.length(), rwork_.valPtr()), 0);
+    mcnla_assert_pass(detail::gesvd(__jobu, __jobvt, a.nrow(), a.ncol(), a.valPtr(), a.pitch(),
+                                    s.valPtr(), u.valPtr(), u_pitch, vt.valPtr(), vt_pitch,
+                                    work_.valPtr(), work_.length(), rwork_.valPtr()));
   } else {
-    mcnla_assert_eq(detail::gesvd(__jobvt, __jobu, a.ncol(), a.nrow(), a.valPtr(), a.pitch(),
-                                  s.valPtr(), vt.valPtr(), vt_pitch, u.valPtr(), u_pitch,
-                                  work_.valPtr(), work_.length(), rwork_.valPtr()), 0);
+    mcnla_assert_pass(detail::gesvd(__jobvt, __jobu, a.ncol(), a.nrow(), a.valPtr(), a.pitch(),
+                                    s.valPtr(), vt.valPtr(), vt_pitch, u.valPtr(), u_pitch,
+                                    work_.valPtr(), work_.length(), rwork_.valPtr()));
   }
 }
 
@@ -188,11 +188,11 @@ index_t GesvdDriver<_Matrix, _jobu, _jobvt>::query(
 ) noexcept {
   ValType lwork;
   if ( !isTrans(trans) ) {
-    mcnla_assert_eq(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
-                                  nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr), 0);
+    mcnla_assert_pass(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
+                                    nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr));
   } else {
-    mcnla_assert_eq(detail::gesvd(_jobvt, _jobu, ncol, nrow, nullptr, ncol, nullptr,
-                                  nullptr, ncol, nullptr, nrow, &lwork, -1, nullptr), 0);
+    mcnla_assert_pass(detail::gesvd(_jobvt, _jobu, ncol, nrow, nullptr, ncol, nullptr,
+                                    nullptr, ncol, nullptr, nrow, &lwork, -1, nullptr));
   }
   return lwork;
 }

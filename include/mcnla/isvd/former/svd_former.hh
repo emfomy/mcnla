@@ -57,6 +57,9 @@ class Former<SvdFormerTag, _Val>
   /// The name.
   static constexpr const char* name_ = "SVD Former";
 
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "forming";
+
   /// The matrix W.
   DenseMatrixColMajor<ValType> matrix_w_;
 
@@ -88,6 +91,7 @@ class Former<SvdFormerTag, _Val>
   using BaseType::initialized_;
   using BaseType::computed_;
   using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 

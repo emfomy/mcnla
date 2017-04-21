@@ -47,6 +47,7 @@ ccmake <path-to-source>
 
 * Set `MCNLA_BUILD_DRIVER` to build driver codes.
 * Set `MCNLA_BUILD_DEMO`   to build demo codes.
+* Set `MCNLA_BUILD_REPORT` to build report codes.
 * Set `MCNLA_BUILD_TEST`   to build test codes.
 * Set `MCNLA_BUILD_DOC`    to build documentation.
 

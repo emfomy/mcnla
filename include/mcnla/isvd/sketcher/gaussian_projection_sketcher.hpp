@@ -78,7 +78,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
   // Random sample Omega using normal Gaussian distribution
   random::gaussian(streams, matrix_omegas_.vectorize());
 
-  moments_.emplace_back(MPI_Wtime());  // random sketching
+  moments_.emplace_back(MPI_Wtime());  // projection
 
   // Q := A * Omega
   la::mm(matrix_a, matrix_omegas_, collection_q.unfold());

@@ -85,19 +85,23 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
   auto &matrix_qs = collection_q.unfold();  // matrix Qs.
   auto &matrix_qc = matrix_qbar;  // matrix Qc.
 
+  double comm_moment, comm_time = 0;
   moments_.emplace_back(MPI_Wtime());  // copying Qc
 
   // Broadcast Q0 to Qc
   if ( mpi_rank == mpi_root ) {
     la::copy(collection_q(0), matrix_qc);
   }
+
+  comm_moment = MPI_Wtime();
   mpi::bcast(matrix_qc, mpi_root, mpi_comm);
+  comm_time += MPI_Wtime() - comm_moment;
 
+  comm_times_.emplace_back(comm_time);
   moments_.emplace_back(MPI_Wtime());  // iterating
+  comm_time = 0;
 
-  time2c_ = 0;
   bool is_converged = false;
-  double moment2c;
   for ( iteration_ = 0; iteration_ < max_iteration_ && !is_converged; ++iteration_ ) {
 
     // ================================================================================================================== //
@@ -116,9 +120,9 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
     la::mm(matrix_qc, matrix_d_.viewSymmetric(), matrix_x_, -1.0/num_sketch, 1.0);
 
     // Reduce sum X
-    moment2c = MPI_Wtime();
+    comm_moment = MPI_Wtime();
     mpi::allreduce(matrix_x_, MPI_SUM, mpi_comm);
-    time2c_ += MPI_Wtime() - moment2c;
+    comm_time += MPI_Wtime() - comm_moment;
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
@@ -163,6 +167,7 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
     is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
   }
 
+  comm_times_.emplace_back(comm_time);
   moments_.emplace_back(MPI_Wtime());  // end
 }
 
@@ -189,15 +194,6 @@ template <typename _Val>
 index_t Integrator<KolmogorovNagumoIntegratorTag, _Val>::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the communication time of iterating.
-///
-template <typename _Val>
-double Integrator<KolmogorovNagumoIntegratorTag, _Val>::time2c() const noexcept {
-  mcnla_assert_true(this->isComputed());
-  return time2c_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
