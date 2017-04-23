@@ -1,0 +1,36 @@
+#!/bin/bash
+
+bin=$1
+
+function run() {
+	Nj=$((N/K))
+	echo ================================================================
+	echo
+	echo K = $K, N = $N, m = $m, k = $k
+	echo
+	@MPIEXEC@ @MPIEXEC_NUMPROC_FLAG@ $K $bin $Nj $m $k
+	echo
+	echo ================================================================
+}
+
+Ks=( 1 2 4 8 16 )
+m0=e3
+k=100
+
+for K in ${Ks[@]}; do
+	N=${Ks[-1]}
+	m=1$m0
+	run
+done
+
+for K in ${Ks[@]::${#Ks[@]}-1}; do
+	N=$K
+	m=1$m0
+	run
+done
+
+for K in ${Ks[@]:1}; do
+	N=${Ks[-1]}
+	m=$K$m0
+	run
+done

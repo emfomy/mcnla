@@ -25,7 +25,7 @@ struct Data {
   }
 };
 
-#include "stage.hpp"
+#include "../stage.hpp"
 #include "integrator.hpp"
 
 void runStage( StageType &integrator, Data &data ) noexcept {
