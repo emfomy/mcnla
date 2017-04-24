@@ -71,12 +71,12 @@ inline void gemmImpl3(
     la::scal(c.vectorize(), beta);
   } else {
     for ( index_t i = 0; i < c.nrow(); ++i ) {
-      la::scal(c("", i), beta);
+      la::scal(c(""_, i), beta);
     }
   }
 
   for ( index_t i = 0; i < a.nnz(); ++i ) {
-    la::axpy(b("", a.rowidxPtr()[i]), c("", a.colidxPtr()[i]), a.valPtr()[i] * alpha);
+    la::axpy(b(""_, a.rowidxPtr()[i]), c(""_, a.colidxPtr()[i]), a.valPtr()[i] * alpha);
   }
 }
 #endif  // MCNLA_USE_MKL

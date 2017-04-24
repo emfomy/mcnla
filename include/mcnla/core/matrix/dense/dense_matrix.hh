@@ -187,8 +187,8 @@ class DenseMatrix
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
-  inline void resize( const index_t nrow, const char* ) noexcept;
-  inline void resize( const char*, const index_t ncol ) noexcept;
+  inline void resize( const index_t nrow, const FullRange ) noexcept;
+  inline void resize( const FullRange, const index_t ncol ) noexcept;
 
   // Transpose
   inline       TransposeType& t() noexcept;
@@ -215,20 +215,20 @@ class DenseMatrix
   // Gets matrix block
   inline       MatrixType operator()( const IdxRange &rowrange, const IdxRange &colrange ) noexcept;
   inline const MatrixType operator()( const IdxRange &rowrange, const IdxRange &colrange ) const noexcept;
-  inline       MatrixType operator()( const char*,              const IdxRange &colrange ) noexcept;
-  inline const MatrixType operator()( const char*,              const IdxRange &colrange ) const noexcept;
-  inline       MatrixType operator()( const IdxRange &rowrange, const char*              ) noexcept;
-  inline const MatrixType operator()( const IdxRange &rowrange, const char*              ) const noexcept;
+  inline       MatrixType operator()( const FullRange, const IdxRange &colrange ) noexcept;
+  inline const MatrixType operator()( const FullRange, const IdxRange &colrange ) const noexcept;
+  inline       MatrixType operator()( const IdxRange &rowrange, const FullRange ) noexcept;
+  inline const MatrixType operator()( const IdxRange &rowrange, const FullRange ) const noexcept;
 
   // Gets vector segment
-  inline       VectorType operator()( const IdxRange &rowrange, const index_t colidx     ) noexcept;
-  inline const VectorType operator()( const IdxRange &rowrange, const index_t colidx     ) const noexcept;
-  inline       VectorType operator()( const char*,              const index_t colidx     ) noexcept;
-  inline const VectorType operator()( const char*,              const index_t colidx     ) const noexcept;
-  inline       VectorType operator()( const index_t rowidx,     const IdxRange &colrange ) noexcept;
-  inline const VectorType operator()( const index_t rowidx,     const IdxRange &colrange ) const noexcept;
-  inline       VectorType operator()( const index_t rowidx,     const char*              ) noexcept;
-  inline const VectorType operator()( const index_t rowidx,     const char*              ) const noexcept;
+  inline       VectorType operator()( const IdxRange &rowrange, const index_t colidx ) noexcept;
+  inline const VectorType operator()( const IdxRange &rowrange, const index_t colidx ) const noexcept;
+  inline       VectorType operator()( const FullRange, const index_t colidx ) noexcept;
+  inline const VectorType operator()( const FullRange, const index_t colidx ) const noexcept;
+  inline       VectorType operator()( const index_t rowidx, const IdxRange &colrange ) noexcept;
+  inline const VectorType operator()( const index_t rowidx, const IdxRange &colrange ) const noexcept;
+  inline       VectorType operator()( const index_t rowidx, const FullRange ) noexcept;
+  inline const VectorType operator()( const index_t rowidx, const FullRange ) const noexcept;
 
   inline       VectorType getDiagonal( const index_t idx = 0 ) noexcept;
   inline const VectorType getDiagonal( const index_t idx = 0 ) const noexcept;

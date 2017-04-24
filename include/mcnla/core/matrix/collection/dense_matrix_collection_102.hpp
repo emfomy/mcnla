@@ -226,7 +226,7 @@ template <typename _Val>
 DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
     const IdxRange &idxrange
 ) noexcept {
-  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@ template <typename _Val>
 const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
     const IdxRange &idxrange
 ) const noexcept {
-  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,11 +244,11 @@ const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection
 ///
 template <typename _Val>
 DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
-    const char*,
-    const char*,
+    const FullRange,
+    const FullRange,
     const IdxRange &idxrange
 ) noexcept {
-  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,11 +256,11 @@ DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag
 ///
 template <typename _Val>
 const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
-    const char*,
-    const char*,
+    const FullRange,
+    const FullRange,
     const IdxRange &idxrange
 ) const noexcept {
-  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""));
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,23 +268,23 @@ const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection
 ///
 template <typename _Val>
 DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
-    const char*,
+    const FullRange,
     const IdxRange &colrange,
-    const char*
+    const FullRange
 ) noexcept {
-  return CollectionType(nrow_, mrow_, data_("", colrange));
+  return CollectionType(nrow_, mrow_, data_(""_, colrange));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const char*, const IdxRange&, const char* )
+/// @copydoc  operator()( const FullRange, const IdxRange&, const FullRange )
 ///
 template <typename _Val>
 const DenseMatrixCollection102<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::operator()(
-    const char*,
+    const FullRange,
     const IdxRange &colrange,
-    const char*
+    const FullRange
 ) const noexcept {
-  return CollectionType(nrow_, mrow_, data_("", colrange));
+  return CollectionType(nrow_, mrow_, data_(""_, colrange));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,7 +345,7 @@ DenseMatrixRowMajor<_Val> DenseMatrixCollection<DenseMatrixCollection102Tag, _Va
     const index_t idx
 ) noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
-  return data_({idx*mrow_, idx*mrow_ + nrow_}, "");
+  return data_({idx*mrow_, idx*mrow_ + nrow_}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,7 +356,7 @@ const DenseMatrixRowMajor<_Val> DenseMatrixCollection<DenseMatrixCollection102Ta
     const index_t idx
 ) const noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
-  return data_({idx*mrow_, idx*mrow_ + nrow_}, "");
+  return data_({idx*mrow_, idx*mrow_ + nrow_}, ""_);
 }
 
 }  // namespace matrix

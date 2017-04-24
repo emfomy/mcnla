@@ -97,10 +97,10 @@ class DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>
   using BaseType::operator();
   inline       CollectionType operator()( const IdxRange &idxrange ) noexcept;
   inline const CollectionType operator()( const IdxRange &idxrange ) const noexcept;
-  inline       CollectionType operator()( const char*, const char*, const IdxRange &idxrange ) noexcept;
-  inline const CollectionType operator()( const char*, const char*, const IdxRange &idxrange ) const noexcept;
-  inline       CollectionType operator()( const char*, const IdxRange &colrange, const char* ) noexcept;
-  inline const CollectionType operator()( const char*, const IdxRange &colrange, const char* ) const noexcept;
+  inline       CollectionType operator()( const FullRange, const FullRange, const IdxRange &idxrange ) noexcept;
+  inline const CollectionType operator()( const FullRange, const FullRange, const IdxRange &idxrange ) const noexcept;
+  inline       CollectionType operator()( const FullRange, const IdxRange &colrange, const FullRange ) noexcept;
+  inline const CollectionType operator()( const FullRange, const IdxRange &colrange, const FullRange ) const noexcept;
 
   // Gets matrix
   inline       MatrixType& unfold() noexcept;

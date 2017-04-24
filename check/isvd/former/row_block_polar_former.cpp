@@ -51,8 +51,8 @@ TEST(RowBlockPolarFormerTest, Test) {
   auto qbar   = parameters.createMatrixQ();
   auto qbarj  = parameters.createMatrixQj();
   auto u      = parameters.createMatrixU();
-  auto aj     = a(parameters.rowrange(), "");
-  auto u_true = u_true_all("", {0, k});
+  auto aj     = a(parameters.rowrange(), ""_);
+  auto u_true = u_true_all(""_, {0, k});
 
   // Copies data
   mcnla::la::copy(qbar_true, qbar);

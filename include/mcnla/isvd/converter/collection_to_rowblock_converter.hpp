@@ -62,7 +62,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
   auto matrix_qs_full = collection_q.unfold();
-  matrix_qs_full.resize(nrow_total, "");
+  matrix_qs_full.resize(nrow_total, ""_);
 
   DenseMatrixCollection102<ValType> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
   DenseMatrixCollection201<ValType> collection_qj_tmp(dim_sketch * num_sketch_each, collection_qj.unfold());

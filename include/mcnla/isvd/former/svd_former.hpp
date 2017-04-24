@@ -48,9 +48,9 @@ void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
 
   matrix_u_cut_.reconstruct(nrow, rank);
 
-  matrix_w_cut_  = matrix_w_("", {0, rank});
+  matrix_w_cut_  = matrix_w_(""_, {0, rank});
   vector_s_cut_  = vector_s_({0, rank});
-  matrix_vt_cut_ = matrix_vt_({0, rank}, "");
+  matrix_vt_cut_ = matrix_vt_({0, rank}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

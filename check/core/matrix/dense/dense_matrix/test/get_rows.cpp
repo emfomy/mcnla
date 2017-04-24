@@ -11,7 +11,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetRows) {
 
   const mcnla::index_t row0 = 3, rows = 5;
 
-  auto block = mat({row0, row0+rows}, "");
+  auto block = mat({row0, row0+rows}, ""_);
 
   EXPECT_EQ(block.nrow(),  rows);
   EXPECT_EQ(block.ncol(),  ncol);
@@ -62,7 +62,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetRows) {
 
   const mcnla::index_t row0 = 3, rows = 5;
 
-  auto block = mat({row0, row0+rows}, "");
+  auto block = mat({row0, row0+rows}, ""_);
 
   EXPECT_EQ(block.nrow(),  rows);
   EXPECT_EQ(block.ncol(),  ncol);
@@ -113,7 +113,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetRows) {
 
   const mcnla::index_t row0 = 3, rows = 5;
 
-  auto block = mat({row0, row0+rows}, "");
+  auto block = mat({row0, row0+rows}, ""_);
 
   EXPECT_EQ(block.nrow(),  rows);
   EXPECT_EQ(block.ncol(),  ncol);
@@ -164,7 +164,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetRows) {
 
   const mcnla::index_t row0 = 3, rows = 5;
 
-  auto block = mat({row0, row0+rows}, "");
+  auto block = mat({row0, row0+rows}, ""_);
 
   EXPECT_EQ(block.nrow(),  rows);
   EXPECT_EQ(block.ncol(),  ncol);

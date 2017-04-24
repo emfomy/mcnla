@@ -48,7 +48,7 @@ void Former<PolarFormerTag, _Val>::initializeImpl() noexcept {
 
   matrix_u_cut_.reconstruct(nrow, rank);
 
-  matrix_w_cut_  = matrix_w_("", {dim_sketch-rank, dim_sketch});
+  matrix_w_cut_  = matrix_w_(""_, {dim_sketch-rank, dim_sketch});
   vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});
 }
 

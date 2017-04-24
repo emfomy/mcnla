@@ -11,7 +11,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetRow) {
 
   const mcnla::index_t rowidx = 3;
 
-  auto segment = mat(rowidx, "");
+  auto segment = mat(rowidx, ""_);
 
   EXPECT_EQ(segment.length(), ncol);
   EXPECT_EQ(segment.nelem(),  ncol);
@@ -54,7 +54,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetRow) {
 
   const mcnla::index_t rowidx = 3;
 
-  auto segment = mat(rowidx, "");
+  auto segment = mat(rowidx, ""_);
 
   EXPECT_EQ(segment.length(), ncol);
   EXPECT_EQ(segment.nelem(),  ncol);
@@ -97,7 +97,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetRow) {
 
   const mcnla::index_t rowidx = 3;
 
-  auto segment = mat(rowidx, "");
+  auto segment = mat(rowidx, ""_);
 
   EXPECT_EQ(segment.length(), ncol);
   EXPECT_EQ(segment.nelem(),  ncol);
@@ -140,7 +140,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetRow) {
 
   const mcnla::index_t rowidx = 3;
 
-  auto segment = mat(rowidx, "");
+  auto segment = mat(rowidx, ""_);
 
   EXPECT_EQ(segment.length(), ncol);
   EXPECT_EQ(segment.nelem(),  ncol);

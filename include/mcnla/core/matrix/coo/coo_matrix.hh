@@ -192,10 +192,10 @@ class CooMatrix
   inline const HermitianType& h() const noexcept;
 
   // Gets vector segment
-  inline       VectorType operator()( const char*,          const index_t colidx ) noexcept;
-  inline const VectorType operator()( const char*,          const index_t colidx ) const noexcept;
-  inline       VectorType operator()( const index_t rowidx, const char*          ) noexcept;
-  inline const VectorType operator()( const index_t rowidx, const char*          ) const noexcept;
+  inline       VectorType operator()( const FullRange, const index_t colidx ) noexcept;
+  inline const VectorType operator()( const FullRange, const index_t colidx ) const noexcept;
+  inline       VectorType operator()( const index_t rowidx, const FullRange ) noexcept;
+  inline const VectorType operator()( const index_t rowidx, const FullRange ) const noexcept;
 
  protected:
 

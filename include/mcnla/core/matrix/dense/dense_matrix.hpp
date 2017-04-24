@@ -267,7 +267,7 @@ void DenseMatrix<_Val, _trans>::resize(
 template <typename _Val, Trans _trans>
 void DenseMatrix<_Val, _trans>::resize(
     const index_t nrow,
-    const char*
+    const FullRange
 ) noexcept {
   this->resizeImpl(toDim0(nrow, this->ncol()), toDim1(nrow, this->ncol()));
 }
@@ -277,7 +277,7 @@ void DenseMatrix<_Val, _trans>::resize(
 ///
 template <typename _Val, Trans _trans>
 void DenseMatrix<_Val, _trans>::resize(
-    const char*,
+    const FullRange,
     const index_t ncol
 ) noexcept {
   this->resizeImpl(toDim0(this->nrow(), ncol), toDim1(this->nrow(), ncol));
@@ -419,7 +419,7 @@ const DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
 ///
 template <typename _Val, Trans _trans>
 DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
-    const char*,
+    const FullRange,
     const IdxRange &colrange
 ) noexcept {
   return static_cast<MatrixType&&>(
@@ -432,7 +432,7 @@ DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
 ///
 template <typename _Val, Trans _trans>
 const DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
-    const char*,
+    const FullRange,
     const IdxRange &colrange
 ) const noexcept {
   return static_cast<const MatrixType&&>(
@@ -446,7 +446,7 @@ const DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
 template <typename _Val, Trans _trans>
 DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
     const IdxRange &rowrange,
-    const char*
+    const FullRange
 ) noexcept {
   return static_cast<MatrixType&&>(
       !isTrans(_trans) ? this->getMatrixImpl(rowrange, colfullrange()) : this->getMatrixImpl(colfullrange(), rowrange)
@@ -459,7 +459,7 @@ DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
 template <typename _Val, Trans _trans>
 const DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::operator()(
     const IdxRange &rowrange,
-    const char*
+    const FullRange
 ) const noexcept {
   return static_cast<const MatrixType&&>(
       !isTrans(_trans) ? this->getMatrixImpl(rowrange, colfullrange()) : this->getMatrixImpl(colfullrange(), rowrange)
@@ -497,7 +497,7 @@ const DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
 ///
 template <typename _Val, Trans _trans>
 DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
-    const char*,
+    const FullRange,
     const index_t colidx
 ) noexcept {
   return static_cast<VectorType&&>(
@@ -510,7 +510,7 @@ DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
 ///
 template <typename _Val, Trans _trans>
 const DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
-    const char*,
+    const FullRange,
     const index_t colidx
 ) const noexcept {
   return static_cast<const VectorType&&>(
@@ -550,7 +550,7 @@ const DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
 template <typename _Val, Trans _trans>
 DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
     const index_t rowidx,
-    const char*
+    const FullRange
 ) noexcept {
   return static_cast<VectorType&&>(
       !isTrans(_trans) ? this->getVector1Impl(rowidx, colfullrange()) : this->getVector0Impl(colfullrange(), rowidx)
@@ -563,7 +563,7 @@ DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
 template <typename _Val, Trans _trans>
 const DenseVector<_Val> DenseMatrix<_Val, _trans>::operator()(
     const index_t rowidx,
-    const char*
+    const FullRange
 ) const noexcept {
   return static_cast<const VectorType&&>(
       !isTrans(_trans) ? this->getVector1Impl(rowidx, colfullrange()) : this->getVector0Impl(colfullrange(), rowidx)

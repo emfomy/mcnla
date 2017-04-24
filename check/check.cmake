@@ -15,6 +15,7 @@ macro(_ADD_CHECK_PREDO checktype)
   list(SORT files)
   list(REVERSE files)
   add_executable(${checktarget} EXCLUDE_FROM_ALL ${checkmain} ${files})
+  set_target_properties(${checktarget} PROPERTIES SUFFIX "${BIN_SUFFIX}")
   target_include_directories(${checktarget} PUBLIC "${PROJECT_BINARY_DIR}/include")
   target_include_directories(${checktarget} PUBLIC "${PROJECT_SOURCE_DIR}/include")
   target_include_directories(${checktarget} SYSTEM PUBLIC ${INCS})
@@ -38,7 +39,7 @@ macro(_ADD_CHECK checktype)
   # Add rule
   add_custom_target(
     run_test_${checkname}
-    COMMAND ./${checktarget}
+    COMMAND ./${checktarget}${BIN_SUFFIX}
     DEPENDS ${checktarget}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Check test ${checkpath}"
@@ -55,12 +56,12 @@ macro(_ADD_MPI_CHECK checktype)
   _add_check_predo("${checktype}")
 
   foreach(procs ${ARGN})
-    add_test(NAME ${checkname0}_${procs} COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ./${checktarget})
+    add_test(NAME ${checkname0}_${procs} COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ./${checktarget}${BIN_SUFFIX})
 
     # Add rule
     add_custom_target(
       run_test_${checkname}_${procs}
-      COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ./${checktarget}
+      COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ./${checktarget}${BIN_SUFFIX}
       DEPENDS ${checktarget}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Run test ${checkpath}"

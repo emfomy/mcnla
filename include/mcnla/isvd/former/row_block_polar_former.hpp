@@ -49,11 +49,11 @@ void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
   vector_s_.reconstruct(dim_sketch);
   syev_driver_.reconstruct(dim_sketch);
 
-  matrix_qta_.reconstruct(dim_sketch, ncol_total); matrix_qta_.resize("", ncol);
-  matrix_qtaj_.reconstruct(dim_sketch, ncol_each); matrix_qtaj_.resize("", ncol_rank);
-  matrix_uj_cut_.reconstruct(nrow_each, rank);     matrix_uj_cut_.resize(nrow_rank, "");
+  matrix_qta_.reconstruct(dim_sketch, ncol_total); matrix_qta_.resize(""_, ncol);
+  matrix_qtaj_.reconstruct(dim_sketch, ncol_each); matrix_qtaj_.resize(""_, ncol_rank);
+  matrix_uj_cut_.reconstruct(nrow_each, rank);     matrix_uj_cut_.resize(nrow_rank, ""_);
 
-  matrix_w_cut_  = matrix_w_("", {dim_sketch-rank, dim_sketch});
+  matrix_w_cut_  = matrix_w_(""_, {dim_sketch-rank, dim_sketch});
   vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});
 }
 
@@ -80,9 +80,9 @@ void Former<RowBlockPolarFormerTag, _Val>::runImpl(
   mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch));
 
   auto matrix_qta_full = matrix_qta_;
-  matrix_qta_full.resize("", ncol_total);
+  matrix_qta_full.resize(""_, ncol_total);
   auto matrix_qtaj_full = matrix_qtaj_;
-  matrix_qtaj_full.resize("", ncol_each);
+  matrix_qtaj_full.resize(""_, ncol_each);
 
   moments_.emplace_back(MPI_Wtime());  // start
 

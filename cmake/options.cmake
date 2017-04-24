@@ -22,6 +22,11 @@ endif()
 
 if(MCNLA_USE_ILP64)
   list(APPEND DEFS "MCNLA_USE_ILP64")
+  set(BIN_SUFFIX "_64")
+  set(BIN_FOLDER "bin64")
+else()
+  set(BIN_SUFFIX "")
+  set(BIN_FOLDER "bin")
 endif()
 
 if(MCNLA_USE_MKL)

@@ -351,7 +351,7 @@ const CooMatrix<_Val, changeHerm(_trans)>& CooMatrix<_Val, _trans>::h() const no
 ///
 template <typename _Val, Trans _trans>
 CooVector<_Val> CooMatrix<_Val, _trans>::operator()(
-    const char*,
+    const FullRange,
     const index_t colidx
 ) noexcept {
   static_assert(!isTrans(_trans), "This routine is only available in column-major matrices.");
@@ -359,11 +359,11 @@ CooVector<_Val> CooMatrix<_Val, _trans>::operator()(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const char*, const index_t )
+/// @copydoc  operator()( const FullRange, const index_t )
 ///
 template <typename _Val, Trans _trans>
 const CooVector<_Val> CooMatrix<_Val, _trans>::operator()(
-    const char*,
+    const FullRange,
     const index_t colidx
 ) const noexcept {
   static_assert(!isTrans(_trans), "This routine is only available in column-major matrices.");
@@ -376,19 +376,19 @@ const CooVector<_Val> CooMatrix<_Val, _trans>::operator()(
 template <typename _Val, Trans _trans>
 CooVector<_Val> CooMatrix<_Val, _trans>::operator()(
     const index_t rowidx,
-    const char*
+    const FullRange
 ) noexcept {
   static_assert(isTrans(_trans), "This routine is only available in row-major matrices.");
   return static_cast<VectorType&&>(this->getVector0Impl(rowidx));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const index_t, const char* )
+/// @copydoc  operator()( const index_t, const FullRange )
 ///
 template <typename _Val, Trans _trans>
 const CooVector<_Val> CooMatrix<_Val, _trans>::operator()(
     const index_t rowidx,
-    const char*
+    const FullRange
 ) const noexcept {
   static_assert(isTrans(_trans), "This routine is only available in row-major matrices.");
   return static_cast<VectorType&&>(this->getVector0Impl(rowidx));

@@ -60,9 +60,9 @@ void Converter<MatrixFromRowBlockConverterTag, _Val>::runImpl(
   mcnla_assert_eq(matrix.nrow(),   nrow);
 
   auto matrix_j_full = matrix_j;
-  matrix_j_full.resize(nrow_each, "");
+  matrix_j_full.resize(nrow_each, ""_);
   auto matrix_full = matrix;
-  matrix_full.resize(nrow_total, "");
+  matrix_full.resize(nrow_total, ""_);
 
   moments_.emplace_back(MPI_Wtime());  // start
 

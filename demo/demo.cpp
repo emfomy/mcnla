@@ -137,7 +137,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate matrices
-  auto matrix_aj     = matrix_a(parameters.rowrange(), "");
+  auto matrix_aj     = matrix_a(parameters.rowrange(), ""_);
   auto collection_q  = parameters.createCollectionQ();
   auto collection_qj = parameters.createCollectionQj();
   auto matrix_q      = parameters.createMatrixQ();
@@ -271,7 +271,7 @@ void create(
   mcnla::la::gesvd<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
 
   // Copy U
-  mcnla::la::copy(matrix_u("", {0, rank}), matrix_u_true);
+  mcnla::la::copy(matrix_u(""_, {0, rank}), matrix_u_true);
 
   // Generate S
   for ( mcnla::index_t i = 0; i < rank; ++i ) {
@@ -282,7 +282,7 @@ void create(
   }
 
   // A := U * S * V'
-  mcnla::la::mm("", vector_s.viewDiagonal(), matrix_u);
+  mcnla::la::mm(""_, vector_s.viewDiagonal(), matrix_u);
   mcnla::la::mm(matrix_u, matrix_v.t(), matrix_a);
 
   // Compute excepted error
@@ -328,7 +328,7 @@ void check(
   auto matrix_u_tmp = matrix_u.copy();
 
   // A_tmp -= U * S * V'
-  mcnla::la::mm("", vector_s.viewDiagonal(), matrix_u_tmp);
+  mcnla::la::mm(""_, vector_s.viewDiagonal(), matrix_u_tmp);
   mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F

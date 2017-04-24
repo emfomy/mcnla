@@ -73,14 +73,14 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
 
   // Compute the eigen-decomposition of Wi -> Wi' * Si * Wi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    gesvd_driver_(collection_w_(i), matrix_s_("", i), matrix_empty_, matrix_empty_);
+    gesvd_driver_(collection_w_(i), matrix_s_(""_, i), matrix_empty_, matrix_empty_);
   }
 
   // Qi := Qi * Wi' / sqrt(Si)
   matrix_s_.val().valarray() = std::sqrt(matrix_s_.val().valarray());
   la::copy(matrix_qs.vectorize(), collection_tmp_.unfold().vectorize());
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    la::sm(matrix_s_("", i).viewDiagonal().inv(), collection_w_(i));
+    la::sm(matrix_s_(""_, i).viewDiagonal().inv(), collection_w_(i));
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_q(i));
   }
 

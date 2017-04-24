@@ -68,7 +68,7 @@ inline void dimmImpl2(
 
   auto da = a.viewVector();
   for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b(i, ""), c(i, ""), da(i) * alpha, beta);
+    la::axpby(b(i, ""_), c(i, ""_), da(i) * alpha, beta);
   }
 }
 
@@ -85,7 +85,7 @@ inline void dimmImpl2(
 
   auto da = a.viewVector();
   for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b("", i), c("", i), da(i) * alpha, beta);
+    la::axpby(b(""_, i), c(""_, i), da(i) * alpha, beta);
   }
 }
 
@@ -207,7 +207,7 @@ inline void dimm(
 template <typename _Val, Trans _transc>
 inline void dimm(
     const DenseDiagonalMatrix<_Val> &a,
-    const char*,
+    const FullRange,
           DenseMatrix<_Val, _transc> &c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
     const ValT<DenseMatrix<_Val, _transc>> beta  = 0
@@ -217,7 +217,7 @@ inline void dimm(
 
 template <typename _Val, Trans _transc>
 inline void dimm(
-    const char*,
+    const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
@@ -253,7 +253,7 @@ inline void dimm(
 template <typename _Val, Trans _transc>
 inline void dimm(
     const DenseDiagonalMatrix<_Val> &a,
-    const char*,
+    const FullRange,
           DenseMatrix<_Val, _transc> &&c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
     const ValT<DenseMatrix<_Val, _transc>> beta  = 0
@@ -263,7 +263,7 @@ inline void dimm(
 
 template <typename _Val, Trans _transc>
 inline void dimm(
-    const char*,
+    const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &&c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
@@ -302,7 +302,7 @@ inline void mm(
 template <typename _Val, Trans _transc>
 inline void mm(
     const DenseDiagonalMatrix<_Val> &a,
-    const char*,
+    const FullRange,
           DenseMatrix<_Val, _transc> &c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
     const ValT<DenseMatrix<_Val, _transc>> beta  = 0
@@ -312,7 +312,7 @@ inline void mm(
 
 template <typename _Val, Trans _transc>
 inline void mm(
-    const char*,
+    const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
@@ -348,7 +348,7 @@ inline void mm(
 template <typename _Val, Trans _transc>
 inline void mm(
     const DenseDiagonalMatrix<_Val> &a,
-    const char*,
+    const FullRange,
           DenseMatrix<_Val, _transc> &&c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
     const ValT<DenseMatrix<_Val, _transc>> beta  = 0
@@ -358,7 +358,7 @@ inline void mm(
 
 template <typename _Val, Trans _transc>
 inline void mm(
-    const char*,
+    const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &&c,
     const ValT<DenseMatrix<_Val, _transc>> alpha = 1,

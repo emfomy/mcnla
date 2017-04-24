@@ -36,6 +36,9 @@ using index_t = std::int64_t;
 /// The type of size.
 using size_t = std::size_t;
 
+/// The index type literal.
+static inline index_t operator""_i( unsigned long long int idx ) { return idx; }
+
 /// The format width
 static constexpr size_t kOsValWidth = 14;
 static constexpr size_t kOsIdxWidth = 6;
