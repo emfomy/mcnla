@@ -6,7 +6,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto vec      = this->vec_;
-  const auto valarray = this->valarray_;
+  const auto valptr0  = this->valptr0_;
 
   const mcnla::index_t idx0 = 2, idxs = 5;
 
@@ -28,12 +28,12 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
   }
 
   for ( auto i = 0; i < idxs; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + (i+idx0)]);
+    EXPECT_EQ(segment(i), valptr0[offset + (i+idx0)]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < idxs; ++i ) {
-    tmp.push(valarray[offset + (i+idx0)]);
+    tmp.push(valptr0[offset + (i+idx0)]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
@@ -48,7 +48,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto vec      = this->vec_;
-  const auto valarray = this->valarray_;
+  const auto valptr0  = this->valptr0_;
 
   const mcnla::index_t idx0 = 2, idxs = 5;
 
@@ -70,12 +70,12 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
   }
 
   for ( auto i = 0; i < idxs; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + (i+idx0)*stride]);
+    EXPECT_EQ(segment(i), valptr0[offset + (i+idx0)*stride]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < idxs; ++i ) {
-    tmp.push(valarray[offset + (i+idx0)*stride]);
+    tmp.push(valptr0[offset + (i+idx0)*stride]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());

@@ -127,10 +127,14 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
     syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
 
     // E := sqrt( I/2 - sqrt( I/4 - E ) )
-    vector_e_.val().valarray() = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_.val().valarray()));
+    for ( auto &v : vector_e_ ) {
+      v = std::sqrt(0.5 + std::sqrt(0.25 - v));
+    }
 
     // F := sqrt( E )
-    vector_f_.val().valarray() = std::sqrt(vector_e_.val().valarray());
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      vector_f_(i) = std::sqrt(vector_e_(i));
+    }
 
     // D := F * Z
     la::mm(vector_f_.viewDiagonal(), matrix_z_, matrix_d_);
@@ -156,7 +160,9 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
 
     // ================================================================================================================== //
     // Check convergence
-    vector_e_.val().valarray() -= 1.0;
+    for ( auto &v : vector_e_ ) {
+      v -= 1.0;
+    }
     is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
   }
 

@@ -29,13 +29,16 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Array : public std::shared_ptr<std::valarray<_Val>> {
+class Array : public std::shared_ptr<_Val> {
 
  private:
 
-  using BaseType = std::shared_ptr<std::valarray<_Val>>;
+  using BaseType = std::shared_ptr<_Val>;
 
  protected:
+
+  // The size.
+  index_t size_;
 
   // The offset.
   index_t offset_;
@@ -48,7 +51,7 @@ class Array : public std::shared_ptr<std::valarray<_Val>> {
   // Constructors
   inline Array() noexcept;
   inline Array( const index_t size, const index_t offset = 0 ) noexcept;
-  inline Array( const BaseType &ptr, const index_t offset = 0 ) noexcept;
+  inline Array( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
   inline Array( const Array &other ) noexcept;
   inline Array( Array &&other ) noexcept;
 
@@ -62,6 +65,9 @@ class Array : public std::shared_ptr<std::valarray<_Val>> {
   inline       Array operator<<( const index_t offset ) noexcept;
   inline const Array operator<<( const index_t offset ) const noexcept;
 
+  // Copy
+  inline Array copy() const noexcept;
+
   // Gets information
   inline bool    isEmpty() const noexcept;
   inline index_t size() const noexcept;
@@ -74,14 +80,7 @@ class Array : public std::shared_ptr<std::valarray<_Val>> {
   inline       _Val& operator[]( const index_t idx ) noexcept;
   inline const _Val& operator[]( const index_t idx ) const noexcept;
 
-  // Gets Valarray
-  inline       std::valarray<_Val>& valarray() noexcept;
-  inline const std::valarray<_Val>& valarray() const noexcept;
-
 };
-
-template <typename _Val>
-const typename Array<_Val>::BaseType Array<_Val>::kNullPtr = std::make_shared<std::valarray<_Val>>();
 
 }  // namespace matrix
 

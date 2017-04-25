@@ -89,7 +89,9 @@ void Former<PolarFormerTag, _Val>::runImpl(
   syev_driver_(matrix_w_.viewSymmetric(), vector_s_);
 
   // S := sqrt(S)
-  vector_s_.val().valarray() = std::sqrt(vector_s_.val().valarray());
+  for ( auto &v : vector_s_ ) {
+    v = std::sqrt(v);
+  }
 
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);

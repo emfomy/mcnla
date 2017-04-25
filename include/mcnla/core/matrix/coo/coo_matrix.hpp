@@ -137,7 +137,7 @@ CooMatrix<_Val, _trans>& CooMatrix<_Val, _trans>::operator=(
 template <typename _Val, Trans _trans>
 CooMatrix<_Val, _trans> CooMatrix<_Val, _trans>::copy() const noexcept {
   CooMatrix retval(this->sizes(), this->nnz(), this->capacity());
-  retval.val().valarray() = this->val().valarray();
+  retval.val() = this->val().copy();
   return retval;
 }
 

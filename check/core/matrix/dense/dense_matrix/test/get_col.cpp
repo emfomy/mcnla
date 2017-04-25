@@ -7,7 +7,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCol) {
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto mat      = this->mat_;
-  const auto valarray = this->valarray_;
+  const auto valptr0  = this->valptr0_;
 
   const mcnla::index_t colidx = 2;
 
@@ -29,12 +29,12 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetCol) {
   }
 
   for ( auto i = 0; i < nrow; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + i + colidx*pitch]);
+    EXPECT_EQ(segment(i), valptr0[offset + i + colidx*pitch]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < nrow; ++i ) {
-    tmp.push(valarray[offset + i + colidx*pitch]);
+    tmp.push(valptr0[offset + i + colidx*pitch]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
@@ -50,7 +50,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCol) {
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto mat      = this->mat_;
-  const auto valarray = this->valarray_;
+  const auto valptr0  = this->valptr0_;
 
   const mcnla::index_t colidx = 2;
 
@@ -72,12 +72,12 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetCol) {
   }
 
   for ( auto i = 0; i < nrow; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + i + colidx*pitch]);
+    EXPECT_EQ(segment(i), valptr0[offset + i + colidx*pitch]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < nrow; ++i ) {
-    tmp.push(valarray[offset + i + colidx*pitch]);
+    tmp.push(valptr0[offset + i + colidx*pitch]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
@@ -93,7 +93,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCol) {
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto mat      = this->mat_;
-  const auto valarray = this->valarray_;
+  const auto valptr0  = this->valptr0_;
 
   const mcnla::index_t colidx = 2;
 
@@ -115,12 +115,12 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetCol) {
   }
 
   for ( auto i = 0; i < nrow; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + i*pitch + colidx]);
+    EXPECT_EQ(segment(i), valptr0[offset + i*pitch + colidx]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < nrow; ++i ) {
-    tmp.push(valarray[offset + i*pitch + colidx]);
+    tmp.push(valptr0[offset + i*pitch + colidx]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());
@@ -136,7 +136,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCol) {
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto mat      = this->mat_;
-  const auto valarray = this->valarray_;
+  const auto valptr0  = this->valptr0_;
 
   const mcnla::index_t colidx = 2;
 
@@ -158,12 +158,12 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetCol) {
   }
 
   for ( auto i = 0; i < nrow; ++i ) {
-    EXPECT_EQ(segment(i), valarray[offset + i*pitch + colidx]);
+    EXPECT_EQ(segment(i), valptr0[offset + i*pitch + colidx]);
   }
 
   std::queue<TypeParam> tmp;
   for ( auto i = 0; i < nrow; ++i ) {
-    tmp.push(valarray[offset + i*pitch + colidx]);
+    tmp.push(valptr0[offset + i*pitch + colidx]);
   }
   for ( auto value : segment ) {
     EXPECT_EQ(value, tmp.front());

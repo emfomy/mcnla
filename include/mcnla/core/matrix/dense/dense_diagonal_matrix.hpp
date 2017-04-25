@@ -120,7 +120,7 @@ DenseDiagonalMatrix<_Val>& DenseDiagonalMatrix<_Val>::operator=(
 template <typename _Val>
 DenseDiagonalMatrix<_Val> DenseDiagonalMatrix<_Val>::copy() const noexcept {
   DenseDiagonalMatrix retval(this->sizes(), this->pitch(), this->capacity());
-  retval.val().valarray() = this->val().valarray();
+  retval.val() = this->val().copy();
   return retval;
 }
 

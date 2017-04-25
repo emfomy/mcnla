@@ -34,7 +34,7 @@ static inline index_t vRngUniform(
     const index_t method, VSLStreamStatePtr stream, const index_t n, int *r, const int a, const int b
 ) noexcept { return viRngUniform(method, stream, n, r, a, b); }
 static inline index_t vRngUniform(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, long *r, const long a, const long b
+    const index_t, VSLStreamStatePtr, const index_t, long*, const long, const long
 ) noexcept { return -1; }
 static inline index_t vRngUniform(
     const index_t method, VSLStreamStatePtr stream, const index_t n, float *r, const float a, const float b

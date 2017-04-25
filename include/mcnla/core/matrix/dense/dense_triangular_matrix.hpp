@@ -120,7 +120,7 @@ DenseTriangularMatrix<_Val, _trans, _uplo>& DenseTriangularMatrix<_Val, _trans, 
 template <typename _Val, Trans _trans, Uplo _uplo>
 DenseTriangularMatrix<_Val, _trans, _uplo> DenseTriangularMatrix<_Val, _trans, _uplo>::copy() const noexcept {
   DenseTriangularMatrix retval(this->sizes(), this->pitch(), this->capacity());
-  retval.val().valarray() = this->val().valarray();
+  retval.val() = this->val().copy();
   return retval;
 }
 

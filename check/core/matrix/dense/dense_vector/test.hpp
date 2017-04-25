@@ -17,7 +17,7 @@ class DenseVectorTestBase : public testing::Test {
   const mcnla::index_t capacity_ = _memsize-_offset;
   const mcnla::index_t offset_   = _offset;
 
-  std::valarray<_Val> valarray_;
+  const _Val *valptr0_;
   mcnla::matrix::DenseVector<_Val> vec_;
 
   mcnla::index_t iseed[4] = {0, 0, 0, 1};
@@ -26,7 +26,7 @@ class DenseVectorTestBase : public testing::Test {
     mcnla::matrix::Array<_Val> array(memsize_, offset_);
     vec_.reconstruct(length_, stride_, array);
     mcnla::la::larnv<3>(vec_, iseed);
-    valarray_ = vec_.val().valarray();
+    valptr0_ = array.get();
   }
 
   virtual void TearDown() {}

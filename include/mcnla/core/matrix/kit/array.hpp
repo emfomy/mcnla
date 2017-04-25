@@ -9,6 +9,7 @@
 #define MCNLA_CORE_MATRIX_KIT_ARRAY_HPP_
 
 #include <mcnla/core/matrix/kit/array.hh>
+#include <mcnla/core/utility/memory.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,7 +26,8 @@ namespace matrix {
 ///
 template <typename _Val>
 Array<_Val>::Array() noexcept
-  : BaseType(kNullPtr),
+  : BaseType(),
+    size_(0),
     offset_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,10 +35,11 @@ Array<_Val>::Array() noexcept
 ///
 template <typename _Val>
 Array<_Val>::Array(
-    const index_t capacity,
+    const index_t size,
     const index_t offset
 ) noexcept
-  : BaseType(new std::valarray<_Val>(capacity)),
+  : BaseType(utility::malloc<_Val>(size), utility::free<_Val>),
+    size_(size),
     offset_(offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,23 +48,26 @@ Array<_Val>::Array(
 template <typename _Val>
 Array<_Val>::Array(
     const BaseType &ptr,
+    const index_t size,
     const index_t offset
 ) noexcept
   : BaseType(ptr),
+    size_(size),
     offset_(offset) {
-  mcnla_assert_gele(offset_, 0, size());
+  mcnla_assert_gele(offset_, 0, size_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy (creates an alias). For deep copy, uses `dst.#valarray() = src.#valarray()`.
+/// @attention  It is shallow copy (creates an alias).
 ///
 template <typename _Val>
 Array<_Val>::Array(
     const Array &other
 ) noexcept
   : BaseType(other),
+    size_(other.size_),
     offset_(other.offset_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,20 +79,22 @@ Array<_Val>::Array(
 ) noexcept
   : BaseType(std::move(other)),
     offset_(other.offset_) {
-  static_cast<BaseType&>(other) = kNullPtr;
+  other.reset();
+  other.size_   = 0;
   other.offset_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy (creates an alias). For deep copy, uses `dst.#valarray() = src.#valarray()`.
+/// @attention  It is shallow copy (creates an alias).
 ///
 template <typename _Val>
 Array<_Val>& Array<_Val>::operator=(
     const Array &other
 ) noexcept {
   BaseType::operator=(other);
+  size_   = other.size_;
   offset_ = other.offset_;
   return *this;
 }
@@ -98,7 +106,8 @@ template <typename _Val>
 Array<_Val>& Array<_Val>::operator=(
     Array &&other
 ) noexcept {
-  BaseType::operator=(std::move(other)); static_cast<BaseType&>(other) = kNullPtr;
+  BaseType::operator=(std::move(other)); other.reset();
+  size_   = other.size_;   other.size_   = 0;
   offset_ = other.offset_; other.offset_ = 0;
   return *this;
 }
@@ -112,7 +121,7 @@ void Array<_Val>::operator>>=(
     const index_t offset
 ) noexcept {
   offset_ += offset;
-  mcnla_assert_gele(offset_, 0, size());
+  mcnla_assert_gele(offset_, 0, size_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +133,7 @@ void Array<_Val>::operator<<=(
     const index_t offset
 ) noexcept {
   offset_ -= offset;
-  mcnla_assert_gele(offset_, 0, size());
+  mcnla_assert_gele(offset_, 0, size_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,11 +185,21 @@ const Array<_Val> Array<_Val>::operator<<(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the array.
+///
+template <typename _Val>
+Array<_Val> Array<_Val>::copy() const noexcept {
+  Array retval(size_, offset_);
+  utility::memcpy(*retval, **this, size_);
+  return retval;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
 template <typename _Val>
 bool Array<_Val>::isEmpty() const noexcept {
-  return (size() == 0);
+  return (size_ == 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +209,7 @@ bool Array<_Val>::isEmpty() const noexcept {
 ///
 template <typename _Val>
 index_t Array<_Val>::size() const noexcept {
-  return this->valarray().size();
+  return size_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +219,7 @@ index_t Array<_Val>::size() const noexcept {
 ///
 template <typename _Val>
 index_t Array<_Val>::capacity() const noexcept {
-  return size() - offset();
+  return size_ - offset_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +237,7 @@ index_t Array<_Val>::offset() const noexcept {
 ///
 template <typename _Val>
 _Val* Array<_Val>::operator*() noexcept {
-  return &(this->valarray()[offset_]);
+  return &(this->get()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,7 +245,7 @@ _Val* Array<_Val>::operator*() noexcept {
 ///
 template <typename _Val>
 const _Val* Array<_Val>::operator*() const noexcept {
-  return &(this->valarray()[offset_]);
+  return &(this->get()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +255,7 @@ template <typename _Val>
 _Val& Array<_Val>::operator[](
     const index_t idx
 ) noexcept {
-  return this->valarray()[idx+offset_];
+  return this->get()[idx+offset_];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,23 +265,7 @@ template <typename _Val>
 const _Val& Array<_Val>::operator[](
     const index_t idx
 ) const noexcept {
-  return this->valarray()[idx+offset_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the valarray.
-///
-template <typename _Val>
-std::valarray<_Val>& Array<_Val>::valarray() noexcept {
-  return *(this->get());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the valarray.
-///
-template <typename _Val>
-const std::valarray<_Val>& Array<_Val>::valarray() const noexcept {
-  return *(this->get());
+  return this->get()[idx+offset_];
 }
 
 }  // namespace matrix

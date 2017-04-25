@@ -77,7 +77,9 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
   }
 
   // Qi := Qi * Wi' / sqrt(Si)
-  matrix_s_.val().valarray() = std::sqrt(matrix_s_.val().valarray());
+  for ( auto &v : matrix_s_ ) {
+    v = std::sqrt(v);
+  }
   la::copy(matrix_qs.vectorize(), collection_tmp_.unfold().vectorize());
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
     la::sm(matrix_s_(""_, i).viewDiagonal().inv(), collection_w_(i));

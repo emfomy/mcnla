@@ -18,9 +18,6 @@
 ///
 int main( int argc, char **argv ) {
 
-  mcnla::matrix::DenseMatrixColMajor<double> mat(10, 20);
-  std::cout << mat(0, ""_) << std::endl;
-
 //   MPI_Init(&argc, &argv);
 
 //   const auto mpi_comm = MPI_COMM_WORLD;
