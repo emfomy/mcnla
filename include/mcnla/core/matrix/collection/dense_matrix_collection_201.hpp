@@ -132,20 +132,6 @@ DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>::DenseMat
     mcol_(other.mcol_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>::DenseMatrixCollection(
-    DenseMatrixCollection &&other
-) noexcept
-  : data_(std::move(other.data_)),
-    ncol_(other.ncol_),
-    mcol_(other.mcol_) {
-  other.ncol_ = 0;
-  other.mcol_ = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -157,20 +143,6 @@ DenseMatrixCollection201<_Val>& DenseMatrixCollection<DenseMatrixCollection201Ta
   data_ = other.data_;
   ncol_ = other.ncol_;
   mcol_ = other.mcol_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-DenseMatrixCollection201<_Val>& DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>::operator=(
-    DenseMatrixCollection &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
-  data_ = std::move(other.data_);
-  ncol_ = other.ncol_; other.ncol_ = 0;
-  mcol_ = other.mcol_; other.mcol_ = 0;
   return *this;
 }
 

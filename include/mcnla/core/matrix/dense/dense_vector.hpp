@@ -91,13 +91,6 @@ DenseVector<_Val>::DenseVector( const DenseVector &other ) noexcept
   : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-DenseVector<_Val>::DenseVector( DenseVector &&other ) noexcept
-  : BaseType(std::move(other)) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -107,17 +100,6 @@ DenseVector<_Val>& DenseVector<_Val>::operator=(
     const DenseVector &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-DenseVector<_Val>& DenseVector<_Val>::operator=(
-    DenseVector &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
   return *this;
 }
 

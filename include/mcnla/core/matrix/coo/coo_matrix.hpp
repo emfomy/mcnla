@@ -99,15 +99,6 @@ CooMatrix<_Val, _trans>::CooMatrix(
   : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val, Trans _trans>
-CooMatrix<_Val, _trans>::CooMatrix(
-    CooMatrix &&other
-) noexcept
-  : BaseType(std::move(other)) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias).
@@ -117,17 +108,6 @@ CooMatrix<_Val, _trans>& CooMatrix<_Val, _trans>::operator=(
     const CooMatrix &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val, Trans _trans>
-CooMatrix<_Val, _trans>& CooMatrix<_Val, _trans>::operator=(
-    CooMatrix &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
   return *this;
 }
 

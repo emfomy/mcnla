@@ -159,11 +159,9 @@ class DenseMatrix
   inline DenseMatrix( const index_t nrow, const index_t ncol, const index_t pitch,
                       const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseMatrix( const DenseMatrix &other ) noexcept;
-  inline DenseMatrix( DenseMatrix &&other ) noexcept;
 
   // Operators
   inline DenseMatrix& operator=( const DenseMatrix &other ) noexcept;
-  inline DenseMatrix& operator=( DenseMatrix &&other ) noexcept;
 
   // Copy
   inline DenseMatrix copy() const noexcept;

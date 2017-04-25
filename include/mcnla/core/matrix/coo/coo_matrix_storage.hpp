@@ -113,22 +113,6 @@ CooMatrixStorage<_Val>::CooMatrixStorage(
     dim1_(other.dim1_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-CooMatrixStorage<_Val>::CooMatrixStorage(
-  CooMatrixStorage &&other
-) noexcept
-  : BaseType(std::move(other)),
-    Base0Type(std::move(other)),
-    Base1Type(std::move(other)),
-    dim0_(other.dim0_),
-    dim1_(other.dim1_) {
-  other.dim0_ = 0;
-  other.dim1_ = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, mcnla::la::copy.
@@ -142,21 +126,6 @@ CooMatrixStorage<_Val>& CooMatrixStorage<_Val>::operator=(
   Base1Type::operator=(other);
   dim0_ = other.dim0_;
   dim1_ = other.dim1_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-CooMatrixStorage<_Val>& CooMatrixStorage<_Val>::operator=(
-    CooMatrixStorage &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
-  Base0Type::operator=(std::move(other));
-  Base1Type::operator=(std::move(other));
-  dim0_ = other.dim0_;  other.dim0_ = 0;
-  dim1_ = other.dim1_;  other.dim1_ = 0;
   return *this;
 }
 

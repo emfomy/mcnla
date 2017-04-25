@@ -93,20 +93,6 @@ DenseVectorStorage<_Val>::DenseVectorStorage(
     stride_(other.stride_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-DenseVectorStorage<_Val>::DenseVectorStorage(
-  DenseVectorStorage &&other
-) noexcept
-  : BaseType(std::move(other)),
-    dim0_(other.dim0_),
-    stride_(other.stride_) {
-  other.dim0_  = 0;
-  other.stride_ = 1;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -118,19 +104,6 @@ DenseVectorStorage<_Val>& DenseVectorStorage<_Val>::operator=(
   BaseType::operator=(other);
   dim0_   = other.dim0_;
   stride_ = other.stride_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-DenseVectorStorage<_Val>& DenseVectorStorage<_Val>::operator=(
-    DenseVectorStorage &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
-  dim0_   = other.dim0_;    other.dim0_  = 0;
-  stride_ = other.stride_;  other.stride_ = 1;
   return *this;
 }
 

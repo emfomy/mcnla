@@ -53,11 +53,9 @@ class CooStorage : protected DenseStorage<_Val> {
   inline CooStorage( const index_t capacity, const index_t nnz = 0 ) noexcept;
   inline CooStorage( const ValArrayType &val, const index_t nnz = 0 ) noexcept;
   inline CooStorage( const CooStorage &other ) noexcept;
-  inline CooStorage( CooStorage &&other ) noexcept;
 
   // Operators
   inline CooStorage& operator=( const CooStorage &other ) noexcept;
-  inline CooStorage& operator=( CooStorage &&other ) noexcept;
 
  public:
 

@@ -146,11 +146,9 @@ class CooMatrix
   inline CooMatrix( const index_t nrow, const index_t ncol, const index_t nnz, const ValArrayType &val,
                     const IdxArrayType &idx0, const IdxArrayType &idx1, const index_t offset = 0 ) noexcept;
   inline CooMatrix( const CooMatrix &other ) noexcept;
-  inline CooMatrix( CooMatrix &&other ) noexcept;
 
   // Operators
   inline CooMatrix& operator=( const CooMatrix &other ) noexcept;
-  inline CooMatrix& operator=( CooMatrix &&other ) noexcept;
 
   // Copy
   inline CooMatrix copy() const noexcept;

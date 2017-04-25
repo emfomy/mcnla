@@ -94,19 +94,6 @@ CooVectorStorage<_Val>::CooVectorStorage(
     dim0_(other.dim0_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-CooVectorStorage<_Val>::CooVectorStorage(
-  CooVectorStorage &&other
-) noexcept
-  : BaseType(std::move(other)),
-    Base0Type(std::move(other)),
-    dim0_(other.dim0_) {
-  other.dim0_ = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -118,19 +105,6 @@ CooVectorStorage<_Val>& CooVectorStorage<_Val>::operator=(
   BaseType::operator=(other);
   Base0Type::operator=(other);
   dim0_ = other.dim0_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-CooVectorStorage<_Val>& CooVectorStorage<_Val>::operator=(
-    CooVectorStorage &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
-  Base0Type::operator=(std::move(other));
-  dim0_ = other.dim0_;  other.dim0_ = 0;
   return *this;
 }
 

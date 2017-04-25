@@ -71,20 +71,6 @@ Array<_Val>::Array(
     offset_(other.offset_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-Array<_Val>::Array(
-    Array &&other
-) noexcept
-  : BaseType(std::move(other)),
-    offset_(other.offset_) {
-  other.reset();
-  other.size_   = 0;
-  other.offset_ = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias).
@@ -96,19 +82,6 @@ Array<_Val>& Array<_Val>::operator=(
   BaseType::operator=(other);
   size_   = other.size_;
   offset_ = other.offset_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-Array<_Val>& Array<_Val>::operator=(
-    Array &&other
-) noexcept {
-  BaseType::operator=(std::move(other)); other.reset();
-  size_   = other.size_;   other.size_   = 0;
-  offset_ = other.offset_; other.offset_ = 0;
   return *this;
 }
 

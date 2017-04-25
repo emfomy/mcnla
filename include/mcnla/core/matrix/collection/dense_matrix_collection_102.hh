@@ -75,11 +75,9 @@ class DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>
   inline DenseMatrixCollection( const index_t nrow, const MatrixType &data ) noexcept;
   inline DenseMatrixCollection( const index_t nrow, const index_t mrow, const MatrixType &data ) noexcept;
   inline DenseMatrixCollection( const DenseMatrixCollection &other ) noexcept;
-  inline DenseMatrixCollection( DenseMatrixCollection &&other ) noexcept;
 
   // Operators
   inline DenseMatrixCollection& operator=( const DenseMatrixCollection &other ) noexcept;
-  inline DenseMatrixCollection& operator=( DenseMatrixCollection &&other ) noexcept;
 
   // Gets information
   inline bool isShrunk() const noexcept;

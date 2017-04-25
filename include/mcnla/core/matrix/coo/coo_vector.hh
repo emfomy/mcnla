@@ -132,11 +132,9 @@ class CooVector
   inline CooVector( const index_t length, const index_t nnz,
                     const ValArrayType &val, const IdxArrayType &idx0, const index_t offset = 0 ) noexcept;
   inline CooVector( const CooVector &other ) noexcept;
-  inline CooVector( CooVector &&other ) noexcept;
 
   // Operators
   inline CooVector& operator=( const CooVector &other ) noexcept;
-  inline CooVector& operator=( CooVector &&other ) noexcept;
 
   // Copy
   inline CooVector copy() const noexcept;

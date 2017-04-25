@@ -92,13 +92,6 @@ CooVector<_Val>::CooVector( const CooVector &other ) noexcept
   : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-CooVector<_Val>::CooVector( CooVector &&other ) noexcept
-  : BaseType(std::move(other)) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -108,17 +101,6 @@ CooVector<_Val>& CooVector<_Val>::operator=(
     const CooVector &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-CooVector<_Val>& CooVector<_Val>::operator=(
-    CooVector &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
   return *this;
 }
 

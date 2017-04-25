@@ -135,11 +135,9 @@ class DenseSymmetricMatrix
   inline DenseSymmetricMatrix( const index_t size, const index_t pitch,
                                const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseSymmetricMatrix( const DenseSymmetricMatrix &other ) noexcept;
-  inline DenseSymmetricMatrix( DenseSymmetricMatrix &&other ) noexcept;
 
   // Operators
   inline DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other ) noexcept;
-  inline DenseSymmetricMatrix& operator=( DenseSymmetricMatrix &&other ) noexcept;
 
   // Copy
   inline DenseSymmetricMatrix copy() const noexcept;

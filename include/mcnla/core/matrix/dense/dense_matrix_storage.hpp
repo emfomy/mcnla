@@ -120,22 +120,6 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
     pitch_(other.pitch_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-DenseMatrixStorage<_Val>::DenseMatrixStorage(
-  DenseMatrixStorage &&other
-) noexcept
-  : BaseType(std::move(other)),
-    dim0_(other.dim0_),
-    dim1_(other.dim1_),
-    pitch_(other.pitch_) {
-  other.dim0_  = 0;
-  other.dim1_  = 0;
-  other.pitch_ = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -148,20 +132,6 @@ DenseMatrixStorage<_Val>& DenseMatrixStorage<_Val>::operator=(
   dim0_  = other.dim0_;
   dim1_  = other.dim1_;
   pitch_ = other.pitch_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-DenseMatrixStorage<_Val>& DenseMatrixStorage<_Val>::operator=(
-    DenseMatrixStorage &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
-  dim0_  = other.dim0_;   other.dim0_  = 0;
-  dim1_  = other.dim1_;   other.dim1_  = 0;
-  pitch_ = other.pitch_;  other.pitch_ = 0;
   return *this;
 }
 

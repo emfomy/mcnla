@@ -132,11 +132,9 @@ class DenseVector
   inline DenseVector( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
   inline DenseVector( const index_t length, const index_t stride, const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseVector( const DenseVector &other ) noexcept;
-  inline DenseVector( DenseVector &&other ) noexcept;
 
   // Operators
   inline DenseVector& operator=( const DenseVector &other ) noexcept;
-  inline DenseVector& operator=( DenseVector &&other ) noexcept;
 
   // Copy
   inline DenseVector copy() const noexcept;

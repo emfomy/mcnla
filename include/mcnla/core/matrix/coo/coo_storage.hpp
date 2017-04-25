@@ -67,18 +67,6 @@ CooStorage<_Val>::CooStorage(
     nnz_(other.nnz_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-CooStorage<_Val>::CooStorage(
-    CooStorage &&other
-) noexcept
-  : BaseType(std::move(other)),
-    nnz_(other.nnz_) {
-  other.nnz_ = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -89,18 +77,6 @@ CooStorage<_Val>& CooStorage<_Val>::operator=(
 ) noexcept {
   BaseType::operator=(other);
   nnz_ = other.nnz_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-CooStorage<_Val>& CooStorage<_Val>::operator=(
-    CooStorage &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
-  nnz_ = other.nnz_;  other.nnz_ = 0;
   return *this;
 }
 

@@ -121,11 +121,9 @@ class DenseDiagonalMatrix
   inline DenseDiagonalMatrix( const index_t size, const index_t pitch,
                               const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseDiagonalMatrix( const DenseDiagonalMatrix &other ) noexcept;
-  inline DenseDiagonalMatrix( DenseDiagonalMatrix &&other ) noexcept;
 
   // Operators
   inline DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other ) noexcept;
-  inline DenseDiagonalMatrix& operator=( DenseDiagonalMatrix &&other ) noexcept;
 
   // Copy
   inline DenseDiagonalMatrix copy() const noexcept;

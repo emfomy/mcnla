@@ -66,11 +66,9 @@ class DenseVectorStorage : public DenseStorage<_Val> {
   inline DenseVectorStorage( const index_t dim0, const index_t stride,
                              const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseVectorStorage( const DenseVectorStorage &other ) noexcept;
-  inline DenseVectorStorage( DenseVectorStorage &&other ) noexcept;
 
   // Operators
   inline DenseVectorStorage& operator=( const DenseVectorStorage &other ) noexcept;
-  inline DenseVectorStorage& operator=( DenseVectorStorage &&other ) noexcept;
 
  public:
 

@@ -77,11 +77,9 @@ class CooVectorStorage
   inline CooVectorStorage( const index_t dim0, const index_t nnz,
                            const ValArrayType &val, const IdxArrayType &idx0, const index_t offset = 0 ) noexcept;
   inline CooVectorStorage( const CooVectorStorage &other ) noexcept;
-  inline CooVectorStorage( CooVectorStorage &&other ) noexcept;
 
   // Operators
   inline CooVectorStorage& operator=( const CooVectorStorage &other ) noexcept;
-  inline CooVectorStorage& operator=( CooVectorStorage &&other ) noexcept;
 
  public:
 

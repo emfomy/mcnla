@@ -46,11 +46,9 @@ class DenseStorage {
   inline DenseStorage( const index_t capacity ) noexcept;
   inline DenseStorage( const ValArrayType &val ) noexcept;
   inline DenseStorage( const DenseStorage &other ) noexcept;
-  inline DenseStorage( DenseStorage &&other ) noexcept;
 
   // Operators
   inline DenseStorage& operator=( const DenseStorage &other ) noexcept;
-  inline DenseStorage& operator=( DenseStorage &&other ) noexcept;
 
  public:
 

@@ -134,11 +134,9 @@ class DenseTriangularMatrix
   inline DenseTriangularMatrix( const index_t size, const index_t pitch,
                                 const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseTriangularMatrix( const DenseTriangularMatrix &other ) noexcept;
-  inline DenseTriangularMatrix( DenseTriangularMatrix &&other ) noexcept;
 
   // Operators
   inline DenseTriangularMatrix& operator=( const DenseTriangularMatrix &other ) noexcept;
-  inline DenseTriangularMatrix& operator=( DenseTriangularMatrix &&other ) noexcept;
 
   // Copy
   inline DenseTriangularMatrix copy() const noexcept;

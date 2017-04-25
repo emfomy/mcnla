@@ -157,31 +157,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Constructor) {
     EXPECT_EQ(vec1.offset(),   vec.offset());
 
     EXPECT_EQ(vec1.valPtr(), vec.valPtr());
-
-
-    SCOPED_TRACE("Move Constructor");
-    VectorType vec2 = std::move(vec1);
-
-    EXPECT_EQ(vec1.length(), 0);
-    EXPECT_EQ(vec1.nelem(),  0);
-    EXPECT_EQ(vec1.stride(), 1);
-
-    EXPECT_TRUE(vec1.isShrunk());
-
-    EXPECT_EQ(vec1.capacity(), 0);
-    EXPECT_EQ(vec1.offset(),   0);
-
-
-    EXPECT_EQ(vec2.length(), vec.length());
-    EXPECT_EQ(vec2.nelem(),  vec.nelem());
-    EXPECT_EQ(vec2.stride(), vec.stride());
-
-    EXPECT_EQ(vec2.isShrunk(),  vec.isShrunk());
-
-    EXPECT_EQ(vec2.capacity(), vec.capacity());
-    EXPECT_EQ(vec2.offset(),   vec.offset());
-
-    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }
 
@@ -236,30 +211,5 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Constructor) {
     EXPECT_EQ(vec1.offset(),   vec.offset());
 
     EXPECT_EQ(vec1.valPtr(), vec.valPtr());
-
-
-    SCOPED_TRACE("Move Constructor");
-    VectorType vec2 = std::move(vec1);
-
-    EXPECT_EQ(vec1.length(), 0);
-    EXPECT_EQ(vec1.nelem(),  0);
-    EXPECT_EQ(vec1.stride(), 1);
-
-    EXPECT_TRUE(vec1.isShrunk());
-
-    EXPECT_EQ(vec1.capacity(), 0);
-    EXPECT_EQ(vec1.offset(),   0);
-
-
-    EXPECT_EQ(vec2.length(), vec.length());
-    EXPECT_EQ(vec2.nelem(),  vec.nelem());
-    EXPECT_EQ(vec2.stride(), vec.stride());
-
-    EXPECT_EQ(vec2.isShrunk(),  vec.isShrunk());
-
-    EXPECT_EQ(vec2.capacity(), vec.capacity());
-    EXPECT_EQ(vec2.offset(),   vec.offset());
-
-    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }

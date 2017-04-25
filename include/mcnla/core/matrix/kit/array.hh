@@ -53,11 +53,9 @@ class Array : public std::shared_ptr<_Val> {
   inline Array( const index_t size, const index_t offset = 0 ) noexcept;
   inline Array( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
   inline Array( const Array &other ) noexcept;
-  inline Array( Array &&other ) noexcept;
 
   // Operators
   inline Array& operator=( const Array &other ) noexcept;
-  inline Array& operator=( Array &&other ) noexcept;
   inline void operator>>=( const index_t offset ) noexcept;
   inline void operator<<=( const index_t offset ) noexcept;
   inline       Array operator>>( const index_t offset ) noexcept;

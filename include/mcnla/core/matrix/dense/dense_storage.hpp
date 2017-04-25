@@ -57,15 +57,6 @@ DenseStorage<_Val>::DenseStorage(
   : val_(other.val_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Val>
-DenseStorage<_Val>::DenseStorage(
-    DenseStorage &&other
-) noexcept
-  : val_(std::move(other.val_)) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
@@ -75,17 +66,6 @@ DenseStorage<_Val>& DenseStorage<_Val>::operator=(
     const DenseStorage &other
 ) noexcept {
   val_ = other.val_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Val>
-DenseStorage<_Val>& DenseStorage<_Val>::operator=(
-    DenseStorage &&other
-) noexcept {
-  val_ = std::move(other.val_);
   return *this;
 }
 

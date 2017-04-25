@@ -244,33 +244,6 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
     EXPECT_EQ(mat1.valPtr(), mat.valPtr());
-
-
-    SCOPED_TRACE("Move Constructor");
-    MatrixType mat2 = std::move(mat1);
-
-    EXPECT_EQ(mat1.nrow(),  0);
-    EXPECT_EQ(mat1.ncol(),  0);
-    EXPECT_EQ(mat1.nelem(), 0);
-    EXPECT_EQ(mat1.pitch(), 0);
-
-    EXPECT_TRUE(mat1.isShrunk());
-
-    EXPECT_EQ(mat1.capacity(), 0);
-    EXPECT_EQ(mat1.offset(),   0);
-
-
-    EXPECT_EQ(mat2.nrow(),  mat.nrow());
-    EXPECT_EQ(mat2.ncol(),  mat.ncol());
-    EXPECT_EQ(mat2.nelem(), mat.nelem());
-    EXPECT_EQ(mat2.pitch(), mat.pitch());
-
-    EXPECT_EQ(mat2.isShrunk(), mat.isShrunk());
-
-    EXPECT_EQ(mat2.capacity(), mat.capacity());
-    EXPECT_EQ(mat2.offset(),   mat.offset());
-
-    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }
 
@@ -367,33 +340,6 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
     EXPECT_EQ(mat1.valPtr(), mat.valPtr());
-
-
-    SCOPED_TRACE("Move Constructor");
-    MatrixType mat2 = std::move(mat1);
-
-    EXPECT_EQ(mat1.nrow(),  0);
-    EXPECT_EQ(mat1.ncol(),  0);
-    EXPECT_EQ(mat1.nelem(), 0);
-    EXPECT_EQ(mat1.pitch(), 0);
-
-    EXPECT_TRUE(mat1.isShrunk());
-
-    EXPECT_EQ(mat1.capacity(), 0);
-    EXPECT_EQ(mat1.offset(),   0);
-
-
-    EXPECT_EQ(mat2.nrow(),  mat.nrow());
-    EXPECT_EQ(mat2.ncol(),  mat.ncol());
-    EXPECT_EQ(mat2.nelem(), mat.nelem());
-    EXPECT_EQ(mat2.pitch(), mat.pitch());
-
-    EXPECT_EQ(mat2.isShrunk(), mat.isShrunk());
-
-    EXPECT_EQ(mat2.capacity(), mat.capacity());
-    EXPECT_EQ(mat2.offset(),   mat.offset());
-
-    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }
 
@@ -490,33 +436,6 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
     EXPECT_EQ(mat1.valPtr(), mat.valPtr());
-
-
-    SCOPED_TRACE("Move Constructor");
-    MatrixType mat2 = std::move(mat1);
-
-    EXPECT_EQ(mat1.nrow(),  0);
-    EXPECT_EQ(mat1.ncol(),  0);
-    EXPECT_EQ(mat1.nelem(), 0);
-    EXPECT_EQ(mat1.pitch(), 0);
-
-    EXPECT_TRUE(mat1.isShrunk());
-
-    EXPECT_EQ(mat1.capacity(), 0);
-    EXPECT_EQ(mat1.offset(),   0);
-
-
-    EXPECT_EQ(mat2.nrow(),  mat.nrow());
-    EXPECT_EQ(mat2.ncol(),  mat.ncol());
-    EXPECT_EQ(mat2.nelem(), mat.nelem());
-    EXPECT_EQ(mat2.pitch(), mat.pitch());
-
-    EXPECT_EQ(mat2.isShrunk(), mat.isShrunk());
-
-    EXPECT_EQ(mat2.capacity(), mat.capacity());
-    EXPECT_EQ(mat2.offset(),   mat.offset());
-
-    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }
 
@@ -613,32 +532,5 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.offset(),   mat.offset());
 
     EXPECT_EQ(mat1.valPtr(), mat.valPtr());
-
-
-    SCOPED_TRACE("Move Constructor");
-    MatrixType mat2 = std::move(mat1);
-
-    EXPECT_EQ(mat1.nrow(),  0);
-    EXPECT_EQ(mat1.ncol(),  0);
-    EXPECT_EQ(mat1.nelem(), 0);
-    EXPECT_EQ(mat1.pitch(), 0);
-
-    EXPECT_TRUE(mat1.isShrunk());
-
-    EXPECT_EQ(mat1.capacity(), 0);
-    EXPECT_EQ(mat1.offset(),   0);
-
-
-    EXPECT_EQ(mat2.nrow(),  mat.nrow());
-    EXPECT_EQ(mat2.ncol(),  mat.ncol());
-    EXPECT_EQ(mat2.nelem(), mat.nelem());
-    EXPECT_EQ(mat2.pitch(), mat.pitch());
-
-    EXPECT_EQ(mat2.isShrunk(), mat.isShrunk());
-
-    EXPECT_EQ(mat2.capacity(), mat.capacity());
-    EXPECT_EQ(mat2.offset(),   mat.offset());
-
-    EXPECT_EQ(mat2.valPtr(), mat.valPtr());
   }
 }
