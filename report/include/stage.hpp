@@ -56,15 +56,8 @@ int main( int argc, char **argv ) {
   int num_test, skip_test;
 
   mcnla::isvd::Parameters<ValType> parameters(mpi_root, mpi_comm);
-  StageType stage(parameters);
-
   setParam(parameters, num_test, skip_test, argc, argv);
-  setStage(stage);
-
   parameters.sync();
-  stage.initialize();
-
-  Data data(parameters);
 
   if ( mpi_rank == mpi_root ) {
     std::cout << "m = " << parameters.nrow()
@@ -81,6 +74,12 @@ int main( int argc, char **argv ) {
 #endif  // MCNLA_USE_OMP
               << " threads per node" << std::endl << std::endl;
   }
+
+  StageType stage(parameters);
+  setStage(stage);
+  stage.initialize();
+
+  Data data(parameters);
 
   // ====================================================================================================================== //
   // Create statistics collector
