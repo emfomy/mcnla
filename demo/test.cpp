@@ -5,8 +5,6 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#include <mcnla/core/utility.hpp>
-
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>

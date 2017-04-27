@@ -336,7 +336,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     // Compute the eigen-decomposition of D (E := eigenvalues, D := eigenvectors)
     LAPACKE_dsyev(LAPACK_COL_MAJOR, 'V', 'L', k, matrix_d, k, vector_e);
 
-    // E := sqrt( I/2 - sqrt( I/4 - E ) )
+    // E := sqrt( I/2 + sqrt( I/4 - E ) )
     for ( auto i = 0; i < k; ++i ) {
       vector_e[i] = sqrt(0.5 + sqrt(0.25 - vector_e[i]));
     }

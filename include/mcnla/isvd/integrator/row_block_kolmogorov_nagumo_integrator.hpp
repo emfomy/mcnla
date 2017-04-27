@@ -126,7 +126,7 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
     // Compute the eigen-decomposition of Z -> Z' * E * Z
     syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
 
-    // E := sqrt( I/2 - sqrt( I/4 - E ) )
+    // E := sqrt( I/2 + sqrt( I/4 - E ) )
     for ( auto &v : vector_e_ ) {
       v = std::sqrt(0.5 + std::sqrt(0.25 - v));
     }

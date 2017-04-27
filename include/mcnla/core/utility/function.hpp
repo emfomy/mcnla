@@ -9,9 +9,6 @@
 #define MCNLA_CORE_UTILITY_FUNCTION_HPP_
 
 #include <mcnla/core/utility/def.hpp>
-#include <iostream>
-
-#define disp( expression ) std::cout << #expression << ":\n" << expression << std::endl;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

@@ -173,6 +173,38 @@ inline void dimmImpl1(
   static_assert(dummy && false, "DIMM does not support conjugate matrices!");
 }
 
+// ========================================================================================================================== //
+// Impl0
+//
+
+template <typename _Val, Trans _transc>
+inline void dimmImpl0(
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transc> &c,
+    const _Val alpha
+) noexcept {
+  mcnla_assert_eq(a.size(), c.nrow());
+
+  auto da = a.viewVector();
+  for ( index_t i = 0; i < da.length(); ++i ) {
+    la::scal(c(i, ""_), da(i) * alpha);
+  }
+}
+
+template <typename _Val, Trans _transc>
+inline void dimmImpl0(
+          DenseMatrix<_Val, _transc> &c,
+    const DenseDiagonalMatrix<_Val> &a,
+    const _Val alpha
+) noexcept {
+  mcnla_assert_eq(a.size(), c.ncol());
+
+  auto da = a.viewVector();
+  for ( index_t i = 0; i < da.length(); ++i ) {
+    la::scal(c(""_, i), da(i) * alpha);
+  }
+}
+
 //@}
 
 }  // namespace detail
@@ -209,10 +241,9 @@ inline void dimm(
     const DenseDiagonalMatrix<_Val> &a,
     const FullRange,
           DenseMatrix<_Val, _transc> &c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  detail::dimmImpl1(a, c, c, alpha, beta);
+  detail::dimmImpl0(a, c, alpha);
 }
 
 template <typename _Val, Trans _transc>
@@ -220,10 +251,9 @@ inline void dimm(
     const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  detail::dimmImpl1(c, a, c, alpha, beta);
+  detail::dimmImpl0(c, a, alpha);
 }
 //@}
 
@@ -255,10 +285,9 @@ inline void dimm(
     const DenseDiagonalMatrix<_Val> &a,
     const FullRange,
           DenseMatrix<_Val, _transc> &&c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  detail::dimmImpl1(a, c, c, alpha, beta);
+  detail::dimmImpl0(a, c, alpha);
 }
 
 template <typename _Val, Trans _transc>
@@ -266,10 +295,9 @@ inline void dimm(
     const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &&c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  detail::dimmImpl1(c, a, c, alpha, beta);
+  detail::dimmImpl0(c, a, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -304,10 +332,9 @@ inline void mm(
     const DenseDiagonalMatrix<_Val> &a,
     const FullRange,
           DenseMatrix<_Val, _transc> &c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  dimm(a, c, c, alpha, beta);
+  dimm(a, ""_, c, alpha);
 }
 
 template <typename _Val, Trans _transc>
@@ -315,10 +342,9 @@ inline void mm(
     const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  dimm(c, a, c, alpha, beta);
+  dimm(""_, a, c, alpha);
 }
 //@}
 
@@ -350,10 +376,9 @@ inline void mm(
     const DenseDiagonalMatrix<_Val> &a,
     const FullRange,
           DenseMatrix<_Val, _transc> &&c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  dimm(a, c, c, alpha, beta);
+  dimm(a, ""_, c, alpha);
 }
 
 template <typename _Val, Trans _transc>
@@ -361,10 +386,9 @@ inline void mm(
     const FullRange,
     const DenseDiagonalMatrix<_Val> &a,
           DenseMatrix<_Val, _transc> &&c,
-    const ValT<DenseMatrix<_Val, _transc>> alpha = 1,
-    const ValT<DenseMatrix<_Val, _transc>> beta  = 0
+    const ValT<DenseMatrix<_Val, _transc>> alpha = 1
 ) noexcept {
-  dimm(c, a, c, alpha, beta);
+  dimm(""_, a, c, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <cmath>
 #include <complex>
+#include <iostream>
 #include <type_traits>
 #include <mcnla/config.hpp>
 
@@ -88,5 +89,7 @@ static constexpr size_t kOsIdxWidth = 6;
 #endif  // MCNLA_USE_GTEST
 
 #define mcnla_assert_pass( condition )  { auto err = condition; static_cast<void>(err); mcnla_assert_eq(err, 0); }
+
+#define disp( expression ) std::cout << #expression << ":\n" << expression << std::endl;
 
 #endif  // MCNLA_DEF_HPP_
