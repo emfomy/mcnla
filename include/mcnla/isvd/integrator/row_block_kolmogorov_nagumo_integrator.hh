@@ -69,15 +69,6 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
   /// The number of iteration.
   index_t iteration_;
 
-  /// The matrix Qs.
-  DenseMatrixRowMajor<ValType> matrix_qs_;
-
-  /// The matrix Qjs.
-  DenseMatrixRowMajor<ValType> matrix_qjs_;
-
-  /// The matrix Qcj.
-  DenseMatrixRowMajor<ValType> matrix_qcj_;
-
   /// The matrix Bs.
   DenseMatrixRowMajor<ValType> matrix_bs_;
 

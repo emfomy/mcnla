@@ -133,9 +133,7 @@ DenseMatrix<_Val, _trans>& DenseMatrix<_Val, _trans>::operator=(
 ///
 template <typename _Val, Trans _trans>
 DenseMatrix<_Val, _trans> DenseMatrix<_Val, _trans>::copy() const noexcept {
-  DenseMatrix retval(this->sizes(), this->pitch(), this->capacity());
-  retval.val() = this->val().copy();
-  return retval;
+  return DenseMatrix(this->nrow(), this->ncol(), this->pitch(), this->val().copy(), this->offset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

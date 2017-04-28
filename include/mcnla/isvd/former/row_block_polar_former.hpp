@@ -61,7 +61,7 @@ void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
 /// @brief  Forms SVD.
 ///
 /// @param  matrix_aj  The matrix Aj (j-th row-block, where j is the MPI rank).
-/// @param  matrix_qj  The matrix Qjbar (j-th row-block, where j is the MPI rank).
+/// @param  matrix_qj  The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
 void Former<RowBlockPolarFormerTag, _Val>::runImpl(

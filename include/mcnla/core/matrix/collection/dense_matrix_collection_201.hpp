@@ -147,6 +147,14 @@ DenseMatrixCollection201<_Val>& DenseMatrixCollection<DenseMatrixCollection201Ta
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Copies the collection.
+///
+template <typename _Val>
+DenseMatrixCollection201<_Val> DenseMatrixCollection<DenseMatrixCollection201Tag, _Val, Trans::TRANS>::copy() const noexcept {
+  return DenseMatrixCollection(ncol_, mcol_, data_.copy());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the dimensions are equal to the sizes.
 ///
 template <typename _Val>

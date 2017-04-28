@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/integrator/row_block_kolmogorov_nagumo_integrator.hpp
-/// @brief   The Kolmogorov-Nagumo-type integrator.
+/// @brief   The Kolmogorov-Nagumo-type integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -64,7 +64,7 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::initializeImpl() n
 /// @brief  Integrates.
 ///
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
-/// @param  matrix_qbarj   The matrix Qjbar (j-th row-block, where j is the MPI rank).
+/// @param  matrix_qbarj   The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
 void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(

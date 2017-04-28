@@ -72,7 +72,6 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
-  const auto mpi_root        = parameters_.mpi_root;
   const auto mpi_rank        = parameters_.mpi_rank;
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
@@ -89,12 +88,12 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
   moments_.emplace_back(MPI_Wtime());  // copying Qc
 
   // Broadcast Q0 to Qc
-  if ( mpi_rank == mpi_root ) {
+  if ( mpi_rank == 0 ) {
     la::copy(collection_q(0), matrix_qc);
   }
 
   comm_moment = MPI_Wtime();
-  mpi::bcast(matrix_qc, mpi_root, mpi_comm);
+  mpi::bcast(matrix_qc, 0, mpi_comm);
   comm_time += MPI_Wtime() - comm_moment;
 
   comm_times_.emplace_back(comm_time);

@@ -108,9 +108,7 @@ DenseVector<_Val>& DenseVector<_Val>::operator=(
 ///
 template <typename _Val>
 DenseVector<_Val> DenseVector<_Val>::copy() const noexcept {
-  DenseVector retval(this->sizes(), this->stride(), this->capacity());
-  retval.val() = this->val().copy();
-  return retval;
+  return retval(this->length(), this->stride(), this->val().copy(), this->offset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

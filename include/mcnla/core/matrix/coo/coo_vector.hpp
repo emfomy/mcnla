@@ -109,9 +109,7 @@ CooVector<_Val>& CooVector<_Val>::operator=(
 ///
 template <typename _Val>
 CooVector<_Val> CooVector<_Val>::copy() const noexcept {
-  CooVector retval(this->sizes(), this->nnz(), this->capacity());
-  retval.val() = this->val().copy();
-  return retval;
+  return CooVector(this->length(), this->nnz(), this->val().copy(), this->idx0().copy(), this->offset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

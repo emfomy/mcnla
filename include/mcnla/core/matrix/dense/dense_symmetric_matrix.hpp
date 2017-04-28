@@ -99,9 +99,7 @@ DenseSymmetricMatrix<_Val, _trans, _uplo>& DenseSymmetricMatrix<_Val, _trans, _u
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 DenseSymmetricMatrix<_Val, _trans, _uplo> DenseSymmetricMatrix<_Val, _trans, _uplo>::copy() const noexcept {
-  DenseSymmetricMatrix retval(this->sizes(), this->pitch(), this->capacity());
-  retval.val() = this->val().copy();
-  return retval;
+  return DenseSymmetricMatrix(this->size(), this->pitch(), this->val().copy(), this->offset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
