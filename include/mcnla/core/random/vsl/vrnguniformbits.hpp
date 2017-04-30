@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/vsl/vrnguniform.hpp
-/// @brief   The VSL vRngUniform.
+/// @file    include/mcnla/core/random/vsl/vrnguniformbits.hpp
+/// @brief   The VSL vRngUniformBits.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORM_HPP_
-#define MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORM_HPP_
+#ifndef MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORMBITS_HPP_
+#define MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORMBITS_HPP_
 
 #include <mcnla/core/random/def.hpp>
 #include <mkl.h>
@@ -27,18 +27,15 @@ namespace random {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Generates random numbers with uniform distribution.
+/// @brief  Generates uniformly distributed bits.
 ///
 //@{
-static inline index_t vRngUniform(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, int *r, const int a, const int b
-) noexcept { return viRngUniform(method, stream, n, r, a, b); }
-static inline index_t vRngUniform(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, float *r, const float a, const float b
-) noexcept { return vsRngUniform(method, stream, n, r, a, b); }
-static inline index_t vRngUniform(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, double *r, const double a, const double b
-) noexcept { return vdRngUniform(method, stream, n, r, a, b); }
+static inline index_t vRngUniformBits(
+    const index_t method, VSLStreamStatePtr stream, const index_t n, int *r
+) noexcept { return viRngUniformBits32(method, stream, n, static_cast<unsigned int*>(static_cast<void*>(r))); }
+static inline index_t vRngUniformBits(
+    const index_t method, VSLStreamStatePtr stream, const index_t n, long long* r
+) noexcept { return viRngUniformBits64(method, stream, n, static_cast<unsigned long long*>(static_cast<void*>(r))); }
 //@}
 
 }  // namespace detail
@@ -47,4 +44,4 @@ static inline index_t vRngUniform(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORM_HPP_
+#endif  // MCNLA_CORE_RANDOM_VSL_VIRNGUNIFORMBITS_HPP_

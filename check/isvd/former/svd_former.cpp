@@ -43,7 +43,7 @@ TEST(SvdFormerTest, Test) {
 
   // Creates matrices
   auto qbar = parameters.createMatrixQ();
-  auto u_true_cut = u_true(""_, {0, k});
+  auto u_true_cut = u_true(""_, {0_i, k});
 
   // Copies data
   mcnla::la::copy(qbar_true, qbar);

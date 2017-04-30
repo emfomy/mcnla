@@ -133,12 +133,8 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
     syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
 
     // E := sqrt( I/2 + sqrt( I/4 - E ) )
-    for ( auto &v : vector_e_ ) {
-      v = std::sqrt(0.5 + std::sqrt(0.25 - v));
-    }
-
-    // F := sqrt( E )
     for ( index_t i = 0; i < dim_sketch; ++i ) {
+      vector_e_(i) = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_(i)));
       vector_f_(i) = std::sqrt(vector_e_(i));
     }
 

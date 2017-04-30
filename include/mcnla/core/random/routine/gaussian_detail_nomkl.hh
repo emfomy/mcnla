@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/random/routine/routine_detail_nomkl.hh
-/// @brief   The detail of distribution generators without MKL.
+/// @file    include/mcnla/core/random/routine/gaussian_detail_nomkl.hh
+/// @brief   The detail of Gaussian distribution generator without MKL.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_RANDOM_ROUTINE_ROUTINE_DETAIL_HH_
-#define MCNLA_CORE_RANDOM_ROUTINE_ROUTINE_DETAIL_HH_
+#ifndef MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_DETAIL_HH_
+#define MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_DETAIL_HH_
 
 #ifdef MCNLA_USE_MKL
   #error 'MCNLA_USE_MKL' should not be set!
@@ -27,34 +27,9 @@ namespace random {
 //
 namespace detail {
 
-static inline void uniformImpl(
-          std::mt19937 gen,
-          DenseVector<index_t> &&vector,
-    const index_t a,
-    const index_t b
-) noexcept {
-  std::uniform_int_distribution<> dis(a, b);
-  for ( auto &v : vector ) {
-    v = dis(gen);
-  }
-}
-
-template <typename _Val>
-static inline void uniformImpl(
-          std::mt19937 gen,
-          DenseVector<_Val> &&vector,
-    const _Val a,
-    const _Val b
-) noexcept {
-  std::uniform_real_distribution<> dis(a, b);
-  for ( auto &v : vector ) {
-    v = dis(gen);
-  }
-}
-
-template <typename _Val>
+template <typename _Val, typename _Gen>
 static inline void gaussianImpl(
-          std::mt19937 gen,
+          _Gen &gen,
           DenseVector<_Val> &&vector,
     const _Val a,
     const _Val sigma
@@ -71,4 +46,4 @@ static inline void gaussianImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_RANDOM_ROUTINE_ROUTINE_DETAIL_HH_
+#endif  // MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_DETAIL_HH_

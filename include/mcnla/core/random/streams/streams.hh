@@ -43,7 +43,11 @@ class Streams {
 #ifdef MCNLA_USE_MKL
   using StreamType = VSLStreamStatePtr;
 #else  // MCNLA_USE_MKL
+ #ifndef MCNLA_USE_ILP64
   using StreamType = std::mt19937;
+ #else  // MCNLA_USE_ILP64
+  using StreamType = std::mt19937_64;
+ #endif  // MCNLA_USE_ILP64
 #endif  // MCNLA_USE_MKL
 
  protected:

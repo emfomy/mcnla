@@ -123,7 +123,7 @@ void Streams::setSeedImpl(
   seq.generate(seeds.begin(), seeds.end());
   for ( index_t i = 0; i < omp_size_; ++i ) {
 #ifdef MCNLA_USE_MKL
-    vslNewStream(&(streams_[i]), VSL_BRNG_MT19937, seeds[i]);
+    vslNewStream(&(streams_[i]), VSL_BRNG_SFMT19937, seeds[i]);
 #else  // MCNLA_USE_MKL
     streams_[i].seed(seeds[i]);
 #endif  // MCNLA_USE_MKL

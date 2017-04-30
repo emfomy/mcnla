@@ -329,14 +329,14 @@ DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getDiagonalImpl(
   index_t length;
   index_t pos;
   if ( idx < 0 ) {
-    pos = posImpl(-idx, 0);
+    pos = posImpl(-idx, 0_i);
     if ( dim0_ + idx > dim1_ && dim0_ > dim1_ ) {
       length = dim1_;
     } else {
       length = dim0_ + idx;
     }
   } else {
-    pos = posImpl(0, idx);
+    pos = posImpl(0_i, idx);
     if ( dim1_ - idx > dim0_ && dim1_ > dim0_ ) {
       length = dim0_;
     } else {
@@ -357,14 +357,14 @@ const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getDiagonalImpl(
   index_t length;
   index_t pos;
   if ( idx < 0 ) {
-    pos = posImpl(-idx, 0);
+    pos = posImpl(-idx, 0_i);
     if ( dim0_ + idx > dim1_ && dim0_ > dim1_ ) {
       length = dim1_;
     } else {
       length = dim0_ + idx;
     }
   } else {
-    pos = posImpl(0, idx);
+    pos = posImpl(0_i, idx);
     if ( dim1_ - idx > dim0_ && dim1_ > dim0_ ) {
       length = dim0_;
     } else {
@@ -384,7 +384,7 @@ const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getDiagonalImpl(
 ///
 template <typename _Val>
 DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::vectorizeImpl() noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0, 0));
+  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -392,7 +392,7 @@ DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::vectorizeImpl() noexcept {
 ///
 template <typename _Val>
 const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::vectorizeImpl() const noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0, 0));
+  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 }  // namespace matrix

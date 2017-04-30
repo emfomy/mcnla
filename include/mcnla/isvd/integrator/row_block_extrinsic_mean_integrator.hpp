@@ -43,7 +43,7 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::initializeImpl() noex
 
   matrix_bjs_.reconstruct(dim_sketch * num_sketch, dim_sketch * num_sketch);
   collection_bi_.reconstruct(dim_sketch, dim_sketch * num_sketch, num_sketch_each);
-  collection_bi0_ = collection_bi_(""_, {0, dim_sketch}, ""_);
+  collection_bi0_ = collection_bi_(""_, {0_i, dim_sketch}, ""_);
 
   collection_g_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
   matrix_g0_.reconstruct(dim_sketch, dim_sketch);

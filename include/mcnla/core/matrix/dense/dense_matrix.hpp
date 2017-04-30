@@ -651,7 +651,7 @@ index_t DenseMatrix<_Val, _trans>::toDim1(
 ///
 template <typename _Val, Trans _trans>
 const IdxRange DenseMatrix<_Val, _trans>::rowfullrange() const noexcept {
-  return {0, this->nrow()};
+  return {0_i, this->nrow()};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -659,7 +659,7 @@ const IdxRange DenseMatrix<_Val, _trans>::rowfullrange() const noexcept {
 ///
 template <typename _Val, Trans _trans>
 const IdxRange DenseMatrix<_Val, _trans>::colfullrange() const noexcept {
-  return {0, this->ncol()};
+  return {0_i, this->ncol()};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

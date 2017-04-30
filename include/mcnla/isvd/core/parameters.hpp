@@ -257,7 +257,7 @@ Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
 template<typename _Val>
 DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQ() const noexcept {
   DenseMatrixCollection201<_Val> retval(nrowTotal(), dimSketch(), numSketchEach());
-  return retval({0, nrow()}, ""_, ""_);
+  return retval({0_i, nrow()}, ""_, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,7 +266,7 @@ DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQ() const noexc
 template<typename _Val>
 DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
   DenseMatrixCollection201<_Val> retval(nrowEach(), dimSketch(), numSketch());
-  return retval({0, nrowRank()}, ""_, ""_);
+  return retval({0_i, nrowRank()}, ""_, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQj() const noex
 template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowTotal(), dimSketch());
-  return retval({0, nrow()}, ""_);
+  return retval({0_i, nrow()}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -284,7 +284,7 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
 template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQj() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowEach(), dimSketch());
-  return retval({0, nrowRank()}, ""_);
+  return retval({0_i, nrowRank()}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,7 +293,7 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQj() const noexcept {
 template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixU() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowTotal(), rank());
-  return retval({0, nrow()}, ""_);
+  return retval({0_i, nrow()}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,7 +302,7 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixU() const noexcept {
 template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixUj() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowEach(), rank());
-  return retval({0, nrowRank()}, ""_);
+  return retval({0_i, nrowRank()}, ""_);
 }
 
 }  // namespace isvd

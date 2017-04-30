@@ -40,10 +40,6 @@ using index_t = std::int64_t;
 using size_t = std::size_t;
 
 /// @ingroup  core_module
-/// The index type literal.
-static inline index_t operator""_i( unsigned long long int idx ) { return idx; }
-
-/// @ingroup  core_module
 /// The format width
 static constexpr size_t kOsValWidth = 14;
 static constexpr size_t kOsIdxWidth = 6;
@@ -51,10 +47,14 @@ static constexpr size_t kOsIdxWidth = 6;
 }  // namespace mcnla
 
 #ifdef MCNLA_USE_MKL
+#define MKL_INT mcnla::index_t
 #define MKL_Complex8 std::complex<float>
 #define MKL_Complex16 std::complex<double>
-#define MKL_INT mcnla::index_t
 #endif  // MCNLA_USE_MKL
+
+/// @ingroup  core_module
+/// The index type literal.
+static inline mcnla::index_t operator""_i( unsigned long long int idx ) { return idx; }
 
 /// @ingroup  core_module
 //@{
