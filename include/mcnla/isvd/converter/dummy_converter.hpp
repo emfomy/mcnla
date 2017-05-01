@@ -45,7 +45,7 @@ template <typename _Val> template <typename... Args>
 void Converter<DummyConverterTag, _Val>::runImpl(
     Args...
 ) noexcept {
-  moments_.emplace_back(MPI_Wtime());
+  moments_.emplace_back(utility::getTime());
 }
 
 }  // namespace isvd

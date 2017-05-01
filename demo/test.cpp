@@ -8,6 +8,7 @@
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
+#include <unistd.h>
 
 #define DATA_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
 

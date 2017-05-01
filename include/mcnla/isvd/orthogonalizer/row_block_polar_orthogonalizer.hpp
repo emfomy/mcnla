@@ -57,15 +57,13 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;
-  const auto nrow_rank  = parameters_.nrowRank();
   const auto num_sketch = parameters_.numSketch();
-  const auto dim_sketch = parameters_.dimSketch();
 
-  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
+  mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(parameters_.nrowRank(), parameters_.dimSketch(), num_sketch));
 
   auto &matrix_qjs = collection_qj.unfold();  // matrix Qs.
 
-  moments_.emplace_back(MPI_Wtime());  // orthogonalization
+  moments_.emplace_back(utility::getTime());  // orthogonalization
 
   // Wi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch; ++i ) {
@@ -90,7 +88,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_qj(i));
   }
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 }  // namespace isvd

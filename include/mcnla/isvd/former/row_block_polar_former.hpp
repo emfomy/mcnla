@@ -76,6 +76,10 @@ void Former<RowBlockPolarFormerTag, _Val>::runImpl(
   const auto ncol_total = parameters_.ncolTotal();
   const auto dim_sketch = parameters_.dimSketch();
 
+  static_cast<void>(nrow_rank);
+  static_cast<void>(ncol);
+  static_cast<void>(dim_sketch);
+
   mcnla_assert_eq(matrix_aj.sizes(), std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch));
 
@@ -84,7 +88,7 @@ void Former<RowBlockPolarFormerTag, _Val>::runImpl(
   auto matrix_qtaj_full = matrix_qtaj_;
   matrix_qtaj_full.resize(""_, ncol_each);
 
-  moments_.emplace_back(MPI_Wtime());  // start
+  moments_.emplace_back(utility::getTime());  // start
 
   // QtA := sum( Qj' * Aj )
   la::mm(matrix_qj.t(), matrix_aj, matrix_qta_);
@@ -105,7 +109,7 @@ void Former<RowBlockPolarFormerTag, _Val>::runImpl(
   // U := Q * W
   la::mm(matrix_qj, matrix_w_cut_, matrix_uj_cut_);
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

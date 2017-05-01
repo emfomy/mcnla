@@ -56,6 +56,9 @@ void Converter<MatrixToRowBlockConverterTag, _Val>::runImpl(
   const auto nrow_each  = parameters_.nrowEach();
   const auto nrow_total = parameters_.nrowTotal();
 
+  static_cast<void>(nrow);
+  static_cast<void>(nrow_rank);
+
   mcnla_assert_eq(matrix.ncol(),   matrix_j.ncol());
   mcnla_assert_eq(matrix.nrow(),   nrow);
   mcnla_assert_eq(matrix_j.nrow(), nrow_rank);
@@ -65,12 +68,12 @@ void Converter<MatrixToRowBlockConverterTag, _Val>::runImpl(
   auto matrix_j_full = matrix_j;
   matrix_j_full.resize(nrow_each, ""_);
 
-  moments_.emplace_back(MPI_Wtime());  // start
+  moments_.emplace_back(utility::getTime());  // start
 
   // Scatter Qc
   mcnla::mpi::scatter(matrix_full, matrix_j_full, mpi_root, mpi_comm);
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 
 }
 

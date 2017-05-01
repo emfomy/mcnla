@@ -77,6 +77,8 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
   const auto dim_sketch = parameters_.dimSketch();
   const auto num_sketch = parameters_.numSketch();
 
+  static_cast<void>(nrow_rank);
+
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
   mcnla_assert_eq(matrix_qbarj.sizes(),  std::make_tuple(nrow_rank, dim_sketch));
 
@@ -84,13 +86,13 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
   auto &matrix_qcj = matrix_qbarj;  // matrix Qc.
 
   double comm_moment, comm_time = 0;
-  moments_.emplace_back(MPI_Wtime());  // copying Qc
+  moments_.emplace_back(utility::getTime());  // copying Qc
 
   // Qc := Q0
   la::copy(collection_qj(0), matrix_qcj);
 
   comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(MPI_Wtime());  // iterating
+  moments_.emplace_back(utility::getTime());  // iterating
   comm_time = 0;
 
   bool is_converged = false;
@@ -101,9 +103,9 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
 
     // Bs := sum( Qcj' * Qjs )
     la::mm(matrix_qcj.t(), matrix_qjs, matrix_bs_);
-    comm_moment = MPI_Wtime();
+    comm_moment = utility::getTime();
     mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
-    comm_time += MPI_Wtime() - comm_moment;
+    comm_time += utility::getTime() - comm_moment;
 
     // D := Bs * Bs'
     la::rk(matrix_bs_, matrix_d_.viewSymmetric());
@@ -119,9 +121,9 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
 
     // Z := sum(Xj' * Xj)
     la::rk(matrix_xj_.t(), matrix_z_.viewSymmetric());
-    comm_moment = MPI_Wtime();
+    comm_moment = utility::getTime();
     mpi::allreduce(matrix_z_, MPI_SUM, mpi_comm);
-    comm_time += MPI_Wtime() - comm_moment;
+    comm_time += utility::getTime() - comm_moment;
 
     // Compute the eigen-decomposition of Z -> Z' * E * Z
     syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
@@ -164,7 +166,7 @@ void Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>::runImpl(
   }
 
   comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
