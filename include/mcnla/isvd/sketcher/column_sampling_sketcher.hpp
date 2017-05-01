@@ -73,13 +73,13 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
   moments_.emplace_back(MPI_Wtime());  // random generating
 
   // Random sample Idxs using uniform distribution
-  random::uniformBits(streams, vector_idxs_, 0_i, ncol);
+  random::uniformBits(streams, vector_idxs_);
 
   moments_.emplace_back(MPI_Wtime());  // projection
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
-    la::copy(matrix_a(""_, vector_idxs_(i) % ncol), collection_q.unfold()(""_, i));
+    la::copy(matrix_a(""_, abs(vector_idxs_(i)) % ncol), collection_q.unfold()(""_, i));
   }
 
   moments_.emplace_back(MPI_Wtime());  // end

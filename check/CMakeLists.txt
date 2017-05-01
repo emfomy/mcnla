@@ -19,12 +19,20 @@ add_check_death(core/matrix/dense/dense_vector "Dense Vector death test")
 add_check_test(core/matrix/dense/dense_matrix  "Dense Matrix test")
 add_check_death(core/matrix/dense/dense_matrix "Dense Matrix death test")
 
+add_mpi_check(isvd/sketcher/gaussian_projection_sketcher "Gaussian Projection Sketcher test" "GaussianProjectionSketcherTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/sketcher/column_sampling_sketcher "Column Sampling Sketcher test" "ColumnSamplingSketcherTest" 1 2 3 4 6 12)
+
+add_mpi_check(isvd/sketcher/row_block_gaussian_projection_sketcher "Row-Block Gaussian Projection Sketcher test" "RowBlockGaussianProjectionSketcherTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/sketcher/row_block_column_sampling_sketcher "Row-Block Column Sampling Sketcher test" "RowBlockColumnSamplingSketcherTest" 1 2 3 4 6 12)
+
 add_mpi_check(isvd/orthogonalizer/svd_orthogonalizer "SVD Orthogonalizer test" "SvdOrthogonalizerTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/orthogonalizer/polar_orthogonalizer "Polar Orthogonalizer test" "PolarOrthogonalizerTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/orthogonalizer/row_block_polar_orthogonalizer "Row-Block Polar Orthogonalizer test" "RowBlockPolarOrthogonalizerTest" 1 2 3 4 6 12)
+
 add_mpi_check(isvd/integrator/kolmogorov_nagumo_integrator "Kolmogorov-Nagumo-Type Integrator test" "KolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_kolmogorov_nagumo_integrator "Row-Block Kolmogorov-Nagumo-Type Integrator test" "RowBlockKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_extrinsic_mean_integrator "Row-Block Extrinsic Mean Integrator test" "RowBlockExtrinsicMeanIntegratorTest" 1 2 3 4 6 12)
+
 add_mpi_check(isvd/former/svd_former "SVD Former test" "SvdFormerTest" 1)
 add_mpi_check(isvd/former/polar_former "Polar Former test" "PolarFormerTest" 1)
 add_mpi_check(isvd/former/row_block_polar_former "Row-BLock Polar Former test" "RowBlockPolarFormerTest" 1 2 3 4 6 12)

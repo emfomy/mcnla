@@ -6,7 +6,7 @@ if(NOT MCNLA_BUILD_REPOET)
 endif()
 
 # Disable asserts
-# list(APPEND DEFS "NDEBUG")
+list(APPEND DEFS "NDEBUG")
 
 # Add reports
 include(report.cmake)
