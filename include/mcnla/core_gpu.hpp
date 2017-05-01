@@ -1,0 +1,27 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/mcnla/core_gpu.hpp
+/// @brief   The core module header with GPU support.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_CORE_GPU_HPP_
+#define MCNLA_CORE_GPU_HPP_
+
+#include <mcnla/core.hpp>
+#include <mcnla/core_gpu/def.hpp>
+#include <mcnla/core_gpu/matrix.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  gpu_matrix_module  GPU Container Module
+/// @ingroup   core_gpu_module
+/// @brief     The Container Module (GPU Version)
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  gpu_utility_module  GPU Utility Module
+/// @ingroup   core_gpu_module
+/// @brief     The Utility Module (GPU Version)
+///
+
+#endif  // MCNLA_CORE_GPU_HPP_

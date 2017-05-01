@@ -9,7 +9,6 @@
 #define MCNLA_CORE_MATRIX_KIT_ARRAY_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <valarray>
 #include <memory>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,9 +41,6 @@ class Array : public std::shared_ptr<_Val> {
 
   // The offset.
   index_t offset_;
-
-  /// The empty array pointer.
-  static const BaseType kNullPtr;
 
  public:
 

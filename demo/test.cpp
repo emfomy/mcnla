@@ -8,25 +8,22 @@
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
-#include <unistd.h>
 
 #define DATA_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
-
-#include <magma.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Main function
 ///
 int main( int argc, char **argv ) {
 
-  magma_init();
+  mcnla::init(argc, argv);
+
   magma_print_environment();
 
   int n = 10;
 
-  double *da, *db;
-
   mcnla::matrix::DenseVector<double> a(n), b(n);
+  mcnla::matrix::GpuArray<double> da(n), db(n);
 
   int i = 0;
   for ( auto &v : a ) {
@@ -39,18 +36,12 @@ int main( int argc, char **argv ) {
   disp(a);
   disp(b);
 
-  magma_dmalloc(&da, n);
-  magma_dmalloc(&db, n);
-  magma_dsetmatrix(n, 1, a.valPtr(), n, da, n);
-  magma_dcopy(n, da, 1, db, 1);
-  magma_dgetmatrix(n, 1, db, n, b.valPtr(), n);
+  magma_dsetmatrix(n, 1, a.valPtr(), n, *da, n);
+  magma_dcopy(n, *da, 1, *db, 1);
+  magma_dgetmatrix(n, 1, *db, n, b.valPtr(), n);
 
   disp(a);
   disp(b);
-
-  magma_finalize();
-
-//   MPI_Init(&argc, &argv);
 
 //   const auto mpi_comm = MPI_COMM_WORLD;
 //   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -134,7 +125,7 @@ int main( int argc, char **argv ) {
 //     disp(uut);
 //   }
 
-//   MPI_Finalize();
+  mcnla::finalize();
 
   return 0;
 }
