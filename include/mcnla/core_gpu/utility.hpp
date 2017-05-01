@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_GPU_UTILITY_HPP_
 #define MCNLA_CORE_GPU_UTILITY_HPP_
 
-#include <mcnla/core/utility.hpp>
 #include <mcnla/core_gpu/utility/def.hpp>
 #include <mcnla/core_gpu/utility/memory.hpp>
 

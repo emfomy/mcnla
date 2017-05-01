@@ -8,7 +8,6 @@
 #ifndef MCNLA_CORE_GPU_MATRIX_HPP_
 #define MCNLA_CORE_GPU_MATRIX_HPP_
 
-#include <mcnla/core/matrix.hpp>
 #include <mcnla/core_gpu/matrix/def.hpp>
 #include <mcnla/core_gpu/matrix/dense.hpp>
 // #include <mcnla/core_gpu/matrix/coo.hpp>

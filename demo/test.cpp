@@ -37,7 +37,7 @@ int main( int argc, char **argv ) {
   disp(b);
 
   magma_dsetmatrix(n, 1, a.valPtr(), n, da.valPtr(), n);
-  magma_dcopy(n, da.valPtr(), 1, db.valPtr(), 1);
+  mcnla::la::copy(da, db);
   magma_dgetmatrix(n, 1, db.valPtr(), n, b.valPtr(), n);
 
   disp(a);
