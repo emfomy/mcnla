@@ -78,6 +78,9 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
+  static_cast<void>(nrow);
+  static_cast<void>(num_sketch_each);
+
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
   mcnla_assert_eq(matrix_qbar.sizes(),  std::make_tuple(nrow, dim_sketch));
 
@@ -85,19 +88,19 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
   auto &matrix_qc = matrix_qbar;  // matrix Qc.
 
   double comm_moment, comm_time = 0;
-  moments_.emplace_back(MPI_Wtime());  // copying Qc
+  moments_.emplace_back(utility::getTime());  // copying Qc
 
   // Broadcast Q0 to Qc
   if ( mpi_rank == 0 ) {
     la::copy(collection_q(0), matrix_qc);
   }
 
-  comm_moment = MPI_Wtime();
+  comm_moment = utility::getTime();
   mpi::bcast(matrix_qc, 0, mpi_comm);
-  comm_time += MPI_Wtime() - comm_moment;
+  comm_time += utility::getTime() - comm_moment;
 
   comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(MPI_Wtime());  // iterating
+  moments_.emplace_back(utility::getTime());  // iterating
   comm_time = 0;
 
   bool is_converged = false;
@@ -119,9 +122,9 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
     la::mm(matrix_qc, matrix_d_.viewSymmetric(), matrix_x_, -1.0/num_sketch, 1.0);
 
     // Reduce sum X
-    comm_moment = MPI_Wtime();
+    comm_moment = utility::getTime();
     mpi::allreduce(matrix_x_, MPI_SUM, mpi_comm);
-    comm_time += MPI_Wtime() - comm_moment;
+    comm_time += utility::getTime() - comm_moment;
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
@@ -169,7 +172,7 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
   }
 
   comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

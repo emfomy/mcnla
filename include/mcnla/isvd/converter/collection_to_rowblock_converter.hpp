@@ -58,6 +58,8 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
+  static_cast<void>(num_sketch);
+
   mcnla_assert_eq(collection_q.sizes(),  std::make_tuple(nrow, dim_sketch, num_sketch_each));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
@@ -67,7 +69,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
   DenseMatrixCollection102<ValType> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
   DenseMatrixCollection201<ValType> collection_qj_tmp(dim_sketch * num_sketch_each, collection_qj.unfold());
 
-  moments_.emplace_back(MPI_Wtime());  // start
+  moments_.emplace_back(utility::getTime());  // start
 
   // Exchange Q
   mpi::alltoall(matrix_qs_full, mpi_comm);
@@ -77,7 +79,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
     la::copy(collection_q_tmp(j), collection_qj_tmp(j));
   }
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 
 }
 

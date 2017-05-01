@@ -8,6 +8,7 @@
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
+#include <unistd.h>
 
 #define DATA_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
 
@@ -15,6 +16,11 @@
 /// Main function
 ///
 int main( int argc, char **argv ) {
+
+  double tic = mcnla::utility::getTime();
+  usleep(1000000);
+  double toc = mcnla::utility::getTime();
+  std::cout << toc - tic << std::endl;
 
 //   MPI_Init(&argc, &argv);
 

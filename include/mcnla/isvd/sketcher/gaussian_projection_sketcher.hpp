@@ -73,12 +73,12 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
 
   random::Streams streams(seed_, mpi_root, mpi_comm);
 
-  moments_.emplace_back(MPI_Wtime());  // random generating
+  moments_.emplace_back(utility::getTime());  // random generating
 
   // Random sample Omega using normal Gaussian distribution
   random::gaussian(streams, matrix_omegas_.vectorize());
 
-  moments_.emplace_back(MPI_Wtime());  // projection
+  moments_.emplace_back(utility::getTime());  // projection
 
   // Q := A * Omega
   la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
@@ -87,7 +87,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
     la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
   }
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

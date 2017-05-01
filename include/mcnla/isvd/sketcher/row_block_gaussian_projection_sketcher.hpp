@@ -76,17 +76,17 @@ void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::runImpl(
   MPI_Bcast(&seed_tmp, 1, datatype, mpi_root, mpi_comm);
   random::Streams streams(seed_tmp);
 
-  moments_.emplace_back(MPI_Wtime());  // random generating
+  moments_.emplace_back(utility::getTime());  // random generating
 
   // Random sample Omega using normal Gaussian distribution
   random::gaussian(streams, matrix_omegas_.vectorize());
 
-  moments_.emplace_back(MPI_Wtime());  // projection
+  moments_.emplace_back(utility::getTime());  // projection
 
   // Q := A * Omega
   la::mm(matrix_aj, matrix_omegas_, collection_qj.unfold());
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

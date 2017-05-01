@@ -64,7 +64,7 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
 
   auto &matrix_qs = collection_q.unfold();  // matrix Qs.
 
-  moments_.emplace_back(MPI_Wtime());  // orthogonalization
+  moments_.emplace_back(utility::getTime());  // orthogonalization
 
   // Wi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
@@ -86,7 +86,7 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_q(i));
   }
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 }  // namespace isvd

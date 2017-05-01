@@ -78,6 +78,10 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
+  static_cast<void>(nrow);
+  static_cast<void>(nrow_rank);
+  static_cast<void>(num_sketch);
+
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
   mcnla_assert_eq(collection_q.sizes(),  std::make_tuple(nrow, dim_sketch, num_sketch_each));
   mcnla_assert_eq(matrix_qbar.sizes(),   std::make_tuple(nrow, dim_sketch));
@@ -85,13 +89,13 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
   auto &matrix_qjs = collection_qj.unfold();  // matrix Qs.
 
   double comm_moment, comm_time = 0;
-  moments_.emplace_back(MPI_Wtime());  // rotate
+  moments_.emplace_back(utility::getTime());  // rotate
 
   // Bs := sum( Qjs' * Qjs )
   la::mm(matrix_qjs.t(), matrix_qjs, matrix_bjs_);
-  comm_moment = MPI_Wtime();
+  comm_moment = utility::getTime();
   mpi::reduceScatterBlock(matrix_bjs_, collection_bi_.unfold(), MPI_SUM, mpi_comm);
-  comm_time = MPI_Wtime() - comm_moment;
+  comm_time = utility::getTime() - comm_moment;
 
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
@@ -104,16 +108,16 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
   }
 
   comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(MPI_Wtime());  // flip
+  moments_.emplace_back(utility::getTime());  // flip
   comm_time = 0;
 
   // Broadcast G0
   if ( mpi_rank == 0 ) {
     la::omatcopy(collection_g_(0), matrix_g0_);
   }
-  comm_moment = MPI_Wtime();
+  comm_moment = utility::getTime();
   mpi::bcast(matrix_g0_, 0, mpi_comm);
-  comm_time = MPI_Wtime() - comm_moment;
+  comm_time = utility::getTime() - comm_moment;
 
   // Qbar := 0
   la::memset0(matrix_qbar);
@@ -135,13 +139,13 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
   }
 
   comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(MPI_Wtime());  // sum
+  moments_.emplace_back(utility::getTime());  // sum
   comm_time = 0;
 
   // Qbar := sum( Qbar )
-  comm_moment = MPI_Wtime();
+  comm_moment = utility::getTime();
   mpi::reduce(matrix_qbar, MPI_SUM, mpi_root, mpi_comm);
-  comm_time = MPI_Wtime() - comm_moment;
+  comm_time = utility::getTime() - comm_moment;
 
   // Compute the left singular vectors of Qbar
   if ( mpi_rank == mpi_root ) {
@@ -149,7 +153,7 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
   }
 
   comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 }  // namespace isvd

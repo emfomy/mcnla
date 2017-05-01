@@ -70,6 +70,10 @@ void Former<PolarFormerTag, _Val>::runImpl(
   const auto ncol       = parameters_.ncol();
   const auto dim_sketch = parameters_.dimSketch();
 
+  static_cast<void>(nrow);
+  static_cast<void>(ncol);
+  static_cast<void>(dim_sketch);
+
   if ( mpi_rank != mpi_root ) {
     return;
   }
@@ -77,7 +81,7 @@ void Former<PolarFormerTag, _Val>::runImpl(
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  moments_.emplace_back(MPI_Wtime());  // start
+  moments_.emplace_back(utility::getTime());  // start
 
   // QtA := Q' * A
   la::mm(matrix_q.t(), matrix_a, matrix_qta_);
@@ -96,7 +100,7 @@ void Former<PolarFormerTag, _Val>::runImpl(
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
 
-  moments_.emplace_back(MPI_Wtime());  // end
+  moments_.emplace_back(utility::getTime());  // end
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
