@@ -92,7 +92,7 @@ class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _I
 
   // Operators
   template <typename __Val, typename __Idx, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<__Val, __Idx, __Vector> &it );
+  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<__Val, __Idx, __Vector> &it ) noexcept;
 
   // Gets value
   inline ValType&    val() const noexcept;

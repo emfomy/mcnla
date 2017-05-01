@@ -71,7 +71,7 @@ class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> 
   template <typename... Args>
   inline void operator()( Args... arg ) noexcept;
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper ) noexcept;
 
   // Gets data
   inline bool isInitialized() const noexcept;

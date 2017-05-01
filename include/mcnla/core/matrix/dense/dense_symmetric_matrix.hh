@@ -154,7 +154,7 @@ class DenseSymmetricMatrix
   inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t size ) noexcept;
 
-  // Transpose
+  // Transpose/Conjugate
   inline       TransposeType& t() noexcept;
   inline const TransposeType& t() const noexcept;
 

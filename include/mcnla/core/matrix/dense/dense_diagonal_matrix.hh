@@ -140,7 +140,7 @@ class DenseDiagonalMatrix
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
 
-  // Transpose
+  // Transpose/Conjugate
   inline       TransposeType& t() noexcept;
   inline const TransposeType& t() const noexcept;
 

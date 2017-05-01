@@ -41,7 +41,7 @@ class DenseMatrixWrapper : public MatrixWrapper<_Derived> {
 
   // Operators
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixWrapper<__Derived> &wrapper ) noexcept;
 
 };
 

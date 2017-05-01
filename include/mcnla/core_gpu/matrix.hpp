@@ -10,8 +10,7 @@
 
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core_gpu/matrix/def.hpp>
-// #include <mcnla/core_gpu/matrix/base.hpp>
-// #include <mcnla/core_gpu/matrix/dense.hpp>
+#include <mcnla/core_gpu/matrix/dense.hpp>
 // #include <mcnla/core_gpu/matrix/coo.hpp>
 // #include <mcnla/core_gpu/matrix/collection.hpp>
 #include <mcnla/core_gpu/matrix/kit.hpp>

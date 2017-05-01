@@ -39,6 +39,9 @@ endif()
 
 if(MCNLA_USE_GPU)
   list(APPEND DEFS "MCNLA_USE_GPU")
+  if(MCNLA_USE_ILP64)
+    list(APPEND DEFS "MAGMA_ILP64")
+  endif()
 endif()
 
 if(MCNLA_USE_OMP)

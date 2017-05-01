@@ -69,7 +69,7 @@ class CooTuple2 : public std::tuple<_Idx&, _Idx&> {
 
   // Operators
   template <typename __Val, typename __Idx, Trans __Trans>
-  friend inline std::ostream& operator<<( std::ostream &os, const CooTuple2<__Val, __Idx, __Trans> &tuple );
+  friend inline std::ostream& operator<<( std::ostream &os, const CooTuple2<__Val, __Idx, __Trans> &tuple ) noexcept;
 
   // Gets data
   inline       ValType& val() noexcept;

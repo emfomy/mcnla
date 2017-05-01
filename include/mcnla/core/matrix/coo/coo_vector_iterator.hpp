@@ -27,7 +27,7 @@ template <typename __Val, typename __Idx, class __Vector>
 std::ostream& operator<<(
     std::ostream &os,
     const CooVectorIteratorBase<__Val, __Idx, __Vector> &it
-) {
+) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << it.idx() << ")  "
                    << std::setw(kOsValWidth) << it.val();
 }

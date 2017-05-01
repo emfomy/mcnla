@@ -27,7 +27,7 @@ template <typename __Val, Trans __trans, class __Matrix>
 std::ostream& operator<<(
     std::ostream &os,
     const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &it
-) {
+) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << it.rowidx() << ", "
                    << std::setw(kOsIdxWidth) << it.colidx() << ")  "
                    << std::setw(kOsValWidth) << it.val();

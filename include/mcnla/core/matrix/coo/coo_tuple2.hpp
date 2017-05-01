@@ -146,7 +146,7 @@ template <typename __Val, typename __Idx, Trans __trans>
 std::ostream& operator<<(
     std::ostream &os,
     const CooTuple2<__Val, __Idx, __trans> &tuple
-) {
+) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << tuple.rowidx() << ", "
                    << std::setw(kOsIdxWidth) << tuple.colidx() << ")  "
                    << std::setw(kOsValWidth) << tuple.val();

@@ -181,7 +181,7 @@ class CooMatrix
   inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol, const index_t nnz ) noexcept;
 
-  // Transpose
+  // Transpose/Conjugate
   inline       TransposeType& t() noexcept;
   inline const TransposeType& t() const noexcept;
   inline       ConjugateType& c() noexcept;

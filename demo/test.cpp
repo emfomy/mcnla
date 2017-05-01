@@ -23,7 +23,7 @@ int main( int argc, char **argv ) {
   int n = 10;
 
   mcnla::matrix::DenseVector<double> a(n), b(n);
-  mcnla::matrix::GpuArray<double> da(n), db(n);
+  mcnla::matrix::DenseGpuVector<double> da(n), db(n);
 
   int i = 0;
   for ( auto &v : a ) {
@@ -36,9 +36,9 @@ int main( int argc, char **argv ) {
   disp(a);
   disp(b);
 
-  magma_dsetmatrix(n, 1, a.valPtr(), n, *da, n);
-  magma_dcopy(n, *da, 1, *db, 1);
-  magma_dgetmatrix(n, 1, *db, n, b.valPtr(), n);
+  magma_dsetmatrix(n, 1, a.valPtr(), n, da.valPtr(), n);
+  magma_dcopy(n, da.valPtr(), 1, db.valPtr(), 1);
+  magma_dgetmatrix(n, 1, db.valPtr(), n, b.valPtr(), n);
 
   disp(a);
   disp(b);

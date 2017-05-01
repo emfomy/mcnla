@@ -10,7 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <iostream>
-#include <mcnla/core/utility/crtp.hpp>
+#include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ class DenseVectorWrapper : public VectorWrapper<_Derived> {
 
   // Operators
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorWrapper<__Derived> &wrapper ) noexcept;
 
 };
 

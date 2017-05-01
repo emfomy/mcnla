@@ -188,7 +188,7 @@ class DenseMatrix
   inline void resize( const index_t nrow, const FullRange ) noexcept;
   inline void resize( const FullRange, const index_t ncol ) noexcept;
 
-  // Transpose
+  // Transpose/Conjugate
   inline       TransposeType& t() noexcept;
   inline const TransposeType& t() const noexcept;
   inline       ConjugateType& c() noexcept;
