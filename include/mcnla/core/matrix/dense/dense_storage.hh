@@ -25,7 +25,7 @@ namespace matrix {
 /// The dense storage.
 ///
 /// @tparam  _Val    The value type.
-/// @tparam  _Array  The array type.
+/// @tparam  _Array  The array template.
 ///
 template <typename _Val, template <typename> class _Array = Array>
 class DenseStorage {

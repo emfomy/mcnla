@@ -29,7 +29,8 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The The coordinate list (COO) matrix storage class.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val    The value type.
+/// @tparam  _Array  The array template.
 ///
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.

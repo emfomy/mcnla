@@ -30,7 +30,8 @@ template <typename _Val, template <typename> class _Array> class DenseMatrixStor
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector storage class.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val    The value type.
+/// @tparam  _Array  The array template.
 ///
 template <typename _Val, template <typename> class _Array = Array>
 class DenseVectorStorage : public DenseStorage<_Val, _Array> {

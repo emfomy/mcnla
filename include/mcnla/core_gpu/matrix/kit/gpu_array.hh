@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core_gpu/matrix/kit/gpu_array.hh
-/// @brief   The definition of raw GPU array class.
+/// @brief   The definition of GPU value array class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -9,7 +9,7 @@
 #define MCNLA_CORE_GPU_MATRIX_KIT_GPU_ARRAY_HH_
 
 #include <mcnla/core_gpu/matrix/def.hpp>
-#include <mcnla/core/matrix/kit/array.hpp>
+#include <mcnla/core/matrix/kit/array_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,16 +23,16 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  gpu_matrix_module
-/// The GPU array.
+/// The GPU value array.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class GpuArray : public Array<_Val> {
+class GpuArray : public ArrayBase<_Val> {
 
  private:
 
-  using BaseType = Array<_Val>;
+  using BaseType = ArrayBase<_Val>;
 
  protected:
 
@@ -49,9 +49,6 @@ class GpuArray : public Array<_Val> {
 
   // Operators
   inline GpuArray& operator=( const GpuArray &other ) noexcept;
-
-  // Copy
-  inline GpuArray copy() const noexcept = delete;
 
   // Gets data
   inline       _Val& operator[]( const index_t idx ) noexcept = delete;

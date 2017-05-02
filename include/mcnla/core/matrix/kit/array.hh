@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/kit/array.hh
-/// @brief   The definition of raw array class.
+/// @brief   The definition of value array class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_KIT_ARRAY_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <memory>
+#include <mcnla/core/matrix/kit/array_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,24 +23,21 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_module
-/// The array.
+/// The value array.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Array : public std::shared_ptr<_Val> {
+class Array : public ArrayBase<_Val> {
 
  private:
 
-  using BaseType = std::shared_ptr<_Val>;
+  using BaseType = ArrayBase<_Val>;
 
  protected:
 
-  // The size.
-  index_t size_;
-
-  // The offset.
-  index_t offset_;
+  using BaseType::size_;
+  using BaseType::offset_;
 
  public:
 
@@ -52,27 +49,9 @@ class Array : public std::shared_ptr<_Val> {
 
   // Operators
   inline Array& operator=( const Array &other ) noexcept;
-  inline void operator>>=( const index_t offset ) noexcept;
-  inline void operator<<=( const index_t offset ) noexcept;
-  inline       Array operator>>( const index_t offset ) noexcept;
-  inline const Array operator>>( const index_t offset ) const noexcept;
-  inline       Array operator<<( const index_t offset ) noexcept;
-  inline const Array operator<<( const index_t offset ) const noexcept;
 
   // Copy
   inline Array copy() const noexcept;
-
-  // Gets information
-  inline bool    isEmpty() const noexcept;
-  inline index_t size() const noexcept;
-  inline index_t capacity() const noexcept;
-  inline index_t offset() const noexcept;
-
-  // Gets data
-  inline       _Val* operator*() noexcept;
-  inline const _Val* operator*() const noexcept;
-  inline       _Val& operator[]( const index_t idx ) noexcept;
-  inline const _Val& operator[]( const index_t idx ) const noexcept;
 
 };
 

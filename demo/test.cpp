@@ -23,7 +23,7 @@ int main( int argc, char **argv ) {
   int n = 10;
 
   mcnla::matrix::DenseVector<double> a(n), b(n);
-  mcnla::matrix::DenseDiagonalGpuVector<double> da(n), db(n);
+  mcnla::matrix::DenseDiagonalGpuMatrix<double> da(n), db(n);
 
   int i = 0;
   for ( auto &v : a ) {
@@ -42,6 +42,8 @@ int main( int argc, char **argv ) {
 
   disp(a);
   disp(b);
+
+  mcnla::finalize();
 
 //   const auto mpi_comm = MPI_COMM_WORLD;
 //   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -124,8 +126,6 @@ int main( int argc, char **argv ) {
 //     disp(utu);
 //     disp(uut);
 //   }
-
-  mcnla::finalize();
 
   return 0;
 }

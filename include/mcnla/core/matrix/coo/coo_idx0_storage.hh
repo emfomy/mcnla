@@ -24,7 +24,8 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) storage of the first dimension index.
 ///
-/// @tparam  _Idx  The index type.
+/// @tparam  _Idx    The index type.
+/// @tparam  _Array  The array template.
 ///
 template <typename _Idx = index_t, template <typename> class _Array = Array>
 class CooIdx0Storage : protected DenseStorage<_Idx, _Array> {

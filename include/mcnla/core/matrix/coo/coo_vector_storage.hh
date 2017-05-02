@@ -31,7 +31,8 @@ template <typename _Val, template <typename> class _Array> class CooMatrixStorag
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) vector storage class.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val    The value type.
+/// @tparam  _Array  The array template.
 ///
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
