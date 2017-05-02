@@ -25,7 +25,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class CooMatrixStorage;
+template <typename _Val, template <typename> class _Array> class CooMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,24 +36,24 @@ template <typename _Val> class CooMatrixStorage;
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Val>
+template <typename _Val, template <typename> class _Array = Array>
 class CooVectorStorage
-  : public CooStorage<_Val>,
-    public CooIdx0Storage<index_t> {
+  : public CooStorage<_Val, _Array>,
+    public CooIdx0Storage<index_t, _Array> {
 
-  friend class CooMatrixStorage<_Val>;
+  friend class CooMatrixStorage<_Val, _Array>;
 
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = Array<_Val>;
-  using IdxArrayType      = Array<index_t>;
+  using ValArrayType      = _Array<_Val>;
+  using IdxArrayType      = _Array<index_t>;
   using DimsType          = std::tuple<index_t>;
 
-  using VectorStorageType = CooVectorStorage<_Val>;
+  using VectorStorageType = CooVectorStorage<_Val, _Array>;
 
-  using BaseType          = CooStorage<_Val>;
-  using Base0Type      = CooIdx0Storage<index_t>;
+  using BaseType          = CooStorage<_Val, _Array>;
+  using Base0Type         = CooIdx0Storage<index_t, _Array>;
 
  protected:
 
@@ -66,7 +66,9 @@ class CooVectorStorage
  public:
 
   using BaseType::val;
+  using BaseType::idx0;
   using BaseType::valPtr;
+  using BaseType::idx0Ptr;
 
  protected:
 

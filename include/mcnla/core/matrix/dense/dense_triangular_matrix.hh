@@ -13,6 +13,7 @@
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -27,6 +28,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val> class DenseVector;
+template <typename _Val, Trans _trans> class DenseMatrix;
 template <typename _Val, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

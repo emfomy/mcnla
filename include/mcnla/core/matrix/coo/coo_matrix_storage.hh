@@ -34,25 +34,25 @@ namespace matrix {
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Val>
+template <typename _Val, template <typename> class _Array = Array>
 class CooMatrixStorage
-  : public CooStorage<_Val>,
-    public CooIdx0Storage<index_t>,
-    public CooIdx1Storage<index_t> {
+  : public CooStorage<_Val, _Array>,
+    public CooIdx0Storage<index_t, _Array>,
+    public CooIdx1Storage<index_t, _Array> {
 
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = Array<ValType>;
-  using IdxArrayType      = Array<index_t>;
+  using ValArrayType      = _Array<_Val>;
+  using IdxArrayType      = _Array<index_t>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = CooVectorStorage<ValType>;
-  using MatrixStorageType = CooMatrixStorage<ValType>;
+  using VectorStorageType = CooVectorStorage<_Val, _Array>;
+  using MatrixStorageType = CooMatrixStorage<_Val, _Array>;
 
-  using BaseType          = CooStorage<_Val>;
-  using Base0Type         = CooIdx0Storage<index_t>;
-  using Base1Type         = CooIdx1Storage<index_t>;
+  using BaseType          = CooStorage<_Val, _Array>;
+  using Base0Type         = CooIdx0Storage<index_t, _Array>;
+  using Base1Type         = CooIdx1Storage<index_t, _Array>;
 
  protected:
 
@@ -68,7 +68,11 @@ class CooMatrixStorage
  public:
 
   using BaseType::val;
+  using BaseType::idx0;
+  using BaseType::idx1;
   using BaseType::valPtr;
+  using BaseType::idx0Ptr;
+  using BaseType::idx1Ptr;
 
  protected:
 

@@ -24,15 +24,16 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense storage.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val    The value type.
+/// @tparam  _Array  The array type.
 ///
-template <typename _Val>
+template <typename _Val, template <typename> class _Array = Array>
 class DenseStorage {
 
  private:
 
   using ValType      = _Val;
-  using ValArrayType = Array<ValType>;
+  using ValArrayType = _Array<_Val>;
 
  protected:
 

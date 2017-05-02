@@ -24,8 +24,8 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Val>
-CooVectorStorage<_Val>::CooVectorStorage() noexcept
+template <typename _Val, template <typename> class _Array>
+CooVectorStorage<_Val, _Array>::CooVectorStorage() noexcept
   : BaseType(),
     Base0Type(),
     dim0_(0) {}
@@ -33,8 +33,8 @@ CooVectorStorage<_Val>::CooVectorStorage() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val>
-CooVectorStorage<_Val>::CooVectorStorage(
+template <typename _Val, template <typename> class _Array>
+CooVectorStorage<_Val, _Array>::CooVectorStorage(
     const index_t dim0,
     const index_t nnz
 ) noexcept
@@ -47,8 +47,8 @@ CooVectorStorage<_Val>::CooVectorStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val>
-CooVectorStorage<_Val>::CooVectorStorage(
+template <typename _Val, template <typename> class _Array>
+CooVectorStorage<_Val, _Array>::CooVectorStorage(
     const index_t dim0,
     const index_t nnz,
     const index_t capacity
@@ -64,8 +64,8 @@ CooVectorStorage<_Val>::CooVectorStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Val>
-CooVectorStorage<_Val>::CooVectorStorage(
+template <typename _Val, template <typename> class _Array>
+CooVectorStorage<_Val, _Array>::CooVectorStorage(
     const index_t dim0,
     const index_t nnz,
     const ValArrayType &val,
@@ -85,8 +85,8 @@ CooVectorStorage<_Val>::CooVectorStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val>
-CooVectorStorage<_Val>::CooVectorStorage(
+template <typename _Val, template <typename> class _Array>
+CooVectorStorage<_Val, _Array>::CooVectorStorage(
     const CooVectorStorage &other
 ) noexcept
   : BaseType(other),
@@ -98,8 +98,8 @@ CooVectorStorage<_Val>::CooVectorStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val>
-CooVectorStorage<_Val>& CooVectorStorage<_Val>::operator=(
+template <typename _Val, template <typename> class _Array>
+CooVectorStorage<_Val, _Array>& CooVectorStorage<_Val, _Array>::operator=(
     const CooVectorStorage &other
 ) noexcept {
   BaseType::operator=(other);
@@ -111,32 +111,32 @@ CooVectorStorage<_Val>& CooVectorStorage<_Val>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
-template <typename _Val>
-bool CooVectorStorage<_Val>::isEmpty() const noexcept {
+template <typename _Val, template <typename> class _Array>
+bool CooVectorStorage<_Val, _Array>::isEmpty() const noexcept {
   return BaseType::isEmpty() && Base0Type::isEmpty();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size in the first dimension.
 ///
-template <typename _Val>
-index_t CooVectorStorage<_Val>::dim0() const noexcept {
+template <typename _Val, template <typename> class _Array>
+index_t CooVectorStorage<_Val, _Array>::dim0() const noexcept {
   return dim0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size of dimensions in storage order. [ dim0 ]
 ///
-template <typename _Val>
-std::tuple<index_t> CooVectorStorage<_Val>::dims() const noexcept {
+template <typename _Val, template <typename> class _Array>
+std::tuple<index_t> CooVectorStorage<_Val, _Array>::dims() const noexcept {
   return std::make_tuple(dim0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
-template <typename _Val>
-_Val CooVectorStorage<_Val>::elemImpl(
+template <typename _Val, template <typename> class _Array>
+_Val CooVectorStorage<_Val, _Array>::elemImpl(
     const index_t idx0
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
@@ -147,8 +147,8 @@ _Val CooVectorStorage<_Val>::elemImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  elemImpl
 ///
-template <typename _Val>
-const _Val CooVectorStorage<_Val>::elemImpl(
+template <typename _Val, template <typename> class _Array>
+const _Val CooVectorStorage<_Val, _Array>::elemImpl(
     const index_t idx0
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
@@ -161,8 +161,8 @@ const _Val CooVectorStorage<_Val>::elemImpl(
 //
 /// @attention  Returns `-1` if the index does not exist!
 ///
-template <typename _Val>
-index_t CooVectorStorage<_Val>::posImpl(
+template <typename _Val, template <typename> class _Array>
+index_t CooVectorStorage<_Val, _Array>::posImpl(
     const index_t idx0
 ) const noexcept {
   index_t pos = std::find(idx0Ptr(), idx0Ptr() + nnz_, idx0) - idx0Ptr();
@@ -174,8 +174,8 @@ index_t CooVectorStorage<_Val>::posImpl(
 ///
 /// @attention  The new space is kept but not initialized.
 ///
-template <typename _Val>
-void CooVectorStorage<_Val>::resizeImpl(
+template <typename _Val, template <typename> class _Array>
+void CooVectorStorage<_Val, _Array>::resizeImpl(
     const index_t dim0,
     const index_t nnz
 ) noexcept {

@@ -24,7 +24,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseMatrixStorage;
+template <typename _Val, template <typename> class _Array> class DenseMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,20 +32,20 @@ template <typename _Val> class DenseMatrixStorage;
 ///
 /// @tparam  _Val  The value type.
 ///
-template <typename _Val>
-class DenseVectorStorage : public DenseStorage<_Val> {
+template <typename _Val, template <typename> class _Array = Array>
+class DenseVectorStorage : public DenseStorage<_Val, _Array> {
 
-  friend class DenseMatrixStorage<_Val>;
+  friend class DenseMatrixStorage<_Val, _Array>;
 
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = Array<_Val>;
+  using ValArrayType      = _Array<_Val>;
   using DimsType          = std::tuple<index_t>;
 
-  using VectorStorageType = DenseVectorStorage<_Val>;
+  using VectorStorageType = DenseVectorStorage<_Val, _Array>;
 
-  using BaseType          = DenseStorage<_Val>;
+  using BaseType          = DenseStorage<_Val, _Array>;
 
  protected:
 

@@ -1,19 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_diagonal_matrix.hh
-/// @brief   The definition of definition of dense diagonal matrix class.
+/// @file    include/mcnla/core/matrix/dense/dense_diagonal_gpu_matrix.hh
+/// @brief   The definition of definition of dense diagonal GPU matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
+#ifndef MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_DIAGONAL_GPU_MATRIX_HH_
+#define MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_DIAGONAL_GPU_MATRIX_HH_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
-#include <mcnla/core/matrix/base/iterable_wrapper.hpp>
+#include <mcnla/core_gpu/matrix/def.hpp>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
-#include <mcnla/core/matrix/dense/dense_vector.hpp>
+#include <mcnla/core_gpu/matrix/dense/dense_gpu_vector.hpp>
+#include <mcnla/core_gpu/matrix/kit/gpu_array.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,8 +27,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseVector;
-template <typename _Val> class DenseDiagonalMatrix;
+template <typename _Val> class DenseGpuVector;
+template <typename _Val> class DenseDiagonalGpuMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -42,34 +42,34 @@ namespace traits {
 /// The dense diagonal matrix traits.
 ///
 template <typename _Val>
-struct Traits<matrix::DenseDiagonalMatrix<_Val>> {
+struct Traits<matrix::DenseDiagonalGpuMatrix<_Val>> {
 
   static constexpr index_t ndim = 2;
 
   using ValType     = _Val;
-  using RealType    = matrix::DenseDiagonalMatrix<RealValT<_Val>>;
-  using ComplexType = matrix::DenseDiagonalMatrix<ComplexValT<_Val>>;
-  using VectorType  = matrix::DenseVector<_Val>;
-  using MatrixType  = matrix::DenseDiagonalMatrix<_Val>;
+  using RealType    = matrix::DenseDiagonalGpuMatrix<RealValT<_Val>>;
+  using ComplexType = matrix::DenseDiagonalGpuMatrix<ComplexValT<_Val>>;
+  using VectorType  = matrix::DenseGpuVector<_Val>;
+  using MatrixType  = matrix::DenseDiagonalGpuMatrix<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix instantiation type traits.
 ///
 template <typename _Type>
-struct IsDenseDiagonalMatrix : std::false_type {};
+struct IsDenseDiagonalGpuMatrix : std::false_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseDiagonalMatrix
+/// @copydoc IsDenseDiagonalGpuMatrix
 ///
 template <typename _Val>
-struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Val>> : std::true_type {};
+struct IsDenseDiagonalGpuMatrix<matrix::DenseDiagonalGpuMatrix<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix assert.
 ///
-#define assertDenseDiagonalMatrix( Type ) \
-    static_assert(traits::IsDenseDiagonalMatrix<Type>::value, "'"#Type"' is not a dense diagonal matrix!")
+#define assertDenseDiagonalGpuMatrix( Type ) \
+    static_assert(traits::IsDenseDiagonalGpuMatrix<Type>::value, "'"#Type"' is not a dense diagonal matrix!")
 
 }  // namespace traits
 
@@ -79,64 +79,57 @@ struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Val>> : std::true_type
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  gpu_matrix_dense_module
 /// The dense diagonal matrix class.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class DenseDiagonalMatrix
-  : public DenseVectorStorage<_Val>,
-    public DenseMatrixWrapper<DenseDiagonalMatrix<_Val>>,
-    public InvertibleWrapper<DenseDiagonalMatrix<_Val>> {
+class DenseDiagonalGpuMatrix
+  : public DenseVectorStorage<_Val, GpuArray>,
+    public MatrixWrapper<DenseDiagonalGpuMatrix<_Val>>,
+    public InvertibleWrapper<DenseDiagonalGpuMatrix<_Val>> {
 
-  friend MatrixWrapper<DenseDiagonalMatrix<_Val>>;
-  friend DenseMatrixWrapper<DenseDiagonalMatrix<_Val>>;
-  friend InvertibleWrapper<DenseDiagonalMatrix<_Val>>;
+  friend MatrixWrapper<DenseDiagonalGpuMatrix<_Val>>;
+  friend InvertibleWrapper<DenseDiagonalGpuMatrix<_Val>>;
 
  public:
 
   static constexpr index_t ndim = 2;
 
   using ValType       = _Val;
-  using ValArrayType  = Array<_Val>;
+  using ValArrayType  = GpuArray<_Val>;
 
-  using RealType      = DenseDiagonalMatrix<RealValT<_Val>>;
-  using ComplexType   = DenseDiagonalMatrix<ComplexValT<_Val>>;
+  using RealType      = DenseDiagonalGpuMatrix<RealValT<_Val>>;
+  using ComplexType   = DenseDiagonalGpuMatrix<ComplexValT<_Val>>;
 
-  using VectorType    = DenseVector<_Val>;
-  using MatrixType    = DenseDiagonalMatrix<_Val>;
+  using VectorType    = DenseGpuVector<_Val>;
+  using MatrixType    = DenseDiagonalGpuMatrix<_Val>;
 
-  using TransposeType = DenseDiagonalMatrix<_Val>;
+  using TransposeType = DenseDiagonalGpuMatrix<_Val>;
 
  private:
 
-  using BaseType      = DenseVectorStorage<_Val>;
+  using BaseType      = DenseVectorStorage<_Val, GpuArray>;
 
  public:
 
   // Constructors
-  inline DenseDiagonalMatrix() noexcept;
-  inline DenseDiagonalMatrix( const index_t size ) noexcept;
-  inline DenseDiagonalMatrix( const index_t size, const index_t pitch ) noexcept;
-  inline DenseDiagonalMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseDiagonalMatrix( const index_t size, const index_t pitch,
-                              const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseDiagonalMatrix( const DenseDiagonalMatrix &other ) noexcept;
+  inline DenseDiagonalGpuMatrix() noexcept;
+  inline DenseDiagonalGpuMatrix( const index_t size ) noexcept;
+  inline DenseDiagonalGpuMatrix( const index_t size, const index_t pitch ) noexcept;
+  inline DenseDiagonalGpuMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
+  inline DenseDiagonalGpuMatrix( const index_t size, const index_t pitch,
+                                 const ValArrayType &val, const index_t offset = 0 ) noexcept;
+  inline DenseDiagonalGpuMatrix( const DenseDiagonalGpuMatrix &other ) noexcept;
 
   // Operators
-  inline DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other ) noexcept;
-
-  // Copy
-  inline DenseDiagonalMatrix copy() const noexcept;
+  inline DenseDiagonalGpuMatrix& operator=( const DenseDiagonalGpuMatrix &other ) noexcept;
 
   // Gets information
   inline index_t size() const noexcept;
   inline index_t nnz() const noexcept;
   inline index_t pitch() const noexcept;
-
-  // Gets element
-  inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
   template <typename... Args>
@@ -170,4 +163,4 @@ class DenseDiagonalMatrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
+#endif  // MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_DIAGONAL_GPU_MATRIX_HH_

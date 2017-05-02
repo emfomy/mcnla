@@ -29,19 +29,19 @@ namespace matrix {
 ///
 /// @tparam  _Val  The value type.
 ///
-template <typename _Val>
-class DenseMatrixStorage : public DenseStorage<_Val> {
+template <typename _Val, template <typename> class _Array = Array>
+class DenseMatrixStorage : public DenseStorage<_Val, _Array> {
 
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = Array<ValType>;
+  using ValArrayType      = _Array<_Val>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = DenseVectorStorage<ValType>;
-  using MatrixStorageType = DenseMatrixStorage<ValType>;
+  using VectorStorageType = DenseVectorStorage<_Val, _Array>;
+  using MatrixStorageType = DenseMatrixStorage<_Val, _Array>;
 
-  using BaseType          = DenseStorage<_Val>;
+  using BaseType          = DenseStorage<_Val, _Array>;
 
  protected:
 

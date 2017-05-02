@@ -31,8 +31,8 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans> class DenseMatrix;
 template <typename _Val> class DenseVector;
+template <typename _Val, Trans _trans> class DenseMatrix;
 template <typename _Val, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
 template <typename _Val, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
 template <typename _Val> class DenseDiagonalMatrix;

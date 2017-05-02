@@ -26,15 +26,15 @@ namespace matrix {
 ///
 /// @tparam  _Idx  The index type.
 ///
-template <typename _Idx = index_t>
-class CooIdx0Storage : protected DenseStorage<_Idx> {
+template <typename _Idx = index_t, template <typename> class _Array = Array>
+class CooIdx0Storage : protected DenseStorage<_Idx, _Array> {
 
  private:
 
   using IdxType      = _Idx;
-  using IdxArrayType = Array<_Idx>;
+  using IdxArrayType = _Array<_Idx>;
 
-  using BaseType     = DenseStorage<_Idx>;
+  using BaseType     = DenseStorage<_Idx, _Array>;
 
  protected:
 

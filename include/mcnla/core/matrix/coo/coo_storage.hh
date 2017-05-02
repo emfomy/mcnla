@@ -26,15 +26,15 @@ namespace matrix {
 ///
 /// @tparam  _Val  The value type.
 ///
-template <typename _Val>
-class CooStorage : protected DenseStorage<_Val> {
+template <typename _Val, template <typename> class _Array = Array>
+class CooStorage : protected DenseStorage<_Val, _Array> {
 
  private:
 
   using ValType      = _Val;
-  using ValArrayType = Array<ValType>;
+  using ValArrayType = _Array<_Val>;
 
-  using BaseType     = DenseStorage<_Val>;
+  using BaseType     = DenseStorage<_Val, _Array>;
 
  protected:
 
