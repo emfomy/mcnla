@@ -10,7 +10,6 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <iostream>
-#include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseVectorWrapper : public VectorWrapper<_Derived> {
+class DenseVectorWrapper : public utility::CrtpBase<_Derived, DenseVectorWrapper<_Derived>> {
 
  protected:
 

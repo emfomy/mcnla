@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_diagonal_gpu_matrix.hh
+/// @file    include/mcnla/core_gpu/matrix/dense/dense_diagonal_gpu_matrix.hh
 /// @brief   The definition of definition of dense diagonal GPU matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
@@ -44,7 +44,6 @@ namespace traits {
 template <typename _Val>
 struct Traits<matrix::DenseDiagonalGpuMatrix<_Val>> {
 
-  static constexpr index_t ndim = 2;
 
   using ValType     = _Val;
   using RealType    = matrix::DenseDiagonalGpuMatrix<RealValT<_Val>>;
@@ -94,8 +93,6 @@ class DenseDiagonalGpuMatrix
   friend InvertibleWrapper<DenseDiagonalGpuMatrix<_Val>>;
 
  public:
-
-  static constexpr index_t ndim = 2;
 
   using ValType       = _Val;
   using ValArrayType  = GpuArray<_Val>;

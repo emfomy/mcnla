@@ -43,7 +43,6 @@ namespace traits {
 ///
 template <typename _Val>
 struct Traits<matrix::CooVector<_Val>> {
-  static constexpr index_t ndim = 1;
 
   using ValType           = _Val;
 
@@ -101,8 +100,6 @@ class CooVector
   friend InvertibleWrapper<CooVector<_Val>>;
 
  public:
-
-  static constexpr index_t ndim = 1;
 
   using ValType           = _Val;
   using ValArrayType      = Array<_Val>;

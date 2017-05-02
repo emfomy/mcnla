@@ -9,9 +9,7 @@
 #define MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_GPU_VECTOR_HH_
 
 #include <mcnla/core_gpu/matrix/def.hpp>
-#include <mcnla/core/matrix/base/vector_wrapper.hpp>
-#include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core_gpu/matrix/dense/dense_diagonal_gpu_matrix.hpp>
 #include <mcnla/core_gpu/matrix/kit/gpu_array.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -43,7 +41,6 @@ namespace traits {
 ///
 template <typename _Val>
 struct Traits<matrix::DenseGpuVector<_Val>> {
-  static constexpr index_t ndim = 1;
 
   using ValType     = _Val;
 
@@ -51,6 +48,8 @@ struct Traits<matrix::DenseGpuVector<_Val>> {
   using ComplexType = matrix::DenseGpuVector<ComplexValT<_Val>>;
 
   using VectorType  = matrix::DenseGpuVector<_Val>;
+
+  using DiagonalType = matrix::DenseGpuVector<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,80 +84,22 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class DenseGpuVector
-  : public DenseVectorStorage<_Val, GpuArray>,
-    public VectorWrapper<DenseGpuVector<_Val>>,
-    public InvertibleWrapper<DenseGpuVector<_Val>> {
-
-  friend VectorWrapper<DenseGpuVector<_Val>>;
-  friend InvertibleWrapper<DenseGpuVector<_Val>>;
-
- public:
-
-  static constexpr index_t ndim = 1;
-
-  using ValType      = _Val;
-  using ValArrayType = GpuArray<_Val>;
-  using SizesType    = std::tuple<index_t>;
-
-  using RealType     = DenseGpuVector<RealValT<_Val>>;
-  using ComplexType  = DenseGpuVector<ComplexValT<_Val>>;
-
-  using VectorType   = DenseGpuVector<_Val>;
-
-  using DiagonalType = DenseGpuDiagonalMatrix<_Val>;
+class DenseGpuVector : public DenseVectorBase<_Val, DenseVector, DenseDiagonalMatrix, GpuArray> {
 
  private:
 
-  using BaseType     = DenseVectorStorage<_Val, GpuArray>;
+  using BaseType = DenseVectorBase<_Val, DenseVector, DenseDiagonalMatrix, GpuArray>;
 
  public:
 
-  // Constructors
-  inline DenseGpuVector() noexcept;
-  inline DenseGpuVector( const index_t length, const index_t stride = 1 ) noexcept;
-  inline DenseGpuVector( const SizesType sizes, const index_t stride = 1 ) noexcept;
-  inline DenseGpuVector( const index_t length, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseGpuVector( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseGpuVector( const index_t length, const index_t stride,
-                         const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseGpuVector( const DenseGpuVector &other ) noexcept;
+  using BaseType::DenseVectorBase;
 
-  // Operators
-  inline DenseGpuVector& operator=( const DenseGpuVector &other ) noexcept;
+  // Copy
+  inline void copy() const noexcept = delete;
 
-  // Gets information
-  inline index_t nnz() const noexcept;
-
-  // Gets internal position
-  inline index_t pos( const index_t idx ) const noexcept;
-
-  // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t length ) noexcept;
-  inline void resize( const index_t length, const index_t stride ) noexcept;
-
-  // Changes view
-  inline       DiagonalType& viewDiagonal() noexcept;
-  inline const DiagonalType& viewDiagonal() const noexcept;
-
-  // Gets segment
-  inline       VectorType operator()( const IdxRange &range ) noexcept;
-  inline const VectorType operator()( const IdxRange &range ) const noexcept;
-
- protected:
-
-  // Gets information
-  inline index_t lengthImpl() const noexcept;
-
-  // Convert sizes to dims
-  inline index_t toDim0( const SizesType sizes ) const noexcept;
-  inline index_t toDim0( const index_t length ) const noexcept;
-
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
+  // Gets element
+  inline void operator()( const index_t idx ) noexcept = delete;
+  inline void operator()( const index_t idx ) const noexcept = delete;
 
 };
 

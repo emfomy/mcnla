@@ -13,6 +13,7 @@
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 
+#include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
 

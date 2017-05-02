@@ -44,7 +44,6 @@ namespace traits {
 template <typename _Val>
 struct Traits<matrix::DenseDiagonalMatrix<_Val>> {
 
-  static constexpr index_t ndim = 2;
 
   using ValType     = _Val;
   using RealType    = matrix::DenseDiagonalMatrix<RealValT<_Val>>;
@@ -95,8 +94,6 @@ class DenseDiagonalMatrix
   friend InvertibleWrapper<DenseDiagonalMatrix<_Val>>;
 
  public:
-
-  static constexpr index_t ndim = 2;
 
   using ValType       = _Val;
   using ValArrayType  = Array<_Val>;

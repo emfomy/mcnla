@@ -46,7 +46,6 @@ namespace traits {
 template <typename _Val, Trans _trans>
 struct Traits<matrix::CooMatrix<_Val, _trans>> {
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
   using ValType           = _Val;
@@ -110,7 +109,6 @@ class CooMatrix
 
  public:
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
   using ValType           = _Val;

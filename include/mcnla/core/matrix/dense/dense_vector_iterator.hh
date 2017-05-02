@@ -40,7 +40,6 @@ namespace traits {
 ///
 template <typename _Val, class _Vector>
 struct Traits<matrix::DenseVectorIteratorBase<_Val, _Vector>> {
-  static constexpr index_t ndim = 1;
   using ElemType      = _Val;
   using ElemRefType   = _Val&;
   using ElemPtrType   = _Val*;
@@ -67,7 +66,6 @@ class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val
 
  private:
 
-  static constexpr index_t ndim = 1;
   using ValType       = _Val;
   using ElemType      = _Val;
   using ElemRefType   = _Val&;

@@ -41,7 +41,6 @@ namespace traits {
 ///
 template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
 struct Traits<matrix::CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   using ElemType      = std::tuple<_Idx, _Idx>;
   using ElemRefType   = matrix::CooTuple2<_Val, _Idx, _trans>;
@@ -71,7 +70,6 @@ class CooMatrixIteratorBase : public IteratorBase<CooMatrixIteratorBase<_Val, _I
 
  private:
 
-  static constexpr index_t ndim = 2;
   using ValType       = _Val;
   using IdxType       = _Idx;
   using TupleType     = CooTuple2<_Val, _Idx, _trans>;

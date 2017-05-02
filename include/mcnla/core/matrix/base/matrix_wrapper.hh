@@ -32,6 +32,10 @@ namespace matrix {
 template <class _Derived>
 class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>> {
 
+ public:
+
+  static constexpr index_t ndim = 2;
+
  private:
 
   using SizesType = std::tuple<index_t, index_t>;

@@ -46,7 +46,6 @@ namespace traits {
 template <typename _Val, Trans _trans, Uplo _uplo>
 struct Traits<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
@@ -107,7 +106,6 @@ class DenseSymmetricMatrix
 
  public:
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
