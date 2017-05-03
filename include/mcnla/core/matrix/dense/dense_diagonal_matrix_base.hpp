@@ -91,7 +91,7 @@ typename DenseDiagonalMatrixBase<_Val, _Types>::DerivedType& DenseDiagonalMatrix
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,8 @@ typename DenseDiagonalMatrixBase<_Val, _Types>::DerivedType& DenseDiagonalMatrix
 ///
 template <typename _Val, class _Types>
 typename DenseDiagonalMatrixBase<_Val, _Types>::DerivedType DenseDiagonalMatrixBase<_Val, _Types>::copy() const noexcept {
-  return DenseDiagonalMatrixBase(this->size(), this->pitch(), this->val().copy(), this->offset());
+  DenseDiagonalMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
+  return retval.derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +158,7 @@ void DenseDiagonalMatrixBase<_Val, _Types>::reconstruct(
 template <typename _Val, class _Types>
 typename DenseDiagonalMatrixBase<_Val, _Types>::TransposeType&
     DenseDiagonalMatrixBase<_Val, _Types>::t() noexcept {
-  return *this;
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,7 +167,7 @@ typename DenseDiagonalMatrixBase<_Val, _Types>::TransposeType&
 template <typename _Val, class _Types>
 const typename DenseDiagonalMatrixBase<_Val, _Types>::TransposeType&
     DenseDiagonalMatrixBase<_Val, _Types>::t() const noexcept {
-  return *this;
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +226,8 @@ index_t DenseDiagonalMatrixBase<_Val, _Types>::ncolImpl() const noexcept {
 /// @brief  Convert to base class.
 ///
 template <typename _Val, class _Types>
-typename DenseDiagonalMatrixBase<_Val, _Types>::BaseType& DenseDiagonalMatrixBase<_Val, _Types>::base() noexcept {
+typename DenseDiagonalMatrixBase<_Val, _Types>::BaseType&
+    DenseDiagonalMatrixBase<_Val, _Types>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
@@ -233,8 +235,27 @@ typename DenseDiagonalMatrixBase<_Val, _Types>::BaseType& DenseDiagonalMatrixBas
 /// @copydoc  base
 ///
 template <typename _Val, class _Types>
-const typename DenseDiagonalMatrixBase<_Val, _Types>::BaseType& DenseDiagonalMatrixBase<_Val, _Types>::base() const noexcept {
+const typename DenseDiagonalMatrixBase<_Val, _Types>::BaseType&
+    DenseDiagonalMatrixBase<_Val, _Types>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to derived class.
+///
+template <typename _Val, class _Types>
+typename DenseDiagonalMatrixBase<_Val, _Types>::DerivedType&
+    DenseDiagonalMatrixBase<_Val, _Types>::derived() noexcept {
+  return static_cast<DerivedType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <typename _Val, class _Types>
+const typename DenseDiagonalMatrixBase<_Val, _Types>::DerivedType&
+    DenseDiagonalMatrixBase<_Val, _Types>::derived() const noexcept {
+  return static_cast<const DerivedType&>(*this);
 }
 
 }  // namespace matrix

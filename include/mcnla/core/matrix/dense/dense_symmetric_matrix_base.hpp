@@ -92,7 +92,7 @@ typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,8 @@ typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
 template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
 typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType
     DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::copy() const noexcept {
-  return DenseSymmetricMatrixBase(this->size(), this->pitch(), this->val().copy(), this->offset());
+  DenseSymmetricMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
+  return retval.derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,6 +226,24 @@ template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
 const typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::BaseType&
     DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to derived class.
+///
+template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
+typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
+    DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::derived() noexcept {
+  return static_cast<DerivedType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
+const typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
+    DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::derived() const noexcept {
+  return static_cast<const DerivedType&>(*this);
 }
 
 }  // namespace matrix

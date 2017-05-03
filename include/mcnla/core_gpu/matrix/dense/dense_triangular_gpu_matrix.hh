@@ -67,7 +67,7 @@ struct IsDenseTriangularGpuMatrix<matrix::DenseTriangularGpuMatrix<_Val, _trans,
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  gpu_matrix_dense_module
 /// The dense triangular matrix class.
 ///
 /// @tparam  _Val    The value type.
@@ -94,11 +94,11 @@ class DenseTriangularGpuMatrix : public DenseTriangularMatrixBase<_Val, _trans, 
 
 };
 
-/// @ingroup  matrix_dense_module
+/// @ingroup  gpu_matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
 using DenseTriangularGpuMatrixColMajor = DenseTriangularGpuMatrix<_Val, Trans::NORMAL, _uplo>;
 
-/// @ingroup  matrix_dense_module
+/// @ingroup  gpu_matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
 using DenseTriangularGpuMatrixRowMajor = DenseTriangularGpuMatrix<_Val, Trans::TRANS, _uplo>;
 

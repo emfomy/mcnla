@@ -92,7 +92,7 @@ typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,8 @@ typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
 template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
 typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType
     DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::copy() const noexcept {
-  return DenseTriangularMatrixBase(this->size(), this->pitch(), this->val().copy(), this->offset());
+  DenseTriangularMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
+  return retval.derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,6 +230,24 @@ template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
 const typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::BaseType&
     DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to derived class.
+///
+template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
+typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
+    DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::derived() noexcept {
+  return static_cast<DerivedType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
+const typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
+    DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::derived() const noexcept {
+  return static_cast<const DerivedType&>(*this);
 }
 
 }  // namespace matrix

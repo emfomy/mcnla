@@ -125,7 +125,7 @@ typename DenseMatrixBase<_Val, _trans, _Types>::DerivedType& DenseMatrixBase<_Va
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +133,8 @@ typename DenseMatrixBase<_Val, _trans, _Types>::DerivedType& DenseMatrixBase<_Va
 ///
 template <typename _Val, Trans _trans, class _Types>
 typename DenseMatrixBase<_Val, _trans, _Types>::DerivedType DenseMatrixBase<_Val, _trans, _Types>::copy() const noexcept {
-  return DenseMatrixBase(this->nrow(), this->ncol(), this->pitch(), this->val().copy(), this->offset());
+  DenseMatrixBase retval(this->nrow(), this->ncol(), this->pitch(), this->val().copy(), this->offset());
+  return retval.derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,7 +279,11 @@ const typename DenseMatrixBase<_Val, _trans, _Types>::HermitianType& DenseMatrix
 /// @brief  Gets the symmetric view of the matrix.
 ///
 template <typename _Val, Trans _trans, class _Types> template <Uplo _uplo>
-typename _Types::template SyMatT<_Val, _trans, _uplo>&
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+typename DenseMatrixBase<_Val, _trans, _Types>::template SymmetricType<_uplo>&
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+typename DenseMatrixBase<_Val, _trans, _Types>::SymmetricType<_uplo>&
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
     DenseMatrixBase<_Val, _trans, _Types>::viewSymmetric() noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<SymmetricType<_uplo>&>(base());
@@ -288,7 +293,11 @@ typename _Types::template SyMatT<_Val, _trans, _uplo>&
 /// @copydoc  viewSymmetric
 ///
 template <typename _Val, Trans _trans, class _Types> template <Uplo _uplo>
-const typename _Types::template SyMatT<_Val, _trans, _uplo>&
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+const typename DenseMatrixBase<_Val, _trans, _Types>::template SymmetricType<_uplo>&
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+const typename DenseMatrixBase<_Val, _trans, _Types>::SymmetricType<_uplo>&
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
     DenseMatrixBase<_Val, _trans, _Types>::viewSymmetric() const noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<const SymmetricType<_uplo>&>(base());
@@ -298,7 +307,11 @@ const typename _Types::template SyMatT<_Val, _trans, _uplo>&
 /// @brief  Gets the triangular view of the matrix.
 ///
 template <typename _Val, Trans _trans, class _Types> template <Uplo _uplo>
-typename _Types::template TrMatT<_Val, _trans, _uplo>&
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+typename DenseMatrixBase<_Val, _trans, _Types>::template TriangularType<_uplo>&
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+typename DenseMatrixBase<_Val, _trans, _Types>::TriangularType< _uplo >&
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
     DenseMatrixBase<_Val, _trans, _Types>::viewTriangular() noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<TriangularType<_uplo>&>(base());
@@ -308,7 +321,11 @@ typename _Types::template TrMatT<_Val, _trans, _uplo>&
 /// @copydoc  viewTriangular
 ///
 template <typename _Val, Trans _trans, class _Types> template <Uplo _uplo>
-const typename _Types::template TrMatT<_Val, _trans, _uplo>&
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+const typename DenseMatrixBase<_Val, _trans, _Types>::template TriangularType<_uplo>&
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+const typename DenseMatrixBase<_Val, _trans, _Types>::TriangularType<_uplo>&
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
     DenseMatrixBase<_Val, _trans, _Types>::viewTriangular() const noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<const TriangularType<_uplo>&>(base());
@@ -643,6 +660,22 @@ typename DenseMatrixBase<_Val, _trans, _Types>::BaseType& DenseMatrixBase<_Val, 
 template <typename _Val, Trans _trans, class _Types>
 const typename DenseMatrixBase<_Val, _trans, _Types>::BaseType& DenseMatrixBase<_Val, _trans, _Types>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to derived class.
+///
+template <typename _Val, Trans _trans, class _Types>
+typename DenseMatrixBase<_Val, _trans, _Types>::DerivedType& DenseMatrixBase<_Val, _trans, _Types>::derived() noexcept {
+  return static_cast<DerivedType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <typename _Val, Trans _trans, class _Types>
+const typename DenseMatrixBase<_Val, _trans, _Types>::DerivedType& DenseMatrixBase<_Val, _trans, _Types>::derived() const noexcept {
+  return static_cast<const DerivedType&>(*this);
 }
 
 }  // namespace matrix

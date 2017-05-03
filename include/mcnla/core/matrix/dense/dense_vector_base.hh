@@ -114,6 +114,10 @@ class DenseVectorBase
   inline       BaseType& base() noexcept;
   inline const BaseType& base() const noexcept;
 
+  // Gets derived class
+  inline       DerivedType& derived() noexcept;
+  inline const DerivedType& derived() const noexcept;
+
 };
 
 }  // namespace matrix

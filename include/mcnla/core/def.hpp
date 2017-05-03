@@ -11,10 +11,6 @@
 #include <mcnla/def.hpp>
 #include <mpi.h>
 
-#ifdef MCNLA_USE_GPU
-  #include <magma.h>
-#endif  // MCNLA_USE_GPU
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
 //
@@ -22,23 +18,17 @@ namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  core_module
-/// Initializes the environment (including MPI and MAGMA).
+/// Initializes the environment (including MPI).
 ///
-void init( int &argc, char **&argv ) {
+static inline void init( int &argc, char **&argv ) {
   MPI_Init(&argc, &argv);
-#ifdef MCNLA_USE_GPU
-  magma_init();
-#endif  // MCNLA_USE_GPU
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  core_module
-/// Finalizes the environment (including MPI and MAGMA).
+/// Finalizes the environment (including MPI).
 ///
-void finalize() {
-#ifdef MCNLA_USE_GPU
-  magma_finalize();
-#endif  // MCNLA_USE_GPU
+static inline void finalize() {
   MPI_Finalize();
 }
 

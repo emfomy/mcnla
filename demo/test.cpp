@@ -16,7 +16,7 @@
 ///
 int main( int argc, char **argv ) {
 
-  mcnla::init(argc, argv);
+  mcnla::gpuInit(argc, argv);
 
   magma_print_environment();
 
@@ -42,7 +42,7 @@ int main( int argc, char **argv ) {
   disp(a);
   disp(b);
 
-  mcnla::finalize();
+  mcnla::gpuFinalize();
 
 //   const auto mpi_comm = MPI_COMM_WORLD;
 //   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);

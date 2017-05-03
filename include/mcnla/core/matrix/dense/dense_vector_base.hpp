@@ -100,7 +100,7 @@ typename DenseVectorBase<_Val, _Types>::DerivedType& DenseVectorBase<_Val, _Type
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
-  return *this;
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,8 @@ typename DenseVectorBase<_Val, _Types>::DerivedType& DenseVectorBase<_Val, _Type
 ///
 template <typename _Val, class _Types>
 typename DenseVectorBase<_Val, _Types>::DerivedType DenseVectorBase<_Val, _Types>::copy() const noexcept {
-  return DenseVectorBase(this->length(), this->stride(), this->val().copy(), this->offset());
+  DenseVectorBase retval(this->length(), this->stride(), this->val().copy(), this->offset());
+  return retval.derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,6 +261,22 @@ typename DenseVectorBase<_Val, _Types>::BaseType& DenseVectorBase<_Val, _Types>:
 template <typename _Val, class _Types>
 const typename DenseVectorBase<_Val, _Types>::BaseType& DenseVectorBase<_Val, _Types>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert to derived class.
+///
+template <typename _Val, class _Types>
+typename DenseVectorBase<_Val, _Types>::DerivedType& DenseVectorBase<_Val, _Types>::derived() noexcept {
+  return static_cast<DerivedType&>(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  derived
+///
+template <typename _Val, class _Types>
+const typename DenseVectorBase<_Val, _Types>::DerivedType& DenseVectorBase<_Val, _Types>::derived() const noexcept {
+  return static_cast<const DerivedType&>(*this);
 }
 
 }  // namespace matrix

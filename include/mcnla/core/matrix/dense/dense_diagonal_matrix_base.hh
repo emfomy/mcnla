@@ -11,7 +11,6 @@
 #include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -109,6 +108,10 @@ class DenseDiagonalMatrixBase
   // Gets base class
   inline       BaseType& base() noexcept;
   inline const BaseType& base() const noexcept;
+
+  // Gets derived class
+  inline       DerivedType& derived() noexcept;
+  inline const DerivedType& derived() const noexcept;
 
 };
 

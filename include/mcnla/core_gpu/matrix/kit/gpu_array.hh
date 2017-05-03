@@ -44,6 +44,7 @@ class GpuArray : public ArrayBase<GpuArray<_Val>, _Val> {
   using BaseType::ArrayBase;
 
   // Constructors
+  inline GpuArray() noexcept;
   inline GpuArray( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Gets data

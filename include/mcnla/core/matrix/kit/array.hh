@@ -44,6 +44,7 @@ class Array : public ArrayBase<Array<_Val>, _Val> {
   using BaseType::ArrayBase;
 
   // Constructors
+  inline Array() noexcept;
   inline Array( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Copy

@@ -67,7 +67,7 @@ struct IsDenseSymmetricGpuMatrix<matrix::DenseSymmetricGpuMatrix<_Val, _trans, _
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  gpu_matrix_dense_module
 /// The dense symmetric matrix class.
 ///
 /// @tparam  _Val    The value type.
@@ -94,11 +94,11 @@ class DenseSymmetricGpuMatrix : public DenseSymmetricMatrixBase<_Val, _trans, _u
 
 };
 
-/// @ingroup  matrix_dense_module
+/// @ingroup  gpu_matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
 using DenseSymmetricGpuMatrixColMajor = DenseSymmetricGpuMatrix<_Val, Trans::NORMAL, _uplo>;
 
-/// @ingroup  matrix_dense_module
+/// @ingroup  gpu_matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
 using DenseSymmetricGpuMatrixRowMajor = DenseSymmetricGpuMatrix<_Val, Trans::TRANS, _uplo>;
 
