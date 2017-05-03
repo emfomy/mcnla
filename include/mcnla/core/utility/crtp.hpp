@@ -28,15 +28,7 @@ namespace utility {
 /// @tparam  _Wrapper  The wrapper class type.
 ///
 template <class _Derived, class _Wrapper = void>
-class CrtpBase {
-
-  friend _Wrapper;
-
- protected:
-
-  inline CrtpBase() noexcept = default;
-
- public:
+struct CrtpBase {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /// @brief  Cast to derived class.

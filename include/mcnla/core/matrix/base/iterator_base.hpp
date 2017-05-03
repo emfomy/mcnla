@@ -57,7 +57,7 @@ _Derived& IteratorBase<_Derived>::operator=(
     const IteratorBase &other
 ) noexcept {
   container_ = other.container_; itidx_ = other.itidx_;
-  return derived();
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ _Derived& IteratorBase<_Derived>::operator=(
 ///
 template <class _Derived>
 typename IteratorBase<_Derived>::ElemRefType IteratorBase<_Derived>::operator*() const noexcept {
-  return derived().elemRef();
+  return this->derived().elemRef();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ typename IteratorBase<_Derived>::ElemRefType IteratorBase<_Derived>::operator*()
 ///
 template <class _Derived>
 typename IteratorBase<_Derived>::ElemPtrType IteratorBase<_Derived>::operator->() const noexcept {
-  return derived().elemPtr();
+  return this->derived().elemPtr();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ _Derived& IteratorBase<_Derived>::operator++() noexcept {
   if ( ++itidx_ > nnz ) {
     itidx_ = nnz;
   }
-  return derived();
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ _Derived& IteratorBase<_Derived>::operator--() noexcept {
   if ( --itidx_ < 0 ) {
     itidx_ = 0;
   }
-  return derived();
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +204,7 @@ _Derived& IteratorBase<_Derived>::operator+=(
   if ( (itidx_+=num) > nnz ) {
     itidx_ = nnz;
   }
-  return derived();
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +220,7 @@ _Derived& IteratorBase<_Derived>::operator-=(
   if ( (itidx_-=num) < 0 ) {
     itidx_ = 0;
   }
-  return derived();
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,7 +289,7 @@ ContainerT<_Derived>* IteratorBase<_Derived>::container() const noexcept {
 template <class _Derived>
 _Derived& IteratorBase<_Derived>::setBegin() noexcept {
   itidx_ = 0;
-  return derived();
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,7 +298,7 @@ _Derived& IteratorBase<_Derived>::setBegin() noexcept {
 template <class _Derived>
 _Derived& IteratorBase<_Derived>::setEnd() noexcept {
   itidx_ = (container_ != nullptr) ? container_->nnz() : 0;
-  return derived();
+  return this->derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,22 +319,6 @@ _Derived IteratorBase<_Derived>::endImpl(
     ContainerType *container
 ) noexcept {
   _Derived retval(container); retval.setEnd(); return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to derived class.
-///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::derived() noexcept {
-  return static_cast<_Derived&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  derived
-///
-template <class _Derived>
-const _Derived& IteratorBase<_Derived>::derived() const noexcept {
-  return static_cast<const _Derived&>(*this);
 }
 
 }  // namespace matrix

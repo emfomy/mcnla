@@ -24,18 +24,18 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) storage.
 ///
-/// @tparam  _Val    The value type.
-/// @tparam  _Array  The array template.
+/// @tparam  _Val     The value type.
+/// @tparam  _ArrayT  The array template.
 ///
-template <typename _Val, template <typename> class _Array>
-class CooStorage : protected DenseStorage<_Val, _Array> {
+template <typename _Val, template <typename> class _ArrayT>
+class CooStorage : protected DenseStorage<_Val, _ArrayT> {
 
  private:
 
   using ValType      = _Val;
-  using ValArrayType = _Array<_Val>;
+  using ValArrayType = _ArrayT<_Val>;
 
-  using BaseType     = DenseStorage<_Val, _Array>;
+  using BaseType     = DenseStorage<_Val, _ArrayT>;
 
  protected:
 

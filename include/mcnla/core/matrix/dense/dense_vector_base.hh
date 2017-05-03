@@ -35,12 +35,14 @@ class DenseVectorBase
     public VectorWrapper<typename _Types::template GeVecT<_Val>>,
     public InvertibleWrapper<typename _Types::template GeVecT<_Val>> {
 
-  friend VectorWrapper<typename _Types::template GeVecT<_Val>>;
-  friend InvertibleWrapper<typename _Types::template GeVecT<_Val>>;
+ private:
+
+  using DerivedType = typename _Types::template GeVecT<_Val>;
+
+  friend VectorWrapper<DerivedType>;
+  friend InvertibleWrapper<DerivedType>;
 
  public:
-
-  using DerivedType  = typename _Types::template GeVecT<_Val>;
 
   using ValType      = _Val;
   using ValArrayType = typename _Types::template ArrayT<_Val>;

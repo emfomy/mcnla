@@ -28,11 +28,11 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class GpuArray : public ArrayBase<_Val> {
+class GpuArray : public ArrayBase<GpuArray<_Val>, _Val> {
 
  private:
 
-  using BaseType = ArrayBase<_Val>;
+  using BaseType = ArrayBase<GpuArray<_Val>, _Val>;
 
  protected:
 
@@ -41,14 +41,10 @@ class GpuArray : public ArrayBase<_Val> {
 
  public:
 
-  // Constructors
-  inline GpuArray() noexcept;
-  inline GpuArray( const index_t size, const index_t offset = 0 ) noexcept;
-  inline GpuArray( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline GpuArray( const GpuArray &other ) noexcept;
+  using BaseType::ArrayBase;
 
-  // Operators
-  inline GpuArray& operator=( const GpuArray &other ) noexcept;
+  // Constructors
+  inline GpuArray( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Gets data
   inline       _Val& operator[]( const index_t idx ) noexcept = delete;

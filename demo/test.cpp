@@ -20,24 +20,24 @@ int main( int argc, char **argv ) {
 
   magma_print_environment();
 
-  int n = 10;
-  mcnla::matrix::DenseVector<double> a(n), b(n);
-  mcnla::matrix::DenseDiagonalGpuMatrix<double> da(n), db(n);
+  int n = 5;
+  mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
+  mcnla::matrix::DenseTriangularGpuMatrix<double> da(n), db(n);
 
   int i = 0;
-  for ( auto &v : a ) {
+  for ( auto &v : a.viewGeneral() ) {
     v = ++i;
   }
-  for ( auto &v : b ) {
+  for ( auto &v : b.viewGeneral() ) {
     v = 0;
   }
 
   disp(a);
   disp(b);
 
-  magma_dsetmatrix(n, 1, a.valPtr(), n, da.valPtr(), n);
-  mcnla::la::copy(da.viewVector(), db.viewVector());
-  magma_dgetmatrix(n, 1, db.valPtr(), n, b.valPtr(), n);
+  magma_dsetmatrix(n, n, a.valPtr(), n, da.valPtr(), n);
+  mcnla::la::copy(da.viewGeneral().vectorize(), db.viewGeneral().vectorize());
+  magma_dgetmatrix(n, n, db.valPtr(), n, b.valPtr(), n);
 
   disp(a);
   disp(b);

@@ -35,12 +35,14 @@ class DenseDiagonalMatrixBase
     public MatrixWrapper<typename _Types::template DiMatT<_Val>>,
     public InvertibleWrapper<typename _Types::template DiMatT<_Val>> {
 
-  friend MatrixWrapper<typename _Types::template DiMatT<_Val>>;
-  friend InvertibleWrapper<typename _Types::template DiMatT<_Val>>;
+ private:
+
+  using DerivedType = typename _Types::template DiMatT<_Val>;
+
+  friend MatrixWrapper<DerivedType>;
+  friend InvertibleWrapper<DerivedType>;
 
  public:
-
-  using DerivedType  = typename _Types::template DiMatT<_Val>;
 
   using ValType       = _Val;
   using ValArrayType  = typename _Types::template ArrayT<_Val>;

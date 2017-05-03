@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <iterator>
+#include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +30,9 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class IteratorBase : public std::iterator<std::random_access_iterator_tag, typename traits::Traits<_Derived>::ElemType> {
+class IteratorBase
+  : public std::iterator<std::random_access_iterator_tag, typename traits::Traits<_Derived>::ElemType>,
+    public utility::CrtpBase<_Derived, IteratorBase<_Derived>> {
 
  private:
 
@@ -94,12 +97,6 @@ class IteratorBase : public std::iterator<std::random_access_iterator_tag, typen
   // Gets the begin/end iterator
   static inline _Derived beginImpl( ContainerType *container ) noexcept;
   static inline _Derived endImpl( ContainerType *container ) noexcept;
-
- protected:
-
-  // Gets derived class
-  inline       _Derived& derived() noexcept;
-  inline const _Derived& derived() const noexcept;
 
 };
 

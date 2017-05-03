@@ -28,11 +28,11 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Array : public ArrayBase<_Val> {
+class Array : public ArrayBase<Array<_Val>, _Val> {
 
  private:
 
-  using BaseType = ArrayBase<_Val>;
+  using BaseType = ArrayBase<Array<_Val>, _Val>;
 
  protected:
 
@@ -41,14 +41,10 @@ class Array : public ArrayBase<_Val> {
 
  public:
 
-  // Constructors
-  inline Array() noexcept;
-  inline Array( const index_t size, const index_t offset = 0 ) noexcept;
-  inline Array( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline Array( const Array &other ) noexcept;
+  using BaseType::ArrayBase;
 
-  // Operators
-  inline Array& operator=( const Array &other ) noexcept;
+  // Constructors
+  inline Array( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Copy
   inline Array copy() const noexcept;

@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <memory>
+#include <mcnla/core/utility/crtp.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,14 +26,18 @@ namespace matrix {
 /// @ingroup  matrix_module
 /// The base array.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val       The value type.
+/// @tparam  _DerivedT  The derived template.
 ///
-template <typename _Val>
-class ArrayBase : public std::shared_ptr<_Val> {
+template <class _Derived, typename _Val>
+class ArrayBase
+  : public std::shared_ptr<_Val>,
+    public utility::CrtpBase<_Derived, ArrayBase<_Derived, _Val>> {
 
  private:
 
-  using BaseType = std::shared_ptr<_Val>;
+  using DerivedType = _Derived;
+  using BaseType    = std::shared_ptr<_Val>;
 
  protected:
 
@@ -42,28 +47,21 @@ class ArrayBase : public std::shared_ptr<_Val> {
   // The offset.
   index_t offset_;
 
- protected:
+ public:
 
   // Constructors
   inline ArrayBase() noexcept;
   inline ArrayBase( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline ArrayBase( const ArrayBase &other ) noexcept;
+  inline ArrayBase( const DerivedType &other ) noexcept;
 
   // Operators
-  inline ArrayBase& operator=( const ArrayBase &other ) noexcept;
-
- public:
-
-  // Operators
-  inline void operator>>=( const index_t offset ) noexcept;
-  inline void operator<<=( const index_t offset ) noexcept;
-  inline       ArrayBase operator>>( const index_t offset ) noexcept;
-  inline const ArrayBase operator>>( const index_t offset ) const noexcept;
-  inline       ArrayBase operator<<( const index_t offset ) noexcept;
-  inline const ArrayBase operator<<( const index_t offset ) const noexcept;
-
-  // Copy
-  inline ArrayBase copy() const noexcept;
+  inline       DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline       DerivedType& operator>>=( const index_t offset ) noexcept;
+  inline       DerivedType& operator<<=( const index_t offset ) noexcept;
+  inline       DerivedType  operator>>( const index_t offset ) noexcept;
+  inline const DerivedType  operator>>( const index_t offset ) const noexcept;
+  inline       DerivedType  operator<<( const index_t offset ) noexcept;
+  inline const DerivedType  operator<<( const index_t offset ) const noexcept;
 
   // Gets information
   inline bool    isEmpty() const noexcept;

@@ -12,10 +12,10 @@
 
 #include <mcnla/core_gpu/matrix/dense/dense_gpu_vector.hpp>
 
-// #include <mcnla/core_gpu/matrix/dense/dense_gpu_matrix.hpp>
+#include <mcnla/core_gpu/matrix/dense/dense_gpu_matrix.hpp>
 
-// #include <mcnla/core_gpu/matrix/dense/dense_symmetric_gpu_matrix.hpp>
-// #include <mcnla/core_gpu/matrix/dense/dense_triangular_gpu_matrix.hpp>
+#include <mcnla/core_gpu/matrix/dense/dense_symmetric_gpu_matrix.hpp>
+#include <mcnla/core_gpu/matrix/dense/dense_triangular_gpu_matrix.hpp>
 #include <mcnla/core_gpu/matrix/dense/dense_diagonal_gpu_matrix.hpp>
 
 #endif  // MCNLA_CORE_GPU_MATRIX_DENSE_HPP_

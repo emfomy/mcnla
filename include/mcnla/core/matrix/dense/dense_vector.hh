@@ -14,6 +14,7 @@
 #include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix.hpp>
+#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -81,7 +82,6 @@ class DenseVector
 
   friend DenseVectorWrapper<DenseVector<_Val>>;
   friend IterableWrapper<DenseVector<_Val>>;
-  friend InvertibleWrapper<DenseVector<_Val>>;
 
  private:
 

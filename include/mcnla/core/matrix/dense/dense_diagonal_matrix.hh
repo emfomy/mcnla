@@ -31,8 +31,10 @@ template <typename _Val>
 struct Traits<matrix::DenseDiagonalMatrix<_Val>> {
 
   using ValType     = _Val;
+
   using RealType    = matrix::DenseDiagonalMatrix<RealValT<_Val>>;
   using ComplexType = matrix::DenseDiagonalMatrix<ComplexValT<_Val>>;
+
   using VectorType  = matrix::DenseVector<_Val>;
   using MatrixType  = matrix::DenseDiagonalMatrix<_Val>;
 };

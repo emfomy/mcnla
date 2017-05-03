@@ -22,13 +22,6 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor.
-///
-template <typename _Val>
-GpuArray<_Val>::GpuArray() noexcept
-  : BaseType() {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Val>
@@ -37,41 +30,6 @@ GpuArray<_Val>::GpuArray(
     const index_t offset
 ) noexcept
   : BaseType(std::shared_ptr<_Val>(utility::gpuMalloc<_Val>(size), utility::gpuFree<_Val>), size, offset) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Val>
-GpuArray<_Val>::GpuArray(
-    const BaseType &ptr,
-    const index_t size,
-    const index_t offset
-) noexcept
-  : BaseType(ptr, size, offset) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy constructor.
-///
-/// @attention  It is shallow copy (creates an alias).
-///
-template <typename _Val>
-GpuArray<_Val>::GpuArray(
-    const GpuArray &other
-) noexcept
-  : BaseType(other) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy assignment operator.
-///
-/// @attention  It is shallow copy (creates an alias).
-///
-template <typename _Val>
-GpuArray<_Val>& GpuArray<_Val>::operator=(
-    const GpuArray &other
-) noexcept {
-  BaseType::operator=(other);
-  return *this;
-}
 
 }  // namespace matrix
 

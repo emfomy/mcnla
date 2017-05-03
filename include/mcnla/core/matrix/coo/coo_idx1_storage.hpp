@@ -23,48 +23,48 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the second dimension index array.
 ///
-template <typename _Idx, template <typename> class _Array>
-index_t CooIdx1Storage<_Idx, _Array>::idx1Capacity() const noexcept {
+template <typename _Idx, template <typename> class _ArrayT>
+index_t CooIdx1Storage<_Idx, _ArrayT>::idx1Capacity() const noexcept {
   return this->capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the second dimension index array.
 ///
-template <typename _Idx, template <typename> class _Array>
-index_t CooIdx1Storage<_Idx, _Array>::idx1Offset() const noexcept {
+template <typename _Idx, template <typename> class _ArrayT>
+index_t CooIdx1Storage<_Idx, _ArrayT>::idx1Offset() const noexcept {
   return this->offset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the second dimension index array.
 ///
-template <typename _Idx, template <typename> class _Array>
-typename CooIdx1Storage<_Idx, _Array>::IdxArrayType& CooIdx1Storage<_Idx, _Array>::idx1() noexcept {
+template <typename _Idx, template <typename> class _ArrayT>
+typename CooIdx1Storage<_Idx, _ArrayT>::IdxArrayType& CooIdx1Storage<_Idx, _ArrayT>::idx1() noexcept {
   return this->val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  idx1
 ///
-template <typename _Idx, template <typename> class _Array>
-const typename CooIdx1Storage<_Idx, _Array>::IdxArrayType& CooIdx1Storage<_Idx, _Array>::idx1() const noexcept {
+template <typename _Idx, template <typename> class _ArrayT>
+const typename CooIdx1Storage<_Idx, _ArrayT>::IdxArrayType& CooIdx1Storage<_Idx, _ArrayT>::idx1() const noexcept {
   return this->val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw second dimension index pointer.
 ///
-template <typename _Idx, template <typename> class _Array>
-_Idx* CooIdx1Storage<_Idx, _Array>::idx1Ptr() noexcept {
+template <typename _Idx, template <typename> class _ArrayT>
+_Idx* CooIdx1Storage<_Idx, _ArrayT>::idx1Ptr() noexcept {
   return this->valPtr();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  idx1Ptr
 ///
-template <typename _Idx, template <typename> class _Array>
-const _Idx* CooIdx1Storage<_Idx, _Array>::idx1Ptr() const noexcept {
+template <typename _Idx, template <typename> class _ArrayT>
+const _Idx* CooIdx1Storage<_Idx, _ArrayT>::idx1Ptr() const noexcept {
   return this->valPtr();
 }
 

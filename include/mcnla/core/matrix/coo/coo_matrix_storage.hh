@@ -29,31 +29,31 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The The coordinate list (COO) matrix storage class.
 ///
-/// @tparam  _Val    The value type.
-/// @tparam  _Array  The array template.
+/// @tparam  _Val     The value type.
+/// @tparam  _ArrayT  The array template.
 ///
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Val, template <typename> class _Array>
+template <typename _Val, template <typename> class _ArrayT>
 class CooMatrixStorage
-  : public CooStorage<_Val, _Array>,
-    public CooIdx0Storage<index_t, _Array>,
-    public CooIdx1Storage<index_t, _Array> {
+  : public CooStorage<_Val, _ArrayT>,
+    public CooIdx0Storage<index_t, _ArrayT>,
+    public CooIdx1Storage<index_t, _ArrayT> {
 
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = _Array<_Val>;
-  using IdxArrayType      = _Array<index_t>;
+  using ValArrayType      = _ArrayT<_Val>;
+  using IdxArrayType      = _ArrayT<index_t>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = CooVectorStorage<_Val, _Array>;
-  using MatrixStorageType = CooMatrixStorage<_Val, _Array>;
+  using VectorStorageType = CooVectorStorage<_Val, _ArrayT>;
+  using MatrixStorageType = CooMatrixStorage<_Val, _ArrayT>;
 
-  using BaseType          = CooStorage<_Val, _Array>;
-  using Base0Type         = CooIdx0Storage<index_t, _Array>;
-  using Base1Type         = CooIdx1Storage<index_t, _Array>;
+  using BaseType          = CooStorage<_Val, _ArrayT>;
+  using Base0Type         = CooIdx0Storage<index_t, _ArrayT>;
+  using Base1Type         = CooIdx1Storage<index_t, _ArrayT>;
 
  protected:
 
@@ -69,11 +69,11 @@ class CooMatrixStorage
  public:
 
   using BaseType::val;
-  using BaseType::idx0;
-  using BaseType::idx1;
   using BaseType::valPtr;
-  using BaseType::idx0Ptr;
-  using BaseType::idx1Ptr;
+  using Base0Type::idx0;
+  using Base0Type::idx0Ptr;
+  using Base1Type::idx1;
+  using Base1Type::idx1Ptr;
 
  protected:
 
