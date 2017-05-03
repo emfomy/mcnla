@@ -28,7 +28,7 @@
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_collection_module Container Collection Module
+/// @defgroup  matrix_collection_module  Container Collection Module
 /// @ingroup   matrix_module
 /// @brief     The Container Collection Module
 ///

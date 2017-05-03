@@ -67,7 +67,7 @@ template <class __Derived>
 std::ostream& operator<<(
     std::ostream &os,
     const StageWrapper<__Derived> &wrapper
-) {
+) noexcept {
   return wrapper.outputName(os);
 }
 

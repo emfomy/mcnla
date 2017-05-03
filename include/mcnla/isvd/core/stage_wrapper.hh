@@ -15,6 +15,7 @@
 #include <mcnla/isvd/core/parameters.hpp>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/utility/crtp.hpp>
+#include <mcnla/core/utility/time.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -33,7 +34,7 @@ namespace isvd {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> {
+class StageWrapper {
 
  public:
 
@@ -71,7 +72,7 @@ class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> 
   template <typename... Args>
   inline void operator()( Args... arg ) noexcept;
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper ) noexcept;
 
   // Gets data
   inline bool isInitialized() const noexcept;
@@ -90,6 +91,10 @@ class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> 
   // Outputs name
   inline std::ostream& outputName( std::ostream &os ) const noexcept;
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 
 };

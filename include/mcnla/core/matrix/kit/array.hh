@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/kit/array.hh
-/// @brief   The definition of raw array class.
+/// @brief   The definition of value array class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -9,8 +9,7 @@
 #define MCNLA_CORE_MATRIX_KIT_ARRAY_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <valarray>
-#include <memory>
+#include <mcnla/core/matrix/kit/array_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,59 +23,32 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_module
-/// The array.
+/// The value array.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Array : public std::shared_ptr<_Val> {
+class Array : public ArrayBase<Array<_Val>, _Val> {
 
  private:
 
-  using BaseType = std::shared_ptr<_Val>;
+  using BaseType = ArrayBase<Array<_Val>, _Val>;
 
  protected:
 
-  // The size.
-  index_t size_;
-
-  // The offset.
-  index_t offset_;
-
-  /// The empty array pointer.
-  static const BaseType kNullPtr;
+  using BaseType::size_;
+  using BaseType::offset_;
 
  public:
+
+  using BaseType::ArrayBase;
 
   // Constructors
   inline Array() noexcept;
   inline Array( const index_t size, const index_t offset = 0 ) noexcept;
-  inline Array( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline Array( const Array &other ) noexcept;
-
-  // Operators
-  inline Array& operator=( const Array &other ) noexcept;
-  inline void operator>>=( const index_t offset ) noexcept;
-  inline void operator<<=( const index_t offset ) noexcept;
-  inline       Array operator>>( const index_t offset ) noexcept;
-  inline const Array operator>>( const index_t offset ) const noexcept;
-  inline       Array operator<<( const index_t offset ) noexcept;
-  inline const Array operator<<( const index_t offset ) const noexcept;
 
   // Copy
   inline Array copy() const noexcept;
-
-  // Gets information
-  inline bool    isEmpty() const noexcept;
-  inline index_t size() const noexcept;
-  inline index_t capacity() const noexcept;
-  inline index_t offset() const noexcept;
-
-  // Gets data
-  inline       _Val* operator*() noexcept;
-  inline const _Val* operator*() const noexcept;
-  inline       _Val& operator[]( const index_t idx ) noexcept;
-  inline const _Val& operator[]( const index_t idx ) const noexcept;
 
 };
 

@@ -1,5 +1,5 @@
 # Set install prefix
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_VERSION}" CACHE PATH "The install path prefix." FORCE)
 endif()
 
@@ -12,8 +12,9 @@ option(MCNLA_BUILD_DOC    "Build documentation."                          "OFF")
 option(MCNLA_INSTALL_DEMO "Install demos."                                "OFF")
 option(MCNLA_USE_ILP64    "Uses 64bit integer."                           "OFF")
 option(MCNLA_USE_MKL      "Uses Intel MKL."                               "OFF")
-option(MKL_USE_OMP        "Uses multithread MKL. (Require MCNLA_USE_MKL)" "OFF")
-option(MKL_USE_IOMP       "Uses Intel OMP. (Require MKL_USE_OMP)"         "OFF")
+option(MCNLA_USE_GPU      "Uses GPU."                                     "OFF")
+option(MCNLA_USE_OMP      "Uses multithread MKL. (Require MCNLA_USE_MKL)" "OFF")
+option(MCNLA_USE_IOMP     "Uses Intel OMP. (Require MCNLA_USE_OMP)"       "OFF")
 
 # Set variables
 if(MCNLA_BUILD_DRIVER OR MCNLA_BUILD_DEMO OR MCNLA_BUILD_REPOET OR MCNLA_BUILD_TEST)
@@ -36,9 +37,16 @@ else()
   unset(MKL_ILP64)
 endif()
 
-if(MKL_USE_OMP)
+if(MCNLA_USE_GPU)
+  list(APPEND DEFS "MCNLA_USE_GPU")
+  if(MCNLA_USE_ILP64)
+    list(APPEND DEFS "MAGMA_ILP64")
+  endif()
+endif()
+
+if(MCNLA_USE_OMP)
   list(APPEND DEFS "MCNLA_USE_OMP")
-  if(MKL_USE_IOMP)
+  if(MCNLA_USE_IOMP)
     set(MKL_OMP "IOMP")
   else()
     set(MKL_OMP "GOMP")

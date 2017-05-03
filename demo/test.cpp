@@ -8,7 +8,6 @@
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
-#include <unistd.h>
 
 #define DATA_PATH MCNLA_DATA_PATH "/../demo/test.mtx"
 
@@ -17,12 +16,33 @@
 ///
 int main( int argc, char **argv ) {
 
-  double tic = mcnla::utility::getTime();
-  usleep(1000000);
-  double toc = mcnla::utility::getTime();
-  std::cout << toc - tic << std::endl;
+  mcnla::init(argc, argv);
 
-//   MPI_Init(&argc, &argv);
+  magma_print_environment();
+
+  int n = 5;
+  mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
+  mcnla::matrix::DenseTriangularGpuMatrix<double> da(n), db(n);
+
+  int i = 0;
+  for ( auto &v : a.viewGeneral() ) {
+    v = ++i;
+  }
+  for ( auto &v : b.viewGeneral() ) {
+    v = 0;
+  }
+
+  disp(a);
+  disp(b);
+
+  magma_dsetmatrix(n, n, a.valPtr(), n, da.valPtr(), n);
+  mcnla::la::copy(da.viewGeneral().vectorize(), db.viewGeneral().vectorize());
+  magma_dgetmatrix(n, n, db.valPtr(), n, b.valPtr(), n);
+
+  disp(a);
+  disp(b);
+
+  mcnla::finalize();
 
 //   const auto mpi_comm = MPI_COMM_WORLD;
 //   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -105,8 +125,6 @@ int main( int argc, char **argv ) {
 //     disp(utu);
 //     disp(uut);
 //   }
-
-//   MPI_Finalize();
 
   return 0;
 }

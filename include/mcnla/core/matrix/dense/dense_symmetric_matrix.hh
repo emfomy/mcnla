@@ -8,29 +8,17 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
-#include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_symmetric_matrix_base.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
 namespace mcnla {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -43,7 +31,6 @@ namespace traits {
 template <typename _Val, Trans _trans, Uplo _uplo>
 struct Traits<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
@@ -91,86 +78,18 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
 class DenseSymmetricMatrix
-  : public DenseMatrixStorage<_Val>,
-    public DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>,
-    public InvertibleWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>> {
+  : public DenseSymmetricMatrixBase<_Val, _trans, _uplo, DenseTypes>,
+    public DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
-  static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
-  static_assert(!isUnitDiag(_uplo), "Unit-diagonal symmetric matrix is not supported!");
-
-  friend MatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>;
   friend DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>;
-  friend InvertibleWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>;
-
- public:
-
-  static constexpr index_t ndim = 2;
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
-
-  using ValType       = _Val;
-  using ValArrayType  = Array<_Val>;
-
-  using RealType      = DenseSymmetricMatrix<RealValT<_Val>, _trans, _uplo>;
-  using ComplexType   = DenseSymmetricMatrix<ComplexValT<_Val>, _trans, _uplo>;
-
-  using VectorType    = DenseVector<_Val>;
-  using MatrixType    = DenseSymmetricMatrix<_Val, _trans, _uplo>;
-
-  using TransposeType = DenseSymmetricMatrix<_Val, changeTrans(_trans), changeUplo(_uplo)>;
-
-  using GeneralType   = DenseMatrix<_Val, _trans>;
 
  private:
 
-  using BaseType      = DenseMatrixStorage<_Val>;
+  using BaseType = DenseSymmetricMatrixBase<_Val, _trans, _uplo, DenseTypes>;
 
  public:
 
-  // Constructors
-  inline DenseSymmetricMatrix() noexcept;
-  inline DenseSymmetricMatrix( const index_t size ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch,
-                               const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseSymmetricMatrix( const DenseSymmetricMatrix &other ) noexcept;
-
-  // Operators
-  inline DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other ) noexcept;
-
-  // Copy
-  inline DenseSymmetricMatrix copy() const noexcept;
-
-  // Gets information
-  inline index_t size() const noexcept;
-  inline index_t nnz() const noexcept;
-
-  // Gets element
-  inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
-
-  // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t size ) noexcept;
-
-  // Transpose
-  inline       TransposeType& t() noexcept;
-  inline const TransposeType& t() const noexcept;
-
-  // Change view
-  inline       GeneralType& viewGeneral() noexcept;
-  inline const GeneralType& viewGeneral() const noexcept;
-
- protected:
-
-  // Gets information
-  inline index_t nrowImpl() const noexcept;
-  inline index_t ncolImpl() const noexcept;
-
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
+  using BaseType::DenseSymmetricMatrixBase;
 
 };
 

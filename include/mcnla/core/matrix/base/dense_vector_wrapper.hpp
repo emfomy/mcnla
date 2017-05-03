@@ -28,7 +28,7 @@ template <class __Derived>
 std::ostream& operator<<(
     std::ostream &os,
     const DenseVectorWrapper<__Derived> &wrapper
-) {
+) noexcept {
   auto &vector = wrapper.derived();
   for ( index_t i = 0; i < vector.length(); ++i ) {
     os << std::setw(kOsValWidth) << vector(i) << "  ";

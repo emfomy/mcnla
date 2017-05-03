@@ -23,8 +23,8 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val>::DenseMatrixStorage() noexcept
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT>::DenseMatrixStorage() noexcept
   : BaseType(),
     dim0_(0),
     dim1_(0),
@@ -33,8 +33,8 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val>::DenseMatrixStorage(
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT>::DenseMatrixStorage(
     const index_t dim0,
     const index_t dim1
 ) noexcept
@@ -49,8 +49,8 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val>::DenseMatrixStorage(
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT>::DenseMatrixStorage(
     const index_t dim0,
     const index_t dim1,
     const index_t pitch
@@ -67,8 +67,8 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val>::DenseMatrixStorage(
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT>::DenseMatrixStorage(
     const index_t dim0,
     const index_t dim1,
     const index_t pitch,
@@ -87,8 +87,8 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val>::DenseMatrixStorage(
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT>::DenseMatrixStorage(
     const index_t dim0,
     const index_t dim1,
     const index_t pitch,
@@ -110,8 +110,8 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val>::DenseMatrixStorage(
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT>::DenseMatrixStorage(
     const DenseMatrixStorage &other
 ) noexcept
   : BaseType(other),
@@ -124,8 +124,8 @@ DenseMatrixStorage<_Val>::DenseMatrixStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val>& DenseMatrixStorage<_Val>::operator=(
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT>& DenseMatrixStorage<_Val, _ArrayT>::operator=(
     const DenseMatrixStorage &other
 ) noexcept {
   BaseType::operator=(other);
@@ -138,56 +138,56 @@ DenseMatrixStorage<_Val>& DenseMatrixStorage<_Val>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the dimensions are equal to the sizes.
 ///
-template <typename _Val>
-bool DenseMatrixStorage<_Val>::isShrunk() const noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+bool DenseMatrixStorage<_Val, _ArrayT>::isShrunk() const noexcept {
   return (dim0_ == pitch_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the matrix is square.
 ///
-template <typename _Val>
-bool DenseMatrixStorage<_Val>::isSquare() const noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+bool DenseMatrixStorage<_Val, _ArrayT>::isSquare() const noexcept {
   return (dim0_ == dim1_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size in the first dimension.
 ///
-template <typename _Val>
-index_t DenseMatrixStorage<_Val>::dim0() const noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+index_t DenseMatrixStorage<_Val, _ArrayT>::dim0() const noexcept {
   return dim0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size in the second dimension.
 ///
-template <typename _Val>
-index_t DenseMatrixStorage<_Val>::dim1() const noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+index_t DenseMatrixStorage<_Val, _ArrayT>::dim1() const noexcept {
   return dim1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size of dimensions in storage order. [ dim0, dim1 ]
 ///
-template <typename _Val>
-std::tuple<index_t, index_t> DenseMatrixStorage<_Val>::dims() const noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+std::tuple<index_t, index_t> DenseMatrixStorage<_Val, _ArrayT>::dims() const noexcept {
   return std::make_tuple(dim0_, dim1_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the maximum size in the first dimension.
 ///
-template <typename _Val>
-index_t DenseMatrixStorage<_Val>::pitch() const noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+index_t DenseMatrixStorage<_Val, _ArrayT>::pitch() const noexcept {
   return pitch_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
-template <typename _Val>
-_Val& DenseMatrixStorage<_Val>::elemImpl(
+template <typename _Val, template <typename> class _ArrayT>
+_Val& DenseMatrixStorage<_Val, _ArrayT>::elemImpl(
     const index_t idx0,
     const index_t idx1
 ) noexcept {
@@ -199,8 +199,8 @@ _Val& DenseMatrixStorage<_Val>::elemImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  elemImpl
 ///
-template <typename _Val>
-const _Val& DenseMatrixStorage<_Val>::elemImpl(
+template <typename _Val, template <typename> class _ArrayT>
+const _Val& DenseMatrixStorage<_Val, _ArrayT>::elemImpl(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
@@ -212,8 +212,8 @@ const _Val& DenseMatrixStorage<_Val>::elemImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
 ///
-template <typename _Val>
-index_t DenseMatrixStorage<_Val>::posImpl(
+template <typename _Val, template <typename> class _ArrayT>
+index_t DenseMatrixStorage<_Val, _ArrayT>::posImpl(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
@@ -225,8 +225,8 @@ index_t DenseMatrixStorage<_Val>::posImpl(
 ///
 /// @attention  The new space is kept but not initialized.
 ///
-template <typename _Val>
-void DenseMatrixStorage<_Val>::resizeImpl(
+template <typename _Val, template <typename> class _ArrayT>
+void DenseMatrixStorage<_Val, _ArrayT>::resizeImpl(
     const index_t dim0,
     const index_t dim1
 ) noexcept {
@@ -241,8 +241,8 @@ void DenseMatrixStorage<_Val>::resizeImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a matrix block.
 ///
-template <typename _Val>
-DenseMatrixStorage<_Val> DenseMatrixStorage<_Val>::getMatrixImpl(
+template <typename _Val, template <typename> class _ArrayT>
+DenseMatrixStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getMatrixImpl(
     const IdxRange &range0,
     const IdxRange &range1
 ) noexcept {
@@ -254,8 +254,8 @@ DenseMatrixStorage<_Val> DenseMatrixStorage<_Val>::getMatrixImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getMatrixImpl
 ///
-template <typename _Val>
-const DenseMatrixStorage<_Val> DenseMatrixStorage<_Val>::getMatrixImpl(
+template <typename _Val, template <typename> class _ArrayT>
+const DenseMatrixStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getMatrixImpl(
     const IdxRange &range0,
     const IdxRange &range1
 ) const noexcept {
@@ -267,8 +267,8 @@ const DenseMatrixStorage<_Val> DenseMatrixStorage<_Val>::getMatrixImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector segment.
 ///
-template <typename _Val>
-DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector0Impl(
+template <typename _Val, template <typename> class _ArrayT>
+DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getVector0Impl(
     const IdxRange &range0,
     const index_t idx1
 ) noexcept {
@@ -280,8 +280,8 @@ DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector0Impl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getVector0Impl
 ///
-template <typename _Val>
-const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector0Impl(
+template <typename _Val, template <typename> class _ArrayT>
+const DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getVector0Impl(
     const IdxRange &range0,
     const index_t idx1
 ) const noexcept {
@@ -293,8 +293,8 @@ const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector0Impl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getVector0Impl
 ///
-template <typename _Val>
-DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector1Impl(
+template <typename _Val, template <typename> class _ArrayT>
+DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getVector1Impl(
     const index_t idx0,
     const IdxRange &range1
 ) noexcept {
@@ -306,8 +306,8 @@ DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector1Impl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getVector0Impl
 ///
-template <typename _Val>
-const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector1Impl(
+template <typename _Val, template <typename> class _ArrayT>
+const DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getVector1Impl(
     const index_t idx0,
     const IdxRange &range1
 ) const noexcept {
@@ -321,8 +321,8 @@ const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getVector1Impl(
 ///
 /// @note @a idx > 0 for above diagonals, @a idx < 0 for below diagonals.
 ///
-template <typename _Val>
-DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getDiagonalImpl(
+template <typename _Val, template <typename> class _ArrayT>
+DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getDiagonalImpl(
     const index_t idx
 ) noexcept {
   mcnla_assert_gtlt(idx, -dim0_, dim1_);
@@ -349,8 +349,8 @@ DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getDiagonalImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getDiagonalImpl
 ///
-template <typename _Val>
-const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getDiagonalImpl(
+template <typename _Val, template <typename> class _ArrayT>
+const DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::getDiagonalImpl(
     const index_t idx
 ) const noexcept {
   mcnla_assert_gtlt(idx, -dim0_, dim1_);
@@ -382,16 +382,16 @@ const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::getDiagonalImpl(
 ///
 /// @attention  The output vector contains the out-of-range spaces.
 ///
-template <typename _Val>
-DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::vectorizeImpl() noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::vectorizeImpl() noexcept {
   return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  vectorizeImpl
 ///
-template <typename _Val>
-const DenseVectorStorage<_Val> DenseMatrixStorage<_Val>::vectorizeImpl() const noexcept {
+template <typename _Val, template <typename> class _ArrayT>
+const DenseVectorStorage<_Val, _ArrayT> DenseMatrixStorage<_Val, _ArrayT>::vectorizeImpl() const noexcept {
   return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 

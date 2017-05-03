@@ -143,7 +143,7 @@ template <typename __Val, typename __Idx>
 std::ostream& operator<<(
     std::ostream &os,
     const CooTuple1<__Val, __Idx> &tuple
-) {
+) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << tuple.idx() << ")  "
                    << std::setw(kOsValWidth) << tuple.val();
 }

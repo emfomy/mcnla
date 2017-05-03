@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_MATRIX_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_MATRIX_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/sparse_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
@@ -16,7 +16,6 @@
 #include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix_iterator.hpp>
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -46,7 +45,6 @@ namespace traits {
 template <typename _Val, Trans _trans>
 struct Traits<matrix::CooMatrix<_Val, _trans>> {
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
   using ValType           = _Val;
@@ -95,7 +93,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans = Trans::NORMAL>
 class CooMatrix
-  : public CooMatrixStorage<_Val>,
+  : public CooMatrixStorage<_Val, Array>,
     public MatrixWrapper<CooMatrix<_Val, _trans>>,
     public SparseWrapper<CooMatrix<_Val, _trans>>,
     public IterableWrapper<CooMatrix<_Val, _trans>>,
@@ -110,7 +108,6 @@ class CooMatrix
 
  public:
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
 
   using ValType           = _Val;
@@ -133,7 +130,7 @@ class CooMatrix
 
  private:
 
-  using BaseType          = CooMatrixStorage<_Val>;
+  using BaseType          = CooMatrixStorage<_Val, Array>;
 
  public:
 
@@ -181,7 +178,7 @@ class CooMatrix
   inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol, const index_t nnz ) noexcept;
 
-  // Transpose
+  // Transpose/Conjugate
   inline       TransposeType& t() noexcept;
   inline const TransposeType& t() const noexcept;
   inline       ConjugateType& c() noexcept;
@@ -213,9 +210,9 @@ class CooMatrix
   inline       IdxArrayType& toIdx1(       IdxArrayType &rowidx,       IdxArrayType &colidx ) const noexcept;
   inline const IdxArrayType& toIdx1( const IdxArrayType &rowidx, const IdxArrayType &colidx ) const noexcept;
 
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_BASE(BaseType);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

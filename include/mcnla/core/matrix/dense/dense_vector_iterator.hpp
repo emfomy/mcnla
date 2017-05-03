@@ -28,7 +28,7 @@ template <typename __Val, class __Vector>
 std::ostream& operator<<(
     std::ostream &os,
     const DenseVectorIteratorBase<__Val, __Vector> &it
-) {
+) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << it.idx() << ")  "
                    << std::setw(kOsValWidth) << it.val();
 }

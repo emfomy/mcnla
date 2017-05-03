@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/dense/dense_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -27,21 +27,22 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix storage class.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val     The value type.
+/// @tparam  _ArrayT  The array template.
 ///
-template <typename _Val>
-class DenseMatrixStorage : public DenseStorage<_Val> {
+template <typename _Val, template <typename> class _ArrayT>
+class DenseMatrixStorage : public DenseStorage<_Val, _ArrayT> {
 
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = Array<ValType>;
+  using ValArrayType      = _ArrayT<_Val>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = DenseVectorStorage<ValType>;
-  using MatrixStorageType = DenseMatrixStorage<ValType>;
+  using VectorStorageType = DenseVectorStorage<_Val, _ArrayT>;
+  using MatrixStorageType = DenseMatrixStorage<_Val, _ArrayT>;
 
-  using BaseType          = DenseStorage<_Val>;
+  using BaseType          = DenseStorage<_Val, _ArrayT>;
 
  protected:
 

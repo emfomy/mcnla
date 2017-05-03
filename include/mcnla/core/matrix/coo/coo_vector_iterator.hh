@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
 #include <mcnla/core/matrix/coo/coo_tuple1.hpp>
@@ -41,7 +41,6 @@ namespace traits {
 ///
 template <typename _Val, typename _Idx, class _Vector>
 struct Traits<matrix::CooVectorIteratorBase<_Val, _Idx, _Vector>> {
-  static constexpr index_t ndim = 1;
   using ElemType      = std::tuple<_Idx>;
   using ElemRefType   = matrix::CooTuple1<_Val, _Idx>;
   using ElemPtrType   = matrix::CooTuple1Ptr<_Val, _Idx>;
@@ -69,7 +68,6 @@ class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _I
 
  private:
 
-  static constexpr index_t ndim = 1;
   using ValType       = _Val;
   using IdxType       = _Idx;
   using TupleType     = CooTuple1<_Val, _Idx>;
@@ -92,7 +90,7 @@ class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _I
 
   // Operators
   template <typename __Val, typename __Idx, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<__Val, __Idx, __Vector> &it );
+  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<__Val, __Idx, __Vector> &it ) noexcept;
 
   // Gets value
   inline ValType&    val() const noexcept;

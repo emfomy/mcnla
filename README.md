@@ -55,8 +55,9 @@ ccmake <path-to-source>
 
 * Set `MCNLA_USE_ILP64`    to change the system integer size. (`OFF`: 32-bit / `ON`: 64-bit)
 * Set `MCNLA_USE_MKL`      to enable Intel MKL.
-* Set `MKL_USE_OMP`        to enable multithread MKL. (Require `MCNLA_USE_MKL`)
-* Set `MKL_USE_IOMP`       to enable Intel OMP.       (Require `MKL_USE_OMP`)
+* Set `MCNLA_USE_GPU`      to enable GPU support.
+* Set `MCNLA_USE_OMP`      to enable multithread MKL. (Require `MCNLA_USE_MKL`)
+* Set `MCNLA_USE_IOMP`     to enable Intel OMP.       (Require `MCNLA_USE_OMP`)
 
 * Set `MKL_ROOT`   for the root path of Intel MKL. (Automatically set if environment variable `MKLROOT` is set.)
 * Set `GTEST_ROOT` for the root path of Google Test.

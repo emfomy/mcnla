@@ -10,7 +10,6 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <iostream>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseMatrixWrapper : public MatrixWrapper<_Derived> {
+class DenseMatrixWrapper {
 
  protected:
 
@@ -41,7 +40,13 @@ class DenseMatrixWrapper : public MatrixWrapper<_Derived> {
 
   // Operators
   template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixWrapper<__Derived> &wrapper );
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixWrapper<__Derived> &wrapper ) noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

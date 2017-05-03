@@ -28,8 +28,8 @@ namespace detail {
 
 template <typename _Val>
 inline void reduceImpl(
-    const DenseStorage<_Val> &send,
-          DenseStorage<_Val> &recv,
+    const DenseStorage<_Val, Array> &send,
+          DenseStorage<_Val, Array> &recv,
     const mpi_int_t count,
     const MPI_Op op,
     const mpi_int_t root,
@@ -41,7 +41,7 @@ inline void reduceImpl(
 
 template <typename _Val>
 inline void reduceImpl(
-          DenseStorage<_Val> &buffer,
+          DenseStorage<_Val, Array> &buffer,
     const mpi_int_t count,
     const MPI_Op op,
     const mpi_int_t root,

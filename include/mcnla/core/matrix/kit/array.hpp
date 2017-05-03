@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/kit/array.hpp
-/// @brief   The array.
+/// @brief   The value array.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -26,9 +26,7 @@ namespace matrix {
 ///
 template <typename _Val>
 Array<_Val>::Array() noexcept
-  : BaseType(),
-    size_(0),
-    offset_(0) {}
+  : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -38,124 +36,7 @@ Array<_Val>::Array(
     const index_t size,
     const index_t offset
 ) noexcept
-  : BaseType(utility::malloc<_Val>(size), utility::free<_Val>),
-    size_(size),
-    offset_(offset) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Construct with given raw data.
-///
-template <typename _Val>
-Array<_Val>::Array(
-    const BaseType &ptr,
-    const index_t size,
-    const index_t offset
-) noexcept
-  : BaseType(ptr),
-    size_(size),
-    offset_(offset) {
-  mcnla_assert_gele(offset_, 0, size_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy constructor.
-///
-/// @attention  It is shallow copy (creates an alias).
-///
-template <typename _Val>
-Array<_Val>::Array(
-    const Array &other
-) noexcept
-  : BaseType(other),
-    size_(other.size_),
-    offset_(other.offset_) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copy assignment operator.
-///
-/// @attention  It is shallow copy (creates an alias).
-///
-template <typename _Val>
-Array<_Val>& Array<_Val>::operator=(
-    const Array &other
-) noexcept {
-  BaseType::operator=(other);
-  size_   = other.size_;
-  offset_ = other.offset_;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Right-shift the offset.
-/// Add @a offset to @ref offset_.
-///
-template <typename _Val>
-void Array<_Val>::operator>>=(
-    const index_t offset
-) noexcept {
-  offset_ += offset;
-  mcnla_assert_gele(offset_, 0, size_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Left-shift the offset.
-/// Subtract @ref offset_ by @a offset.
-///
-template <typename _Val>
-void Array<_Val>::operator<<=(
-    const index_t offset
-) noexcept {
-  offset_ -= offset;
-  mcnla_assert_gele(offset_, 0, size_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator>>=
-///
-template <typename _Val>
-Array<_Val> Array<_Val>::operator>>(
-    const index_t offset
-) noexcept {
-  auto retval = *this;
-  retval >>= offset;
-  return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator>>=
-///
-template <typename _Val>
-const Array<_Val> Array<_Val>::operator>>(
-    const index_t offset
-) const noexcept {
-  auto retval = *this;
-  retval >>= offset;
-  return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator<<=
-///
-template <typename _Val>
-Array<_Val> Array<_Val>::operator<<(
-    const index_t offset
-) noexcept {
-  auto retval = *this;
-  retval <<= offset;
-  return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator<<=
-///
-template <typename _Val>
-const Array<_Val> Array<_Val>::operator<<(
-    const index_t offset
-) const noexcept {
-  auto retval = *this;
-  retval <<= offset;
-  return retval;
-}
+  : BaseType(std::shared_ptr<_Val>(utility::malloc<_Val>(size), utility::free<_Val>), size, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies the array.
@@ -165,80 +46,6 @@ Array<_Val> Array<_Val>::copy() const noexcept {
   Array retval(size_, offset_);
   utility::memcpy(*retval, **this, size_);
   return retval;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Determines if the memory size is zero.
-///
-template <typename _Val>
-bool Array<_Val>::isEmpty() const noexcept {
-  return (size_ == 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the memory size.
-///
-/// @note  #capacity + #offset = #size.
-///
-template <typename _Val>
-index_t Array<_Val>::size() const noexcept {
-  return size_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the capacity.
-///
-/// @note  #capacity + #offset = #size.
-///
-template <typename _Val>
-index_t Array<_Val>::capacity() const noexcept {
-  return size_ - offset_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the offset.
-///
-/// @note  #capacity + #offset = #size.
-///
-template <typename _Val>
-index_t Array<_Val>::offset() const noexcept {
-  return offset_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data pointer.
-///
-template <typename _Val>
-_Val* Array<_Val>::operator*() noexcept {
-  return &(this->get()[offset_]);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data pointer.
-///
-template <typename _Val>
-const _Val* Array<_Val>::operator*() const noexcept {
-  return &(this->get()[offset_]);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data of given index.
-///
-template <typename _Val>
-_Val& Array<_Val>::operator[](
-    const index_t idx
-) noexcept {
-  return this->get()[idx+offset_];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the data of given index.
-///
-template <typename _Val>
-const _Val& Array<_Val>::operator[](
-    const index_t idx
-) const noexcept {
-  return this->get()[idx+offset_];
 }
 
 }  // namespace matrix

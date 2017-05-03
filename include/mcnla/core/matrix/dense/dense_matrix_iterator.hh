@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -44,7 +44,6 @@ namespace traits {
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 struct Traits<matrix::DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   using ElemType      = _Val;
   using ElemRefType   = _Val&;
@@ -73,7 +72,6 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
 
  private:
 
-  static constexpr index_t ndim = 2;
   static constexpr Trans trans = _trans;
   using ValType       = _Val;
   using ElemType      = _Val;
@@ -95,7 +93,8 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
 
   // Operators
   template <typename __Val, Trans __trans, class __Matrix>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &it );
+  friend inline std::ostream& operator<<( std::ostream &os,
+                                          const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &it ) noexcept;
 
   // Gets value
   inline ValType&    val() const noexcept;

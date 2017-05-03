@@ -241,22 +241,6 @@ index_t CooVector<_Val>::toDim0(
   return length;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to base class.
-///
-template <typename _Val>
-CooVectorStorage<_Val>& CooVector<_Val>::base() noexcept {
-  return static_cast<BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  base
-///
-template <typename _Val>
-const CooVectorStorage<_Val>& CooVector<_Val>::base() const noexcept {
-  return static_cast<const BaseType&>(*this);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla

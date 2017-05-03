@@ -8,8 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/kit/array.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,15 +23,16 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense storage.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val     The value type.
+/// @tparam  _ArrayT  The array template.
 ///
-template <typename _Val>
+template <typename _Val, template <typename> class _ArrayT>
 class DenseStorage {
 
  private:
 
   using ValType      = _Val;
-  using ValArrayType = Array<ValType>;
+  using ValArrayType = _ArrayT<_Val>;
 
  protected:
 

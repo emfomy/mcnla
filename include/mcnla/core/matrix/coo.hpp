@@ -1,12 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/coo.hpp
-/// @brief   The COO header.
+/// @brief   The COO container header.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 #ifndef MCNLA_CORE_MATRIX_COO_HPP_
 #define MCNLA_CORE_MATRIX_COO_HPP_
+
+#include <mcnla/core/matrix/coo/def.hpp>
 
 #include <mcnla/core/matrix/coo/coo_tuple1.hpp>
 #include <mcnla/core/matrix/coo/coo_tuple2.hpp>

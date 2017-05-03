@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/base/sparse_wrapper.hpp
-/// @brief   The sparse wrapper.
+/// @brief   The displayable container wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -28,7 +28,7 @@ template <class __Derived>
 std::ostream& operator<<(
     std::ostream &os,
     const SparseWrapper<__Derived> &wrapper
-) {
+) noexcept {
   for ( auto tuple : wrapper.derived() ) {
     os << tuple << '\n';
   }

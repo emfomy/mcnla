@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_TUPLE1_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_TUPLE1_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <iostream>
 #include <tuple>
 
@@ -68,7 +68,7 @@ class CooTuple1 : public std::tuple<_Idx&> {
 
   // Operators
   template <typename __Val, typename __Idx>
-  friend inline std::ostream& operator<<( std::ostream &os, const CooTuple1<__Val, __Idx> &tuple );
+  friend inline std::ostream& operator<<( std::ostream &os, const CooTuple1<__Val, __Idx> &tuple ) noexcept;
 
   // Gets data
   inline       ValType& val() noexcept;

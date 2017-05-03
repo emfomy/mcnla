@@ -28,7 +28,7 @@ template <class __Derived>
 std::ostream& operator<<(
     std::ostream &os,
     const DenseMatrixWrapper<__Derived> &wrapper
-) {
+) noexcept {
   auto &matrix = wrapper.derived();
   for ( index_t i = 0; i < matrix.nrow(); ++i ) {
     for ( index_t j = 0; j < matrix.ncol(); ++j ) {

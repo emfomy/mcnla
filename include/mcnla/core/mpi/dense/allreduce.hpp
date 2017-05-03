@@ -28,8 +28,8 @@ namespace detail {
 
 template <typename _Val>
 inline void allreduceImpl(
-    const DenseStorage<_Val> &send,
-          DenseStorage<_Val> &recv,
+    const DenseStorage<_Val, Array> &send,
+          DenseStorage<_Val, Array> &recv,
     const mpi_int_t count,
     const MPI_Op op,
     const MPI_Comm comm
@@ -40,7 +40,7 @@ inline void allreduceImpl(
 
 template <typename _Val>
 inline void allreduceImpl(
-          DenseStorage<_Val> &buffer,
+          DenseStorage<_Val, Array> &buffer,
     const mpi_int_t count,
     const MPI_Op op,
     const MPI_Comm comm

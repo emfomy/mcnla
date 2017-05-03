@@ -24,12 +24,12 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_base_module
-/// The container wrapper.
+/// The iterable container wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class IterableWrapper : public utility::CrtpBase<_Derived, IterableWrapper<_Derived>> {
+class IterableWrapper {
 
  private:
 
@@ -50,6 +50,12 @@ class IterableWrapper : public utility::CrtpBase<_Derived, IterableWrapper<_Deri
   inline IteratorType      end() noexcept;
   inline ConstIteratorType end() const noexcept;
   inline ConstIteratorType cend() const noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

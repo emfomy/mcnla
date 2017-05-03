@@ -26,7 +26,7 @@ namespace traits {
 /// @tparam  _Derived  The derived type.
 ///
 template <typename _Derived>
-  struct Traits {
+struct Traits {
   static_assert(std::integral_constant<_Derived, false>::value, "Error using non-specialized traits!");
 };
 
@@ -93,10 +93,6 @@ using ValT = typename traits::Traits<_Derived>::ValType;
 /// @ingroup  utility_module
 template <class _Derived>
 using IdxT = typename traits::Traits<_Derived>::IdxType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using TupleT = typename traits::Traits<_Derived>::TupleType;
 
 /// @ingroup  utility_module
 template <class _Derived>

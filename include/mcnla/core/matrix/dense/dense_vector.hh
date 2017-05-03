@@ -8,11 +8,10 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/dense_vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
-#include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -21,18 +20,6 @@
 //  The MCNLA namespace.
 //
 namespace mcnla {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseVector;
-template <typename _Val> class DenseDiagonalMatrix;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -44,7 +31,6 @@ namespace traits {
 ///
 template <typename _Val>
 struct Traits<matrix::DenseVector<_Val>> {
-  static constexpr index_t ndim = 1;
 
   using ValType           = _Val;
 
@@ -90,96 +76,28 @@ namespace matrix {
 ///
 template <typename _Val>
 class DenseVector
-  : public DenseVectorStorage<_Val>,
+  : public DenseVectorBase<_Val, DenseTypes>,
     public DenseVectorWrapper<DenseVector<_Val>>,
-    public IterableWrapper<DenseVector<_Val>>,
-    public InvertibleWrapper<DenseVector<_Val>> {
+    public IterableWrapper<DenseVector<_Val>> {
 
-  friend VectorWrapper<DenseVector<_Val>>;
   friend DenseVectorWrapper<DenseVector<_Val>>;
   friend IterableWrapper<DenseVector<_Val>>;
-  friend InvertibleWrapper<DenseVector<_Val>>;
 
- public:
-
-  static constexpr index_t ndim = 1;
-
-  using ValType           = _Val;
-  using ValArrayType      = Array<_Val>;
-  using SizesType         = std::tuple<index_t>;
-
-  using RealType          = DenseVector<RealValT<_Val>>;
-  using ComplexType       = DenseVector<ComplexValT<_Val>>;
-
-  using VectorType        = DenseVector<_Val>;
-
-  using DiagonalType      = DenseDiagonalMatrix<_Val>;
+ private:
 
   using IteratorType      = DenseVectorIterator<_Val>;
   using ConstIteratorType = DenseVectorConstIterator<_Val>;
 
- private:
-
-  using BaseType          = DenseVectorStorage<_Val>;
+  using BaseType          = DenseVectorBase<_Val, DenseTypes>;
 
  public:
 
-  // Constructors
-  inline DenseVector() noexcept;
-  inline DenseVector( const index_t length, const index_t stride = 1 ) noexcept;
-  inline DenseVector( const SizesType sizes, const index_t stride = 1 ) noexcept;
-  inline DenseVector( const index_t length, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseVector( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseVector( const index_t length, const index_t stride, const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseVector( const DenseVector &other ) noexcept;
-
-  // Operators
-  inline DenseVector& operator=( const DenseVector &other ) noexcept;
-
-  // Copy
-  inline DenseVector copy() const noexcept;
-
-  // Gets information
-  inline index_t nnz() const noexcept;
-
-  // Gets element
-  inline       ValType& operator()( const index_t idx ) noexcept;
-  inline const ValType& operator()( const index_t idx ) const noexcept;
-
-  // Gets internal position
-  inline index_t pos( const index_t idx ) const noexcept;
+  using BaseType::DenseVectorBase;
 
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;
   inline ConstIteratorType find( const index_t idx ) const noexcept;
   inline ConstIteratorType cfind( const index_t idx ) const noexcept;
-
-  // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t length ) noexcept;
-  inline void resize( const index_t length, const index_t stride ) noexcept;
-
-  // Changes view
-  inline       DiagonalType& viewDiagonal() noexcept;
-  inline const DiagonalType& viewDiagonal() const noexcept;
-
-  // Gets segment
-  inline       VectorType operator()( const IdxRange &range ) noexcept;
-  inline const VectorType operator()( const IdxRange &range ) const noexcept;
-
- protected:
-
-  // Gets information
-  inline index_t lengthImpl() const noexcept;
-
-  // Convert sizes to dims
-  inline index_t toDim0( const SizesType sizes ) const noexcept;
-  inline index_t toDim0( const index_t length ) const noexcept;
-
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
 
 };
 

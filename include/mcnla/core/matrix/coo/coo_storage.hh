@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/dense/dense_storage.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,17 +24,18 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) storage.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val     The value type.
+/// @tparam  _ArrayT  The array template.
 ///
-template <typename _Val>
-class CooStorage : protected DenseStorage<_Val> {
+template <typename _Val, template <typename> class _ArrayT>
+class CooStorage : protected DenseStorage<_Val, _ArrayT> {
 
  private:
 
   using ValType      = _Val;
-  using ValArrayType = Array<ValType>;
+  using ValArrayType = _ArrayT<_Val>;
 
-  using BaseType     = DenseStorage<_Val>;
+  using BaseType     = DenseStorage<_Val, _ArrayT>;
 
  protected:
 
