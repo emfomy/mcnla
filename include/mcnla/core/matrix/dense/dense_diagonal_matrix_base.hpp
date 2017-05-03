@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_triangular_matrix.hpp
-/// @brief   The dense triangular matrix.
+/// @file    include/mcnla/core/matrix/dense/dense_diagonal_matrix_base.hpp
+/// @brief   The dense diagonal matrix.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_
+#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_BASE_HPP_
+#define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_BASE_HPP_
 
-#include <mcnla/core/matrix/dense/dense_triangular_matrix.hh>
+#include <mcnla/core/matrix/dense/dense_diagonal_matrix_base.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,61 +23,61 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo>::DenseTriangularMatrix() noexcept
+template <typename _Val, class _Types>
+DenseDiagonalMatrixBase<_Val, _Types>::DenseDiagonalMatrixBase() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo>::DenseTriangularMatrix(
+template <typename _Val, class _Types>
+DenseDiagonalMatrixBase<_Val, _Types>::DenseDiagonalMatrixBase(
     const index_t size
 ) noexcept
-  : BaseType(size, size) {
+  : BaseType(size) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo>::DenseTriangularMatrix(
+template <typename _Val, class _Types>
+DenseDiagonalMatrixBase<_Val, _Types>::DenseDiagonalMatrixBase(
     const index_t size,
     const index_t pitch
 ) noexcept
-  : BaseType(size, size, pitch) {}
+  : BaseType(size, pitch+1) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo>::DenseTriangularMatrix(
+template <typename _Val, class _Types>
+DenseDiagonalMatrixBase<_Val, _Types>::DenseDiagonalMatrixBase(
     const index_t size,
     const index_t pitch,
     const index_t capacity
 ) noexcept
-  : BaseType(size, size, pitch, capacity) {}
+  : BaseType(size, pitch+1, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo>::DenseTriangularMatrix(
+template <typename _Val, class _Types>
+DenseDiagonalMatrixBase<_Val, _Types>::DenseDiagonalMatrixBase(
     const index_t size,
     const index_t pitch,
     const ValArrayType &val,
     const index_t offset
 ) noexcept
-  : BaseType(size, size, pitch, val, offset) {}
+  : BaseType(size, pitch+1, val, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo>::DenseTriangularMatrix(
-    const DenseTriangularMatrix &other
+template <typename _Val, class _Types>
+DenseDiagonalMatrixBase<_Val, _Types>::DenseDiagonalMatrixBase(
+    const DerivedType &other
 ) noexcept
   : BaseType(other) {}
 
@@ -86,9 +86,9 @@ DenseTriangularMatrix<_Val, _trans, _uplo>::DenseTriangularMatrix(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo>& DenseTriangularMatrix<_Val, _trans, _uplo>::operator=(
-    const DenseTriangularMatrix &other
+template <typename _Val, class _Types>
+typename DenseDiagonalMatrixBase<_Val, _Types>::DerivedType& DenseDiagonalMatrixBase<_Val, _Types>::operator=(
+    const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
   return *this;
@@ -97,42 +97,44 @@ DenseTriangularMatrix<_Val, _trans, _uplo>& DenseTriangularMatrix<_Val, _trans, 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies the matrix.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, _trans, _uplo> DenseTriangularMatrix<_Val, _trans, _uplo>::copy() const noexcept {
-  return DenseTriangularMatrix(this->size(), this->pitch(), this->val().copy(), this->offset());
+template <typename _Val, class _Types>
+typename DenseDiagonalMatrixBase<_Val, _Types>::DerivedType DenseDiagonalMatrixBase<_Val, _Types>::copy() const noexcept {
+  return DenseDiagonalMatrixBase(this->size(), this->pitch(), this->val().copy(), this->offset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-index_t DenseTriangularMatrix<_Val, _trans, _uplo>::size() const noexcept {
+template <typename _Val, class _Types>
+index_t DenseDiagonalMatrixBase<_Val, _Types>::size() const noexcept {
   return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-index_t DenseTriangularMatrix<_Val, _trans, _uplo>::nnz() const noexcept {
-  return !isUnitDiag(_uplo) ? (this->size()*(this->size()+1)/2) : (this->size()*(this->size()-1)/2);
+template <typename _Val, class _Types>
+index_t DenseDiagonalMatrixBase<_Val, _Types>::nnz() const noexcept {
+  return this->size();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum size in the first dimension.
+///
+template <typename _Val, class _Types>
+index_t DenseDiagonalMatrixBase<_Val, _Types>::pitch() const noexcept {
+  return this->stride()-1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-_Val DenseTriangularMatrix<_Val, _trans, _uplo>::operator()(
+template <typename _Val, class _Types>
+_Val DenseDiagonalMatrixBase<_Val, _Types>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
-  if ( rowidx == colidx ) {
-    return isUnitDiag(_uplo) ? 1 : this->elemImpl(rowidx, colidx);
-  } else if ( !(isUpper(_uplo) ^ (rowidx < colidx)) ) {
-    return (!isTrans(_trans) ? this->elemImpl(rowidx, colidx) : this->elemImpl(colidx, rowidx));
-  } else {
-    return 0;
-  }
+  return (rowidx == colidx) ? this->elemImpl(rowidx) : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,21 +142,11 @@ _Val DenseTriangularMatrix<_Val, _trans, _uplo>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo> template <typename... Args>
-void DenseTriangularMatrix<_Val, _trans, _uplo>::reconstruct(
+template <typename _Val, class _Types> template <typename... Args>
+void DenseDiagonalMatrixBase<_Val, _Types>::reconstruct(
     Args... args
 ) noexcept {
-  *this = DenseTriangularMatrix<_Val, _trans, _uplo>(args...);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
-///
-template <typename _Val, Trans _trans, Uplo _uplo>
-void DenseTriangularMatrix<_Val, _trans, _uplo>::resize(
-    const index_t size
-) noexcept {
-  this->resizeImpl(size, size);
+  *this = DenseDiagonalMatrixBase<_Val, _Types>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,66 +154,86 @@ void DenseTriangularMatrix<_Val, _trans, _uplo>::resize(
 ///
 /// @attention  The storage layout is also changed.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrix<_Val, changeTrans(_trans), changeUplo(_uplo)>&
-    DenseTriangularMatrix<_Val, _trans, _uplo>::t() noexcept {
-  return static_cast<TransposeType&>(base());
+template <typename _Val, class _Types>
+typename DenseDiagonalMatrixBase<_Val, _Types>::TransposeType&
+    DenseDiagonalMatrixBase<_Val, _Types>::t() noexcept {
+  return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  t
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-const DenseTriangularMatrix<_Val, changeTrans(_trans), changeUplo(_uplo)>&
-    DenseTriangularMatrix<_Val, _trans, _uplo>::t() const noexcept {
-  return static_cast<const TransposeType&>(base());
+template <typename _Val, class _Types>
+const typename DenseDiagonalMatrixBase<_Val, _Types>::TransposeType&
+    DenseDiagonalMatrixBase<_Val, _Types>::t() const noexcept {
+  return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the general view of the matrix.
+/// @brief  Gets the vector view of the matrix.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseMatrix<_Val, _trans>& DenseTriangularMatrix<_Val, _trans, _uplo>::viewGeneral() noexcept {
-  return static_cast<GeneralType&>(base());
+template <typename _Val, class _Types>
+typename DenseDiagonalMatrixBase<_Val, _Types>::VectorType&
+    DenseDiagonalMatrixBase<_Val, _Types>::viewVector() noexcept {
+  return static_cast<VectorType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewGeneral
+/// @copydoc  viewVector
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-const DenseMatrix<_Val, _trans>& DenseTriangularMatrix<_Val, _trans, _uplo>::viewGeneral() const noexcept {
-  return static_cast<const GeneralType&>(base());
+template <typename _Val, class _Types>
+const typename DenseDiagonalMatrixBase<_Val, _Types>::VectorType&
+    DenseDiagonalMatrixBase<_Val, _Types>::viewVector() const noexcept {
+  return static_cast<const VectorType&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  viewVector
+///
+template <typename _Val, class _Types>
+typename DenseDiagonalMatrixBase<_Val, _Types>::VectorType&
+    DenseDiagonalMatrixBase<_Val, _Types>::vectorize() noexcept {
+  return viewVector();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  vectorize
+///
+template <typename _Val, class _Types>
+const typename DenseDiagonalMatrixBase<_Val, _Types>::VectorType&
+    DenseDiagonalMatrixBase<_Val, _Types>::vectorize() const noexcept {
+  return viewVector();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-index_t DenseTriangularMatrix<_Val, _trans, _uplo>::nrowImpl() const noexcept {
-  return !isTrans(_trans) ? this->dim0() : this->dim1();
+template <typename _Val, class _Types>
+index_t DenseDiagonalMatrixBase<_Val, _Types>::nrowImpl() const noexcept {
+  return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::ncol
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-index_t DenseTriangularMatrix<_Val, _trans, _uplo>::ncolImpl() const noexcept {
-  return !isTrans(_trans) ? this->dim1() : this->dim0();
+template <typename _Val, class _Types>
+index_t DenseDiagonalMatrixBase<_Val, _Types>::ncolImpl() const noexcept {
+  return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert to base class.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-DenseMatrixStorage<_Val, Array>& DenseTriangularMatrix<_Val, _trans, _uplo>::base() noexcept {
+template <typename _Val, class _Types>
+typename DenseDiagonalMatrixBase<_Val, _Types>::BaseType& DenseDiagonalMatrixBase<_Val, _Types>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  base
 ///
-template <typename _Val, Trans _trans, Uplo _uplo>
-const DenseMatrixStorage<_Val, Array>& DenseTriangularMatrix<_Val, _trans, _uplo>::base() const noexcept {
+template <typename _Val, class _Types>
+const typename DenseDiagonalMatrixBase<_Val, _Types>::BaseType& DenseDiagonalMatrixBase<_Val, _Types>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 
@@ -229,4 +241,4 @@ const DenseMatrixStorage<_Val, Array>& DenseTriangularMatrix<_Val, _trans, _uplo
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HPP_
+#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_BASE_HPP_

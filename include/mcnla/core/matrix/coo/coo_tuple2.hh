@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_TUPLE2_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_TUPLE2_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <iostream>
 #include <tuple>
 

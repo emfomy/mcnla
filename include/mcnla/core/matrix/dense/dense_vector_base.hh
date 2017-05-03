@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_BASE_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_BASE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -26,41 +26,36 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector base class.
 ///
-/// @tparam  _Val       The value type.
-/// @tparam  _Vector    The vector template.
-/// @tparam  _Diagonal  The diagonal matrix template.
-/// @tparam  _Array     The array template.
+/// @tparam  _Val    The value type.
+/// @tparam  _Types  The type templates.
 ///
-template <typename _Val,
-          template <typename> class _Vector,
-          template <typename> class _Diagonal,
-          template <typename> class _Array>
+template <typename _Val, class _Types>
 class DenseVectorBase
-  : public DenseVectorStorage<_Val, _Array>,
-    public VectorWrapper<_Vector<_Val>>,
-    public InvertibleWrapper<_Vector<_Val>> {
+  : public DenseVectorStorage<_Val, _Types::template ArrayT>,
+    public VectorWrapper<typename _Types::template GeVecT<_Val>>,
+    public InvertibleWrapper<typename _Types::template GeVecT<_Val>> {
 
-  friend VectorWrapper<_Vector<_Val>>;
-  friend InvertibleWrapper<_Vector<_Val>>;
+  friend VectorWrapper<typename _Types::template GeVecT<_Val>>;
+  friend InvertibleWrapper<typename _Types::template GeVecT<_Val>>;
 
  public:
 
-  using DerivedType  = _Vector<_Val>;
+  using DerivedType  = typename _Types::template GeVecT<_Val>;
 
   using ValType      = _Val;
-  using ValArrayType = _Array<_Val>;
+  using ValArrayType = typename _Types::template ArrayT<_Val>;
   using SizesType    = std::tuple<index_t>;
 
-  using RealType     = RealT<DerivedType>;
-  using ComplexType  = ComplexT<DerivedType>;
+  using RealType     = typename _Types::template GeVecT<RealValT<_Val>>;
+  using ComplexType  = typename _Types::template GeVecT<ComplexValT<_Val>>;
 
-  using VectorType   = _Vector<_Val>;
+  using VectorType   = typename _Types::template GeVecT<_Val>;
 
-  using DiagonalType = _Diagonal<_Val>;
+  using DiagonalType = typename _Types::template DiMatT<_Val>;
 
  private:
 
-  using BaseType     = DenseVectorStorage<ValType>;
+  using BaseType     = DenseVectorStorage<_Val, _Types::template ArrayT>;
 
  public:
 

@@ -666,7 +666,7 @@ const IdxRange DenseMatrix<_Val, _trans>::colfullrange() const noexcept {
 /// @brief  Convert to base class.
 ///
 template <typename _Val, Trans _trans>
-DenseMatrixStorage<_Val>& DenseMatrix<_Val, _trans>::base() noexcept {
+DenseMatrixStorage<_Val, Array>& DenseMatrix<_Val, _trans>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
@@ -674,7 +674,7 @@ DenseMatrixStorage<_Val>& DenseMatrix<_Val, _trans>::base() noexcept {
 /// @copydoc  base
 ///
 template <typename _Val, Trans _trans>
-const DenseMatrixStorage<_Val>& DenseMatrix<_Val, _trans>::base() const noexcept {
+const DenseMatrixStorage<_Val, Array>& DenseMatrix<_Val, _trans>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 

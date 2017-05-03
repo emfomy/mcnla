@@ -8,6 +8,8 @@
 #ifndef MCNLA_CORE_GPU_MATRIX_DENSE_HPP_
 #define MCNLA_CORE_GPU_MATRIX_DENSE_HPP_
 
+#include <mcnla/core_gpu/matrix/dense/def.hpp>
+
 #include <mcnla/core_gpu/matrix/dense/dense_gpu_vector.hpp>
 
 // #include <mcnla/core_gpu/matrix/dense/dense_gpu_matrix.hpp>

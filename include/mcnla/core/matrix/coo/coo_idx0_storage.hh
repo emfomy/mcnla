@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_IDX0_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_IDX0_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/dense/dense_storage.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ namespace matrix {
 /// @tparam  _Idx    The index type.
 /// @tparam  _Array  The array template.
 ///
-template <typename _Idx = index_t, template <typename> class _Array = Array>
+template <typename _Idx, template <typename> class _Array>
 class CooIdx0Storage : protected DenseStorage<_Idx, _Array> {
 
  private:

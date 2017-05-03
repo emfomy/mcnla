@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_VECTOR_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/coo/coo_storage.hpp>
 #include <mcnla/core/matrix/coo/coo_idx0_storage.hpp>
@@ -37,7 +37,7 @@ template <typename _Val, template <typename> class _Array> class CooMatrixStorag
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Val, template <typename> class _Array = Array>
+template <typename _Val, template <typename> class _Array>
 class CooVectorStorage
   : public CooStorage<_Val, _Array>,
     public CooIdx0Storage<index_t, _Array> {

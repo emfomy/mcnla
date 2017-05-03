@@ -8,32 +8,18 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
 namespace mcnla {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseVector;
-template <typename _Val, Trans _trans> class DenseMatrix;
-template <typename _Val, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -93,7 +79,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
 class DenseSymmetricMatrix
-  : public DenseMatrixStorage<_Val>,
+  : public DenseMatrixStorage<_Val, Array>,
     public DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>,
     public InvertibleWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
@@ -124,7 +110,7 @@ class DenseSymmetricMatrix
 
  private:
 
-  using BaseType      = DenseMatrixStorage<_Val>;
+  using BaseType      = DenseMatrixStorage<_Val, Array>;
 
  public:
 

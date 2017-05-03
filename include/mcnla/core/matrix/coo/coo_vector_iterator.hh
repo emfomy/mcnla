@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_VECTOR_ITERATOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
 #include <mcnla/core/matrix/coo/coo_tuple1.hpp>

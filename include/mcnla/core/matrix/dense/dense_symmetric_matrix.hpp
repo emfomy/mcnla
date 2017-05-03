@@ -209,7 +209,7 @@ index_t DenseSymmetricMatrix<_Val, _trans, _uplo>::ncolImpl() const noexcept {
 /// @brief  Convert to base class.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-DenseMatrixStorage<_Val>& DenseSymmetricMatrix<_Val, _trans, _uplo>::base() noexcept {
+DenseMatrixStorage<_Val, Array>& DenseSymmetricMatrix<_Val, _trans, _uplo>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
@@ -217,7 +217,7 @@ DenseMatrixStorage<_Val>& DenseSymmetricMatrix<_Val, _trans, _uplo>::base() noex
 /// @copydoc  base
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-const DenseMatrixStorage<_Val>& DenseSymmetricMatrix<_Val, _trans, _uplo>::base() const noexcept {
+const DenseMatrixStorage<_Val, Array>& DenseSymmetricMatrix<_Val, _trans, _uplo>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 

@@ -21,7 +21,6 @@ int main( int argc, char **argv ) {
   magma_print_environment();
 
   int n = 10;
-
   mcnla::matrix::DenseVector<double> a(n), b(n);
   mcnla::matrix::DenseDiagonalGpuMatrix<double> da(n), db(n);
 

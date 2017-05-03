@@ -8,30 +8,17 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/dense_vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
 namespace mcnla {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseVector;
-template <typename _Val> class DenseDiagonalMatrix;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -88,7 +75,7 @@ namespace matrix {
 ///
 template <typename _Val>
 class DenseVector
-  : public DenseVectorBase<_Val, DenseVector, DenseDiagonalMatrix, Array>,
+  : public DenseVectorBase<_Val, DenseTypes>,
     public DenseVectorWrapper<DenseVector<_Val>>,
     public IterableWrapper<DenseVector<_Val>> {
 
@@ -101,7 +88,7 @@ class DenseVector
   using IteratorType      = DenseVectorIterator<_Val>;
   using ConstIteratorType = DenseVectorConstIterator<_Val>;
 
-  using BaseType          = DenseVectorBase<_Val, DenseVector, DenseDiagonalMatrix, Array>;
+  using BaseType          = DenseVectorBase<_Val, DenseTypes>;
 
  public:
 

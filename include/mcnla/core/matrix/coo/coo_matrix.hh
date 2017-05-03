@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_MATRIX_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_MATRIX_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/sparse_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
@@ -16,7 +16,6 @@
 #include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix_iterator.hpp>
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -94,7 +93,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans = Trans::NORMAL>
 class CooMatrix
-  : public CooMatrixStorage<_Val>,
+  : public CooMatrixStorage<_Val, Array>,
     public MatrixWrapper<CooMatrix<_Val, _trans>>,
     public SparseWrapper<CooMatrix<_Val, _trans>>,
     public IterableWrapper<CooMatrix<_Val, _trans>>,
@@ -131,7 +130,7 @@ class CooMatrix
 
  private:
 
-  using BaseType          = CooMatrixStorage<_Val>;
+  using BaseType          = CooMatrixStorage<_Val, Array>;
 
  public:
 

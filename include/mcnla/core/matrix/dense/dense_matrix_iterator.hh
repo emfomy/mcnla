@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_ITERATOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
 #include <mcnla/core/utility/traits.hpp>

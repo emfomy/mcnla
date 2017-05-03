@@ -8,14 +8,13 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_VECTOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/sparse_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_vector_storage.hpp>
 #include <mcnla/core/matrix/coo/coo_vector_iterator.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -88,7 +87,7 @@ namespace matrix {
 ///
 template <typename _Val>
 class CooVector
-  : public CooVectorStorage<_Val>,
+  : public CooVectorStorage<_Val, Array>,
     public VectorWrapper<CooVector<_Val>>,
     public SparseWrapper<CooVector<_Val>>,
     public IterableWrapper<CooVector<_Val>>,
@@ -116,7 +115,7 @@ class CooVector
 
  private:
 
-  using BaseType          = CooVectorStorage<_Val>;
+  using BaseType          = CooVectorStorage<_Val, Array>;
 
  public:
 

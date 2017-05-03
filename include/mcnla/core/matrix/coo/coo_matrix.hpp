@@ -479,7 +479,7 @@ const Array<index_t>& CooMatrix<_Val, _trans>::toIdx1(
 /// @brief  Convert to base class.
 ///
 template <typename _Val, Trans _trans>
-CooMatrixStorage<_Val>& CooMatrix<_Val, _trans>::base() noexcept {
+CooMatrixStorage<_Val, Array>& CooMatrix<_Val, _trans>::base() noexcept {
   return static_cast<BaseType&>(*this);
 }
 
@@ -487,7 +487,7 @@ CooMatrixStorage<_Val>& CooMatrix<_Val, _trans>::base() noexcept {
 /// @copydoc  base
 ///
 template <typename _Val, Trans _trans>
-const CooMatrixStorage<_Val>& CooMatrix<_Val, _trans>::base() const noexcept {
+const CooMatrixStorage<_Val, Array>& CooMatrix<_Val, _trans>::base() const noexcept {
   return static_cast<const BaseType&>(*this);
 }
 

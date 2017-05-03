@@ -28,8 +28,8 @@ namespace detail {
 
 template <typename _Val>
 inline void alltoallImpl(
-    const DenseStorage<_Val> &send,
-          DenseStorage<_Val> &recv,
+    const DenseStorage<_Val, Array> &send,
+          DenseStorage<_Val, Array> &recv,
     const mpi_int_t count,
     const MPI_Comm comm
 ) noexcept {
@@ -39,7 +39,7 @@ inline void alltoallImpl(
 
 template <typename _Val>
 inline void alltoallImpl(
-          DenseStorage<_Val> &buffer,
+          DenseStorage<_Val, Array> &buffer,
     const mpi_int_t count,
     const MPI_Comm comm
 ) noexcept {

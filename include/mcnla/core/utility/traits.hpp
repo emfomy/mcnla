@@ -26,7 +26,7 @@ namespace traits {
 /// @tparam  _Derived  The derived type.
 ///
 template <typename _Derived>
-  struct Traits {
+struct Traits {
   static_assert(std::integral_constant<_Derived, false>::value, "Error using non-specialized traits!");
 };
 

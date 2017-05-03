@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
@@ -24,21 +24,6 @@
 //  The MCNLA namespace.
 //
 namespace mcnla {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseVector;
-template <typename _Val, Trans _trans> class DenseMatrix;
-template <typename _Val, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
-template <typename _Val, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
-template <typename _Val> class DenseDiagonalMatrix;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
@@ -99,7 +84,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans = Trans::NORMAL>
 class DenseMatrix
-  : public DenseMatrixStorage<_Val>,
+  : public DenseMatrixStorage<_Val, Array>,
     public DenseMatrixWrapper<DenseMatrix<_Val, _trans>>,
     public IterableWrapper<DenseMatrix<_Val, _trans>>,
     public InvertibleWrapper<DenseMatrix<_Val, _trans>> {
@@ -142,7 +127,7 @@ class DenseMatrix
 
  private:
 
-  using BaseType          = DenseMatrixStorage<_Val>;
+  using BaseType          = DenseMatrixStorage<_Val, Array>;
 
  public:
 
