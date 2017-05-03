@@ -34,7 +34,7 @@ namespace isvd {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> {
+class StageWrapper {
 
  public:
 
@@ -91,6 +91,10 @@ class StageWrapper : public utility::CrtpBase<_Derived, StageWrapper<_Derived>> 
   // Outputs name
   inline std::ostream& outputName( std::ostream &os ) const noexcept;
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 
 };

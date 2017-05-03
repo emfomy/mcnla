@@ -30,7 +30,7 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class SparseWrapper : public utility::CrtpBase<_Derived, SparseWrapper<_Derived>> {
+class SparseWrapper {
 
  protected:
 
@@ -42,6 +42,12 @@ class SparseWrapper : public utility::CrtpBase<_Derived, SparseWrapper<_Derived>
   // Operators
   template <class __Derived>
   friend inline std::ostream& operator<<( std::ostream &os, const SparseWrapper<__Derived> &wrapper ) noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

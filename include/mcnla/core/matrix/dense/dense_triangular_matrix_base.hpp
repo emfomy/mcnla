@@ -214,42 +214,6 @@ index_t DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::ncolImpl() const
   return !isTrans(_trans) ? this->dim1() : this->dim0();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to base class.
-///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::BaseType&
-    DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::base() noexcept {
-  return static_cast<BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  base
-///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-const typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::BaseType&
-    DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::base() const noexcept {
-  return static_cast<const BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to derived class.
-///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
-    DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::derived() noexcept {
-  return static_cast<DerivedType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  derived
-///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-const typename DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
-    DenseTriangularMatrixBase<_Val, _trans, _uplo, _Types>::derived() const noexcept {
-  return static_cast<const DerivedType&>(*this);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla

@@ -210,9 +210,9 @@ class CooMatrix
   inline       IdxArrayType& toIdx1(       IdxArrayType &rowidx,       IdxArrayType &colidx ) const noexcept;
   inline const IdxArrayType& toIdx1( const IdxArrayType &rowidx, const IdxArrayType &colidx ) const noexcept;
 
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_BASE(BaseType);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

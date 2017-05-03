@@ -10,44 +10,12 @@
 
 #include <mcnla/core/utility/def.hpp>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The MCNLA namespace.
-//
-namespace mcnla {
+#define CRTP_BASE( _Base ) \
+    inline _Base& base() noexcept { return static_cast<_Base&>(*this); } \
+    inline const _Base& base() const noexcept { return static_cast<const _Base&>(*this); }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The utility namespace.
-//
-namespace utility {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  utility_module
-/// The curiously recurring template pattern (CRTP) interface.
-///
-/// @tparam  _Derived  The derived types.
-/// @tparam  _Wrapper  The wrapper class type.
-///
-template <class _Derived, class _Wrapper = void>
-struct CrtpBase {
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @brief  Cast to derived class.
-  ///
-  inline _Derived& derived() noexcept {
-    return static_cast<_Derived&>(*this);
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  /// @copydoc  derived
-  ///
-  inline const _Derived& derived() const noexcept {
-    return static_cast<const _Derived&>(*this);
-  }
-
-};
-
-}  // namespace utility
-
-}  // namespace mcnla
+#define CRTP_DERIVED( _Derived ) \
+    inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); } \
+    inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); }
 
 #endif  // MCNLA_CORE_UTILITY_CRTP_HPP_

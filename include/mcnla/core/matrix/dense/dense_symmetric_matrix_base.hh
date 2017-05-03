@@ -112,13 +112,10 @@ class DenseSymmetricMatrixBase
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
 
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
-
-  // Gets derived class
-  inline       DerivedType& derived() noexcept;
-  inline const DerivedType& derived() const noexcept;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_BASE(BaseType);
+  CRTP_DERIVED(DerivedType);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

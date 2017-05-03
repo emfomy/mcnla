@@ -30,9 +30,7 @@ namespace matrix {
 /// @tparam  _DerivedT  The derived template.
 ///
 template <class _Derived, typename _Val>
-class ArrayBase
-  : public std::shared_ptr<_Val>,
-    public utility::CrtpBase<_Derived, ArrayBase<_Derived, _Val>> {
+class ArrayBase : public std::shared_ptr<_Val> {
 
  private:
 
@@ -74,6 +72,12 @@ class ArrayBase
   inline const _Val* operator*() const noexcept;
   inline       _Val& operator[]( const index_t idx ) noexcept;
   inline const _Val& operator[]( const index_t idx ) const noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

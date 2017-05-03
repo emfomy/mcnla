@@ -321,22 +321,6 @@ _Derived IteratorBase<_Derived>::endImpl(
   _Derived retval(container); retval.setEnd(); return retval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to derived class.
-///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::derived() noexcept {
-  return static_cast<_Derived&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  derived
-///
-template <class _Derived>
-const _Derived& IteratorBase<_Derived>::derived() const noexcept {
-  return static_cast<const _Derived&>(*this);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla

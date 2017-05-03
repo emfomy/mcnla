@@ -30,7 +30,7 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class VectorCollectionWrapper : public utility::CrtpBase<_Derived, VectorCollectionWrapper<_Derived>> {
+class VectorCollectionWrapper {
 
  private:
 
@@ -52,6 +52,12 @@ class VectorCollectionWrapper : public utility::CrtpBase<_Derived, VectorCollect
   // Gets vector
   inline       VectorType operator()( const index_t idx ) noexcept;
   inline const VectorType operator()( const index_t idx ) const noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

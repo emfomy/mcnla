@@ -560,7 +560,8 @@ const typename DenseMatrixBase<_Val, _trans, _Types>::VectorType DenseMatrixBase
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::vectorizeImpl
 ///
 template <typename _Val, Trans _trans, class _Types>
-typename DenseMatrixBase<_Val, _trans, _Types>::VectorType DenseMatrixBase<_Val, _trans, _Types>::vectorize() noexcept {
+typename DenseMatrixBase<_Val, _trans, _Types>::VectorType
+    DenseMatrixBase<_Val, _trans, _Types>::vectorize() noexcept {
   return static_cast<VectorType&&>(this->vectorizeImpl());
 }
 
@@ -568,7 +569,8 @@ typename DenseMatrixBase<_Val, _trans, _Types>::VectorType DenseMatrixBase<_Val,
 /// @copydoc  vectorize
 ///
 template <typename _Val, Trans _trans, class _Types>
-const typename DenseMatrixBase<_Val, _trans, _Types>::VectorType DenseMatrixBase<_Val, _trans, _Types>::vectorize() const noexcept {
+const typename DenseMatrixBase<_Val, _trans, _Types>::VectorType
+    DenseMatrixBase<_Val, _trans, _Types>::vectorize() const noexcept {
   return static_cast<const VectorType&&>(this->vectorizeImpl());
 }
 
@@ -644,38 +646,6 @@ const IdxRange DenseMatrixBase<_Val, _trans, _Types>::rowfullrange() const noexc
 template <typename _Val, Trans _trans, class _Types>
 const IdxRange DenseMatrixBase<_Val, _trans, _Types>::colfullrange() const noexcept {
   return {0_i, this->ncol()};
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to base class.
-///
-template <typename _Val, Trans _trans, class _Types>
-typename DenseMatrixBase<_Val, _trans, _Types>::BaseType& DenseMatrixBase<_Val, _trans, _Types>::base() noexcept {
-  return static_cast<BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  base
-///
-template <typename _Val, Trans _trans, class _Types>
-const typename DenseMatrixBase<_Val, _trans, _Types>::BaseType& DenseMatrixBase<_Val, _trans, _Types>::base() const noexcept {
-  return static_cast<const BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to derived class.
-///
-template <typename _Val, Trans _trans, class _Types>
-typename DenseMatrixBase<_Val, _trans, _Types>::DerivedType& DenseMatrixBase<_Val, _trans, _Types>::derived() noexcept {
-  return static_cast<DerivedType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  derived
-///
-template <typename _Val, Trans _trans, class _Types>
-const typename DenseMatrixBase<_Val, _trans, _Types>::DerivedType& DenseMatrixBase<_Val, _trans, _Types>::derived() const noexcept {
-  return static_cast<const DerivedType&>(*this);
 }
 
 }  // namespace matrix

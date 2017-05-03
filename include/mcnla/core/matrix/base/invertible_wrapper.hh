@@ -34,11 +34,7 @@ template <class _Base> class InverseView;
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class InvertibleWrapper : public utility::CrtpBase<_Derived, InvertibleWrapper<_Derived>> {
-
- private:
-
-  using InverseType = InverseView<_Derived>;
+class InvertibleWrapper {
 
  public:
 
@@ -46,8 +42,14 @@ class InvertibleWrapper : public utility::CrtpBase<_Derived, InvertibleWrapper<_
   inline InvertibleWrapper() noexcept = default;
 
   // Change view
-  inline       InverseType& inv() noexcept;
-  inline const InverseType& inv() const noexcept;
+  inline       InverseView<_Derived>& inv() noexcept;
+  inline const InverseView<_Derived>& inv() const noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 
@@ -62,18 +64,14 @@ class InverseView : private _Base {
 
   friend InvertibleWrapper<_Base>;
 
- private:
-
-  using BaseType = _Base;
-
  public:
 
   // Constructors
   inline InverseView() noexcept = delete;
 
   // Change view
-  inline       BaseType& inv() noexcept;
-  inline const BaseType& inv() const noexcept;
+  inline       _Base& inv() noexcept;
+  inline const _Base& inv() const noexcept;
 
 };
 

@@ -247,38 +247,6 @@ index_t DenseVectorBase<_Val, _Types>::toDim0(
   return length;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to base class.
-///
-template <typename _Val, class _Types>
-typename DenseVectorBase<_Val, _Types>::BaseType& DenseVectorBase<_Val, _Types>::base() noexcept {
-  return static_cast<BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  base
-///
-template <typename _Val, class _Types>
-const typename DenseVectorBase<_Val, _Types>::BaseType& DenseVectorBase<_Val, _Types>::base() const noexcept {
-  return static_cast<const BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to derived class.
-///
-template <typename _Val, class _Types>
-typename DenseVectorBase<_Val, _Types>::DerivedType& DenseVectorBase<_Val, _Types>::derived() noexcept {
-  return static_cast<DerivedType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  derived
-///
-template <typename _Val, class _Types>
-const typename DenseVectorBase<_Val, _Types>::DerivedType& DenseVectorBase<_Val, _Types>::derived() const noexcept {
-  return static_cast<const DerivedType&>(*this);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla

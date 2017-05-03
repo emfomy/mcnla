@@ -30,7 +30,7 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>> {
+class MatrixWrapper {
 
  public:
 
@@ -52,6 +52,12 @@ class MatrixWrapper : public utility::CrtpBase<_Derived, MatrixWrapper<_Derived>
   inline index_t   ncol() const noexcept;
   inline index_t   nelem() const noexcept;
   inline SizesType sizes() const noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

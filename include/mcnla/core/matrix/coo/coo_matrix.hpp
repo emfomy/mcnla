@@ -475,22 +475,6 @@ const Array<index_t>& CooMatrix<_Val, _trans>::toIdx1(
   return !isTrans(_trans) ? colidx : rowidx;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Convert to base class.
-///
-template <typename _Val, Trans _trans>
-CooMatrixStorage<_Val, Array>& CooMatrix<_Val, _trans>::base() noexcept {
-  return static_cast<BaseType&>(*this);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  base
-///
-template <typename _Val, Trans _trans>
-const CooMatrixStorage<_Val, Array>& CooMatrix<_Val, _trans>::base() const noexcept {
-  return static_cast<const BaseType&>(*this);
-}
-
 }  // namespace matrix
 
 }  // namespace mcnla

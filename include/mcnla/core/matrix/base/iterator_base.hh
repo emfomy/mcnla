@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <iterator>
+#include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,9 +99,9 @@ class IteratorBase
 
  protected:
 
-  // Gets derived class
-  inline       _Derived& derived() noexcept;
-  inline const _Derived& derived() const noexcept;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

@@ -29,7 +29,7 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseMatrixWrapper : public utility::CrtpBase<_Derived, DenseMatrixWrapper<_Derived>> {
+class DenseMatrixWrapper {
 
  protected:
 
@@ -41,6 +41,12 @@ class DenseMatrixWrapper : public utility::CrtpBase<_Derived, DenseMatrixWrapper
   // Operators
   template <class __Derived>
   friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixWrapper<__Derived> &wrapper ) noexcept;
+
+ protected:
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_DERIVED(_Derived);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

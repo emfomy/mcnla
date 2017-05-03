@@ -166,9 +166,9 @@ class CooVector
   inline index_t toDim0( const SizesType sizes ) const noexcept;
   inline index_t toDim0( const index_t length ) const noexcept;
 
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  CRTP_BASE(BaseType);
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 
