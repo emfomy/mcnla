@@ -5,7 +5,7 @@
 
 int main( int argc, char **argv ) {
 
-  mcnla::init(argc, argv);
+  MPI_Init(&argc, &argv);
 
   if ( ! mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
     std::fclose(stdout);
@@ -23,6 +23,7 @@ int main( int argc, char **argv ) {
   auto retval = RUN_ALL_TESTS();
   assert(testing::UnitTest::GetInstance()->test_to_run_count() > 0);
 
-  mcnla::finalize();
+  MPI_Finalize();
+
   return retval;
 }
