@@ -11,7 +11,7 @@
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
 
 #include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hpp>
-#include <mcnla/isvd/orthogonalizer/polar_orthogonalizer.hpp>
-#include <mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hpp>
+#include <mcnla/isvd/orthogonalizer/gramian_orthogonalizer.hpp>
+#include <mcnla/isvd/orthogonalizer/row_block_gramian_orthogonalizer.hpp>
 
 #endif  // MCNLA_ISVD_OTRHOGONALIZER_HPP_

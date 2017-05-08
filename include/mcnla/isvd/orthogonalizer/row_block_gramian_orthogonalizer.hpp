@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hpp
-/// @brief   The polar orthogonalizer (row-block version).
+/// @file    include/mcnla/isvd/orthogonalizer/row_block_gramian_orthogonalizer.hpp
+/// @brief   The Gramian orthogonalizer (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HPP_
-#define MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HPP_
+#ifndef MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_GRAMIAN_ORTHOGONALIZER_HPP_
+#define MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_GRAMIAN_ORTHOGONALIZER_HPP_
 
-#include <mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hh>
+#include <mcnla/isvd/orthogonalizer/row_block_gramian_orthogonalizer.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::Orthogonalizer(
+Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::Orthogonalizer(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
+void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto num_sketch = parameters_.numSketch();
@@ -52,7 +52,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::initializeImpl() noex
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
+void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::runImpl(
     DenseMatrixCollection201<ValType> &collection_qj
 ) noexcept {
 
@@ -61,7 +61,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(parameters_.nrowRank(), parameters_.dimSketch(), num_sketch));
 
-  auto &matrix_qjs = collection_qj.unfold();  // matrix Qs.
+  auto &matrix_qsj = collection_qj.unfold();  // matrix Qs.
 
   moments_.emplace_back(utility::getTime());  // orthogonalization
 
@@ -82,7 +82,7 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
   for ( auto &v : matrix_s_ ) {
     v = std::sqrt(v);
   }
-  la::copy(matrix_qjs.vectorize(), collection_tmp_.unfold().vectorize());
+  la::copy(matrix_qsj.vectorize(), collection_tmp_.unfold().vectorize());
   for ( index_t i = 0; i < num_sketch; ++i ) {
     la::sm(matrix_s_(""_, i).viewDiagonal().inv(), collection_w_(i));
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_qj(i));
@@ -95,4 +95,4 @@ void Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>::runImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HPP_
+#endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_GRAMIAN_ORTHOGONALIZER_HPP_

@@ -42,11 +42,10 @@ Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::Sketcher(
 template <typename _Val>
 void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
 
-  const auto ncol       = parameters_.ncol();
-  const auto dim_sketch = parameters_.dimSketch();
-  const auto num_sketch = parameters_.numSketch();
+  const auto ncol             = parameters_.ncol();
+  const auto dim_sketch_total = parameters_.dimSketchTotal();
 
-  matrix_omegas_.reconstruct(ncol, dim_sketch * num_sketch);
+  matrix_omegas_.reconstruct(ncol, dim_sketch_total);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

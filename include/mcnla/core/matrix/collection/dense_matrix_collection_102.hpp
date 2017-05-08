@@ -315,7 +315,7 @@ index_t DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::
 ///
 template <typename _Val>
 index_t DenseMatrixCollection<DenseMatrixCollection102Tag, _Val, Trans::TRANS>::nmatImpl() const noexcept {
-  return mrow_ ? ((data_.nrow() + mrow_ - nrow_) / mrow_) : 0;
+  return mrow_ ? (data_.nrow() / mrow_) : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

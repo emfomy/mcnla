@@ -40,10 +40,9 @@ Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::Sketcher(
 template <typename _Val>
 void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
 
-  const auto dim_sketch = parameters_.dimSketch();
-  const auto num_sketch = parameters_.numSketch();
+  const auto dim_sketch_total = parameters_.dimSketchTotal();
 
-  vector_idxs_.reconstruct(dim_sketch * num_sketch);
+  vector_idxs_.reconstruct(dim_sketch_total);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,12 +57,13 @@ void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::runImpl(
           DenseMatrixCollection201<ValType> &collection_qj
 ) noexcept {
 
-  const auto mpi_comm   = parameters_.mpi_comm;
-  const auto mpi_root   = parameters_.mpi_root;
-  const auto nrow_rank  = parameters_.nrowRank();
-  const auto ncol       = parameters_.ncol();
-  const auto dim_sketch = parameters_.dimSketch();
-  const auto num_sketch = parameters_.numSketch();
+  const auto mpi_comm         = parameters_.mpi_comm;
+  const auto mpi_root         = parameters_.mpi_root;
+  const auto nrow_rank        = parameters_.nrowRank();
+  const auto ncol             = parameters_.ncol();
+  const auto dim_sketch       = parameters_.dimSketch();
+  const auto dim_sketch_total = parameters_.dimSketchTotal();
+  const auto num_sketch       = parameters_.numSketch();
 
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
@@ -81,7 +81,7 @@ void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::runImpl(
   moments_.emplace_back(utility::getTime());  // projection
 
   // Copy columns
-  for ( index_t i = 0; i < dim_sketch * num_sketch; ++i ) {
+  for ( index_t i = 0; i < dim_sketch_total; ++i ) {
     la::copy(matrix_aj(""_, abs(vector_idxs_(i)) % ncol), collection_qj.unfold()(""_, i));
   }
 

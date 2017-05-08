@@ -43,9 +43,9 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::initializeImpl() noexcept 
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
-  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch_each = parameters_.dimSketchEach();
 
-  matrix_bs_.reconstruct(dim_sketch, dim_sketch * num_sketch_each);
+  matrix_b_.reconstruct(dim_sketch, dim_sketch_each);
   matrix_d_.reconstruct(dim_sketch, dim_sketch);
   matrix_z_.reconstruct(dim_sketch, dim_sketch);
   matrix_c_.reconstruct(dim_sketch, dim_sketch);
@@ -109,14 +109,14 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
     // ================================================================================================================== //
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
-    // Bs := sum( Qc' * Qs )
-    la::mm(matrix_qc.t(), matrix_qs, matrix_bs_);
+    // B := sum( Qc' * Qs )
+    la::mm(matrix_qc.t(), matrix_qs, matrix_b_);
 
-    // D := Bs * Bs'
-    la::rk(matrix_bs_, matrix_d_.viewSymmetric());
+    // D := B * B'
+    la::rk(matrix_b_, matrix_d_.viewSymmetric());
 
-    // X := 1/N * Qs * Bs'
-    la::mm(matrix_qs, matrix_bs_.t(), matrix_x_, 1.0/num_sketch);
+    // X := 1/N * Qs * B'
+    la::mm(matrix_qs, matrix_b_.t(), matrix_x_, 1.0/num_sketch);
 
     // X -= 1/N * Qc * D
     la::mm(matrix_qc, matrix_d_.viewSymmetric(), matrix_x_, -1.0/num_sketch, 1.0);

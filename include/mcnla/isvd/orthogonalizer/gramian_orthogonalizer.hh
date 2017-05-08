@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hh
-/// @brief   The definition of polar orthogonalizer (row-block version).
+/// @file    include/mcnla/isvd/orthogonalizer/gramian_orthogonalizer.hh
+/// @brief   The definition of Gramian orthogonalizer.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HH_
-#define MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HH_
+#ifndef MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HH_
+#define MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
@@ -23,29 +23,29 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block polar orthogonalizer tag.
+/// The Gramian orthogonalizer tag.
 ///
-struct RowBlockPolarOrthogonalizerTag {};
+struct GramianOrthogonalizerTag {};
 
 /// @ingroup  isvd_orthogonalizer_module
 template <typename _Val>
-using RowBlockPolarOrthogonalizer = Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>;
+using GramianOrthogonalizer = Orthogonalizer<GramianOrthogonalizerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
-/// The polar orthogonalizer (row-block version).
+/// The Gramian orthogonalizer.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
-  : public StageWrapper<RowBlockPolarOrthogonalizer<_Val>> {
+class Orthogonalizer<GramianOrthogonalizerTag, _Val>
+  : public StageWrapper<GramianOrthogonalizer<_Val>> {
 
-  friend StageWrapper<RowBlockPolarOrthogonalizer<_Val>>;
+  friend StageWrapper<GramianOrthogonalizer<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockPolarOrthogonalizer<_Val>>;
+  using BaseType = StageWrapper<GramianOrthogonalizer<_Val>>;
 
  public:
 
@@ -54,7 +54,7 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Polar Orthogonalizer (Row-Block Version)";
+  static constexpr const char* name_ = "Gramian Orthogonalizer";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "orthogonalization";
@@ -91,7 +91,7 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection201<ValType> &collection_qj ) noexcept;
+  void runImpl( DenseMatrixCollection201<ValType> &collection_q ) noexcept;
 
 };
 
@@ -99,4 +99,4 @@ class Orthogonalizer<RowBlockPolarOrthogonalizerTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_POLAR_ORTHOGONALIZER_HH_
+#endif  // MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HH_

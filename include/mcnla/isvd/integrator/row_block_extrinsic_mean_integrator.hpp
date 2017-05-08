@@ -41,8 +41,8 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::initializeImpl() noex
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
-  matrix_bjs_.reconstruct(dim_sketch * num_sketch, dim_sketch * num_sketch);
-  collection_bi_.reconstruct(dim_sketch, dim_sketch * num_sketch, num_sketch_each);
+  matrix_bsj_.reconstruct(dim_sketch, dim_sketch);
+  collection_bi_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
   collection_bi0_ = collection_bi_(""_, {0_i, dim_sketch}, ""_);
 
   collection_g_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
@@ -86,15 +86,15 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
   mcnla_assert_eq(collection_q.sizes(),  std::make_tuple(nrow, dim_sketch, num_sketch_each));
   mcnla_assert_eq(matrix_qbar.sizes(),   std::make_tuple(nrow, dim_sketch));
 
-  auto &matrix_qjs = collection_qj.unfold();  // matrix Qs.
+  auto &matrix_qsj = collection_qj.unfold();  // matrix Qs.
 
   double comm_moment, comm_time = 0;
   moments_.emplace_back(utility::getTime());  // rotate
 
-  // Bs := sum( Qjs' * Qjs )
-  la::mm(matrix_qjs.t(), matrix_qjs, matrix_bjs_);
+  // Bs := sum( Qsj' * Qsj )
+  la::mm(matrix_qsj.t(), matrix_qsj, matrix_bsj_);
   comm_moment = utility::getTime();
-  mpi::reduceScatterBlock(matrix_bjs_, collection_bi_.unfold(), MPI_SUM, mpi_comm);
+  mpi::reduceScatterBlock(matrix_bsj_, collection_bi_.unfold(), MPI_SUM, mpi_comm);
   comm_time = utility::getTime() - comm_moment;
 
   for ( index_t i = 0; i < num_sketch_each; ++i ) {

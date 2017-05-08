@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/orthogonalizer/row_block_polar_orthogonalizer.hpp>
+#include <mcnla/isvd/orthogonalizer/row_block_gramian_orthogonalizer.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define COLLECTION_Y_PATH MCNLA_DATA_PATH "/yi.mtx"
 #define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qi.mtx"
 
-TEST(RowBlockPolarOrthogonalizerTest, Test) {
+TEST(RowBlockGramianOrthogonalizerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -37,7 +37,7 @@ TEST(RowBlockPolarOrthogonalizerTest, Test) {
   parameters.sync();
 
   // Initializes orthogonalizer
-  mcnla::isvd::RowBlockPolarOrthogonalizer<ValType> orthogonalizer(parameters);
+  mcnla::isvd::RowBlockGramianOrthogonalizer<ValType> orthogonalizer(parameters);
   orthogonalizer.initialize();
 
   // Initializes converter

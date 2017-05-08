@@ -26,16 +26,17 @@ add_mpi_check(isvd/sketcher/row_block_gaussian_projection_sketcher "Row-Block Ga
 add_mpi_check(isvd/sketcher/row_block_column_sampling_sketcher "Row-Block Column Sampling Sketcher test" "RowBlockColumnSamplingSketcherTest" 1 2 3 4 6 12)
 
 add_mpi_check(isvd/orthogonalizer/svd_orthogonalizer "SVD Orthogonalizer test" "SvdOrthogonalizerTest" 1 2 3 4 6 12)
-add_mpi_check(isvd/orthogonalizer/polar_orthogonalizer "Polar Orthogonalizer test" "PolarOrthogonalizerTest" 1 2 3 4 6 12)
-add_mpi_check(isvd/orthogonalizer/row_block_polar_orthogonalizer "Row-Block Polar Orthogonalizer test" "RowBlockPolarOrthogonalizerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/orthogonalizer/gramian_orthogonalizer "Gramian Orthogonalizer test" "GramianOrthogonalizerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/orthogonalizer/row_block_gramian_orthogonalizer "Row-Block Gramian Orthogonalizer test" "RowBlockGramianOrthogonalizerTest" 1 2 3 4 6 12)
 
 add_mpi_check(isvd/integrator/kolmogorov_nagumo_integrator "Kolmogorov-Nagumo-Type Integrator test" "KolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_kolmogorov_nagumo_integrator "Row-Block Kolmogorov-Nagumo-Type Integrator test" "RowBlockKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/integrator/row_block_fast_kolmogorov_nagumo_integrator "Fast Row-Block Kolmogorov-Nagumo-Type Integrator test" "RowBlockFastKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_extrinsic_mean_integrator "Row-Block Extrinsic Mean Integrator test" "RowBlockExtrinsicMeanIntegratorTest" 1 2 3 4 6 12)
 
 add_mpi_check(isvd/former/svd_former "SVD Former test" "SvdFormerTest" 1)
-add_mpi_check(isvd/former/polar_former "Polar Former test" "PolarFormerTest" 1)
-add_mpi_check(isvd/former/row_block_polar_former "Row-BLock Polar Former test" "RowBlockPolarFormerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/former/gramian_former "Gramian Former test" "GramianFormerTest" 1)
+add_mpi_check(isvd/former/row_block_gramian_former "Row-BLock Gramian Former test" "RowBlockGramianFormerTest" 1 2 3 4 6 12)
 
 # Add rule 'build_test'
 add_custom_target(

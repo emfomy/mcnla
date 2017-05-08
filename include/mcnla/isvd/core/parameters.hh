@@ -95,6 +95,8 @@ class Parameters {
   inline index_t rank() const noexcept;
   inline index_t overRank() const noexcept;
   inline index_t dimSketch() const noexcept;
+  inline index_t dimSketchEach() const noexcept;
+  inline index_t dimSketchTotal() const noexcept;
   inline index_t numSketch() const noexcept;
   inline index_t numSketchEach() const noexcept;
 

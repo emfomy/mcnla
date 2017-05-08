@@ -14,6 +14,7 @@
 #include <mcnla/core/matrix/collection/dense_vector_collection.hpp>
 #include <mcnla/core/matrix/collection/dense_matrix_collection.hpp>
 
+#include <mcnla/core/matrix/collection/dense_matrix_collection_012.hpp>
 #include <mcnla/core/matrix/collection/dense_matrix_collection_102.hpp>
 #include <mcnla/core/matrix/collection/dense_matrix_collection_201.hpp>
 

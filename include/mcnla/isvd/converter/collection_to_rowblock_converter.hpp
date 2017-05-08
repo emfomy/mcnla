@@ -55,6 +55,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
   const auto nrow_each       = parameters_.nrowEach();
   const auto nrow_total      = parameters_.nrowTotal();
   const auto dim_sketch      = parameters_.dimSketch();
+  const auto dim_sketch_each = parameters_.dimSketchEach();
   const auto num_sketch      = parameters_.numSketch();
   const auto num_sketch_each = parameters_.numSketchEach();
 
@@ -67,7 +68,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
   matrix_qs_full.resize(nrow_total, ""_);
 
   DenseMatrixCollection102<ValType> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
-  DenseMatrixCollection201<ValType> collection_qj_tmp(dim_sketch * num_sketch_each, collection_qj.unfold());
+  DenseMatrixCollection201<ValType> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
 
   moments_.emplace_back(utility::getTime());  // start
 

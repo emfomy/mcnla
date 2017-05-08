@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/row_block_polar_former.hpp
-/// @brief   The polar former (row-block version).
+/// @file    include/mcnla/isvd/former/row_block_gramian_former.hpp
+/// @brief   The Gramian former (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HPP_
-#define MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HPP_
+#ifndef MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HPP_
+#define MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HPP_
 
-#include <mcnla/isvd/former/row_block_polar_former.hh>
+#include <mcnla/isvd/former/row_block_gramian_former.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Former<RowBlockPolarFormerTag, _Val>::Former(
+Former<RowBlockGramianFormerTag, _Val>::Former(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Former<RowBlockPolarFormerTag, _Val>::Former(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
+void Former<RowBlockGramianFormerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto nrow_each  = parameters_.nrowEach();
@@ -64,7 +64,7 @@ void Former<RowBlockPolarFormerTag, _Val>::initializeImpl() noexcept {
 /// @param  matrix_qj  The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void Former<RowBlockPolarFormerTag, _Val>::runImpl(
+void Former<RowBlockGramianFormerTag, _Val>::runImpl(
     const _Matrix &matrix_aj,
     const DenseMatrixRowMajor<ValType> &matrix_qj
 ) noexcept {
@@ -116,7 +116,7 @@ void Former<RowBlockPolarFormerTag, _Val>::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& Former<RowBlockPolarFormerTag, _Val>::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& Former<RowBlockGramianFormerTag, _Val>::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -125,7 +125,7 @@ const DenseVector<RealValT<_Val>>& Former<RowBlockPolarFormerTag, _Val>::vectorS
 /// @brief  Gets the left singular vectors (row-block).
 ///
 template <typename _Val>
-const DenseMatrixRowMajor<_Val>& Former<RowBlockPolarFormerTag, _Val>::matrixUj() const noexcept {
+const DenseMatrixRowMajor<_Val>& Former<RowBlockGramianFormerTag, _Val>::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_uj_cut_;
 }
@@ -134,4 +134,4 @@ const DenseMatrixRowMajor<_Val>& Former<RowBlockPolarFormerTag, _Val>::matrixUj(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HPP_
+#endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HPP_

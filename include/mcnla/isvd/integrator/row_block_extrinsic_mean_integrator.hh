@@ -60,8 +60,8 @@ class Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>
   /// The name of each part of the stage.
   static constexpr const char* names_ = "Rotate / Flip / Sum";
 
-  /// The matrix Bjs.
-  DenseMatrixRowMajor<ValType> matrix_bjs_;
+  /// The matrix Bsj.
+  DenseMatrixRowMajor<ValType> matrix_bsj_;
 
   /// The collection Bi.
   DenseMatrixCollection102<ValType> collection_bi_;

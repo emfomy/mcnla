@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/row_block_polar_former.hh
-/// @brief   The definition of polar former (row-block version).
+/// @file    include/mcnla/isvd/former/row_block_gramian_former.hh
+/// @brief   The definition of Gramian former (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HH_
-#define MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HH_
+#ifndef MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HH_
+#define MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/former/former.hpp>
@@ -23,29 +23,29 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block polar former tag.
+/// The row-block Gramian former tag.
 ///
-struct RowBlockPolarFormerTag {};
+struct RowBlockGramianFormerTag {};
 
 /// @ingroup  isvd_former_module
 template <typename _Val>
-using RowBlockPolarFormer = Former<RowBlockPolarFormerTag, _Val>;
+using RowBlockGramianFormer = Former<RowBlockGramianFormerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-/// The polar former (row-block version).
+/// The Gramian former (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Former<RowBlockPolarFormerTag, _Val>
-  : public StageWrapper<RowBlockPolarFormer<_Val>> {
+class Former<RowBlockGramianFormerTag, _Val>
+  : public StageWrapper<RowBlockGramianFormer<_Val>> {
 
-  friend StageWrapper<RowBlockPolarFormer<_Val>>;
+  friend StageWrapper<RowBlockGramianFormer<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockPolarFormer<_Val>>;
+  using BaseType = StageWrapper<RowBlockGramianFormer<_Val>>;
 
  public:
 
@@ -55,7 +55,7 @@ class Former<RowBlockPolarFormerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Polar Former (Row-Block Version)";
+  static constexpr const char* name_ = "Gramian Former (Row-Block Version)";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "forming";
@@ -115,4 +115,4 @@ class Former<RowBlockPolarFormerTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_POLAR_FORMER_HH_
+#endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HH_

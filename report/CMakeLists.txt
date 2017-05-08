@@ -13,6 +13,7 @@ include(report.cmake)
 
 add_report(integrator kolmogorov_nagumo_integrator)
 add_report(integrator row_block_kolmogorov_nagumo_integrator)
+add_report(integrator row_block_fast_kolmogorov_nagumo_integrator)
 
 # Add rule 'build_report'
 add_custom_target(

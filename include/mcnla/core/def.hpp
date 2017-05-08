@@ -21,10 +21,10 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  gpu_core_module
+/// @ingroup  core_module
 /// Initializes the environment (including MPI and MAGMA).
 ///
-static inline void gpuInit( int &argc, char **&argv ) {
+static inline void init( int &argc, char **&argv ) {
   MPI_Init(&argc, &argv);
 #ifdef MCNLA_USE_GPU
   magma_init();
@@ -32,10 +32,10 @@ static inline void gpuInit( int &argc, char **&argv ) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  gpu_core_module
+/// @ingroup  core_module
 /// Finalizes the environment (including MPI and MAGMA).
 ///
-static inline void gpuFinalize() {
+static inline void finalize() {
 #ifdef MCNLA_USE_GPU
   magma_finalize();
 #endif  // MCNLA_USE_GPU

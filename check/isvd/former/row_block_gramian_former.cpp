@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/former/row_block_polar_former.hpp>
+#include <mcnla/isvd/former/row_block_gramian_former.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
@@ -7,7 +7,7 @@
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_kn.mtx"
 #define MATRIX_U_PATH MCNLA_DATA_PATH "/u_kn.mtx"
 
-TEST(RowBlockPolarFormerTest, Test) {
+TEST(RowBlockGramianFormerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -38,7 +38,7 @@ TEST(RowBlockPolarFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::RowBlockPolarFormer<ValType> former(parameters);
+  mcnla::isvd::RowBlockGramianFormer<ValType> former(parameters);
   former.initialize();
 
   // Initializes converter

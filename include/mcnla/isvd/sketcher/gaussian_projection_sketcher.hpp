@@ -43,10 +43,9 @@ template <typename _Val>
 void Sketcher<GaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
 
   const auto ncol            = parameters_.ncol();
-  const auto num_sketch_each = parameters_.numSketchEach();
-  const auto dim_sketch      = parameters_.dimSketch();
+  const auto dim_sketch_each = parameters_.dimSketchEach();
 
-  matrix_omegas_.reconstruct(ncol, dim_sketch * num_sketch_each);
+  matrix_omegas_.reconstruct(ncol, dim_sketch_each);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/orthogonalizer/polar_orthogonalizer.hpp
-/// @brief   The polar orthogonalizer.
+/// @file    include/mcnla/isvd/orthogonalizer/gramian_orthogonalizer.hpp
+/// @brief   The Gramian orthogonalizer.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_ORTHOGONALIZER_POLAR_ORTHOGONALIZER_HPP_
-#define MCNLA_ISVD_ORTHOGONALIZER_POLAR_ORTHOGONALIZER_HPP_
+#ifndef MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HPP_
+#define MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HPP_
 
-#include <mcnla/isvd/orthogonalizer/polar_orthogonalizer.hh>
+#include <mcnla/isvd/orthogonalizer/gramian_orthogonalizer.hh>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Orthogonalizer<PolarOrthogonalizerTag, _Val>::Orthogonalizer(
+Orthogonalizer<GramianOrthogonalizerTag, _Val>::Orthogonalizer(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Orthogonalizer<PolarOrthogonalizerTag, _Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Orthogonalizer<PolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
+void Orthogonalizer<GramianOrthogonalizerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -52,13 +52,16 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val>
-void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
+void Orthogonalizer<GramianOrthogonalizerTag, _Val>::runImpl(
     DenseMatrixCollection201<ValType> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
+
+  static_cast<void>(nrow);
+  static_cast<void>(dim_sketch);
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
@@ -93,4 +96,4 @@ void Orthogonalizer<PolarOrthogonalizerTag, _Val>::runImpl(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_ORTHOGONALIZER_POLAR_ORTHOGONALIZER_HPP_
+#endif  // MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HPP_

@@ -40,10 +40,9 @@ Sketcher<ColumnSamplingSketcherTag, _Val>::Sketcher(
 template <typename _Val>
 void Sketcher<ColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
 
-  const auto dim_sketch      = parameters_.dimSketch();
-  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto dim_sketch_each = parameters_.dimSketchEach();
 
-  vector_idxs_.reconstruct(dim_sketch * num_sketch_each);
+  vector_idxs_.reconstruct(dim_sketch_each);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +62,7 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
   const auto dim_sketch      = parameters_.dimSketch();
+  const auto dim_sketch_each = parameters_.dimSketchEach();
   const auto num_sketch_each = parameters_.numSketchEach();
 
   mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
@@ -78,7 +78,7 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
   moments_.emplace_back(utility::getTime());  // projection
 
   // Copy columns
-  for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
+  for ( index_t i = 0; i < dim_sketch_each; ++i ) {
     la::copy(matrix_a(""_, abs(vector_idxs_(i)) % ncol), collection_q.unfold()(""_, i));
   }
 

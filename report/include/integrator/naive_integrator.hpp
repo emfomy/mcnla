@@ -19,7 +19,7 @@ struct Data {
       matrix_q(parameters.createMatrixQ()) {
     mcnla::random::Streams streams(0);
     mcnla::random::gaussian(streams, collection_q.unfold().vectorize());
-    mcnla::isvd::PolarOrthogonalizer<ValType> orthogonalizer(parameters);
+    mcnla::isvd::GramianOrthogonalizer<ValType> orthogonalizer(parameters);
     orthogonalizer.initialize();
     orthogonalizer(collection_q);
   }

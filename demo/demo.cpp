@@ -107,7 +107,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::Parameters<ValType> parameters(mpi_root, mpi_comm);
 
   mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
-  mcnla::isvd::RowBlockPolarOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
   mcnla::isvd::DummyConverter<double> so_converter(parameters);

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/former/polar_former.hh
-/// @brief   The definition of polar former.
+/// @file    include/mcnla/isvd/former/gramian_former.hh
+/// @brief   The definition of Gramian former.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
-#define MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
+#ifndef MCNLA_ISVD_FORMER_GRAMIAN_FORMER_HH_
+#define MCNLA_ISVD_FORMER_GRAMIAN_FORMER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/former/former.hpp>
@@ -23,29 +23,29 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The polar former tag.
+/// The Gramian former tag.
 ///
-struct PolarFormerTag {};
+struct GramianFormerTag {};
 
 /// @ingroup  isvd_former_module
 template <typename _Val>
-using PolarFormer = Former<PolarFormerTag, _Val>;
+using GramianFormer = Former<GramianFormerTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-/// The polar former.
+/// The Gramian former.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class Former<PolarFormerTag, _Val>
-  : public StageWrapper<PolarFormer<_Val>> {
+class Former<GramianFormerTag, _Val>
+  : public StageWrapper<GramianFormer<_Val>> {
 
-  friend StageWrapper<PolarFormer<_Val>>;
+  friend StageWrapper<GramianFormer<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<PolarFormer<_Val>>;
+  using BaseType = StageWrapper<GramianFormer<_Val>>;
 
  public:
 
@@ -55,7 +55,7 @@ class Former<PolarFormerTag, _Val>
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Polar Former";
+  static constexpr const char* name_ = "Gramian Former";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "forming";
@@ -112,4 +112,4 @@ class Former<PolarFormerTag, _Val>
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_FORMER_POLAR_FORMER_HH_
+#endif  // MCNLA_ISVD_FORMER_GRAMIAN_FORMER_HH_

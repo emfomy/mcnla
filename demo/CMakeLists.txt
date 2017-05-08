@@ -18,7 +18,7 @@ macro(SET_TARGET target files)
   target_include_directories(mcnla_${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
   target_include_directories(mcnla_${target} PUBLIC SYSTEM ${INCS})
   target_link_libraries(mcnla_${target} ${LIBS})
-  target_compile_definitions(mcnla_${target} PUBLIC ${DEFS} ${ARGN})
+  target_compile_definitions(mcnla_${target} PUBLIC ${DEFS})
   set_target_properties(mcnla_${target} PROPERTIES COMPILE_FLAGS ${COMFLGS})
   set_target_properties(mcnla_${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
 
