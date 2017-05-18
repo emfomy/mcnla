@@ -73,19 +73,23 @@ void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::runImpl(
   MPI_Bcast(&seed_tmp, 1, datatype, mpi_root, mpi_comm);
   random::Streams streams(seed_tmp);
 
-  moments_.emplace_back(utility::getTime());  // random generating
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Random generating
 
   // Random sample Idxs using uniform distribution
   random::uniformBits(streams, vector_idxs_);
 
-  moments_.emplace_back(utility::getTime());  // projection
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Projection
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch_total; ++i ) {
     la::copy(matrix_aj(""_, abs(vector_idxs_(i)) % ncol), collection_qj.unfold()(""_, i));
   }
 
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

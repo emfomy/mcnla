@@ -40,7 +40,7 @@ static inline void uniformImpl(
   }
 }
 
-template <typename _Val>
+template <typename _Val, typename _Gen>
 static inline void uniformImpl(
           _Gen &gen,
           DenseVector<_Val> &&vector,

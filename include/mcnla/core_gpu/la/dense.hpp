@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core_gpu/la/dense.hpp
-/// @brief   The dense GPU linear algebra header.
+/// @brief   The GPU dense linear algebra header.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

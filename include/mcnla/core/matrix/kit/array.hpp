@@ -25,14 +25,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <typename _Val>
-Array<_Val>::Array() noexcept
+ArrI<CoreTag, _Val>::ArrI() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Val>
-Array<_Val>::Array(
+ArrI<CoreTag, _Val>::ArrI(
     const index_t size,
     const index_t offset
 ) noexcept
@@ -42,8 +42,8 @@ Array<_Val>::Array(
 /// @brief  Copies the array.
 ///
 template <typename _Val>
-Array<_Val> Array<_Val>::copy() const noexcept {
-  Array retval(size_, offset_);
+ArrI<CoreTag, _Val> ArrI<CoreTag, _Val>::copy() const noexcept {
+  ArrI retval(size_, offset_);
   utility::memcpy(*retval, **this, size_);
   return retval;
 }

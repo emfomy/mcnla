@@ -67,13 +67,16 @@ void Converter<MatrixFromRowBlockConverterTag, _Val>::runImpl(
   auto matrix_full = matrix;
   matrix_full.resize(nrow_total, ""_);
 
-  moments_.emplace_back(utility::getTime());  // start
+  this->tic(); double comm_moment, comm_time = 0.0;
+  // ====================================================================================================================== //
+  // Start
 
   // Gather Qc
+  comm_moment = utility::getTime();
   mcnla::mpi::gather(matrix_j_full, matrix_full, mpi_root, mpi_comm);
+  comm_time += utility::getTime() - comm_moment;
 
-  moments_.emplace_back(utility::getTime());  // end
-
+  this->toc(comm_time);
 }
 
 }  // namespace isvd

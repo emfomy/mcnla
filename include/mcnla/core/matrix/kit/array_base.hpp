@@ -23,8 +23,8 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Derived, typename _Val>
-ArrayBase<_Derived, _Val>::ArrayBase() noexcept
+template <class _Core, typename _Val>
+ArrayBase<_Core, _Val>::ArrayBase() noexcept
   : BaseType(),
     size_(0),
     offset_(0) {}
@@ -32,8 +32,8 @@ ArrayBase<_Derived, _Val>::ArrayBase() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <class _Derived, typename _Val>
-ArrayBase<_Derived, _Val>::ArrayBase(
+template <class _Core, typename _Val>
+ArrayBase<_Core, _Val>::ArrayBase(
     const BaseType &ptr,
     const index_t size,
     const index_t offset
@@ -49,8 +49,8 @@ ArrayBase<_Derived, _Val>::ArrayBase(
 ///
 /// @attention  It is shallow copy (creates an alias).
 ///
-template <class _Derived, typename _Val>
-ArrayBase<_Derived, _Val>::ArrayBase(
+template <class _Core, typename _Val>
+ArrayBase<_Core, _Val>::ArrayBase(
     const DerivedType &other
 ) noexcept
   : BaseType(other),
@@ -62,8 +62,8 @@ ArrayBase<_Derived, _Val>::ArrayBase(
 ///
 /// @attention  It is shallow copy (creates an alias).
 ///
-template <class _Derived, typename _Val>
-_Derived& ArrayBase<_Derived, _Val>::operator=(
+template <class _Core, typename _Val>
+ArrI<_Core, _Val>& ArrayBase<_Core, _Val>::operator=(
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
@@ -76,8 +76,8 @@ _Derived& ArrayBase<_Derived, _Val>::operator=(
 /// @brief  Right-shift the offset.
 /// Add @a offset to @ref offset_.
 ///
-template <class _Derived, typename _Val>
-_Derived& ArrayBase<_Derived, _Val>::operator>>=(
+template <class _Core, typename _Val>
+ArrI<_Core, _Val>& ArrayBase<_Core, _Val>::operator>>=(
     const index_t offset
 ) noexcept {
   offset_ += offset;
@@ -89,8 +89,8 @@ _Derived& ArrayBase<_Derived, _Val>::operator>>=(
 /// @brief  Left-shift the offset.
 /// Subtract @ref offset_ by @a offset.
 ///
-template <class _Derived, typename _Val>
-_Derived& ArrayBase<_Derived, _Val>::operator<<=(
+template <class _Core, typename _Val>
+ArrI<_Core, _Val>& ArrayBase<_Core, _Val>::operator<<=(
     const index_t offset
 ) noexcept {
   offset_ -= offset;
@@ -101,8 +101,8 @@ _Derived& ArrayBase<_Derived, _Val>::operator<<=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator>>=
 ///
-template <class _Derived, typename _Val>
-_Derived ArrayBase<_Derived, _Val>::operator>>(
+template <class _Core, typename _Val>
+ArrI<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
     const index_t offset
 ) noexcept {
   auto retval = this->derived();
@@ -113,8 +113,8 @@ _Derived ArrayBase<_Derived, _Val>::operator>>(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator>>=
 ///
-template <class _Derived, typename _Val>
-const _Derived ArrayBase<_Derived, _Val>::operator>>(
+template <class _Core, typename _Val>
+const ArrI<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
     const index_t offset
 ) const noexcept {
   auto retval = this->derived();
@@ -125,8 +125,8 @@ const _Derived ArrayBase<_Derived, _Val>::operator>>(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator<<=
 ///
-template <class _Derived, typename _Val>
-_Derived ArrayBase<_Derived, _Val>::operator<<(
+template <class _Core, typename _Val>
+ArrI<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
     const index_t offset
 ) noexcept {
   auto retval = this->derived();
@@ -137,8 +137,8 @@ _Derived ArrayBase<_Derived, _Val>::operator<<(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator<<=
 ///
-template <class _Derived, typename _Val>
-const _Derived ArrayBase<_Derived, _Val>::operator<<(
+template <class _Core, typename _Val>
+const ArrI<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
     const index_t offset
 ) const noexcept {
   auto retval = this->derived();
@@ -149,8 +149,8 @@ const _Derived ArrayBase<_Derived, _Val>::operator<<(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
-template <class _Derived, typename _Val>
-bool ArrayBase<_Derived, _Val>::isEmpty() const noexcept {
+template <class _Core, typename _Val>
+bool ArrayBase<_Core, _Val>::isEmpty() const noexcept {
   return (size_ == 0);
 }
 
@@ -159,8 +159,8 @@ bool ArrayBase<_Derived, _Val>::isEmpty() const noexcept {
 ///
 /// @note  #capacity + #offset = #size.
 ///
-template <class _Derived, typename _Val>
-index_t ArrayBase<_Derived, _Val>::size() const noexcept {
+template <class _Core, typename _Val>
+index_t ArrayBase<_Core, _Val>::size() const noexcept {
   return size_;
 }
 
@@ -169,8 +169,8 @@ index_t ArrayBase<_Derived, _Val>::size() const noexcept {
 ///
 /// @note  #capacity + #offset = #size.
 ///
-template <class _Derived, typename _Val>
-index_t ArrayBase<_Derived, _Val>::capacity() const noexcept {
+template <class _Core, typename _Val>
+index_t ArrayBase<_Core, _Val>::capacity() const noexcept {
   return size_ - offset_;
 }
 
@@ -179,32 +179,32 @@ index_t ArrayBase<_Derived, _Val>::capacity() const noexcept {
 ///
 /// @note  #capacity + #offset = #size.
 ///
-template <class _Derived, typename _Val>
-index_t ArrayBase<_Derived, _Val>::offset() const noexcept {
+template <class _Core, typename _Val>
+index_t ArrayBase<_Core, _Val>::offset() const noexcept {
   return offset_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data pointer.
 ///
-template <class _Derived, typename _Val>
-_Val* ArrayBase<_Derived, _Val>::operator*() noexcept {
+template <class _Core, typename _Val>
+_Val* ArrayBase<_Core, _Val>::operator*() noexcept {
   return &(this->get()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data pointer.
 ///
-template <class _Derived, typename _Val>
-const _Val* ArrayBase<_Derived, _Val>::operator*() const noexcept {
+template <class _Core, typename _Val>
+const _Val* ArrayBase<_Core, _Val>::operator*() const noexcept {
   return &(this->get()[offset_]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data of given index.
 ///
-template <class _Derived, typename _Val>
-_Val& ArrayBase<_Derived, _Val>::operator[](
+template <class _Core, typename _Val>
+_Val& ArrayBase<_Core, _Val>::operator[](
     const index_t idx
 ) noexcept {
   return this->get()[idx+offset_];
@@ -213,8 +213,8 @@ _Val& ArrayBase<_Derived, _Val>::operator[](
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the data of given index.
 ///
-template <class _Derived, typename _Val>
-const _Val& ArrayBase<_Derived, _Val>::operator[](
+template <class _Core, typename _Val>
+const _Val& ArrayBase<_Core, _Val>::operator[](
     const index_t idx
 ) const noexcept {
   return this->get()[idx+offset_];

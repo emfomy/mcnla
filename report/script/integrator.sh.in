@@ -3,34 +3,34 @@
 bin=$1
 
 function run() {
-	Nj=$((N/K))
+	Nj=$((N/P))
 	echo ================================================================
 	echo
-	echo K = $K, N = $N, m = $m, k = $k
+	echo P = $P, N = $N, m = $m, k = $k
 	echo
-	@MPIEXEC@ @MPIEXEC_NUMPROC_FLAG@ $K $bin $Nj $m $k
+	@MPIEXEC@ @MPIEXEC_NUMPROC_FLAG@ $P $bin $Nj $m $k
 	echo
 	echo ================================================================
 }
 
-Ks=( 1 2 4 8 16 )
+Ps=( 1 2 4 8 16 )
 m0=e3
 k=100
 
-for K in ${Ks[@]}; do
-	N=${Ks[-1]}
+for P in ${Ps[@]}; do
+	N=${Ps[-1]}
 	m=1$m0
 	run
 done
 
-for K in ${Ks[@]::${#Ks[@]}-1}; do
-	N=$K
+for P in ${Ps[@]::${#Ps[@]}-1}; do
+	N=$P
 	m=1$m0
 	run
 done
 
-for K in ${Ks[@]:1}; do
-	N=${Ks[-1]}
-	m=$K$m0
+for P in ${Ps[@]:1}; do
+	N=${Ps[-1]}
+	m=$P$m0
 	run
 done

@@ -68,13 +68,16 @@ void Converter<MatrixToRowBlockConverterTag, _Val>::runImpl(
   auto matrix_j_full = matrix_j;
   matrix_j_full.resize(nrow_each, ""_);
 
-  moments_.emplace_back(utility::getTime());  // start
+  this->tic(); double comm_moment, comm_time = 0.0;
+  // ====================================================================================================================== //
+  // Start
 
   // Scatter Qc
+  comm_moment = utility::getTime();
   mcnla::mpi::scatter(matrix_full, matrix_j_full, mpi_root, mpi_comm);
+  comm_time += utility::getTime() - comm_moment;
 
-  moments_.emplace_back(utility::getTime());  // end
-
+  this->toc(comm_time);
 }
 
 }  // namespace isvd

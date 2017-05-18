@@ -24,7 +24,6 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans> class DenseMatrix;
 template <typename _Val, Trans _trans, class _Matrix> class DenseMatrixIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -109,10 +108,10 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
 };
 
 template <typename _Val, Trans _trans>
-using DenseMatrixIterator = DenseMatrixIteratorBase<_Val, _trans, DenseMatrix<_Val, _trans>>;
+using DenseMatrixIterator = DenseMatrixIteratorBase<_Val, _trans, GeMatI<CoreTag, DenseTag, _Val, _trans>>;
 
 template <typename _Val, Trans _trans>
-using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Val, _trans, const DenseMatrix<_Val, _trans>>;
+using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Val, _trans, const GeMatI<CoreTag, DenseTag, _Val, _trans>>;
 
 }  // namespace matrix
 

@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core_gpu/matrix/kit/gpu_array.hh
+/// @file    include/mcnla/core_gpu/matrix/kit/array_gpu.hh
 /// @brief   The definition of GPU value array class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_GPU_MATRIX_KIT_GPU_ARRAY_HH_
-#define MCNLA_CORE_GPU_MATRIX_KIT_GPU_ARRAY_HH_
+#ifndef MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HH_
+#define MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HH_
 
 #include <mcnla/core_gpu/matrix/def.hpp>
 #include <mcnla/core/matrix/kit/array_base.hpp>
@@ -22,17 +22,17 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  gpu_matrix_module
+/// @ingroup  matrix_gpu_module
 /// The GPU value array.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class GpuArray : public ArrayBase<GpuArray<_Val>, _Val> {
+class ArrI<CoreGpuTag, _Val> : public ArrayBase<CoreGpuTag, _Val> {
 
  private:
 
-  using BaseType = ArrayBase<GpuArray<_Val>, _Val>;
+  using BaseType = ArrayBase<CoreGpuTag, _Val>;
 
  protected:
 
@@ -44,8 +44,8 @@ class GpuArray : public ArrayBase<GpuArray<_Val>, _Val> {
   using BaseType::ArrayBase;
 
   // Constructors
-  inline GpuArray() noexcept;
-  inline GpuArray( const index_t size, const index_t offset = 0 ) noexcept;
+  inline ArrI() noexcept;
+  inline ArrI( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Gets data
   inline       _Val& operator[]( const index_t idx ) noexcept = delete;
@@ -53,8 +53,11 @@ class GpuArray : public ArrayBase<GpuArray<_Val>, _Val> {
 
 };
 
+/// @ingroup  matrix_gpu_module
+template <typename _Val> using ArrayGpu = ArrI<CoreGpuTag, _Val>;
+
 }  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_GPU_MATRIX_KIT_GPU_ARRAY_HH_
+#endif  // MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HH_

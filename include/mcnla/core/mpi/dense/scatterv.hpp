@@ -28,8 +28,8 @@ namespace detail {
 
 template <typename _Val>
 inline void scattervImpl(
-    const DenseStorage<_Val, Array> &send,
-          DenseStorage<_Val, Array> &recv,
+    const DenseStorage<CoreTag, _Val> &send,
+          DenseStorage<CoreTag, _Val> &recv,
     const mpi_int_t *sendcounts,
     const mpi_int_t *displs,
     const mpi_int_t recvcount,

@@ -26,21 +26,21 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix base class.
 ///
+/// @tparam  _Core   The core tag.
 /// @tparam  _Val    The value type.
 /// @tparam  _trans  The transpose storage layout.
-/// @tparam  _Types  The type templates.
 ///
-template <typename _Val, Trans _trans, class _Types>
+template <class _Core, typename _Val, Trans _trans>
 class DenseMatrixBase
-  : public DenseMatrixStorage<_Val, _Types::template ArrayT>,
-    public MatrixWrapper<typename _Types::template GeMatT<_Val, _trans>>,
-    public InvertibleWrapper<typename _Types::template GeMatT<_Val, _trans>> {
+  : public DenseMatrixStorage<_Core, _Val>,
+    public MatrixWrapper<GeMatI<_Core, DenseTag, _Val, _trans>>,
+    public InvertibleWrapper<GeMatI<_Core, DenseTag, _Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
  private:
 
-  using DerivedType = typename _Types::template GeMatT<_Val, _trans>;
+  using DerivedType = GeMatI<_Core, DenseTag, _Val, _trans>;
 
   friend MatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -50,30 +50,30 @@ class DenseMatrixBase
   static constexpr Trans trans = _trans;
 
   using ValType        = _Val;
-  using ValArrayType   = typename _Types::template ArrayT<_Val>;
+  using ValArrayType   = ArrI<_Core, _Val>;
   using SizesType      = std::tuple<index_t, index_t>;
 
-  using RealType       = typename _Types::template GeMatT<RealValT<_Val>, _trans>;
-  using ComplexType    = typename _Types::template GeMatT<ComplexValT<_Val>, _trans>;
+  using RealType       = GeMatI<_Core, DenseTag, RealValT<_Val>, _trans>;
+  using ComplexType    = GeMatI<_Core, DenseTag, ComplexValT<_Val>, _trans>;
 
-  using VectorType     = typename _Types::template GeVecT<_Val>;
-  using MatrixType     = typename _Types::template GeMatT<_Val, _trans>;
+  using VectorType     = GeVecI<_Core, DenseTag, _Val>;
+  using MatrixType     = GeMatI<_Core, DenseTag, _Val, _trans>;
 
-  using TransposeType  = typename _Types::template GeMatT<_Val, changeTrans(_trans)>;
-  using ConjugateType  = typename _Types::template GeMatT<_Val, changeConj(_trans)>;
-  using HermitianType  = typename _Types::template GeMatT<_Val, changeHerm(_trans)>;
-
-  template <Uplo _uplo>
-  using SymmetricType  = typename _Types::template SyMatT<_Val, _trans, _uplo>;
+  using TransposeType  = GeMatI<_Core, DenseTag, _Val, changeTrans(_trans)>;
+  using ConjugateType  = GeMatI<_Core, DenseTag, _Val, changeConj(_trans)>;
+  using HermitianType  = GeMatI<_Core, DenseTag, _Val, changeHerm(_trans)>;
 
   template <Uplo _uplo>
-  using TriangularType = typename _Types::template TrMatT<_Val, _trans, _uplo>;
+  using SymmetricType  = SyMatI<_Core, DenseTag, _Val, _trans, _uplo>;
 
-  using DiagonalType   = typename _Types::template DiMatT<_Val>;
+  template <Uplo _uplo>
+  using TriangularType = TrMatI<_Core, DenseTag, _Val, _trans, _uplo>;
+
+  using DiagonalType   = DiMatI<_Core, DenseTag, _Val>;
 
  private:
 
-  using BaseType       = DenseMatrixStorage<_Val, _Types::template ArrayT>;
+  using BaseType       = DenseMatrixStorage<_Core, _Val>;
 
  public:
 

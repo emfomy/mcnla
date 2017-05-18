@@ -24,7 +24,7 @@ namespace matrix {
 /// @brief  Finds the iterator to element
 ///
 template <typename _Val>
-DenseVectorIterator<_Val> DenseVector<_Val>::find(
+DenseVectorIterator<_Val> GeVecI<CoreTag, DenseTag, _Val>::find(
     const index_t idx
 ) noexcept {
   mcnla_assert_gelt(idx, 0, this->length());
@@ -35,7 +35,7 @@ DenseVectorIterator<_Val> DenseVector<_Val>::find(
 /// @copydoc  find
 ///
 template <typename _Val>
-DenseVectorConstIterator<_Val> DenseVector<_Val>::find(
+DenseVectorConstIterator<_Val> GeVecI<CoreTag, DenseTag, _Val>::find(
     const index_t idx
 ) const noexcept {
   mcnla_assert_gelt(idx, 0, this->length());
@@ -46,7 +46,7 @@ DenseVectorConstIterator<_Val> DenseVector<_Val>::find(
 /// @copydoc  find
 ///
 template <typename _Val>
-DenseVectorConstIterator<_Val> DenseVector<_Val>::cfind(
+DenseVectorConstIterator<_Val> GeVecI<CoreTag, DenseTag, _Val>::cfind(
     const index_t idx
 ) const noexcept {
   return find(idx);

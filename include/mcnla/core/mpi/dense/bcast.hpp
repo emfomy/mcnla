@@ -28,7 +28,7 @@ namespace detail {
 
 template <typename _Val>
 inline void bcastImpl(
-          DenseStorage<_Val, Array> &buffer,
+          DenseStorage<CoreTag, _Val> &buffer,
     const mpi_int_t count,
     const mpi_int_t root,
     const MPI_Comm comm

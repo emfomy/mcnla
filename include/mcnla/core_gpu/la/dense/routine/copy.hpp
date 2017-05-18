@@ -28,8 +28,8 @@ namespace la {
 ///
 template <typename _Val>
 inline void copy(
-    const DenseGpuVector<_Val> &x,
-          DenseGpuVector<_Val> &y
+    const DenseVectorGpu<_Val> &x,
+          DenseVectorGpu<_Val> &y
 ) noexcept {
   mcnla_assert_eq(x.sizes(), y.sizes());
   detail::gpu::copy(x.length(), x.valPtr(), x.stride(), y.valPtr(), y.stride());
@@ -38,8 +38,8 @@ inline void copy(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
 inline void copy(
-    const DenseGpuVector<_Val> &x,
-          DenseGpuVector<_Val> &&y
+    const DenseVectorGpu<_Val> &x,
+          DenseVectorGpu<_Val> &&y
 ) noexcept {
   copy(x, y);
 }

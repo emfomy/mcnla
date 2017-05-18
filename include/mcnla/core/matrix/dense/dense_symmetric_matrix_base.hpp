@@ -23,15 +23,15 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase() noexcept
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
     const index_t size
 ) noexcept
   : BaseType(size, size) {
@@ -40,8 +40,8 @@ DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -50,8 +50,8 @@ DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -61,8 +61,8 @@ DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
     const index_t size,
     const index_t pitch,
     const ValArrayType &val,
@@ -75,8 +75,8 @@ DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
     const DerivedType &other
 ) noexcept
   : BaseType(other) {}
@@ -86,9 +86,9 @@ DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DenseSymmetricMatrixBase(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
-  DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::operator=(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType&
+  DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
@@ -98,9 +98,9 @@ typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType&
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies the matrix.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType
-    DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::copy() const noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType
+    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
   DenseSymmetricMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -108,24 +108,24 @@ typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::DerivedType
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-index_t DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::size() const noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::size() const noexcept {
   return this->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-index_t DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::nnz() const noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::nnz() const noexcept {
   return !isUnitDiag(_uplo) ? (this->size()*(this->size()+1)/2) : (this->size()*(this->size()-1)/2);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::elemImpl
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-_Val DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::operator()(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+_Val DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator()(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -139,18 +139,18 @@ _Val DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types> template <typename... Args>
-void DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::reconstruct(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo> template <typename... Args>
+void DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::reconstruct(
     Args... args
 ) noexcept {
-  *this = DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>(args...);
+  *this = DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::resizeImpl
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-void DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::resize(
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+void DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::resize(
     const index_t size
 ) noexcept {
   this->resizeImpl(size, size);
@@ -161,52 +161,52 @@ void DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::resize(
 ///
 /// @attention  The storage layout is also changed.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::TransposeType&
-    DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::t() noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  t
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-const typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::TransposeType&
-    DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::t() const noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+const typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the general view of the matrix.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::GeneralType&
-    DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::viewGeneral() noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
+    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() noexcept {
   return static_cast<GeneralType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  viewGeneral
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-const typename DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::GeneralType&
-    DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::viewGeneral() const noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+const typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
+    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() const noexcept {
   return static_cast<const GeneralType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-index_t DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::nrowImpl() const noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::nrowImpl() const noexcept {
   return !isTrans(_trans) ? this->dim0() : this->dim1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::ncol
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
-index_t DenseSymmetricMatrixBase<_Val, _trans, _uplo, _Types>::ncolImpl() const noexcept {
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::ncolImpl() const noexcept {
   return !isTrans(_trans) ? this->dim1() : this->dim0();
 }
 }  // namespace matrix

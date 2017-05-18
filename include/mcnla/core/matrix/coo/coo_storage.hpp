@@ -23,16 +23,16 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooStorage<_Val, _ArrayT>::CooStorage() noexcept
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage() noexcept
   : BaseType(),
     nnz_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooStorage<_Val, _ArrayT>::CooStorage(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage(
     const index_t capacity,
     const index_t nnz
 ) noexcept
@@ -44,8 +44,8 @@ CooStorage<_Val, _ArrayT>::CooStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooStorage<_Val, _ArrayT>::CooStorage(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage(
     const ValArrayType &val,
     const index_t nnz
 ) noexcept
@@ -59,8 +59,8 @@ CooStorage<_Val, _ArrayT>::CooStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooStorage<_Val, _ArrayT>::CooStorage(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage(
     const CooStorage &other
 ) noexcept
   : BaseType(other),
@@ -71,8 +71,8 @@ CooStorage<_Val, _ArrayT>::CooStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooStorage<_Val, _ArrayT>& CooStorage<_Val, _ArrayT>::operator=(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>& CooStorage<_Core, _Val>::operator=(
     const CooStorage &other
 ) noexcept {
   BaseType::operator=(other);
@@ -83,24 +83,24 @@ CooStorage<_Val, _ArrayT>& CooStorage<_Val, _ArrayT>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-index_t CooStorage<_Val, _ArrayT>::nnz() const noexcept {
+template <class _Core, typename _Val>
+index_t CooStorage<_Core, _Val>::nnz() const noexcept {
   return nnz_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the value array.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-index_t CooStorage<_Val, _ArrayT>::valCapacity() const noexcept {
+template <class _Core, typename _Val>
+index_t CooStorage<_Core, _Val>::valCapacity() const noexcept {
   return this->capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the value array.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-index_t CooStorage<_Val, _ArrayT>::valOffset() const noexcept {
+template <class _Core, typename _Val>
+index_t CooStorage<_Core, _Val>::valOffset() const noexcept {
   return this->offset();
 }
 

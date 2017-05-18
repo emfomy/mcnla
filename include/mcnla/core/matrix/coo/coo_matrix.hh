@@ -93,7 +93,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans = Trans::NORMAL>
 class CooMatrix
-  : public CooMatrixStorage<_Val, Array>,
+  : public CooMatrixStorage<CoreTag, _Val>,
     public MatrixWrapper<CooMatrix<_Val, _trans>>,
     public SparseWrapper<CooMatrix<_Val, _trans>>,
     public IterableWrapper<CooMatrix<_Val, _trans>>,
@@ -130,7 +130,7 @@ class CooMatrix
 
  private:
 
-  using BaseType          = CooMatrixStorage<_Val, Array>;
+  using BaseType          = CooMatrixStorage<CoreTag, _Val>;
 
  public:
 

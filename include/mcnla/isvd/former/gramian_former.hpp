@@ -81,7 +81,9 @@ void Former<GramianFormerTag, _Val>::runImpl(
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  moments_.emplace_back(utility::getTime());  // start
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Start
 
   // QtA := Q' * A
   la::mm(matrix_q.t(), matrix_a, matrix_qta_);
@@ -100,7 +102,7 @@ void Former<GramianFormerTag, _Val>::runImpl(
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
 
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

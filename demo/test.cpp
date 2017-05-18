@@ -18,49 +18,51 @@ int main( int argc, char **argv ) {
 
   mcnla::init(argc, argv);
 
-  // magma_print_environment();
+  magma_print_environment();
 
-  // int n = 5;
-  // mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
-  // mcnla::matrix::DenseTriangularGpuMatrix<double> da(n), db(n);
+  int n = 5;
+  mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
+  mcnla::matrix::DenseTriangularMatrixGpu<double> da(n), db(n);
 
-  // int i = 0;
-  // for ( auto &v : a.viewGeneral() ) {
-  //   v = ++i;
-  // }
-  // for ( auto &v : b.viewGeneral() ) {
-  //   v = 0;
-  // }
-
-  // disp(a);
-  // disp(b);
-
-  // magma_dsetmatrix(n, n, a.valPtr(), n, da.valPtr(), n);
-  // mcnla::la::copy(da.viewGeneral().vectorize(), db.viewGeneral().vectorize());
-  // magma_dgetmatrix(n, n, db.valPtr(), n, b.valPtr(), n);
-
-  // disp(a);
-  // disp(b);
-
-  const auto mpi_comm = MPI_COMM_WORLD;
-  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
-  mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(mpi_comm);
-  mcnla::mpi_int_t mpi_root = 0;
-
-  if ( mpi_rank == mpi_root ) {
-    std::cout << "MCNLA "
-              << MCNLA_MAJOR_VERSION << "."
-              << MCNLA_MINOR_VERSION << "."
-              << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
-
-    std::cout << mpi_size << " nodes / "
-#ifdef MCNLA_USE_OMP
-              << omp_get_max_threads()
-#else  //MCNLA_USE_OMP
-              << 1
-#endif  // MCNLA_USE_OMP
-              << " threads per node" << std::endl << std::endl;
+  int i = 0;
+  for ( auto &v : a.viewGeneral() ) {
+    v = ++i;
   }
+  for ( auto &v : b.viewGeneral() ) {
+    v = 0;
+  }
+
+  disp(a);
+  disp(b);
+
+  magma_dsetmatrix(n, n, a.valPtr(), n, da.valPtr(), n);
+  mcnla::la::copy(da.viewGeneral().vectorize(), db.viewGeneral().vectorize());
+  magma_dgetmatrix(n, n, db.valPtr(), n, b.valPtr(), n);
+
+  disp(a);
+  disp(b);
+
+  mcnla::finalize();
+
+//   const auto mpi_comm = MPI_COMM_WORLD;
+//   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
+//   mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(mpi_comm);
+//   mcnla::mpi_int_t mpi_root = 0;
+
+//   if ( mpi_rank == mpi_root ) {
+//     std::cout << "MCNLA "
+//               << MCNLA_MAJOR_VERSION << "."
+//               << MCNLA_MINOR_VERSION << "."
+//               << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
+
+//     std::cout << mpi_size << " nodes / "
+// #ifdef MCNLA_USE_OMP
+//               << omp_get_max_threads()
+// #else  //MCNLA_USE_OMP
+//               << 1
+// #endif  // MCNLA_USE_OMP
+//               << " threads per node" << std::endl << std::endl;
+//   }
 
 //   mcnla::index_t m = 11, n = 20, k = 3, p = 1, Nj = 2;
 
@@ -80,9 +82,9 @@ int main( int argc, char **argv ) {
 //   auto qbarj = parameters.createMatrixQj();
 
 //   mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
-//   mcnla::isvd::GramianOrthogonalizer<double> orthogonalizer(parameters);
+//   mcnla::isvd::PolarOrthogonalizer<double> orthogonalizer(parameters);
 //   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
-//   mcnla::isvd::GramianFormer<double> former(parameters);
+//   mcnla::isvd::PolarFormer<double> former(parameters);
 //   sketcher.initialize();
 //   orthogonalizer.initialize();
 //   integrator.initialize();
@@ -123,8 +125,6 @@ int main( int argc, char **argv ) {
 //     disp(utu);
 //     disp(uut);
 //   }
-
-  mcnla::finalize();
 
   return 0;
 }

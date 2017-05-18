@@ -24,18 +24,18 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The coordinate list (COO) storage of the second dimension index.
 ///
-/// @tparam  _Idx     The index type.
-/// @tparam  _ArrayT  The array template.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Idx, template <typename> class _ArrayT>
-class CooIdx1Storage : protected DenseStorage<_Idx, _ArrayT> {
+template <class _Core, typename _Idx>
+class CooIdx1Storage : protected DenseStorage<_Core, _Idx> {
 
  private:
 
   using IdxType      = _Idx;
-  using IdxArrayType = _ArrayT<_Idx>;
+  using IdxArrayType = ArrI<_Core, _Idx>;
 
-  using BaseType     = DenseStorage<_Idx, _ArrayT>;
+  using BaseType     = DenseStorage<_Core, _Idx>;
 
  protected:
 

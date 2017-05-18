@@ -83,7 +83,7 @@ namespace traits {
 ///
 template <typename _Val>
 struct MpiValTraits {
-  static_assert(std::integral_constant<_Val, false>::value, "Error using non-specialized MPI data type traits!");
+  static_assert(traits::FalseTraits<_Val>::value, "Error using non-specialized MPI data type traits!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

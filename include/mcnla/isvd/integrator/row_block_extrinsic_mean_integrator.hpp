@@ -36,13 +36,13 @@ Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::Integrator(
 template <typename _Val>
 void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::initializeImpl() noexcept {
 
-  const auto nrow            = parameters_.nrow();
-  const auto dim_sketch      = parameters_.dimSketch();
-  const auto num_sketch      = parameters_.numSketch();
-  const auto num_sketch_each = parameters_.numSketchEach();
+  const auto nrow             = parameters_.nrow();
+  const auto dim_sketch       = parameters_.dimSketch();
+  const auto dim_sketch_total = parameters_.dimSketchTotal();
+  const auto num_sketch_each  = parameters_.numSketchEach();
 
-  matrix_bsj_.reconstruct(dim_sketch, dim_sketch);
-  collection_bi_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
+  matrix_bsj_.reconstruct(dim_sketch_total, dim_sketch_total);
+  collection_bi_.reconstruct(dim_sketch, dim_sketch_total, num_sketch_each);
   collection_bi0_ = collection_bi_(""_, {0_i, dim_sketch}, ""_);
 
   collection_g_.reconstruct(dim_sketch, dim_sketch, num_sketch_each);
@@ -88,8 +88,9 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
 
   auto &matrix_qsj = collection_qj.unfold();  // matrix Qs.
 
-  double comm_moment, comm_time = 0;
-  moments_.emplace_back(utility::getTime());  // rotate
+  this->tic(); double comm_moment, comm_time = 0;
+  // ====================================================================================================================== //
+  // Rotate
 
   // Bs := sum( Qsj' * Qsj )
   la::mm(matrix_qsj.t(), matrix_qsj, matrix_bsj_);
@@ -107,9 +108,9 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
 
   }
 
-  comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(utility::getTime());  // flip
-  comm_time = 0;
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Flip
 
   // Broadcast G0
   if ( mpi_rank == 0 ) {
@@ -138,9 +139,9 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
 
   }
 
-  comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(utility::getTime());  // sum
-  comm_time = 0;
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Sum
 
   // Qbar := sum( Qbar )
   comm_moment = utility::getTime();
@@ -152,8 +153,7 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
     gesvd_driver_(matrix_qbar, vector_s_, matrix_empty_, matrix_empty_);
   }
 
-  comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 }  // namespace isvd

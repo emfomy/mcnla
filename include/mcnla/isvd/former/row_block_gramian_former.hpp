@@ -88,15 +88,21 @@ void Former<RowBlockGramianFormerTag, _Val>::runImpl(
   auto matrix_qtaj_full = matrix_qtaj_;
   matrix_qtaj_full.resize(""_, ncol_each);
 
-  moments_.emplace_back(utility::getTime());  // start
+  this->tic(); double comm_moment, comm_time = 0;
+  // ====================================================================================================================== //
+  // Start
 
   // QtA := sum( Qj' * Aj )
   la::mm(matrix_qj.t(), matrix_aj, matrix_qta_);
+  comm_moment = utility::getTime();
   mpi::reduceScatterBlock(matrix_qta_full, matrix_qtaj_full, MPI_SUM, mpi_comm);
+  comm_time += utility::getTime() - comm_moment;
 
   // W := sum( QtAj * QtAj' )
   la::rk(matrix_qtaj_, matrix_w_.viewSymmetric());
+  comm_moment = utility::getTime();
   mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
+  comm_time += utility::getTime() - comm_moment;
 
   // Compute the eigen-decomposition of W -> W * S * W'
   syev_driver_(matrix_w_.viewSymmetric(), vector_s_);
@@ -109,7 +115,7 @@ void Former<RowBlockGramianFormerTag, _Val>::runImpl(
   // U := Q * W
   la::mm(matrix_qj, matrix_w_cut_, matrix_uj_cut_);
 
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

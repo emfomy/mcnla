@@ -15,20 +15,20 @@
 #include <mcnla/core_gpu/matrix/kit.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_matrix_dense_module  Dense GPU Container Module
-/// @ingroup   gpu_matrix_module
+/// @defgroup  matrix_gpu_dense_module  Dense GPU Container Module
+/// @ingroup   matrix_gpu_module
 /// @brief     The Dense Container Module (GPU Version)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_matrix_coo_module  COO GPU Container Module
-/// @ingroup   gpu_matrix_module
+/// @defgroup  matrix_gpu_coo_module  COO GPU Container Module
+/// @ingroup   matrix_gpu_module
 /// @brief     The Coordinate List (COO) Container Module (GPU Version)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_matrix_collection_module  GPU Container Collection Module
-/// @ingroup   gpu_matrix_module
+/// @defgroup  matrix_gpu_collection_module  GPU Container Collection Module
+/// @ingroup   matrix_gpu_module
 /// @brief     The Container Collection Module (GPU Version)
 ///
 

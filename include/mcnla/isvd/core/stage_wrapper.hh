@@ -92,6 +92,10 @@ class StageWrapper {
   inline std::ostream& outputName( std::ostream &os ) const noexcept;
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
+  // Record time
+  inline void tic() noexcept;
+  inline void toc( double &comm_time ) noexcept;
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   CRTP_DERIVED(_Derived);
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

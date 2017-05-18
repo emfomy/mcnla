@@ -63,7 +63,9 @@ void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::runImpl(
 
   auto &matrix_qsj = collection_qj.unfold();  // matrix Qs.
 
-  moments_.emplace_back(utility::getTime());  // orthogonalization
+  this->tic(); double comm_moment, comm_time = 0;
+  // ====================================================================================================================== //
+  // Start
 
   // Wi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch; ++i ) {
@@ -71,7 +73,9 @@ void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::runImpl(
   }
 
   // Reduce sum Wi
+  comm_moment = utility::getTime();
   mpi::allreduce(collection_w_.unfold(), MPI_SUM, mpi_comm);
+  comm_time += utility::getTime() - comm_moment;
 
   // Compute the eigen-decomposition of Wi -> Wi' * Si * Wi
   for ( index_t i = 0; i < num_sketch; ++i ) {
@@ -88,7 +92,7 @@ void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::runImpl(
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_qj(i));
   }
 
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 }  // namespace isvd

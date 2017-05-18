@@ -22,37 +22,10 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class DenseVector;
-template <typename _Val, Trans _trans> class DenseMatrix;
-template <typename _Val, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
-template <typename _Val, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
-template <typename _Val> class DenseDiagonalMatrix;
+template <class _Core, typename _Val> class DenseStorage;
+template <class _Core, typename _Val> class DenseVectorStorage;
+template <class _Core, typename _Val> class DenseMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The dense types.
-//
-struct DenseTypes {
-
-  template <typename _Val>
-  using ArrayT = Array<_Val>;
-
-  template <typename _Val>
-  using GeVecT = DenseVector<_Val>;
-
-  template <typename _Val, Trans _trans>
-  using GeMatT = DenseMatrix<_Val, _trans>;
-
-  template <typename _Val, Trans _trans, Uplo _uplo>
-  using SyMatT = DenseSymmetricMatrix<_Val, _trans, _uplo>;
-
-  template <typename _Val, Trans _trans, Uplo _uplo>
-  using TrMatT = DenseTriangularMatrix<_Val, _trans, _uplo>;
-
-  template <typename _Val>
-  using DiMatT = DenseDiagonalMatrix<_Val>;
-
-};
 
 }  // namespace matrix
 

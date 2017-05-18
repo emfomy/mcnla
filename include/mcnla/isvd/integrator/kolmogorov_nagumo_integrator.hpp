@@ -87,8 +87,9 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
   auto &matrix_qs = collection_q.unfold();  // matrix Qs.
   auto &matrix_qc = matrix_qbar;  // matrix Qc.
 
-  double comm_moment, comm_time = 0;
-  moments_.emplace_back(utility::getTime());  // copying Qc
+  this->tic(); double comm_moment, comm_time = 0;
+  // ====================================================================================================================== //
+  // Copying Qc
 
   // Broadcast Q0 to Qc
   if ( mpi_rank == 0 ) {
@@ -99,9 +100,9 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
   mpi::bcast(matrix_qc, 0, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
 
-  comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(utility::getTime());  // iterating
-  comm_time = 0;
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Iterating
 
   bool is_converged = false;
   for ( iteration_ = 0; iteration_ < max_iteration_ && !is_converged; ++iteration_ ) {
@@ -171,8 +172,7 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
     is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
   }
 
-  comm_times_.emplace_back(comm_time);
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

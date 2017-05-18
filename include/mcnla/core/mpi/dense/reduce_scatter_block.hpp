@@ -30,8 +30,8 @@ namespace detail {
 
 template <typename _Val>
 inline void reduceScatterBlockImpl(
-    const DenseStorage<_Val, Array> &send,
-          DenseStorage<_Val, Array> &recv,
+    const DenseStorage<CoreTag, _Val> &send,
+          DenseStorage<CoreTag, _Val> &recv,
     const mpi_int_t count,
     const MPI_Op op,
     const MPI_Comm comm

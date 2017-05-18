@@ -70,17 +70,21 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
   DenseMatrixCollection102<ValType> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
   DenseMatrixCollection201<ValType> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
 
-  moments_.emplace_back(utility::getTime());  // start
+  this->tic(); double comm_moment, comm_time = 0.0;
+  // ====================================================================================================================== //
+  // Start
 
   // Exchange Q
+  comm_moment = utility::getTime();
   mpi::alltoall(matrix_qs_full, mpi_comm);
+  comm_time += utility::getTime() - comm_moment;
 
   // Rearrange Qj
   for ( auto j = 0; j < mpi_size; ++j ) {
     la::copy(collection_q_tmp(j), collection_qj_tmp(j));
   }
 
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 
 }
 

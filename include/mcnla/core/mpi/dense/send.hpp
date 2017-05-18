@@ -28,7 +28,7 @@ namespace detail {
 
 template <typename _Val>
 inline void sendImpl(
-    const DenseStorage<_Val, Array> &buffer,
+    const DenseStorage<CoreTag, _Val> &buffer,
     const mpi_int_t count,
     const mpi_int_t dest,
     const mpi_int_t tag,

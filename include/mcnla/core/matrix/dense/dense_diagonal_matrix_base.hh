@@ -26,18 +26,18 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix base class.
 ///
+/// @tparam  _Core  The core tag.
 /// @tparam  _Val    The value type.
-/// @tparam  _Types  The type templates.
 ///
-template <typename _Val, class _Types>
+template <class _Core, typename _Val>
 class DenseDiagonalMatrixBase
-  : public DenseVectorStorage<_Val, _Types::template ArrayT>,
-    public MatrixWrapper<typename _Types::template DiMatT<_Val>>,
-    public InvertibleWrapper<typename _Types::template DiMatT<_Val>> {
+  : public DenseVectorStorage<_Core, _Val>,
+    public MatrixWrapper<DiMatI<_Core, DenseTag, _Val>>,
+    public InvertibleWrapper<DiMatI<_Core, DenseTag, _Val>> {
 
  private:
 
-  using DerivedType = typename _Types::template DiMatT<_Val>;
+  using DerivedType = DiMatI<_Core, DenseTag, _Val>;
 
   friend MatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -45,19 +45,19 @@ class DenseDiagonalMatrixBase
  public:
 
   using ValType       = _Val;
-  using ValArrayType  = typename _Types::template ArrayT<_Val>;
+  using ValArrayType  = ArrI<_Core, _Val>;
 
-  using RealType      = typename _Types::template DiMatT<RealValT<_Val>>;
-  using ComplexType   = typename _Types::template DiMatT<ComplexValT<_Val>>;
+  using RealType      = DiMatI<_Core, DenseTag, RealValT<_Val>>;
+  using ComplexType   = DiMatI<_Core, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType    = typename _Types::template GeVecT<_Val>;
-  using MatrixType    = typename _Types::template DiMatT<_Val>;
+  using VectorType    = GeVecI<_Core, DenseTag, _Val>;
+  using MatrixType    = DiMatI<_Core, DenseTag, _Val>;
 
-  using TransposeType = typename _Types::template DiMatT<_Val>;
+  using TransposeType = DiMatI<_Core, DenseTag, _Val>;
 
  private:
 
-  using BaseType      = DenseVectorStorage<_Val, _Types::template ArrayT>;
+  using BaseType      = DenseVectorStorage<_Core, _Val>;
 
  public:
 

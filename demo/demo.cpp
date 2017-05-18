@@ -60,7 +60,7 @@ int main( int argc, char **argv ) {
   mcnla::index_t Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
   mcnla::index_t m         = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
   mcnla::index_t n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
-  mcnla::index_t k         = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  mcnla::index_t k         = ( argc > ++argi ) ? atof(argv[argi]) : 10;
   mcnla::index_t p         = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   mcnla::index_t num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;
   mcnla::index_t skip_test = ( argc > ++argi ) ? atof(argv[argi]) : 5;

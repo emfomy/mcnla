@@ -88,12 +88,9 @@ void Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>::runImpl(
   auto &symatrix_bs = matrix_bs_.template viewSymmetric<Uplo::UPPER>();  // matrix Bs.
 
   _Val one_n = 1.0/num_sketch, one_n2 = (1.0/num_sketch)/num_sketch;
-  double comm_moment, comm_time = 0;
-
+  this->tic(); double comm_moment, comm_time = 0;
   // ====================================================================================================================== //
   // Initializing
-
-  moments_.emplace_back(utility::getTime());
 
   la::memset0(matrix_bs_({0, dim_sketch}, ""_));
 
@@ -113,12 +110,9 @@ void Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>::runImpl(
     collection_sf_(0)(i, i) = 1.0;
   }
 
-  comm_times_.emplace_back(comm_time);
-
+  this->toc(comm_time);
   // ====================================================================================================================== //
   // Iterating
-
-  moments_.emplace_back(utility::getTime());  // iterating
 
   bool is_converged = false;
   bool is_odd = false;
@@ -203,12 +197,9 @@ void Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>::runImpl(
     is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
   }
 
-  comm_times_.emplace_back(0.0);
-
+  this->toc(comm_time);
   // ====================================================================================================================== //
   // Forming Qbar
-
-  moments_.emplace_back(utility::getTime());
 
   auto &&matrix_sf = collection_sf_(is_odd);  // matrix Sf.
   auto &&matrix_tf = collection_tf_(is_odd);  // matrix Tf.
@@ -217,8 +208,7 @@ void Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>::runImpl(
   la::mm(matrix_q0j, matrix_sf, matrix_qbarj);
   la::mm(matrix_qsj, matrix_tf, matrix_qbarj, 1.0, 1.0);
 
-  comm_times_.emplace_back(0.0);
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

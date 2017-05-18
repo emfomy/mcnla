@@ -8,6 +8,6 @@
 #ifndef MCNLA_CORE_GPU_MATRIX_KIT_HPP_
 #define MCNLA_CORE_GPU_MATRIX_KIT_HPP_
 
-#include <mcnla/core_gpu/matrix/kit/gpu_array.hpp>
+#include <mcnla/core_gpu/matrix/kit/array_gpu.hpp>
 
 #endif  // MCNLA_CORE_GPU_MATRIX_KIT_HPP_

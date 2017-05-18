@@ -23,16 +23,16 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense storage.
 ///
-/// @tparam  _Val     The value type.
-/// @tparam  _ArrayT  The array template.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Val, template <typename> class _ArrayT>
+template <typename _Core, typename _Val>
 class DenseStorage {
 
  private:
 
   using ValType      = _Val;
-  using ValArrayType = _ArrayT<_Val>;
+  using ValArrayType = ArrI<_Core, _Val>;
 
  protected:
 

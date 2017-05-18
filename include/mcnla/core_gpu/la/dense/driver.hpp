@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core_gpu/la/dense/driver.hpp
-/// @brief   The dense GPU linear algebra  driver header.
+/// @brief   The GPU dense linear algebra  driver header.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

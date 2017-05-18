@@ -26,18 +26,18 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector base class.
 ///
-/// @tparam  _Val    The value type.
-/// @tparam  _Types  The type templates.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Val, class _Types>
+template <class _Core, typename _Val>
 class DenseVectorBase
-  : public DenseVectorStorage<_Val, _Types::template ArrayT>,
-    public VectorWrapper<typename _Types::template GeVecT<_Val>>,
-    public InvertibleWrapper<typename _Types::template GeVecT<_Val>> {
+  : public DenseVectorStorage<_Core, _Val>,
+    public VectorWrapper<GeVecI<_Core, DenseTag, _Val>>,
+    public InvertibleWrapper<GeVecI<_Core, DenseTag, _Val>> {
 
  private:
 
-  using DerivedType = typename _Types::template GeVecT<_Val>;
+  using DerivedType = GeVecI<_Core, DenseTag, _Val>;
 
   friend VectorWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -45,19 +45,19 @@ class DenseVectorBase
  public:
 
   using ValType      = _Val;
-  using ValArrayType = typename _Types::template ArrayT<_Val>;
+  using ValArrayType = ArrI<_Core, _Val>;
   using SizesType    = std::tuple<index_t>;
 
-  using RealType     = typename _Types::template GeVecT<RealValT<_Val>>;
-  using ComplexType  = typename _Types::template GeVecT<ComplexValT<_Val>>;
+  using RealType     = GeVecI<_Core, DenseTag, RealValT<_Val>>;
+  using ComplexType  = GeVecI<_Core, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType   = typename _Types::template GeVecT<_Val>;
+  using VectorType   = GeVecI<_Core, DenseTag, _Val>;
 
-  using DiagonalType = typename _Types::template DiMatT<_Val>;
+  using DiagonalType = DiMatI<_Core, DenseTag, _Val>;
 
  private:
 
-  using BaseType     = DenseVectorStorage<_Val, _Types::template ArrayT>;
+  using BaseType     = DenseVectorStorage<_Core, _Val>;
 
  public:
 

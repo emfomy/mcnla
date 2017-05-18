@@ -26,15 +26,15 @@ namespace matrix {
 /// @ingroup  matrix_module
 /// The base array.
 ///
-/// @tparam  _Val       The value type.
-/// @tparam  _DerivedT  The derived template.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <class _Derived, typename _Val>
+template <class _Core, typename _Val>
 class ArrayBase : public std::shared_ptr<_Val> {
 
  private:
 
-  using DerivedType = _Derived;
+  using DerivedType = ArrI<_Core, _Val>;
   using BaseType    = std::shared_ptr<_Val>;
 
  protected:
@@ -76,7 +76,7 @@ class ArrayBase : public std::shared_ptr<_Val> {
  protected:
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
+  CRTP_DERIVED(DerivedType);
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };

@@ -33,17 +33,17 @@ namespace traits {
 /// The dense matrix traits.
 ///
 template <typename _Val, Trans _trans>
-struct Traits<matrix::DenseMatrix<_Val, _trans>> {
+struct Traits<matrix::GeMatI<CoreTag, DenseTag, _Val, _trans>> {
 
   static constexpr Trans trans = _trans;
 
   using ValType           = _Val;
 
-  using RealType          = matrix::DenseMatrix<RealValT<_Val>, _trans>;
-  using ComplexType       = matrix::DenseMatrix<ComplexValT<_Val>, _trans>;
+  using RealType          = matrix::GeMatI<CoreTag, DenseTag, RealValT<_Val>, _trans>;
+  using ComplexType       = matrix::GeMatI<CoreTag, DenseTag, ComplexValT<_Val>, _trans>;
 
-  using VectorType        = matrix::DenseVector<_Val>;
-  using MatrixType        = matrix::DenseMatrix<_Val, _trans>;
+  using VectorType        = matrix::GeVecI<CoreTag, DenseTag, _Val>;
+  using MatrixType        = matrix::GeMatI<CoreTag, DenseTag, _Val, _trans>;
 
   using IteratorType      = matrix::DenseMatrixIterator<_Val, _trans>;
   using ConstIteratorType = matrix::DenseMatrixConstIterator<_Val, _trans>;
@@ -59,7 +59,7 @@ struct IsDenseMatrix : std::false_type {};
 /// @copydoc IsDenseMatrix
 ///
 template <typename _Val, Trans _trans>
-struct IsDenseMatrix<matrix::DenseMatrix<_Val, _trans>> : std::true_type {};
+struct IsDenseMatrix<matrix::GeMatI<CoreTag, DenseTag, _Val, _trans>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix assert.
@@ -81,14 +81,14 @@ namespace matrix {
 /// @tparam  _Val    The value type.
 /// @tparam  _trans  The transpose storage layout.
 ///
-template <typename _Val, Trans _trans = Trans::NORMAL>
-class DenseMatrix
-  : public DenseMatrixBase<_Val, _trans, DenseTypes>,
-    public DenseMatrixWrapper<DenseMatrix<_Val, _trans>>,
-    public IterableWrapper<DenseMatrix<_Val, _trans>> {
+template <typename _Val, Trans _trans>
+class GeMatI<CoreTag, DenseTag, _Val, _trans>
+  : public DenseMatrixBase<CoreTag, _Val, _trans>,
+    public DenseMatrixWrapper<GeMatI<CoreTag, DenseTag, _Val, _trans>>,
+    public IterableWrapper<GeMatI<CoreTag, DenseTag, _Val, _trans>> {
 
-  friend DenseMatrixWrapper<DenseMatrix<_Val, _trans>>;
-  friend IterableWrapper<DenseMatrix<_Val, _trans>>;
+  friend DenseMatrixWrapper<GeMatI<CoreTag, DenseTag, _Val, _trans>>;
+  friend IterableWrapper<GeMatI<CoreTag, DenseTag, _Val, _trans>>;
 
  public:
 
@@ -97,7 +97,7 @@ class DenseMatrix
 
  private:
 
-  using BaseType          = DenseMatrixBase<_Val, _trans, DenseTypes>;
+  using BaseType          = DenseMatrixBase<CoreTag, _Val, _trans>;
 
  public:
 
@@ -111,12 +111,16 @@ class DenseMatrix
 };
 
 /// @ingroup  matrix_dense_module
-template <typename _Val>
-using DenseMatrixColMajor = DenseMatrix<_Val, Trans::NORMAL>;
+template <typename _Val, Trans _trans = Trans::NORMAL>
+using DenseMatrix = GeMatI<CoreTag, DenseTag, _Val, _trans>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Val>
-using DenseMatrixRowMajor = DenseMatrix<_Val, Trans::TRANS>;
+using DenseMatrixColMajor = GeMatI<CoreTag, DenseTag, _Val, Trans::NORMAL>;
+
+/// @ingroup  matrix_dense_module
+template <typename _Val>
+using DenseMatrixRowMajor = GeMatI<CoreTag, DenseTag, _Val, Trans::TRANS>;
 
 }  // namespace matrix
 

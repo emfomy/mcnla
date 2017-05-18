@@ -163,6 +163,31 @@ const char* StageWrapper<_Derived>::names() const noexcept {
   return this->derived().names_;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Record the starting time.
+///
+template <class _Derived>
+void StageWrapper<_Derived>::tic() noexcept {
+  mcnla_assert_true(moments_.empty());
+  mcnla_assert_true(comm_times_.empty());
+  moments_.emplace_back(utility::getTime());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Record the ending time of current part.
+///
+/// @note  @a comm_time will be reset to zero.
+///
+template <class _Derived>
+void StageWrapper<_Derived>::toc(
+    double &comm_time
+) noexcept {
+  mcnla_assert_false(moments_.empty());
+  moments_.emplace_back(utility::getTime());
+  comm_times_.emplace_back(comm_time);
+  comm_time = 0.0;
+}
+
 }  // namespace isvd
 
 }  // namespace mcnla

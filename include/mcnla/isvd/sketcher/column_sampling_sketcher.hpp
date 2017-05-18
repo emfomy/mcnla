@@ -70,19 +70,23 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
 
   random::Streams streams(seed_, mpi_root, mpi_comm);
 
-  moments_.emplace_back(utility::getTime());  // random generating
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Random generating
 
   // Random sample Idxs using uniform distribution
   random::uniformBits(streams, vector_idxs_);
 
-  moments_.emplace_back(utility::getTime());  // projection
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Projection
 
   // Copy columns
   for ( index_t i = 0; i < dim_sketch_each; ++i ) {
     la::copy(matrix_a(""_, abs(vector_idxs_(i)) % ncol), collection_q.unfold()(""_, i));
   }
 
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

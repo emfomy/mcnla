@@ -24,8 +24,8 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage() noexcept
+template <class _Core, typename _Val>
+CooMatrixStorage<_Core, _Val>::CooMatrixStorage() noexcept
   : BaseType(),
     Base0Type(),
     Base1Type(),
@@ -35,8 +35,8 @@ CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
+template <class _Core, typename _Val>
+CooMatrixStorage<_Core, _Val>::CooMatrixStorage(
     const index_t dim0,
     const index_t dim1,
     const index_t nnz
@@ -53,8 +53,8 @@ CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
+template <class _Core, typename _Val>
+CooMatrixStorage<_Core, _Val>::CooMatrixStorage(
     const index_t dim0,
     const index_t dim1,
     const index_t nnz,
@@ -75,8 +75,8 @@ CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
+template <class _Core, typename _Val>
+CooMatrixStorage<_Core, _Val>::CooMatrixStorage(
     const index_t dim0,
     const index_t dim1,
     const index_t nnz,
@@ -102,8 +102,8 @@ CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, mcnla::la::copy.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
+template <class _Core, typename _Val>
+CooMatrixStorage<_Core, _Val>::CooMatrixStorage(
     const CooMatrixStorage &other
 ) noexcept
   : BaseType(other),
@@ -117,8 +117,8 @@ CooMatrixStorage<_Val, _ArrayT>::CooMatrixStorage(
 ///
 /// @attention  It is shallow copy (creates an alias). For deep copy, mcnla::la::copy.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooMatrixStorage<_Val, _ArrayT>& CooMatrixStorage<_Val, _ArrayT>::operator=(
+template <class _Core, typename _Val>
+CooMatrixStorage<_Core, _Val>& CooMatrixStorage<_Core, _Val>::operator=(
     const CooMatrixStorage &other
 ) noexcept {
   BaseType::operator=(other);
@@ -132,48 +132,48 @@ CooMatrixStorage<_Val, _ArrayT>& CooMatrixStorage<_Val, _ArrayT>::operator=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-bool CooMatrixStorage<_Val, _ArrayT>::isEmpty() const noexcept {
+template <class _Core, typename _Val>
+bool CooMatrixStorage<_Core, _Val>::isEmpty() const noexcept {
   return BaseType::isEmpty() && Base0Type::isEmpty() && Base1Type::isEmpty();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the matrix is square.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-bool CooMatrixStorage<_Val, _ArrayT>::isSquare() const noexcept {
+template <class _Core, typename _Val>
+bool CooMatrixStorage<_Core, _Val>::isSquare() const noexcept {
   return (dim0_ == dim1_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size in the first dimension.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-index_t CooMatrixStorage<_Val, _ArrayT>::dim0() const noexcept {
+template <class _Core, typename _Val>
+index_t CooMatrixStorage<_Core, _Val>::dim0() const noexcept {
   return dim0_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size in the second dimension.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-index_t CooMatrixStorage<_Val, _ArrayT>::dim1() const noexcept {
+template <class _Core, typename _Val>
+index_t CooMatrixStorage<_Core, _Val>::dim1() const noexcept {
   return dim1_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size of dimensions in storage order. [ dim0, dim1 ]
 ///
-template <typename _Val, template <typename> class _ArrayT>
-std::tuple<index_t, index_t> CooMatrixStorage<_Val, _ArrayT>::dims() const noexcept {
+template <class _Core, typename _Val>
+std::tuple<index_t, index_t> CooMatrixStorage<_Core, _Val>::dims() const noexcept {
   return std::make_tuple(dim0_, dim1_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the element of given index.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-_Val CooMatrixStorage<_Val, _ArrayT>::elemImpl(
+template <class _Core, typename _Val>
+_Val CooMatrixStorage<_Core, _Val>::elemImpl(
     const index_t idx0,
     const index_t idx1
 ) noexcept {
@@ -186,8 +186,8 @@ _Val CooMatrixStorage<_Val, _ArrayT>::elemImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  elemImpl
 ///
-template <typename _Val, template <typename> class _ArrayT>
-const _Val CooMatrixStorage<_Val, _ArrayT>::elemImpl(
+template <class _Core, typename _Val>
+const _Val CooMatrixStorage<_Core, _Val>::elemImpl(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
@@ -200,8 +200,8 @@ const _Val CooMatrixStorage<_Val, _ArrayT>::elemImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position of given index.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-index_t CooMatrixStorage<_Val, _ArrayT>::posImpl(
+template <class _Core, typename _Val>
+index_t CooMatrixStorage<_Core, _Val>::posImpl(
     const index_t idx0,
     const index_t idx1
 ) const noexcept {
@@ -219,8 +219,8 @@ index_t CooMatrixStorage<_Val, _ArrayT>::posImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position and nonzero elements of given index range.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-void CooMatrixStorage<_Val, _ArrayT>::posImpl(
+template <class _Core, typename _Val>
+void CooMatrixStorage<_Core, _Val>::posImpl(
     const index_t idx1,
           index_t &pos,
           index_t &nnz
@@ -234,8 +234,8 @@ void CooMatrixStorage<_Val, _ArrayT>::posImpl(
 ///
 /// @attention  The new space is kept but not initialized.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-void CooMatrixStorage<_Val, _ArrayT>::resizeImpl(
+template <class _Core, typename _Val>
+void CooMatrixStorage<_Core, _Val>::resizeImpl(
     const index_t dim0,
     const index_t dim1,
     const index_t nnz
@@ -253,8 +253,8 @@ void CooMatrixStorage<_Val, _ArrayT>::resizeImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a vector segment.
 ///
-template <typename _Val, template <typename> class _ArrayT>
-CooVectorStorage<_Val, _ArrayT> CooMatrixStorage<_Val, _ArrayT>::getVector0Impl(
+template <class _Core, typename _Val>
+CooVectorStorage<_Core, _Val> CooMatrixStorage<_Core, _Val>::getVector0Impl(
     const index_t idx1
 ) noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);
@@ -266,8 +266,8 @@ CooVectorStorage<_Val, _ArrayT> CooMatrixStorage<_Val, _ArrayT>::getVector0Impl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getVector0Impl
 ///
-template <typename _Val, template <typename> class _ArrayT>
-const CooVectorStorage<_Val, _ArrayT> CooMatrixStorage<_Val, _ArrayT>::getVector0Impl(
+template <class _Core, typename _Val>
+const CooVectorStorage<_Core, _Val> CooMatrixStorage<_Core, _Val>::getVector0Impl(
     const index_t idx1
 ) const noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);

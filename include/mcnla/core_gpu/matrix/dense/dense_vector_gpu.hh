@@ -1,16 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core_gpu/matrix/dense/dense_gpu_vector.hh
-/// @brief   The definition of dense GPU vector class.
+/// @file    include/mcnla/core_gpu/matrix/dense/dense_vector_gpu.hh
+/// @brief   The definition of GPU dense vector class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_GPU_VECTOR_HH_
-#define MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_GPU_VECTOR_HH_
+#ifndef MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_VECTOR_GPU_HH_
+#define MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_VECTOR_GPU_HH_
 
-#include <mcnla/core_gpu/matrix/dense/def.hpp>
+#include <mcnla/core_gpu/matrix/def.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_base.hpp>
-#include <mcnla/core_gpu/matrix/dense/dense_diagonal_gpu_matrix.hpp>
+#include <mcnla/core_gpu/matrix/dense/dense_diagonal_matrix_gpu.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,38 +24,38 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense GPU vector traits.
+/// The GPU dense vector traits.
 ///
 template <typename _Val>
-struct Traits<matrix::DenseGpuVector<_Val>> {
+struct Traits<matrix::GeVecI<CoreGpuTag, DenseTag, _Val>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DenseGpuVector<RealValT<_Val>>;
-  using ComplexType = matrix::DenseGpuVector<ComplexValT<_Val>>;
+  using RealType    = matrix::GeVecI<CoreGpuTag, DenseTag, RealValT<_Val>>;
+  using ComplexType = matrix::GeVecI<CoreGpuTag, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType  = matrix::DenseGpuVector<_Val>;
+  using VectorType  = matrix::GeVecI<CoreGpuTag, DenseTag, _Val>;
 
-  using DiagonalType = matrix::DenseGpuVector<_Val>;
+  using DiagonalType = matrix::DiMatI<CoreGpuTag, DenseTag, _Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense GPU vector instantiation type traits.
+/// The GPU dense vector instantiation type traits.
 ///
 template <typename _Type>
-struct IsDenseGpuVector : std::false_type {};
+struct IsDenseVectorGpu : std::false_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseGpuVector
+/// @copydoc IsDenseVectorGpu
 ///
 template <typename _Val>
-struct IsDenseGpuVector<matrix::DenseGpuVector<_Val>> : std::true_type {};
+struct IsDenseVectorGpu<matrix::GeVecI<CoreGpuTag, DenseTag, _Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense GPU vector assert.
+/// The GPU dense vector assert.
 ///
-#define assertDenseGpuVector( Type ) \
-    static_assert(traits::IsDenseGpuVector<Type>::value, "'"#Type"' is not a dense GPU vector!")
+#define assertDenseVectorGpu( Type ) \
+    static_assert(traits::IsDenseVectorGpu<Type>::value, "'"#Type"' is not a GPU dense vector!")
 
 }  // namespace traits
 
@@ -65,17 +65,17 @@ struct IsDenseGpuVector<matrix::DenseGpuVector<_Val>> : std::true_type {};
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  gpu_matrix_dense_module
-/// The dense GPU vector class.
+/// @ingroup  matrix_gpu_dense_module
+/// The GPU dense vector class.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class DenseGpuVector : public DenseVectorBase<_Val, DenseGpuTypes> {
+class GeVecI<CoreGpuTag, DenseTag, _Val> : public DenseVectorBase<CoreGpuTag, _Val> {
 
  private:
 
-  using BaseType = DenseVectorBase<_Val, DenseGpuTypes>;
+  using BaseType = DenseVectorBase<CoreGpuTag, _Val>;
 
  public:
 
@@ -90,8 +90,12 @@ class DenseGpuVector : public DenseVectorBase<_Val, DenseGpuTypes> {
 
 };
 
+/// @ingroup  matrix_gpu_dense_module
+template <typename _Val>
+using DenseVectorGpu = GeVecI<CoreGpuTag, DenseTag, _Val>;
+
 }  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_GPU_VECTOR_HH_
+#endif  // MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_VECTOR_GPU_HH_

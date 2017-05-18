@@ -28,8 +28,8 @@ namespace detail {
 
 template <typename _Val>
 inline void gathervImpl(
-    const DenseStorage<_Val, Array> &send,
-          DenseStorage<_Val, Array> &recv,
+    const DenseStorage<CoreTag, _Val> &send,
+          DenseStorage<CoreTag, _Val> &recv,
     const mpi_int_t sendcount,
     const mpi_int_t *recvcounts,
     const mpi_int_t *displs,

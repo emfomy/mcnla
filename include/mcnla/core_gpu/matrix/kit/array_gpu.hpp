@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core_gpu/matrix/kit/gpu_array.hpp
+/// @file    include/mcnla/core_gpu/matrix/kit/array_gpu.hpp
 /// @brief   The GPU value array.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_GPU_MATRIX_KIT_GPU_ARRAY_HPP_
-#define MCNLA_CORE_GPU_MATRIX_KIT_GPU_ARRAY_HPP_
+#ifndef MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HPP_
+#define MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HPP_
 
-#include <mcnla/core_gpu/matrix/kit/gpu_array.hh>
+#include <mcnla/core_gpu/matrix/kit/array_gpu.hh>
 #include <mcnla/core_gpu/utility/memory.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,14 +25,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <typename _Val>
-GpuArray<_Val>::GpuArray() noexcept
+ArrI<CoreGpuTag, _Val>::ArrI() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Val>
-GpuArray<_Val>::GpuArray(
+ArrI<CoreGpuTag, _Val>::ArrI(
     const index_t size,
     const index_t offset
 ) noexcept
@@ -42,4 +42,4 @@ GpuArray<_Val>::GpuArray(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_GPU_MATRIX_KIT_GPU_ARRAY_HPP_
+#endif  // MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HPP_

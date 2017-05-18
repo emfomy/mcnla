@@ -29,18 +29,18 @@ namespace traits {
 /// The dense triangular matrix traits.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct Traits<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> {
+struct Traits<matrix::TrMatI<CoreTag, DenseTag, _Val, _trans, _uplo>> {
 
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DenseTriangularMatrix<RealValT<_Val>, _trans, _uplo>;
-  using ComplexType = matrix::DenseTriangularMatrix<ComplexValT<_Val>, _trans, _uplo>;
+  using RealType    = matrix::TrMatI<CoreTag, DenseTag, RealValT<_Val>, _trans, _uplo>;
+  using ComplexType = matrix::TrMatI<CoreTag, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType  = matrix::DenseVector<_Val>;
-  using MatrixType  = matrix::DenseTriangularMatrix<_Val, _trans, _uplo>;
+  using VectorType  = matrix::GeVecI<CoreTag, DenseTag, _Val>;
+  using MatrixType  = matrix::TrMatI<CoreTag, DenseTag, _Val, _trans, _uplo>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ struct IsDenseTriangularMatrix : std::false_type {};
 /// @copydoc IsDenseTriangularMatrix
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct IsDenseTriangularMatrix<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> : std::true_type {};
+struct IsDenseTriangularMatrix<matrix::TrMatI<CoreTag, DenseTag, _Val, _trans, _uplo>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix assert.
@@ -76,16 +76,16 @@ namespace matrix {
 /// @tparam  _trans  The transpose storage layout.
 /// @tparam  _uplo   The triangular storage layout.
 ///
-template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-class DenseTriangularMatrix
-  : public DenseTriangularMatrixBase<_Val, _trans, _uplo, DenseTypes>,
-    public DenseMatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>> {
+template <typename _Val, Trans _trans, Uplo _uplo>
+class TrMatI<CoreTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseTriangularMatrixBase<CoreTag, _Val, _trans, _uplo>,
+    public DenseMatrixWrapper<TrMatI<CoreTag, DenseTag, _Val, _trans, _uplo>> {
 
-  friend DenseMatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>;
+  friend DenseMatrixWrapper<TrMatI<CoreTag, DenseTag, _Val, _trans, _uplo>>;
 
  private:
 
-  using BaseType = DenseTriangularMatrixBase<_Val, _trans, _uplo, DenseTypes>;
+  using BaseType = DenseTriangularMatrixBase<CoreTag, _Val, _trans, _uplo>;
 
  public:
 
@@ -94,12 +94,16 @@ class DenseTriangularMatrix
 };
 
 /// @ingroup  matrix_dense_module
+template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+using DenseTriangularMatrix = TrMatI<CoreTag, DenseTag, _Val, _trans, _uplo>;
+
+/// @ingroup  matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
-using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Val, Trans::NORMAL, _uplo>;
+using DenseTriangularMatrixColMajor = TrMatI<CoreTag, DenseTag, _Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
-using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Val, Trans::TRANS, _uplo>;
+using DenseTriangularMatrixRowMajor = TrMatI<CoreTag, DenseTag, _Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix
 

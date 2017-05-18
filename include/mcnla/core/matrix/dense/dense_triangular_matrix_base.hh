@@ -26,22 +26,22 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix base class.
 ///
+/// @tparam  _Core   The core tag.
 /// @tparam  _Val    The value type.
 /// @tparam  _trans  The transpose storage layout.
 /// @tparam  _uplo   The triangular storage layout.
-/// @tparam  _Types  The type templates.
 ///
-template <typename _Val, Trans _trans, Uplo _uplo, class _Types>
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 class DenseTriangularMatrixBase
-  : public DenseMatrixStorage<_Val, _Types::template ArrayT>,
-    public MatrixWrapper<typename _Types::template TrMatT<_Val, _trans, _uplo>>,
-    public InvertibleWrapper<typename _Types::template TrMatT<_Val, _trans, _uplo>> {
+  : public DenseMatrixStorage<_Core, _Val>,
+    public MatrixWrapper<TrMatI<_Core, DenseTag, _Val, _trans, _uplo>>,
+    public InvertibleWrapper<TrMatI<_Core, DenseTag, _Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
  private:
 
-  using DerivedType = typename _Types::template TrMatT<_Val, _trans, _uplo>;
+  using DerivedType = TrMatI<_Core, DenseTag, _Val, _trans, _uplo>;
 
   friend MatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -52,21 +52,21 @@ class DenseTriangularMatrixBase
   static constexpr Uplo uplo   = _uplo;
 
   using ValType       = _Val;
-  using ValArrayType  = typename _Types::template ArrayT<_Val>;
+  using ValArrayType  = ArrI<_Core, _Val>;
 
-  using RealType      = typename _Types::template TrMatT<RealValT<_Val>, _trans, _uplo>;
-  using ComplexType   = typename _Types::template TrMatT<ComplexValT<_Val>, _trans, _uplo>;
+  using RealType      = TrMatI<_Core, DenseTag, RealValT<_Val>, _trans, _uplo>;
+  using ComplexType   = TrMatI<_Core, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType    = typename _Types::template GeVecT<_Val>;
-  using MatrixType    = typename _Types::template TrMatT<_Val, _trans, _uplo>;
+  using VectorType    = GeVecI<_Core, DenseTag, _Val>;
+  using MatrixType    = TrMatI<_Core, DenseTag, _Val, _trans, _uplo>;
 
-  using TransposeType = typename _Types::template TrMatT<_Val, changeTrans(_trans), changeUplo(_uplo)>;
+  using TransposeType = TrMatI<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>;
 
-  using GeneralType   = typename _Types::template GeMatT<_Val, _trans>;
+  using GeneralType   = GeMatI<_Core, DenseTag, _Val, _trans>;
 
  private:
 
-  using BaseType      = DenseMatrixStorage<_Val, _Types::template ArrayT>;
+  using BaseType      = DenseMatrixStorage<_Core, _Val>;
 
  public:
 
@@ -76,7 +76,7 @@ class DenseTriangularMatrixBase
   inline DenseTriangularMatrixBase( const index_t size, const index_t pitch ) noexcept;
   inline DenseTriangularMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseTriangularMatrixBase( const index_t size, const index_t pitch,
-                                   const ValArrayType &val, const index_t offset = 0 ) noexcept;
+                                    const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseTriangularMatrixBase( const DerivedType &other ) noexcept;
 
   // Operators

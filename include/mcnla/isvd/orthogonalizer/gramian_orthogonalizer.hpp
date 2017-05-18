@@ -67,7 +67,9 @@ void Orthogonalizer<GramianOrthogonalizerTag, _Val>::runImpl(
 
   auto &matrix_qs = collection_q.unfold();  // matrix Qs.
 
-  moments_.emplace_back(utility::getTime());  // orthogonalization
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Start
 
   // Wi := Qi' * Qi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
@@ -89,7 +91,7 @@ void Orthogonalizer<GramianOrthogonalizerTag, _Val>::runImpl(
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_q(i));
   }
 
-  moments_.emplace_back(utility::getTime());  // end
+  this->toc(comm_time);
 }
 
 }  // namespace isvd

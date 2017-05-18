@@ -26,8 +26,8 @@ namespace la {
 /// The MM functor.
 ///
 /// @tparam  _Matrix  The type of matrix A.
-/// @tparam  _transb  The transpose layout of matrix B.
-/// @tparam  _transc  The transpose layout of matrix C.
+/// @tparam  _transb  The transpose storage layout of matrix B.
+/// @tparam  _transc  The transpose storage layout of matrix C.
 ///
 /// @see  mcnla::la::mm
 ///

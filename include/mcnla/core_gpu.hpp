@@ -13,7 +13,7 @@
 #include <mcnla/core_gpu/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_matrix_module  GPU Container Module
+/// @defgroup  matrix_gpu_module  GPU Container Module
 /// @ingroup   core_gpu_module
 /// @brief     The Container Module (GPU Version)
 ///

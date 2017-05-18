@@ -59,13 +59,16 @@ void Orthogonalizer<SvdOrthogonalizerTag, _Val>::runImpl(
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  moments_.emplace_back(utility::getTime());  // orthogonalization
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Start
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
     gesvd_driver_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
-  moments_.emplace_back(utility::getTime());  // end
+
+  this->toc(comm_time);
 }
 
 }  // namespace isvd
