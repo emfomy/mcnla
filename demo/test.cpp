@@ -18,7 +18,9 @@ int main( int argc, char **argv ) {
 
   mcnla::init(argc, argv);
 
-  // magma_print_environment();
+  magma_print_environment();
+
+  mcnla::matrix::DenseMatrixCollection012Gpu<double> matcol(3, 4, 5);
 
   // int n = 5;
   // mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
@@ -42,7 +44,7 @@ int main( int argc, char **argv ) {
   // disp(a);
   // disp(b);
 
-  // mcnla::finalize();
+  mcnla::finalize();
 
 //   const auto mpi_comm = MPI_COMM_WORLD;
 //   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);

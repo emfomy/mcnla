@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core_gpu/matrix.hpp
-/// @brief   The GPU matrix header.
+/// @brief   The GPU container header.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -11,7 +11,7 @@
 #include <mcnla/core_gpu/matrix/def.hpp>
 #include <mcnla/core_gpu/matrix/dense.hpp>
 // #include <mcnla/core_gpu/matrix/coo.hpp>
-// #include <mcnla/core_gpu/matrix/collection.hpp>
+#include <mcnla/core_gpu/matrix/collection.hpp>
 #include <mcnla/core_gpu/matrix/kit.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
