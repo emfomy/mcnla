@@ -18,8 +18,12 @@ set(CMAKE_COLOR_MAKEFILE ON)
 # Set module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-# Set the data path
+# Set the paths
+include_directories(${target} "${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
 list(APPEND DEFS "-DMCNLA_DATA_PATH=\"${PROJECT_SOURCE_DIR}/data\"")
+
+# Include functions
+include(cmake/functions.cmake)
 
 # Sets the options
 include(cmake/options.cmake)

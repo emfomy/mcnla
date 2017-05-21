@@ -7,23 +7,14 @@ macro(_ADD_REPORT_PREDO)
 
   if(MCNLA_INSTALL_DEMO)
     add_executable(${reporttarget} ${files})
+    install(TARGETS ${reporttarget} RUNTIME DESTINATION ${BIN_FOLDER}/report)
   else()
     add_executable(${reporttarget} EXCLUDE_FROM_ALL ${files})
   endif()
 
-  set_target_properties(${reporttarget} PROPERTIES SUFFIX "${BIN_SUFFIX}")
-  target_include_directories(${reporttarget} PUBLIC "${PROJECT_BINARY_DIR}/include")
-  target_include_directories(${reporttarget} PUBLIC "${PROJECT_SOURCE_DIR}/include")
-  target_include_directories(${reporttarget} PUBLIC SYSTEM ${INCS})
-  target_link_libraries(${reporttarget} ${LIBS})
-  target_compile_definitions(${reporttarget} PUBLIC ${DEFS})
-  set_target_properties(${reporttarget} PROPERTIES COMPILE_FLAGS ${COMFLGS})
-  set_target_properties(${reporttarget} PROPERTIES LINK_FLAGS    ${LNKFLGS})
-  set(CMAKE_REPORT_TARGETS ${CMAKE_REPORT_TARGETS} ${reporttarget} PARENT_SCOPE)
+  mcnla_set_target(${reporttarget})
 
-  if(MCNLA_INSTALL_DEMO)
-    install(TARGETS ${reporttarget} RUNTIME DESTINATION ${BIN_FOLDER}/report)
-  endif()
+  set(CMAKE_REPORT_TARGETS ${CMAKE_REPORT_TARGETS} ${reporttarget} PARENT_SCOPE)
 endmacro()
 
 ################################################################################
@@ -34,7 +25,7 @@ macro(_ADD_REPORT)
   # Add rule
   add_custom_target(
     run_report_${reportname}
-    COMMAND bash script/${reporttype}.sh ./${reporttarget}${BIN_SUFFIX}
+    COMMAND bash script/${reporttype}.sh $<TARGET_FILE:${reporttarget}>
     DEPENDS ${reporttarget}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Run report ${reportname}"

@@ -18,31 +18,31 @@ int main( int argc, char **argv ) {
 
   mcnla::init(argc, argv);
 
-  magma_print_environment();
+  // magma_print_environment();
 
-  int n = 5;
-  mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
-  mcnla::matrix::DenseTriangularMatrixGpu<double> da(n), db(n);
+  // int n = 5;
+  // mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
+  // mcnla::matrix::DenseTriangularMatrixGpu<double> da(n), db(n);
 
-  int i = 0;
-  for ( auto &v : a.viewGeneral() ) {
-    v = ++i;
-  }
-  for ( auto &v : b.viewGeneral() ) {
-    v = 0;
-  }
+  // int i = 0;
+  // for ( auto &v : a.viewGeneral() ) {
+  //   v = ++i;
+  // }
+  // for ( auto &v : b.viewGeneral() ) {
+  //   v = 0;
+  // }
 
-  disp(a);
-  disp(b);
+  // disp(a);
+  // disp(b);
 
-  magma_dsetmatrix(n, n, a.valPtr(), n, da.valPtr(), n);
-  mcnla::la::copy(da.viewGeneral().vectorize(), db.viewGeneral().vectorize());
-  magma_dgetmatrix(n, n, db.valPtr(), n, b.valPtr(), n);
+  // magma_dsetmatrix(n, n, a.valPtr(), n, da.valPtr(), n);
+  // mcnla::la::copy(da.viewGeneral().vectorize(), db.viewGeneral().vectorize());
+  // magma_dgetmatrix(n, n, db.valPtr(), n, b.valPtr(), n);
 
-  disp(a);
-  disp(b);
+  // disp(a);
+  // disp(b);
 
-  mcnla::finalize();
+  // mcnla::finalize();
 
 //   const auto mpi_comm = MPI_COMM_WORLD;
 //   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
