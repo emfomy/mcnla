@@ -27,18 +27,18 @@ namespace traits {
 /// The dense symmetric matrix traits.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct Traits<matrix::SyMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>> {
+struct Traits<matrix::SyMatI<GpuTag, DenseTag, _Val, _trans, _uplo>> {
 
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
   using ValType     = _Val;
 
-  using RealType    = matrix::SyMatI<CoreGpuTag, DenseTag, RealValT<_Val>, _trans, _uplo>;
-  using ComplexType = matrix::SyMatI<CoreGpuTag, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
+  using RealType    = matrix::SyMatI<GpuTag, DenseTag, RealValT<_Val>, _trans, _uplo>;
+  using ComplexType = matrix::SyMatI<GpuTag, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType  = matrix::GeVecI<CoreGpuTag, DenseTag, _Val>;
-  using MatrixType  = matrix::SyMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>;
+  using VectorType  = matrix::GeVecI<GpuTag, DenseTag, _Val>;
+  using MatrixType  = matrix::SyMatI<GpuTag, DenseTag, _Val, _trans, _uplo>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ struct IsDenseSymmetricMatrixGpu : std::false_type {};
 /// @copydoc IsDenseSymmetricMatrixGpu
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct IsDenseSymmetricMatrixGpu<matrix::SyMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>> : std::true_type {};
+struct IsDenseSymmetricMatrixGpu<matrix::SyMatI<GpuTag, DenseTag, _Val, _trans, _uplo>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix assert.
@@ -67,7 +67,7 @@ struct IsDenseSymmetricMatrixGpu<matrix::SyMatI<CoreGpuTag, DenseTag, _Val, _tra
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 /// The dense symmetric matrix class.
 ///
 /// @tparam  _Val    The value type.
@@ -75,11 +75,11 @@ namespace matrix {
 /// @tparam  _uplo   The triangular storage layout.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-class SyMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo> : public DenseSymmetricMatrixBase<CoreGpuTag, _Val, _trans, _uplo> {
+class SyMatI<GpuTag, DenseTag, _Val, _trans, _uplo> : public DenseSymmetricMatrixBase<GpuTag, _Val, _trans, _uplo> {
 
  private:
 
-  using BaseType = DenseSymmetricMatrixBase<CoreGpuTag, _Val, _trans, _uplo>;
+  using BaseType = DenseSymmetricMatrixBase<GpuTag, _Val, _trans, _uplo>;
 
  public:
 
@@ -94,17 +94,17 @@ class SyMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo> : public DenseSymmetricM
 
 };
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-using DenseSymmetricMatrixGpu = SyMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>;
+using DenseSymmetricMatrixGpu = SyMatI<GpuTag, DenseTag, _Val, _trans, _uplo>;
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
-using DenseSymmetricMatrixGpuColMajor = SyMatI<CoreGpuTag, DenseTag, _Val, Trans::NORMAL, _uplo>;
+using DenseSymmetricMatrixGpuColMajor = SyMatI<GpuTag, DenseTag, _Val, Trans::NORMAL, _uplo>;
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
-using DenseSymmetricMatrixGpuRowMajor = SyMatI<CoreGpuTag, DenseTag, _Val, Trans::TRANS, _uplo>;
+using DenseSymmetricMatrixGpuRowMajor = SyMatI<GpuTag, DenseTag, _Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix
 

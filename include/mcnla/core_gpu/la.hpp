@@ -14,21 +14,21 @@
 // #include <mcnla/core_gpu/la/functor.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_module  Dense GPU Linear Algebra Module
-/// @ingroup   gpu_la_module
-/// @brief     The Dense Linear Algebra Module (GPU Version)
+/// @defgroup  la_dense_gpu_module  Dense GPU Linear Algebra Module
+/// @ingroup   la_gpu_module
+/// @brief     The Dense Linear Algebra Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_coo_module  COO GPU Linear Algebra Module
-/// @ingroup   gpu_la_module
-/// @brief     The COO Linear Algebra Module (GPU Version)
+/// @defgroup  la_coo_gpu_module  COO GPU Linear Algebra Module
+/// @ingroup   la_gpu_module
+/// @brief     The COO Linear Algebra Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_functor_module GPU Linear Algebra Functor Module
-/// @ingroup   gpu_la_module
-/// @brief     The Linear Algebra Functor Module (GPU Version)
+/// @defgroup  la_functor_gpu_module GPU Linear Algebra Functor Module
+/// @ingroup   la_gpu_module
+/// @brief     The Linear Algebra Functor Module (GPU Support)
 ///
 
 #endif  // MCNLA_CORE_GPU_LA_HPP_

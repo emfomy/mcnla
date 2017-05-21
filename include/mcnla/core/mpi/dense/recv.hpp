@@ -28,7 +28,7 @@ namespace detail {
 
 template <typename _Val>
 inline void recvImpl(
-          DenseStorage<CoreTag, _Val> &buffer,
+          DenseStorage<CpuTag, _Val> &buffer,
     const mpi_int_t count,
     const mpi_int_t source,
     const mpi_int_t tag,

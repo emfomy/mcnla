@@ -56,7 +56,7 @@ namespace isvd {
 ///
 template <class _Tag, typename _Val>
 class Integrator : public StageWrapper<Integrator<_Tag, _Val>> {
-  static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD integrator!");
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD integrator!");
 };
 
 }  // namespace isvd

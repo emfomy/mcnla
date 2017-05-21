@@ -22,17 +22,17 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_gpu_module
+/// @ingroup  matrix_kit_gpu_module
 /// The GPU value array.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class ArrI<CoreGpuTag, _Val> : public ArrayBase<CoreGpuTag, _Val> {
+class ArrI<GpuTag, _Val> : public ArrayBase<GpuTag, _Val> {
 
  private:
 
-  using BaseType = ArrayBase<CoreGpuTag, _Val>;
+  using BaseType = ArrayBase<GpuTag, _Val>;
 
  protected:
 
@@ -54,7 +54,7 @@ class ArrI<CoreGpuTag, _Val> : public ArrayBase<CoreGpuTag, _Val> {
 };
 
 /// @ingroup  matrix_gpu_module
-template <typename _Val> using ArrayGpu = ArrI<CoreGpuTag, _Val>;
+template <typename _Val> using ArrayGpu = ArrI<GpuTag, _Val>;
 
 }  // namespace matrix
 

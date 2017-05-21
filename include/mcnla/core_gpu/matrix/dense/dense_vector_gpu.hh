@@ -27,16 +27,16 @@ namespace traits {
 /// The GPU dense vector traits.
 ///
 template <typename _Val>
-struct Traits<matrix::GeVecI<CoreGpuTag, DenseTag, _Val>> {
+struct Traits<matrix::GeVecI<GpuTag, DenseTag, _Val>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::GeVecI<CoreGpuTag, DenseTag, RealValT<_Val>>;
-  using ComplexType = matrix::GeVecI<CoreGpuTag, DenseTag, ComplexValT<_Val>>;
+  using RealType    = matrix::GeVecI<GpuTag, DenseTag, RealValT<_Val>>;
+  using ComplexType = matrix::GeVecI<GpuTag, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType  = matrix::GeVecI<CoreGpuTag, DenseTag, _Val>;
+  using VectorType  = matrix::GeVecI<GpuTag, DenseTag, _Val>;
 
-  using DiagonalType = matrix::DiMatI<CoreGpuTag, DenseTag, _Val>;
+  using DiagonalType = matrix::DiMatI<GpuTag, DenseTag, _Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ struct IsDenseVectorGpu : std::false_type {};
 /// @copydoc IsDenseVectorGpu
 ///
 template <typename _Val>
-struct IsDenseVectorGpu<matrix::GeVecI<CoreGpuTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseVectorGpu<matrix::GeVecI<GpuTag, DenseTag, _Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The GPU dense vector assert.
@@ -65,17 +65,17 @@ struct IsDenseVectorGpu<matrix::GeVecI<CoreGpuTag, DenseTag, _Val>> : std::true_
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 /// The GPU dense vector class.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class GeVecI<CoreGpuTag, DenseTag, _Val> : public DenseVectorBase<CoreGpuTag, _Val> {
+class GeVecI<GpuTag, DenseTag, _Val> : public DenseVectorBase<GpuTag, _Val> {
 
  private:
 
-  using BaseType = DenseVectorBase<CoreGpuTag, _Val>;
+  using BaseType = DenseVectorBase<GpuTag, _Val>;
 
  public:
 
@@ -90,9 +90,9 @@ class GeVecI<CoreGpuTag, DenseTag, _Val> : public DenseVectorBase<CoreGpuTag, _V
 
 };
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val>
-using DenseVectorGpu = GeVecI<CoreGpuTag, DenseTag, _Val>;
+using DenseVectorGpu = GeVecI<GpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

@@ -23,7 +23,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Tag, typename _Val, Trans _trans> class DenseMatrixCollection;
+template <class _Tag, class _Core, typename _Val, Trans _trans> class DenseMatrixCollection;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -36,12 +36,12 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix collection traits.
 ///
-template <class _Tag, typename _Val, Trans _trans>
-struct Traits<matrix::DenseMatrixCollection<_Tag, _Val, _trans>> {
+template <class _Tag, class _Core, typename _Val, Trans _trans>
+struct Traits<matrix::DenseMatrixCollection<_Tag, _Core, _Val, _trans>> {
 
   using ValType        = _Val;
-  using CollectionType = matrix::DenseMatrixCollection<_Tag, _Val, _trans>;
-  using MatrixType     = matrix::DenseMatrix<_Val, _trans>;
+  using CollectionType = matrix::DenseMatrixCollection<_Tag, _Core, _Val, _trans>;
+  using MatrixType     = matrix::GeMatI<_Core, DenseTag, _Val, _trans>;
 
 };
 
@@ -56,12 +56,13 @@ namespace matrix {
 /// The interface of dense matrix collection.
 ///
 /// @tparam  _Tag    The collection tag.
+/// @tparam  _Core   The core tag.
 /// @tparam  _Val    The value type.
 /// @tparam  _trans  The transpose storage layout.
 ///
-template <class _Tag, typename _Val, Trans _trans>
-class DenseMatrixCollection : public MatrixCollectionWrapper<DenseMatrixCollection<_Tag, _Val, _trans>> {
-  static_assert(traits::False<_Tag>::value, "Error using non-specialized dense matrix collection!");
+template <class _Tag, class _Core, typename _Val, Trans _trans>
+class DenseMatrixCollection : public MatrixCollectionWrapper<DenseMatrixCollection<_Tag, _Core, _Val, _trans>> {
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized dense matrix collection!");
 };
 
 }  // namespace matrix

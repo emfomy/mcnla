@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix.hpp
-/// @brief   The matrix header.
+/// @brief   The container header.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -31,6 +31,12 @@
 /// @defgroup  matrix_collection_module  Container Collection Module
 /// @ingroup   matrix_module
 /// @brief     The Container Collection Module
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  matrix_kit_module  Container Kit Module
+/// @ingroup   matrix_module
+/// @brief     The Container Kit Module
 ///
 
 #endif  // MCNLA_CORE_MATRIX_HPP_

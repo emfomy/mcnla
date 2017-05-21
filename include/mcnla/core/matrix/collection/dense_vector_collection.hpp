@@ -23,7 +23,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Tag, typename _Val> class DenseVectorCollection;
+template <class _Tag, class _Core, typename _Val> class DenseVectorCollection;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
@@ -36,12 +36,12 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector collection traits.
 ///
-template <class _Tag, typename _Val>
-struct Traits<matrix::DenseVectorCollection<_Tag, _Val>> {
+template <class _Tag, class _Core, typename _Val>
+struct Traits<matrix::DenseVectorCollection<_Tag, _Core, _Val>> {
 
   using ValType        = _Val;
-  using CollectionType = matrix::DenseVectorCollection<_Tag, _Val>;
-  using VectorType     = matrix::DenseVector<_Val>;
+  using CollectionType = matrix::DenseVectorCollection<_Tag, _Core, _Val>;
+  using VectorType     = matrix::GeVecI<_Core, DenseTag, _Val>;
 
 };
 
@@ -55,12 +55,13 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of dense vector collection.
 ///
-/// @tparam  _Tag  The collection tag.
-/// @tparam  _Val  The value type.
+/// @tparam  _Tag   The collection tag.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <class _Tag, typename _Val>
-class DenseVectorCollection : public VectorCollectionWrapper<DenseVectorCollection<_Tag, _Val>> {
-  static_assert(traits::False<_Tag>::value, "Error using non-specialized dense vector collection!");
+template <class _Tag, class _Core, typename _Val>
+class DenseVectorCollection : public VectorCollectionWrapper<DenseVectorCollection<_Tag, _Core, _Val>> {
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized dense vector collection!");
 };
 
 }  // namespace matrix

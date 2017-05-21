@@ -23,7 +23,7 @@ namespace mcnla {
 namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  gpu_la_dense_blas1_module
+/// @ingroup  la_dense_blas1_gpu_module
 /// @brief  Copies vector to another vector.
 ///
 template <typename _Val>

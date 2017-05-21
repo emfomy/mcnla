@@ -27,18 +27,18 @@ namespace traits {
 /// The dense triangular matrix traits.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct Traits<matrix::TrMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>> {
+struct Traits<matrix::TrMatI<GpuTag, DenseTag, _Val, _trans, _uplo>> {
 
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
   using ValType     = _Val;
 
-  using RealType    = matrix::TrMatI<CoreGpuTag, DenseTag, RealValT<_Val>, _trans, _uplo>;
-  using ComplexType = matrix::TrMatI<CoreGpuTag, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
+  using RealType    = matrix::TrMatI<GpuTag, DenseTag, RealValT<_Val>, _trans, _uplo>;
+  using ComplexType = matrix::TrMatI<GpuTag, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType  = matrix::GeVecI<CoreGpuTag, DenseTag, _Val>;
-  using MatrixType  = matrix::TrMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>;
+  using VectorType  = matrix::GeVecI<GpuTag, DenseTag, _Val>;
+  using MatrixType  = matrix::TrMatI<GpuTag, DenseTag, _Val, _trans, _uplo>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ struct IsDenseTriangularMatrixGpu : std::false_type {};
 /// @copydoc IsDenseTriangularMatrixGpu
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct IsDenseTriangularMatrixGpu<matrix::TrMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>> : std::true_type {};
+struct IsDenseTriangularMatrixGpu<matrix::TrMatI<GpuTag, DenseTag, _Val, _trans, _uplo>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix assert.
@@ -67,7 +67,7 @@ struct IsDenseTriangularMatrixGpu<matrix::TrMatI<CoreGpuTag, DenseTag, _Val, _tr
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 /// The dense triangular matrix class.
 ///
 /// @tparam  _Val    The value type.
@@ -75,11 +75,11 @@ namespace matrix {
 /// @tparam  _uplo   The triangular storage layout.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-class TrMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo> : public DenseTriangularMatrixBase<CoreGpuTag, _Val, _trans, _uplo> {
+class TrMatI<GpuTag, DenseTag, _Val, _trans, _uplo> : public DenseTriangularMatrixBase<GpuTag, _Val, _trans, _uplo> {
 
  private:
 
-  using BaseType = DenseTriangularMatrixBase<CoreGpuTag, _Val, _trans, _uplo>;
+  using BaseType = DenseTriangularMatrixBase<GpuTag, _Val, _trans, _uplo>;
 
  public:
 
@@ -94,17 +94,17 @@ class TrMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo> : public DenseTriangular
 
 };
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-using DenseTriangularMatrixGpu = TrMatI<CoreGpuTag, DenseTag, _Val, _trans, _uplo>;
+using DenseTriangularMatrixGpu = TrMatI<GpuTag, DenseTag, _Val, _trans, _uplo>;
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
-using DenseTriangularMatrixGpuColMajor = TrMatI<CoreGpuTag, DenseTag, _Val, Trans::NORMAL, _uplo>;
+using DenseTriangularMatrixGpuColMajor = TrMatI<GpuTag, DenseTag, _Val, Trans::NORMAL, _uplo>;
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
-using DenseTriangularMatrixGpuRowMajor = TrMatI<CoreGpuTag, DenseTag, _Val, Trans::TRANS, _uplo>;
+using DenseTriangularMatrixGpuRowMajor = TrMatI<GpuTag, DenseTag, _Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix
 

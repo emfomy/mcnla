@@ -22,17 +22,17 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
+/// @ingroup  matrix_kit_module
 /// The value array.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class ArrI<CoreTag, _Val> : public ArrayBase<CoreTag, _Val> {
+class ArrI<CpuTag, _Val> : public ArrayBase<CpuTag, _Val> {
 
  private:
 
-  using BaseType = ArrayBase<CoreTag, _Val>;
+  using BaseType = ArrayBase<CpuTag, _Val>;
 
  protected:
 
@@ -52,8 +52,8 @@ class ArrI<CoreTag, _Val> : public ArrayBase<CoreTag, _Val> {
 
 };
 
-/// @ingroup  matrix_module
-template <typename _Val> using Array = ArrI<CoreTag, _Val>;
+/// @ingroup  matrix_kit_module
+template <typename _Val> using Array = ArrI<CpuTag, _Val>;
 
 }  // namespace matrix
 

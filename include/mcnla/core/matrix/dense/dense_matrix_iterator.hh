@@ -108,10 +108,10 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
 };
 
 template <typename _Val, Trans _trans>
-using DenseMatrixIterator = DenseMatrixIteratorBase<_Val, _trans, GeMatI<CoreTag, DenseTag, _Val, _trans>>;
+using DenseMatrixIterator = DenseMatrixIteratorBase<_Val, _trans, GeMatI<CpuTag, DenseTag, _Val, _trans>>;
 
 template <typename _Val, Trans _trans>
-using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Val, _trans, const GeMatI<CoreTag, DenseTag, _Val, _trans>>;
+using DenseMatrixConstIterator = DenseMatrixIteratorBase<const _Val, _trans, const GeMatI<CpuTag, DenseTag, _Val, _trans>>;
 
 }  // namespace matrix
 

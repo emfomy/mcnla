@@ -35,7 +35,7 @@ namespace detail {}
 ///
 template <class _Core, typename _Val>
 class ArrI {
-  static_assert(traits::FalseTraits<_Core>::value, "Error using non-specialized array!");
+  static_assert(traits::FalseType<_Core>::value, "Error using non-specialized array!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ class ArrI {
 ///
 template <class _Core, class _Storage, typename _Val>
 class GeVecI {
-  static_assert(traits::FalseTraits<_Core>::value, "Error using non-specialized vector!");
+  static_assert(traits::FalseType<_Core>::value, "Error using non-specialized vector!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ class GeVecI {
 ///
 template <class _Core, class _Storage, typename _Val, Trans _trans>
 class GeMatI {
-  static_assert(traits::FalseTraits<_Core>::value, "Error using non-specialized matrix!");
+  static_assert(traits::FalseType<_Core>::value, "Error using non-specialized matrix!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ class GeMatI {
 ///
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
 class SyMatI {
-  static_assert(traits::FalseTraits<_Core>::value, "Error using non-specialized symmetric matrix!");
+  static_assert(traits::FalseType<_Core>::value, "Error using non-specialized symmetric matrix!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ class SyMatI {
 ///
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
 class TrMatI {
-  static_assert(traits::FalseTraits<_Core>::value, "Error using non-specialized triangular matrix!");
+  static_assert(traits::FalseType<_Core>::value, "Error using non-specialized triangular matrix!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ class TrMatI {
 ///
 template <class _Core, class _Storage, typename _Val>
 class DiMatI {
-  static_assert(traits::FalseTraits<_Core>::value, "Error using non-specialized diagonal matrix!");
+  static_assert(traits::FalseType<_Core>::value, "Error using non-specialized diagonal matrix!");
 };
 
 }  // namespace matrix

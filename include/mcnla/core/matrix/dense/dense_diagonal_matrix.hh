@@ -28,15 +28,15 @@ namespace traits {
 /// The dense diagonal matrix traits.
 ///
 template <typename _Val>
-struct Traits<matrix::DiMatI<CoreTag, DenseTag, _Val>> {
+struct Traits<matrix::DiMatI<CpuTag, DenseTag, _Val>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DiMatI<CoreTag, DenseTag, RealValT<_Val>>;
-  using ComplexType = matrix::DiMatI<CoreTag, DenseTag, ComplexValT<_Val>>;
+  using RealType    = matrix::DiMatI<CpuTag, DenseTag, RealValT<_Val>>;
+  using ComplexType = matrix::DiMatI<CpuTag, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType  = matrix::GeVecI<CoreTag, DenseTag, _Val>;
-  using MatrixType  = matrix::DiMatI<CoreTag, DenseTag, _Val>;
+  using VectorType  = matrix::GeVecI<CpuTag, DenseTag, _Val>;
+  using MatrixType  = matrix::DiMatI<CpuTag, DenseTag, _Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ struct IsDenseDiagonalMatrix : std::false_type {};
 /// @copydoc IsDenseDiagonalMatrix
 ///
 template <typename _Val>
-struct IsDenseDiagonalMatrix<matrix::DiMatI<CoreTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseDiagonalMatrix<matrix::DiMatI<CpuTag, DenseTag, _Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix assert.
@@ -71,15 +71,15 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class DiMatI<CoreTag, DenseTag, _Val>
-  : public DenseDiagonalMatrixBase<CoreTag, _Val>,
-    public DenseMatrixWrapper<DiMatI<CoreTag, DenseTag, _Val>> {
+class DiMatI<CpuTag, DenseTag, _Val>
+  : public DenseDiagonalMatrixBase<CpuTag, _Val>,
+    public DenseMatrixWrapper<DiMatI<CpuTag, DenseTag, _Val>> {
 
-  friend DenseMatrixWrapper<DiMatI<CoreTag, DenseTag, _Val>>;
+  friend DenseMatrixWrapper<DiMatI<CpuTag, DenseTag, _Val>>;
 
  private:
 
-  using BaseType = DenseDiagonalMatrixBase<CoreTag, _Val>;
+  using BaseType = DenseDiagonalMatrixBase<CpuTag, _Val>;
 
  public:
 
@@ -89,7 +89,7 @@ class DiMatI<CoreTag, DenseTag, _Val>
 
 /// @ingroup  matrix_dense_module
 template <typename _Val>
-using DenseDiagonalMatrix = DiMatI<CoreTag, DenseTag, _Val>;
+using DenseDiagonalMatrix = DiMatI<CpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

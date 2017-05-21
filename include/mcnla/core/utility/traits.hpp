@@ -20,24 +20,19 @@ namespace mcnla {
 ///
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The false trait.
-///
-/// @tparam  _Type  The type.
-///
-template <typename _Type>
-struct FalseTraits {
-  static constexpr bool value = false;
-};
+/// @ingroup  utility_module
+template <typename... _Args>
+using FalseType = std::false_type;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_module
 /// The traits interface.
 ///
 /// @tparam  _Type  The type.
 ///
 template <typename _Type>
 struct Traits {
-  static_assert(traits::FalseTraits<_Type>::value, "Error using non-specialized traits!");
+  static_assert(traits::FalseType<_Type>::value, "Error using non-specialized traits!");
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

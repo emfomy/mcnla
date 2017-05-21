@@ -87,7 +87,7 @@ namespace matrix {
 ///
 template <typename _Val>
 class CooVector
-  : public CooVectorStorage<CoreTag, _Val>,
+  : public CooVectorStorage<CpuTag, _Val>,
     public VectorWrapper<CooVector<_Val>>,
     public SparseWrapper<CooVector<_Val>>,
     public IterableWrapper<CooVector<_Val>>,
@@ -115,7 +115,7 @@ class CooVector
 
  private:
 
-  using BaseType          = CooVectorStorage<CoreTag, _Val>;
+  using BaseType          = CooVectorStorage<CpuTag, _Val>;
 
  public:
 

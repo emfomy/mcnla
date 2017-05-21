@@ -98,10 +98,10 @@ class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val
 };
 
 template <typename _Val>
-using DenseVectorIterator = DenseVectorIteratorBase<_Val, GeVecI<CoreTag, DenseTag, _Val>>;
+using DenseVectorIterator = DenseVectorIteratorBase<_Val, GeVecI<CpuTag, DenseTag, _Val>>;
 
 template <typename _Val>
-using DenseVectorConstIterator = DenseVectorIteratorBase<const _Val, const GeVecI<CoreTag, DenseTag, _Val>>;
+using DenseVectorConstIterator = DenseVectorIteratorBase<const _Val, const GeVecI<CpuTag, DenseTag, _Val>>;
 
 }  // namespace matrix
 

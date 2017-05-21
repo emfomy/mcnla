@@ -12,45 +12,45 @@
 #include <mcnla/core_gpu/la/dense/driver.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_blas1_module  Dense GPU BLAS 1 Module
-/// @ingroup   gpu_la_dense_module
-/// @brief     The Dense BLAS 1 Module (GPU Version)
+/// @defgroup  la_dense_blas1_gpu_module  Dense BLAS 1 Module (GPU)
+/// @ingroup   la_dense_gpu_module
+/// @brief     The Dense BLAS 1 Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_blas1m_module  Dense GPU BLAS 1 Module for Matrices
-/// @ingroup   gpu_la_dense_module
-/// @brief     The Dense BLAS 1 Module for Matrices (GPU Version)
+/// @defgroup  la_dense_blas1m_gpu_module  Dense BLAS 1 Module for Matrices (GPU)
+/// @ingroup   la_dense_gpu_module
+/// @brief     The Dense BLAS 1 Module for Matrices (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_blas2_module  Dense GPU BLAS 2 Module
-/// @ingroup   gpu_la_dense_module
-/// @brief     The Dense BLAS 2 Module (GPU Version)
+/// @defgroup  la_dense_blas2_gpu_module  Dense BLAS 2 Module (GPU)
+/// @ingroup   la_dense_gpu_module
+/// @brief     The Dense BLAS 2 Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_blas3_module  Dense GPU BLAS 3 Module
-/// @ingroup   gpu_la_dense_module
-/// @brief     The Dense BLAS 3 Module (GPU Version)
+/// @defgroup  la_dense_blas3_gpu_module  Dense BLAS 3 Module (GPU)
+/// @ingroup   la_dense_gpu_module
+/// @brief     The Dense BLAS 3 Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_lapack_le_module  Dense GPU LAPACK Linear Equation Module
-/// @ingroup   gpu_la_dense_module
-/// @brief     The Dense LAPACK Linear Equation Module (GPU Version)
+/// @defgroup  la_dense_lapack_le_gpu_module  Dense LAPACK Linear Equation Module (GPU)
+/// @ingroup   la_dense_gpu_module
+/// @brief     The Dense LAPACK Linear Equation Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_lapack_ls_module  Dense GPU LAPACK Least Squares Module
-/// @ingroup   gpu_la_dense_module
-/// @brief     The Dense LAPACK Least Squares Equation Module (GPU Version)
+/// @defgroup  la_dense_lapack_ls_gpu_module  Dense LAPACK Least Squares Module (GPU)
+/// @ingroup   la_dense_gpu_module
+/// @brief     The Dense LAPACK Least Squares Equation Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_dense_lapack_aux_module  Dense GPU LAPACK Auxiliary Module
-/// @ingroup   gpu_la_dense_module
-/// @brief     The Dense LAPACK Auxiliary Module (GPU Version)
+/// @defgroup  la_dense_lapack_aux_gpu_module  Dense LAPACK Auxiliary Module (GPU)
+/// @ingroup   la_dense_gpu_module
+/// @brief     The Dense LAPACK Auxiliary Module (GPU Support)
 ///
 
 #endif  // MCNLA_CORE_GPU_LA_DENSE_HPP_

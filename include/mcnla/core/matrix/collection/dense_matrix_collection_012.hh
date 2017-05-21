@@ -26,31 +26,28 @@ namespace matrix {
 ///
 struct DenseMatrixCollection012Tag {};
 
-/// @ingroup  matrix_collection_module
-template <typename _Val>
-using DenseMatrixCollection012 = DenseMatrixCollection<DenseMatrixCollection012Tag, _Val, Trans::NORMAL>;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
 /// The dense matrix collection with dimension order (dim0, dim1, dim2).
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Core  The core type.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Val>
-class DenseMatrixCollection<DenseMatrixCollection012Tag, _Val, Trans::NORMAL>
-  : public MatrixCollectionWrapper<DenseMatrixCollection012<_Val>> {
+template <class _Core, typename _Val>
+class DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>
+  : public MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection012<_Val>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>>;
 
  public:
 
   using ValType        = _Val;
-  using CollectionType = DenseMatrixCollection012<_Val>;
-  using MatrixType     = DenseMatrixColMajor<_Val>;
+  using CollectionType = DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>;
+  using MatrixType     = GeMatI<_Core, DenseTag, _Val, Trans::NORMAL>;
 
  private:
 
-  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollection012<_Val>>;
+  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>>;
   using SizesType = std::tuple<index_t, index_t, index_t>;
 
  protected:
@@ -121,6 +118,10 @@ class DenseMatrixCollection<DenseMatrixCollection012Tag, _Val, Trans::NORMAL>
   inline const MatrixType getImpl( const index_t idx ) const noexcept;
 
 };
+
+/// @ingroup  matrix_collection_module
+template <typename _Val>
+using DenseMatrixCollection012 = DenseMatrixCollection<DenseMatrixCollection012Tag, CpuTag, _Val, Trans::NORMAL>;
 
 }  // namespace matrix
 

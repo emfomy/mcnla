@@ -28,8 +28,8 @@ namespace detail {
 
 template <typename _Val>
 inline void scatterImpl(
-    const DenseStorage<CoreTag, _Val> &send,
-          DenseStorage<CoreTag, _Val> &recv,
+    const DenseStorage<CpuTag, _Val> &send,
+          DenseStorage<CpuTag, _Val> &recv,
     const mpi_int_t count,
     const mpi_int_t root,
     const MPI_Comm comm

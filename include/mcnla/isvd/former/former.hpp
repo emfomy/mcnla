@@ -56,7 +56,7 @@ namespace isvd {
 ///
 template <class _Tag, typename _Val>
 class Former : public StageWrapper<Former<_Tag, _Val>> {
-  static_assert(traits::False<_Tag>::value, "Error using non-specialized iSVD former!");
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD former!");
 };
 
 }  // namespace isvd

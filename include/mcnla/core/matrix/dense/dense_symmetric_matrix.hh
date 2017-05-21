@@ -29,18 +29,18 @@ namespace traits {
 /// The dense symmetric matrix traits.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct Traits<matrix::SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>> {
+struct Traits<matrix::SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>> {
 
   static constexpr Trans trans = _trans;
   static constexpr Uplo uplo = _uplo;
 
   using ValType     = _Val;
 
-  using RealType    = matrix::SyMatI<CoreTag, DenseTag, RealValT<_Val>, _trans, _uplo>;
-  using ComplexType = matrix::SyMatI<CoreTag, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
+  using RealType    = matrix::SyMatI<CpuTag, DenseTag, RealValT<_Val>, _trans, _uplo>;
+  using ComplexType = matrix::SyMatI<CpuTag, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType  = matrix::GeVecI<CoreTag, DenseTag, _Val>;
-  using MatrixType  = matrix::SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>;
+  using VectorType  = matrix::GeVecI<CpuTag, DenseTag, _Val>;
+  using MatrixType  = matrix::SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ struct IsDenseSymmetricMatrix : std::false_type {};
 /// @copydoc IsDenseSymmetricMatrix
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-struct IsDenseSymmetricMatrix<matrix::SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>> : std::true_type {};
+struct IsDenseSymmetricMatrix<matrix::SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix assert.
@@ -77,15 +77,15 @@ namespace matrix {
 /// @tparam  _uplo   The triangular storage layout.
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
-class SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>
-  : public DenseSymmetricMatrixBase<CoreTag, _Val, _trans, _uplo>,
-    public DenseMatrixWrapper<SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>> {
+class SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
+    public DenseMatrixWrapper<SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>> {
 
-  friend DenseMatrixWrapper<SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>>;
+  friend DenseMatrixWrapper<SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>>;
 
  private:
 
-  using BaseType = DenseSymmetricMatrixBase<CoreTag, _Val, _trans, _uplo>;
+  using BaseType = DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>;
 
  public:
 
@@ -95,15 +95,15 @@ class SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>
 
 /// @ingroup  matrix_dense_module
 template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-using DenseSymmetricMatrix = SyMatI<CoreTag, DenseTag, _Val, _trans, _uplo>;
+using DenseSymmetricMatrix = SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
-using DenseSymmetricMatrixColMajor = SyMatI<CoreTag, DenseTag, _Val, Trans::NORMAL, _uplo>;
+using DenseSymmetricMatrixColMajor = SyMatI<CpuTag, DenseTag, _Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
-using DenseSymmetricMatrixRowMajor = SyMatI<CoreTag, DenseTag, _Val, Trans::TRANS, _uplo>;
+using DenseSymmetricMatrixRowMajor = SyMatI<CpuTag, DenseTag, _Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix
 

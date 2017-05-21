@@ -13,21 +13,21 @@
 #include <mcnla/core_gpu/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_gpu_module  GPU Container Module
+/// @defgroup  matrix_gpu_module  Container Module (GPU)
 /// @ingroup   core_gpu_module
-/// @brief     The Container Module (GPU Version)
+/// @brief     The Container Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_la_module  GPU Linear Algebra Module
+/// @defgroup  la_gpu_module  Linear Algebra Module (GPU)
 /// @ingroup   core_gpu_module
-/// @brief     The Linear Algebra Module (GPU Version)
+/// @brief     The Linear Algebra Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  gpu_utility_module  GPU Utility Module
+/// @defgroup  utility_gpu_module  Utility Module (GPU)
 /// @ingroup   core_gpu_module
-/// @brief     The Utility Module (GPU Version)
+/// @brief     The Utility Module (GPU Support)
 ///
 
 #endif  // MCNLA_CORE_GPU_HPP_

@@ -30,14 +30,14 @@ namespace traits {
 /// The dense vector traits.
 ///
 template <typename _Val>
-struct Traits<matrix::GeVecI<CoreTag, DenseTag, _Val>> {
+struct Traits<matrix::GeVecI<CpuTag, DenseTag, _Val>> {
 
   using ValType           = _Val;
 
-  using RealType          = matrix::GeVecI<CoreTag, DenseTag, RealValT<_Val>>;
-  using ComplexType       = matrix::GeVecI<CoreTag, DenseTag, ComplexValT<_Val>>;
+  using RealType          = matrix::GeVecI<CpuTag, DenseTag, RealValT<_Val>>;
+  using ComplexType       = matrix::GeVecI<CpuTag, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType        = matrix::GeVecI<CoreTag, DenseTag, _Val>;
+  using VectorType        = matrix::GeVecI<CpuTag, DenseTag, _Val>;
 
   using IteratorType      = matrix::DenseVectorIterator<_Val>;
   using ConstIteratorType = matrix::DenseVectorConstIterator<_Val>;
@@ -53,7 +53,7 @@ struct IsDenseVector : std::false_type {};
 /// @copydoc IsDenseVector
 ///
 template <typename _Val>
-struct IsDenseVector<matrix::GeVecI<CoreTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseVector<matrix::GeVecI<CpuTag, DenseTag, _Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector assert.
@@ -75,20 +75,20 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class GeVecI<CoreTag, DenseTag, _Val>
-  : public DenseVectorBase<CoreTag, _Val>,
-    public DenseVectorWrapper<GeVecI<CoreTag, DenseTag, _Val>>,
-    public IterableWrapper<GeVecI<CoreTag, DenseTag, _Val>> {
+class GeVecI<CpuTag, DenseTag, _Val>
+  : public DenseVectorBase<CpuTag, _Val>,
+    public DenseVectorWrapper<GeVecI<CpuTag, DenseTag, _Val>>,
+    public IterableWrapper<GeVecI<CpuTag, DenseTag, _Val>> {
 
-  friend DenseVectorWrapper<GeVecI<CoreTag, DenseTag, _Val>>;
-  friend IterableWrapper<GeVecI<CoreTag, DenseTag, _Val>>;
+  friend DenseVectorWrapper<GeVecI<CpuTag, DenseTag, _Val>>;
+  friend IterableWrapper<GeVecI<CpuTag, DenseTag, _Val>>;
 
  private:
 
   using IteratorType      = DenseVectorIterator<_Val>;
   using ConstIteratorType = DenseVectorConstIterator<_Val>;
 
-  using BaseType          = DenseVectorBase<CoreTag, _Val>;
+  using BaseType          = DenseVectorBase<CpuTag, _Val>;
 
  public:
 
@@ -103,7 +103,7 @@ class GeVecI<CoreTag, DenseTag, _Val>
 
 /// @ingroup  matrix_dense_module
 template <typename _Val>
-using DenseVector = GeVecI<CoreTag, DenseTag, _Val>;
+using DenseVector = GeVecI<CpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

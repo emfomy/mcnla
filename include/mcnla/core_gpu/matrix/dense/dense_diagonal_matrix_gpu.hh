@@ -27,15 +27,15 @@ namespace traits {
 /// The dense diagonal GPU matrix traits.
 ///
 template <typename _Val>
-struct Traits<matrix::DiMatI<CoreGpuTag, DenseTag, _Val>> {
+struct Traits<matrix::DiMatI<GpuTag, DenseTag, _Val>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DiMatI<CoreGpuTag, DenseTag, RealValT<_Val>>;
-  using ComplexType = matrix::DiMatI<CoreGpuTag, DenseTag, ComplexValT<_Val>>;
+  using RealType    = matrix::DiMatI<GpuTag, DenseTag, RealValT<_Val>>;
+  using ComplexType = matrix::DiMatI<GpuTag, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType  = matrix::GeVecI<CoreGpuTag, DenseTag, _Val>;
-  using MatrixType  = matrix::DiMatI<CoreGpuTag, DenseTag, _Val>;
+  using VectorType  = matrix::GeVecI<GpuTag, DenseTag, _Val>;
+  using MatrixType  = matrix::DiMatI<GpuTag, DenseTag, _Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ struct IsDenseDiagonalMatrixGpu : std::false_type {};
 /// @copydoc IsDenseDiagonalMatrixGpu
 ///
 template <typename _Val>
-struct IsDenseDiagonalMatrixGpu<matrix::DiMatI<CoreGpuTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseDiagonalMatrixGpu<matrix::DiMatI<GpuTag, DenseTag, _Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal GPU matrix assert.
@@ -64,17 +64,17 @@ struct IsDenseDiagonalMatrixGpu<matrix::DiMatI<CoreGpuTag, DenseTag, _Val>> : st
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 /// The  GPU dense diagonal matrix class.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class DiMatI<CoreGpuTag, DenseTag, _Val> : public DenseDiagonalMatrixBase<CoreGpuTag, _Val> {
+class DiMatI<GpuTag, DenseTag, _Val> : public DenseDiagonalMatrixBase<GpuTag, _Val> {
 
  private:
 
-  using BaseType = DenseDiagonalMatrixBase<CoreGpuTag, _Val>;
+  using BaseType = DenseDiagonalMatrixBase<GpuTag, _Val>;
 
  public:
 
@@ -89,9 +89,9 @@ class DiMatI<CoreGpuTag, DenseTag, _Val> : public DenseDiagonalMatrixBase<CoreGp
 
 };
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val>
-using DenseDiagonalMatrixGpu = DiMatI<CoreGpuTag, DenseTag, _Val>;
+using DenseDiagonalMatrixGpu = DiMatI<GpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

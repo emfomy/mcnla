@@ -30,17 +30,17 @@ namespace traits {
 /// The GPU dense matrix traits.
 ///
 template <typename _Val, Trans _trans>
-struct Traits<matrix::GeMatI<CoreGpuTag, DenseTag, _Val, _trans>> {
+struct Traits<matrix::GeMatI<GpuTag, DenseTag, _Val, _trans>> {
 
   static constexpr Trans trans = _trans;
 
   using ValType     = _Val;
 
-  using RealType    = matrix::GeMatI<CoreGpuTag, DenseTag, RealValT<_Val>, _trans>;
-  using ComplexType = matrix::GeMatI<CoreGpuTag, DenseTag, ComplexValT<_Val>, _trans>;
+  using RealType    = matrix::GeMatI<GpuTag, DenseTag, RealValT<_Val>, _trans>;
+  using ComplexType = matrix::GeMatI<GpuTag, DenseTag, ComplexValT<_Val>, _trans>;
 
-  using VectorType  = matrix::GeVecI<CoreGpuTag, DenseTag, _Val>;
-  using MatrixType  = matrix::GeMatI<CoreGpuTag, DenseTag, _Val, _trans>;
+  using VectorType  = matrix::GeVecI<GpuTag, DenseTag, _Val>;
+  using MatrixType  = matrix::GeMatI<GpuTag, DenseTag, _Val, _trans>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ struct IsDenseMatrixGpu : std::false_type {};
 /// @copydoc IsDenseMatrixGpu
 ///
 template <typename _Val, Trans _trans>
-struct IsDenseMatrixGpu<matrix::GeMatI<CoreGpuTag, DenseTag, _Val, _trans>> : std::true_type {};
+struct IsDenseMatrixGpu<matrix::GeMatI<GpuTag, DenseTag, _Val, _trans>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The GPU dense matrix assert.
@@ -69,18 +69,18 @@ struct IsDenseMatrixGpu<matrix::GeMatI<CoreGpuTag, DenseTag, _Val, _trans>> : st
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 /// The GPU dense matrix class.
 ///
 /// @tparam  _Val    The value type.
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <typename _Val, Trans _trans>
-class GeMatI<CoreGpuTag, DenseTag, _Val, _trans> : public DenseMatrixBase<CoreGpuTag, _Val, _trans> {
+class GeMatI<GpuTag, DenseTag, _Val, _trans> : public DenseMatrixBase<GpuTag, _Val, _trans> {
 
  private:
 
-  using BaseType = DenseMatrixBase<CoreGpuTag, _Val, _trans>;
+  using BaseType = DenseMatrixBase<GpuTag, _Val, _trans>;
 
  public:
 
@@ -95,17 +95,17 @@ class GeMatI<CoreGpuTag, DenseTag, _Val, _trans> : public DenseMatrixBase<CoreGp
 
 };
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val, Trans _trans = Trans::NORMAL>
-using DenseMatrixGpu = GeMatI<CoreGpuTag, DenseTag, _Val, _trans>;
+using DenseMatrixGpu = GeMatI<GpuTag, DenseTag, _Val, _trans>;
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val>
-using DenseMatrixGpuColMajor = GeMatI<CoreGpuTag, DenseTag, _Val, Trans::NORMAL>;
+using DenseMatrixGpuColMajor = GeMatI<GpuTag, DenseTag, _Val, Trans::NORMAL>;
 
-/// @ingroup  matrix_gpu_dense_module
+/// @ingroup  matrix_dense_gpu_module
 template <typename _Val>
-using DenseMatrixGpuRowMajor = GeMatI<CoreGpuTag, DenseTag, _Val, Trans::TRANS>;
+using DenseMatrixGpuRowMajor = GeMatI<GpuTag, DenseTag, _Val, Trans::TRANS>;
 
 }  // namespace matrix
 

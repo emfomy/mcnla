@@ -15,21 +15,27 @@
 #include <mcnla/core_gpu/matrix/kit.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_gpu_dense_module  Dense GPU Container Module
+/// @defgroup  matrix_dense_gpu_module  Dense Container Module (GPU)
 /// @ingroup   matrix_gpu_module
-/// @brief     The Dense Container Module (GPU Version)
+/// @brief     The Dense Container Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_gpu_coo_module  COO GPU Container Module
+/// @defgroup  matrix_coo_gpu_module  COO Container Module (GPU)
 /// @ingroup   matrix_gpu_module
-/// @brief     The Coordinate List (COO) Container Module (GPU Version)
+/// @brief     The Coordinate List (COO) Container Module (GPU Support)
 ///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  matrix_gpu_collection_module  GPU Container Collection Module
+/// @defgroup  matrix_collection_gpu_module  Container Collection Module (GPU)
 /// @ingroup   matrix_gpu_module
-/// @brief     The Container Collection Module (GPU Version)
+/// @brief     The Container Collection Module (GPU Support)
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  matrix_kit_gpu_module  Container Kit Module (GPU)
+/// @ingroup   matrix_gpu_module
+/// @brief     The Container Kit Module (GPU Support)
 ///
 
 #endif  // MCNLA_CORE_GPU_MATRIX_HPP_
