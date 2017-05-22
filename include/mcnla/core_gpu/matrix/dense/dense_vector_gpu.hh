@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_VECTOR_GPU_HH_
 #define MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_VECTOR_GPU_HH_
 
-#include <mcnla/core_gpu/matrix/def.hpp>
+#include <mcnla/core_gpu/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core_gpu/matrix/dense/dense_diagonal_matrix_gpu.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -27,16 +27,16 @@ namespace traits {
 /// The GPU dense vector traits.
 ///
 template <typename _Val>
-struct Traits<matrix::GeVecI<GpuTag, DenseTag, _Val>> {
+struct Traits<matrix::DenseVectorGpu<_Val>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::GeVecI<GpuTag, DenseTag, RealValT<_Val>>;
-  using ComplexType = matrix::GeVecI<GpuTag, DenseTag, ComplexValT<_Val>>;
+  using RealType    = matrix::DenseVectorGpu<RealValT<_Val>>;
+  using ComplexType = matrix::DenseVectorGpu<ComplexValT<_Val>>;
 
-  using VectorType  = matrix::GeVecI<GpuTag, DenseTag, _Val>;
+  using VectorType  = matrix::DenseVectorGpu<_Val>;
 
-  using DiagonalType = matrix::DiMatI<GpuTag, DenseTag, _Val>;
+  using DiagonalType = matrix::DenseDiagonalMatrixGpu<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ struct IsDenseVectorGpu : std::false_type {};
 /// @copydoc IsDenseVectorGpu
 ///
 template <typename _Val>
-struct IsDenseVectorGpu<matrix::GeVecI<GpuTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseVectorGpu<matrix::DenseVectorGpu<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The GPU dense vector assert.
@@ -71,7 +71,12 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class GeVecI<GpuTag, DenseTag, _Val> : public DenseVectorBase<GpuTag, _Val> {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class GeVecI<GpuTag, DenseTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseVectorGpu
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseVectorBase<GpuTag, _Val> {
 
  private:
 
@@ -89,10 +94,6 @@ class GeVecI<GpuTag, DenseTag, _Val> : public DenseVectorBase<GpuTag, _Val> {
   inline void operator()( const index_t idx ) const noexcept = delete;
 
 };
-
-/// @ingroup  matrix_dense_gpu_module
-template <typename _Val>
-using DenseVectorGpu = GeVecI<GpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

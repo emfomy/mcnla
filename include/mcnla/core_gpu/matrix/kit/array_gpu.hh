@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HH_
 #define MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HH_
 
-#include <mcnla/core_gpu/matrix/def.hpp>
+#include <mcnla/core_gpu/matrix/kit/def.hpp>
 #include <mcnla/core/matrix/kit/array_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,12 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class ArrI<GpuTag, _Val> : public ArrayBase<GpuTag, _Val> {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class ArrI<GpuTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class ArrayGpu
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public ArrayBase<GpuTag, _Val> {
 
  private:
 
@@ -52,9 +57,6 @@ class ArrI<GpuTag, _Val> : public ArrayBase<GpuTag, _Val> {
   inline const _Val& operator[]( const index_t idx ) const noexcept = delete;
 
 };
-
-/// @ingroup  matrix_gpu_module
-template <typename _Val> using ArrayGpu = ArrI<GpuTag, _Val>;
 
 }  // namespace matrix
 

@@ -33,6 +33,8 @@ namespace detail {}
 /// @tparam  _Core  The core tag.
 /// @tparam  _Val   The value type.
 ///
+/// @see Array, ArrayGpu
+///
 template <class _Core, typename _Val>
 class ArrI {
   static_assert(traits::FalseType<_Core>::value, "Error using non-specialized array!");
@@ -44,6 +46,8 @@ class ArrI {
 /// @tparam  _Core     The core tag.
 /// @tparam  _Storage  The storage tag.
 /// @tparam  _Val      The value type.
+///
+/// @see DenseVector, DenseVectorGpu, CooVector
 ///
 template <class _Core, class _Storage, typename _Val>
 class GeVecI {
@@ -57,6 +61,8 @@ class GeVecI {
 /// @tparam  _Storage  The storage tag.
 /// @tparam  _Val      The value type.
 /// @tparam  _trans    The transpose storage layout.
+///
+/// @see DenseMatrix, DenseMatrixGpu, CooMatrix
 ///
 template <class _Core, class _Storage, typename _Val, Trans _trans>
 class GeMatI {
@@ -72,6 +78,8 @@ class GeMatI {
 /// @tparam  _trans    The transpose storage layout.
 /// @tparam  _uplo     The triangular storage layout.
 ///
+/// @see DenseSymmetricMatrix, DenseSymmetricMatrixGpu
+///
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
 class SyMatI {
   static_assert(traits::FalseType<_Core>::value, "Error using non-specialized symmetric matrix!");
@@ -86,6 +94,8 @@ class SyMatI {
 /// @tparam  _trans    The transpose storage layout.
 /// @tparam  _uplo     The triangular storage layout.
 ///
+/// @see DenseTriangularMatrix, DenseTriangularMatrixGpu
+///
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
 class TrMatI {
   static_assert(traits::FalseType<_Core>::value, "Error using non-specialized triangular matrix!");
@@ -97,6 +107,8 @@ class TrMatI {
 /// @tparam  _Core     The core tag.
 /// @tparam  _Storage  The storage tag.
 /// @tparam  _Val      The value type.
+///
+/// @see DenseDiagonalMatrix, DenseDiagonalMatrixGpu
 ///
 template <class _Core, class _Storage, typename _Val>
 class DiMatI {

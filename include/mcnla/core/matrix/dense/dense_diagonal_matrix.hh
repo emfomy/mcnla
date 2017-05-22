@@ -28,15 +28,15 @@ namespace traits {
 /// The dense diagonal matrix traits.
 ///
 template <typename _Val>
-struct Traits<matrix::DiMatI<CpuTag, DenseTag, _Val>> {
+struct Traits<matrix::DenseDiagonalMatrix<_Val>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DiMatI<CpuTag, DenseTag, RealValT<_Val>>;
-  using ComplexType = matrix::DiMatI<CpuTag, DenseTag, ComplexValT<_Val>>;
+  using RealType    = matrix::DenseDiagonalMatrix<RealValT<_Val>>;
+  using ComplexType = matrix::DenseDiagonalMatrix<ComplexValT<_Val>>;
 
-  using VectorType  = matrix::GeVecI<CpuTag, DenseTag, _Val>;
-  using MatrixType  = matrix::DiMatI<CpuTag, DenseTag, _Val>;
+  using VectorType  = matrix::DenseVector<_Val>;
+  using MatrixType  = matrix::DenseDiagonalMatrix<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ struct IsDenseDiagonalMatrix : std::false_type {};
 /// @copydoc IsDenseDiagonalMatrix
 ///
 template <typename _Val>
-struct IsDenseDiagonalMatrix<matrix::DiMatI<CpuTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix assert.
@@ -71,11 +71,15 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DiMatI<CpuTag, DenseTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseDiagonalMatrix
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseDiagonalMatrixBase<CpuTag, _Val>,
-    public DenseMatrixWrapper<DiMatI<CpuTag, DenseTag, _Val>> {
+    public DenseMatrixWrapper<DenseDiagonalMatrix<_Val>> {
 
-  friend DenseMatrixWrapper<DiMatI<CpuTag, DenseTag, _Val>>;
+  friend DenseMatrixWrapper<DenseDiagonalMatrix<_Val>>;
 
  private:
 
@@ -86,10 +90,6 @@ class DiMatI<CpuTag, DenseTag, _Val>
   using BaseType::DenseDiagonalMatrixBase;
 
 };
-
-/// @ingroup  matrix_dense_module
-template <typename _Val>
-using DenseDiagonalMatrix = DiMatI<CpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

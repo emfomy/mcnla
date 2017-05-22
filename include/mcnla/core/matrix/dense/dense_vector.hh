@@ -30,14 +30,14 @@ namespace traits {
 /// The dense vector traits.
 ///
 template <typename _Val>
-struct Traits<matrix::GeVecI<CpuTag, DenseTag, _Val>> {
+struct Traits<matrix::DenseVector<_Val>> {
 
   using ValType           = _Val;
 
-  using RealType          = matrix::GeVecI<CpuTag, DenseTag, RealValT<_Val>>;
-  using ComplexType       = matrix::GeVecI<CpuTag, DenseTag, ComplexValT<_Val>>;
+  using RealType          = matrix::DenseVector<RealValT<_Val>>;
+  using ComplexType       = matrix::DenseVector<ComplexValT<_Val>>;
 
-  using VectorType        = matrix::GeVecI<CpuTag, DenseTag, _Val>;
+  using VectorType        = matrix::DenseVector<_Val>;
 
   using IteratorType      = matrix::DenseVectorIterator<_Val>;
   using ConstIteratorType = matrix::DenseVectorConstIterator<_Val>;
@@ -53,7 +53,7 @@ struct IsDenseVector : std::false_type {};
 /// @copydoc IsDenseVector
 ///
 template <typename _Val>
-struct IsDenseVector<matrix::GeVecI<CpuTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseVector<matrix::DenseVector<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector assert.
@@ -75,13 +75,17 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeVecI<CpuTag, DenseTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseVector
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorBase<CpuTag, _Val>,
-    public DenseVectorWrapper<GeVecI<CpuTag, DenseTag, _Val>>,
-    public IterableWrapper<GeVecI<CpuTag, DenseTag, _Val>> {
+    public DenseVectorWrapper<DenseVector<_Val>>,
+    public IterableWrapper<DenseVector<_Val>> {
 
-  friend DenseVectorWrapper<GeVecI<CpuTag, DenseTag, _Val>>;
-  friend IterableWrapper<GeVecI<CpuTag, DenseTag, _Val>>;
+  friend DenseVectorWrapper<DenseVector<_Val>>;
+  friend IterableWrapper<DenseVector<_Val>>;
 
  private:
 
@@ -100,10 +104,6 @@ class GeVecI<CpuTag, DenseTag, _Val>
   inline ConstIteratorType cfind( const index_t idx ) const noexcept;
 
 };
-
-/// @ingroup  matrix_dense_module
-template <typename _Val>
-using DenseVector = GeVecI<CpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

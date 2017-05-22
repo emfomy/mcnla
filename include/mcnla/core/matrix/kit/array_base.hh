@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_KIT_ARRAY_BASE_HH_
 #define MCNLA_CORE_MATRIX_KIT_ARRAY_BASE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/kit/def.hpp>
 #include <memory>
 #include <mcnla/core/utility/crtp.hpp>
 

@@ -37,7 +37,7 @@ namespace mcnla {
   `la::sm&zwnj;(a.inv(), b, alpha)`                                | @f$B \gets \alpha A^{-1} B@f$
   `la::sm&zwnj;(b, a.inv(), alpha)`                                | @f$B \gets \alpha B A^{-1}@f$
   `la::rk&zwnj;(a, c, alpha, beta)`                                | @f$C \gets \alpha A A^* + \beta C@f$
-  `la::rk2&zwnj;(a, b, c, alpha, beta)`                            | @f$C \gets \alpha A B^* + \overline{\alpha} B A^* + \beta C@f$
+  `la::r2k&zwnj;(a, b, c, alpha, beta)`                            | @f$C \gets \alpha A B^* + \overline{\alpha} B A^* + \beta C@f$
 
   @see @ref la_module
 

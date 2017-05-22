@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_HH_
 #define MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/kit/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

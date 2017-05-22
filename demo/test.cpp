@@ -18,93 +18,64 @@ int main( int argc, char **argv ) {
 
   mcnla::init(argc, argv);
 
-  magma_print_environment();
+  const auto mpi_comm = MPI_COMM_WORLD;
+  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
+  mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(mpi_comm);
+  mcnla::mpi_int_t mpi_root = 0;
 
-  mcnla::matrix::DenseMatrixCollection012Gpu<double> matcol(3, 4, 5);
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "MCNLA "
+              << MCNLA_MAJOR_VERSION << "."
+              << MCNLA_MINOR_VERSION << "."
+              << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
 
-  // int n = 5;
-  // mcnla::matrix::DenseTriangularMatrix<double> a(n), b(n);
-  // mcnla::matrix::DenseTriangularMatrixGpu<double> da(n), db(n);
+    std::cout << mpi_size << " nodes / "
+#ifdef MCNLA_USE_OMP
+              << omp_get_max_threads()
+#else  //MCNLA_USE_OMP
+              << 1
+#endif  // MCNLA_USE_OMP
+              << " threads per node" << std::endl << std::endl;
 
-  // int i = 0;
-  // for ( auto &v : a.viewGeneral() ) {
-  //   v = ++i;
-  // }
-  // for ( auto &v : b.viewGeneral() ) {
-  //   v = 0;
-  // }
+    magma_print_environment();
+  }
 
-  // disp(a);
-  // disp(b);
+  // mcnla::index_t m = 11, n = 20, k = 3, p = 1, Nj = 2;
 
-  // magma_dsetmatrix(n, n, a.valPtr(), n, da.valPtr(), n);
-  // mcnla::la::copy(da.viewGeneral().vectorize(), db.viewGeneral().vectorize());
-  // magma_dgetmatrix(n, n, db.valPtr(), n, b.valPtr(), n);
+  // mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
+  // parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  // parameters.sync();
 
-  // disp(a);
-  // disp(b);
+  // mcnla::matrix::DenseMatrixRowMajor<double> a(m, n);
+  // mcnla::random::Streams streams(0);
+  // mcnla::random::gaussian(streams, a.vectorize());
+  // mcnla::mpi::bcast(a, mpi_root, mpi_comm);
 
-  mcnla::finalize();
+  // auto qi = parameters.createCollectionQ();
 
-//   const auto mpi_comm = MPI_COMM_WORLD;
-//   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
-//   mcnla::mpi_int_t mpi_size = mcnla::mpi::commSize(mpi_comm);
-//   mcnla::mpi_int_t mpi_root = 0;
+  // mcnla::matrix::DenseMatrixGpuRowMajor<double> da(a.sizes());
+  // mcnla::matrix::DenseMatrixCollection201Gpu<double> dqi(qi.sizes());
 
-//   if ( mpi_rank == mpi_root ) {
-//     std::cout << "MCNLA "
-//               << MCNLA_MAJOR_VERSION << "."
-//               << MCNLA_MINOR_VERSION << "."
-//               << MCNLA_PATCH_VERSION << " test" << std::endl << std::endl;
-
-//     std::cout << mpi_size << " nodes / "
-// #ifdef MCNLA_USE_OMP
-//               << omp_get_max_threads()
-// #else  //MCNLA_USE_OMP
-//               << 1
-// #endif  // MCNLA_USE_OMP
-//               << " threads per node" << std::endl << std::endl;
-//   }
-
-//   mcnla::index_t m = 11, n = 20, k = 3, p = 1, Nj = 2;
-
-//   mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
-//   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
-//   parameters.sync();
-
-//   mcnla::matrix::DenseMatrixColMajor<double> a(m, n);
-//   mcnla::random::Streams streams(0);
-//   mcnla::random::gaussian(streams, a.vectorize());
-//   mcnla::mpi::bcast(a, mpi_root, mpi_comm);
-
-//   auto aj    = a(parameters.rowrange(), ""_);
-//   auto qi    = parameters.createCollectionQ();
-//   auto qij   = parameters.createCollectionQj();
-//   auto qbar  = parameters.createMatrixQ();
-//   auto qbarj = parameters.createMatrixQj();
-
-//   mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters, 0);
-//   mcnla::isvd::PolarOrthogonalizer<double> orthogonalizer(parameters);
-//   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
-//   mcnla::isvd::PolarFormer<double> former(parameters);
-//   sketcher.initialize();
-//   orthogonalizer.initialize();
-//   integrator.initialize();
-//   former.initialize();
-
-//   mcnla::isvd::CollectionFromRowBlockConverter<double> so_converter(parameters);
-//   mcnla::isvd::CollectionToRowBlockConverter<double> oi_converter(parameters);
-//   mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
-//   so_converter.initialize();
-//   oi_converter.initialize();
-//   if_converter.initialize();
+  // mcnla::isvd::GaussianProjectionSketcherGpu<double> sketcher(parameters, 0);
+  // sketcher.initialize();
 
 //   if ( mpi_rank == mpi_root ) {
 //     std::cout << "Uses " << sketcher << "." << std::endl;
-//     std::cout << "Uses " << orthogonalizer << "." << std::endl;
-//     std::cout << "Uses " << integrator << "." << std::endl;
-//     std::cout << "Uses " << former << "." << std::endl << std::endl;
+// //     std::cout << "Uses " << orthogonalizer << "." << std::endl;
+// //     std::cout << "Uses " << integrator << "." << std::endl;
+// //     std::cout << "Uses " << former << "." << std::endl << std::endl;
 //   }
+
+
+//   magma_dsetmatrix(a.dim0(), a.dim1(), a.valPtr(), a.pitch(), da.valPtr(), da.pitch());
+//   sketcher(da, dqi);
+//   auto &qs  = qi.unfold();
+//   auto &dqs = dqi.unfold();
+//   magma_dgetmatrix(qs.dim0(), qs.dim1(), qs.valPtr(), qs.pitch(), dqs.valPtr(), dqs.pitch());
+
+//   disp(qs);
+
+  mcnla::finalize();
 
 //   sketcher(aj, qij);
 //   so_converter(qij, qi);

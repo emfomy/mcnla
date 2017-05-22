@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_GPU_HH_
 #define MCNLA_CORE_GPU_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_GPU_HH_
 
-#include <mcnla/core_gpu/matrix/def.hpp>
+#include <mcnla/core_gpu/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix_base.hpp>
 #include <mcnla/core_gpu/matrix/dense/dense_vector_gpu.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -27,15 +27,15 @@ namespace traits {
 /// The dense diagonal GPU matrix traits.
 ///
 template <typename _Val>
-struct Traits<matrix::DiMatI<GpuTag, DenseTag, _Val>> {
+struct Traits<matrix::DenseDiagonalMatrixGpu<_Val>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DiMatI<GpuTag, DenseTag, RealValT<_Val>>;
-  using ComplexType = matrix::DiMatI<GpuTag, DenseTag, ComplexValT<_Val>>;
+  using RealType    = matrix::DenseDiagonalMatrixGpu<RealValT<_Val>>;
+  using ComplexType = matrix::DenseDiagonalMatrixGpu<ComplexValT<_Val>>;
 
-  using VectorType  = matrix::GeVecI<GpuTag, DenseTag, _Val>;
-  using MatrixType  = matrix::DiMatI<GpuTag, DenseTag, _Val>;
+  using VectorType  = matrix::DenseVectorGpu<_Val>;
+  using MatrixType  = matrix::DenseDiagonalMatrixGpu<_Val>;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ struct IsDenseDiagonalMatrixGpu : std::false_type {};
 /// @copydoc IsDenseDiagonalMatrixGpu
 ///
 template <typename _Val>
-struct IsDenseDiagonalMatrixGpu<matrix::DiMatI<GpuTag, DenseTag, _Val>> : std::true_type {};
+struct IsDenseDiagonalMatrixGpu<matrix::DenseDiagonalMatrixGpu<_Val>> : std::true_type {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal GPU matrix assert.
@@ -70,7 +70,12 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class DiMatI<GpuTag, DenseTag, _Val> : public DenseDiagonalMatrixBase<GpuTag, _Val> {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class DiMatI<GpuTag, DenseTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseDiagonalMatrixGpu
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseDiagonalMatrixBase<GpuTag, _Val> {
 
  private:
 
@@ -88,10 +93,6 @@ class DiMatI<GpuTag, DenseTag, _Val> : public DenseDiagonalMatrixBase<GpuTag, _V
   inline void operator()( const index_t rowidx, const index_t colidx ) const noexcept = delete;
 
 };
-
-/// @ingroup  matrix_dense_gpu_module
-template <typename _Val>
-using DenseDiagonalMatrixGpu = DiMatI<GpuTag, DenseTag, _Val>;
 
 }  // namespace matrix
 

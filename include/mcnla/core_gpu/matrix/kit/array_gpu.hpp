@@ -25,14 +25,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <typename _Val>
-ArrI<GpuTag, _Val>::ArrI() noexcept
+ArrayGpu<_Val>::ArrI() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Val>
-ArrI<GpuTag, _Val>::ArrI(
+ArrayGpu<_Val>::ArrI(
     const index_t size,
     const index_t offset
 ) noexcept

@@ -25,6 +25,21 @@ namespace matrix {
 template <class _Core, typename _Val> class DenseStorage;
 template <class _Core, typename _Val> class DenseVectorStorage;
 template <class _Core, typename _Val> class DenseMatrixStorage;
+
+template <typename _Val>
+using DenseVector = GeVecI<CpuTag, DenseTag, _Val>;
+
+template <typename _Val, Trans _trans = Trans::NORMAL>
+using DenseMatrix = GeMatI<CpuTag, DenseTag, _Val, _trans>;
+
+template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+using DenseSymmetricMatrix = SyMatI<CpuTag, DenseTag, _Val, _trans, _uplo>;
+
+template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+using DenseTriangularMatrix = TrMatI<CpuTag, DenseTag, _Val, _trans, _uplo>;
+
+template <typename _Val>
+using DenseDiagonalMatrix = DiMatI<CpuTag, DenseTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix

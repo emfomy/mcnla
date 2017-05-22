@@ -29,11 +29,11 @@ using DenseMatrixCollection012Gpu = DenseMatrixCollection<DenseMatrixCollection0
 
 /// @ingroup  matrix_collection_gpu_module
 template <typename _Val>
-using DenseMatrixCollection102Gpu = DenseMatrixCollection<DenseMatrixCollection102Tag, GpuTag, _Val, Trans::NORMAL>;
+using DenseMatrixCollection102Gpu = DenseMatrixCollection<DenseMatrixCollection102Tag, GpuTag, _Val, Trans::TRANS>;
 
 /// @ingroup  matrix_collection_gpu_module
 template <typename _Val>
-using DenseMatrixCollection201Gpu = DenseMatrixCollection<DenseMatrixCollection201Tag, GpuTag, _Val, Trans::NORMAL>;
+using DenseMatrixCollection201Gpu = DenseMatrixCollection<DenseMatrixCollection201Tag, GpuTag, _Val, Trans::TRANS>;
 
 }  // namespace matrix
 

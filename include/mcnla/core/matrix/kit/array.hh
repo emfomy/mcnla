@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_KIT_ARRAY_HH_
 #define MCNLA_CORE_MATRIX_KIT_ARRAY_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/kit/def.hpp>
 #include <mcnla/core/matrix/kit/array_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,12 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class ArrI<CpuTag, _Val> : public ArrayBase<CpuTag, _Val> {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class ArrI<CpuTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class Array
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public ArrayBase<CpuTag, _Val> {
 
  private:
 
@@ -51,9 +56,6 @@ class ArrI<CpuTag, _Val> : public ArrayBase<CpuTag, _Val> {
   inline ArrI copy() const noexcept;
 
 };
-
-/// @ingroup  matrix_kit_module
-template <typename _Val> using Array = ArrI<CpuTag, _Val>;
 
 }  // namespace matrix
 
