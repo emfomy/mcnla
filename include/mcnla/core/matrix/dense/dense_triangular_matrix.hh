@@ -79,10 +79,11 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class TrMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseTriangularMatrixBase<CpuTag, _Val, _trans, _uplo>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrix
+  : public DenseTriangularMatrixBase_<CpuTag, _Val, _trans, _uplo>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseTriangularMatrixBase<CpuTag, _Val, _trans, _uplo>,
     public DenseMatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>> {
 
   friend DenseMatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>;

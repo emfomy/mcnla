@@ -77,10 +77,11 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeVecS<CpuTag, DenseTag, _Val>
+  : public DenseVectorBase<CpuTag, _Val>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseVector
+  : public DenseVectorBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseVectorBase<CpuTag, _Val>,
     public DenseVectorWrapper<DenseVector<_Val>>,
     public IterableWrapper<DenseVector<_Val>> {
 

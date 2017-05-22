@@ -23,6 +23,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val>
+using DenseVectorBase = DenseVectorBase_<_Core, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector base class.
 ///
@@ -30,7 +35,11 @@ namespace matrix {
 /// @tparam  _Val   The value type.
 ///
 template <class _Core, typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseVectorBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseVectorBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
     public VectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
     public InvertibleWrapper<GeVecS<_Core, DenseTag, _Val>> {

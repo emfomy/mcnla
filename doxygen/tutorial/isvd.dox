@@ -36,7 +36,7 @@ namespace mcnla {
 
   <h4>Initialize %Prarmeters</h4>
 
-  Set @ref Parameters before calling iSVD. Note that one should call @ref isvd::Parameters::sync to broadcast parameters from root node.
+  Set @ref isvd::Parameters before calling iSVD. Note that one should call @ref isvd::Parameters::sync to broadcast parameters from root node.
 
   @code{.cpp}
   // Set parameters

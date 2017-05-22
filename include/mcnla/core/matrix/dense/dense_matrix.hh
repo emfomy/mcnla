@@ -84,10 +84,11 @@ namespace matrix {
 template <typename _Val, Trans _trans>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeMatS<CpuTag, DenseTag, _Val, _trans>
+  : public DenseMatrixBase<CpuTag, _Val, _trans>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrix
+  : public DenseMatrixBase_<CpuTag, _Val, _trans>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseMatrixBase<CpuTag, _Val, _trans>,
     public DenseMatrixWrapper<DenseMatrix<_Val, _trans>>,
     public IterableWrapper<DenseMatrix<_Val, _trans>> {
 

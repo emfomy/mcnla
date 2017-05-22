@@ -23,6 +23,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+using DenseTriangularMatrixBase = DenseTriangularMatrixBase_<_Core, _Val, _trans, _uplo>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix base class.
 ///
@@ -32,7 +37,11 @@ namespace matrix {
 /// @tparam  _uplo   The triangular storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseTriangularMatrixBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
     public MatrixWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
     public InvertibleWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>> {

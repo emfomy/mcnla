@@ -34,8 +34,8 @@ void check( const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_a,
 int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
-  // Initialize MPI
-  MPI_Init(&argc, &argv);
+  // Initialize MCNLA
+  mcnla::init(argc, argv);
   auto mpi_comm = MPI_COMM_WORLD;
   auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -238,7 +238,7 @@ int main( int argc, char **argv ) {
     std::cout << std::endl;
   }
 
-  MPI_Finalize();
+  mcnla::finalize();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

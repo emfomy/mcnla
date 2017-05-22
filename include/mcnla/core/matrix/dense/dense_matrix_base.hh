@@ -23,6 +23,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val, Trans _trans>
+using DenseMatrixBase = DenseMatrixBase_<_Core, _Val, _trans>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix base class.
 ///
@@ -31,7 +36,11 @@ namespace matrix {
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseMatrixBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
     public MatrixWrapper<GeMatS<_Core, DenseTag, _Val, _trans>>,
     public InvertibleWrapper<GeMatS<_Core, DenseTag, _Val, _trans>> {

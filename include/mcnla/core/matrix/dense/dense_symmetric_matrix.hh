@@ -79,10 +79,11 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class SyMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrix
+  : public DenseSymmetricMatrixBase_<CpuTag, _Val, _trans, _uplo>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
     public DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
   friend DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>;
