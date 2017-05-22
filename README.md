@@ -24,7 +24,7 @@ Monte Carlo Numerical Linear Algebra Package
 
 ### Optional
 * [Intel&reg; Math Kernel Library](https://software.intel.com/en-us/intel-mkl) (**Recommended** for better performance, used for BLAS & LAPACK).
-* [MAGMA](http://icl.cs.utk.edu/magma/) 2+ (Used for BLAS & LAPACK with GPU support).
+<!-- * [MAGMA](http://icl.cs.utk.edu/magma/) 2+ (Used for BLAS & LAPACK with GPU support). -->
 * [DOxygen](http://www.stack.nl/~dimitri/doxygen/) (Used for documentation).
 * [Google Test Library](https://github.com/google/googletest) (Used for code testing).
 
@@ -56,7 +56,7 @@ ccmake <path-to-source>
 
 * Set `MCNLA_USE_ILP64`    to change the system integer size. (`OFF`: 32-bit / `ON`: 64-bit)
 * Set `MCNLA_USE_MKL`      to enable Intel MKL.
-* Set `MCNLA_USE_GPU`      to enable GPU support.
+<!-- * Set `MCNLA_USE_GPU`      to enable GPU support. -->
 * Set `MCNLA_USE_OMP`      to enable multithread MKL. (Require `MCNLA_USE_MKL`)
 * Set `MCNLA_USE_IOMP`     to enable Intel OMP.       (Require `MCNLA_USE_OMP`)
 

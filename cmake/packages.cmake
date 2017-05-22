@@ -46,14 +46,14 @@ if(MCNLA_BUILD_BIN)
 endif()
 
 # CUDA & MAGMA
-if(MCNLA_USE_GPU)
-  find_package(CUDA REQUIRED)
-  find_package(MAGMA REQUIRED)
-  if(MAGMA_FOUND)
-    list(APPEND INCS "${MAGMA_INCLUDES}")
-    list(APPEND LIBS "${MAGMA_LIBRARIES}" "${CUDA_CUDART_LIBRARY}" "${CUDA_cublas_LIBRARY}" "${CUDA_cusparse_LIBRARY}")
-  endif()
-endif()
+# if(MCNLA_USE_GPU)
+#   find_package(CUDA REQUIRED)
+#   find_package(MAGMA REQUIRED)
+#   if(MAGMA_FOUND)
+#     list(APPEND INCS "${MAGMA_INCLUDES}")
+#     list(APPEND LIBS "${MAGMA_LIBRARIES}" "${CUDA_CUDART_LIBRARY}" "${CUDA_cublas_LIBRARY}" "${CUDA_cusparse_LIBRARY}")
+#   endif()
+# endif()
 
 # GTest
 if(MCNLA_BUILD_TEST)
