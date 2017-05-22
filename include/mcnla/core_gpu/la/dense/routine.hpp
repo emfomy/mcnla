@@ -14,6 +14,7 @@
 // BLAS 2
 
 // BLAS 3
+#include <mcnla/core_gpu/la/dense/routine/gemm.hpp>
 
 // BLAS-like
 
