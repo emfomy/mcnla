@@ -22,14 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block Gramian orthogonalizer tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct RowBlockGramianOrthogonalizerTag {};
-
-/// @ingroup  isvd_orthogonalizer_module
-template <typename _Val>
-using RowBlockGramianOrthogonalizer = Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>;
+template <typename _Val> using RowBlockGramianOrthogonalizer = Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
@@ -38,7 +34,11 @@ using RowBlockGramianOrthogonalizer = Orthogonalizer<RowBlockGramianOrthogonaliz
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class RowBlockGramianOrthogonalizer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<RowBlockGramianOrthogonalizer<_Val>> {
 
   friend StageWrapper<RowBlockGramianOrthogonalizer<_Val>>;

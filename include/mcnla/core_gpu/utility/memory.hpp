@@ -21,7 +21,7 @@ namespace mcnla {
 namespace utility {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  gpu_utility_module
+/// @ingroup  utility_gpu_module
 /// @copydoc  malloc
 ///
 /// @attention  The pointer should be GPU pointer.
@@ -34,7 +34,7 @@ inline _Type* gpuMalloc( const index_t num ) noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  gpu_utility_module
+/// @ingroup  utility_gpu_module
 /// @copydoc  free
 ///
 /// @attention  The pointer should be GPU pointer.

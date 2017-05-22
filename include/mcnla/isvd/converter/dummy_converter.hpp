@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Converter<DummyConverterTag, _Val>::Converter(
+DummyConverter<_Val>::Converter(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Converter<DummyConverterTag, _Val>::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Converter<DummyConverterTag, _Val>::initializeImpl() noexcept {}
+void DummyConverter<_Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -42,7 +42,7 @@ void Converter<DummyConverterTag, _Val>::initializeImpl() noexcept {}
 /// @note  Do nothing.
 ///
 template <typename _Val> template <typename... Args>
-void Converter<DummyConverterTag, _Val>::runImpl(
+void DummyConverter<_Val>::runImpl(
     Args...
 ) noexcept {
   this->tic();

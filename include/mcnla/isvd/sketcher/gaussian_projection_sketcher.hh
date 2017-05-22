@@ -21,14 +21,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gaussian projection sketcher tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct GaussianProjectionSketcherTag {};
-
-/// @ingroup  isvd_sketcher_module
-template <typename _Val>
-using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag, _Val>;
+template <typename _Val> using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
@@ -37,7 +33,11 @@ using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag, _Val>
 /// @tparam  _Val    The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Sketcher<GaussianProjectionSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class GaussianProjectionSketcher
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<GaussianProjectionSketcher<_Val>> {
 
   friend StageWrapper<GaussianProjectionSketcher<_Val>>;

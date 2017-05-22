@@ -24,6 +24,7 @@ Monte Carlo Numerical Linear Algebra Package
 
 ### Optional
 * [Intel&reg; Math Kernel Library](https://software.intel.com/en-us/intel-mkl) (**Recommended** for better performance, used for BLAS & LAPACK).
+* [MAGMA](http://icl.cs.utk.edu/magma/) 2+ (Used for BLAS & LAPACK with GPU support).
 * [DOxygen](http://www.stack.nl/~dimitri/doxygen/) (Used for documentation).
 * [Google Test Library](https://github.com/google/googletest) (Used for code testing).
 

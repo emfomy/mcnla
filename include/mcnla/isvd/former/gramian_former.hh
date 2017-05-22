@@ -22,14 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gramian former tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct GramianFormerTag {};
-
-/// @ingroup  isvd_former_module
-template <typename _Val>
-using GramianFormer = Former<GramianFormerTag, _Val>;
+template <typename _Val> using GramianFormer = Former<GramianFormerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
@@ -38,7 +34,11 @@ using GramianFormer = Former<GramianFormerTag, _Val>;
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Former<GramianFormerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class GramianFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<GramianFormer<_Val>> {
 
   friend StageWrapper<GramianFormer<_Val>>;

@@ -72,7 +72,7 @@ namespace matrix {
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class DiMatI<CpuTag, DenseTag, _Val>
+class DiMatS<CpuTag, DenseTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseDiagonalMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

@@ -40,7 +40,7 @@ int main( int argc, char **argv ) {
     magma_print_environment();
   }
 
-  mcnla::index_t m = 11, n = 20, k = 3, p = 1, Nj = 2;
+  mcnla::index_t m = 10000, n = 100000, k = 100, p = 1, Nj = 2;
 
   mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
   parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
@@ -57,6 +57,7 @@ int main( int argc, char **argv ) {
   mcnla::matrix::DenseMatrixCollection201Gpu<double> dqi(qi.sizes());
 
   mcnla::isvd::GaussianProjectionSketcherGpu<double> sketcher(parameters, 0);
+  // mcnla::isvd::GaussianProjectionSketcher<double> sketcher(parameters, 0);
   sketcher.initialize();
 
   if ( mpi_rank == mpi_root ) {
@@ -72,8 +73,10 @@ int main( int argc, char **argv ) {
   auto &qs  = qi.unfold();
   auto &dqs = dqi.unfold();
   magma_dgetmatrix(qs.dim0(), qs.dim1(), dqs.valPtr(), dqs.pitch(), qs.valPtr(), qs.pitch());
+  // sketcher(a, qi);
 
-  disp(qs);
+  disp(sketcher.times()[0]);
+  disp(sketcher.times()[1]);
 
   mcnla::finalize();
 

@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Integrator<KolmogorovNagumoIntegratorTag, _Val>::Integrator(
+KolmogorovNagumoIntegrator<_Val>::Integrator(
     const Parameters<ValType> &parameters,
     const index_t max_iteration,
     const RealValType tolerance
@@ -39,7 +39,7 @@ Integrator<KolmogorovNagumoIntegratorTag, _Val>::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Integrator<KolmogorovNagumoIntegratorTag, _Val>::initializeImpl() noexcept {
+void KolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
@@ -66,7 +66,7 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::initializeImpl() noexcept 
 /// @param  matrix_qbar   The matrix Qbar.
 ///
 template <typename _Val>
-void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
+void KolmogorovNagumoIntegrator<_Val>::runImpl(
     const DenseMatrixCollection201<ValType> &collection_q,
           DenseMatrixRowMajor<ValType> &matrix_qbar
 ) noexcept {
@@ -179,7 +179,7 @@ void Integrator<KolmogorovNagumoIntegratorTag, _Val>::runImpl(
 /// @brief  Gets the maximum number of iteration.
 ///
 template <typename _Val>
-index_t Integrator<KolmogorovNagumoIntegratorTag, _Val>::maxIteration() const noexcept {
+index_t KolmogorovNagumoIntegrator<_Val>::maxIteration() const noexcept {
   return max_iteration_;
 }
 
@@ -187,7 +187,7 @@ index_t Integrator<KolmogorovNagumoIntegratorTag, _Val>::maxIteration() const no
 /// @brief  Gets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RealValT<_Val> Integrator<KolmogorovNagumoIntegratorTag, _Val>::tolerance() const noexcept {
+RealValT<_Val> KolmogorovNagumoIntegrator<_Val>::tolerance() const noexcept {
   return tolerance_;
 }
 
@@ -195,7 +195,7 @@ RealValT<_Val> Integrator<KolmogorovNagumoIntegratorTag, _Val>::tolerance() cons
 /// @brief  Gets the number of iteration.
 ///
 template <typename _Val>
-index_t Integrator<KolmogorovNagumoIntegratorTag, _Val>::iteration() const noexcept {
+index_t KolmogorovNagumoIntegrator<_Val>::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
 }
@@ -204,7 +204,7 @@ index_t Integrator<KolmogorovNagumoIntegratorTag, _Val>::iteration() const noexc
 /// @brief  Sets the maximum number of iteration.
 ///
 template <typename _Val>
-Integrator<KolmogorovNagumoIntegratorTag, _Val>& Integrator<KolmogorovNagumoIntegratorTag, _Val>::setMaxIteration(
+KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
@@ -218,7 +218,7 @@ Integrator<KolmogorovNagumoIntegratorTag, _Val>& Integrator<KolmogorovNagumoInte
 /// @brief  Sets the tolerance of convergence condition.
 ///
 template <typename _Val>
-Integrator<KolmogorovNagumoIntegratorTag, _Val>& Integrator<KolmogorovNagumoIntegratorTag, _Val>::setTolerance(
+KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setTolerance(
     const RealValType tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);

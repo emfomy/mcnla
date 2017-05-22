@@ -32,12 +32,12 @@ namespace matrix {
 template <class _Core, typename _Val>
 class DenseDiagonalMatrixBase
   : public DenseVectorStorage<_Core, _Val>,
-    public MatrixWrapper<DiMatI<_Core, DenseTag, _Val>>,
-    public InvertibleWrapper<DiMatI<_Core, DenseTag, _Val>> {
+    public MatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
+    public InvertibleWrapper<DiMatS<_Core, DenseTag, _Val>> {
 
  private:
 
-  using DerivedType = DiMatI<_Core, DenseTag, _Val>;
+  using DerivedType = DiMatS<_Core, DenseTag, _Val>;
 
   friend MatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -45,15 +45,15 @@ class DenseDiagonalMatrixBase
  public:
 
   using ValType       = _Val;
-  using ValArrayType  = ArrI<_Core, _Val>;
+  using ValArrayType  = ArrS<_Core, _Val>;
 
-  using RealType      = DiMatI<_Core, DenseTag, RealValT<_Val>>;
-  using ComplexType   = DiMatI<_Core, DenseTag, ComplexValT<_Val>>;
+  using RealType      = DiMatS<_Core, DenseTag, RealValT<_Val>>;
+  using ComplexType   = DiMatS<_Core, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType    = GeVecI<_Core, DenseTag, _Val>;
-  using MatrixType    = DiMatI<_Core, DenseTag, _Val>;
+  using VectorType    = GeVecS<_Core, DenseTag, _Val>;
+  using MatrixType    = DiMatS<_Core, DenseTag, _Val>;
 
-  using TransposeType = DiMatI<_Core, DenseTag, _Val>;
+  using TransposeType = DiMatS<_Core, DenseTag, _Val>;
 
  private:
 

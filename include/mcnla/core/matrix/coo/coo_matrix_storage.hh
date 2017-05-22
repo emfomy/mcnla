@@ -44,8 +44,8 @@ class CooMatrixStorage
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = ArrI<_Core, _Val>;
-  using IdxArrayType      = ArrI<_Core, index_t>;
+  using ValArrayType      = ArrS<_Core, _Val>;
+  using IdxArrayType      = ArrS<_Core, index_t>;
   using DimsType          = std::tuple<index_t, index_t>;
 
   using VectorStorageType = CooVectorStorage<_Core, _Val>;

@@ -21,15 +21,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_converter_module_detail
-/// The tag of the converter that converts a matrix to row-block version.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct MatrixToRowBlockConverterTag {};
-
-/// @ingroup  isvd_converter_module
-template <typename _Val>
-using MatrixToRowBlockConverter = Converter<MatrixToRowBlockConverterTag, _Val>;
+template <typename _Val> using MatrixToRowBlockConverter = Converter<MatrixToRowBlockConverterTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module
@@ -38,14 +33,18 @@ using MatrixToRowBlockConverter = Converter<MatrixToRowBlockConverterTag, _Val>;
 /// @tparam  _Val  The value type.
 ///
 template <class _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Converter<MatrixToRowBlockConverterTag, _Val>
-  : public StageWrapper<Converter<MatrixToRowBlockConverterTag, _Val>> {
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class MatrixToRowBlockConverter
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<MatrixToRowBlockConverter<_Val>> {
 
-  friend StageWrapper<Converter<MatrixToRowBlockConverterTag, _Val>>;
+  friend StageWrapper<MatrixToRowBlockConverter<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<Converter<MatrixToRowBlockConverterTag, _Val>>;
+  using BaseType = StageWrapper<MatrixToRowBlockConverter<_Val>>;
 
  public:
 

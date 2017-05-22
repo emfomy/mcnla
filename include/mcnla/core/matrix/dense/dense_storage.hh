@@ -32,7 +32,7 @@ class DenseStorage {
  private:
 
   using ValType      = _Val;
-  using ValArrayType = ArrI<_Core, _Val>;
+  using ValArrayType = ArrS<_Core, _Val>;
 
  protected:
 

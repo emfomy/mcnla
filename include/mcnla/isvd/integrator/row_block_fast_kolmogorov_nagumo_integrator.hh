@@ -22,14 +22,11 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block Kolmogorov-Nagumo-type integrator tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct RowBlockFastKolmogorovNagumoIntegratorTag {};
-
-/// @ingroup  isvd_integrator_module
 template <typename _Val>
 using RowBlockFastKolmogorovNagumoIntegrator = Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
@@ -38,7 +35,11 @@ using RowBlockFastKolmogorovNagumoIntegrator = Integrator<RowBlockFastKolmogorov
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class RowBlockFastKolmogorovNagumoIntegrator
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<RowBlockFastKolmogorovNagumoIntegrator<_Val>> {
 
   friend StageWrapper<RowBlockFastKolmogorovNagumoIntegrator<_Val>>;

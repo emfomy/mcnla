@@ -21,15 +21,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_converter_module_detail
-/// The tag of dummy converter.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct DummyConverterTag {};
-
-/// @ingroup  isvd_converter_module
-template <typename _Val>
-using DummyConverter = Converter<DummyConverterTag, _Val>;
+template <typename _Val> using DummyConverter = Converter<DummyConverterTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module
@@ -38,14 +33,18 @@ using DummyConverter = Converter<DummyConverterTag, _Val>;
 /// @tparam  _Val  The value type.
 ///
 template <class _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Converter<DummyConverterTag, _Val>
-  : public StageWrapper<Converter<DummyConverterTag, _Val>> {
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DummyConverter
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<DummyConverter<_Val>> {
 
-  friend StageWrapper<Converter<DummyConverterTag, _Val>>;
+  friend StageWrapper<DummyConverter<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<Converter<DummyConverterTag, _Val>>;
+  using BaseType = StageWrapper<DummyConverter<_Val>>;
 
  public:
 

@@ -26,7 +26,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Sketcher<ColumnSamplingSketcherTag, _Val>::Sketcher(
+ColumnSamplingSketcher<_Val>::Sketcher(
     const Parameters<ValType> &parameters,
     const index_t seed
 ) noexcept
@@ -38,7 +38,7 @@ Sketcher<ColumnSamplingSketcherTag, _Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Sketcher<ColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
+void ColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
 
   const auto dim_sketch_each = parameters_.dimSketchEach();
 
@@ -52,7 +52,7 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val> template <class _Matrix>
-void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
+void ColumnSamplingSketcher<_Val>::runImpl(
     const _Matrix &matrix_a,
           DenseMatrixCollection201<ValType> &collection_q
 ) noexcept {
@@ -93,7 +93,7 @@ void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t Sketcher<ColumnSamplingSketcherTag, _Val>::seed() const noexcept {
+index_t ColumnSamplingSketcher<_Val>::seed() const noexcept {
   return seed_;
 }
 
@@ -101,7 +101,7 @@ index_t Sketcher<ColumnSamplingSketcherTag, _Val>::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-Sketcher<ColumnSamplingSketcherTag, _Val>& Sketcher<ColumnSamplingSketcherTag, _Val>::setSeed(
+ColumnSamplingSketcher<_Val>& ColumnSamplingSketcher<_Val>::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;

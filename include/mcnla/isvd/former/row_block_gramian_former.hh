@@ -22,14 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block Gramian former tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct RowBlockGramianFormerTag {};
-
-/// @ingroup  isvd_former_module
-template <typename _Val>
-using RowBlockGramianFormer = Former<RowBlockGramianFormerTag, _Val>;
+template <typename _Val> using RowBlockGramianFormer = Former<RowBlockGramianFormerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
@@ -38,7 +34,11 @@ using RowBlockGramianFormer = Former<RowBlockGramianFormerTag, _Val>;
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Former<RowBlockGramianFormerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class RowBlockGramianFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<RowBlockGramianFormer<_Val>> {
 
   friend StageWrapper<RowBlockGramianFormer<_Val>>;

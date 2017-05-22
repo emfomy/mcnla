@@ -22,7 +22,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> using ArrayGpu = ArrI<GpuTag, _Val>;
+template <typename _Val> using ArrayGpu = ArrS<GpuTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix

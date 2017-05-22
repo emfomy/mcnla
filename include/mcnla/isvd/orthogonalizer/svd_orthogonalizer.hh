@@ -22,14 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The SVD orthogonalizer tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct SvdOrthogonalizerTag {};
-
-/// @ingroup  isvd_orthogonalizer_module
-template <typename _Val>
-using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Val>;
+template <typename _Val> using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
@@ -38,7 +34,11 @@ using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Val>;
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Orthogonalizer<SvdOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class SvdOrthogonalizer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<SvdOrthogonalizer<_Val>> {
 
   friend StageWrapper<SvdOrthogonalizer<_Val>>;

@@ -34,15 +34,15 @@ namespace matrix {
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 class DenseSymmetricMatrixBase
   : public DenseMatrixStorage<_Core, _Val>,
-    public MatrixWrapper<SyMatI<_Core, DenseTag, _Val, _trans, _uplo>>,
-    public InvertibleWrapper<SyMatI<_Core, DenseTag, _Val, _trans, _uplo>> {
+    public MatrixWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
+    public InvertibleWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans),    "Conjugate matrix is not supported!");
   static_assert(!isUnitDiag(_uplo), "Unit-diagonal symmetric matrix is not supported!");
 
  private:
 
-  using DerivedType = SyMatI<_Core, DenseTag, _Val, _trans, _uplo>;
+  using DerivedType = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
   friend MatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -53,17 +53,17 @@ class DenseSymmetricMatrixBase
   static constexpr Uplo uplo   = _uplo;
 
   using ValType       = _Val;
-  using ValArrayType  = ArrI<_Core, _Val>;
+  using ValArrayType  = ArrS<_Core, _Val>;
 
-  using RealType      = SyMatI<_Core, DenseTag, RealValT<_Val>, _trans, _uplo>;
-  using ComplexType   = SyMatI<_Core, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
+  using RealType      = SyMatS<_Core, DenseTag, RealValT<_Val>, _trans, _uplo>;
+  using ComplexType   = SyMatS<_Core, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
 
-  using VectorType    = GeVecI<_Core, DenseTag, _Val>;
-  using MatrixType    = SyMatI<_Core, DenseTag, _Val, _trans, _uplo>;
+  using VectorType    = GeVecS<_Core, DenseTag, _Val>;
+  using MatrixType    = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
-  using TransposeType = SyMatI<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>;
+  using TransposeType = SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>;
 
-  using GeneralType   = GeMatI<_Core, DenseTag, _Val, _trans>;
+  using GeneralType   = GeMatS<_Core, DenseTag, _Val, _trans>;
 
  private:
 

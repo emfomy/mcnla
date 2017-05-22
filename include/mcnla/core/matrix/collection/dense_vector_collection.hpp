@@ -41,7 +41,7 @@ struct Traits<matrix::DenseVectorCollection<_Tag, _Core, _Val>> {
 
   using ValType        = _Val;
   using CollectionType = matrix::DenseVectorCollection<_Tag, _Core, _Val>;
-  using VectorType     = matrix::GeVecI<_Core, DenseTag, _Val>;
+  using VectorType     = matrix::GeVecS<_Core, DenseTag, _Val>;
 
 };
 

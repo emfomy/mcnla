@@ -77,7 +77,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class GeMatI<GpuTag, DenseTag, _Val, _trans>
+class GeMatS<GpuTag, DenseTag, _Val, _trans>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrixGpu
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

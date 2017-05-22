@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Former<SvdFormerTag, _Val>::Former(
+SvdFormer<_Val>::Former(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Former<SvdFormerTag, _Val>::Former(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
+void SvdFormer<_Val>::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -60,7 +60,7 @@ void Former<SvdFormerTag, _Val>::initializeImpl() noexcept {
 /// @param  matrix_q  The matrix Q.
 ///
 template <typename _Val> template <class _Matrix>
-void Former<SvdFormerTag, _Val>::runImpl(
+void SvdFormer<_Val>::runImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<ValType> &matrix_q
 ) noexcept {
@@ -102,7 +102,7 @@ void Former<SvdFormerTag, _Val>::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& SvdFormer<_Val>::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -111,7 +111,7 @@ const DenseVector<RealValT<_Val>>& Former<SvdFormerTag, _Val>::vectorS() const n
 /// @brief  Gets the left singular vectors.
 ///
 template <typename _Val>
-const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noexcept {
+const DenseMatrixColMajor<_Val>& SvdFormer<_Val>::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
 }
@@ -120,7 +120,7 @@ const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixU() const noe
 /// @brief  Gets the right singular vectors.
 ///
 template <typename _Val>
-const DenseMatrixColMajor<_Val>& Former<SvdFormerTag, _Val>::matrixVt() const noexcept {
+const DenseMatrixColMajor<_Val>& SvdFormer<_Val>::matrixVt() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_vt_cut_;
 }

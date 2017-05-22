@@ -33,14 +33,14 @@ namespace matrix {
 template <class _Core, typename _Val, Trans _trans>
 class DenseMatrixBase
   : public DenseMatrixStorage<_Core, _Val>,
-    public MatrixWrapper<GeMatI<_Core, DenseTag, _Val, _trans>>,
-    public InvertibleWrapper<GeMatI<_Core, DenseTag, _Val, _trans>> {
+    public MatrixWrapper<GeMatS<_Core, DenseTag, _Val, _trans>>,
+    public InvertibleWrapper<GeMatS<_Core, DenseTag, _Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
  private:
 
-  using DerivedType = GeMatI<_Core, DenseTag, _Val, _trans>;
+  using DerivedType = GeMatS<_Core, DenseTag, _Val, _trans>;
 
   friend MatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -50,26 +50,26 @@ class DenseMatrixBase
   static constexpr Trans trans = _trans;
 
   using ValType        = _Val;
-  using ValArrayType   = ArrI<_Core, _Val>;
+  using ValArrayType   = ArrS<_Core, _Val>;
   using SizesType      = std::tuple<index_t, index_t>;
 
-  using RealType       = GeMatI<_Core, DenseTag, RealValT<_Val>, _trans>;
-  using ComplexType    = GeMatI<_Core, DenseTag, ComplexValT<_Val>, _trans>;
+  using RealType       = GeMatS<_Core, DenseTag, RealValT<_Val>, _trans>;
+  using ComplexType    = GeMatS<_Core, DenseTag, ComplexValT<_Val>, _trans>;
 
-  using VectorType     = GeVecI<_Core, DenseTag, _Val>;
-  using MatrixType     = GeMatI<_Core, DenseTag, _Val, _trans>;
+  using VectorType     = GeVecS<_Core, DenseTag, _Val>;
+  using MatrixType     = GeMatS<_Core, DenseTag, _Val, _trans>;
 
-  using TransposeType  = GeMatI<_Core, DenseTag, _Val, changeTrans(_trans)>;
-  using ConjugateType  = GeMatI<_Core, DenseTag, _Val, changeConj(_trans)>;
-  using HermitianType  = GeMatI<_Core, DenseTag, _Val, changeHerm(_trans)>;
-
-  template <Uplo _uplo>
-  using SymmetricType  = SyMatI<_Core, DenseTag, _Val, _trans, _uplo>;
+  using TransposeType  = GeMatS<_Core, DenseTag, _Val, changeTrans(_trans)>;
+  using ConjugateType  = GeMatS<_Core, DenseTag, _Val, changeConj(_trans)>;
+  using HermitianType  = GeMatS<_Core, DenseTag, _Val, changeHerm(_trans)>;
 
   template <Uplo _uplo>
-  using TriangularType = TrMatI<_Core, DenseTag, _Val, _trans, _uplo>;
+  using SymmetricType  = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
-  using DiagonalType   = DiMatI<_Core, DenseTag, _Val>;
+  template <Uplo _uplo>
+  using TriangularType = TrMatS<_Core, DenseTag, _Val, _trans, _uplo>;
+
+  using DiagonalType   = DiMatS<_Core, DenseTag, _Val>;
 
  private:
 

@@ -37,7 +37,7 @@ namespace matrix {
 
   | Command                  | Detail
   | ------------------------ | ------------------------
-  | `a.viewMatrix()`         | treat `a` as a @ref DenseMatrix "general matrix"
+  | `a.viewGeneral()`        | treat `a` as a @ref DenseMatrix "general matrix"
   | `a.viewSymmetric()`      | treat `a` as a @ref DenseSymmetricMatrix "symmetric matrix"
   | `a.viewTriangular()`     | treat `a` as a @ref DenseTriangularMatrix "triangular matrix"
 
@@ -49,7 +49,7 @@ namespace matrix {
   | `a.c()`                  | conjugate `a`
   | `a.h()`                  | conjugate transpose `a`
 
-  @see @ref matrix_module
+  @see  @ref matrix_module
 
 */
 

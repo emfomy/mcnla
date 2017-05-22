@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::Orthogonalizer(
+RowBlockGramianOrthogonalizer<_Val>::Orthogonalizer(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::initializeImpl() noexcept {
+void RowBlockGramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto num_sketch = parameters_.numSketch();
@@ -52,7 +52,7 @@ void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::initializeImpl() no
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>::runImpl(
+void RowBlockGramianOrthogonalizer<_Val>::runImpl(
     DenseMatrixCollection201<ValType> &collection_qj
 ) noexcept {
 

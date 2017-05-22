@@ -83,7 +83,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class GeMatI<CpuTag, DenseTag, _Val, _trans>
+class GeMatS<CpuTag, DenseTag, _Val, _trans>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

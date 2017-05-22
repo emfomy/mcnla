@@ -41,7 +41,7 @@ struct Traits<matrix::DenseMatrixCollection<_Tag, _Core, _Val, _trans>> {
 
   using ValType        = _Val;
   using CollectionType = matrix::DenseMatrixCollection<_Tag, _Core, _Val, _trans>;
-  using MatrixType     = matrix::GeMatI<_Core, DenseTag, _Val, _trans>;
+  using MatrixType     = matrix::GeMatS<_Core, DenseTag, _Val, _trans>;
 
 };
 

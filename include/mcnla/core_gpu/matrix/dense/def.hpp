@@ -24,19 +24,19 @@ namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
-using DenseVectorGpu = GeVecI<GpuTag, DenseTag, _Val>;
+using DenseVectorGpu = GeVecS<GpuTag, DenseTag, _Val>;
 
 template <typename _Val, Trans _trans = Trans::NORMAL>
-using DenseMatrixGpu = GeMatI<GpuTag, DenseTag, _Val, _trans>;
+using DenseMatrixGpu = GeMatS<GpuTag, DenseTag, _Val, _trans>;
 
 template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-using DenseSymmetricMatrixGpu = SyMatI<GpuTag, DenseTag, _Val, _trans, _uplo>;
+using DenseSymmetricMatrixGpu = SyMatS<GpuTag, DenseTag, _Val, _trans, _uplo>;
 
 template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-using DenseTriangularMatrixGpu = TrMatI<GpuTag, DenseTag, _Val, _trans, _uplo>;
+using DenseTriangularMatrixGpu = TrMatS<GpuTag, DenseTag, _Val, _trans, _uplo>;
 
 template <typename _Val>
-using DenseDiagonalMatrixGpu = DiMatI<GpuTag, DenseTag, _Val>;
+using DenseDiagonalMatrixGpu = DiMatS<GpuTag, DenseTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix

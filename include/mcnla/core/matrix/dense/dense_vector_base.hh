@@ -32,12 +32,12 @@ namespace matrix {
 template <class _Core, typename _Val>
 class DenseVectorBase
   : public DenseVectorStorage<_Core, _Val>,
-    public VectorWrapper<GeVecI<_Core, DenseTag, _Val>>,
-    public InvertibleWrapper<GeVecI<_Core, DenseTag, _Val>> {
+    public VectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
+    public InvertibleWrapper<GeVecS<_Core, DenseTag, _Val>> {
 
  private:
 
-  using DerivedType = GeVecI<_Core, DenseTag, _Val>;
+  using DerivedType = GeVecS<_Core, DenseTag, _Val>;
 
   friend VectorWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
@@ -45,15 +45,15 @@ class DenseVectorBase
  public:
 
   using ValType      = _Val;
-  using ValArrayType = ArrI<_Core, _Val>;
+  using ValArrayType = ArrS<_Core, _Val>;
   using SizesType    = std::tuple<index_t>;
 
-  using RealType     = GeVecI<_Core, DenseTag, RealValT<_Val>>;
-  using ComplexType  = GeVecI<_Core, DenseTag, ComplexValT<_Val>>;
+  using RealType     = GeVecS<_Core, DenseTag, RealValT<_Val>>;
+  using ComplexType  = GeVecS<_Core, DenseTag, ComplexValT<_Val>>;
 
-  using VectorType   = GeVecI<_Core, DenseTag, _Val>;
+  using VectorType   = GeVecS<_Core, DenseTag, _Val>;
 
-  using DiagonalType = DiMatI<_Core, DenseTag, _Val>;
+  using DiagonalType = DiMatS<_Core, DenseTag, _Val>;
 
  private:
 

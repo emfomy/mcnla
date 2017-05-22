@@ -76,7 +76,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class SyMatI<GpuTag, DenseTag, _Val, _trans, _uplo>
+class SyMatS<GpuTag, DenseTag, _Val, _trans, _uplo>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrixGpu
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

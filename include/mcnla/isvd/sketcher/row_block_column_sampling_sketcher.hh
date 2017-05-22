@@ -21,14 +21,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The row-block column sampling sketcher tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct RowBlockColumnSamplingSketcherTag {};
-
-/// @ingroup  isvd_sketcher_module
-template <typename _Val>
-using RowBlockColumnSamplingSketcher = Sketcher<RowBlockColumnSamplingSketcherTag, _Val>;
+template <typename _Val> using RowBlockColumnSamplingSketcher = Sketcher<RowBlockColumnSamplingSketcherTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
@@ -37,7 +33,11 @@ using RowBlockColumnSamplingSketcher = Sketcher<RowBlockColumnSamplingSketcherTa
 /// @tparam  _Val    The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Sketcher<RowBlockColumnSamplingSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class RowBlockColumnSamplingSketcher
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<RowBlockColumnSamplingSketcher<_Val>> {
 
   friend StageWrapper<RowBlockColumnSamplingSketcher<_Val>>;

@@ -22,14 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The Gramian orthogonalizer tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct GramianOrthogonalizerTag {};
-
-/// @ingroup  isvd_orthogonalizer_module
-template <typename _Val>
-using GramianOrthogonalizer = Orthogonalizer<GramianOrthogonalizerTag, _Val>;
+template <typename _Val> using GramianOrthogonalizer = Orthogonalizer<GramianOrthogonalizerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
@@ -38,7 +34,11 @@ using GramianOrthogonalizer = Orthogonalizer<GramianOrthogonalizerTag, _Val>;
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Orthogonalizer<GramianOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class GramianOrthogonalizer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<GramianOrthogonalizer<_Val>> {
 
   friend StageWrapper<GramianOrthogonalizer<_Val>>;

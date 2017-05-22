@@ -21,15 +21,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_converter_module_detail
-/// The tag of the converter that converts collection Q from row-block version.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct CollectionFromRowBlockConverterTag {};
-
-/// @ingroup  isvd_converter_module
-template <typename _Val>
-using CollectionFromRowBlockConverter = Converter<CollectionFromRowBlockConverterTag, _Val>;
+template <typename _Val> using CollectionFromRowBlockConverter = Converter<CollectionFromRowBlockConverterTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module
@@ -38,14 +33,18 @@ using CollectionFromRowBlockConverter = Converter<CollectionFromRowBlockConverte
 /// @tparam  _Val  The value type.
 ///
 template <class _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Converter<CollectionFromRowBlockConverterTag, _Val>
-  : public StageWrapper<Converter<CollectionFromRowBlockConverterTag, _Val>> {
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class CollectionFromRowBlockConverter
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<CollectionFromRowBlockConverter<_Val>> {
 
-  friend StageWrapper<Converter<CollectionFromRowBlockConverterTag, _Val>>;
+  friend StageWrapper<CollectionFromRowBlockConverter<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<Converter<CollectionFromRowBlockConverterTag, _Val>>;
+  using BaseType = StageWrapper<CollectionFromRowBlockConverter<_Val>>;
 
  public:
 

@@ -1,13 +1,11 @@
 namespace mcnla {
 
-namespace isvd {
-
 /**
   @page tutorial_isvd iSVD
 
   <h3>iSVD</h3>
 
-  iSVD solves a approximate low-rank singular value decomposition of matrix `a`.
+  iSVD solves an approximate low-rank singular value decomposition of matrix `a`.
 
   <h3>Example</h3>
 
@@ -15,52 +13,92 @@ namespace isvd {
 
   <h4>Initialize Environment</h4>
 
-  The MPI environment and random seed should be set up before calling iSVD.
+  The MCNLA environment and random seed should be set up before calling iSVD. @ref init also initialize the MPI environment and the MAGMA environment.
 
   @code{.cpp}
-  // Initialize MPI
-  MPI_Init(&argc, &argv);
+  // Initialize MCNLA
+  mcnla::init(argc, argv);
   mcnla::mpi_int_t mpi_root = 0;
-  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
 
   // Initialize random seed
   srand(time(NULL));
-  mcnla::index_t seed = rand();
   @endcode
 
   <h4>Load Data</h4>
 
-  One may use @ref mcnla::io::loadMatrixMarket to load a matrix from a Matrix Market format file. Note the all the MPI nodes should load the matrix.
+  One may use @ref io::loadMatrixMarket to load a matrix from a Matrix Market format file. Note the all the MPI nodes should load the matrix.
 
   @code{.cpp}
   // Load matrix
-  mcnla::DenseMatrix<double> matrix_a;
+  mcnla::matrix::DenseMatrix<double> matrix_a;
   mcnla::io::loadMatrixMarket(matrix_a, "a.mtx");
   @endcode
 
   <h4>Initialize %Prarmeters</h4>
 
-  Set @ref Parameters before calling iSVD. Note that one should call @ref Parameters::sync to broadcast parameters from root node.
+  Set @ref Parameters before calling iSVD. Note that one should call @ref isvd::Parameters::sync to broadcast parameters from root node.
 
   @code{.cpp}
   // Set parameters
-  mcnla::isvd::Parameters<ValType> parameters(MPI_COMM_WORLD, 0);
+  mcnla::index_t k = 20, p = 12, Nj = 4;
+  mcnla::isvd::Parameters<double> parameters(MPI_COMM_WORLD, 0);
   parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
   @endcode
 
-  <h4>Allocate variables</h4>
+  <h4>Allocate iSVD stages</h4>
 
-  Allocate the variables.
+  Allocate the iSVD stages. Note that one should use @ref isvd_converter_module "converters" while using stages with different data structures.
 
   @code{.cpp}
-  // Variable allocation
-  mcnla::random::Streams streams(MPI_COMM_WORLD, 0, rand());
-  mcnla::matrix::DenseMatrixCollection201<double> collection_qs(m, k+p, Nj);
-  mcnla::matrix::DenseMatrixRowMajor<double> matrix_q(m, k+p);
-  mcnla::matrix::DenseVector<double> vector_s(k+p);
-  mcnla::matrix::DenseMatrixColMajor<double> matrix_u(m, k+p);
-  mcnla::matrix::DenseMatrixColMajor<double> matrix_vt(k+p, n);
+  // Allocate stages and converters
+  mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
+  mcnla::isvd::SvdOrthogonalizer<double> orthogonalizer(parameters);
+  mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
+  mcnla::isvd::SvdFormer<double> former(parameters);
+  mcnla::isvd::CollectionFromRowBlockConverter<double> so_converter(parameters);
+  mcnla::isvd::CollectionToRowBlockConverter<double> oi_converter(parameters);
+  mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
+
+  // Initialize stages
+  mcnla::index_t maxiter = 256;
+  double tol = 1e-4;
+  sketcher.setSeed(rand());
+  integrator.setMaxIteration(maxiter).setTolerance(tol);
+  sketcher.initialize();
+  orthogonalizer.initialize();
+  integrator.initialize();
+  former.initialize();
+  so_converter.initialize();
+  oi_converter.initialize();
+  if_converter.initialize();
+  @endcode
+
+  <h4>Allocate variables</h4>
+
+  Allocate the variables using @ref isvd::Parameters.
+
+  @code{.cpp}
+  // Allocate variables
+  auto matrix_aj     = matrix_a(parameters.rowrange(), ""_);
+  auto collection_q  = parameters.createCollectionQ();
+  auto collection_qj = parameters.createCollectionQj();
+  auto matrix_q      = parameters.createMatrixQ();
+  auto matrix_qj     = parameters.createMatrixQj();
+  @endcode
+
+  <h4>Display stage names</h4>
+
+  One may use `std::cout` to display the name of stages to screen.
+
+  @code{.cpp}
+  // Display stage names
+  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
+    std::cout << "Uses " << sketcher << "." << std::endl;
+    std::cout << "Uses " << orthogonalizer << "." << std::endl;
+    std::cout << "Uses " << integrator << "." << std::endl;
+    std::cout << "Uses " << former << "." << std::endl << std::endl;
+  }
   @endcode
 
   <h4>Run iSVD</h4>
@@ -69,12 +107,13 @@ namespace isvd {
 
   @code{.cpp}
   // Run iSVD
-  mcnla::index_t iter; double time2c;
-
-  auto moments_s = mcnla::isvd::gaussianProjectionSketcher<double>(parameters, matrix_a, collection_qs, streams);
-  auto moments_o = mcnla::isvd::svdOrthogonalizer<double>(parameters, collection_qs);
-  auto moments_i = mcnla::isvd::kolmogorovNagumoIntegrator<double>(parameters, collection_qs, matrix_q, iter, time2c, maxiter, tol);
-  auto moments_f = mcnla::isvd::svdFormer<double>(parameters, matrix_a, matrix_q, vector_s, matrix_u, matrix_vt);
+  sketcher(matrix_aj, collection_qj);
+  so_converter(collection_qj, collection_q);
+  orthogonalizer(collection_q);
+  oi_converter(collection_q, collection_qj);
+  integrator(collection_qj, matrix_qj);
+  if_converter(matrix_qj, matrix_q);
+  former(matrix_a, matrix_q);
   @endcode
 
   <h4>Get Executing Time</h4>
@@ -84,11 +123,11 @@ namespace isvd {
   @code{.cpp}
   // Display executing time
   if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
-    auto time_s = moments_s.back() - moments_s.front();
-    auto time_o = moments_o.back() - moments_o.front();
-    auto time_i = moments_i.back() - moments_i.front();
-    auto time_f = moments_f.back() - moments_f.front();
-    auto time = time_s + time_o + time_i + time_f;
+    auto time_s  = sketcher.time();
+    auto time_o  = orthogonalizer.time();
+    auto time_i  = integrator.time();
+    auto time_f  = former.time();
+    auto time    = time_s + time_o + time_i + time_f;
 
     std::cout << "Average total computing time: " << time   << " seconds." << std::endl;
     std::cout << "Average sketching time:       " << time_s << " seconds." << std::endl;
@@ -100,7 +139,7 @@ namespace isvd {
 
   <h4>Save Data</h4>
 
-  One may use @ref mcnla::io::saveMatrixMarket to save the results into Matrix Market format files.
+  One may use @ref io::saveMatrixMarket to save the results into Matrix Market format files.
 
   @code{.cpp}
   // Save matrix
@@ -113,18 +152,16 @@ namespace isvd {
 
   <h4>Finalize</h4>
 
-  Remember to finalize the MPI.
+  Remember to @ref finalize MCNLA.
 
   @code{.cpp}
-  // Finalize MPI
-  MPI_Finalize();
+  // Finalize MCNLA
+  mcnla::finalize();
 
   @endcode
 
-  @see @ref isvd_module
+  @see  @ref isvd_module
 
 */
-
-}  // namespace isvd
 
 }  // namespace mcnla

@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Converter<CollectionToRowBlockConverterTag, _Val>::Converter(
+CollectionToRowBlockConverter<_Val>::Converter(
     const Parameters<ValType> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ Converter<CollectionToRowBlockConverterTag, _Val>::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Converter<CollectionToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
+void CollectionToRowBlockConverter<_Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,7 +43,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::initializeImpl() noexcep
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
+void CollectionToRowBlockConverter<_Val>::runImpl(
     DenseMatrixCollection201<ValType> &collection_q,
     DenseMatrixCollection201<ValType> &collection_qj
 ) noexcept {

@@ -27,7 +27,7 @@ namespace la {
 /// @ingroup  la_dense_lapack_ls_module
 /// @brief  The singular value driver of general rectangular matrices.
 ///
-/// @see mcnla::la::gesvd
+/// @see  mcnla::la::gesvd
 ///
 template <class _Matrix, JobOption _jobu, JobOption _jobvt>
 class GesvdDriver {

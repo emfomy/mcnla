@@ -22,15 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
-/// The Kolmogorov-Nagumo-type integrator tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct KolmogorovNagumoIntegratorTag {};
-
-/// @ingroup  isvd_integrator_module
-template <typename _Val>
-using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Val>;
+template <typename _Val> using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
@@ -39,14 +34,18 @@ using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Va
 /// @tparam  _Val  The scalar type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Integrator<KolmogorovNagumoIntegratorTag, _Val>
-  : public StageWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>> {
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class KolmogorovNagumoIntegrator
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<KolmogorovNagumoIntegrator<_Val>> {
 
-  friend StageWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
+  friend StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<Integrator<KolmogorovNagumoIntegratorTag, _Val>>;
+  using BaseType = StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
  public:
 

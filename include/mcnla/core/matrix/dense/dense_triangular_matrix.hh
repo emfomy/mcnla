@@ -78,7 +78,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class TrMatI<CpuTag, DenseTag, _Val, _trans, _uplo>
+class TrMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS

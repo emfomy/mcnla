@@ -33,7 +33,7 @@ class CooIdx1Storage : protected DenseStorage<_Core, _Idx> {
  private:
 
   using IdxType      = _Idx;
-  using IdxArrayType = ArrI<_Core, _Idx>;
+  using IdxArrayType = ArrS<_Core, _Idx>;
 
   using BaseType     = DenseStorage<_Core, _Idx>;
 

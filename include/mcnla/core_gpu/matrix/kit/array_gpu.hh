@@ -29,7 +29,7 @@ namespace matrix {
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class ArrI<GpuTag, _Val>
+class ArrS<GpuTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class ArrayGpu
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -49,8 +49,8 @@ class ArrayGpu
   using BaseType::ArrayBase;
 
   // Constructors
-  inline ArrI() noexcept;
-  inline ArrI( const index_t size, const index_t offset = 0 ) noexcept;
+  inline ArrS() noexcept;
+  inline ArrS( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Gets data
   inline       _Val& operator[]( const index_t idx ) noexcept = delete;

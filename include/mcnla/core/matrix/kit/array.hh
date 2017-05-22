@@ -29,7 +29,7 @@ namespace matrix {
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class ArrI<CpuTag, _Val>
+class ArrS<CpuTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class Array
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -49,11 +49,11 @@ class Array
   using BaseType::ArrayBase;
 
   // Constructors
-  inline ArrI() noexcept;
-  inline ArrI( const index_t size, const index_t offset = 0 ) noexcept;
+  inline ArrS() noexcept;
+  inline ArrS( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Copy
-  inline ArrI copy() const noexcept;
+  inline Array<_Val> copy() const noexcept;
 
 };
 

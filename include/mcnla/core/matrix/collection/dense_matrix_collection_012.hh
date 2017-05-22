@@ -21,10 +21,16 @@ namespace mcnla {
 //
 namespace matrix {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The tag of dense matrix collection with dimension order (dim0, dim1, dim2).
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct DenseMatrixCollection012Tag {};
+template <class _Core, typename _Val>
+using DenseMatrixCollection012Base = DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+/// @ingroup  matrix_collection_module
+/// @see  DenseMatrixCollection012Base
+template <typename _Val>
+using DenseMatrixCollection012 = DenseMatrixCollection012Base<CpuTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
@@ -34,20 +40,24 @@ struct DenseMatrixCollection012Tag {};
 /// @tparam  _Val   The value type.
 ///
 template <class _Core, typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>
-  : public MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>> {
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseMatrixCollection012Base
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public MatrixCollectionWrapper<DenseMatrixCollection012Base<_Core, _Val>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection012Base<_Core, _Val>>;
 
  public:
 
   using ValType        = _Val;
-  using CollectionType = DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>;
-  using MatrixType     = GeMatI<_Core, DenseTag, _Val, Trans::NORMAL>;
+  using CollectionType = DenseMatrixCollection012Base<_Core, _Val>;
+  using MatrixType     = GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>;
 
  private:
 
-  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NORMAL>>;
+  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollection012Base<_Core, _Val>>;
   using SizesType = std::tuple<index_t, index_t, index_t>;
 
  protected:
@@ -118,10 +128,6 @@ class DenseMatrixCollection<DenseMatrixCollection012Tag, _Core, _Val, Trans::NOR
   inline const MatrixType getImpl( const index_t idx ) const noexcept;
 
 };
-
-/// @ingroup  matrix_collection_module
-template <typename _Val>
-using DenseMatrixCollection012 = DenseMatrixCollection<DenseMatrixCollection012Tag, CpuTag, _Val, Trans::NORMAL>;
 
 }  // namespace matrix
 

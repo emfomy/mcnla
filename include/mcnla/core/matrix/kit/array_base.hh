@@ -34,7 +34,7 @@ class ArrayBase : public std::shared_ptr<_Val> {
 
  private:
 
-  using DerivedType = ArrI<_Core, _Val>;
+  using DerivedType = ArrS<_Core, _Val>;
   using BaseType    = std::shared_ptr<_Val>;
 
  protected:

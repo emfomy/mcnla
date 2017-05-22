@@ -29,7 +29,7 @@ namespace la {
 ///
 /// @tparam  _Matrix  The matrix type.
 ///
-/// @see mcnla::la::syev
+/// @see  mcnla::la::syev
 ///
 template <class _Matrix, JobOption _jobz>
 class SyevDriver {

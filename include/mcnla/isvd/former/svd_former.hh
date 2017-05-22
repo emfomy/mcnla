@@ -22,14 +22,10 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The SVD former tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct SvdFormerTag {};
-
-/// @ingroup  isvd_former_module
-template <typename _Val>
-using SvdFormer = Former<SvdFormerTag, _Val>;
+template <typename _Val> using SvdFormer = Former<SvdFormerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
@@ -38,7 +34,11 @@ using SvdFormer = Former<SvdFormerTag, _Val>;
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class Former<SvdFormerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class SvdFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public StageWrapper<SvdFormer<_Val>> {
 
   friend StageWrapper<SvdFormer<_Val>>;
