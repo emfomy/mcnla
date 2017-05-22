@@ -190,7 +190,7 @@ void RowBlockFastKolmogorovNagumoIntegrator<_Val>::runImpl(
     la::mm(matrix_tfc, matrix_s, matrix_tfp, 1.0, 1.0);
 
     // ================================================================================================================== //
-    // Check convergence
+    // Check convergence: || I - C ||_F / sqrt(k) < tol
     for ( auto &v : vector_e_ ) {
       v -= 1.0;
     }

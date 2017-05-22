@@ -5,7 +5,7 @@ namespace mcnla {
 
   <h3>iSVD</h3>
 
-  iSVD solves an approximate low-rank singular value decomposition of matrix `a`.
+  iSVD solves an approximate low-rank singular value decomposition of `matrix_a`.
 
   <h3>Example</h3>
 
@@ -42,7 +42,7 @@ namespace mcnla {
   // Set parameters
   mcnla::index_t k = 20, p = 12, Nj = 4;
   mcnla::isvd::Parameters<double> parameters(MPI_COMM_WORLD, 0);
-  parameters.setSize(a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
   parameters.sync();
   @endcode
 

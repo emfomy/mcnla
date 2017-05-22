@@ -369,7 +369,7 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, k, mj, k, 1.0, matrix_d, k, matrix_tmp, mj, 1.0, matrix_qjt, k);
 
     // ================================================================================================================== //
-    // Check convergence
+    // Check convergence: || I - C ||_F / sqrt(k) < tol
     for ( auto i = 0; i < k; ++i ) {
       vector_e[i] = vector_e[i] - 1.0;
     }
@@ -407,8 +407,8 @@ void form( const int m0, const int n, const int k,
 void check_u( const int m0, const int k0, const double *matrix_u_true, const double *matrix_u,
               double &smax, double &smin, double &smean ) {
   auto matrix_tmp  = static_cast<double*>(malloc(k0 * k0 * sizeof(double)));
-  auto vector_tmp1 = static_cast<double*>(malloc(k0     * sizeof(double)));
-  auto vector_tmp2 = static_cast<double*>(malloc(k0     * sizeof(double)));
+  auto vector_tmp1 = static_cast<double*>(malloc(k0      * sizeof(double)));
+  auto vector_tmp2 = static_cast<double*>(malloc(k0      * sizeof(double)));
 
   // TMP := Utrue' * U
   cblas_dgemm(CblasColMajor, CblasTrans, CblasNoTrans, k0, k0, m0, 1.0, matrix_u_true, m0, matrix_u, m0, 0.0, matrix_tmp, k0);
