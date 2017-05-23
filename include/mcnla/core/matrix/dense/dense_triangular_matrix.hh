@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_triangular_matrix_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
@@ -84,9 +84,9 @@ class TrMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
 class DenseTriangularMatrix
   : public DenseTriangularMatrixBase_<CpuTag, _Val, _trans, _uplo>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    public DenseMatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>> {
+    public MatrixOstreamWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>> {
 
-  friend DenseMatrixWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>;
+  friend MatrixOstreamWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>;
 
  private:
 

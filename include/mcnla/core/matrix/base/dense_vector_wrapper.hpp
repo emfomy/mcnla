@@ -9,7 +9,6 @@
 #define MCNLA_CORE_MATRIX_BASE_DENSE_VECTOR_WRAPPER_HPP_
 
 #include <mcnla/core/matrix/base/dense_vector_wrapper.hh>
-#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,18 +21,27 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Output to stream.
+/// @brief  Gets the maximum length.
 ///
-template <class __Derived>
-std::ostream& operator<<(
-    std::ostream &os,
-    const DenseVectorWrapper<__Derived> &wrapper
-) noexcept {
-  auto &vector = wrapper.derived();
-  for ( index_t i = 0; i < vector.len(); ++i ) {
-    os << std::setw(kOsValWidth) << vector(i) << "  ";
-  }
-  return os << '\n';
+template <class _Derived>
+index_t DenseVectorWrapper<_Derived>::mlen() const noexcept {
+  return this->derived().mlenImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum number of elements.
+///
+template <class _Derived>
+index_t DenseVectorWrapper<_Derived>::melem() const noexcept {
+  return mlen();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum size of dimensions in interface order: `{ #mlen }`.
+///
+template <class _Derived>
+std::tuple<index_t> DenseVectorWrapper<_Derived>::msizes() const noexcept {
+  return std::make_tuple(mlen());
 }
 
 }  // namespace matrix

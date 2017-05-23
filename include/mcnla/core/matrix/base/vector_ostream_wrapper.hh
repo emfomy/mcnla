@@ -1,18 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/base/dense_matrix_wrapper.hh
-/// @brief   The definition of dense matrix wrapper.
+/// @file    include/mcnla/core/matrix/base/vector_ostream_wrapper.hh
+/// @brief   The definition of vector output-stream wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_BASE_DENSE_MATRIX_WRAPPER_HH_
-#define MCNLA_CORE_MATRIX_BASE_DENSE_MATRIX_WRAPPER_HH_
+#ifndef MCNLA_CORE_MATRIX_BASE_VECTOR_OSTREAM_WRAPPER_HH_
+#define MCNLA_CORE_MATRIX_BASE_VECTOR_OSTREAM_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <tuple>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
-#include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
+#include <iostream>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -26,29 +23,23 @@ namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_base_module
-/// The dense matrix wrapper.
+/// The vector output-stream wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseMatrixWrapper : public MatrixWrapper<_Derived> {
-
- private:
-
-  using SizesType = std::tuple<index_t, index_t>;
+class VectorOstreamWrapper {
 
  protected:
 
   // Constructors
-  inline DenseMatrixWrapper() noexcept = default;
+  inline VectorOstreamWrapper() noexcept = default;
 
  public:
 
-  // Gets information
-  inline index_t   mrow() const noexcept;
-  inline index_t   mcol() const noexcept;
-  inline index_t   melem() const noexcept;
-  inline SizesType msizes() const noexcept;
+  // Operators
+  template <class __Derived>
+  friend inline std::ostream& operator<<( std::ostream &os, const VectorOstreamWrapper<__Derived> &wrapper ) noexcept;
 
  protected:
 
@@ -62,4 +53,4 @@ class DenseMatrixWrapper : public MatrixWrapper<_Derived> {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_BASE_DENSE_MATRIX_WRAPPER_HH_
+#endif  // MCNLA_CORE_MATRIX_BASE_VECTOR_OSTREAM_WRAPPER_HH_

@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/base/sparse_wrapper.hpp
-/// @brief   The displayable container wrapper.
+/// @file    include/mcnla/core/matrix/base/matrix_ostream_wrapper.hpp
+/// @brief   The matrix output-stream wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_BASE_SPARSE_WRAPPER_HPP_
-#define MCNLA_CORE_MATRIX_BASE_SPARSE_WRAPPER_HPP_
+#ifndef MCNLA_CORE_MATRIX_BASE_MATRIX_OSTREAM_WRAPPER_HPP_
+#define MCNLA_CORE_MATRIX_BASE_MATRIX_OSTREAM_WRAPPER_HPP_
 
-#include <mcnla/core/matrix/base/sparse_wrapper.hh>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hh>
 #include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,10 +27,14 @@ namespace matrix {
 template <class __Derived>
 std::ostream& operator<<(
     std::ostream &os,
-    const SparseWrapper<__Derived> &wrapper
+    const MatrixOstreamWrapper<__Derived> &wrapper
 ) noexcept {
-  for ( auto tuple : wrapper.derived() ) {
-    os << tuple << '\n';
+  auto &matrix = wrapper.derived();
+  for ( index_t i = 0; i < matrix.nrow(); ++i ) {
+    for ( index_t j = 0; j < matrix.ncol(); ++j ) {
+      os << std::setw(kOsValWidth) << matrix(i, j) << "  ";
+    }
+    os << '\n';
   }
   return os;
 }
@@ -39,4 +43,4 @@ std::ostream& operator<<(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_BASE_SPARSE_WRAPPER_HPP_
+#endif  // MCNLA_CORE_MATRIX_BASE_MATRIX_OSTREAM_WRAPPER_HPP_

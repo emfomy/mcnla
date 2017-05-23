@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_vector_wrapper.hpp>
+#include <mcnla/core/matrix/base/vector_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
@@ -82,10 +82,10 @@ class GeVecS<CpuTag, DenseTag, _Val>
 class DenseVector
   : public DenseVectorBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    public DenseVectorWrapper<DenseVector<_Val>>,
+    public VectorOstreamWrapper<DenseVector<_Val>>,
     public IterableWrapper<DenseVector<_Val>> {
 
-  friend DenseVectorWrapper<DenseVector<_Val>>;
+  friend VectorOstreamWrapper<DenseVector<_Val>>;
   friend IterableWrapper<DenseVector<_Val>>;
 
  private:

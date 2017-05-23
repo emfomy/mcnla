@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -78,9 +78,9 @@ class DiMatS<CpuTag, DenseTag, _Val>
 class DenseDiagonalMatrix
   : public DenseDiagonalMatrixBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    public DenseMatrixWrapper<DenseDiagonalMatrix<_Val>> {
+    public MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>> {
 
-  friend DenseMatrixWrapper<DenseDiagonalMatrix<_Val>>;
+  friend MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>>;
 
  private:
 

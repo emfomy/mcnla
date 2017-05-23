@@ -10,7 +10,7 @@
 
 #include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
-#include <mcnla/core/matrix/base/sparse_wrapper.hpp>
+#include <mcnla/core/matrix/base/sparse_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_vector_storage.hpp>
@@ -89,12 +89,12 @@ template <typename _Val>
 class CooVector
   : public CooVectorStorage<CpuTag, _Val>,
     public VectorWrapper<CooVector<_Val>>,
-    public SparseWrapper<CooVector<_Val>>,
+    public SparseOstreamWrapper<CooVector<_Val>>,
     public IterableWrapper<CooVector<_Val>>,
     public InvertibleWrapper<CooVector<_Val>> {
 
   friend VectorWrapper<CooVector<_Val>>;
-  friend SparseWrapper<CooVector<_Val>>;
+  friend SparseOstreamWrapper<CooVector<_Val>>;
   friend IterableWrapper<CooVector<_Val>>;
   friend InvertibleWrapper<CooVector<_Val>>;
 

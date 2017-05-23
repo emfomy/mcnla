@@ -9,7 +9,10 @@
 #define MCNLA_CORE_MATRIX_BASE_DENSE_VECTOR_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <iostream>
+#include <tuple>
+#include <mcnla/core/matrix/base/vector_wrapper.hpp>
+#include <mcnla/core/utility/crtp.hpp>
+#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -28,7 +31,11 @@ namespace matrix {
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseVectorWrapper {
+class DenseVectorWrapper : public VectorWrapper<_Derived> {
+
+ private:
+
+  using SizesType = std::tuple<index_t>;
 
  protected:
 
@@ -37,9 +44,10 @@ class DenseVectorWrapper {
 
  public:
 
-  // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorWrapper<__Derived> &wrapper ) noexcept;
+  // Gets information
+  inline index_t   mlen() const noexcept;
+  inline index_t   melem() const noexcept;
+  inline SizesType msizes() const noexcept;
 
  protected:
 

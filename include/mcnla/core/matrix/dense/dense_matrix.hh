@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_base.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
@@ -89,10 +89,10 @@ class GeMatS<CpuTag, DenseTag, _Val, _trans>
 class DenseMatrix
   : public DenseMatrixBase_<CpuTag, _Val, _trans>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    public DenseMatrixWrapper<DenseMatrix<_Val, _trans>>,
+    public MatrixOstreamWrapper<DenseMatrix<_Val, _trans>>,
     public IterableWrapper<DenseMatrix<_Val, _trans>> {
 
-  friend DenseMatrixWrapper<DenseMatrix<_Val, _trans>>;
+  friend MatrixOstreamWrapper<DenseMatrix<_Val, _trans>>;
   friend IterableWrapper<DenseMatrix<_Val, _trans>>;
 
  public:
