@@ -26,14 +26,14 @@ namespace matrix {
 
   <h3>Storage View</h3>
 
-  The storage views of @ref DenseVectorStorage "dense-vector-based" containers:
+  The storage views of @ref DenseVectorStorage "dense-vector-based" containers are:
 
   | Command                  | Detail
   | ------------------------ | ------------------------
   | `x.viewVector()`         | treat `x` as a @ref DenseVector "general vector"
   | `x.viewDiagonal()`       | treat `x` as a @ref DenseDiagonalMatrix "diagonal matrix"
 
-  The storage views of @ref DenseMatrixStorage "dense-matrix-based" containers:
+  The storage views of @ref DenseMatrixStorage "dense-matrix-based" containers are:
 
   | Command                  | Detail
   | ------------------------ | ------------------------

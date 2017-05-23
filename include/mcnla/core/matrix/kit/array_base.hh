@@ -22,6 +22,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val>
+using class ArrayBase = ArrayBase_<_Core, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_kit_module
 /// The base array.
@@ -30,7 +35,12 @@ namespace matrix {
 /// @tparam  _Val   The value type.
 ///
 template <class _Core, typename _Val>
-class ArrayBase : public std::shared_ptr<_Val> {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class ArrayBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class ArrayBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public std::shared_ptr<_Val> {
 
  private:
 

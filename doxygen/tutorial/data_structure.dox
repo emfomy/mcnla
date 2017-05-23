@@ -41,7 +41,7 @@ namespace matrix {
 
   where `x_val = x.val()` is the raw array of `x`. That is, `x(i) = x_val[i*s]`.
 
-  Note that @ref DenseVector::stride "stride" is the same as the variable `inc?` (e.g. `incx` for vector `x`) in BLAS.
+  Note that @ref DenseVector::stride "stride" is the variable `inc?` (e.g. `incx` for vector `x`) in BLAS.
 
   <h4>%DenseMatrix</h4>
 
@@ -58,7 +58,7 @@ namespace matrix {
 
   Extra variables @ref DenseMatrix::dim0 "dim0" and @ref DenseMatrix::dim1 "dim1" are the aliases of the sizes in storage order: (@ref DenseMatrix::dim0 "dim0", @ref DenseMatrix::dim1 "dim1") = (@ref DenseMatrix::nrow "nrow", @ref DenseMatrix::ncol "ncol") for column-major layout, and (@ref DenseMatrix::dim0 "dim0", @ref DenseMatrix::dim1 "dim1") = (@ref DenseMatrix::ncol "ncol", @ref DenseMatrix::nrow "nrow") for row-major layout.
 
-  Note that @ref DenseMatrix::pitch "pitch" is the same as the variable `ld?` (e.g. `lda` for matrix `a`) in BLAS.
+  Note that @ref DenseMatrix::pitch "pitch" is the variable `ld?` (e.g. `lda` for matrix `a`) in BLAS.
 
   <h3>Coordinate List (COO)  Containers</h3>
 
