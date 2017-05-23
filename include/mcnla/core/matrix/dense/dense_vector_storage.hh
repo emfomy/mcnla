@@ -72,7 +72,9 @@ class DenseVectorStorage : public DenseStorage<_Core, _Val> {
   // Gets information
   inline bool     isShrunk() const noexcept;
   inline index_t  dim0() const noexcept;
+  inline index_t  mdim0() const noexcept;
   inline DimsType dims() const noexcept;
+  inline DimsType mdims() const noexcept;
   inline index_t  stride() const noexcept;
 
  protected:
@@ -85,7 +87,7 @@ class DenseVectorStorage : public DenseStorage<_Core, _Val> {
   inline index_t posImpl( const index_t idx0 ) const noexcept;
 
   // Resizes
-  inline void resizeImpl( const index_t dim0, const index_t stride = 1 ) noexcept;
+  inline void resizeImpl( const index_t dim0 ) noexcept;
 
   // Gets segment
   inline       VectorStorageType getVectorImpl( const IdxRange &range0 ) noexcept;

@@ -43,7 +43,7 @@ class DenseTriangularMatrixBase
 class DenseTriangularMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
-    public MatrixWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
+    public DenseMatrixWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
     public InvertibleWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
@@ -53,6 +53,7 @@ class DenseTriangularMatrixBase_
   using DerivedType = TrMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
   friend MatrixWrapper<DerivedType>;
+  friend DenseMatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -119,6 +120,8 @@ class DenseTriangularMatrixBase_
   // Gets information
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
+  inline index_t mrowImpl() const noexcept;
+  inline index_t mcolImpl() const noexcept;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   CRTP_BASE(BaseType);

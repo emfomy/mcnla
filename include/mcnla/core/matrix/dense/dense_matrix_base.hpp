@@ -591,6 +591,22 @@ index_t DenseMatrixBase<_Core, _Val, _trans>::ncolImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::mrow
+///
+template <class _Core, typename _Val, Trans _trans>
+index_t DenseMatrixBase<_Core, _Val, _trans>::mrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->mdim0() : this->mdim1();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::mcol
+///
+template <class _Core, typename _Val, Trans _trans>
+index_t DenseMatrixBase<_Core, _Val, _trans>::mcolImpl() const noexcept {
+  return !isTrans(_trans) ? this->mdim1() : this->mdim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Gets the first dimension from sizes.
 ///
 template <class _Core, typename _Val, Trans _trans>

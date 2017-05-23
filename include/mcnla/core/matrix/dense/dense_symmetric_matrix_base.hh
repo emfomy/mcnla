@@ -43,7 +43,7 @@ class DenseSymmetricMatrixBase
 class DenseSymmetricMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
-    public MatrixWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
+    public DenseMatrixWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
     public InvertibleWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans),    "Conjugate matrix is not supported!");
@@ -54,6 +54,7 @@ class DenseSymmetricMatrixBase_
   using DerivedType = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
   friend MatrixWrapper<DerivedType>;
+  friend DenseMatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -120,6 +121,8 @@ class DenseSymmetricMatrixBase_
   // Gets information
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
+  inline index_t mrowImpl() const noexcept;
+  inline index_t mcolImpl() const noexcept;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   CRTP_BASE(BaseType);

@@ -222,6 +222,22 @@ index_t DenseDiagonalMatrixBase<_Core, _Val>::ncolImpl() const noexcept {
   return this->dim0();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::mrow
+///
+template <class _Core, typename _Val>
+index_t DenseDiagonalMatrixBase<_Core, _Val>::mrowImpl() const noexcept {
+  return this->mdim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::mcol
+///
+template <class _Core, typename _Val>
+index_t DenseDiagonalMatrixBase<_Core, _Val>::mcolImpl() const noexcept {
+  return this->mdim0();
+}
+
 }  // namespace matrix
 
 }  // namespace mcnla

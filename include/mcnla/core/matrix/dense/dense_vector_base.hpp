@@ -169,18 +169,7 @@ template <class _Core, typename _Val>
 void DenseVectorBase<_Core, _Val>::resize(
     const index_t len
 ) noexcept {
-  this->resizeImpl(len, this->stride());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseVectorStorage::resizeImpl
-///
-template <class _Core, typename _Val>
-void DenseVectorBase<_Core, _Val>::resize(
-    const index_t len,
-    const index_t stride
-) noexcept {
-  this->resizeImpl(len, stride);
+  this->resizeImpl(len);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,6 +214,14 @@ const typename DenseVectorBase<_Core, _Val>::DerivedType DenseVectorBase<_Core, 
 template <class _Core, typename _Val>
 index_t DenseVectorBase<_Core, _Val>::lenImpl() const noexcept {
   return this->dim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseVectorWrapper::mlen
+///
+template <class _Core, typename _Val>
+index_t DenseVectorBase<_Core, _Val>::mlenImpl() const noexcept {
+  return this->mdim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

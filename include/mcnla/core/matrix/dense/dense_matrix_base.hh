@@ -42,7 +42,7 @@ class DenseMatrixBase
 class DenseMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
-    public MatrixWrapper<GeMatS<_Core, DenseTag, _Val, _trans>>,
+    public DenseMatrixWrapper<GeMatS<_Core, DenseTag, _Val, _trans>>,
     public InvertibleWrapper<GeMatS<_Core, DenseTag, _Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
@@ -52,6 +52,7 @@ class DenseMatrixBase_
   using DerivedType = GeMatS<_Core, DenseTag, _Val, _trans>;
 
   friend MatrixWrapper<DerivedType>;
+  friend DenseMatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -171,6 +172,8 @@ class DenseMatrixBase_
   // Gets information
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
+  inline index_t mrowImpl() const noexcept;
+  inline index_t mcolImpl() const noexcept;
 
   // Convert sizes to dims
   inline index_t toDim0( const SizesType sizes ) const noexcept;

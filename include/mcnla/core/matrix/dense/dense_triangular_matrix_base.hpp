@@ -214,6 +214,22 @@ index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::ncolImpl() const 
   return !isTrans(_trans) ? this->dim1() : this->dim0();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::mrow
+///
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->mdim0() : this->mdim1();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::mcol
+///
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mcolImpl() const noexcept {
+  return !isTrans(_trans) ? this->mdim1() : this->mdim0();
+}
+
 }  // namespace matrix
 
 }  // namespace mcnla

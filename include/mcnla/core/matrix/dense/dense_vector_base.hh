@@ -41,7 +41,7 @@ class DenseVectorBase
 class DenseVectorBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
-    public VectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
+    public DenseVectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
     public InvertibleWrapper<GeVecS<_Core, DenseTag, _Val>> {
 
  private:
@@ -49,6 +49,7 @@ class DenseVectorBase_
   using DerivedType = GeVecS<_Core, DenseTag, _Val>;
 
   friend VectorWrapper<DerivedType>;
+  friend DenseVectorWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -100,7 +101,6 @@ class DenseVectorBase_
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
   inline void resize( const index_t len ) noexcept;
-  inline void resize( const index_t len, const index_t stride ) noexcept;
 
   // Changes view
   inline       DiagonalType& viewDiagonal() noexcept;
@@ -114,6 +114,7 @@ class DenseVectorBase_
 
   // Gets information
   inline index_t lenImpl() const noexcept;
+  inline index_t mlenImpl() const noexcept;
 
   // Convert sizes to dims
   inline index_t toDim0( const SizesType sizes ) const noexcept;

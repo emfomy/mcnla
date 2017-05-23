@@ -78,7 +78,10 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   inline bool     isSquare() const noexcept;
   inline index_t  dim0() const noexcept;
   inline index_t  dim1() const noexcept;
+  inline index_t  mdim0() const noexcept;
+  inline index_t  mdim1() const noexcept;
   inline DimsType dims() const noexcept;
+  inline DimsType mdims() const noexcept;
   inline index_t  pitch() const noexcept;
 
  protected:

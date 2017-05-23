@@ -41,7 +41,7 @@ class DenseDiagonalMatrixBase
 class DenseDiagonalMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
-    public MatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
+    public DenseMatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
     public InvertibleWrapper<DiMatS<_Core, DenseTag, _Val>> {
 
  private:
@@ -49,6 +49,7 @@ class DenseDiagonalMatrixBase_
   using DerivedType = DiMatS<_Core, DenseTag, _Val>;
 
   friend MatrixWrapper<DerivedType>;
+  friend DenseMatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -114,6 +115,8 @@ class DenseDiagonalMatrixBase_
   // Gets information
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
+  inline index_t mrowImpl() const noexcept;
+  inline index_t mcolImpl() const noexcept;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   CRTP_BASE(BaseType);

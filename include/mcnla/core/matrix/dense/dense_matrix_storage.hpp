@@ -59,9 +59,8 @@ DenseMatrixStorage<_Core, _Val>::DenseMatrixStorage(
     dim0_(dim0),
     dim1_(dim1),
     pitch_(pitch) {
-  mcnla_assert_ge(dim0_, 0);
+  mcnla_assert_gele(dim0_, 0, mdim0());
   mcnla_assert_ge(dim1_, 0);
-  mcnla_assert_ge(pitch_, dim0_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,10 +77,8 @@ DenseMatrixStorage<_Core, _Val>::DenseMatrixStorage(
     dim0_(dim0),
     dim1_(dim1),
     pitch_(pitch) {
-  mcnla_assert_ge(dim0_, 0);
-  mcnla_assert_ge(dim1_, 0);
-  mcnla_assert_ge(pitch_, dim0_);
-  mcnla_assert_ge(capacity, pitch_ * (dim1_-1) + dim0_);
+  mcnla_assert_gele(dim0_, 0, mdim0());
+  mcnla_assert_gele(dim1_, 0, mdim1());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,10 +96,8 @@ DenseMatrixStorage<_Core, _Val>::DenseMatrixStorage(
     dim0_(dim0),
     dim1_(dim1),
     pitch_(pitch) {
-  mcnla_assert_ge(dim0_, 0);
-  mcnla_assert_ge(dim1_, 0);
-  mcnla_assert_ge(pitch_, dim0_);
-  mcnla_assert_ge(this->capacity(), pitch_ * (dim1_-1) + dim0_);
+  mcnla_assert_gele(dim0_, 0, mdim0());
+  mcnla_assert_gele(dim1_, 0, mdim1());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,11 +163,35 @@ index_t DenseMatrixStorage<_Core, _Val>::dim1() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum size in the first dimension.
+///
+template <class _Core, typename _Val>
+index_t DenseMatrixStorage<_Core, _Val>::mdim0() const noexcept {
+  return pitch_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum size in the second dimension.
+///
+template <class _Core, typename _Val>
+index_t DenseMatrixStorage<_Core, _Val>::mdim1() const noexcept {
+  return (this->capacity()-dim0_) / pitch_ + 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the size of dimensions in storage order. [ dim0, dim1 ]
 ///
 template <class _Core, typename _Val>
 std::tuple<index_t, index_t> DenseMatrixStorage<_Core, _Val>::dims() const noexcept {
   return std::make_tuple(dim0_, dim1_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the size of maximum dimensions in storage order. [ mdim0, mdim1 ]
+///
+template <class _Core, typename _Val>
+std::tuple<index_t, index_t> DenseMatrixStorage<_Core, _Val>::mdims() const noexcept {
+  return std::make_tuple(mdim0(), mdim1());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,12 +249,10 @@ void DenseMatrixStorage<_Core, _Val>::resizeImpl(
     const index_t dim0,
     const index_t dim1
 ) noexcept {
-  mcnla_assert_ge(dim0, 0);
-  mcnla_assert_ge(dim1, 0);
-  mcnla_assert_ge(pitch_, dim0);
-  mcnla_assert_ge(this->capacity(), pitch_ * (dim1-1) + dim0);
   dim0_ = dim0;
   dim1_ = dim1;
+  mcnla_assert_gele(dim0_, 0, mdim0());
+  mcnla_assert_gele(dim1_, 0, mdim1());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
