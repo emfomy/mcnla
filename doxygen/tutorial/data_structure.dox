@@ -32,9 +32,9 @@ namespace matrix {
 
   <h4>%DenseVector</h4>
 
-  The variable @ref DenseVector::length "length" gives the number of elements in the vector. An special variable @ref DenseVector::stride "stride" gives the number of positions between successive elements in raw data.
+  The variable @ref DenseVector::len "length" gives the number of elements in the vector. An special variable @ref DenseVector::stride "stride" gives the number of positions between successive elements in raw data.
 
-  Let `x` be a @ref DenseVector of @ref DenseVector::length "length" `n` and @ref DenseVector::stride "stride" `s`, then the elements are
+  Let `x` be a @ref DenseVector of @ref DenseVector::len "length" `n` and @ref DenseVector::stride "stride" `s`, then the elements are
   @code
     x_val[0], x_val[s], x_val[2*s], ..., x_val[(n-1)*s]
   @endcode

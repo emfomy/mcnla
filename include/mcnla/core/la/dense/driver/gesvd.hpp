@@ -150,7 +150,7 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   mcnla_assert_gt(nrow_, 0);
   mcnla_assert_gt(ncol_, 0);
   mcnla_assert_eq(a.sizes(),  std::make_tuple(nrow_, ncol_));
-  mcnla_assert_eq(s.length(), std::min(nrow_, ncol_));
+  mcnla_assert_eq(s.len(), std::min(nrow_, ncol_));
   mcnla_assert_true(s.isShrunk());
 
   if ( __jobu == 'A' ) {
@@ -171,11 +171,11 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   if ( !isTrans(trans) ) {
     mcnla_assert_pass(detail::gesvd(__jobu, __jobvt, a.nrow(), a.ncol(), a.valPtr(), a.pitch(),
                                     s.valPtr(), u.valPtr(), u_pitch, vt.valPtr(), vt_pitch,
-                                    work_.valPtr(), work_.length(), rwork_.valPtr()));
+                                    work_.valPtr(), work_.len(), rwork_.valPtr()));
   } else {
     mcnla_assert_pass(detail::gesvd(__jobvt, __jobu, a.ncol(), a.nrow(), a.valPtr(), a.pitch(),
                                     s.valPtr(), vt.valPtr(), vt_pitch, u.valPtr(), u_pitch,
-                                    work_.valPtr(), work_.length(), rwork_.valPtr()));
+                                    work_.valPtr(), work_.len(), rwork_.valPtr()));
   }
 }
 

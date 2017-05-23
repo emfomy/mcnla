@@ -31,7 +31,7 @@ template <typename _Val>
 inline index_t iamin(
     const DenseVector<_Val> &x
 ) noexcept {
-  return detail::iamin(x.length(), x.valPtr(), x.stride());
+  return detail::iamin(x.len(), x.valPtr(), x.stride());
 }
 //@}
 
@@ -44,7 +44,7 @@ template <typename _Val>
 inline RealValT<_Val> amin(
     const DenseVector<_Val> &x
 ) noexcept {
-  index_t idx = detail::iamin(x.length(), x.valPtr(), x.stride());
+  index_t idx = detail::iamin(x.len(), x.valPtr(), x.stride());
   return std::abs(x(idx));
 }
 //@}

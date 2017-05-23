@@ -14,7 +14,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonal) {
 
   auto segment = mat.getDiagonal();
 
-  EXPECT_EQ(segment.length(), ncol);
+  EXPECT_EQ(segment.len(),    ncol);
   EXPECT_EQ(segment.nelem(),  ncol);
   EXPECT_EQ(segment.stride(), pitch+1);
 
@@ -58,7 +58,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonal) {
 
   auto segment = mat.getDiagonal();
 
-  EXPECT_EQ(segment.length(), ncol);
+  EXPECT_EQ(segment.len(),    ncol);
   EXPECT_EQ(segment.nelem(),  ncol);
   EXPECT_EQ(segment.stride(), pitch+1);
 
@@ -102,7 +102,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonal) {
 
   auto segment = mat.getDiagonal();
 
-  EXPECT_EQ(segment.length(), ncol);
+  EXPECT_EQ(segment.len(),    ncol);
   EXPECT_EQ(segment.nelem(),  ncol);
   EXPECT_EQ(segment.stride(), pitch+1);
 
@@ -146,7 +146,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonal) {
 
   auto segment = mat.getDiagonal();
 
-  EXPECT_EQ(segment.length(), ncol);
+  EXPECT_EQ(segment.len(),    ncol);
   EXPECT_EQ(segment.nelem(),  ncol);
   EXPECT_EQ(segment.stride(), pitch+1);
 

@@ -48,7 +48,7 @@ class VectorWrapper {
  public:
 
   // Gets information
-  inline index_t   length() const noexcept;
+  inline index_t   len() const noexcept;
   inline index_t   nelem() const noexcept;
   inline SizesType sizes() const noexcept;
 

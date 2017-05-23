@@ -11,7 +11,7 @@ namespace matrix {
 
   <table>
   <tr><th> Command                                                              <th> Detail
-  <tr><td> `DenseVector           ( [length]     [, stride] [, capacity] )`<br>
+  <tr><td> `DenseVector           ( [len]     [, stride] [, capacity] )`<br>
            `DenseVector           ( [sizes]      [, stride] [, capacity] )`     <td> Dense vector
   <tr><td> `DenseMatrix           ( [nrow, ncol] [, pitch]  [, capacity] )`<br>
            `DenseMatrix           ( [sizes]      [, pitch]  [, capacity] )`     <td> Dense matrix
@@ -34,7 +34,7 @@ namespace matrix {
     Array<double> array(sptr, 20);
     DenseVector<double> vec(5, 2, array, 4);
   @endcode
-  Here `vec` is a @ref DenseVector with @ref DenseVector::length "length" 5, @ref DenseVector::stride "stride" 2. The @ref Array::size "memory size" of `vec` is 20, and the first element of `vec` stores in the 4th element in the memory.
+  Here `vec` is a @ref DenseVector with @ref DenseVector::len "length" 5, @ref DenseVector::stride "stride" 2. The @ref Array::size "memory size" of `vec` is 20, and the first element of `vec` stores in the 4th element in the memory.
 
   @see  @ref matrix_module
 

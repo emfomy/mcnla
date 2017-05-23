@@ -33,14 +33,14 @@ static inline void uniformBitsImpl(
     VSLStreamStatePtr stream,
     DenseVector<int> &&vector
 ) noexcept {
-  detail::vRngUniformBits(VSL_RNG_METHOD_UNIFORMBITS32_STD, stream, vector.length(), vector.valPtr());
+  detail::vRngUniformBits(VSL_RNG_METHOD_UNIFORMBITS32_STD, stream, vector.len(), vector.valPtr());
 }
 
 static inline void uniformBitsImpl(
     VSLStreamStatePtr stream,
     DenseVector<long long> &&vector
 ) noexcept {
-  detail::vRngUniformBits(VSL_RNG_METHOD_UNIFORMBITS64_STD, stream, vector.length(), vector.valPtr());
+  detail::vRngUniformBits(VSL_RNG_METHOD_UNIFORMBITS64_STD, stream, vector.len(), vector.valPtr());
 }
 
 }  // namespace detail

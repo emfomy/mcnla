@@ -31,7 +31,7 @@ template <typename _Val>
 inline _Val asum(
     const DenseVector<_Val> &x
 ) noexcept {
-  return detail::asum(x.length(), x.valPtr(), x.stride());
+  return detail::asum(x.len(), x.valPtr(), x.stride());
 }
 //@}
 

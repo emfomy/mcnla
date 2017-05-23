@@ -72,7 +72,7 @@ index_t Parameters<_Val>::ncol() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::nrowRank() const noexcept {
-  return rowrange().length();
+  return rowrange().len();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ index_t Parameters<_Val>::nrowRank() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::ncolRank() const noexcept {
-  return colrange().length();
+  return colrange().len();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

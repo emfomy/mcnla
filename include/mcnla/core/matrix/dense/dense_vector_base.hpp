@@ -32,10 +32,10 @@ DenseVectorBase<_Core, _Val>::DenseVectorBase() noexcept
 ///
 template <class _Core, typename _Val>
 DenseVectorBase<_Core, _Val>::DenseVectorBase(
-    const index_t length,
+    const index_t len,
     const index_t stride
 ) noexcept
-  : BaseType(toDim0(length), stride) {}
+  : BaseType(toDim0(len), stride) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -52,11 +52,11 @@ DenseVectorBase<_Core, _Val>::DenseVectorBase(
 ///
 template <class _Core, typename _Val>
 DenseVectorBase<_Core, _Val>::DenseVectorBase(
-    const index_t length,
+    const index_t len,
     const index_t stride,
     const index_t capacity
 ) noexcept
-  : BaseType(toDim0(length), stride, capacity) {}
+  : BaseType(toDim0(len), stride, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -74,12 +74,12 @@ DenseVectorBase<_Core, _Val>::DenseVectorBase(
 ///
 template <class _Core, typename _Val>
 DenseVectorBase<_Core, _Val>::DenseVectorBase(
-    const index_t length,
+    const index_t len,
     const index_t stride,
     const ValArrayType &val,
     const index_t offset
 ) noexcept
-  : BaseType(toDim0(length), stride, val, offset) {}
+  : BaseType(toDim0(len), stride, val, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -108,7 +108,7 @@ typename DenseVectorBase<_Core, _Val>::DerivedType& DenseVectorBase<_Core, _Val>
 ///
 template <class _Core, typename _Val>
 typename DenseVectorBase<_Core, _Val>::DerivedType DenseVectorBase<_Core, _Val>::copy() const noexcept {
-  DenseVectorBase retval(this->length(), this->stride(), this->val().copy(), this->offset());
+  DenseVectorBase retval(this->len(), this->stride(), this->val().copy(), this->offset());
   return retval.derived();
 }
 
@@ -167,9 +167,9 @@ void DenseVectorBase<_Core, _Val>::reconstruct(
 ///
 template <class _Core, typename _Val>
 void DenseVectorBase<_Core, _Val>::resize(
-    const index_t length
+    const index_t len
 ) noexcept {
-  this->resizeImpl(length, this->stride());
+  this->resizeImpl(len, this->stride());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,10 +177,10 @@ void DenseVectorBase<_Core, _Val>::resize(
 ///
 template <class _Core, typename _Val>
 void DenseVectorBase<_Core, _Val>::resize(
-    const index_t length,
+    const index_t len,
     const index_t stride
 ) noexcept {
-  this->resizeImpl(length, stride);
+  this->resizeImpl(len, stride);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,10 +220,10 @@ const typename DenseVectorBase<_Core, _Val>::DerivedType DenseVectorBase<_Core, 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::VectorWrapper::length
+/// @copydoc  mcnla::matrix::VectorWrapper::len
 ///
 template <class _Core, typename _Val>
-index_t DenseVectorBase<_Core, _Val>::lengthImpl() const noexcept {
+index_t DenseVectorBase<_Core, _Val>::lenImpl() const noexcept {
   return this->dim0();
 }
 
@@ -242,9 +242,9 @@ index_t DenseVectorBase<_Core, _Val>::toDim0(
 ///
 template <class _Core, typename _Val>
 index_t DenseVectorBase<_Core, _Val>::toDim0(
-    const index_t length
+    const index_t len
 ) const noexcept {
-  return length;
+  return len;
 }
 
 }  // namespace matrix

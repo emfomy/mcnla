@@ -246,9 +246,9 @@ DenseMatrixStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getMatrixImpl(
     const IdxRange &range0,
     const IdxRange &range1
 ) noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
-  return MatrixStorageType(range0.length(), range1.length(), pitch_, val_, posImpl(range0.begin, range1.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.len(), 0);
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.len(), 0);
+  return MatrixStorageType(range0.len(), range1.len(), pitch_, val_, posImpl(range0.begin, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,9 +259,9 @@ const DenseMatrixStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getMatrix
     const IdxRange &range0,
     const IdxRange &range1
 ) const noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
-  return MatrixStorageType(range0.length(), range1.length(), pitch_, val_, posImpl(range0.begin, range1.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.len(), 0);
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.len(), 0);
+  return MatrixStorageType(range0.len(), range1.len(), pitch_, val_, posImpl(range0.begin, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,8 +273,8 @@ DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getVector0Impl(
     const index_t idx1
 ) noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
-  return VectorStorageType(range0.length(), 1, val_, posImpl(range0.begin, idx1));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.len(), 0);
+  return VectorStorageType(range0.len(), 1, val_, posImpl(range0.begin, idx1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,8 +286,8 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getVector
     const index_t idx1
 ) const noexcept {
   mcnla_assert_gelt(idx1, 0, dim1_);
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
-  return VectorStorageType(range0.length(), 1, val_, posImpl(range0.begin, idx1));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.len(), 0);
+  return VectorStorageType(range0.len(), 1, val_, posImpl(range0.begin, idx1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -299,8 +299,8 @@ DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getVector1Impl(
     const IdxRange &range1
 ) noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
-  return VectorStorageType(range1.length(), pitch_, val_, posImpl(idx0, range1.begin));
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.len(), 0);
+  return VectorStorageType(range1.len(), pitch_, val_, posImpl(idx0, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,8 +312,8 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getVector
     const IdxRange &range1
 ) const noexcept {
   mcnla_assert_gelt(idx0, 0, dim0_);
-  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.length(), 0);
-  return VectorStorageType(range1.length(), pitch_, val_, posImpl(idx0, range1.begin));
+  mcnla_assert_ge(range1.begin, 0); mcnla_assert_le(range1.end, dim1_); mcnla_assert_ge(range1.len(), 0);
+  return VectorStorageType(range1.len(), pitch_, val_, posImpl(idx0, range1.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -326,24 +326,24 @@ DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagonalImpl
     const index_t idx
 ) noexcept {
   mcnla_assert_gtlt(idx, -dim0_, dim1_);
-  index_t length;
+  index_t len;
   index_t pos;
   if ( idx < 0 ) {
     pos = posImpl(-idx, 0_i);
     if ( dim0_ + idx > dim1_ && dim0_ > dim1_ ) {
-      length = dim1_;
+      len = dim1_;
     } else {
-      length = dim0_ + idx;
+      len = dim0_ + idx;
     }
   } else {
     pos = posImpl(0_i, idx);
     if ( dim1_ - idx > dim0_ && dim1_ > dim0_ ) {
-      length = dim0_;
+      len = dim0_;
     } else {
-      length = dim1_ - idx;
+      len = dim1_ - idx;
     }
   }
-  return VectorStorageType(length, pitch_+1, val_, pos);
+  return VectorStorageType(len, pitch_+1, val_, pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,24 +354,24 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagon
     const index_t idx
 ) const noexcept {
   mcnla_assert_gtlt(idx, -dim0_, dim1_);
-  index_t length;
+  index_t len;
   index_t pos;
   if ( idx < 0 ) {
     pos = posImpl(-idx, 0_i);
     if ( dim0_ + idx > dim1_ && dim0_ > dim1_ ) {
-      length = dim1_;
+      len = dim1_;
     } else {
-      length = dim0_ + idx;
+      len = dim0_ + idx;
     }
   } else {
     pos = posImpl(0_i, idx);
     if ( dim1_ - idx > dim0_ && dim1_ > dim0_ ) {
-      length = dim0_;
+      len = dim0_;
     } else {
-      length = dim1_ - idx;
+      len = dim1_ - idx;
     }
   }
-  return VectorStorageType(length, pitch_+1, val_, pos);
+  return VectorStorageType(len, pitch_+1, val_, pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

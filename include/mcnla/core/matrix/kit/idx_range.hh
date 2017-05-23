@@ -46,7 +46,7 @@ struct IdxRange {
   inline IdxRange& operator/=( const index_t idx ) noexcept;
 
   // Gets data
-  inline index_t length() const noexcept;
+  inline index_t len() const noexcept;
 
 };
 

@@ -27,7 +27,7 @@ template <typename _Val>
 DenseVectorIterator<_Val> DenseVector<_Val>::find(
     const index_t idx
 ) noexcept {
-  mcnla_assert_gelt(idx, 0, this->length());
+  mcnla_assert_gelt(idx, 0, this->len());
   return IteratorType(this, idx);
 }
 
@@ -38,7 +38,7 @@ template <typename _Val>
 DenseVectorConstIterator<_Val> DenseVector<_Val>::find(
     const index_t idx
 ) const noexcept {
-  mcnla_assert_gelt(idx, 0, this->length());
+  mcnla_assert_gelt(idx, 0, this->len());
   return ConstIteratorType(this, idx);
 }
 

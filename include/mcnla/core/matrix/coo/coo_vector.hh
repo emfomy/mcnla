@@ -121,11 +121,11 @@ class CooVector
 
   // Constructors
   inline CooVector() noexcept;
-  inline CooVector( const index_t length, const index_t nnz = 0 ) noexcept;
+  inline CooVector( const index_t len, const index_t nnz = 0 ) noexcept;
   inline CooVector( const SizesType sizes, const index_t nnz = 0 ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz, const index_t capacity ) noexcept;
+  inline CooVector( const index_t len, const index_t nnz, const index_t capacity ) noexcept;
   inline CooVector( const SizesType sizes, const index_t nnz, const index_t capacity ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz,
+  inline CooVector( const index_t len, const index_t nnz,
                     const ValArrayType &val, const IdxArrayType &idx0, const index_t offset = 0 ) noexcept;
   inline CooVector( const CooVector &other ) noexcept;
 
@@ -155,16 +155,16 @@ class CooVector
   // Resizes
   template <typename... Args>
   inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t length, const index_t nnz = 0 ) noexcept;
+  inline void resize( const index_t len, const index_t nnz = 0 ) noexcept;
 
  protected:
 
   // Gets information
-  inline index_t lengthImpl() const noexcept;
+  inline index_t lenImpl() const noexcept;
 
   // Convert sizes to dims
   inline index_t toDim0( const SizesType sizes ) const noexcept;
-  inline index_t toDim0( const index_t length ) const noexcept;
+  inline index_t toDim0( const index_t len ) const noexcept;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   CRTP_BASE(BaseType);

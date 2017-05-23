@@ -35,7 +35,7 @@ inline void larnv(
 ) noexcept {
   static_assert(traits::ValTraits<_Val>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
                 "Invalid idist!");
-  detail::larnv(idist, iseed, (x.length()-1) * x.stride() + 1, x.valPtr());
+  detail::larnv(idist, iseed, (x.len()-1) * x.stride() + 1, x.valPtr());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

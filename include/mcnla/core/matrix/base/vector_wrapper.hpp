@@ -25,8 +25,8 @@ namespace matrix {
 /// @brief  Gets the length.
 ///
 template <class _Derived>
-index_t VectorWrapper<_Derived>::length() const noexcept {
-  return this->derived().lengthImpl();
+index_t VectorWrapper<_Derived>::len() const noexcept {
+  return this->derived().lenImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,15 +34,15 @@ index_t VectorWrapper<_Derived>::length() const noexcept {
 ///
 template <class _Derived>
 index_t VectorWrapper<_Derived>::nelem() const noexcept {
-  return length();
+  return len();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size of dimensions in interface order: `{ #length }`.
+/// @brief  Gets the size of dimensions in interface order: `{ #len }`.
 ///
 template <class _Derived>
 std::tuple<index_t> VectorWrapper<_Derived>::sizes() const noexcept {
-  return std::make_tuple(length());
+  return std::make_tuple(len());
 }
 
 }  // namespace matrix

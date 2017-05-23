@@ -196,8 +196,8 @@ template <class _Core, typename _Val>
 DenseVectorStorage<_Core, _Val> DenseVectorStorage<_Core, _Val>::getVectorImpl(
     const IdxRange &range0
 ) noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
-  return VectorStorageType(range0.length(), stride_, val_, this->posImpl(range0.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.len(), 0);
+  return VectorStorageType(range0.len(), stride_, val_, this->posImpl(range0.begin));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,8 +207,8 @@ template <class _Core, typename _Val>
 const DenseVectorStorage<_Core, _Val> DenseVectorStorage<_Core, _Val>::getVectorImpl(
     const IdxRange &range0
 ) const noexcept {
-  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.length(), 0);
-  return VectorStorageType(range0.length(), stride_, val_, this->posImpl(range0.begin));
+  mcnla_assert_ge(range0.begin, 0); mcnla_assert_le(range0.end, dim0_); mcnla_assert_ge(range0.len(), 0);
+  return VectorStorageType(range0.len(), stride_, val_, this->posImpl(range0.begin));
 }
 
 }  // namespace matrix

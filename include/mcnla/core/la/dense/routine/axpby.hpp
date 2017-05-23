@@ -39,7 +39,7 @@ inline void axpby(
     copy(x, y);
     scal(y, alpha);
   } else {
-    detail::axpby(x.length(), alpha, x.valPtr(), x.stride(), beta, y.valPtr(), y.stride());
+    detail::axpby(x.len(), alpha, x.valPtr(), x.stride(), beta, y.valPtr(), y.stride());
   }
 }
 

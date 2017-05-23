@@ -32,7 +32,7 @@ inline _Val dot(
     const DenseVector<_Val> &y
 ) noexcept {
   mcnla_assert_eq(x.sizes(), y.sizes());
-  return detail::dot(x.length(), x.valPtr(), x.stride(), y.valPtr(), y.stride());
+  return detail::dot(x.len(), x.valPtr(), x.stride(), y.valPtr(), y.stride());
 }
 
 }  // namespace la

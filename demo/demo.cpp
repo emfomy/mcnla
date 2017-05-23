@@ -310,7 +310,7 @@ void check_u(
   mcnla::la::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
   smax  = mcnla::la::amax(vector_s);
   smin  = mcnla::la::amin(vector_s);
-  smean = mcnla::la::asum(vector_s) / vector_s.length();
+  smean = mcnla::la::asum(vector_s) / vector_s.len();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

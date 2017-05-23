@@ -46,10 +46,10 @@ void saveMatrixMarket(
   fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
-  fout << vector.length() << " 1" << std::endl;
+  fout << vector.len() << " 1" << std::endl;
 
   // Write values
-  for ( index_t i = 0; i < vector.length(); ++i ) {
+  for ( index_t i = 0; i < vector.len(); ++i ) {
     fout << vector(i) << std::endl;
   }
 
@@ -118,12 +118,12 @@ void saveMatrixMarket(
   fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
-  fout << collection.length() << " " << collection.nvec() << std::endl;
+  fout << collection.len() << " " << collection.nvec() << std::endl;
 
   // Write values
   for ( index_t j = 0; j < collection.nvec(); ++j ) {
     auto vector = collection(j);
-    for ( index_t i = 0; i < vector.length(); ++i ) {
+    for ( index_t i = 0; i < vector.len(); ++i ) {
       fout << vector(i) << std::endl;
     }
   }

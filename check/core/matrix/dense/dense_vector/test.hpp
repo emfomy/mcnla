@@ -6,12 +6,12 @@
 
 using MyTypes = testing::Types<float, double, std::complex<float>, std::complex<double>>;
 
-template <typename _Val, mcnla::index_t _length, mcnla::index_t _stride, mcnla::index_t _memsize, mcnla::index_t _offset>
+template <typename _Val, mcnla::index_t _len, mcnla::index_t _stride, mcnla::index_t _memsize, mcnla::index_t _offset>
 class DenseVectorTestBase : public testing::Test {
 
  protected:
 
-  const mcnla::index_t length_   = _length;
+  const mcnla::index_t len_      = _len;
   const mcnla::index_t stride_   = _stride;
   const mcnla::index_t memsize_  = _memsize;
   const mcnla::index_t capacity_ = _memsize-_offset;
@@ -24,7 +24,7 @@ class DenseVectorTestBase : public testing::Test {
 
   virtual void SetUp() {
     mcnla::matrix::Array<_Val> array(memsize_, offset_);
-    vec_.reconstruct(length_, stride_, array);
+    vec_.reconstruct(len_, stride_, array);
     mcnla::la::larnv<3>(vec_, iseed);
     valptr0_ = array.get();
   }

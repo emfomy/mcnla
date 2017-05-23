@@ -36,7 +36,7 @@ static inline void uniformImpl(
     const _Val a,
     const _Val b
 ) noexcept {
-  detail::vRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, vector.length(), vector.valPtr(), a, b);
+  detail::vRngUniform(VSL_RNG_METHOD_UNIFORM_STD, stream, vector.len(), vector.valPtr(), a, b);
 }
 
 }  // namespace detail

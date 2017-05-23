@@ -16,7 +16,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.len(),    idxs);
   EXPECT_EQ(segment.nelem(),  idxs);
   EXPECT_EQ(segment.stride(), 1);
 
@@ -75,7 +75,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.len(),    idxs);
   EXPECT_EQ(segment.nelem(),  idxs);
   EXPECT_EQ(segment.stride(), 1);
 
@@ -136,7 +136,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.len(),    idxs);
   EXPECT_EQ(segment.nelem(),  idxs);
   EXPECT_EQ(segment.stride(), 1);
 
@@ -195,7 +195,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
 
   EXPECT_EQ(idxs, &(mat(nrow-1, ncol-1)) - &(mat(0, 0)) + 1);
 
-  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.len(),    idxs);
   EXPECT_EQ(segment.nelem(),  idxs);
   EXPECT_EQ(segment.stride(), 1);
 

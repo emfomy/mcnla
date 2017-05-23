@@ -30,7 +30,7 @@ std::ostream& operator<<(
     const DenseVectorWrapper<__Derived> &wrapper
 ) noexcept {
   auto &vector = wrapper.derived();
-  for ( index_t i = 0; i < vector.length(); ++i ) {
+  for ( index_t i = 0; i < vector.len(); ++i ) {
     os << std::setw(kOsValWidth) << vector(i) << "  ";
   }
   return os << '\n';

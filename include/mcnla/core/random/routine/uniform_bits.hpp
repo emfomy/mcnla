@@ -44,12 +44,12 @@ inline void uniformBits(
   #pragma omp parallel for
 #endif  // MCNLA_USE_OMP
   for ( index_t i = 0; i < streams.ompSize(); ++i ) {
-    index_t length = vector.length() / streams.ompSize();
-    index_t start = length * i;
+    index_t len = vector.len() / streams.ompSize();
+    index_t start = len * i;
     if ( i == streams.ompSize()-1 ) {
-      length = vector.length() - start;
+      len = vector.len() - start;
     }
-    detail::uniformBitsImpl(streams[i], vector({start, start+length}));
+    detail::uniformBitsImpl(streams[i], vector({start, start+len}));
   }
 }
 

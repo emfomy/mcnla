@@ -32,8 +32,8 @@ bool VectorCollectionWrapper<_Derived>::isEmpty() const noexcept {
 /// @brief  Gets the length of vector.
 ///
 template <class _Derived>
-index_t VectorCollectionWrapper<_Derived>::length() const noexcept {
-  return this->derived().lengthImpl();
+index_t VectorCollectionWrapper<_Derived>::len() const noexcept {
+  return this->derived().lenImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ index_t VectorCollectionWrapper<_Derived>::nvec() const noexcept {
 ///
 template <class _Derived>
 std::tuple<index_t, index_t> VectorCollectionWrapper<_Derived>::sizes() const noexcept {
-  return std::make_tuple(length(), nvec());
+  return std::make_tuple(len(), nvec());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -31,7 +31,7 @@ template <typename _Val>
 inline index_t iamax(
     const DenseVector<_Val> &x
 ) noexcept {
-  return detail::iamax(x.length(), x.valPtr(), x.stride());
+  return detail::iamax(x.len(), x.valPtr(), x.stride());
 }
 //@}
 
@@ -44,7 +44,7 @@ template <typename _Val>
 inline RealValT<_Val> amax(
     const DenseVector<_Val> &x
 ) noexcept {
-  index_t idx = detail::iamax(x.length(), x.valPtr(), x.stride());
+  index_t idx = detail::iamax(x.len(), x.valPtr(), x.stride());
   return std::abs(x(idx));
 }
 //@}
