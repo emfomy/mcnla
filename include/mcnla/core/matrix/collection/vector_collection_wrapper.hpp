@@ -25,7 +25,7 @@ namespace matrix {
 ///
 template <class _Derived>
 bool VectorCollectionWrapper<_Derived>::isEmpty() const noexcept {
-  return this->derived().isEmptyImpl();
+  return derived().isEmptyImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ bool VectorCollectionWrapper<_Derived>::isEmpty() const noexcept {
 ///
 template <class _Derived>
 index_t VectorCollectionWrapper<_Derived>::len() const noexcept {
-  return this->derived().lenImpl();
+  return derived().lenImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ index_t VectorCollectionWrapper<_Derived>::len() const noexcept {
 ///
 template <class _Derived>
 index_t VectorCollectionWrapper<_Derived>::nvec() const noexcept {
-  return this->derived().nvecImpl();
+  return derived().nvecImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ template <class _Derived>
 VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
-  return this->derived().getImpl(idx);
+  return derived().getImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ template <class _Derived>
 const VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
-  return this->derived().getImpl(idx);
+  return derived().getImpl(idx);
 }
 
 }  // namespace matrix

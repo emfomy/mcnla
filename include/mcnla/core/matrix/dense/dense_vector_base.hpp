@@ -155,9 +155,9 @@ index_t DenseVectorBase<_Core, _Val>::pos(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Core, typename _Val> template <typename... Args>
+template <class _Core, typename _Val> template <typename ..._Args>
 void DenseVectorBase<_Core, _Val>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = DenseVectorBase<_Core, _Val>(args...);
 }

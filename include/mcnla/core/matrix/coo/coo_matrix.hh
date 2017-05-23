@@ -174,8 +174,8 @@ class CooMatrix
   inline index_t pos( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol, const index_t nnz ) noexcept;
 
   // Transpose/Conjugate
@@ -210,9 +210,7 @@ class CooMatrix
   inline       IdxArrayType& toIdx1(       IdxArrayType &rowidx,       IdxArrayType &colidx ) const noexcept;
   inline const IdxArrayType& toIdx1( const IdxArrayType &rowidx, const IdxArrayType &colidx ) const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType);
 
 };
 

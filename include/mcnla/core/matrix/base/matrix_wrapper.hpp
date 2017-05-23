@@ -25,7 +25,7 @@ namespace matrix {
 ///
 template <class _Derived>
 index_t MatrixWrapper<_Derived>::nrow() const noexcept {
-  return this->derived().nrowImpl();
+  return derived().nrowImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ index_t MatrixWrapper<_Derived>::nrow() const noexcept {
 ///
 template <class _Derived>
 index_t MatrixWrapper<_Derived>::ncol() const noexcept {
-  return this->derived().ncolImpl();
+  return derived().ncolImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

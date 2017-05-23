@@ -79,9 +79,9 @@ void SyevDriver<_Matrix, _jobz>::computeValues(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Reconstruct the driver.
 ///
-template <class _Matrix, JobOption _jobz> template <typename... Args>
+template <class _Matrix, JobOption _jobz> template <typename ..._Args>
 void SyevDriver<_Matrix, _jobz>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = SyevDriver<_Matrix, _jobz>(args...);
 }

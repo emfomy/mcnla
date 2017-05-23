@@ -95,8 +95,8 @@ class DenseDiagonalMatrixBase_
   inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
 
   // Transpose/Conjugate
   inline       TransposeType& t() noexcept;
@@ -118,10 +118,8 @@ class DenseDiagonalMatrixBase_
   inline index_t mrowImpl() const noexcept;
   inline index_t mcolImpl() const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-  CRTP_DERIVED(DerivedType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType);
+  MCNLA_CRTP_DERIVED(DerivedType);
 
 };
 

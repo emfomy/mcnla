@@ -141,9 +141,9 @@ _Val DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Core, typename _Val, Trans _trans, Uplo _uplo> template <typename... Args>
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo> template <typename ..._Args>
 void DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>(args...);
 }

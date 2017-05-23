@@ -83,9 +83,9 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::computeValues(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Reconstruct the driver.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <typename... Args>
+template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <typename ..._Args>
 void GesvdDriver<_Matrix, _jobu, _jobvt>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = GesvdDriver<_Matrix, _jobu, _jobvt>(args...);
 }

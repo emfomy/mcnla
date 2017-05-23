@@ -183,9 +183,9 @@ index_t DenseMatrixBase<_Core, _Val, _trans>::pos(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Core, typename _Val, Trans _trans> template <typename... Args>
+template <class _Core, typename _Val, Trans _trans> template <typename ..._Args>
 void DenseMatrixBase<_Core, _Val, _trans>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = DenseMatrixBase<_Core, _Val, _trans>(args...);
 }

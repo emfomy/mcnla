@@ -108,6 +108,11 @@ class DenseMatrix
 
   using BaseType::DenseMatrixBase;
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseMatrixBase_::operator=
+  DenseMatrix& operator=( const DenseMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
   // Finds the iterator
   inline IteratorType      find( const index_t rowidx, const index_t colidx ) noexcept;
   inline ConstIteratorType find( const index_t rowidx, const index_t colidx ) const noexcept;

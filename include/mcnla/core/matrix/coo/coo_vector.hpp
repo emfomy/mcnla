@@ -195,9 +195,9 @@ index_t CooVector<_Val>::pos(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Val> template <typename... Args>
+template <typename _Val> template <typename ..._Args>
 void CooVector<_Val>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = CooVector<_Val>(args...);
 }

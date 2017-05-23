@@ -153,8 +153,8 @@ class CooVector
   inline index_t pos( const index_t idx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
   inline void resize( const index_t len, const index_t nnz = 0 ) noexcept;
 
  protected:
@@ -166,9 +166,7 @@ class CooVector
   inline index_t toDim0( const SizesType sizes ) const noexcept;
   inline index_t toDim0( const index_t len ) const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType);
 
 };
 

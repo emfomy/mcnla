@@ -99,8 +99,8 @@ class DenseMatrixCollection201Base
   inline const MatrixType& data() const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
 
   // Gets collection
   using BaseType::operator();

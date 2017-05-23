@@ -69,8 +69,8 @@ class DummyConverter
   void initializeImpl() noexcept;
 
   // Converts data
-  template <typename... Args>
-  void runImpl( Args... arg ) noexcept;
+  template <typename ..._Args>
+  void runImpl( _Args... arg ) noexcept;
 
 };
 

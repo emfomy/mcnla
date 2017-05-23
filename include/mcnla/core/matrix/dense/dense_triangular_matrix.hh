@@ -96,6 +96,11 @@ class DenseTriangularMatrix
 
   using BaseType::DenseTriangularMatrixBase;
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseTriangularMatrixBase_::operator=
+  DenseTriangularMatrix& operator=( const DenseTriangularMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 };
 
 /// @ingroup  matrix_dense_module

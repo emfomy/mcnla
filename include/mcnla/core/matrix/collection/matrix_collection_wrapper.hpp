@@ -25,7 +25,7 @@ namespace matrix {
 ///
 template <typename _Derived>
 bool MatrixCollectionWrapper<_Derived>::isEmpty() const noexcept {
-  return this->derived().isEmptyImpl();
+  return derived().isEmptyImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ bool MatrixCollectionWrapper<_Derived>::isEmpty() const noexcept {
 ///
 template <class _Derived>
 index_t MatrixCollectionWrapper<_Derived>::nrow() const noexcept {
-  return this->derived().nrowImpl();
+  return derived().nrowImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ index_t MatrixCollectionWrapper<_Derived>::nrow() const noexcept {
 ///
 template <class _Derived>
 index_t MatrixCollectionWrapper<_Derived>::ncol() const noexcept {
-  return this->derived().ncolImpl();
+  return derived().ncolImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ index_t MatrixCollectionWrapper<_Derived>::ncol() const noexcept {
 ///
 template <class _Derived>
 index_t MatrixCollectionWrapper<_Derived>::nmat() const noexcept {
-  return this->derived().nmatImpl();
+  return derived().nmatImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ template <class _Derived>
 MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
-  return this->derived().getImpl(idx);
+  return derived().getImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ template <class _Derived>
 const MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
-  return this->derived().getImpl(idx);
+  return derived().getImpl(idx);
 }
 
 }  // namespace matrix

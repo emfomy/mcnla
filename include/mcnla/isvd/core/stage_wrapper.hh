@@ -64,12 +64,12 @@ class StageWrapper {
  public:
 
   // Initializes
-  template <typename... Args>
-  inline void initialize( Args... arg ) noexcept;
+  template <typename ..._Args>
+  inline void initialize( _Args... arg ) noexcept;
 
   // Operators
-  template <typename... Args>
-  inline void operator()( Args... arg ) noexcept;
+  template <typename ..._Args>
+  inline void operator()( _Args... arg ) noexcept;
   template <class __Derived>
   friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper ) noexcept;
 
@@ -95,9 +95,7 @@ class StageWrapper {
   inline void tic() noexcept;
   inline void toc( double &comm_time ) noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 
 };

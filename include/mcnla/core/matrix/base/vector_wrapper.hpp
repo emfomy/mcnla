@@ -25,7 +25,7 @@ namespace matrix {
 ///
 template <class _Derived>
 index_t VectorWrapper<_Derived>::len() const noexcept {
-  return this->derived().lenImpl();
+  return derived().lenImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

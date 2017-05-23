@@ -25,7 +25,7 @@ namespace matrix {
 ///
 template <class _Derived>
 InverseView<_Derived>& InvertibleWrapper<_Derived>::inv() noexcept {
-  return static_cast<InverseType&>(this->derived());
+  return static_cast<InverseType&>(derived());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ InverseView<_Derived>& InvertibleWrapper<_Derived>::inv() noexcept {
 ///
 template <class _Derived>
 const InverseView<_Derived>& InvertibleWrapper<_Derived>::inv() const noexcept {
-  return static_cast<const InverseType&>(this->derived());
+  return static_cast<const InverseType&>(derived());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

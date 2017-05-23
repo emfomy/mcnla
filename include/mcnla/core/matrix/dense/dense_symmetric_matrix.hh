@@ -96,6 +96,11 @@ class DenseSymmetricMatrix
 
   using BaseType::DenseSymmetricMatrixBase;
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseSymmetricMatrixBase_::operator=
+  DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 };
 
 /// @ingroup  matrix_dense_module

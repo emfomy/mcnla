@@ -12,7 +12,6 @@
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/coo/coo_vector.hpp>
 #include <mcnla/core/matrix/coo/coo_tuple1.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,7 +24,6 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class CooVector;
 template <typename _Val, typename _Idx, class _Vector> class CooVectorIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

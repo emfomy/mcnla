@@ -191,9 +191,9 @@ const GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Core, typename _Val> template <typename... Args>
+template <class _Core, typename _Val> template <typename ..._Args>
 void DenseMatrixCollection012Base<_Core, _Val>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = DenseMatrixCollection012Base<_Core, _Val>(args...);
 }

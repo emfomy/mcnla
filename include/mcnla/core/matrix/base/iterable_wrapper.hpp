@@ -24,7 +24,7 @@ namespace matrix {
 /// @brief  Gets the iterator to beginning.
 ///
 template <class _Derived>
-IteratorT<_Derived> IterableWrapper<_Derived>::begin() noexcept {
+typename IterableWrapper<_Derived>::IteratorType IterableWrapper<_Derived>::begin() noexcept {
   return IteratorType::beginImpl(&(this->derived()));
 }
 
@@ -32,7 +32,7 @@ IteratorT<_Derived> IterableWrapper<_Derived>::begin() noexcept {
 /// @copydoc  begin
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> IterableWrapper<_Derived>::begin() const noexcept {
+typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::begin() const noexcept {
   return ConstIteratorType::beginImpl(&(this->derived()));
 }
 
@@ -40,7 +40,7 @@ ConstIteratorT<_Derived> IterableWrapper<_Derived>::begin() const noexcept {
 /// @copydoc  begin
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> IterableWrapper<_Derived>::cbegin() const noexcept {
+typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::cbegin() const noexcept {
   return ConstIteratorType::beginImpl(&(this->derived()));
 }
 
@@ -48,7 +48,7 @@ ConstIteratorT<_Derived> IterableWrapper<_Derived>::cbegin() const noexcept {
 /// @brief  Gets the iterator to end.
 ///
 template <class _Derived>
-IteratorT<_Derived> IterableWrapper<_Derived>::end() noexcept {
+typename IterableWrapper<_Derived>::IteratorType IterableWrapper<_Derived>::end() noexcept {
   return IteratorType::endImpl(&(this->derived()));
 }
 
@@ -56,7 +56,7 @@ IteratorT<_Derived> IterableWrapper<_Derived>::end() noexcept {
 /// @copydoc  end
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> IterableWrapper<_Derived>::end() const noexcept {
+typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::end() const noexcept {
   return ConstIteratorType::endImpl(&(this->derived()));
 }
 
@@ -64,7 +64,7 @@ ConstIteratorT<_Derived> IterableWrapper<_Derived>::end() const noexcept {
 /// @copydoc  end
 ///
 template <class _Derived>
-ConstIteratorT<_Derived> IterableWrapper<_Derived>::cend() const noexcept {
+typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::cend() const noexcept {
   return ConstIteratorType::endImpl(&(this->derived()));
 }
 

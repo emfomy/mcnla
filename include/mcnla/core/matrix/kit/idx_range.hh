@@ -51,7 +51,7 @@ struct IdxRange {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
+/// @ingroup  matrix_kit_module
 /// The full index range.
 ///
 struct FullRange {};
@@ -68,7 +68,7 @@ static inline std::ostream& operator<<( std::ostream &os, const IdxRange &range 
 }  // namespace mcnla
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
+/// @ingroup  matrix_kit_module
 /// The full index range literal.
 ///
 static inline mcnla::matrix::FullRange operator""_( const char*, size_t ) { return mcnla::matrix::FullRange(); }

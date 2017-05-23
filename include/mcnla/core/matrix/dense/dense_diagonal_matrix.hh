@@ -90,6 +90,11 @@ class DenseDiagonalMatrix
 
   using BaseType::DenseDiagonalMatrixBase;
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseDiagonalMatrixBase_::operator=
+  DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 };
 
 }  // namespace matrix

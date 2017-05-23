@@ -85,9 +85,7 @@ class ArrayBase_
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(DerivedType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(DerivedType);
 
 };
 

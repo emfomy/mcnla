@@ -143,9 +143,9 @@ _Val DenseDiagonalMatrixBase<_Core, _Val>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Core, typename _Val> template <typename... Args>
+template <class _Core, typename _Val> template <typename ..._Args>
 void DenseDiagonalMatrixBase<_Core, _Val>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = DenseDiagonalMatrixBase<_Core, _Val>(args...);
 }
@@ -157,7 +157,7 @@ void DenseDiagonalMatrixBase<_Core, _Val>::reconstruct(
 ///
 template <class _Core, typename _Val>
 DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() noexcept {
-  return this->derived();
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +165,7 @@ DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() noexcep
 ///
 template <class _Core, typename _Val>
 const DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() const noexcept {
-  return this->derived();
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -41,9 +41,9 @@ void DummyConverter<_Val>::initializeImpl() noexcept {}
 ///
 /// @note  Do nothing.
 ///
-template <typename _Val> template <typename... Args>
+template <typename _Val> template <typename ..._Args>
 void DummyConverter<_Val>::runImpl(
-    Args...
+    _Args...
 ) noexcept {
   this->tic();
 }

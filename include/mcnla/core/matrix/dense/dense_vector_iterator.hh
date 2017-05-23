@@ -11,7 +11,6 @@
 #include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.

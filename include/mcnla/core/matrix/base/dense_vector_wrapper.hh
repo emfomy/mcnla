@@ -12,7 +12,6 @@
 #include <tuple>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
 #include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,7 +24,6 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The dense vector wrapper.
 ///
 /// @tparam  _Derived  The derived type.
@@ -51,9 +49,7 @@ class DenseVectorWrapper : public VectorWrapper<_Derived> {
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

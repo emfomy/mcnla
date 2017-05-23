@@ -12,7 +12,6 @@
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix.hpp>
 #include <mcnla/core/matrix/coo/coo_tuple2.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,7 +24,6 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans> class CooMatrix;
 template <typename _Val, typename _Idx, Trans _trans, class _Matrix> class CooMatrixIteratorBase;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -41,7 +39,6 @@ namespace traits {
 ///
 template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
 struct Traits<matrix::CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
-  static constexpr Trans trans = _trans;
   using ElemType      = std::tuple<_Idx, _Idx>;
   using ElemRefType   = matrix::CooTuple2<_Val, _Idx, _trans>;
   using ElemPtrType   = matrix::CooTuple2Ptr<_Val, _Idx, _trans>;

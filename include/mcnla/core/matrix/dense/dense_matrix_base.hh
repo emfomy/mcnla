@@ -116,8 +116,8 @@ class DenseMatrixBase_
   inline index_t pos( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
   inline void resize( const index_t nrow, const FullRange ) noexcept;
   inline void resize( const FullRange, const index_t ncol ) noexcept;
@@ -185,10 +185,8 @@ class DenseMatrixBase_
   inline const IdxRange colfullrange() const noexcept;
   inline const IdxRange rowfullrange() const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-  CRTP_DERIVED(DerivedType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType);
+  MCNLA_CRTP_DERIVED(DerivedType);
 
 };
 

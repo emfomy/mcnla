@@ -11,7 +11,6 @@
 #include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -43,7 +42,6 @@ namespace traits {
 ///
 template <typename _Val, Trans _trans, class _Matrix>
 struct Traits<matrix::DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
-  static constexpr Trans trans = _trans;
   using ElemType      = _Val;
   using ElemRefType   = _Val&;
   using ElemPtrType   = _Val*;
@@ -71,7 +69,6 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
 
  private:
 
-  static constexpr Trans trans = _trans;
   using ValType       = _Val;
   using ElemType      = _Val;
   using ElemRefType   = _Val&;

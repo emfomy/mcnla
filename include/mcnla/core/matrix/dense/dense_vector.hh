@@ -99,6 +99,11 @@ class DenseVector
 
   using BaseType::DenseVectorBase;
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseVectorBase_::operator=
+  DenseVector& operator=( const DenseVector &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;
   inline ConstIteratorType find( const index_t idx ) const noexcept;

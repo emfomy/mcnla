@@ -33,12 +33,12 @@ StageWrapper<_Derived>::StageWrapper(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.
 ///
-template <class _Derived> template <typename... Args>
+template <class _Derived> template <typename ..._Args>
 void StageWrapper<_Derived>::initialize(
-    Args... args
+    _Args... args
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
-  this->derived().initializeImpl(args...);
+  derived().initializeImpl(args...);
   moments_.clear();
   comm_times_.clear();
   initialized_ = true;
@@ -48,15 +48,15 @@ void StageWrapper<_Derived>::initialize(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Run the stage.
 ///
-template <class _Derived> template <typename... Args>
+template <class _Derived> template <typename ..._Args>
 void StageWrapper<_Derived>::operator()(
-    Args... args
+    _Args... args
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
   mcnla_assert_true(isInitialized());
   moments_.clear();
   comm_times_.clear();
-  this->derived().runImpl(args...);
+  derived().runImpl(args...);
   computed_ = true;
 }
 
@@ -78,7 +78,7 @@ template <class _Derived>
 std::ostream& StageWrapper<_Derived>::outputName(
     std::ostream &os
 ) const noexcept {
-  return this->derived().outputNameImpl(os);
+  return derived().outputNameImpl(os);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ template <class _Derived>
 std::ostream& StageWrapper<_Derived>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
-  return (os << this->derived().name_);
+  return (os << derived().name_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ std::vector<double> StageWrapper<_Derived>::moments() const noexcept {
 ///
 template <class _Derived>
 const char* StageWrapper<_Derived>::names() const noexcept {
-  return this->derived().names_;
+  return derived().names_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

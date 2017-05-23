@@ -22,7 +22,6 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The matrix output-stream wrapper.
 ///
 /// @tparam  _Derived  The derived type.
@@ -43,9 +42,7 @@ class MatrixOstreamWrapper {
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

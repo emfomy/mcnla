@@ -25,7 +25,7 @@ namespace matrix {
 ///
 template <class _Derived>
 index_t DenseVectorWrapper<_Derived>::mlen() const noexcept {
-  return this->derived().mlenImpl();
+  return derived().mlenImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

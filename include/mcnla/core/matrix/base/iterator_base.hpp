@@ -279,7 +279,7 @@ index_t IteratorBase<_Derived>::itidx() const noexcept {
 /// @brief  Gets the container.
 ///
 template <class _Derived>
-ContainerT<_Derived>* IteratorBase<_Derived>::container() const noexcept {
+typename IteratorBase<_Derived>::ContainerType* IteratorBase<_Derived>::container() const noexcept {
   return container_;
 }
 

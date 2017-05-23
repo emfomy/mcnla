@@ -21,7 +21,11 @@ namespace mcnla {
 namespace traits {
 
 /// @ingroup  utility_module
-template <typename... _Args>
+template <typename ..._Args>
+using TrueType = std::true_type;
+
+/// @ingroup  utility_module
+template <typename ..._Args>
 using FalseType = std::false_type;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,22 +69,6 @@ struct ValTraits<std::complex<_Val>> {
   static constexpr bool is_complex = true;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The true type.
-///
-template <class _Type>
-struct True {
-  static constexpr bool value = true;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The false type.
-///
-template <class _Type>
-struct False {
-  static constexpr bool value = false;
-};
-
 }  // namespace traits
 
 /// @ingroup  utility_module
@@ -106,22 +94,6 @@ using VectorT = typename traits::Traits<_Derived>::VectorType;
 /// @ingroup  utility_module
 template <class _Derived>
 using MatrixT = typename traits::Traits<_Derived>::MatrixType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using CollectionT = typename traits::Traits<_Derived>::CollectionType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using ContainerT = typename traits::Traits<_Derived>::ContainerType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using IteratorT = typename traits::Traits<_Derived>::IteratorType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using ConstIteratorT = typename traits::Traits<_Derived>::ConstIteratorType;
 
 /// @ingroup  utility_module
 template <typename _Val>

@@ -24,10 +24,9 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The iterator interface.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Derived    The derived type.
 ///
 template <class _Derived>
 class IteratorBase
@@ -35,11 +34,10 @@ class IteratorBase
 
  private:
 
-  static constexpr index_t ndim = traits::Traits<_Derived>::ndim;
   using ElemType      = typename traits::Traits<_Derived>::ElemType;
   using ElemRefType   = typename traits::Traits<_Derived>::ElemRefType;
   using ElemPtrType   = typename traits::Traits<_Derived>::ElemPtrType;
-  using ContainerType = ContainerT<_Derived>;
+  using ContainerType = typename traits::Traits<_Derived>::ContainerType;
 
  protected:
 
@@ -99,9 +97,7 @@ class IteratorBase
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

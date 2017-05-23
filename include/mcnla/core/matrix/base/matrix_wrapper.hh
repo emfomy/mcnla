@@ -11,7 +11,6 @@
 #include <mcnla/core/matrix/def.hpp>
 #include <tuple>
 #include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,7 +23,6 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The matrix wrapper.
 ///
 /// @tparam  _Derived  The derived type.
@@ -55,9 +53,7 @@ class MatrixWrapper {
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

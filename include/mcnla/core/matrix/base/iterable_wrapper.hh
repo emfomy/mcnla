@@ -23,7 +23,6 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The iterable container wrapper.
 ///
 /// @tparam  _Derived  The derived type.
@@ -33,8 +32,8 @@ class IterableWrapper {
 
  private:
 
-  using IteratorType      = IteratorT<_Derived>;
-  using ConstIteratorType = ConstIteratorT<_Derived>;
+  using IteratorType      = typename traits::Traits<_Derived>::IteratorType;
+  using ConstIteratorType = typename traits::Traits<_Derived>::ConstIteratorType;
 
  protected:
 
@@ -54,7 +53,7 @@ class IterableWrapper {
  protected:
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
+  MCNLA_CRTP_DERIVED(_Derived);
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };

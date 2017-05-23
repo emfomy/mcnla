@@ -137,9 +137,9 @@ _Val DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Core, typename _Val, Trans _trans, Uplo _uplo> template <typename... Args>
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo> template <typename ..._Args>
 void DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>(args...);
 }

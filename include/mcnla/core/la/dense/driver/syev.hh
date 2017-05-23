@@ -77,8 +77,8 @@ class SyevDriver {
   inline void computeValues( _TypeA &&a, _TypeW &&w ) noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
 
   // Get sizes
   inline std::tuple<index_t> sizes() const noexcept;
