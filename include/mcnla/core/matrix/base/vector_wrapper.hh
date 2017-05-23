@@ -10,7 +10,6 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <tuple>
-#include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,12 +50,6 @@ class VectorWrapper {
   inline index_t   len() const noexcept;
   inline index_t   nelem() const noexcept;
   inline SizesType sizes() const noexcept;
-
- protected:
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

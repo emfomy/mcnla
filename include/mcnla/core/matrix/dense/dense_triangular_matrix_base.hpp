@@ -87,8 +87,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType&
-  DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
+TrMatS<_Core, DenseTag, _Val, _trans, _uplo>& DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
@@ -99,8 +98,7 @@ typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType&
 /// @brief  Copies the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType
-    DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
+TrMatS<_Core, DenseTag, _Val, _trans, _uplo> DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
   DenseTriangularMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -166,7 +164,7 @@ void DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::resize(
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+TrMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
@@ -175,7 +173,7 @@ typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
 /// @copydoc  t
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+const TrMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
@@ -184,7 +182,7 @@ const typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::TransposeT
 /// @brief  Gets the general view of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
+GeMatS<_Core, DenseTag, _Val, _trans>&
     DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() noexcept {
   return static_cast<GeneralType&>(base());
 }
@@ -193,7 +191,7 @@ typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
 /// @copydoc  viewGeneral
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
+const GeMatS<_Core, DenseTag, _Val, _trans>&
     DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() const noexcept {
   return static_cast<const GeneralType&>(base());
 }
@@ -215,7 +213,7 @@ index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::ncolImpl() const 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mrow
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mrow
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mrowImpl() const noexcept {
@@ -223,7 +221,7 @@ index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mrowImpl() const 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mcol
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mcol
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mcolImpl() const noexcept {

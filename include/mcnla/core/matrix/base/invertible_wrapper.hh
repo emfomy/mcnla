@@ -35,14 +35,18 @@ template <class _Base> class InverseView;
 template <class _Derived>
 class InvertibleWrapper {
 
+ private:
+
+  using InverseType = InverseView<_Derived>;
+
  public:
 
   // Constructors
   inline InvertibleWrapper() noexcept = default;
 
   // Change view
-  inline       InverseView<_Derived>& inv() noexcept;
-  inline const InverseView<_Derived>& inv() const noexcept;
+  inline       InverseType& inv() noexcept;
+  inline const InverseType& inv() const noexcept;
 
  protected:
 
@@ -63,14 +67,18 @@ class InverseView : private _Base {
 
   friend InvertibleWrapper<_Base>;
 
+ private:
+
+  using BaseType = _Base;
+
  public:
 
   // Constructors
   inline InverseView() noexcept = delete;
 
   // Change view
-  inline       _Base& inv() noexcept;
-  inline const _Base& inv() const noexcept;
+  inline       BaseType& inv() noexcept;
+  inline const BaseType& inv() const noexcept;
 
 };
 

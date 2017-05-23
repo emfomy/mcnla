@@ -121,7 +121,7 @@ DenseMatrixBase<_Core, _Val, _trans>::DenseMatrixBase(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::DerivedType& DenseMatrixBase<_Core, _Val, _trans>::operator=(
+GeMatS<_Core, DenseTag, _Val, _trans>& DenseMatrixBase<_Core, _Val, _trans>::operator=(
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
@@ -132,7 +132,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::DerivedType& DenseMatrixBase<_Cor
 /// @brief  Copies the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::DerivedType DenseMatrixBase<_Core, _Val, _trans>::copy() const noexcept {
+GeMatS<_Core, DenseTag, _Val, _trans> DenseMatrixBase<_Core, _Val, _trans>::copy() const noexcept {
   DenseMatrixBase retval(this->nrow(), this->ncol(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -229,7 +229,7 @@ void DenseMatrixBase<_Core, _Val, _trans>::resize(
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::TransposeType& DenseMatrixBase<_Core, _Val, _trans>::t() noexcept {
+GeMatS<_Core, DenseTag, _Val, changeTrans(_trans)>& DenseMatrixBase<_Core, _Val, _trans>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
 
@@ -237,7 +237,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::TransposeType& DenseMatrixBase<_C
 /// @copydoc  t
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::TransposeType& DenseMatrixBase<_Core, _Val, _trans>::t() const noexcept {
+const GeMatS<_Core, DenseTag, _Val, changeTrans(_trans)>& DenseMatrixBase<_Core, _Val, _trans>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 
@@ -245,7 +245,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::TransposeType& DenseMatrixB
 /// @brief  Gets the conjugate of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::ConjugateType& DenseMatrixBase<_Core, _Val, _trans>::c() noexcept {
+GeMatS<_Core, DenseTag, _Val, changeConj(_trans)>& DenseMatrixBase<_Core, _Val, _trans>::c() noexcept {
   return static_cast<ConjugateType&>(base());
 }
 
@@ -253,7 +253,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::ConjugateType& DenseMatrixBase<_C
 /// @copydoc  c
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::ConjugateType& DenseMatrixBase<_Core, _Val, _trans>::c() const noexcept {
+const GeMatS<_Core, DenseTag, _Val, changeConj(_trans)>& DenseMatrixBase<_Core, _Val, _trans>::c() const noexcept {
   return static_cast<const ConjugateType&>(base());
 }
 
@@ -263,7 +263,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::ConjugateType& DenseMatrixB
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::HermitianType& DenseMatrixBase<_Core, _Val, _trans>::h() noexcept {
+GeMatS<_Core, DenseTag, _Val, changeHerm(_trans)>& DenseMatrixBase<_Core, _Val, _trans>::h() noexcept {
   return static_cast<HermitianType&>(base());
 }
 
@@ -271,7 +271,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::HermitianType& DenseMatrixBase<_C
 /// @copydoc  h
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::HermitianType& DenseMatrixBase<_Core, _Val, _trans>::h() const noexcept {
+const GeMatS<_Core, DenseTag, _Val, changeHerm(_trans)>& DenseMatrixBase<_Core, _Val, _trans>::h() const noexcept {
   return static_cast<const HermitianType&>(base());
 }
 
@@ -280,7 +280,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::HermitianType& DenseMatrixB
 ///
 template <class _Core, typename _Val, Trans _trans> template <Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-typename DenseMatrixBase<_Core, _Val, _trans>::template SymmetricType<_uplo>&
+SyMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 typename DenseMatrixBase<_Core, _Val, _trans>::SymmetricType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -294,7 +294,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::SymmetricType<_uplo>&
 ///
 template <class _Core, typename _Val, Trans _trans> template <Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-const typename DenseMatrixBase<_Core, _Val, _trans>::template SymmetricType<_uplo>&
+const SyMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 const typename DenseMatrixBase<_Core, _Val, _trans>::SymmetricType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
@@ -308,9 +308,9 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::SymmetricType<_uplo>&
 ///
 template <class _Core, typename _Val, Trans _trans> template <Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-typename DenseMatrixBase<_Core, _Val, _trans>::template TriangularType<_uplo>&
+TrMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-typename DenseMatrixBase<_Core, _Val, _trans>::TriangularType< _uplo >&
+typename DenseMatrixBase<_Core, _Val, _trans>::TriangularType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
     DenseMatrixBase<_Core, _Val, _trans>::viewTriangular() noexcept {
   mcnla_assert_true(this->isSquare());
@@ -322,11 +322,11 @@ typename DenseMatrixBase<_Core, _Val, _trans>::TriangularType< _uplo >&
 ///
 template <class _Core, typename _Val, Trans _trans> template <Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-const typename DenseMatrixBase<_Core, _Val, _trans>::template TriangularType<_uplo>&
+const TrMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 const typename DenseMatrixBase<_Core, _Val, _trans>::TriangularType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    DenseMatrixBase<_Core, _Val, _trans>::viewTriangular() const noexcept {
+  DenseMatrixBase<_Core, _Val, _trans>::viewTriangular() const noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<const TriangularType<_uplo>&>(base());
 }
@@ -335,8 +335,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::TriangularType<_uplo>&
 /// @brief  Gets the diagonal view of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::DiagonalType
-    DenseMatrixBase<_Core, _Val, _trans>::viewDiagonal() noexcept {
+DiMatS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::viewDiagonal() noexcept {
   mcnla_assert_true(this->isSquare());
   return getDiagonal().viewDiagonal();
 }
@@ -345,8 +344,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::DiagonalType
 /// @copydoc  viewDiagonal
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::DiagonalType
-    DenseMatrixBase<_Core, _Val, _trans>::viewDiagonal() const noexcept {
+const DiMatS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::viewDiagonal() const noexcept {
   return getDiagonal().viewDiagonal();
 }
 
@@ -354,7 +352,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::DiagonalType
 /// @brief  Gets a matrix block.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+GeMatS<_Core, DenseTag, _Val, _trans> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const IdxRange &rowrange,
     const IdxRange &colrange
 ) noexcept {
@@ -367,7 +365,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core,
 /// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+const GeMatS<_Core, DenseTag, _Val, _trans> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const IdxRange &rowrange,
     const IdxRange &colrange
 ) const noexcept {
@@ -380,7 +378,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<
 /// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+GeMatS<_Core, DenseTag, _Val, _trans> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const FullRange,
     const IdxRange &colrange
 ) noexcept {
@@ -393,7 +391,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core,
 /// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+const GeMatS<_Core, DenseTag, _Val, _trans> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const FullRange,
     const IdxRange &colrange
 ) const noexcept {
@@ -406,7 +404,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<
 /// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+GeMatS<_Core, DenseTag, _Val, _trans> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const IdxRange &rowrange,
     const FullRange
 ) noexcept {
@@ -419,7 +417,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core,
 /// @copydoc  operator()( const IdxRange&, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+const GeMatS<_Core, DenseTag, _Val, _trans> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const IdxRange &rowrange,
     const FullRange
 ) const noexcept {
@@ -432,7 +430,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::MatrixType DenseMatrixBase<
 /// @brief  Gets a column vector segment.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const IdxRange &rowrange,
     const index_t colidx
 ) noexcept {
@@ -445,7 +443,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core,
 /// @copydoc  operator()( const IdxRange&, const index_t )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const IdxRange &rowrange,
     const index_t colidx
 ) const noexcept {
@@ -458,7 +456,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<
 /// @copydoc  operator()( const IdxRange&, const index_t )
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const FullRange,
     const index_t colidx
 ) noexcept {
@@ -471,7 +469,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core,
 /// @copydoc  operator()( const IdxRange&, const index_t )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const FullRange,
     const index_t colidx
 ) const noexcept {
@@ -484,7 +482,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<
 /// @brief  Gets a row vector segment.
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const index_t rowidx,
     const IdxRange &colrange
 ) noexcept {
@@ -497,7 +495,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core,
 /// @copydoc  operator()( const index_t, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const index_t rowidx,
     const IdxRange &colrange
 ) const noexcept {
@@ -510,7 +508,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<
 /// @copydoc  operator()( const index_t, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const index_t rowidx,
     const FullRange
 ) noexcept {
@@ -523,7 +521,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core,
 /// @copydoc  operator()( const index_t, const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::operator()(
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operator()(
     const index_t rowidx,
     const FullRange
 ) const noexcept {
@@ -536,7 +534,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::getDiagonalImpl
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::getDiagonal(
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::getDiagonal(
     const index_t idx
 ) noexcept {
   return static_cast<VectorType&&>(
@@ -548,7 +546,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core,
 /// @copydoc  getDiagonal
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<_Core, _Val, _trans>::getDiagonal(
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::getDiagonal(
     const index_t idx
 ) const noexcept {
   return static_cast<const VectorType&&>(
@@ -560,8 +558,7 @@ const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType DenseMatrixBase<
 /// @copydoc  mcnla::matrix::DenseMatrixStorage::vectorizeImpl
 ///
 template <class _Core, typename _Val, Trans _trans>
-typename DenseMatrixBase<_Core, _Val, _trans>::VectorType
-    DenseMatrixBase<_Core, _Val, _trans>::vectorize() noexcept {
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::vectorize() noexcept {
   return static_cast<VectorType&&>(this->vectorizeImpl());
 }
 
@@ -569,8 +566,7 @@ typename DenseMatrixBase<_Core, _Val, _trans>::VectorType
 /// @copydoc  vectorize
 ///
 template <class _Core, typename _Val, Trans _trans>
-const typename DenseMatrixBase<_Core, _Val, _trans>::VectorType
-    DenseMatrixBase<_Core, _Val, _trans>::vectorize() const noexcept {
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::vectorize() const noexcept {
   return static_cast<const VectorType&&>(this->vectorizeImpl());
 }
 
@@ -591,7 +587,7 @@ index_t DenseMatrixBase<_Core, _Val, _trans>::ncolImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mrow
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mrow
 ///
 template <class _Core, typename _Val, Trans _trans>
 index_t DenseMatrixBase<_Core, _Val, _trans>::mrowImpl() const noexcept {
@@ -599,7 +595,7 @@ index_t DenseMatrixBase<_Core, _Val, _trans>::mrowImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mcol
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mcol
 ///
 template <class _Core, typename _Val, Trans _trans>
 index_t DenseMatrixBase<_Core, _Val, _trans>::mcolImpl() const noexcept {

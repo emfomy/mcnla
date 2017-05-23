@@ -87,8 +87,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType&
-  DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
+SyMatS<_Core, DenseTag, _Val, _trans, _uplo>& DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
@@ -99,8 +98,7 @@ typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType&
 /// @brief  Copies the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType
-    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
+SyMatS<_Core, DenseTag, _Val, _trans, _uplo> DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
   DenseSymmetricMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -162,7 +160,7 @@ void DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::resize(
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
@@ -171,7 +169,7 @@ typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
 /// @copydoc  t
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+const SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
@@ -180,7 +178,7 @@ const typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::TransposeTy
 /// @brief  Gets the general view of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
+GeMatS<_Core, DenseTag, _Val, _trans>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() noexcept {
   return static_cast<GeneralType&>(base());
 }
@@ -189,7 +187,7 @@ typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
 /// @copydoc  viewGeneral
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const typename DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
+const GeMatS<_Core, DenseTag, _Val, _trans>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() const noexcept {
   return static_cast<const GeneralType&>(base());
 }
@@ -211,7 +209,7 @@ index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::ncolImpl() const n
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mrow
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mrow
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::mrowImpl() const noexcept {
@@ -219,7 +217,7 @@ index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::mrowImpl() const n
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mcol
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mcol
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::mcolImpl() const noexcept {

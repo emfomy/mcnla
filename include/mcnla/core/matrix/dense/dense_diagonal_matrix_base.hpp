@@ -87,7 +87,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::DenseDiagonalMatrixBase(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val>
-typename DenseDiagonalMatrixBase<_Core, _Val>::DerivedType& DenseDiagonalMatrixBase<_Core, _Val>::operator=(
+DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::operator=(
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
@@ -98,7 +98,7 @@ typename DenseDiagonalMatrixBase<_Core, _Val>::DerivedType& DenseDiagonalMatrixB
 /// @brief  Copies the matrix.
 ///
 template <class _Core, typename _Val>
-typename DenseDiagonalMatrixBase<_Core, _Val>::DerivedType DenseDiagonalMatrixBase<_Core, _Val>::copy() const noexcept {
+DiMatS<_Core, DenseTag, _Val> DenseDiagonalMatrixBase<_Core, _Val>::copy() const noexcept {
   DenseDiagonalMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -156,8 +156,7 @@ void DenseDiagonalMatrixBase<_Core, _Val>::reconstruct(
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val>
-typename DenseDiagonalMatrixBase<_Core, _Val>::TransposeType&
-    DenseDiagonalMatrixBase<_Core, _Val>::t() noexcept {
+DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() noexcept {
   return this->derived();
 }
 
@@ -165,8 +164,7 @@ typename DenseDiagonalMatrixBase<_Core, _Val>::TransposeType&
 /// @copydoc  t
 ///
 template <class _Core, typename _Val>
-const typename DenseDiagonalMatrixBase<_Core, _Val>::TransposeType&
-    DenseDiagonalMatrixBase<_Core, _Val>::t() const noexcept {
+const DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() const noexcept {
   return this->derived();
 }
 
@@ -174,8 +172,7 @@ const typename DenseDiagonalMatrixBase<_Core, _Val>::TransposeType&
 /// @brief  Gets the vector view of the matrix.
 ///
 template <class _Core, typename _Val>
-typename DenseDiagonalMatrixBase<_Core, _Val>::VectorType&
-    DenseDiagonalMatrixBase<_Core, _Val>::viewVector() noexcept {
+GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::viewVector() noexcept {
   return static_cast<VectorType&>(base());
 }
 
@@ -183,8 +180,7 @@ typename DenseDiagonalMatrixBase<_Core, _Val>::VectorType&
 /// @copydoc  viewVector
 ///
 template <class _Core, typename _Val>
-const typename DenseDiagonalMatrixBase<_Core, _Val>::VectorType&
-    DenseDiagonalMatrixBase<_Core, _Val>::viewVector() const noexcept {
+const GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::viewVector() const noexcept {
   return static_cast<const VectorType&>(base());
 }
 
@@ -192,8 +188,7 @@ const typename DenseDiagonalMatrixBase<_Core, _Val>::VectorType&
 /// @copydoc  viewVector
 ///
 template <class _Core, typename _Val>
-typename DenseDiagonalMatrixBase<_Core, _Val>::VectorType&
-    DenseDiagonalMatrixBase<_Core, _Val>::vectorize() noexcept {
+GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vectorize() noexcept {
   return viewVector();
 }
 
@@ -201,8 +196,7 @@ typename DenseDiagonalMatrixBase<_Core, _Val>::VectorType&
 /// @copydoc  vectorize
 ///
 template <class _Core, typename _Val>
-const typename DenseDiagonalMatrixBase<_Core, _Val>::VectorType&
-    DenseDiagonalMatrixBase<_Core, _Val>::vectorize() const noexcept {
+const GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vectorize() const noexcept {
   return viewVector();
 }
 
@@ -223,7 +217,7 @@ index_t DenseDiagonalMatrixBase<_Core, _Val>::ncolImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mrow
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mrow
 ///
 template <class _Core, typename _Val>
 index_t DenseDiagonalMatrixBase<_Core, _Val>::mrowImpl() const noexcept {
@@ -231,7 +225,7 @@ index_t DenseDiagonalMatrixBase<_Core, _Val>::mrowImpl() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::MatrixWrapper::mcol
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mcol
 ///
 template <class _Core, typename _Val>
 index_t DenseDiagonalMatrixBase<_Core, _Val>::mcolImpl() const noexcept {
