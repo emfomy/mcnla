@@ -172,32 +172,16 @@ const DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() c
 /// @brief  Gets the vector view of the matrix.
 ///
 template <class _Core, typename _Val>
-GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::viewVector() noexcept {
+GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vec() noexcept {
   return static_cast<VectorType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewVector
+/// @copydoc  vec
 ///
 template <class _Core, typename _Val>
-const GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::viewVector() const noexcept {
+const GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vec() const noexcept {
   return static_cast<const VectorType&>(base());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewVector
-///
-template <class _Core, typename _Val>
-GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vectorize() noexcept {
-  return viewVector();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  vectorize
-///
-template <class _Core, typename _Val>
-const GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vectorize() const noexcept {
-  return viewVector();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

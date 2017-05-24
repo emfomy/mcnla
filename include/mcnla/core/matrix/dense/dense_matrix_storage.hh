@@ -105,10 +105,10 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   inline const VectorStorageType getVector0Impl( const IdxRange &range0, const index_t idx1 ) const noexcept;
   inline       VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) noexcept;
   inline const VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) const noexcept;
-  inline       VectorStorageType getDiagonalImpl( const index_t idx ) noexcept;
-  inline const VectorStorageType getDiagonalImpl( const index_t idx ) const noexcept;
-  inline       VectorStorageType vectorizeImpl() noexcept;
-  inline const VectorStorageType vectorizeImpl() const noexcept;
+  inline       VectorStorageType getDiagImpl( const index_t idx ) noexcept;
+  inline const VectorStorageType getDiagImpl( const index_t idx ) const noexcept;
+  inline       VectorStorageType vecImpl() noexcept;
+  inline const VectorStorageType vecImpl() const noexcept;
 
 };
 

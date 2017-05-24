@@ -143,7 +143,7 @@ inline void omatcopy(
 /// @ingroup  la_dense_blas1m_module
 /// @brief  Copies a matrix to another matrix.
 ///
-/// @note  This routines calls @ref copy "copy"(a.vectorize(), b.vectorize()) if both @a a and @a b are shrunk,
+/// @note  This routines calls @ref copy "copy"(a.vec(), b.vec()) if both @a a and @a b are shrunk,
 ///        otherwise it calls @ref omatcopy "omatcopy"(a, b, 1).
 ///
 template <typename _Val, Trans _transa, Trans _transb>
@@ -152,7 +152,7 @@ inline void copy(
           DenseMatrix<_Val, _transb> &b
 ) noexcept {
   if ( a.isShrunk() && b.isShrunk() ) {
-    copy(a.vectorize(), b.vectorize());
+    copy(a.vec(), b.vec());
   } else {
     omatcopy(a, b, 1);
   }
@@ -165,7 +165,7 @@ inline void copy(
           DenseMatrix<_Val, _transb> &&b
 ) noexcept {
   if ( a.isShrunk() && b.isShrunk() ) {
-    copy(a.vectorize(), b.vectorize());
+    copy(a.vec(), b.vec());
   } else {
     omatcopy(a, b, 1);
   }

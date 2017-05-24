@@ -114,13 +114,13 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
     la::mm(matrix_qc.t(), matrix_qs, matrix_b_);
 
     // D := B * B'
-    la::rk(matrix_b_, matrix_d_.viewSymmetric());
+    la::rk(matrix_b_, matrix_d_.sym());
 
     // X := 1/N * Qs * B'
     la::mm(matrix_qs, matrix_b_.t(), matrix_x_, 1.0/num_sketch);
 
     // X -= 1/N * Qc * D
-    la::mm(matrix_qc, matrix_d_.viewSymmetric(), matrix_x_, -1.0/num_sketch, 1.0);
+    la::mm(matrix_qc, matrix_d_.sym(), matrix_x_, -1.0/num_sketch, 1.0);
 
     // Reduce sum X
     comm_moment = utility::getTime();
@@ -131,10 +131,10 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // Z := sum(X' * X)
-    la::rk(matrix_x_.t(), matrix_z_.viewSymmetric());
+    la::rk(matrix_x_.t(), matrix_z_.sym());
 
     // Compute the eigen-decomposition of Z -> Z' * E * Z
-    syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
+    syev_driver_(matrix_z_.sym(), vector_e_);
 
     // E := sqrt( I/2 + sqrt( I/4 - E ) )
     for ( index_t i = 0; i < dim_sketch; ++i ) {
@@ -143,26 +143,26 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
     }
 
     // D := F * Z
-    la::mm(vector_f_.viewDiagonal(), matrix_z_, matrix_d_);
+    la::mm(vector_f_.diag(), matrix_z_, matrix_d_);
 
     // Z := F \ Z
-    la::sm(vector_f_.viewDiagonal().inv(), matrix_z_);
+    la::sm(vector_f_.diag().inv(), matrix_z_);
 
     // C := D' * D
-    la::rk(matrix_d_.t(), matrix_c_.viewSymmetric());
+    la::rk(matrix_d_.t(), matrix_c_.sym());
 
     // inv(C) := Z' * Z
-    la::rk(matrix_z_.t(), matrix_d_.viewSymmetric());
+    la::rk(matrix_z_.t(), matrix_d_.sym());
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
 
     // Qc *= C
-    la::copy(matrix_qc.vectorize(), matrix_tmp_.vectorize());
-    la::mm(matrix_tmp_, matrix_c_.viewSymmetric(), matrix_qc);
+    la::copy(matrix_qc.vec(), matrix_tmp_.vec());
+    la::mm(matrix_tmp_, matrix_c_.sym(), matrix_qc);
 
     // Qc += X * inv(C)
-    la::mm(matrix_x_, matrix_d_.viewSymmetric(), matrix_qc, 1.0, 1.0);
+    la::mm(matrix_x_, matrix_d_.sym(), matrix_qc, 1.0, 1.0);
 
     // ================================================================================================================== //
     // Check convergence: || I - C ||_F / sqrt(k) < tol

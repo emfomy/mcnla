@@ -86,9 +86,9 @@ void RowBlockGramianOrthogonalizer<_Val>::runImpl(
   for ( auto &v : matrix_s_ ) {
     v = std::sqrt(v);
   }
-  la::copy(matrix_qsj.vectorize(), collection_tmp_.unfold().vectorize());
+  la::copy(matrix_qsj.vec(), collection_tmp_.unfold().vec());
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    la::sm(matrix_s_(""_, i).viewDiagonal().inv(), collection_w_(i));
+    la::sm(matrix_s_(""_, i).diag().inv(), collection_w_(i));
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_qj(i));
   }
 

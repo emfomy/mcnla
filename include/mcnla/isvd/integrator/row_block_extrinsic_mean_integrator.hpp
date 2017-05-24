@@ -101,10 +101,10 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
     // Gi := Bi * Bi'
-    la::rk(collection_bi_(i), collection_g_(i).viewSymmetric());
+    la::rk(collection_bi_(i), collection_g_(i).sym());
 
     // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
-    syev_driver_(collection_g_(i).viewSymmetric(), vector_s_);
+    syev_driver_(collection_g_(i).sym(), vector_s_);
 
   }
 

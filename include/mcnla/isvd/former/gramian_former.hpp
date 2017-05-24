@@ -89,10 +89,10 @@ void GramianFormer<_Val>::runImpl(
   la::mm(matrix_q.t(), matrix_a, matrix_qta_);
 
   // W := QtA * QtA'
-  la::rk(matrix_qta_, matrix_w_.viewSymmetric());
+  la::rk(matrix_qta_, matrix_w_.sym());
 
   // Compute the eigen-decomposition of W -> W * S * W'
-  syev_driver_(matrix_w_.viewSymmetric(), vector_s_);
+  syev_driver_(matrix_w_.sym(), vector_s_);
 
   // S := sqrt(S)
   for ( auto &v : vector_s_ ) {

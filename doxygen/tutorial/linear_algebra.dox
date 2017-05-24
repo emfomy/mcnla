@@ -16,11 +16,11 @@ namespace mcnla {
   `%la::gemm(a.t(), b, c.t())`                                     | @f$C^\top \gets A^\top \cdot B@f$
   `%la::gemm(a, b, c, 2)`                                          | @f$C \gets 2 A \cdot B@f$
   `%la::gemm(a, b, c, 2, -3)`                                      | @f$C \gets 2 A \cdot B - 3 C@f$
-  `%la::symm(a, b.viewSymmetric<Uplo::UPPER>(), c.t())`            | @f$C^\top \gets A \cdot B@f$
-  `%la::symm(a.viewSymmetric(), b, c)`                             | @f$C \gets A \cdot B@f$
-  `%la::dimm(x.viewDiagonal(), b, c)`                              | @f$C \gets \mathrm{diag}(x) \cdot B@f$
-  `%la::dimm(""_, x.viewDiagonal(), c)`                            | @f$C \gets C \cdot \mathrm{diag}(x)@f$
-  `%la::dism(x.viewDiagonal().inv(), b)`                           | @f$B \gets \mathrm{diag}(x)^{-1} \cdot B@f$
+  `%la::symm(a, b.sym<Uplo::UPPER>(), c.t())`                      | @f$C^\top \gets A \cdot B@f$
+  `%la::symm(a.sym(), b, c)`                                       | @f$C \gets A \cdot B@f$
+  `%la::dimm(x.diag(), b, c)`                                      | @f$C \gets \mathrm{diag}(x) \cdot B@f$
+  `%la::dimm(""_, x.diag(), c)`                                    | @f$C \gets C \cdot \mathrm{diag}(x)@f$
+  `%la::dism(x.diag().inv(), b)`                                   | @f$B \gets \mathrm{diag}(x)^{-1} \cdot B@f$
 
   There are some smart routines that determines the types automatically (see @ref la_interface_module for detail):
 

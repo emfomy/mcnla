@@ -263,8 +263,8 @@ void create(
 
   // Generate E & U & V using normal random
   mcnla::random::Streams streams(rand());
-  mcnla::random::gaussian(streams, matrix_u.vectorize());
-  mcnla::random::gaussian(streams, matrix_v.vectorize());
+  mcnla::random::gaussian(streams, matrix_u.vec());
+  mcnla::random::gaussian(streams, matrix_v.vec());
 
   // Orthogonalize U & V
   mcnla::la::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
@@ -282,7 +282,7 @@ void create(
   }
 
   // A := U * S * V'
-  mcnla::la::mm(""_, vector_s.viewDiagonal(), matrix_u);
+  mcnla::la::mm(""_, vector_s.diag(), matrix_u);
   mcnla::la::mm(matrix_u, matrix_v.t(), matrix_a);
 
   // Compute excepted error
@@ -328,7 +328,7 @@ void check(
   auto matrix_u_tmp = matrix_u.copy();
 
   // A_tmp -= U * S * V'
-  mcnla::la::mm(""_, vector_s.viewDiagonal(), matrix_u_tmp);
+  mcnla::la::mm(""_, vector_s.diag(), matrix_u_tmp);
   mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F

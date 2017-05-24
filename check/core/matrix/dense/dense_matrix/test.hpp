@@ -27,7 +27,7 @@ class DenseMatrixTestBase : public testing::Test {
   virtual void SetUp() {
     mcnla::matrix::Array<_Val> array(memsize_, offset_);
     mat_.reconstruct(nrow_, ncol_, pitch_, array);
-    mcnla::la::larnv<3>(mat_.vectorize(), iseed);
+    mcnla::la::larnv<3>(mat_.vec(), iseed);
     valptr0_ = array.get();
   }
 

@@ -18,7 +18,7 @@ struct Data {
     : collection_qj(parameters.createCollectionQj()),
       matrix_qj(parameters.createMatrixQj()) {
     mcnla::random::Streams streams(0);
-    mcnla::random::gaussian(streams, collection_qj.unfold().vectorize());
+    mcnla::random::gaussian(streams, collection_qj.unfold().vec());
     mcnla::isvd::RowBlockGramianOrthogonalizer<ValType> orthogonalizer(parameters);
     orthogonalizer.initialize();
     orthogonalizer(collection_qj);

@@ -11,7 +11,7 @@ namespace matrix {
 
   <table>
   <tr><th> Command                                                              <th> Detail
-  <tr><td> `DenseVector           ( [len]     [, stride] [, capacity] )`<br>
+  <tr><td> `DenseVector           ( [len]        [, stride] [, capacity] )`<br>
            `DenseVector           ( [sizes]      [, stride] [, capacity] )`     <td> Dense vector
   <tr><td> `DenseMatrix           ( [nrow, ncol] [, pitch]  [, capacity] )`<br>
            `DenseMatrix           ( [sizes]      [, pitch]  [, capacity] )`     <td> Dense matrix

@@ -10,7 +10,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Vectorize) {
   const auto mat      = this->mat_;
   const auto valptr0  = this->valptr0_;
 
-  auto segment = mat.vectorize();
+  auto segment = mat.vec();
 
   const auto idxs = nrow * ncol;
 
@@ -69,7 +69,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Vectorize) {
   const auto mat      = this->mat_;
   const auto valptr0  = this->valptr0_;
 
-  auto segment = mat.vectorize();
+  auto segment = mat.vec();
 
   const auto idxs = pitch * ncol - (pitch-nrow);
 
@@ -130,7 +130,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Vectorize) {
   const auto mat      = this->mat_;
   const auto valptr0  = this->valptr0_;
 
-  auto segment = mat.vectorize();
+  auto segment = mat.vec();
 
   const auto idxs = nrow * ncol;
 
@@ -189,7 +189,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Vectorize) {
   const auto mat      = this->mat_;
   const auto valptr0  = this->valptr0_;
 
-  auto segment = mat.vectorize();
+  auto segment = mat.vec();
 
   const auto idxs = nrow * pitch - (pitch-ncol);
 

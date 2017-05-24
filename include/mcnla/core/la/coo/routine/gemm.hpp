@@ -68,7 +68,7 @@ inline void gemmImpl3(
   mcnla_assert_eq(a.nrow(), b.ncol());
 
   if ( c.isShrunk() ) {
-    la::scal(c.vectorize(), beta);
+    la::scal(c.vec(), beta);
   } else {
     for ( index_t i = 0; i < c.nrow(); ++i ) {
       la::scal(c(""_, i), beta);

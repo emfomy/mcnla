@@ -80,7 +80,7 @@ void RowBlockGaussianProjectionSketcher<_Val>::runImpl(
   // Random generating
 
   // Random sample Omega using normal Gaussian distribution
-  random::gaussian(streams, matrix_omegas_.vectorize());
+  random::gaussian(streams, matrix_omegas_.vec());
 
   this->toc(comm_time);
   // ====================================================================================================================== //

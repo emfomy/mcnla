@@ -100,12 +100,8 @@ class DenseDiagonalMatrixBase_
   inline const TransposeType& t() const noexcept;
 
   // Changes view
-  inline       VectorType& viewVector() noexcept;
-  inline const VectorType& viewVector() const noexcept;
-
-  // Gets vector
-  inline       VectorType& vectorize() noexcept;
-  inline const VectorType& vectorize() const noexcept;
+  inline       VectorType& vec() noexcept;
+  inline const VectorType& vec() const noexcept;
 
  protected:
 

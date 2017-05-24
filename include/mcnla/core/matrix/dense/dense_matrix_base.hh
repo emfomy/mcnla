@@ -132,17 +132,25 @@ class DenseMatrixBase_
 
   // Change view
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline       SymmetricType<_uplo>& viewSymmetric() noexcept;
+  inline       SymmetricType<_uplo>& sym() noexcept;
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline const SymmetricType<_uplo>& viewSymmetric() const noexcept;
+  inline const SymmetricType<_uplo>& sym() const noexcept;
+  inline       SymmetricType<Uplo::UPPER>& symu() noexcept;
+  inline const SymmetricType<Uplo::UPPER>& symu() const noexcept;
+  inline       SymmetricType<Uplo::LOWER>& syml() noexcept;
+  inline const SymmetricType<Uplo::LOWER>& syml() const noexcept;
 
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline       TriangularType<_uplo>& viewTriangular() noexcept;
+  inline       TriangularType<_uplo>& tri() noexcept;
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline const TriangularType<_uplo>& viewTriangular() const noexcept;
+  inline const TriangularType<_uplo>& tri() const noexcept;
+  inline       TriangularType<Uplo::UPPER>& triu() noexcept;
+  inline const TriangularType<Uplo::UPPER>& triu() const noexcept;
+  inline       TriangularType<Uplo::LOWER>& tril() noexcept;
+  inline const TriangularType<Uplo::LOWER>& tril() const noexcept;
 
-  inline       DiagonalType viewDiagonal() noexcept;
-  inline const DiagonalType viewDiagonal() const noexcept;
+  inline       DiagonalType diag() noexcept;
+  inline const DiagonalType diag() const noexcept;
 
   // Gets matrix block
   inline       MatrixType operator()( const IdxRange &rowrange, const IdxRange &colrange ) noexcept;
@@ -162,10 +170,10 @@ class DenseMatrixBase_
   inline       VectorType operator()( const index_t rowidx, const FullRange ) noexcept;
   inline const VectorType operator()( const index_t rowidx, const FullRange ) const noexcept;
 
-  inline       VectorType getDiagonal( const index_t idx = 0 ) noexcept;
-  inline const VectorType getDiagonal( const index_t idx = 0 ) const noexcept;
-  inline       VectorType vectorize() noexcept;
-  inline const VectorType vectorize() const noexcept;
+  inline       VectorType getDiag( const index_t idx = 0 ) noexcept;
+  inline const VectorType getDiag( const index_t idx = 0 ) const noexcept;
+  inline       VectorType vec() noexcept;
+  inline const VectorType vec() const noexcept;
 
  protected:
 

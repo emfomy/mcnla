@@ -66,7 +66,7 @@ inline void dimmImpl2(
   mcnla_assert_eq(a.size(), c.nrow());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
-  auto da = a.viewVector();
+  auto da = a.vec();
   for ( index_t i = 0; i < da.len(); ++i ) {
     la::axpby(b(i, ""_), c(i, ""_), da(i) * alpha, beta);
   }
@@ -83,7 +83,7 @@ inline void dimmImpl2(
   mcnla_assert_eq(a.size(), c.ncol());
   mcnla_assert_eq(b.sizes(), c.sizes());
 
-  auto da = a.viewVector();
+  auto da = a.vec();
   for ( index_t i = 0; i < da.len(); ++i ) {
     la::axpby(b(""_, i), c(""_, i), da(i) * alpha, beta);
   }
@@ -185,7 +185,7 @@ inline void dimmImpl0(
 ) noexcept {
   mcnla_assert_eq(a.size(), c.nrow());
 
-  auto da = a.viewVector();
+  auto da = a.vec();
   for ( index_t i = 0; i < da.len(); ++i ) {
     la::scal(c(i, ""_), da(i) * alpha);
   }
@@ -199,7 +199,7 @@ inline void dimmImpl0(
 ) noexcept {
   mcnla_assert_eq(a.size(), c.ncol());
 
-  auto da = a.viewVector();
+  auto da = a.vec();
   for ( index_t i = 0; i < da.len(); ++i ) {
     la::scal(c(""_, i), da(i) * alpha);
   }

@@ -175,20 +175,20 @@ const SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the general view of the matrix.
+/// @brief  Gets the full view of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 GeMatS<_Core, DenseTag, _Val, _trans>&
-    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() noexcept {
+    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::full() noexcept {
   return static_cast<GeneralType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewGeneral
+/// @copydoc  full
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 const GeMatS<_Core, DenseTag, _Val, _trans>&
-    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() const noexcept {
+    DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::full() const noexcept {
   return static_cast<const GeneralType&>(base());
 }
 

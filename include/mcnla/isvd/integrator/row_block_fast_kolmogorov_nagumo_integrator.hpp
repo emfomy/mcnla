@@ -85,7 +85,7 @@ void RowBlockFastKolmogorovNagumoIntegrator<_Val>::runImpl(
 
   auto &matrix_qsj  = collection_qj.unfold();                   // matrix Qs.
   auto &matrix_q0j  = collection_qj(0);                         // matrix Q0.
-  auto &symatrix_bs = matrix_bs_.template viewSymmetric<Uplo::UPPER>();  // matrix Bs.
+  auto &symatrix_bs = matrix_bs_.template sym<Uplo::UPPER>();  // matrix Bs.
 
   _Val one_n = 1.0/num_sketch, one_n2 = (1.0/num_sketch)/num_sketch;
   this->tic(); double comm_moment, comm_time = 0;
@@ -137,13 +137,13 @@ void RowBlockFastKolmogorovNagumoIntegrator<_Val>::runImpl(
     // Z := 1/N^2 * Bc * Bs * Bc' - D^2
     la::mm(matrix_bc, symatrix_bs, matrix_bp);
     la::mm(matrix_bp, matrix_bc.t(), matrix_z_, one_n2);
-    la::rk(matrix_d_, matrix_z_.viewSymmetric(), -1.0, 1.0);
+    la::rk(matrix_d_, matrix_z_.sym(), -1.0, 1.0);
 
     // ================================================================================================================== //
     // C := sqrt( I/2 + sqrt( I/4 - Z ) )
 
     // Compute the eigen-decomposition of Z -> Z' * E * Z
-    syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
+    syev_driver_(matrix_z_.sym(), vector_e_);
 
     // E := sqrt( I/2 + sqrt( I/4 - E ) )
     // F := sqrt( E )
@@ -153,10 +153,10 @@ void RowBlockFastKolmogorovNagumoIntegrator<_Val>::runImpl(
     }
 
     // Tmp := F * Z
-    la::mm(vector_f_.viewDiagonal(), matrix_z_, matrix_cinv_);
+    la::mm(vector_f_.diag(), matrix_z_, matrix_cinv_);
 
     // Z := F \ Z
-    la::sm(vector_f_.viewDiagonal().inv(), matrix_z_);
+    la::sm(vector_f_.diag().inv(), matrix_z_);
 
     // C := Tmp' * Tmp
     la::mm(matrix_cinv_.t(), matrix_cinv_, matrix_c_);

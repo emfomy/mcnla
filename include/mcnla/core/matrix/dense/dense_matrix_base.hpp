@@ -284,13 +284,13 @@ SyMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 typename DenseMatrixBase<_Core, _Val, _trans>::SymmetricType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    DenseMatrixBase<_Core, _Val, _trans>::viewSymmetric() noexcept {
+    DenseMatrixBase<_Core, _Val, _trans>::sym() noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<SymmetricType<_uplo>&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewSymmetric
+/// @copydoc  sym
 ///
 template <class _Core, typename _Val, Trans _trans> template <Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -298,9 +298,45 @@ const SyMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 const typename DenseMatrixBase<_Core, _Val, _trans>::SymmetricType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    DenseMatrixBase<_Core, _Val, _trans>::viewSymmetric() const noexcept {
+    DenseMatrixBase<_Core, _Val, _trans>::sym() const noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<const SymmetricType<_uplo>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the upper symmetric view of the matrix.
+///
+template <class _Core, typename _Val, Trans _trans>
+SyMatS<_Core, DenseTag, _Val, _trans, Uplo::UPPER>& DenseMatrixBase<_Core, _Val, _trans>::symu() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<SymmetricType<Uplo::UPPER>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  symu
+///
+template <class _Core, typename _Val, Trans _trans>
+const SyMatS<_Core, DenseTag, _Val, _trans, Uplo::UPPER>& DenseMatrixBase<_Core, _Val, _trans>::symu() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const SymmetricType<Uplo::UPPER>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the lower symmetric view of the matrix.
+///
+template <class _Core, typename _Val, Trans _trans>
+SyMatS<_Core, DenseTag, _Val, _trans, Uplo::LOWER>& DenseMatrixBase<_Core, _Val, _trans>::syml() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<SymmetricType<Uplo::LOWER>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  syml
+///
+template <class _Core, typename _Val, Trans _trans>
+const SyMatS<_Core, DenseTag, _Val, _trans, Uplo::LOWER>& DenseMatrixBase<_Core, _Val, _trans>::syml() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const SymmetricType<Uplo::LOWER>&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,13 +348,13 @@ TrMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 typename DenseMatrixBase<_Core, _Val, _trans>::TriangularType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    DenseMatrixBase<_Core, _Val, _trans>::viewTriangular() noexcept {
+    DenseMatrixBase<_Core, _Val, _trans>::tri() noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<TriangularType<_uplo>&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewTriangular
+/// @copydoc  tri
 ///
 template <class _Core, typename _Val, Trans _trans> template <Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -326,26 +362,62 @@ const TrMatS<_Core, DenseTag, _Val, _trans, _uplo>&
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 const typename DenseMatrixBase<_Core, _Val, _trans>::TriangularType<_uplo>&
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  DenseMatrixBase<_Core, _Val, _trans>::viewTriangular() const noexcept {
+  DenseMatrixBase<_Core, _Val, _trans>::tri() const noexcept {
   mcnla_assert_true(this->isSquare());
   return static_cast<const TriangularType<_uplo>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the upper triangular view of the matrix.
+///
+template <class _Core, typename _Val, Trans _trans>
+TrMatS<_Core, DenseTag, _Val, _trans, Uplo::UPPER>& DenseMatrixBase<_Core, _Val, _trans>::triu() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<TriangularType<Uplo::UPPER>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  triu
+///
+template <class _Core, typename _Val, Trans _trans>
+const TrMatS<_Core, DenseTag, _Val, _trans, Uplo::UPPER>& DenseMatrixBase<_Core, _Val, _trans>::triu() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const TriangularType<Uplo::UPPER>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the lower triangular view of the matrix.
+///
+template <class _Core, typename _Val, Trans _trans>
+TrMatS<_Core, DenseTag, _Val, _trans, Uplo::LOWER>& DenseMatrixBase<_Core, _Val, _trans>::tril() noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<TriangularType<Uplo::LOWER>&>(base());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  tril
+///
+template <class _Core, typename _Val, Trans _trans>
+const TrMatS<_Core, DenseTag, _Val, _trans, Uplo::LOWER>& DenseMatrixBase<_Core, _Val, _trans>::tril() const noexcept {
+  mcnla_assert_true(this->isSquare());
+  return static_cast<const TriangularType<Uplo::LOWER>&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the diagonal view of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans>
-DiMatS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::viewDiagonal() noexcept {
+DiMatS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::diag() noexcept {
   mcnla_assert_true(this->isSquare());
-  return getDiagonal().viewDiagonal();
+  return getDiag().diag();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewDiagonal
+/// @copydoc  diag
 ///
 template <class _Core, typename _Val, Trans _trans>
-const DiMatS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::viewDiagonal() const noexcept {
-  return getDiagonal().viewDiagonal();
+const DiMatS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::diag() const noexcept {
+  return getDiag().diag();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -531,43 +603,43 @@ const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::operat
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::getDiagonalImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::getDiagImpl
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::getDiagonal(
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::getDiag(
     const index_t idx
 ) noexcept {
   return static_cast<VectorType&&>(
-      !isTrans(_trans) ? this->getDiagonalImpl(idx) : this->getDiagonalImpl(-idx)
+      !isTrans(_trans) ? this->getDiagImpl(idx) : this->getDiagImpl(-idx)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getDiagonal
+/// @copydoc  getDiag
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::getDiagonal(
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::getDiag(
     const index_t idx
 ) const noexcept {
   return static_cast<const VectorType&&>(
-      !isTrans(_trans) ? this->getDiagonalImpl(idx) : this->getDiagonalImpl(-idx)
+      !isTrans(_trans) ? this->getDiagImpl(idx) : this->getDiagImpl(-idx)
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::vectorizeImpl
+/// @copydoc  mcnla::matrix::DenseMatrixStorage::vecImpl
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::vectorize() noexcept {
-  return static_cast<VectorType&&>(this->vectorizeImpl());
+GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::vec() noexcept {
+  return static_cast<VectorType&&>(this->vecImpl());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  vectorize
+/// @copydoc  vec
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::vectorize() const noexcept {
-  return static_cast<const VectorType&&>(this->vectorizeImpl());
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::vec() const noexcept {
+  return static_cast<const VectorType&&>(this->vecImpl());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

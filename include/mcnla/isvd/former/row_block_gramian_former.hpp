@@ -99,13 +99,13 @@ void RowBlockGramianFormer<_Val>::runImpl(
   comm_time += utility::getTime() - comm_moment;
 
   // W := sum( QtAj * QtAj' )
-  la::rk(matrix_qtaj_, matrix_w_.viewSymmetric());
+  la::rk(matrix_qtaj_, matrix_w_.sym());
   comm_moment = utility::getTime();
   mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
 
   // Compute the eigen-decomposition of W -> W * S * W'
-  syev_driver_(matrix_w_.viewSymmetric(), vector_s_);
+  syev_driver_(matrix_w_.sym(), vector_s_);
 
   // S := sqrt(S)
   for ( auto &v : vector_s_ ) {

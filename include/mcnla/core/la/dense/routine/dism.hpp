@@ -59,7 +59,7 @@ inline void dismImpl2(
 ) noexcept {
   mcnla_assert_eq(a.size(), b.nrow());
 
-  auto da = a.viewVector();
+  auto da = a.vec();
   for ( index_t i = 0; i < da.len(); ++i ) {
     la::scal(b(i, ""_), alpha / da(i));
   }
@@ -74,7 +74,7 @@ inline void dismImpl2(
 ) noexcept {
   mcnla_assert_eq(a.size(), b.ncol());
 
-  auto da = a.viewVector();
+  auto da = a.vec();
   for ( index_t i = 0; i < da.len(); ++i ) {
     la::scal(b(""_, i), alpha / da(i));
   }

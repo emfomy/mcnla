@@ -339,7 +339,7 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getVector
 /// @note @a idx > 0 for above diagonals, @a idx < 0 for below diagonals.
 ///
 template <class _Core, typename _Val>
-DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagonalImpl(
+DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagImpl(
     const index_t idx
 ) noexcept {
   mcnla_assert_gtlt(idx, -dim0_, dim1_);
@@ -364,10 +364,10 @@ DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagonalImpl
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  getDiagonalImpl
+/// @copydoc  getDiagImpl
 ///
 template <class _Core, typename _Val>
-const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagonalImpl(
+const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagImpl(
     const index_t idx
 ) const noexcept {
   mcnla_assert_gtlt(idx, -dim0_, dim1_);
@@ -400,15 +400,15 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagon
 /// @attention  The output vector contains the out-of-range spaces.
 ///
 template <class _Core, typename _Val>
-DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vectorizeImpl() noexcept {
+DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vecImpl() noexcept {
   return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  vectorizeImpl
+/// @copydoc  vecImpl
 ///
 template <class _Core, typename _Val>
-const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vectorizeImpl() const noexcept {
+const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vecImpl() const noexcept {
   return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 

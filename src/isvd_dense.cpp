@@ -200,7 +200,7 @@ void check(
   mcnla::la::copy(matrix_u, matrix_u_tmp);
 
   // A_tmp -= U * S * V'
-  mcnla::la::mm(""_, vector_s.viewDiagonal(), matrix_u_tmp);
+  mcnla::la::mm(""_, vector_s.diag(), matrix_u_tmp);
   mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F

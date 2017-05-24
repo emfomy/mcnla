@@ -110,8 +110,8 @@ class DenseSymmetricMatrixBase_
   inline const TransposeType& t() const noexcept;
 
   // Change view
-  inline       GeneralType& viewGeneral() noexcept;
-  inline const GeneralType& viewGeneral() const noexcept;
+  inline       GeneralType& full() noexcept;
+  inline const GeneralType& full() const noexcept;
 
  protected:
 

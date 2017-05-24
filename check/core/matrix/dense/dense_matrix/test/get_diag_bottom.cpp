@@ -1,7 +1,7 @@
 #include "../test.hpp"
 #include <queue>
 
-TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonalBottom) {
+TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagBottom) {
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;
   const auto pitch    = this->pitch_;
@@ -14,7 +14,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonalBottom) {
 
   const mcnla::index_t idx = 6;
 
-  auto segment = mat.getDiagonal(-idx);
+  auto segment = mat.getDiag(-idx);
 
   EXPECT_EQ(segment.len(),    nrow-idx);
   EXPECT_EQ(segment.nelem(),  nrow-idx);
@@ -47,7 +47,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetDiagonalBottom) {
 }
 
 
-TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonalBottom) {
+TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagBottom) {
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;
   const auto pitch    = this->pitch_;
@@ -60,7 +60,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonalBottom) {
 
   const mcnla::index_t idx = 6;
 
-  auto segment = mat.getDiagonal(-idx);
+  auto segment = mat.getDiag(-idx);
 
   EXPECT_EQ(segment.len(),    nrow-idx);
   EXPECT_EQ(segment.nelem(),  nrow-idx);
@@ -93,7 +93,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetDiagonalBottom) {
 }
 
 
-TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonalBottom) {
+TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagBottom) {
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;
   const auto pitch    = this->pitch_;
@@ -106,7 +106,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonalBottom) {
 
   const mcnla::index_t idx = 6;
 
-  auto segment = mat.getDiagonal(-idx);
+  auto segment = mat.getDiag(-idx);
 
   EXPECT_EQ(segment.len(),    nrow-idx);
   EXPECT_EQ(segment.nelem(),  nrow-idx);
@@ -139,7 +139,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetDiagonalBottom) {
 }
 
 
-TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonalBottom) {
+TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagBottom) {
   const auto nrow     = this->nrow_;
   const auto ncol     = this->ncol_;
   const auto pitch    = this->pitch_;
@@ -152,7 +152,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetDiagonalBottom) {
 
   const mcnla::index_t idx = 6;
 
-  auto segment = mat.getDiagonal(-idx);
+  auto segment = mat.getDiag(-idx);
 
   EXPECT_EQ(segment.len(),    nrow-idx);
   EXPECT_EQ(segment.nelem(),  nrow-idx);

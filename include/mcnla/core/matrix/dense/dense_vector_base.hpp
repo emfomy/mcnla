@@ -176,15 +176,15 @@ void DenseVectorBase<_Core, _Val>::resize(
 /// @brief  Gets the diagonal view of the matrix.
 ///
 template <class _Core, typename _Val>
-DiMatS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::viewDiagonal() noexcept {
+DiMatS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() noexcept {
   return static_cast<DiagonalType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewDiagonal
+/// @copydoc  diag
 ///
 template <class _Core, typename _Val>
-const DiMatS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::viewDiagonal() const noexcept {
+const DiMatS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() const noexcept {
   return static_cast<const DiagonalType&>(base());
 }
 

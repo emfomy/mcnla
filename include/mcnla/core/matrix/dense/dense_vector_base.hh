@@ -100,8 +100,8 @@ class DenseVectorBase_
   inline void resize( const index_t len ) noexcept;
 
   // Changes view
-  inline       DiagonalType& viewDiagonal() noexcept;
-  inline const DiagonalType& viewDiagonal() const noexcept;
+  inline       DiagonalType& diag() noexcept;
+  inline const DiagonalType& diag() const noexcept;
 
   // Gets segment
   inline       VectorType operator()( const IdxRange &range ) noexcept;
