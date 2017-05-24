@@ -37,8 +37,8 @@ class VectorOstreamWrapper {
  public:
 
   // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const VectorOstreamWrapper<__Derived> &wrapper ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const VectorOstreamWrapper<_Args...> &wrapper ) noexcept;
 
  protected:
 

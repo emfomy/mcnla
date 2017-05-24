@@ -39,13 +39,13 @@ class Integrator<KolmogorovNagumoIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class KolmogorovNagumoIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<KolmogorovNagumoIntegrator<_Val>> {
+  : public StageWrapper<KolmogorovNagumoIntegrator<_Val>, _Val> {
 
-  friend StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
+  friend StageWrapper<KolmogorovNagumoIntegrator<_Val>, _Val>;
 
  private:
 
-  using BaseType = StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
+  using BaseType = StageWrapper<KolmogorovNagumoIntegrator<_Val>, _Val>;
 
  protected:
 

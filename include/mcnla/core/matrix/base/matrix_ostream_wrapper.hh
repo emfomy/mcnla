@@ -37,8 +37,8 @@ class MatrixOstreamWrapper {
  public:
 
   // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const MatrixOstreamWrapper<__Derived> &wrapper ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const MatrixOstreamWrapper<_Args...> &wrapper ) noexcept;
 
  protected:
 

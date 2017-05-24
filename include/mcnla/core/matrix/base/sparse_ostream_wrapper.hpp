@@ -24,10 +24,10 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <class __Derived>
+template <typename ..._Args>
 std::ostream& operator<<(
     std::ostream &os,
-    const SparseOstreamWrapper<__Derived> &wrapper
+    const SparseOstreamWrapper<_Args...> &wrapper
 ) noexcept {
   for ( auto tuple : wrapper.derived() ) {
     os << tuple << '\n';

@@ -31,13 +31,10 @@ namespace isvd {
 /// The iSVD stage wrapper.
 ///
 /// @tparam  _Derived  The derived type.
+/// @tparam  _Val      The value type.
 ///
-template <class _Derived>
+template <class _Derived, typename _Val>
 class StageWrapper {
-
- public:
-
-  using _Val = ValT<_Derived>;
 
  protected:
 
@@ -70,8 +67,8 @@ class StageWrapper {
   // Operators
   template <typename ..._Args>
   inline void operator()( _Args... arg ) noexcept;
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<_Args...> &wrapper ) noexcept;
 
   // Gets data
   inline bool isInitialized() const noexcept;

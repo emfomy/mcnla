@@ -39,13 +39,13 @@ class Orthogonalizer<SvdOrthogonalizerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class SvdOrthogonalizer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<SvdOrthogonalizer<_Val>> {
+  : public StageWrapper<SvdOrthogonalizer<_Val>, _Val> {
 
-  friend StageWrapper<SvdOrthogonalizer<_Val>>;
+  friend StageWrapper<SvdOrthogonalizer<_Val>, _Val>;
 
  private:
 
-  using BaseType = StageWrapper<SvdOrthogonalizer<_Val>>;
+  using BaseType = StageWrapper<SvdOrthogonalizer<_Val>, _Val>;
 
  protected:
 

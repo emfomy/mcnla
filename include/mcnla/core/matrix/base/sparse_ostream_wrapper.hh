@@ -38,8 +38,8 @@ class SparseOstreamWrapper {
  public:
 
   // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const SparseOstreamWrapper<__Derived> &wrapper ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const SparseOstreamWrapper<_Args...> &wrapper ) noexcept;
 
  protected:
 

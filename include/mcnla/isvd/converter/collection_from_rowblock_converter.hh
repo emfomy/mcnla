@@ -38,13 +38,13 @@ class Converter<CollectionFromRowBlockConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class CollectionFromRowBlockConverter
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<CollectionFromRowBlockConverter<_Val>> {
+  : public StageWrapper<CollectionFromRowBlockConverter<_Val>, _Val> {
 
-  friend StageWrapper<CollectionFromRowBlockConverter<_Val>>;
+  friend StageWrapper<CollectionFromRowBlockConverter<_Val>, _Val>;
 
  private:
 
-  using BaseType = StageWrapper<CollectionFromRowBlockConverter<_Val>>;
+  using BaseType = StageWrapper<CollectionFromRowBlockConverter<_Val>, _Val>;
 
  public:
 

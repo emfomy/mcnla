@@ -39,13 +39,13 @@ class Former<GramianFormerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class GramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<GramianFormer<_Val>> {
+  : public StageWrapper<GramianFormer<_Val>, _Val> {
 
-  friend StageWrapper<GramianFormer<_Val>>;
+  friend StageWrapper<GramianFormer<_Val>, _Val>;
 
  private:
 
-  using BaseType    = StageWrapper<GramianFormer<_Val>>;
+  using BaseType    = StageWrapper<GramianFormer<_Val>, _Val>;
 
  protected:
 

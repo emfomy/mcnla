@@ -24,10 +24,10 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <class __Derived>
+template <typename ..._Args>
 std::ostream& operator<<(
     std::ostream &os,
-    const MatrixOstreamWrapper<__Derived> &wrapper
+    const MatrixOstreamWrapper<_Args...> &wrapper
 ) noexcept {
   auto &matrix = wrapper.derived();
   for ( index_t i = 0; i < matrix.nrow(); ++i ) {

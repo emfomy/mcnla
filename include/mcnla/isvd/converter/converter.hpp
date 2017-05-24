@@ -22,27 +22,6 @@ namespace mcnla {
 //
 namespace isvd {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Tag, typename _Val> class Converter;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace isvd
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-template <class _Tag, typename _Val>
-MCNLA_TRAITS_DEF(VAL, isvd::Converter<_Tag MCNLA_COMMA _Val>, _Val)
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The iSVD namespace.
-//
-namespace isvd {
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The interface of iSVD converter.
 ///
@@ -50,7 +29,7 @@ namespace isvd {
 /// @tparam  _Val  The value type.
 ///
 template <class _Tag, typename _Val>
-class Converter : public StageWrapper<Converter<_Tag, _Val>> {
+class Converter : public StageWrapper<Converter<_Tag, _Val>, _Val> {
   static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD converter!");
 };
 

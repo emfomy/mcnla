@@ -24,8 +24,8 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given parameters.
 ///
-template <class _Derived>
-StageWrapper<_Derived>::StageWrapper(
+template <class _Derived, typename _Val>
+StageWrapper<_Derived, _Val>::StageWrapper(
     const Parameters<_Val> &parameters
 ) noexcept
   : parameters_(parameters) {}
@@ -33,8 +33,8 @@ StageWrapper<_Derived>::StageWrapper(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Initializes.
 ///
-template <class _Derived> template <typename ..._Args>
-void StageWrapper<_Derived>::initialize(
+template <class _Derived, typename _Val> template <typename ..._Args>
+void StageWrapper<_Derived, _Val>::initialize(
     _Args... args
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
@@ -48,8 +48,8 @@ void StageWrapper<_Derived>::initialize(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Run the stage.
 ///
-template <class _Derived> template <typename ..._Args>
-void StageWrapper<_Derived>::operator()(
+template <class _Derived, typename _Val> template <typename ..._Args>
+void StageWrapper<_Derived, _Val>::operator()(
     _Args... args
 ) noexcept {
   mcnla_assert_true(parameters_.isSynchronized());
@@ -63,10 +63,10 @@ void StageWrapper<_Derived>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output name to stream.
 ///
-template <class __Derived>
+template <typename ..._Args>
 std::ostream& operator<<(
     std::ostream &os,
-    const StageWrapper<__Derived> &wrapper
+    const StageWrapper<_Args...> &wrapper
 ) noexcept {
   return wrapper.outputName(os);
 }
@@ -74,8 +74,8 @@ std::ostream& operator<<(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  operator<<
 ///
-template <class _Derived>
-std::ostream& StageWrapper<_Derived>::outputName(
+template <class _Derived, typename _Val>
+std::ostream& StageWrapper<_Derived, _Val>::outputName(
     std::ostream &os
 ) const noexcept {
   return derived().outputNameImpl(os);
@@ -85,8 +85,8 @@ std::ostream& StageWrapper<_Derived>::outputName(
 /// @copydoc  outputName
 ///
 ///
-template <class _Derived>
-std::ostream& StageWrapper<_Derived>::outputNameImpl(
+template <class _Derived, typename _Val>
+std::ostream& StageWrapper<_Derived, _Val>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << derived().name_);
@@ -95,24 +95,24 @@ std::ostream& StageWrapper<_Derived>::outputNameImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Check if the parameters is initialized.
 ///
-template <class _Derived>
-bool StageWrapper<_Derived>::isInitialized() const noexcept {
+template <class _Derived, typename _Val>
+bool StageWrapper<_Derived, _Val>::isInitialized() const noexcept {
   return initialized_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Check if the parameters is computed.
 ///
-template <class _Derived>
-bool StageWrapper<_Derived>::isComputed() const noexcept {
+template <class _Derived, typename _Val>
+bool StageWrapper<_Derived, _Val>::isComputed() const noexcept {
   return computed_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of running the stage.
 ///
-template <class _Derived>
-double StageWrapper<_Derived>::time() const noexcept {
+template <class _Derived, typename _Val>
+double StageWrapper<_Derived, _Val>::time() const noexcept {
   if ( moments_.empty() ) {
     return 0;
   }
@@ -122,16 +122,16 @@ double StageWrapper<_Derived>::time() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of communication.
 ///
-template <class _Derived>
-double StageWrapper<_Derived>::commTime() const noexcept {
+template <class _Derived, typename _Val>
+double StageWrapper<_Derived, _Val>::commTime() const noexcept {
   return std::accumulate(comm_times_.begin(), comm_times_.end(), 0.0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the times of running each part of the stage.
 ///
-template <class _Derived>
-std::vector<double> StageWrapper<_Derived>::times() const noexcept {
+template <class _Derived, typename _Val>
+std::vector<double> StageWrapper<_Derived, _Val>::times() const noexcept {
   mcnla_assert_true(isComputed());
   std::vector<double> times(moments_.size());
   std::adjacent_difference(moments_.begin(), moments_.end(), times.begin());
@@ -142,32 +142,32 @@ std::vector<double> StageWrapper<_Derived>::times() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the time of communication of each part of the stage.
 ///
-template <class _Derived>
-std::vector<double> StageWrapper<_Derived>::commTimes() const noexcept {
+template <class _Derived, typename _Val>
+std::vector<double> StageWrapper<_Derived, _Val>::commTimes() const noexcept {
   return comm_times_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the moment of running each part of the stage.
 ///
-template <class _Derived>
-std::vector<double> StageWrapper<_Derived>::moments() const noexcept {
+template <class _Derived, typename _Val>
+std::vector<double> StageWrapper<_Derived, _Val>::moments() const noexcept {
   return moments_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the name of each part of the stage.
 ///
-template <class _Derived>
-const char* StageWrapper<_Derived>::names() const noexcept {
+template <class _Derived, typename _Val>
+const char* StageWrapper<_Derived, _Val>::names() const noexcept {
   return derived().names_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Record the starting time.
 ///
-template <class _Derived>
-void StageWrapper<_Derived>::tic() noexcept {
+template <class _Derived, typename _Val>
+void StageWrapper<_Derived, _Val>::tic() noexcept {
   mcnla_assert_true(moments_.empty());
   mcnla_assert_true(comm_times_.empty());
   moments_.emplace_back(utility::getTime());
@@ -178,8 +178,8 @@ void StageWrapper<_Derived>::tic() noexcept {
 ///
 /// @note  @a comm_time will be reset to zero.
 ///
-template <class _Derived>
-void StageWrapper<_Derived>::toc(
+template <class _Derived, typename _Val>
+void StageWrapper<_Derived, _Val>::toc(
     double &comm_time
 ) noexcept {
   mcnla_assert_false(moments_.empty());

@@ -38,13 +38,13 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class ColumnSamplingSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<ColumnSamplingSketcher<_Val>> {
+  : public StageWrapper<ColumnSamplingSketcher<_Val>, _Val> {
 
-  friend StageWrapper<ColumnSamplingSketcher<_Val>>;
+  friend StageWrapper<ColumnSamplingSketcher<_Val>, _Val>;
 
  private:
 
-  using BaseType = StageWrapper<ColumnSamplingSketcher<_Val>>;
+  using BaseType = StageWrapper<ColumnSamplingSketcher<_Val>, _Val>;
 
  public:
 

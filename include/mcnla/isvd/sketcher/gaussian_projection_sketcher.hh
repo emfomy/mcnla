@@ -38,13 +38,13 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class GaussianProjectionSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<GaussianProjectionSketcher<_Val>> {
+  : public StageWrapper<GaussianProjectionSketcher<_Val>, _Val> {
 
-  friend StageWrapper<GaussianProjectionSketcher<_Val>>;
+  friend StageWrapper<GaussianProjectionSketcher<_Val>, _Val>;
 
  private:
 
-  using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>>;
+  using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>, _Val>;
 
  public:
 

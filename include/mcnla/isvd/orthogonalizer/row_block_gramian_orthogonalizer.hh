@@ -39,13 +39,13 @@ class Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class RowBlockGramianOrthogonalizer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockGramianOrthogonalizer<_Val>> {
+  : public StageWrapper<RowBlockGramianOrthogonalizer<_Val>, _Val> {
 
-  friend StageWrapper<RowBlockGramianOrthogonalizer<_Val>>;
+  friend StageWrapper<RowBlockGramianOrthogonalizer<_Val>, _Val>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockGramianOrthogonalizer<_Val>>;
+  using BaseType = StageWrapper<RowBlockGramianOrthogonalizer<_Val>, _Val>;
 
  public:
 
