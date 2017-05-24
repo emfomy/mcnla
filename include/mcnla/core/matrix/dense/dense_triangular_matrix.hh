@@ -26,21 +26,6 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense triangular matrix traits.
-///
-template <typename _Val, Trans _trans, Uplo _uplo>
-struct Traits<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> {
-
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
-
-  using ValType     = _Val;
-
-  using VectorType  = matrix::DenseVector<_Val>;
-  using MatrixType  = matrix::DenseTriangularMatrix<_Val, _trans, _uplo>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix instantiation type traits.
 ///
 template <typename _Type>

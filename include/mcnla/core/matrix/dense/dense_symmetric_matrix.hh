@@ -26,21 +26,6 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense symmetric matrix traits.
-///
-template <typename _Val, Trans _trans, Uplo _uplo>
-struct Traits<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> {
-
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
-
-  using ValType     = _Val;
-
-  using VectorType  = matrix::DenseVector<_Val>;
-  using MatrixType  = matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix instantiation type traits.
 ///
 template <typename _Type>
