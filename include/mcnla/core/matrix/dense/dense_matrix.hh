@@ -30,23 +30,6 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix traits.
-///
-template <typename _Val, Trans _trans>
-struct Traits<matrix::DenseMatrix<_Val, _trans>> {
-
-  static constexpr Trans trans = _trans;
-
-  using ValType           = _Val;
-
-  using VectorType        = matrix::DenseVector<_Val>;
-  using MatrixType        = matrix::DenseMatrix<_Val, _trans>;
-
-  using IteratorType      = matrix::DenseMatrixIterator<_Val, _trans>;
-  using ConstIteratorType = matrix::DenseMatrixConstIterator<_Val, _trans>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix instantiation type traits.
 ///
 template <typename _Type>
@@ -87,10 +70,11 @@ class DenseMatrix
   : public DenseMatrixBase_<CpuTag, _Val, _trans>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
     public MatrixOstreamWrapper<DenseMatrix<_Val, _trans>>,
-    public IterableWrapper<DenseMatrix<_Val, _trans>> {
+    public IterableWrapper<DenseMatrix<_Val, _trans>,
+                           DenseMatrixIterator<_Val, _trans>, DenseMatrixConstIterator<_Val, _trans>> {
 
   friend MatrixOstreamWrapper<DenseMatrix<_Val, _trans>>;
-  friend IterableWrapper<DenseMatrix<_Val, _trans>>;
+  friend IterableWrapper<DenseMatrix<_Val, _trans>, DenseMatrixIterator<_Val, _trans>, DenseMatrixConstIterator<_Val, _trans>>;
 
  public:
 

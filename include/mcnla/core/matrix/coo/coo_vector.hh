@@ -22,32 +22,9 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class CooVector;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
 //
 namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO vector traits.
-///
-template <typename _Val>
-struct Traits<matrix::CooVector<_Val>> {
-
-  using VectorType        = matrix::CooVector<_Val>;
-
-  using IteratorType      = matrix::CooVectorIterator<_Val>;
-  using ConstIteratorType = matrix::CooVectorConstIterator<_Val>;
-};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO vector instantiation type traits.
@@ -85,12 +62,12 @@ class CooVector
   : public CooVectorStorage<CpuTag, _Val>,
     public VectorWrapper<CooVector<_Val>>,
     public SparseOstreamWrapper<CooVector<_Val>>,
-    public IterableWrapper<CooVector<_Val>>,
+    public IterableWrapper<CooVector<_Val>, CooVectorIterator<_Val>, CooVectorConstIterator<_Val>>,
     public InvertibleWrapper<CooVector<_Val>> {
 
   friend VectorWrapper<CooVector<_Val>>;
   friend SparseOstreamWrapper<CooVector<_Val>>;
-  friend IterableWrapper<CooVector<_Val>>;
+  friend IterableWrapper<CooVector<_Val>, CooVectorIterator<_Val>, CooVectorConstIterator<_Val>>;
   friend InvertibleWrapper<CooVector<_Val>>;
 
  public:

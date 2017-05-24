@@ -23,32 +23,9 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans> class CooMatrix;
-template <typename _Val> class CooVector;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
 //
 namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO matrix traits.
-///
-template <typename _Val, Trans _trans>
-struct Traits<matrix::CooMatrix<_Val, _trans>> {
-
-  using IteratorType      = matrix::CooMatrixIterator<_Val, _trans>;
-  using ConstIteratorType = matrix::CooMatrixConstIterator<_Val, _trans>;
-
-};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO matrix instantiation type traits.
@@ -87,14 +64,14 @@ class CooMatrix
   : public CooMatrixStorage<CpuTag, _Val>,
     public MatrixWrapper<CooMatrix<_Val, _trans>>,
     public SparseOstreamWrapper<CooMatrix<_Val, _trans>>,
-    public IterableWrapper<CooMatrix<_Val, _trans>>,
+    public IterableWrapper<CooMatrix<_Val, _trans>, CooMatrixIterator<_Val, _trans>, CooMatrixConstIterator<_Val, _trans>>,
     public InvertibleWrapper<CooMatrix<_Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
   friend MatrixWrapper<CooMatrix<_Val, _trans>>;
   friend SparseOstreamWrapper<CooMatrix<_Val, _trans>>;
-  friend IterableWrapper<CooMatrix<_Val, _trans>>;
+  friend IterableWrapper<CooMatrix<_Val, _trans>, CooMatrixIterator<_Val, _trans>, CooMatrixConstIterator<_Val, _trans>>;
   friend InvertibleWrapper<CooMatrix<_Val, _trans>>;
 
  public:

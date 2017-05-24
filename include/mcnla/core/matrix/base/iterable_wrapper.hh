@@ -25,15 +25,12 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The iterable container wrapper.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Derived    The derived type.
+/// @tparam  _Iter       The iterator type.
+/// @tparam  _ConstIter  The constant iterator type.
 ///
-template <class _Derived>
+template <class _Derived, class _Iter, class _ConstIter>
 class IterableWrapper {
-
- private:
-
-  using IteratorType      = typename traits::Traits<_Derived>::IteratorType;
-  using ConstIteratorType = typename traits::Traits<_Derived>::ConstIteratorType;
 
  protected:
 
@@ -43,12 +40,12 @@ class IterableWrapper {
  public:
 
   // Gets iterator
-  inline IteratorType      begin() noexcept;
-  inline ConstIteratorType begin() const noexcept;
-  inline ConstIteratorType cbegin() const noexcept;
-  inline IteratorType      end() noexcept;
-  inline ConstIteratorType end() const noexcept;
-  inline ConstIteratorType cend() const noexcept;
+  inline _Iter      begin() noexcept;
+  inline _ConstIter begin() const noexcept;
+  inline _ConstIter cbegin() const noexcept;
+  inline _Iter      end() noexcept;
+  inline _ConstIter end() const noexcept;
+  inline _ConstIter cend() const noexcept;
 
  protected:
 

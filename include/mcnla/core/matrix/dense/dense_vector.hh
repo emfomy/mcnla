@@ -27,18 +27,6 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector traits.
-///
-template <typename _Val>
-struct Traits<matrix::DenseVector<_Val>> {
-
-  using VectorType        = matrix::DenseVector<_Val>;
-
-  using IteratorType      = matrix::DenseVectorIterator<_Val>;
-  using ConstIteratorType = matrix::DenseVectorConstIterator<_Val>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector instantiation type traits.
 ///
 template <typename _Type>
@@ -78,10 +66,10 @@ class DenseVector
   : public DenseVectorBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
     public VectorOstreamWrapper<DenseVector<_Val>>,
-    public IterableWrapper<DenseVector<_Val>> {
+    public IterableWrapper<DenseVector<_Val>, DenseVectorIterator<_Val>, DenseVectorConstIterator<_Val>> {
 
   friend VectorOstreamWrapper<DenseVector<_Val>>;
-  friend IterableWrapper<DenseVector<_Val>>;
+  friend IterableWrapper<DenseVector<_Val>, DenseVectorIterator<_Val>, DenseVectorConstIterator<_Val>>;
 
  private:
 

@@ -23,49 +23,49 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator to beginning.
 ///
-template <class _Derived>
-typename IterableWrapper<_Derived>::IteratorType IterableWrapper<_Derived>::begin() noexcept {
-  return IteratorType::beginImpl(&(this->derived()));
+template <class _Derived, class _Iter, class _ConstIter>
+_Iter IterableWrapper<_Derived, _Iter, _ConstIter>::begin() noexcept {
+  return _Iter::beginImpl(&(this->derived()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  begin
 ///
-template <class _Derived>
-typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::begin() const noexcept {
-  return ConstIteratorType::beginImpl(&(this->derived()));
+template <class _Derived, class _Iter, class _ConstIter>
+_ConstIter IterableWrapper<_Derived, _Iter, _ConstIter>::begin() const noexcept {
+  return _ConstIter::beginImpl(&(this->derived()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  begin
 ///
-template <class _Derived>
-typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::cbegin() const noexcept {
-  return ConstIteratorType::beginImpl(&(this->derived()));
+template <class _Derived, class _Iter, class _ConstIter>
+_ConstIter IterableWrapper<_Derived, _Iter, _ConstIter>::cbegin() const noexcept {
+  return _ConstIter::beginImpl(&(this->derived()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator to end.
 ///
-template <class _Derived>
-typename IterableWrapper<_Derived>::IteratorType IterableWrapper<_Derived>::end() noexcept {
-  return IteratorType::endImpl(&(this->derived()));
+template <class _Derived, class _Iter, class _ConstIter>
+_Iter IterableWrapper<_Derived, _Iter, _ConstIter>::end() noexcept {
+  return _Iter::endImpl(&(this->derived()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  end
 ///
-template <class _Derived>
-typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::end() const noexcept {
-  return ConstIteratorType::endImpl(&(this->derived()));
+template <class _Derived, class _Iter, class _ConstIter>
+_ConstIter IterableWrapper<_Derived, _Iter, _ConstIter>::end() const noexcept {
+  return _ConstIter::endImpl(&(this->derived()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  end
 ///
-template <class _Derived>
-typename IterableWrapper<_Derived>::ConstIteratorType IterableWrapper<_Derived>::cend() const noexcept {
-  return ConstIteratorType::endImpl(&(this->derived()));
+template <class _Derived, class _Iter, class _ConstIter>
+_ConstIter IterableWrapper<_Derived, _Iter, _ConstIter>::cend() const noexcept {
+  return _ConstIter::endImpl(&(this->derived()));
 }
 
 }  // namespace matrix
