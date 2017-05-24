@@ -33,17 +33,12 @@ template <class _Tag, class _Core, typename _Val, Trans _trans> class DenseMatri
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix collection traits.
-///
 template <class _Tag, class _Core, typename _Val, Trans _trans>
-struct Traits<matrix::DenseMatrixCollection<_Tag, _Core, _Val, _trans>> {
+MCNLA_TRAITS_DEF(VAL, matrix::DenseMatrixCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val MCNLA_COMMA _trans>, _Val)
 
-  using ValType        = _Val;
-  using CollectionType = matrix::DenseMatrixCollection<_Tag, _Core, _Val, _trans>;
-  using MatrixType     = matrix::GeMatS<_Core, DenseTag, _Val, _trans>;
-
-};
+template <class _Tag, class _Core, typename _Val, Trans _trans>
+MCNLA_TRAITS_DEF(MATRIX, matrix::DenseMatrixCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val MCNLA_COMMA _trans>,
+                         matrix::DenseMatrix<_Val MCNLA_COMMA _trans>)
 
 }  // namespace traits
 

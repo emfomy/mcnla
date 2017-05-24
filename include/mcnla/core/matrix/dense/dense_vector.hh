@@ -32,11 +32,6 @@ namespace traits {
 template <typename _Val>
 struct Traits<matrix::DenseVector<_Val>> {
 
-  using ValType           = _Val;
-
-  using RealType          = matrix::DenseVector<RealValT<_Val>>;
-  using ComplexType       = matrix::DenseVector<ComplexValT<_Val>>;
-
   using VectorType        = matrix::DenseVector<_Val>;
 
   using IteratorType      = matrix::DenseVectorIterator<_Val>;

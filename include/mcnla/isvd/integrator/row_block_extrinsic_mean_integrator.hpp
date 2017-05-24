@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 RowBlockExtrinsicMeanIntegrator<_Val>::Integrator(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -64,9 +64,9 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<ValType> &collection_qj,
-    const DenseMatrixCollection201<ValType> &collection_q,
-          DenseMatrixRowMajor<ValType>      &matrix_qbar
+    const DenseMatrixCollection201<_Val> &collection_qj,
+    const DenseMatrixCollection201<_Val> &collection_q,
+          DenseMatrixRowMajor<_Val>      &matrix_qbar
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;

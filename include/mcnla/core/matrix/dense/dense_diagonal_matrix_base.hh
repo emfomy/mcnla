@@ -57,9 +57,6 @@ class DenseDiagonalMatrixBase_
   using ValType       = _Val;
   using ValArrayType  = ArrS<_Core, _Val>;
 
-  using RealType      = DiMatS<_Core, DenseTag, RealValT<_Val>>;
-  using ComplexType   = DiMatS<_Core, DenseTag, ComplexValT<_Val>>;
-
   using VectorType    = GeVecS<_Core, DenseTag, _Val>;
   using MatrixType    = DiMatS<_Core, DenseTag, _Val>;
 

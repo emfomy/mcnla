@@ -33,17 +33,11 @@ template <class _Tag, class _Core, typename _Val> class DenseVectorCollection;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector collection traits.
-///
 template <class _Tag, class _Core, typename _Val>
-struct Traits<matrix::DenseVectorCollection<_Tag, _Core, _Val>> {
+MCNLA_TRAITS_DEF(VAL, matrix::DenseVectorCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val>, _Val)
 
-  using ValType        = _Val;
-  using CollectionType = matrix::DenseVectorCollection<_Tag, _Core, _Val>;
-  using VectorType     = matrix::GeVecS<_Core, DenseTag, _Val>;
-
-};
+template <class _Tag, class _Core, typename _Val>
+MCNLA_TRAITS_DEF(VECTOR, matrix::DenseVectorCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val>, matrix::DenseVector<_Val>)
 
 }  // namespace traits
 

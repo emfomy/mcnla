@@ -65,9 +65,6 @@ class DenseSymmetricMatrixBase_
   using ValType       = _Val;
   using ValArrayType  = ArrS<_Core, _Val>;
 
-  using RealType      = SyMatS<_Core, DenseTag, RealValT<_Val>, _trans, _uplo>;
-  using ComplexType   = SyMatS<_Core, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
-
   using VectorType    = GeVecS<_Core, DenseTag, _Val>;
   using MatrixType    = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 

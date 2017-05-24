@@ -47,12 +47,6 @@ class SvdOrthogonalizer
 
   using BaseType = StageWrapper<SvdOrthogonalizer<_Val>>;
 
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
-  using MatrixType  = MatrixT<DenseMatrixCollection201<ValType>>;
-
  protected:
 
   /// The name.
@@ -62,13 +56,13 @@ class SvdOrthogonalizer
   static constexpr const char* names_ = "orthogonalization";
 
   /// The vector S.
-  DenseVector<RealValType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The empty matrix.
-  MatrixType matrix_empty_;
+  DenseMatrixRowMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<MatrixType, 'O', 'N'> gesvd_driver_;
+  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'O', 'N'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -79,7 +73,7 @@ class SvdOrthogonalizer
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters<ValType> &parameters ) noexcept;
+  inline Orthogonalizer( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -87,7 +81,7 @@ class SvdOrthogonalizer
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection201<ValType> &collection_q ) noexcept;
+  void runImpl( DenseMatrixCollection201<_Val> &collection_q ) noexcept;
 
 };
 

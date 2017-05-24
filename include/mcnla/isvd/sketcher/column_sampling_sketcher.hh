@@ -48,7 +48,7 @@ class ColumnSamplingSketcher
 
  public:
 
-  using ValType = _Val;
+//  using _Val = _Val;
 
  protected:
 
@@ -73,7 +73,7 @@ class ColumnSamplingSketcher
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand() ) noexcept;
+  inline Sketcher( const Parameters<_Val> &parameters, const index_t seed = rand() ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
@@ -88,7 +88,7 @@ class ColumnSamplingSketcher
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection201<ValType> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection201<_Val> &collection_q ) noexcept;
 
 };
 

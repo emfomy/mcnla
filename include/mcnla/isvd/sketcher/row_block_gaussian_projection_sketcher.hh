@@ -48,7 +48,7 @@ class RowBlockGaussianProjectionSketcher
 
  public:
 
-  using ValType = _Val;
+//  using _Val = _Val;
 
  protected:
 
@@ -65,7 +65,7 @@ class RowBlockGaussianProjectionSketcher
   index_t exponent_;
 
   /// The matrix Omega.
-  DenseMatrixRowMajor<ValType> matrix_omegas_;
+  DenseMatrixRowMajor<_Val> matrix_omegas_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -76,7 +76,7 @@ class RowBlockGaussianProjectionSketcher
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
+  inline Sketcher( const Parameters<_Val> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;

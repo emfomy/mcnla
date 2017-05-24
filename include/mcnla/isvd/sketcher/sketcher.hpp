@@ -33,13 +33,8 @@ template <class _Tag, typename _Val> class Sketcher;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The sketcher traits.
-///
 template <class _Tag, typename _Val>
-struct Traits<isvd::Sketcher<_Tag, _Val>> {
-  using ValType = _Val;
-};
+MCNLA_TRAITS_DEF(VAL, isvd::Sketcher<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 

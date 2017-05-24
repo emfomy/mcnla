@@ -22,39 +22,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans, class _Matrix> class DenseMatrixIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix iterator traits.
-///
-/// @tparam  _Val     The value type.
-/// @tparam  _trans   The transpose storage layout.
-/// @tparam  _Matrix  The matrix type.
-///
-template <typename _Val, Trans _trans, class _Matrix>
-struct Traits<matrix::DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
-  using ElemType      = _Val;
-  using ElemRefType   = _Val&;
-  using ElemPtrType   = _Val*;
-  using ContainerType = _Matrix;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix iterator.
 ///
@@ -65,17 +32,16 @@ namespace matrix {
 /// @see  DenseMatrixIterator, DenseMatrixConstIterator
 ///
 template <typename _Val, Trans _trans, class _Matrix>
-class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val, _trans, _Matrix>> {
+class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val, _trans, _Matrix>, _Matrix, _Val> {
 
  private:
 
   using ValType       = _Val;
-  using ElemType      = _Val;
   using ElemRefType   = _Val&;
   using ElemPtrType   = _Val*;
   using ContainerType = _Matrix;
 
-  using BaseType      = IteratorBase<DenseMatrixIteratorBase<_Val, _trans, _Matrix>>;
+  using BaseType      = IteratorBase<DenseMatrixIteratorBase<_Val, _trans, _Matrix>, _Matrix, _Val>;
 
  protected:
 

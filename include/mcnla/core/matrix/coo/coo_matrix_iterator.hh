@@ -23,35 +23,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, typename _Idx, Trans _trans, class _Matrix> class CooMatrixIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO matrix iterator traits.
-///
-template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
-struct Traits<matrix::CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
-  using ElemType      = std::tuple<_Idx, _Idx>;
-  using ElemRefType   = matrix::CooTuple2<_Val, _Idx, _trans>;
-  using ElemPtrType   = matrix::CooTuple2Ptr<_Val, _Idx, _trans>;
-  using ContainerType = _Matrix;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO matrix iterator.
 ///
@@ -63,19 +34,21 @@ namespace matrix {
 /// @see  CooMatrixIterator, CooMatrixConstIterator
 ///
 template <typename _Val, typename _Idx, Trans _trans, class _Matrix>
-class CooMatrixIteratorBase : public IteratorBase<CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>> {
+class CooMatrixIteratorBase
+  : public IteratorBase<CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>, _Matrix, std::tuple<_Idx, _Idx>,
+                        CooTuple2<_Val, _Idx, _trans>, CooTuple2Ptr<_Val, _Idx, _trans>> {
 
  private:
 
   using ValType       = _Val;
   using IdxType       = _Idx;
   using TupleType     = CooTuple2<_Val, _Idx, _trans>;
-  using ElemType      = std::tuple<_Idx>;
   using ElemRefType   = CooTuple2<_Val, _Idx, _trans>;
   using ElemPtrType   = CooTuple2Ptr<_Val, _Idx, _trans>;
   using ContainerType = _Matrix;
 
-  using BaseType      = IteratorBase<CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>>;
+  using BaseType      = IteratorBase<CooMatrixIteratorBase<_Val, _Idx, _trans, _Matrix>, _Matrix, std::tuple<_Idx, _Idx>,
+                                     CooTuple2<_Val, _Idx, _trans>, CooTuple2Ptr<_Val, _Idx, _trans>>;
 
  protected:
 

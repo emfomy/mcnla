@@ -47,11 +47,6 @@ class RowBlockExtrinsicMeanIntegrator
 
   using BaseType = StageWrapper<RowBlockExtrinsicMeanIntegrator<_Val>>;
 
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
-
  protected:
 
   /// The name.
@@ -61,34 +56,34 @@ class RowBlockExtrinsicMeanIntegrator
   static constexpr const char* names_ = "Rotate / Flip / Sum";
 
   /// The matrix Bsj.
-  DenseMatrixRowMajor<ValType> matrix_bsj_;
+  DenseMatrixRowMajor<_Val> matrix_bsj_;
 
   /// The collection Bi.
-  DenseMatrixCollection102<ValType> collection_bi_;
+  DenseMatrixCollection102<_Val> collection_bi_;
 
   /// The collection Bi0.
-  DenseMatrixCollection102<ValType> collection_bi0_;
+  DenseMatrixCollection102<_Val> collection_bi0_;
 
   /// The collection G.
-  DenseMatrixCollection102<ValType> collection_g_;
+  DenseMatrixCollection102<_Val> collection_g_;
 
   /// The matrix G0.
-  DenseMatrixRowMajor<ValType> matrix_g0_;
+  DenseMatrixRowMajor<_Val> matrix_g0_;
 
   /// The matrix GB (= G0 * Bi0').
-  DenseMatrixRowMajor<ValType> matrix_gb_;
+  DenseMatrixRowMajor<_Val> matrix_gb_;
 
   /// The vector S.
-  DenseVector<ValType> vector_s_;
+  DenseVector<_Val> vector_s_;
 
   /// The empty matrix.
-  DenseMatrixRowMajor<ValType> matrix_empty_;
+  DenseMatrixRowMajor<_Val> matrix_empty_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixRowMajor<ValType>, 'O', 'N'> gesvd_driver_;
+  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'O', 'N'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -99,7 +94,7 @@ class RowBlockExtrinsicMeanIntegrator
  public:
 
   // Constructor
-  inline Integrator( const Parameters<ValType> &parameters ) noexcept;
+  inline Integrator( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -107,8 +102,8 @@ class RowBlockExtrinsicMeanIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollection201<ValType> &collection_qj, const DenseMatrixCollection201<ValType> &collection_q,
-                DenseMatrixRowMajor<ValType> &matrix_qbar ) noexcept;
+  void runImpl( const DenseMatrixCollection201<_Val> &collection_qj, const DenseMatrixCollection201<_Val> &collection_q,
+                DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
 
 };
 

@@ -48,7 +48,7 @@ class MatrixFromRowBlockConverter
 
  public:
 
-  using ValType = _Val;
+//  using _Val = _Val;
 
  protected:
 
@@ -61,7 +61,7 @@ class MatrixFromRowBlockConverter
  public:
 
   // Constructor
-  inline Converter( const Parameters<ValType> &parameters ) noexcept;
+  inline Converter( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -69,7 +69,7 @@ class MatrixFromRowBlockConverter
   void initializeImpl() noexcept;
 
   // Converts data
-  void runImpl( const DenseMatrixRowMajor<ValType> &matrix, DenseMatrixRowMajor<ValType> &matrix_j ) noexcept;
+  void runImpl( const DenseMatrixRowMajor<_Val> &matrix, DenseMatrixRowMajor<_Val> &matrix_j ) noexcept;
 
 };
 

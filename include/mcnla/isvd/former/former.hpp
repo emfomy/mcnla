@@ -33,13 +33,8 @@ template <class _Tag, typename _Val> class Former;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The former traits.
-///
 template <class _Tag, typename _Val>
-struct Traits<isvd::Former<_Tag, _Val>> {
-  using ValType = _Val;
-};
+MCNLA_TRAITS_DEF(VAL, isvd::Former<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 

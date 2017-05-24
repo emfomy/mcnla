@@ -30,14 +30,25 @@ using FalseType = std::false_type;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
+/// The enumeration of traits.
+///
+enum class TraitsTag {
+  VOID, REAL, COMPLEX, VAL, VECTOR, MATRIX,
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_module
 /// The traits interface.
 ///
 /// @tparam  _Type  The type.
 ///
-template <typename _Type>
+template <typename _Type, TraitsTag _tag = TraitsTag::VOID>
 struct Traits {
   static_assert(traits::FalseType<_Type>::value, "Error using non-specialized traits!");
 };
+
+#define MCNLA_TRAITS_DEF( _tag, _Type, _value ) \
+  struct Traits<_Type, TraitsTag::_tag> { using Type = _value; };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
@@ -73,27 +84,23 @@ struct ValTraits<std::complex<_Val>> {
 
 /// @ingroup  utility_module
 template <typename _Derived>
-using RealT = typename traits::Traits<_Derived>::RealType;
+using RealT = typename traits::Traits<_Derived, traits::TraitsTag::REAL>::Type;
 
 /// @ingroup  utility_module
 template <typename _Derived>
-using ComplexT = typename traits::Traits<_Derived>::ComplexType;
+using ComplexT = typename traits::Traits<_Derived, traits::TraitsTag::COMPLEX>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using ValT = typename traits::Traits<_Derived>::ValType;
+using ValT = typename traits::Traits<_Derived, traits::TraitsTag::VAL>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using IdxT = typename traits::Traits<_Derived>::IdxType;
+using VectorT = typename traits::Traits<_Derived, traits::TraitsTag::VECTOR>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using VectorT = typename traits::Traits<_Derived>::VectorType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using MatrixT = typename traits::Traits<_Derived>::MatrixType;
+using MatrixT = typename traits::Traits<_Derived, traits::TraitsTag::MATRIX>::Type;
 
 /// @ingroup  utility_module
 template <typename _Val>

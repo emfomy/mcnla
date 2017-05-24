@@ -26,9 +26,9 @@ namespace isvd {
 ///
 template <typename _Val>
 RowBlockKolmogorovNagumoIntegrator<_Val>::Integrator(
-    const Parameters<ValType> &parameters,
+    const Parameters<_Val> &parameters,
     const index_t max_iteration,
-    const RealValType tolerance
+    const RealValT<_Val> tolerance
 ) noexcept
   : BaseType(parameters) {
   setMaxIteration(max_iteration);
@@ -68,8 +68,8 @@ void RowBlockKolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void RowBlockKolmogorovNagumoIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<ValType> &collection_qj,
-          DenseMatrixRowMajor<ValType> &matrix_qbarj
+    const DenseMatrixCollection201<_Val> &collection_qj,
+          DenseMatrixRowMajor<_Val> &matrix_qbarj
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;
@@ -217,7 +217,7 @@ RowBlockKolmogorovNagumoIntegrator<_Val>& RowBlockKolmogorovNagumoIntegrator<_Va
 ///
 template <typename _Val>
 RowBlockKolmogorovNagumoIntegrator<_Val>& RowBlockKolmogorovNagumoIntegrator<_Val>::setTolerance(
-    const RealValType tolerance
+    const RealValT<_Val> tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
   tolerance_ = tolerance;

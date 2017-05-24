@@ -37,12 +37,12 @@ class StageWrapper {
 
  public:
 
-  using ValType = ValT<_Derived>;
+  using _Val = ValT<_Derived>;
 
  protected:
 
   /// The parameters
-  const Parameters<ValType> &parameters_;
+  const Parameters<_Val> &parameters_;
 
   /// The tag shows if the stage is initialized.
   bool initialized_ = false;
@@ -59,7 +59,7 @@ class StageWrapper {
  protected:
 
   // Constructor
-  inline StageWrapper( const Parameters<ValType> &parameters ) noexcept;
+  inline StageWrapper( const Parameters<_Val> &parameters ) noexcept;
 
  public:
 

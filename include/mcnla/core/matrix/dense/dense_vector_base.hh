@@ -58,9 +58,6 @@ class DenseVectorBase_
   using ValArrayType = ArrS<_Core, _Val>;
   using SizesType    = std::tuple<index_t>;
 
-  using RealType     = GeVecS<_Core, DenseTag, RealValT<_Val>>;
-  using ComplexType  = GeVecS<_Core, DenseTag, ComplexValT<_Val>>;
-
   using VectorType   = GeVecS<_Core, DenseTag, _Val>;
 
   using DiagonalType = DiMatS<_Core, DenseTag, _Val>;

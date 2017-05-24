@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 SvdOrthogonalizer<_Val>::Orthogonalizer(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -50,7 +50,7 @@ void SvdOrthogonalizer<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void SvdOrthogonalizer<_Val>::runImpl(
-          DenseMatrixCollection201<ValType> &collection_q
+          DenseMatrixCollection201<_Val> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();

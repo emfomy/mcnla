@@ -39,9 +39,6 @@ struct Traits<matrix::DenseMatrix<_Val, _trans>> {
 
   using ValType           = _Val;
 
-  using RealType          = matrix::DenseMatrix<RealValT<_Val>, _trans>;
-  using ComplexType       = matrix::DenseMatrix<ComplexValT<_Val>, _trans>;
-
   using VectorType        = matrix::DenseVector<_Val>;
   using MatrixType        = matrix::DenseMatrix<_Val, _trans>;
 

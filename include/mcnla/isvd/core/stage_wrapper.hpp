@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <class _Derived>
 StageWrapper<_Derived>::StageWrapper(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : parameters_(parameters) {}
 

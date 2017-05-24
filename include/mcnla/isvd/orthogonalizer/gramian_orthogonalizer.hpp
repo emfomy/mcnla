@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 GramianOrthogonalizer<_Val>::Orthogonalizer(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -53,7 +53,7 @@ void GramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void GramianOrthogonalizer<_Val>::runImpl(
-    DenseMatrixCollection201<ValType> &collection_q
+    DenseMatrixCollection201<_Val> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();

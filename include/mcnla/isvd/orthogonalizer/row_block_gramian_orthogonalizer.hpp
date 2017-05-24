@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 RowBlockGramianOrthogonalizer<_Val>::Orthogonalizer(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -53,7 +53,7 @@ void RowBlockGramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void RowBlockGramianOrthogonalizer<_Val>::runImpl(
-    DenseMatrixCollection201<ValType> &collection_qj
+    DenseMatrixCollection201<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;

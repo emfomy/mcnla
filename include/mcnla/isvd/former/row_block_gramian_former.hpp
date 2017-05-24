@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 RowBlockGramianFormer<_Val>::Former(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -66,7 +66,7 @@ void RowBlockGramianFormer<_Val>::initializeImpl() noexcept {
 template <typename _Val> template <class _Matrix>
 void RowBlockGramianFormer<_Val>::runImpl(
     const _Matrix &matrix_aj,
-    const DenseMatrixRowMajor<ValType> &matrix_qj
+    const DenseMatrixRowMajor<_Val> &matrix_qj
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;

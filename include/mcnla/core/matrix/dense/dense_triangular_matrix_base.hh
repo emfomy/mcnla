@@ -64,9 +64,6 @@ class DenseTriangularMatrixBase_
   using ValType       = _Val;
   using ValArrayType  = ArrS<_Core, _Val>;
 
-  using RealType      = TrMatS<_Core, DenseTag, RealValT<_Val>, _trans, _uplo>;
-  using ComplexType   = TrMatS<_Core, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
-
   using VectorType    = GeVecS<_Core, DenseTag, _Val>;
   using MatrixType    = TrMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 

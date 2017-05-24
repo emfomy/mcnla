@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 GramianFormer<_Val>::Former(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -61,7 +61,7 @@ void GramianFormer<_Val>::initializeImpl() noexcept {
 template <typename _Val> template <class _Matrix>
 void GramianFormer<_Val>::runImpl(
     const _Matrix &matrix_a,
-    const DenseMatrixRowMajor<ValType> &matrix_q
+    const DenseMatrixRowMajor<_Val> &matrix_q
 ) noexcept {
 
   const auto mpi_root   = parameters_.mpi_root;

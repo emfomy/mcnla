@@ -48,7 +48,7 @@ class DummyConverter
 
  public:
 
-  using ValType = _Val;
+//  using _Val = _Val;
 
  protected:
 
@@ -61,7 +61,7 @@ class DummyConverter
  public:
 
   // Constructor
-  inline Converter( const Parameters<ValType> &parameters ) noexcept;
+  inline Converter( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 

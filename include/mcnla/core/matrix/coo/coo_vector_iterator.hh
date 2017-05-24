@@ -23,35 +23,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, typename _Idx, class _Vector> class CooVectorIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO vector iterator traits.
-///
-template <typename _Val, typename _Idx, class _Vector>
-struct Traits<matrix::CooVectorIteratorBase<_Val, _Idx, _Vector>> {
-  using ElemType      = std::tuple<_Idx>;
-  using ElemRefType   = matrix::CooTuple1<_Val, _Idx>;
-  using ElemPtrType   = matrix::CooTuple1Ptr<_Val, _Idx>;
-  using ContainerType = _Vector;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO vector iterator.
 ///
@@ -62,19 +33,21 @@ namespace matrix {
 /// @see  CooVectorIterator, CooVectorConstIterator
 ///
 template <typename _Val, typename _Idx, class _Vector>
-class CooVectorIteratorBase : public IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>> {
+class CooVectorIteratorBase
+  : public IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>, _Vector, std::tuple<_Idx>,
+                        CooTuple1<_Val, _Idx>, CooTuple1Ptr<_Val, _Idx>> {
 
  private:
 
   using ValType       = _Val;
   using IdxType       = _Idx;
   using TupleType     = CooTuple1<_Val, _Idx>;
-  using ElemType      = std::tuple<_Idx>;
   using ElemRefType   = CooTuple1<_Val, _Idx>;
   using ElemPtrType   = CooTuple1Ptr<_Val, _Idx>;
   using ContainerType = _Vector;
 
-  using BaseType      = IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>>;
+  using BaseType      = IteratorBase<CooVectorIteratorBase<_Val, _Idx, _Vector>, _Vector, std::tuple<_Idx>,
+                                     CooTuple1<_Val, _Idx>, CooTuple1Ptr<_Val, _Idx>>;
 
  protected:
 

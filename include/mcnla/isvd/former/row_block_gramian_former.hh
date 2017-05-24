@@ -47,11 +47,6 @@ class RowBlockGramianFormer
 
   using BaseType = StageWrapper<RowBlockGramianFormer<_Val>>;
 
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
-
  protected:
 
   /// The name.
@@ -61,28 +56,28 @@ class RowBlockGramianFormer
   static constexpr const char* names_ = "forming";
 
   /// The matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_;
+  DenseMatrixColMajor<_Val> matrix_w_;
 
   /// The cut matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_cut_;
+  DenseMatrixColMajor<_Val> matrix_w_cut_;
 
   /// The vector S.
-  DenseVector<RealValType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The cut vector S.
-  DenseVector<RealValType> vector_s_cut_;
+  DenseVector<RealValT<_Val>> vector_s_cut_;
 
   /// The cut matrix U (row-block).
-  DenseMatrixRowMajor<ValType> matrix_uj_cut_;
+  DenseMatrixRowMajor<_Val> matrix_uj_cut_;
 
   /// The matrix Q'*A.
-  DenseMatrixColMajor<ValType> matrix_qta_;
+  DenseMatrixColMajor<_Val> matrix_qta_;
 
   /// The matrix Q'*A (row-block).
-  DenseMatrixColMajor<ValType> matrix_qtaj_;
+  DenseMatrixColMajor<_Val> matrix_qtaj_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixColMajor<ValType>, 'V'> syev_driver_;
+  la::SyevDriver<DenseSymmetricMatrixColMajor<_Val>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -93,12 +88,12 @@ class RowBlockGramianFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<ValType> &parameters ) noexcept;
+  inline Former( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealValType>& vectorS() const noexcept;
-  inline const DenseMatrixRowMajor<ValType>& matrixUj() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixVtj() const noexcept = delete;
+  inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
+  inline const DenseMatrixRowMajor<_Val>& matrixUj() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixVtj() const noexcept = delete;
 
  protected:
 
@@ -107,7 +102,7 @@ class RowBlockGramianFormer
 
   // Forms SVD
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<_Val> &matrix_q ) noexcept;
 
 };
 

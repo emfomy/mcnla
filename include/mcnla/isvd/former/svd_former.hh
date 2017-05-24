@@ -47,11 +47,6 @@ class SvdFormer
 
   using BaseType = StageWrapper<SvdFormer<_Val>>;
 
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
-
  protected:
 
   /// The name.
@@ -61,31 +56,31 @@ class SvdFormer
   static constexpr const char* names_ = "forming";
 
   /// The matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_;
+  DenseMatrixColMajor<_Val> matrix_w_;
 
   /// The cut matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_cut_;
+  DenseMatrixColMajor<_Val> matrix_w_cut_;
 
   /// The vector S.
-  DenseVector<RealValType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The cut vector S.
-  DenseVector<RealValType> vector_s_cut_;
+  DenseVector<RealValT<_Val>> vector_s_cut_;
 
   /// The cut matrix U.
-  DenseMatrixColMajor<ValType> matrix_u_cut_;
+  DenseMatrixColMajor<_Val> matrix_u_cut_;
 
   /// The matrix Vt.
-  DenseMatrixColMajor<ValType> matrix_vt_;
+  DenseMatrixColMajor<_Val> matrix_vt_;
 
   /// The cut matrix Vt.
-  DenseMatrixColMajor<ValType> matrix_vt_cut_;
+  DenseMatrixColMajor<_Val> matrix_vt_cut_;
 
   /// The empty matrix.
-  DenseMatrixColMajor<ValType> matrix_empty_;
+  DenseMatrixColMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixColMajor<ValType>, 'S', 'O'> gesvd_driver_;
+  la::GesvdDriver<DenseMatrixColMajor<_Val>, 'S', 'O'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -96,12 +91,12 @@ class SvdFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<ValType> &parameters ) noexcept;
+  inline Former( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealValType>& vectorS() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixVt() const noexcept;
+  inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixVt() const noexcept;
 
  protected:
 
@@ -110,7 +105,7 @@ class SvdFormer
 
   // Forms SVD
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<_Val> &matrix_q ) noexcept;
 
 };
 

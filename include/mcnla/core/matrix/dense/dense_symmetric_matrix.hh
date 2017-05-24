@@ -36,9 +36,6 @@ struct Traits<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DenseSymmetricMatrix<RealValT<_Val>, _trans, _uplo>;
-  using ComplexType = matrix::DenseSymmetricMatrix<ComplexValT<_Val>, _trans, _uplo>;
-
   using VectorType  = matrix::DenseVector<_Val>;
   using MatrixType  = matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>;
 };

@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 CollectionToRowBlockConverter<_Val>::Converter(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -44,8 +44,8 @@ void CollectionToRowBlockConverter<_Val>::initializeImpl() noexcept {}
 ///
 template <typename _Val>
 void CollectionToRowBlockConverter<_Val>::runImpl(
-    DenseMatrixCollection201<ValType> &collection_q,
-    DenseMatrixCollection201<ValType> &collection_qj
+    DenseMatrixCollection201<_Val> &collection_q,
+    DenseMatrixCollection201<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
@@ -67,8 +67,8 @@ void CollectionToRowBlockConverter<_Val>::runImpl(
   auto matrix_qs_full = collection_q.unfold();
   matrix_qs_full.resize(nrow_total, ""_);
 
-  DenseMatrixCollection102<ValType> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
-  DenseMatrixCollection201<ValType> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
+  DenseMatrixCollection102<_Val> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
+  DenseMatrixCollection201<_Val> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
 
   this->tic(); double comm_moment, comm_time = 0.0;
   // ====================================================================================================================== //

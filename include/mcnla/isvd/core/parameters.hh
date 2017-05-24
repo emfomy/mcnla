@@ -33,10 +33,6 @@ class Parameters {
 
  public:
 
-  using ValType = _Val;
-
- public:
-
   /// The MPI communicator
   const MPI_Comm mpi_comm;
 
@@ -110,12 +106,12 @@ class Parameters {
   inline Parameters& setNumSketchEach( const index_t num_sketch_each ) noexcept;
 
   // Create matrices
-  inline DenseMatrixCollection201<ValType> createCollectionQ() const noexcept;
-  inline DenseMatrixCollection201<ValType> createCollectionQj() const noexcept;
-  inline DenseMatrixRowMajor<ValType> createMatrixQ() const noexcept;
-  inline DenseMatrixRowMajor<ValType> createMatrixQj() const noexcept;
-  inline DenseMatrixRowMajor<ValType> createMatrixU() const noexcept;
-  inline DenseMatrixRowMajor<ValType> createMatrixUj() const noexcept;
+  inline DenseMatrixCollection201<_Val> createCollectionQ() const noexcept;
+  inline DenseMatrixCollection201<_Val> createCollectionQj() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixQ() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixQj() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixU() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixUj() const noexcept;
 
 };
 

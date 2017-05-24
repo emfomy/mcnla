@@ -43,11 +43,6 @@ namespace traits {
 template <typename _Val>
 struct Traits<matrix::CooVector<_Val>> {
 
-  using ValType           = _Val;
-
-  using RealType          = matrix::CooVector<RealValT<_Val>>;
-  using ComplexType       = matrix::CooVector<ComplexValT<_Val>>;
-
   using VectorType        = matrix::CooVector<_Val>;
 
   using IteratorType      = matrix::CooVectorIterator<_Val>;
@@ -104,9 +99,6 @@ class CooVector
   using ValArrayType      = Array<_Val>;
   using IdxArrayType      = Array<index_t>;
   using SizesType         = std::tuple<index_t>;
-
-  using RealType          = CooVector<RealValT<_Val>>;
-  using ComplexType       = CooVector<ComplexValT<_Val>>;
 
   using VectorType        = CooVector<_Val>;
 

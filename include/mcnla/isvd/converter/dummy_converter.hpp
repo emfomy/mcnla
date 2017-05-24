@@ -26,7 +26,7 @@ namespace isvd {
 ///
 template <typename _Val>
 DummyConverter<_Val>::Converter(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 

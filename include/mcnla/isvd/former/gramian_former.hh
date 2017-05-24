@@ -45,12 +45,7 @@ class GramianFormer
 
  private:
 
-  using BaseType = StageWrapper<GramianFormer<_Val>>;
-
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
+  using BaseType    = StageWrapper<GramianFormer<_Val>>;
 
  protected:
 
@@ -61,25 +56,25 @@ class GramianFormer
   static constexpr const char* names_ = "forming";
 
   /// The matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_;
+  DenseMatrixColMajor<_Val> matrix_w_;
 
   /// The cut matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_cut_;
+  DenseMatrixColMajor<_Val> matrix_w_cut_;
 
   /// The vector S.
-  DenseVector<RealValType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The cut vector S.
-  DenseVector<RealValType> vector_s_cut_;
+  DenseVector<RealValT<_Val>> vector_s_cut_;
 
   /// The cut matrix U.
-  DenseMatrixColMajor<ValType> matrix_u_cut_;
+  DenseMatrixColMajor<_Val> matrix_u_cut_;
 
   /// The matrix Q'*A.
-  DenseMatrixColMajor<ValType> matrix_qta_;
+  DenseMatrixColMajor<_Val> matrix_qta_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixColMajor<ValType>, 'V'> syev_driver_;
+  la::SyevDriver<DenseSymmetricMatrixColMajor<_Val>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -90,12 +85,12 @@ class GramianFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<ValType> &parameters ) noexcept;
+  inline Former( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealValType>& vectorS() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixVt() const noexcept = delete;
+  inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixVt() const noexcept = delete;
 
  protected:
 
@@ -104,7 +99,7 @@ class GramianFormer
 
   // Forms SVD
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_aj, const DenseMatrixRowMajor<ValType> &matrix_qj ) noexcept;
+  void runImpl( const _Matrix &matrix_aj, const DenseMatrixRowMajor<_Val> &matrix_qj ) noexcept;
 
 };
 

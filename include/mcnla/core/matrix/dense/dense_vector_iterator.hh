@@ -22,35 +22,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, class _Vector> class DenseVectorIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
-///
-template <typename _Val, class _Vector>
-struct Traits<matrix::DenseVectorIteratorBase<_Val, _Vector>> {
-  using ElemType      = _Val;
-  using ElemRefType   = _Val&;
-  using ElemPtrType   = _Val*;
-  using ContainerType = _Vector;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector iterator.
 ///
@@ -60,17 +31,16 @@ namespace matrix {
 /// @see  DenseVectorIterator, DenseVectorConstIterator
 ///
 template <typename _Val, class _Vector>
-class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val, _Vector>> {
+class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val, _Vector>, _Vector, _Val> {
 
  private:
 
   using ValType       = _Val;
-  using ElemType      = _Val;
   using ElemRefType   = _Val&;
   using ElemPtrType   = _Val*;
   using ContainerType = _Vector;
 
-  using BaseType      = IteratorBase<DenseVectorIteratorBase<_Val, _Vector>>;
+  using BaseType      = IteratorBase<DenseVectorIteratorBase<_Val, _Vector>, _Vector, _Val>;
 
  protected:
 

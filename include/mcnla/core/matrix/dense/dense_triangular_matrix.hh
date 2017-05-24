@@ -36,9 +36,6 @@ struct Traits<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> {
 
   using ValType     = _Val;
 
-  using RealType    = matrix::DenseTriangularMatrix<RealValT<_Val>, _trans, _uplo>;
-  using ComplexType = matrix::DenseTriangularMatrix<ComplexValT<_Val>, _trans, _uplo>;
-
   using VectorType  = matrix::DenseVector<_Val>;
   using MatrixType  = matrix::DenseTriangularMatrix<_Val, _trans, _uplo>;
 };

@@ -48,7 +48,7 @@ class CollectionToRowBlockConverter
 
  public:
 
-  using ValType = _Val;
+//  using _Val = _Val;
 
  protected:
 
@@ -61,7 +61,7 @@ class CollectionToRowBlockConverter
  public:
 
   // Constructor
-  inline Converter( const Parameters<ValType> &parameters ) noexcept;
+  inline Converter( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -69,7 +69,7 @@ class CollectionToRowBlockConverter
   void initializeImpl() noexcept;
 
   // Converts data
-  void runImpl( DenseMatrixCollection201<ValType> &collection_q, DenseMatrixCollection201<ValType> &collection_qj ) noexcept;
+  void runImpl( DenseMatrixCollection201<_Val> &collection_q, DenseMatrixCollection201<_Val> &collection_qj ) noexcept;
 
 };
 

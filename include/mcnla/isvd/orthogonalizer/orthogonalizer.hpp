@@ -33,13 +33,8 @@ template <class _Tag, typename _Val> class Orthogonalizer;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The orthogonalizer traits.
-///
 template <class _Tag, typename _Val>
-struct Traits<isvd::Orthogonalizer<_Tag, _Val>> {
-  using ValType = _Val;
-};
+MCNLA_TRAITS_DEF(VAL, isvd::Orthogonalizer<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 

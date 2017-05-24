@@ -47,11 +47,6 @@ class RowBlockKolmogorovNagumoIntegrator
 
   using BaseType = StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
-
  protected:
 
   /// The name.
@@ -64,37 +59,37 @@ class RowBlockKolmogorovNagumoIntegrator
   index_t max_iteration_;
 
   /// The tolerance of convergence condition.
-  RealValType tolerance_;
+  RealValT<_Val> tolerance_;
 
   /// The number of iteration.
   index_t iteration_;
 
   /// The matrix B.
-  DenseMatrixRowMajor<ValType> matrix_b_;
+  DenseMatrixRowMajor<_Val> matrix_b_;
 
   /// The matrix D.
-  DenseMatrixRowMajor<ValType> matrix_d_;
+  DenseMatrixRowMajor<_Val> matrix_d_;
 
   /// The matrix Z.
-  DenseMatrixRowMajor<ValType> matrix_z_;
+  DenseMatrixRowMajor<_Val> matrix_z_;
 
   /// The matrix C.
-  DenseMatrixRowMajor<ValType> matrix_c_;
+  DenseMatrixRowMajor<_Val> matrix_c_;
 
   /// The matrix Xj.
-  DenseMatrixRowMajor<ValType> matrix_xj_;
+  DenseMatrixRowMajor<_Val> matrix_xj_;
 
   /// The temporary matrix.
-  DenseMatrixRowMajor<ValType> matrix_tmp_;
+  DenseMatrixRowMajor<_Val> matrix_tmp_;
 
   /// The vector E.
-  DenseVector<ValType> vector_e_;
+  DenseVector<_Val> vector_e_;
 
   /// The vector F.
-  DenseVector<ValType> vector_f_;
+  DenseVector<_Val> vector_f_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<ValType>, 'V'> syev_driver_;
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -105,17 +100,17 @@ class RowBlockKolmogorovNagumoIntegrator
  public:
 
   // Constructor
-  inline Integrator( const Parameters<ValType> &parameters,
-                     const index_t max_iteration = 256, const RealValType tolerance = 1e-4 ) noexcept;
+  inline Integrator( const Parameters<_Val> &parameters,
+                     const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-4 ) noexcept;
 
   // Gets parameters
-  inline index_t     maxIteration() const noexcept;
-  inline RealValType tolerance() const noexcept;
-  inline index_t     iteration() const noexcept;
+  inline index_t        maxIteration() const noexcept;
+  inline RealValT<_Val> tolerance() const noexcept;
+  inline index_t        iteration() const noexcept;
 
   // Sets parameters
   inline Integrator& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline Integrator& setTolerance( const RealValType tolerance ) noexcept;
+  inline Integrator& setTolerance( const RealValT<_Val> tolerance ) noexcept;
 
  protected:
 
@@ -123,7 +118,7 @@ class RowBlockKolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollection201<ValType> &collection_qj, DenseMatrixRowMajor<ValType> &matrix_qbarj ) noexcept;
+  void runImpl( const DenseMatrixCollection201<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
 
 };
 

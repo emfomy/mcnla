@@ -27,7 +27,7 @@ namespace isvd {
 ///
 template <typename _Val>
 MatrixToRowBlockConverter<_Val>::Converter(
-    const Parameters<ValType> &parameters
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -45,8 +45,8 @@ void MatrixToRowBlockConverter<_Val>::initializeImpl() noexcept {}
 ///
 template <typename _Val>
 void MatrixToRowBlockConverter<_Val>::runImpl(
-    const DenseMatrixRowMajor<ValType> &matrix,
-          DenseMatrixRowMajor<ValType> &matrix_j
+    const DenseMatrixRowMajor<_Val> &matrix,
+          DenseMatrixRowMajor<_Val> &matrix_j
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;

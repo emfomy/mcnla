@@ -45,18 +45,9 @@ namespace traits {
 template <typename _Val, Trans _trans>
 struct Traits<matrix::CooMatrix<_Val, _trans>> {
 
-  static constexpr Trans trans = _trans;
-
-  using ValType           = _Val;
-
-  using RealType          = matrix::CooMatrix<RealValT<_Val>, _trans>;
-  using ComplexType       = matrix::CooMatrix<ComplexValT<_Val>, _trans>;
-
-  using VectorType        = matrix::CooVector<_Val>;
-  using MatrixType        = matrix::CooMatrix<_Val, _trans>;
-
   using IteratorType      = matrix::CooMatrixIterator<_Val, _trans>;
   using ConstIteratorType = matrix::CooMatrixConstIterator<_Val, _trans>;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,9 +105,6 @@ class CooMatrix
   using ValArrayType      = Array<_Val>;
   using IdxArrayType      = Array<index_t>;
   using SizesType         = std::tuple<index_t, index_t>;
-
-  using RealType          = CooMatrix<RealValT<_Val>, _trans>;
-  using ComplexType       = CooMatrix<ComplexValT<_Val>, _trans>;
 
   using VectorType        = CooVector<_Val>;
   using MatrixType        = CooMatrix<_Val, _trans>;
