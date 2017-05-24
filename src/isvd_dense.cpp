@@ -91,7 +91,7 @@ int main( int argc, char **argv ) {
   parameters.sync();
 
   // ====================================================================================================================== //
-  // Allocate stages and converters
+  // Allocate stages
   mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
   mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
@@ -179,6 +179,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Finalize MCNLA
   mcnla::finalize();
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

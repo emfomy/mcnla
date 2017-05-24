@@ -45,6 +45,7 @@ enum class TraitsTag {
 template <typename _Type, TraitsTag _tag = TraitsTag::VOID>
 struct Traits {
   static_assert(traits::FalseType<_Type>::value, "Error using non-specialized traits!");
+  using Type = void;
 };
 
 #define MCNLA_TRAITS_DEF( _tag, _Type, _value ) \
@@ -67,7 +68,7 @@ struct ValTraits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
-/// @copydoc ValTraits
+/// @copydoc  ValTraits
 ///
 /// @tparam  _Val  The value type.
 ///

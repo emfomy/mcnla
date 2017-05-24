@@ -30,7 +30,7 @@ template <typename _Val> using ColumnSamplingSketcher = Sketcher<ColumnSamplingS
 /// @ingroup  isvd_sketcher_module
 /// The column sampling sketcher.
 ///
-/// @tparam  _Val    The value type.
+/// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -38,13 +38,13 @@ class Sketcher<ColumnSamplingSketcherTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class ColumnSamplingSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<ColumnSamplingSketcher<_Val>, _Val> {
+  : public StageWrapper<ColumnSamplingSketcher<_Val>> {
 
-  friend StageWrapper<ColumnSamplingSketcher<_Val>, _Val>;
+  friend StageWrapper<ColumnSamplingSketcher<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<ColumnSamplingSketcher<_Val>, _Val>;
+  using BaseType = StageWrapper<ColumnSamplingSketcher<_Val>>;
 
  public:
 

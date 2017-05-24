@@ -31,11 +31,10 @@ namespace traits {
 template <typename _Type>
 struct IsDenseSymmetricMatrix : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseSymmetricMatrix
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans, Uplo _uplo>
 struct IsDenseSymmetricMatrix<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix assert.

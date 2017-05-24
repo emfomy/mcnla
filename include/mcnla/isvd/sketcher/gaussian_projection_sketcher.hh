@@ -30,7 +30,7 @@ template <typename _Val> using GaussianProjectionSketcher = Sketcher<GaussianPro
 /// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher.
 ///
-/// @tparam  _Val    The value type.
+/// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -38,13 +38,13 @@ class Sketcher<GaussianProjectionSketcherTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class GaussianProjectionSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<GaussianProjectionSketcher<_Val>, _Val> {
+  : public StageWrapper<GaussianProjectionSketcher<_Val>> {
 
-  friend StageWrapper<GaussianProjectionSketcher<_Val>, _Val>;
+  friend StageWrapper<GaussianProjectionSketcher<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>, _Val>;
+  using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>>;
 
  public:
 

@@ -39,13 +39,13 @@ class Former<RowBlockGramianFormerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class RowBlockGramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockGramianFormer<_Val>, _Val> {
+  : public StageWrapper<RowBlockGramianFormer<_Val>> {
 
-  friend StageWrapper<RowBlockGramianFormer<_Val>, _Val>;
+  friend StageWrapper<RowBlockGramianFormer<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockGramianFormer<_Val>, _Val>;
+  using BaseType = StageWrapper<RowBlockGramianFormer<_Val>>;
 
  protected:
 

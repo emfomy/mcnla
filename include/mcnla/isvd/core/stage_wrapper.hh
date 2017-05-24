@@ -31,10 +31,13 @@ namespace isvd {
 /// The iSVD stage wrapper.
 ///
 /// @tparam  _Derived  The derived type.
-/// @tparam  _Val      The value type.
 ///
-template <class _Derived, typename _Val>
+template <class _Derived>
 class StageWrapper {
+
+ public:
+
+  using _Val = ValT<_Derived>;
 
  protected:
 

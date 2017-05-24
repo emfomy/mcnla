@@ -107,4 +107,4 @@ ccmake <path-to-source>
 * [Ting-Li Chen, Dawei D. Chang, Su-Yun Huang, Hung Chen, Chienyao Lin, Weichung Wang, “Integrating Multiple Random Sketches for Singular Value Decomposition”](https://arxiv.org/abs/1608.08285)
 
 ## License
-* @ref LICENSE.md "MIT License"
+@include LICENSE.md

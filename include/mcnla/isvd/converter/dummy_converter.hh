@@ -38,13 +38,13 @@ class Converter<DummyConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DummyConverter
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<DummyConverter<_Val>, _Val> {
+  : public StageWrapper<DummyConverter<_Val>> {
 
-  friend StageWrapper<DummyConverter<_Val>, _Val>;
+  friend StageWrapper<DummyConverter<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<DummyConverter<_Val>, _Val>;
+  using BaseType = StageWrapper<DummyConverter<_Val>>;
 
  public:
 

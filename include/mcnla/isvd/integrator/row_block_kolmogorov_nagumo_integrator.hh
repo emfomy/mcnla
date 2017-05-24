@@ -39,13 +39,13 @@ class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class RowBlockKolmogorovNagumoIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>, _Val> {
+  : public StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>> {
 
-  friend StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>, _Val>;
+  friend StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>, _Val>;
+  using BaseType = StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
  protected:
 

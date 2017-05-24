@@ -38,13 +38,13 @@ class Converter<MatrixToRowBlockConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class MatrixToRowBlockConverter
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<MatrixToRowBlockConverter<_Val>, _Val> {
+  : public StageWrapper<MatrixToRowBlockConverter<_Val>> {
 
-  friend StageWrapper<MatrixToRowBlockConverter<_Val>, _Val>;
+  friend StageWrapper<MatrixToRowBlockConverter<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<MatrixToRowBlockConverter<_Val>, _Val>;
+  using BaseType = StageWrapper<MatrixToRowBlockConverter<_Val>>;
 
  public:
 

@@ -31,11 +31,10 @@ namespace traits {
 template <typename _Type>
 struct IsDenseTriangularMatrix : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseTriangularMatrix
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans, Uplo _uplo>
 struct IsDenseTriangularMatrix<matrix::DenseTriangularMatrix<_Val, _trans, _uplo>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix assert.
