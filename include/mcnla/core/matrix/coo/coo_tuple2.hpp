@@ -142,10 +142,10 @@ CooTuple2<_Val, _Idx, _trans>& CooTuple2<_Val, _Idx, _trans>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <typename __Val, typename __Idx, Trans __trans>
+template <typename ..._Args>
 std::ostream& operator<<(
     std::ostream &os,
-    const CooTuple2<__Val, __Idx, __trans> &tuple
+    const CooTuple2<_Args...> &tuple
 ) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << tuple.rowidx() << ", "
                    << std::setw(kOsIdxWidth) << tuple.colidx() << ")  "

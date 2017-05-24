@@ -54,9 +54,8 @@ class DenseMatrixIteratorBase : public IteratorBase<DenseMatrixIteratorBase<_Val
   using BaseType::operator=;
 
   // Operators
-  template <typename __Val, Trans __trans, class __Matrix>
-  friend inline std::ostream& operator<<( std::ostream &os,
-                                          const DenseMatrixIteratorBase<__Val, __trans, __Matrix> &it ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixIteratorBase<_Args...> &it ) noexcept;
 
   // Gets value
   inline ValType&    val() const noexcept;

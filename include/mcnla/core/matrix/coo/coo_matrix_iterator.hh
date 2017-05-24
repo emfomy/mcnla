@@ -61,8 +61,8 @@ class CooMatrixIteratorBase
   using BaseType::operator=;
 
   // Operators
-  template <typename __Val, typename __Idx, Trans __trans, class __Matrix>
-  friend inline std::ostream& operator<<( std::ostream &os, const CooMatrixIteratorBase<__Val, __Idx, __trans, __Matrix> &it );
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const CooMatrixIteratorBase<_Args...> &it );
 
   // Gets value
   inline ValType&    val() const noexcept;

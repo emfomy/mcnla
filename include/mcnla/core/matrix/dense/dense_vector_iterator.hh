@@ -53,8 +53,8 @@ class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val
   using BaseType::operator=;
 
   // Operators
-  template <typename __Val, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<__Val, __Vector> &it ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<_Args...> &it ) noexcept;
 
   // Gets value
   inline ValType&    val() const noexcept;

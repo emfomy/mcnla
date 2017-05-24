@@ -60,8 +60,8 @@ class CooVectorIteratorBase
   using BaseType::operator=;
 
   // Operators
-  template <typename __Val, typename __Idx, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<__Val, __Idx, __Vector> &it ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const CooVectorIteratorBase<_Args...> &it ) noexcept;
 
   // Gets value
   inline ValType&    val() const noexcept;
