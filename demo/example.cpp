@@ -46,7 +46,7 @@ int main( int argc, char **argv ) {
 
   /// [alloc-stage]
   // Allocate stages
-  mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
+  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters);
   mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
   mcnla::isvd::SvdFormer<double> former(parameters);
