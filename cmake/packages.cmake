@@ -24,7 +24,6 @@ if(MCNLA_BUILD_BIN)
     set(COMFLGS "${COMFLGS} ${MPI_COMPILE_FLAGS}")
     set(LNKFLGS "${LNKFLGS} ${MPI_LINK_FLAGS}")
   endif()
-  set(MPI_PROCS 4 CACHE STRING "The number of MPI processes.")
 
   # MKL
   if(MCNLA_USE_MKL)

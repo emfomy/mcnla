@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    report/row_block_fast_kolmogorov_nagumo_integrator.cpp
-/// @brief   The report for Kolmogorov-Nagumo-type integrator (fast row-block version).
+/// @file    report/row_block_gramian_kolmogorov_nagumo_integrator.cpp
+/// @brief   The report for Gramian Kolmogorov-Nagumo-type integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 using ValType = double;
-#define Stage RowBlockFastKolmogorovNagumoIntegrator
+#define Stage RowBlockGramianKolmogorovNagumoIntegrator
 
 #include "../../include/integrator/row_block_integrator.hpp"
 

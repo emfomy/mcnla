@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/row_block_fast_kolmogorov_nagumo_integrator.hh
-/// @brief   The definition of Kolmogorov-Nagumo-type integrator (fast row-block version).
+/// @file    include/mcnla/isvd/integrator/row_block_gramian_kolmogorov_nagumo_integrator.hh
+/// @brief   The definition of Gramian Kolmogorov-Nagumo-type integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_FAST_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
-#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_FAST_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
@@ -23,35 +23,35 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockFastKolmogorovNagumoIntegratorTag {};
+struct RowBlockGramianKolmogorovNagumoIntegratorTag {};
 template <typename _Val>
-using RowBlockFastKolmogorovNagumoIntegrator = Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>;
+using RowBlockGramianKolmogorovNagumoIntegrator = Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
-/// The Kolmogorov-Nagumo-type integrator (fast row-block version).
+/// The Gramian Kolmogorov-Nagumo-type integrator (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockFastKolmogorovNagumoIntegratorTag, _Val>
+class Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockFastKolmogorovNagumoIntegrator
+class RowBlockGramianKolmogorovNagumoIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockFastKolmogorovNagumoIntegrator<_Val>> {
+  : public StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>> {
 
-  friend StageWrapper<RowBlockFastKolmogorovNagumoIntegrator<_Val>>;
+  friend StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockFastKolmogorovNagumoIntegrator<_Val>>;
+  using BaseType = StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Fast Row-Block Version)";
+  static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Row-Block Gramian Version)";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "initializing / iterating / forming Qbar";
@@ -133,4 +133,4 @@ class RowBlockFastKolmogorovNagumoIntegrator
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_FAST_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
