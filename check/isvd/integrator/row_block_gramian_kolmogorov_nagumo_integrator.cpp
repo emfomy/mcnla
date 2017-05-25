@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/integrator/row_block_fast_kolmogorov_nagumo_integrator.hpp>
+#include <mcnla/isvd/integrator/row_block_gramian_kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qi.mtx"
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_kn.mtx"
 
-TEST(RowBlockFastKolmogorovNagumoIntegratorTest, Test) {
+TEST(RowBlockGramianKolmogorovNagumoIntegratorTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -38,7 +38,7 @@ TEST(RowBlockFastKolmogorovNagumoIntegratorTest, Test) {
   parameters.sync();
 
   // Initializes integrator
-  mcnla::isvd::RowBlockFastKolmogorovNagumoIntegrator<ValType> integrator(parameters, 256, 1e-4);
+  mcnla::isvd::RowBlockGramianKolmogorovNagumoIntegrator<ValType> integrator(parameters, 256, 1e-4);
   integrator.initialize();
 
   // Initializes converter
