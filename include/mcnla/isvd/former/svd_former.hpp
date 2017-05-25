@@ -9,6 +9,7 @@
 #define MCNLA_ISVD_FORMER_SVD_FORMER_HPP_
 
 #include <mcnla/isvd/former/svd_former.hh>
+#include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -21,146 +22,106 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::FormerWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Scalar>
-Former<_Scalar, SvdFormerTag>::Former(
-    const ParametersType &parameters,
-    const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root
+template <typename _Val>
+SvdFormer<_Val>::Former(
+    const Parameters<_Val> &parameters
 ) noexcept
-  : BaseType(parameters, mpi_comm, mpi_root) {}
+  : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
-template <typename _Scalar>
-void Former<_Scalar, SvdFormerTag>::initializeImpl() noexcept {
+template <typename _Val>
+void SvdFormer<_Val>::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
   const auto dim_sketch = parameters_.dimSketch();
   const auto rank       = parameters_.rank();
 
-  moment0_ = 0;
-  moment1_ = 0;
-  moment2_ = 0;
-  moment3_ = 0;
-
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
-  matrix_u_.reconstruct(nrow, dim_sketch);
   matrix_vt_.reconstruct(dim_sketch, ncol);
-  gesvd_engine_.reconstruct(dim_sketch, ncol);
+  gesvd_driver_.reconstruct(dim_sketch, ncol);
 
-  vector_s_cut_  = vector_s_({0, rank});
-  matrix_u_cut_  = matrix_u_("", {0, rank});
-  matrix_vt_cut_ = matrix_vt_({0, rank}, "");
+  matrix_u_cut_.reconstruct(nrow, rank);
+
+  matrix_w_cut_  = matrix_w_(""_, {0_i, rank});
+  vector_s_cut_  = vector_s_({0_i, rank});
+  matrix_vt_cut_ = matrix_vt_({0_i, rank}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::form
+/// @brief  Forms SVD.
 ///
-template <typename _Scalar> template <class _Matrix>
-void Former<_Scalar, SvdFormerTag>::formImpl(
+/// @param  matrix_a  The matrix A.
+/// @param  matrix_q  The matrix Q.
+///
+template <typename _Val> template <class _Matrix>
+void SvdFormer<_Val>::runImpl(
     const _Matrix &matrix_a,
-    const DenseMatrixRowMajor<ScalarType> &matrix_q
+    const DenseMatrixRowMajor<_Val> &matrix_q
 ) noexcept {
-  if ( !mpi::isCommRoot(mpi_root_, mpi_comm_) ) {
-    return;
-  }
 
-  mcnla_assert_true(parameters_.isInitialized());
-
+  const auto mpi_root   = parameters_.mpi_root;
+  const auto mpi_rank   = parameters_.mpi_rank;
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
   const auto dim_sketch = parameters_.dimSketch();
 
-  mcnla_assert_eq(matrix_a.sizes(),  std::make_tuple(nrow, ncol));
+  static_cast<void>(nrow);
+  static_cast<void>(ncol);
+  static_cast<void>(dim_sketch);
+
+  if ( mpi_rank != mpi_root ) {
+    return;
+  }
+
+  mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  moment0_ = MPI_Wtime();
+  this->tic(); double comm_time = 0.0;
+  // ====================================================================================================================== //
+  // Start
 
   // Vt := Q' * A
-  la::gemm(matrix_q.t(), matrix_a, matrix_vt_);
-  moment1_ = MPI_Wtime();
+  la::mm(matrix_q.t(), matrix_a, matrix_vt_);
 
   // Compute the SVD of Vt -> W * S * Vt
-  gesvd_engine_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
-  moment2_ = MPI_Wtime();
+  gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
 
   // U := Q * W
-  la::gemm(matrix_q, matrix_w_, matrix_u_);
-  moment3_ = MPI_Wtime();
+  la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
+
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::outputName
+/// @brief  Gets the singular values.
 ///
-///
-template <typename _Scalar>
-std::ostream&Former<_Scalar, SvdFormerTag>::outputNameImpl(
-    std::ostream &os
-) const noexcept {
-  return (os << name_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::time
-///
-template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::timeImpl() const noexcept {
-  return moment3_-moment0_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::time
-///
-template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::time1() const noexcept {
-  return moment1_-moment0_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::time
-///
-template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::time2() const noexcept {
-  return moment2_-moment1_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::time
-///
-template <typename _Scalar>
-double Former<_Scalar, SvdFormerTag>::time3() const noexcept {
-  return moment3_-moment2_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::vectorS
-///
-template <typename _Scalar>
-const DenseVector<RealScalarT<_Scalar>>& Former<_Scalar, SvdFormerTag>::vectorSImpl() const noexcept {
-  mcnla_assert_true(parameters_.isComputed());
+template <typename _Val>
+const DenseVector<RealValT<_Val>>& SvdFormer<_Val>::vectorS() const noexcept {
+  mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::matrixU
+/// @brief  Gets the left singular vectors.
 ///
-template <typename _Scalar>
-const DenseMatrixColMajor<_Scalar>& Former<_Scalar, SvdFormerTag>::matrixUImpl() const noexcept {
-  mcnla_assert_true(parameters_.isComputed());
+template <typename _Val>
+const DenseMatrixColMajor<_Val>& SvdFormer<_Val>::matrixU() const noexcept {
+  mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::FormerWrapper::matrixVt
+/// @brief  Gets the right singular vectors.
 ///
-template <typename _Scalar>
-const DenseMatrixColMajor<_Scalar>& Former<_Scalar, SvdFormerTag>::matrixVtImpl() const noexcept {
-  mcnla_assert_true(parameters_.isComputed());
+template <typename _Val>
+const DenseMatrixColMajor<_Val>& SvdFormer<_Val>::matrixVt() const noexcept {
+  mcnla_assert_true(this->isComputed());
   return matrix_vt_cut_;
 }
 

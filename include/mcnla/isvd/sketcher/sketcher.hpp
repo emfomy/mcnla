@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_SKETCHER_SKETCHER_HPP_
 
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/sketcher/sketcher_wrapper.hpp>
+#include <mcnla/isvd/core/stage_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, class _Tag> class Sketcher;
+template <class _Tag, typename _Val> class Sketcher;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -33,13 +33,8 @@ template <typename _Scalar, class _Tag> class Sketcher;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The sketcher traits.
-///
-template <typename _Scalar, class _Tag>
-struct Traits<isvd::Sketcher<_Scalar, _Tag>> {
-  using ScalarType = _Scalar;
-};
+template <class _Tag, typename _Val>
+MCNLA_TRAITS_DEF(VAL, isvd::Sketcher<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 
@@ -49,15 +44,15 @@ struct Traits<isvd::Sketcher<_Scalar, _Tag>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
-///
 /// The interface of iSVD sketcher.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Tag     The sketcher tag.
+/// @tparam  _Tag  The sketcher tag.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar, class _Tag>
-class Sketcher : public SketcherWrapper<Sketcher<_Scalar, _Tag>> {};
+template <class _Tag, typename _Val>
+class Sketcher : public StageWrapper<Sketcher<_Tag, _Val>> {
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD sketcher!");
+};
 
 }  // namespace isvd
 

@@ -23,16 +23,16 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage() noexcept
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage() noexcept
   : BaseType(),
     nnz_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage(
     const index_t capacity,
     const index_t nnz
 ) noexcept
@@ -44,8 +44,8 @@ CooStorage<_Scalar>::CooStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage(
     const ValArrayType &val,
     const index_t nnz
 ) noexcept
@@ -57,34 +57,22 @@ CooStorage<_Scalar>::CooStorage(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>::CooStorage(
     const CooStorage &other
 ) noexcept
   : BaseType(other),
     nnz_(other.nnz_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Scalar>
-CooStorage<_Scalar>::CooStorage(
-    CooStorage &&other
-) noexcept
-  : BaseType(std::move(other)),
-    nnz_(other.nnz_) {
-  other.nnz_ = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
+template <class _Core, typename _Val>
+CooStorage<_Core, _Val>& CooStorage<_Core, _Val>::operator=(
     const CooStorage &other
 ) noexcept {
   BaseType::operator=(other);
@@ -93,38 +81,26 @@ CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
-///
-template <typename _Scalar>
-CooStorage<_Scalar>& CooStorage<_Scalar>::operator=(
-    CooStorage &&other
-) noexcept {
-  BaseType::operator=(std::move(other));
-  nnz_ = other.nnz_;  other.nnz_ = 0;
-  return *this;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of nonzero elements.
 ///
-template <typename _Scalar>
-index_t CooStorage<_Scalar>::nnz() const noexcept {
+template <class _Core, typename _Val>
+index_t CooStorage<_Core, _Val>::nnz() const noexcept {
   return nnz_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the value array.
 ///
-template <typename _Scalar>
-index_t CooStorage<_Scalar>::valCapacity() const noexcept {
+template <class _Core, typename _Val>
+index_t CooStorage<_Core, _Val>::valCapacity() const noexcept {
   return this->capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the value array.
 ///
-template <typename _Scalar>
-index_t CooStorage<_Scalar>::valOffset() const noexcept {
+template <class _Core, typename _Val>
+index_t CooStorage<_Core, _Val>::valOffset() const noexcept {
   return this->offset();
 }
 

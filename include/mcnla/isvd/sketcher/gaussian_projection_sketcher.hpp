@@ -9,8 +9,8 @@
 #define MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_
 
 #include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hh>
-#include <ctime>
 #include <mcnla/core/la.hpp>
+#include <mcnla/core/random.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,112 +23,126 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::SketcherWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Scalar, index_t _exponent>
-Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::Sketcher(
-    const ParametersType &parameters,
-    const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root,
-    const index_t seed
+template <typename _Val>
+GaussianProjectionSketcher<_Val>::Sketcher(
+    const Parameters<_Val> &parameters,
+    const index_t seed,
+    const index_t exponent
 ) noexcept
-  : BaseType(parameters, mpi_comm, mpi_root),
-    random_engine_(seed) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::initialize
-///
-template <typename _Scalar, index_t _exponent>
-void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::initializeImpl() noexcept {
-
-  const auto ncol            = parameters_.ncol();
-  const auto num_sketch_each = parameters_.numSketchEach();
-  const auto dim_sketch      = parameters_.dimSketch();
-
-  moment0_ = 0;
-  moment1_ = 0;
-  moment2_ = 0;
-
-  matrix_omegas_.reconstruct(ncol, dim_sketch * num_sketch_each);
+  : BaseType(parameters) {
+  setSeed(seed);
+  setExponent(exponent);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::sketch
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
-template <typename _Scalar, index_t _exponent> template <class _Matrix>
-void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::sketchImpl(
+template <typename _Val>
+void GaussianProjectionSketcher<_Val>::initializeImpl() noexcept {
+
+  const auto ncol            = parameters_.ncol();
+  const auto dim_sketch_each = parameters_.dimSketchEach();
+
+  matrix_omegas_.reconstruct(ncol, dim_sketch_each);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sketches.
+///
+/// @param  matrix_a      The matrix A.
+/// @param  collection_q  The matrix collection Q.
+///
+template <typename _Val> template <class _Matrix>
+void GaussianProjectionSketcher<_Val>::runImpl(
     const _Matrix &matrix_a,
-          DenseMatrixCollection120<ScalarType> &collection_q
+          DenseMatrixCollection201<_Val> &collection_q
 ) noexcept {
 
-  mcnla_assert_true(parameters_.isInitialized());
-
+  const auto mpi_comm        = parameters_.mpi_comm;
+  const auto mpi_root        = parameters_.mpi_root;
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
   const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
-  mcnla_assert_eq(collection_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
+  mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
+  mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  moment0_ = MPI_Wtime();
+  random::Streams streams(seed_, mpi_root, mpi_comm);
+
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Random generating
 
   // Random sample Omega using normal Gaussian distribution
-  random_engine_.gaussian(matrix_omegas_.vectorize());
-  moment1_ = MPI_Wtime();
+  random::gaussian(streams, matrix_omegas_.vec());
+
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Projection
 
   // Q := A * Omega
   la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
-  for ( index_t i = 0; i < _exponent; ++i ) {
+  for ( index_t i = 0; i < exponent_; ++i ) {
     la::mm(matrix_a.t(), collection_q.unfold(), matrix_omegas_);
     la::mm(matrix_a, matrix_omegas_, collection_q.unfold());
   }
-  moment2_ = MPI_Wtime();
+
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::outputName
+/// @copydoc  mcnla::isvd::StageWrapper::outputName
 ///
 ///
-template <typename _Scalar, index_t _exponent>
-std::ostream& Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::outputNameImpl(
+template <typename _Val>
+std::ostream& GaussianProjectionSketcher<_Val>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
-  return (os << name_ << " (Power " << _exponent << ")");
+  return (os << name_ << " (Power " << exponent_ << ")");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::time
+/// @brief  Gets the random seed.
 ///
-template <typename _Scalar, index_t _exponent>
-double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::timeImpl() const noexcept {
-  return moment2_-moment0_;
+template <typename _Val>
+index_t GaussianProjectionSketcher<_Val>::seed() const noexcept {
+  return seed_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::time
+/// @brief  Gets the exponent of power method.
 ///
-template <typename _Scalar, index_t _exponent>
-double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time1() const noexcept {
-  return moment1_-moment0_;
+template <typename _Val>
+index_t GaussianProjectionSketcher<_Val>::exponent() const noexcept {
+  return exponent_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::time
+/// @brief  Sets the random seed.
 ///
-template <typename _Scalar, index_t _exponent>
-double Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::time2() const noexcept {
-  return moment2_-moment1_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
-///
-template <typename _Scalar, index_t _exponent>
-void Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>::setSeedImpl(
+template <typename _Val>
+GaussianProjectionSketcher<_Val>& GaussianProjectionSketcher<_Val>::setSeed(
     const index_t seed
 ) noexcept {
-  random_engine_.setSeed(seed);
+  seed_ = seed;
+  computed_ = false;
+  return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sets the exponent of power method.
+///
+template <typename _Val>
+GaussianProjectionSketcher<_Val>& GaussianProjectionSketcher<_Val>::setExponent(
+    const index_t exponent
+) noexcept {
+  mcnla_assert_ge(exponent, 0);
+  exponent_ = exponent;
+  computed_ = false;
+  return *this;
 }
 
 }  // namespace isvd

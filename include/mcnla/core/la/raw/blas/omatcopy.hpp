@@ -80,10 +80,10 @@ static inline void omatcopy(
 
 #else  // MCNLA_USE_MKL
 
-template <typename _Scalar>
+template <typename _Val>
 inline void omatcopy(
-    const char ordering, const char trans, const index_t rows, const index_t cols, const _Scalar alpha,
-    const _Scalar* a, const index_t lda, _Scalar* b, index_t ldb
+    const char ordering, const char trans, const index_t rows, const index_t cols, const _Val alpha,
+    const _Val* a, const index_t lda, _Val* b, index_t ldb
 ) noexcept {
 }
 

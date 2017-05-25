@@ -18,9 +18,52 @@
 #include <cstdint>
 #include <cmath>
 #include <complex>
+#include <iostream>
 #include <type_traits>
 #include <mcnla/config.hpp>
 
+#define MCNLA_COMMA ,
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The MCNLA namespace
+///
+namespace mcnla {
+
+/// @ingroup  core_module
+/// The type of index.
+#ifndef MCNLA_USE_ILP64
+using index_t = std::int32_t;
+#else  // MCNLA_USE_ILP64
+using index_t = std::int64_t;
+#endif  // MCNLA_USE_ILP64
+
+/// @ingroup  core_module
+/// The type of size.
+using size_t = std::size_t;
+
+/// @ingroup  core_module
+/// The format width
+static constexpr size_t kOsValWidth = 14;
+static constexpr size_t kOsIdxWidth = 6;
+
+/// @ingroup  core_module
+/// The index type literal.
+static inline mcnla::index_t operator""_i( unsigned long long int idx ) { return idx; }
+
+}  // namespace mcnla
+
+#ifndef MCNLA_DISABLE_LITERAL
+using mcnla::operator""_i;
+#endif  // MCNLA_DISABLE_LITERAL
+
+#ifdef MCNLA_USE_MKL
+#define MKL_INT mcnla::index_t
+#define MKL_Complex8 std::complex<float>
+#define MKL_Complex16 std::complex<double>
+#endif  // MCNLA_USE_MKL
+
+/// @ingroup  core_module
+//@{
 #ifndef MCNLA_USE_GTEST
 
 #define mcnla_assert_true( condition )   assert(condition);
@@ -57,31 +100,10 @@
 
 #endif  // MCNLA_USE_GTEST
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The MCNLA namespace
-///
-namespace mcnla {
+#define mcnla_assert_pass( condition )  { auto err = condition; static_cast<void>(err); mcnla_assert_eq(err, 0); }
+//@}
 
-/// The type of index.
-#ifndef MCNLA_USE_ILP64
-using index_t = std::int32_t;
-#else  // MCNLA_USE_ILP64
-using index_t = std::int64_t;
-#endif  // MCNLA_USE_ILP64
-
-/// The type of size.
-using size_t = std::size_t;
-
-/// The format width
-static constexpr size_t ios_width = 14;
-
-}  // namespace mcnla
-
-
-#ifdef MCNLA_USE_MKL
-#define MKL_Complex8 std::complex<float>
-#define MKL_Complex16 std::complex<double>
-#define MKL_INT mcnla::index_t
-#endif  // MCNLA_USE_MKL
+/// @ingroup  core_module
+#define disp( expression ) std::cout << #expression << ":\n" << expression << std::endl;
 
 #endif  // MCNLA_DEF_HPP_

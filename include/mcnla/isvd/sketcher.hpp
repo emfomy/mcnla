@@ -9,9 +9,10 @@
 #define MCNLA_ISVD_SKETCHER_HPP_
 
 #include <mcnla/isvd/sketcher/sketcher.hpp>
-#include <mcnla/isvd/sketcher/sketcher_wrapper.hpp>
 
 #include <mcnla/isvd/sketcher/gaussian_projection_sketcher.hpp>
+#include <mcnla/isvd/sketcher/row_block_gaussian_projection_sketcher.hpp>
 #include <mcnla/isvd/sketcher/column_sampling_sketcher.hpp>
+#include <mcnla/isvd/sketcher/row_block_column_sampling_sketcher.hpp>
 
 #endif  // MCNLA_ISVD_SKETCHER_HPP_

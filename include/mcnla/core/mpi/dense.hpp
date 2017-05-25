@@ -12,9 +12,12 @@
 #include <mcnla/core/mpi/dense/alltoall.hpp>
 #include <mcnla/core/mpi/dense/bcast.hpp>
 #include <mcnla/core/mpi/dense/gather.hpp>
+#include <mcnla/core/mpi/dense/gatherv.hpp>
 #include <mcnla/core/mpi/dense/recv.hpp>
 #include <mcnla/core/mpi/dense/reduce.hpp>
 #include <mcnla/core/mpi/dense/reduce_scatter_block.hpp>
+#include <mcnla/core/mpi/dense/scatter.hpp>
+#include <mcnla/core/mpi/dense/scatterv.hpp>
 #include <mcnla/core/mpi/dense/send.hpp>
 
 #endif  // MCNLA_CORE_MATRIX_MPI_DENSE_HPP_

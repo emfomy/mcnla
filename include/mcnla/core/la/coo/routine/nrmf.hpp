@@ -27,9 +27,9 @@ namespace la {
 /// @brief  Computes the Frobenius norm of a matrix.
 ///
 //@{
-template <typename _Scalar, Trans _trans>
-inline RealScalarT<_Scalar> nrmf(
-    const CooMatrix<_Scalar, _trans> &a
+template <typename _Val, Trans _trans>
+inline RealValT<_Val> nrmf(
+    const CooMatrix<_Val, _trans> &a
 ) noexcept {
   return detail::nrm2(a.nnz(), a.valPtr(), 1);
 }

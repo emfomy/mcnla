@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_MATRIX_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_MATRIX_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/coo/coo_storage.hpp>
 #include <mcnla/core/matrix/coo/coo_idx0_storage.hpp>
@@ -27,33 +27,33 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
 /// The The coordinate list (COO) matrix storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Scalar>
+template <class _Core, typename _Val>
 class CooMatrixStorage
-  : public CooStorage<_Scalar>,
-    public CooIdx0Storage<index_t>,
-    public CooIdx1Storage<index_t> {
+  : public CooStorage<_Core, _Val>,
+    public CooIdx0Storage<_Core, index_t>,
+    public CooIdx1Storage<_Core, index_t> {
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<ScalarType>;
-  using IdxArrayType      = Array<index_t>;
+  using ValType           = _Val;
+  using ValArrayType      = ArrS<_Core, _Val>;
+  using IdxArrayType      = ArrS<_Core, index_t>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = CooVectorStorage<ScalarType>;
-  using MatrixStorageType = CooMatrixStorage<ScalarType>;
+  using VectorStorageType = CooVectorStorage<_Core, _Val>;
+  using MatrixStorageType = CooMatrixStorage<_Core, _Val>;
 
-  using BaseType          = CooStorage<_Scalar>;
-  using Base0Type         = CooIdx0Storage<index_t>;
-  using Base1Type         = CooIdx1Storage<index_t>;
+  using BaseType          = CooStorage<_Core, _Val>;
+  using Base0Type         = CooIdx0Storage<_Core, index_t>;
+  using Base1Type         = CooIdx1Storage<_Core, index_t>;
 
  protected:
 
@@ -70,6 +70,10 @@ class CooMatrixStorage
 
   using BaseType::val;
   using BaseType::valPtr;
+  using Base0Type::idx0;
+  using Base0Type::idx0Ptr;
+  using Base1Type::idx1;
+  using Base1Type::idx1Ptr;
 
  protected:
 
@@ -80,11 +84,9 @@ class CooMatrixStorage
   inline CooMatrixStorage( const index_t dim0, const index_t dim1, const index_t nnz, const ValArrayType &val,
                            const IdxArrayType &idx0, const IdxArrayType &idx1, const index_t offset = 0 ) noexcept;
   inline CooMatrixStorage( const CooMatrixStorage &other ) noexcept;
-  inline CooMatrixStorage( CooMatrixStorage &&other ) noexcept;
 
   // Operators
   inline CooMatrixStorage& operator=( const CooMatrixStorage &other ) noexcept;
-  inline CooMatrixStorage& operator=( CooMatrixStorage &&other ) noexcept;
 
  public:
 
@@ -98,8 +100,8 @@ class CooMatrixStorage
  protected:
 
   // Gets element
-  inline       ScalarType elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
-  inline const ScalarType elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
+  inline       ValType elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
+  inline const ValType elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0, const index_t idx1 ) const noexcept;

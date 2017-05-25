@@ -8,8 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/kit/array.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,18 +21,18 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
 /// The dense storage.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Scalar>
+template <typename _Core, typename _Val>
 class DenseStorage {
 
  private:
 
-  using ScalarType   = _Scalar;
-  using ValArrayType = Array<ScalarType>;
+  using ValType      = _Val;
+  using ValArrayType = ArrS<_Core, _Val>;
 
  protected:
 
@@ -47,11 +46,9 @@ class DenseStorage {
   inline DenseStorage( const index_t capacity ) noexcept;
   inline DenseStorage( const ValArrayType &val ) noexcept;
   inline DenseStorage( const DenseStorage &other ) noexcept;
-  inline DenseStorage( DenseStorage &&other ) noexcept;
 
   // Operators
   inline DenseStorage& operator=( const DenseStorage &other ) noexcept;
-  inline DenseStorage& operator=( DenseStorage &&other ) noexcept;
 
  public:
 
@@ -63,8 +60,8 @@ class DenseStorage {
   // Gets array
   inline       ValArrayType& val() noexcept;
   inline const ValArrayType& val() const noexcept;
-  inline       ScalarType* valPtr() noexcept;
-  inline const ScalarType* valPtr() const noexcept;
+  inline       ValType* valPtr() noexcept;
+  inline const ValType* valPtr() const noexcept;
 
 };
 

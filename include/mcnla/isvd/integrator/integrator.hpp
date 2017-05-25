@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_INTEGRATOR_INTEGRATOR_HPP_
 
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/integrator/integrator_wrapper.hpp>
+#include <mcnla/isvd/core/stage_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, class _Tag> class Integrator;
+template <class _Tag, typename _Val> class Integrator;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -33,13 +33,8 @@ template <typename _Scalar, class _Tag> class Integrator;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The integrator traits.
-///
-template <typename _Scalar, class _Tag>
-struct Traits<isvd::Integrator<_Scalar, _Tag>> {
-  using ScalarType = _Scalar;
-};
+template <class _Tag, typename _Val>
+MCNLA_TRAITS_DEF(VAL, isvd::Integrator<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 
@@ -49,15 +44,15 @@ struct Traits<isvd::Integrator<_Scalar, _Tag>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
-///
 /// The interface of iSVD integrator.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Tag     The integrator tag.
+/// @tparam  _Tag  The integrator tag.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar, class _Tag>
-class Integrator : public IntegratorWrapper<Integrator<_Scalar, _Tag>> {};
+template <class _Tag, typename _Val>
+class Integrator : public StageWrapper<Integrator<_Tag, _Val>> {
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD integrator!");
+};
 
 }  // namespace isvd
 

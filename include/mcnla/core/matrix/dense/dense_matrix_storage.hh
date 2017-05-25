@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/dense/dense_storage.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
@@ -25,24 +25,24 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
 /// The dense matrix storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Scalar>
-class DenseMatrixStorage : public DenseStorage<_Scalar> {
+template <class _Core, typename _Val>
+class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<ScalarType>;
+  using ValType           = _Val;
+  using ValArrayType      = ArrS<_Core, _Val>;
   using DimsType          = std::tuple<index_t, index_t>;
 
-  using VectorStorageType = DenseVectorStorage<ScalarType>;
-  using MatrixStorageType = DenseMatrixStorage<ScalarType>;
+  using VectorStorageType = DenseVectorStorage<_Core, _Val>;
+  using MatrixStorageType = DenseMatrixStorage<_Core, _Val>;
 
-  using BaseType          = DenseStorage<_Scalar>;
+  using BaseType          = DenseStorage<_Core, _Val>;
 
  protected:
 
@@ -67,11 +67,9 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   inline DenseMatrixStorage( const index_t dim0, const index_t dim1, const index_t pitch,
                              const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseMatrixStorage( const DenseMatrixStorage &other ) noexcept;
-  inline DenseMatrixStorage( DenseMatrixStorage &&other ) noexcept;
 
   // Operators
   inline DenseMatrixStorage& operator=( const DenseMatrixStorage &other ) noexcept;
-  inline DenseMatrixStorage& operator=( DenseMatrixStorage &&other ) noexcept;
 
  public:
 
@@ -80,14 +78,17 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   inline bool     isSquare() const noexcept;
   inline index_t  dim0() const noexcept;
   inline index_t  dim1() const noexcept;
+  inline index_t  mdim0() const noexcept;
+  inline index_t  mdim1() const noexcept;
   inline DimsType dims() const noexcept;
+  inline DimsType mdims() const noexcept;
   inline index_t  pitch() const noexcept;
 
  protected:
 
   // Gets element
-  inline       ScalarType& elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
-  inline const ScalarType& elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
+  inline       ValType& elemImpl( const index_t idx0, const index_t idx1 ) noexcept;
+  inline const ValType& elemImpl( const index_t idx0, const index_t idx1 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0, const index_t idx1 ) const noexcept;
@@ -104,10 +105,10 @@ class DenseMatrixStorage : public DenseStorage<_Scalar> {
   inline const VectorStorageType getVector0Impl( const IdxRange &range0, const index_t idx1 ) const noexcept;
   inline       VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) noexcept;
   inline const VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) const noexcept;
-  inline       VectorStorageType getDiagonalImpl( const index_t idx ) noexcept;
-  inline const VectorStorageType getDiagonalImpl( const index_t idx ) const noexcept;
-  inline       VectorStorageType vectorizeImpl() noexcept;
-  inline const VectorStorageType vectorizeImpl() const noexcept;
+  inline       VectorStorageType getDiagImpl( const index_t idx ) noexcept;
+  inline const VectorStorageType getDiagImpl( const index_t idx ) const noexcept;
+  inline       VectorStorageType vecImpl() noexcept;
+  inline const VectorStorageType vecImpl() const noexcept;
 
 };
 

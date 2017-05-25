@@ -10,7 +10,6 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -28,13 +27,12 @@ template <class _Base> class InverseView;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
 /// The invertible container wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class InvertibleWrapper : public utility::CrtpBase<_Derived, InvertibleWrapper<_Derived>> {
+class InvertibleWrapper {
 
  private:
 
@@ -49,10 +47,13 @@ class InvertibleWrapper : public utility::CrtpBase<_Derived, InvertibleWrapper<_
   inline       InverseType& inv() noexcept;
   inline const InverseType& inv() const noexcept;
 
+ protected:
+
+  MCNLA_CRTP_DERIVED(_Derived)
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
 /// The inverse view.
 ///
 /// @tparam  _Base  The base type.

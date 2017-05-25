@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_HH_
 #define MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/kit/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -21,7 +21,7 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
+/// @ingroup  matrix_kit_module
 /// The index range.
 ///
 struct IdxRange {
@@ -32,26 +32,29 @@ struct IdxRange {
   /// The end index.
   index_t end;
 
-  // Constructors
-  inline IdxRange( const index_t begin, const index_t end ) noexcept;
-
   // Operators
   inline bool operator==( const IdxRange& other ) const noexcept;
   inline bool operator!=( const IdxRange& other ) const noexcept;
-  inline IdxRange operator+( const index_t scalar ) const noexcept;
-  inline IdxRange operator-( const index_t scalar ) const noexcept;
-  inline IdxRange operator*( const index_t scalar ) const noexcept;
-  inline IdxRange operator/( const index_t scalar ) const noexcept;
+  inline IdxRange operator+( const index_t idx ) const noexcept;
+  inline IdxRange operator-( const index_t idx ) const noexcept;
+  inline IdxRange operator*( const index_t idx ) const noexcept;
+  inline IdxRange operator/( const index_t idx ) const noexcept;
 
-  inline IdxRange& operator+=( const index_t scalar ) noexcept;
-  inline IdxRange& operator-=( const index_t scalar ) noexcept;
-  inline IdxRange& operator*=( const index_t scalar ) noexcept;
-  inline IdxRange& operator/=( const index_t scalar ) noexcept;
+  inline IdxRange& operator+=( const index_t idx ) noexcept;
+  inline IdxRange& operator-=( const index_t idx ) noexcept;
+  inline IdxRange& operator*=( const index_t idx ) noexcept;
+  inline IdxRange& operator/=( const index_t idx ) noexcept;
 
   // Gets data
-  inline index_t length() const noexcept;
+  inline index_t len() const noexcept;
 
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  matrix_kit_module
+/// The full index range.
+///
+struct FullRange {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
@@ -62,6 +65,19 @@ static inline std::ostream& operator<<( std::ostream &os, const IdxRange &range 
 
 }  // namespace matrix
 
+/// @ingroup  matrix_kit_module
+/// The full index range literal.
+static inline matrix::FullRange operator""_( const char*, size_t ) { return matrix::FullRange(); }
+
+/// @ingroup  matrix_kit_module
+/// The index range literal.
+using I_ = matrix::IdxRange;
+
 }  // namespace mcnla
+
+#ifndef MCNLA_DISABLE_LITERAL
+using mcnla::operator""_;
+using mcnla::I_;
+#endif  // MCNLA_DISABLE_LITERAL
 
 #endif  // MCNLA_CORE_MATRIX_KIT_INDEX_RANGE_HH_

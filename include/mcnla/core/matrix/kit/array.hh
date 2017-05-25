@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/kit/array.hh
-/// @brief   The definition of raw array class.
+/// @brief   The definition of value array class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -8,9 +8,8 @@
 #ifndef MCNLA_CORE_MATRIX_KIT_ARRAY_HH_
 #define MCNLA_CORE_MATRIX_KIT_ARRAY_HH_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <valarray>
-#include <memory>
+#include <mcnla/core/matrix/kit/def.hpp>
+#include <mcnla/core/matrix/kit/array_base.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,63 +22,41 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
-/// The array.
+/// @ingroup  matrix_kit_module
+/// The value array.
 ///
-template <typename _Type>
-class Array : public std::shared_ptr<std::valarray<_Type>> {
+/// @tparam  _Val  The value type.
+///
+template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class ArrS<CpuTag, _Val>
+  : public ArrayBase<CpuTag, _Val> {
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class Array
+  : public ArrayBase_<CpuTag, _Val> {
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
  private:
 
-  using BaseType = std::shared_ptr<std::valarray<_Type>>;
+  using BaseType = ArrayBase<CpuTag, _Val>;
 
  protected:
 
-  // The offset.
-  index_t offset_;
-
-  /// The empty array pointer.
-  static const BaseType kNullPtr;
+  using BaseType::size_;
+  using BaseType::offset_;
 
  public:
 
+  using BaseType::ArrayBase;
+
   // Constructors
-  inline Array() noexcept;
-  inline Array( const index_t size, const index_t offset = 0 ) noexcept;
-  inline Array( const BaseType &ptr, const index_t offset = 0 ) noexcept;
-  inline Array( const Array &other ) noexcept;
-  inline Array( Array &&other ) noexcept;
+  inline ArrS() noexcept;
+  inline ArrS( const index_t size, const index_t offset = 0 ) noexcept;
 
-  // Operators
-  inline Array& operator=( const Array &other ) noexcept;
-  inline Array& operator=( Array &&other ) noexcept;
-  inline void operator>>=( const index_t offset ) noexcept;
-  inline void operator<<=( const index_t offset ) noexcept;
-  inline       Array operator>>( const index_t offset ) noexcept;
-  inline const Array operator>>( const index_t offset ) const noexcept;
-  inline       Array operator<<( const index_t offset ) noexcept;
-  inline const Array operator<<( const index_t offset ) const noexcept;
-
-  // Gets information
-  inline bool    isEmpty() const noexcept;
-  inline index_t size() const noexcept;
-  inline index_t capacity() const noexcept;
-  inline index_t offset() const noexcept;
-
-  // Gets data
-  inline       _Type* operator*() noexcept;
-  inline const _Type* operator*() const noexcept;
-  inline       _Type& operator[]( const index_t idx ) noexcept;
-  inline const _Type& operator[]( const index_t idx ) const noexcept;
-
-  // Gets Valarray
-  inline       std::valarray<_Type>& valarray() noexcept;
-  inline const std::valarray<_Type>& valarray() const noexcept;
+  // Copy
+  inline Array<_Val> copy() const noexcept;
 
 };
-
-template <typename _Type>
-const typename Array<_Type>::BaseType Array<_Type>::kNullPtr = std::make_shared<std::valarray<_Type>>();
 
 }  // namespace matrix
 

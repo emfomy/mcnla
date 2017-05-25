@@ -1,133 +1,80 @@
 namespace mcnla {
 
-namespace isvd {
-
 /**
-  @page tutorial_isvd iSVD %Solver
+  @page tutorial_isvd iSVD
 
-  <h3>iSVD %Solver</h3>
+  <h3>iSVD</h3>
 
-  The @ref Solver "iSVD Solver" solves a approximate low-rank singular value decomposition of matrix `a`.
+  iSVD solves an approximate low-rank singular value decomposition of `matrix_a`.
 
-  <h4>Example</h4>
+  <h3>Example</h3>
 
-  The following is an example of using @ref Solver "iSVD Solver":
+  The following is an example of using iSVD. The code is also available in `<MCNLA-DIR>/demo/example.cpp`.
 
-  <h5>Initialize Environment</h5>
+  @includelineno demo/example.cpp
 
-  The MPI environment and random seed should be set up before calling @ref Solver "iSVD Solver".
+  <h4>Initialize Environment</h4>
 
-  @code{.cpp}
-  // Initialize MPI
-  MPI_Init(&argc, &argv);
-  mcnla::mpi_int_t mpi_root = 0;
-  mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(MPI_COMM_WORLD);
+  The MCNLA environment and random seed should be set up before calling iSVD. @ref init also initialize the MPI environment and the MAGMA environment.
 
-  // Initialize random seed
-  srand(time(NULL));
-  mcnla::index_t seed = rand();
-  @endcode
+  @snippetlineno demo/example.cpp init-mcnla
 
-  <h5>Load Data</h5>
+  <h4>Load Data</h4>
 
-  One may use @ref mcnla::io::loadMatrixMarket to load a matrix from a Matrix Market format file. Note the matrix should be boardcasted to all MPI nodes.
+  One may use @ref io::loadMatrixMarket to load a matrix from a Matrix Market format file. Note the all the MPI nodes should load the matrix.
 
-  @code{.cpp}
-  // Load matrix
-  mcnla::DenseMatrix<double> matrix_a;
-  mcnla::index_t asize0, asize1;
-  auto sizes = matrix_a.sizes();
-  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
-    mcnla::io::loadMatrixMarket(matrix_a, "a.mtx");
-    sizes = matrix_a.sizes();
-  }
-  MPI_Bcast(&sizes, 2, mcnla::traits::MpiScalarTraits<mcnla::index_t>::datatype, mpi_root, MPI_COMM_WORLD);
-  if ( !mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
-    matrix_a.reconstruct(sizes);
-  }
-  mcnla::mpi::bcast(matrix_a, mpi_root, MPI_COMM_WORLD);
-  @endcode
+  @snippetlineno demo/example.cpp load-data
 
-  <h5>Initialize Solver</h5>
+  <h4>Initialize %Prarmeters</h4>
 
-  The @ref Solver "iSVD Solver" should be @ref Solver::initialize "initialized" be before @ref Solver::compute "compute". In initialization, the solver boardcasts the parameters and allocates the memories.
+  Set @ref isvd::Parameters before calling iSVD. Note that one should call @ref isvd::Parameters::sync to broadcast parameters from root node.
 
-  Note that most of the `set?()` methods only affect on the root node. @ref Solver::setSeeds should called by all the nodes, although only the value on root node is used. @ref Solver::initialize also required to be called by all the nodes.
+  @snippetlineno demo/example.cpp init-param
 
-  @code{.cpp}
-  // Set parameters
-  mcnla::index_t Nj    = 4;
-  mcnla::index_t k     = 16;
-  mcnla::index_t p     = 12;
-  double         tol   = 1e-4;
-  mcnla::index_t maxit = 256;
+  <h4>Allocate iSVD stages</h4>
 
-  // Initialize %solver
-  mcnla::isvd::Solver<ScalarType,
-               mcnla::isvd::GaussianProjectionSketcherTag<0>,
-               mcnla::isvd::SvdOrthogonalizerTag,
-               mcnla::isvd::KolmogorovNagumoIntegratorTag,
-               mcnla::isvd::SvdFormerTag> solver(MPI_COMM_WORLD);
-  solver.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj).setSeeds(seed);
-  solver.setTolerance(tol).setMaxIteration(maxit);
-  solver.initialize();
-  @endcode
+  Allocate the iSVD stages. Note that one should use @ref isvd_converter_module "converters" while using stages with different data structures.
 
-  <h5>Run %Solver</h5>
+  @snippetlineno demo/example.cpp alloc-stage
 
-  The @ref Solver "iSVD Solver" compute the approximate low-rank singular value decomposition while calling @ref Solver::compute.
+  <h4>Allocate variables</h4>
 
-  @code{.cpp}
-  // Run iSVD
-  solver.compute(matrix_a);
-  @endcode
+  Allocate the variables using @ref isvd::Parameters.
 
-  <h5>Get Executing Time</h5>
+  @snippetlineno demo/example.cpp alloc-var
 
-  The @ref Solver "iSVD Solver" also records the executing time of each step.
+  <h4>Display stage names</h4>
 
-  @code{.cpp}
-  // Display executing time
-  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
-    auto time_s = solver.sketcherTime();
-    auto time_i = solver.integratorTime();
-    auto time_o = solver.orthogonalizerTime();
-    auto time_f = solver.formerTime();
-    auto time = time_s + time_o + time_i + time_f;
+  One may use `std::cout` to display the name of stages to screen.
 
-    std::cout << "Average total computing time: " << time   << " seconds." << std::endl;
-    std::cout << "Average sketching time:       " << time_s << " seconds." << std::endl;
-    std::cout << "Average orthogonalizing time: " << time_o << " seconds." << std::endl;
-    std::cout << "Average integrating time:     " << time_i << " seconds." << std::endl;
-    std::cout << "Average forming time:         " << time_f << " seconds." << std::endl;
-  }
-  @endcode
+  @snippetlineno demo/example.cpp disp-stage
 
-  <h5>Save Data</h5>
+  <h4>Run iSVD</h4>
 
-  One may use @ref mcnla::io::saveMatrixMarket to save the results into Matrix Market format files.
+  The iSVD compute the approximate low-rank singular value decomposition.
 
-  @code{.cpp}
-  // Save matrix
-  if ( mcnla::mpi::isCommRoot(MPI_COMM_WORLD, mpi_root) ) {
-    mcnla::io::saveMatrixMarket(solver.singularValues(),       "s.mtx");
-    mcnla::io::saveMatrixMarket(solver.leftSingularVectors(),  "u.mtx");
-    mcnla::io::saveMatrixMarket(solver.rightSingularVectors(), "vt.mtx");
-  }
-  @endcode
+  @snippetlineno demo/example.cpp run-isvd
 
-  <h5>Finalize</h5>
+  <h4>Get Executing Time</h4>
 
-  Remember to finalize the MPI.
+  iSVD also records the executing time of each step.
 
-  @code{.cpp}
-  // Finalize MPI
-  MPI_Finalize();
+  @snippetlineno demo/example.cpp disp-time
 
-  @endcode
+  <h4>Save Data</h4>
+
+  One may use @ref io::saveMatrixMarket to save the results into Matrix Market format files.
+
+  @snippetlineno demo/example.cpp save-data
+
+  <h4>Finalize</h4>
+
+  Remember to @ref finalize MCNLA.
+
+  @snippetlineno demo/example.cpp final-mcnla
+
+  @see  @ref isvd_module
 
 */
-
-}  // namespace isvd
 
 }  // namespace mcnla

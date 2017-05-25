@@ -27,7 +27,7 @@ namespace la {
 /// @brief  Computes the Euclidean norm of a vector.
 ///
 template <typename _Val>
-inline RealScalarT<_Val> nrm2(
+inline RealValT<_Val> nrm2(
     const CooVector<_Val> &x
 ) noexcept {
   return detail::nrm2(x.nnz(), x.valPtr(), 1);
@@ -38,7 +38,7 @@ inline RealScalarT<_Val> nrm2(
 /// @brief  Computes the Frobenius norm of a vector.
 ///
 template <typename _Val>
-inline RealScalarT<_Val> nrmf(
+inline RealValT<_Val> nrmf(
     const CooVector<_Val> &x
 ) noexcept {
   return nrm2(x);

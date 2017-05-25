@@ -1,7 +1,10 @@
 /**
   @page tutorial_main Tutorial
 
+  <h4>Subpages</h4>
+
   - @subpage tutorial_data_structure
+  - @subpage tutorial_container_creation
   - @subpage tutorial_container_usage
   - @subpage tutorial_linear_algebra
   - @subpage tutorial_isvd

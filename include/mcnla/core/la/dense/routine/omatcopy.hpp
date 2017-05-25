@@ -33,54 +33,53 @@ namespace detail {
 // ========================================================================================================================== //
 // Impl2
 //
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void omatcopyImpl2(
-    const DenseMatrix<_Scalar, Trans::NORMAL> &a,
-          DenseMatrix<_Scalar, _transb> &b,
-    const _Scalar alpha
+    const DenseMatrix<_Val, Trans::NORMAL> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const _Val alpha
 ) noexcept {
   mcnla_assert_eq(a.sizes(), b.sizes());
 
-  omatcopy('C', toTransChar<_Scalar>(_transb), a.nrow(), a.ncol(),
-           alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
+  omatcopy('C', toTransChar<_Val>(_transb), a.nrow(), a.ncol(), alpha, a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
 }
 
 // ========================================================================================================================== //
 // Impl1
 //
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void omatcopyImpl1(
-    const DenseMatrix<_Scalar, Trans::NORMAL> &a,
-          DenseMatrix<_Scalar, _transb> &b,
-    const _Scalar alpha
+    const DenseMatrix<_Val, Trans::NORMAL> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const _Val alpha
 ) noexcept {
   omatcopyImpl2(a, b, alpha);
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void omatcopyImpl1(
-    const DenseMatrix<_Scalar, Trans::TRANS> &a,
-          DenseMatrix<_Scalar, _transb> &b,
-    const _Scalar alpha
+    const DenseMatrix<_Val, Trans::TRANS> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const _Val alpha
 ) noexcept {
   omatcopyImpl2(a.t(), b.t(), alpha);
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void omatcopyImpl1(
-    const DenseMatrix<_Scalar, Trans::CONJ> &a,
-          DenseMatrix<_Scalar, _transb> &b,
-    const _Scalar alpha
+    const DenseMatrix<_Val, Trans::CONJ> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const _Val alpha
 ) noexcept {
   omatcopyImpl2(a.c(), b.c(), alpha);
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val, Trans _transb>
 inline void omatcopyImpl1(
-    const DenseMatrix<_Scalar, Trans::HERM> &a,
-          DenseMatrix<_Scalar, _transb> &b,
-    const _Scalar alpha
+    const DenseMatrix<_Val, Trans::HERM> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const _Val alpha
 ) noexcept {
   omatcopyImpl2(a.h(), b.h(), alpha);
 }
@@ -89,14 +88,18 @@ inline void omatcopyImpl1(
 // Impl0
 //
 
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void omatcopyImpl0(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseMatrix<_Scalar, _transb> &b,
-    const _Scalar alpha
+    const DenseMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const _Val alpha
 ) noexcept {
-  for ( auto ait = a.cbegin(), bit = b.begin(); ait != a.cend(); ++ait, ++bit ) {
-    *bit = alpha * (*ait);
+  mcnla_assert_eq(a.sizes(), b.sizes());
+
+  for ( index_t i = 0; i < a.nrow(); ++i ) {
+    for ( index_t j = 0; j < a.ncol(); ++j ) {
+      b(i, j) = alpha * a(i, j);
+    }
   }
 }
 
@@ -108,11 +111,11 @@ inline void omatcopyImpl0(
 /// @ingroup  la_dense_blas1m_module
 /// @brief  Performs scaling and out-place transposition/copying of matrices.
 ///
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void omatcopy(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseMatrix<_Scalar, _transb> &b,
-    const ScalarT<DenseMatrix<_Scalar, _transb>> alpha = 1
+    const DenseMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
 #ifdef MCNLA_USE_MKL
   detail::omatcopyImpl1(a, b, alpha);
@@ -122,11 +125,11 @@ inline void omatcopy(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void omatcopy(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseMatrix<_Scalar, _transb> &&b,
-    const ScalarT<DenseMatrix<_Scalar, _transb>> alpha = 1
+    const DenseMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &&b,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
 #ifdef MCNLA_USE_MKL
   detail::omatcopyImpl1(a, b, alpha);
@@ -137,32 +140,32 @@ inline void omatcopy(
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
+/// @ingroup  la_dense_blas1m_module
 /// @brief  Copies a matrix to another matrix.
 ///
-/// @note  This routines calls @ref copy "copy"(a.vectorize(), b.vectorize()) if both @a a and @a b are shrunk,
+/// @note  This routines calls @ref copy "copy"(a.vec(), b.vec()) if both @a a and @a b are shrunk,
 ///        otherwise it calls @ref omatcopy "omatcopy"(a, b, 1).
 ///
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void copy(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseMatrix<_Scalar, _transb> &b
+    const DenseMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &b
 ) noexcept {
   if ( a.isShrunk() && b.isShrunk() ) {
-    copy(a.vectorize(), b.vectorize());
+    copy(a.vec(), b.vec());
   } else {
     omatcopy(a, b, 1);
   }
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void copy(
-    const DenseMatrix<_Scalar, _transa> &a,
-          DenseMatrix<_Scalar, _transb> &&b
+    const DenseMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &&b
 ) noexcept {
   if ( a.isShrunk() && b.isShrunk() ) {
-    copy(a.vectorize(), b.vectorize());
+    copy(a.vec(), b.vec());
   } else {
     omatcopy(a, b, 1);
   }

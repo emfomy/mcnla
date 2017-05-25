@@ -10,25 +10,8 @@
 
 #include <mcnla/core/def.hpp>
 #include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/utility/traits.hpp>
 #include <mpi.h>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  mpi_module  MPI Module
-/// @ingroup   core_module
-/// @brief     The MPI Module
-///
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  mpi_dense_module  Dense MPI Module
-/// @ingroup   mpi_module
-/// @brief     The Dense MPI Module
-///
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  mpi_coo_module  COO MPI Module
-/// @ingroup   mpi_module
-/// @brief     The COO MPI Module
-///
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -36,7 +19,7 @@
 namespace mcnla {
 
 /// The type of MPI integer.
-using mpi_int_t = int32_t;
+using mpi_int_t = int;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
@@ -55,7 +38,7 @@ using namespace matrix;
 /// @return       The number of processes in the group of @a comm.
 ///
 static inline mpi_int_t commSize( const MPI_Comm comm ) noexcept {
-  mpi_int_t size; mcnla_assert_eq(MPI_Comm_size(comm, &size), 0); return size;
+  mpi_int_t size; mcnla_assert_pass(MPI_Comm_size(comm, &size)); return size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +50,7 @@ static inline mpi_int_t commSize( const MPI_Comm comm ) noexcept {
 /// @return       The rank of the calling process in group of @a comm.
 ///
 static inline mpi_int_t commRank( const MPI_Comm comm ) noexcept {
-  mpi_int_t rank; mcnla_assert_eq(MPI_Comm_rank(comm, &rank), 0); return rank;
+  mpi_int_t rank; mcnla_assert_pass(MPI_Comm_rank(comm, &rank)); return rank;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,82 +79,26 @@ namespace traits {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The MPI data type traits.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-struct MpiScalarTraits {};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 8-bit character MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<char> {
-  static constexpr const MPI_Datatype &datatype = MPI_CHARACTER;
+template <typename _Val>
+struct MpiValTraits {
+  static_assert(traits::FalseType<_Val>::value, "Error using non-specialized MPI data type traits!");
+  static constexpr const MPI_Datatype &datatype = nullptr;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 8-bit integer MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<int8_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER1;
-};
+#define MCNLA_MPI_VAL_TRAITS_DEF( _Type, _value ) \
+  template <> struct MpiValTraits<_Type> { static constexpr const MPI_Datatype &datatype = _value; };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 16-bit integer MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<int16_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER2;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 32-bit integer MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<int32_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER4;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 64-bit integer MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<int64_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER8;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 32-bit floating point MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<float> {
-  static constexpr const MPI_Datatype &datatype = MPI_REAL4;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 64-bit floating point MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<double> {
-  static constexpr const MPI_Datatype &datatype = MPI_REAL8;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The complex float MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<std::complex<float>> {
-  static constexpr const MPI_Datatype &datatype = MPI_COMPLEX8;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The complex double MPI data type traits.
-///
-template <>
-struct MpiScalarTraits<std::complex<double>> {
-  static constexpr const MPI_Datatype &datatype = MPI_COMPLEX16;
-};
+MCNLA_MPI_VAL_TRAITS_DEF(char,                 MPI_CHARACTER)
+MCNLA_MPI_VAL_TRAITS_DEF(int8_t,               MPI_INTEGER1)
+MCNLA_MPI_VAL_TRAITS_DEF(int16_t,              MPI_INTEGER2)
+MCNLA_MPI_VAL_TRAITS_DEF(int32_t,              MPI_INTEGER4)
+MCNLA_MPI_VAL_TRAITS_DEF(int64_t,              MPI_INTEGER8)
+MCNLA_MPI_VAL_TRAITS_DEF(float,                MPI_REAL4)
+MCNLA_MPI_VAL_TRAITS_DEF(double,               MPI_REAL8)
+MCNLA_MPI_VAL_TRAITS_DEF(std::complex<float>,  MPI_COMPLEX8)
+MCNLA_MPI_VAL_TRAITS_DEF(std::complex<double>, MPI_COMPLEX16)
 
 }  // namespace traits
 

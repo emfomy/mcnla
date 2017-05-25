@@ -27,12 +27,13 @@ namespace io {
 /// Load a COO vector from a Matrix Market file.
 ///
 /// @note  If @a vector is empty, the memory will be allocated.
+/// @note  The file storage major should be the same as @a vector.
 ///
 /// @todo  Read banner
 ///
-template <typename _Scalar>
+template <typename _Val>
 void loadMatrixMarket(
-    CooVector<_Scalar> &vector,
+    CooVector<_Val> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -66,9 +67,9 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void loadMatrixMarket(
-    CooVector<_Scalar> &&vector,
+    CooVector<_Val> &&vector,
     const char *file
 ) noexcept {
   loadMatrixMarket(vector, file);
@@ -80,12 +81,13 @@ inline void loadMatrixMarket(
 /// Load a COO matrix from a Matrix Market file.
 ///
 /// @note  If @a matrix is empty, the memory will be allocated.
+/// @note  The file storage major should be the same as @a matrix.
 ///
 /// @todo  Read banner
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 void loadMatrixMarket(
-    CooMatrix<_Scalar, _trans> &matrix,
+    CooMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
@@ -124,16 +126,16 @@ void loadMatrixMarket(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void loadMatrixMarket(
-    CooMatrix<_Scalar, _trans> &&matrix,
+    CooMatrix<_Val, _trans> &&matrix,
     const char *file
 ) noexcept {
   loadMatrixMarket(matrix, file);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-}  // namespace matrix
+}  // namespace io
 
 }  // namespace mcnla
 

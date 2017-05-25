@@ -4,6 +4,7 @@
 #include <mcnla.hpp>
 
 int main( int argc, char **argv ) {
+
   MPI_Init(&argc, &argv);
 
   if ( ! mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
@@ -23,5 +24,6 @@ int main( int argc, char **argv ) {
   assert(testing::UnitTest::GetInstance()->test_to_run_count() > 0);
 
   MPI_Finalize();
+
   return retval;
 }

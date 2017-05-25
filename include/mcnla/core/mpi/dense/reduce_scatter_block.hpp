@@ -28,15 +28,15 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void reduceScatterBlockImpl(
-    const DenseStorage<_Scalar> &send,
-          DenseStorage<_Scalar> &recv,
+    const DenseStorage<CpuTag, _Val> &send,
+          DenseStorage<CpuTag, _Val> &recv,
+    const mpi_int_t count,
     const MPI_Op op,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Reduce_scatter_block(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
 }
 
@@ -50,48 +50,48 @@ inline void reduceScatterBlockImpl(
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void reduceScatterBlock(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
-  detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
+  detail::reduceScatterBlockImpl(send, recv, recv.nelem(), op, comm);
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void reduceScatterBlock(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   mcnla_assert_eq(send.nelem(), recv.nelem() * commSize(comm));
-  detail::reduceScatterBlockImpl(send, recv, op, comm, recv.nelem());
+  detail::reduceScatterBlockImpl(send, recv, recv.nelem(), op, comm);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void reduceScatterBlock(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &&recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &&recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
   reduceScatterBlock(send, recv, op, comm);
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void reduceScatterBlock(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &&recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &&recv,
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {

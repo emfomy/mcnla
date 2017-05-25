@@ -27,10 +27,10 @@ namespace la {
 /// @brief  Computes the Euclidean norm of a vector.
 ///
 template <typename _Val>
-inline RealScalarT<_Val> nrm2(
+inline RealValT<_Val> nrm2(
     const DenseVector<_Val> &x
 ) noexcept {
-  return detail::nrm2(x.length(), x.valPtr(), x.stride());
+  return detail::nrm2(x.len(), x.valPtr(), x.stride());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ inline RealScalarT<_Val> nrm2(
 /// @brief  Computes the Frobenius norm of a vector.
 ///
 template <typename _Val>
-inline RealScalarT<_Val> nrmf(
+inline RealValT<_Val> nrmf(
     const DenseVector<_Val> &x
 ) noexcept {
   return nrm2(x);

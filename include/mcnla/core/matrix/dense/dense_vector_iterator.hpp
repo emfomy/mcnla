@@ -9,6 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HPP_
 
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hh>
+#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,22 +24,22 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <typename __Scalar, class __Vector>
-std::ostream& operator<< (
+template <typename ..._Args>
+std::ostream& operator<<(
     std::ostream &os,
-    const DenseVectorIteratorBase<__Scalar, __Vector> &iterator
-) {
-  const index_t width = log10(iterator.container_->length())+1;
-  return os << "(" << std::setw(width) << iterator.idx() << ")  " << std::setw(ios_width) << iterator.val();
+    const DenseVectorIteratorBase<_Args...> &it
+) noexcept {
+  return os << "(" << std::setw(kOsIdxWidth) << it.idx() << ")  "
+                   << std::setw(kOsValWidth) << it.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
-/// @attention  Never call this when the iterator is at the end.
+/// @attention  Never call this method when the iterator is at the end.
 ///
-template <typename _Scalar, class _Vector>
-_Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::val() const noexcept {
+template <typename _Val, class _Vector>
+_Val& DenseVectorIteratorBase<_Val, _Vector>::val() const noexcept {
   mcnla_assert_gelt(itidx_, 0, container_->nelem());
   return container_->valPtr()[pos()];
 }
@@ -46,19 +47,47 @@ _Scalar& DenseVectorIteratorBase<_Scalar, _Vector>::val() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the index.
 ///
-template <typename _Scalar, class _Vector>
-index_t DenseVectorIteratorBase<_Scalar, _Vector>::idx() const noexcept {
+template <typename _Val, class _Vector>
+index_t DenseVectorIteratorBase<_Val, _Vector>::idx() const noexcept {
+  return idx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the first dimension index.
+///
+template <typename _Val, class _Vector>
+index_t DenseVectorIteratorBase<_Val, _Vector>::idx0() const noexcept {
   return itidx_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
-/// @attention  Never call this when the iterator is at the end.
+/// @attention  Never call this method when the iterator is at the end.
 ///
-template <typename _Scalar, class _Vector>
-index_t DenseVectorIteratorBase<_Scalar, _Vector>::pos() const noexcept {
+template <typename _Val, class _Vector>
+index_t DenseVectorIteratorBase<_Val, _Vector>::pos() const noexcept {
   return container_->pos(itidx_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element reference.
+///
+/// @attention  Never call this method when the iterator is at the end.
+///
+template <typename _Val, class _Vector>
+_Val& DenseVectorIteratorBase<_Val, _Vector>::elemRef() const noexcept {
+  return val();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element pointer.
+///
+/// @attention  Never call this method when the iterator is at the end.
+///
+template <typename _Val, class _Vector>
+_Val* DenseVectorIteratorBase<_Val, _Vector>::elemPtr() const noexcept {
+  return &(val());
 }
 
 }  // namespace matrix

@@ -9,24 +9,15 @@ endif()
 macro(SET_TARGET target files)
   # Set target
   add_executable(${target} ${files})
-  target_include_directories(${target} PUBLIC "${PROJECT_BINARY_DIR}/include")
-  target_include_directories(${target} PUBLIC "${PROJECT_SOURCE_DIR}/include")
-  target_include_directories(${target} PUBLIC SYSTEM ${INCS})
-  target_link_libraries(${target} ${LIBS})
-  target_compile_definitions(${target} PUBLIC ${DEFS} ${ARGN})
-  set_target_properties(${target} PROPERTIES COMPILE_FLAGS ${COMFLGS})
-  set_target_properties(${target} PROPERTIES LINK_FLAGS    ${LNKFLGS})
-  install(TARGETS ${target} RUNTIME DESTINATION bin)
+  mcnla_set_target(${target})
+  install(TARGETS ${target} RUNTIME DESTINATION ${BIN_FOLDER})
 endmacro()
 
 # Set target (isvd_dense)
-set_target(isvd_dense isvd.cpp "-DATYPE=DenseMatrix")
-
-# Set target (isvd_coo)
-set_target(isvd_coo isvd.cpp "-DATYPE=CooMatrix")
+set_target(isvd_dense isvd_dense.cpp)
 
 # Set target (isvd)
 add_custom_target(
   isvd
-  DEPENDS isvd_dense isvd_coo
+  DEPENDS isvd_dense
 )

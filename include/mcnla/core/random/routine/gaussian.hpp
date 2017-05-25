@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/random/routine/gaussian.hpp
-/// @brief   The normal (Gaussian) distribution generator routine.
+/// @brief   The Gaussian distribution generator.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -9,7 +9,17 @@
 #define MCNLA_CORE_RANDOM_ROUTINE_GAUSSIAN_HPP_
 
 #include <mcnla/core/random/def.hpp>
-#include <mcnla/core/random/engine.hpp>
+#include <mcnla/core/random/streams.hpp>
+
+#ifdef MCNLA_USE_OMP
+  #include <omp.h>
+#endif  // MCNLA_USE_MKL
+
+#ifdef MCNLA_USE_MKL
+  #include <mcnla/core/random/routine/gaussian_detail_mkl.hh>
+#else  // MCNLA_USE_MKL
+  #include <mcnla/core/random/routine/gaussian_detail_nomkl.hh>
+#endif  // MCNLA_USE_MKL
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -22,42 +32,38 @@ namespace mcnla {
 namespace random {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace
-//
-namespace detail {
-
-template <typename _Scalar>
-inline void gaussianImpl(
-    DenseVector<_Scalar> &vector,
-    const index_t seed
-) noexcept {
-  Engine<_Scalar> engine(seed);
-  engine.gaussian(vector);
-}
-
-}  // namespace detail
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  random_module
-/// @copydoc  mcnla::random::Engine::gaussian
+/// @brief  Returns a vector of random numbers from a normal (Gaussian) distribution.
 ///
-/// @see  mcnla::random::Engine
-///
-template <typename _Scalar>
+template <typename _Val>
 inline void gaussian(
-    DenseVector<_Scalar> &vector,
-    const index_t seed
+    const Streams &streams,
+          DenseVector<_Val> &vector,
+    const _Val a = 0,
+    const _Val sigma = 1
 ) noexcept {
-  detail::gaussianImpl(vector, seed);
+#ifdef MCNLA_USE_OMP
+  #pragma omp parallel for
+#endif  // MCNLA_USE_OMP
+  for ( index_t i = 0; i < streams.ompSize(); ++i ) {
+    index_t len = vector.len() / streams.ompSize();
+    index_t start = len * i;
+    if ( i == streams.ompSize()-1 ) {
+      len = vector.len() - start;
+    }
+    detail::gaussianImpl(streams[i], vector({start, start+len}), a, sigma);
+  }
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void gaussian(
-    DenseVector<_Scalar> &&vector,
-    const index_t seed
+    const Streams &streams,
+          DenseVector<_Val> &&vector,
+    const _Val a = 0,
+    const _Val sigma = 1
 ) noexcept {
-  detail::gaussianImpl(vector, seed);
+  gaussian(streams, vector, a, sigma);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

@@ -9,7 +9,6 @@
 #define MCNLA_CORE_MATRIX_BASE_MATRIX_WRAPPER_HPP_
 
 #include <mcnla/core/matrix/base/matrix_wrapper.hh>
-#include <iomanip>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,29 +21,11 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Output to stream.
-///
-template <class __Derived>
-std::ostream& operator<< (
-    std::ostream &os,
-    const MatrixWrapper<__Derived> &wrapper
-) {
-  auto &matrix = wrapper.derived();
-  for ( index_t i = 0; i < matrix.nrow(); ++i ) {
-    for ( index_t j = 0; j < matrix.ncol(); ++j ) {
-      os << std::setw(ios_width) << matrix(i, j) << "  ";
-    }
-    os << '\n';
-  }
-  return os;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows.
 ///
 template <class _Derived>
 index_t MatrixWrapper<_Derived>::nrow() const noexcept {
-  return this->derived().nrowImpl();
+  return derived().nrowImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +33,7 @@ index_t MatrixWrapper<_Derived>::nrow() const noexcept {
 ///
 template <class _Derived>
 index_t MatrixWrapper<_Derived>::ncol() const noexcept {
-  return this->derived().ncolImpl();
+  return derived().ncolImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +45,7 @@ index_t MatrixWrapper<_Derived>::nelem() const noexcept {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the size of dimensions in interface order. [ nrow, ncol ]
+/// @brief  Gets the size of dimensions in interface order: `{ #nrow, #ncol }`.
 ///
 template <class _Derived>
 std::tuple<index_t, index_t> MatrixWrapper<_Derived>::sizes() const noexcept {

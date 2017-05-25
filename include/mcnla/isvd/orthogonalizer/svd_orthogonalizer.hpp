@@ -9,7 +9,6 @@
 #define MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HPP_
 
 #include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hh>
-#include <ctime>
 #include <mcnla/core/la.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,41 +22,36 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::OrthogonalizerWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Scalar>
-Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::Orthogonalizer(
-    const ParametersType &parameters,
-    const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root
+template <typename _Val>
+SvdOrthogonalizer<_Val>::Orthogonalizer(
+    const Parameters<_Val> &parameters
 ) noexcept
-  : BaseType(parameters, mpi_comm, mpi_root) {}
+  : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::initialize
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
-template <typename _Scalar>
-void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::initializeImpl() noexcept {
+template <typename _Val>
+void SvdOrthogonalizer<_Val>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
 
-  moment0_ = 0;
-  moment1_ = 0;
-
   vector_s_.reconstruct(dim_sketch);
-  gesvd_engine_.reconstruct(nrow, dim_sketch);
+  gesvd_driver_.reconstruct(nrow, dim_sketch);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::orthogonalize
+/// @brief  Orthogonalizes.
 ///
-template <typename _Scalar>
-void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
-          DenseMatrixCollection120<ScalarType> &collection_q
+/// @param  collection_q  The matrix collection Q.
+///
+template <typename _Val>
+void SvdOrthogonalizer<_Val>::runImpl(
+          DenseMatrixCollection201<_Val> &collection_q
 ) noexcept {
-
-  mcnla_assert_true(parameters_.isInitialized());
 
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -65,40 +59,16 @@ void Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::orthogonalizeImpl(
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  moment0_ = MPI_Wtime();
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Start
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    gesvd_engine_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
+    gesvd_driver_(collection_q(i), vector_s_, matrix_empty_, matrix_empty_);
   }
-  moment1_ = MPI_Wtime();
-}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::outputName
-///
-///
-template <typename _Scalar>
-std::ostream&Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::outputNameImpl(
-    std::ostream &os
-) const noexcept {
-  return (os << name_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::time
-///
-template <typename _Scalar>
-double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::timeImpl() const noexcept {
-  return moment1_-moment0_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::OrthogonalizerWrapper::time
-///
-template <typename _Scalar>
-double Orthogonalizer<_Scalar, SvdOrthogonalizerTag>::time1() const noexcept {
-  return moment1_-moment0_;
+  this->toc(comm_time);
 }
 
 }  // namespace isvd

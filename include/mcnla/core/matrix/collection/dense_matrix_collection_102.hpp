@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_102.hpp
-/// @brief   The the dense matrix collection with dimension order [1 0 2].
+/// @brief   The the dense matrix collection with dimension order (dim1, dim0, dim2).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -23,24 +23,24 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>::DenseMatrixCollection102() noexcept
-  : BaseType(),
-    data_(),
-    nrow_(0) {}
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection() noexcept
+  : data_(),
+    nrow_(0),
+    mrow_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>::DenseMatrixCollection102(
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection(
     const index_t nrow,
     const index_t ncol,
     const index_t nmat
 ) noexcept
-  : BaseType(),
-    data_(nrow*nmat, ncol),
-    nrow_(nrow) {
+  : data_(nrow*nmat, ncol),
+    nrow_(nrow),
+    mrow_(nrow) {
   mcnla_assert_ge(this->nrow(), 0);
   mcnla_assert_ge(this->ncol(), 0);
   mcnla_assert_ge(this->nmat(), 0);
@@ -49,99 +49,140 @@ DenseMatrixCollection102<_Scalar>::DenseMatrixCollection102(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>::DenseMatrixCollection102(
-    const std::tuple<index_t, index_t, index_t> sizes
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection(
+    const SizesType sizes
 ) noexcept
-  : DenseMatrixCollection102(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
+  : DenseMatrixCollection(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection(
+    const index_t nrow,
+    const index_t ncol,
+    const index_t nmat,
+    const index_t mrow
+) noexcept
+  : data_(mrow*nmat, ncol),
+    nrow_(nrow),
+    mrow_(mrow) {
+  mcnla_assert_ge(this->nrow(), 0);
+  mcnla_assert_ge(this->ncol(), 0);
+  mcnla_assert_ge(this->nmat(), 0);
+  mcnla_assert_ge(mrow_, nrow_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given size information.
+///
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection(
+    const SizesType sizes,
+    const index_t mrow
+) noexcept
+  : DenseMatrixCollection(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes), mrow) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given raw data.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>::DenseMatrixCollection102(
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection(
     const index_t nrow,
     const MatrixType &data
 ) noexcept
-  : BaseType(),
-    data_(data),
-    nrow_(nrow) {
+  : data_(data),
+    nrow_(nrow),
+    mrow_(nrow) {
   mcnla_assert_ge(this->nrow(), 0);
   mcnla_assert_ge(this->ncol(), 0);
   mcnla_assert_ge(this->nmat(), 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Construct with given raw data.
+///
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection(
+    const index_t nrow,
+    const index_t mrow,
+    const MatrixType &data
+) noexcept
+  : data_(data),
+    nrow_(nrow),
+    mrow_(mrow) {
+  mcnla_assert_ge(this->nrow(), 0);
+  mcnla_assert_ge(this->ncol(), 0);
+  mcnla_assert_ge(this->nmat(), 0);
+  mcnla_assert_ge(mrow_, nrow_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>::DenseMatrixCollection102(
-    const DenseMatrixCollection102 &other
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>::DenseMatrixCollection(
+    const DenseMatrixCollection &other
 ) noexcept
-  : BaseType(other),
-    data_(other.data_),
-    nrow_(other.nrow_) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move constructor.
-///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>::DenseMatrixCollection102(
-    DenseMatrixCollection102 &&other
-) noexcept
-  : BaseType(std::move(other)),
-    data_(std::move(other.data_)),
-    nrow_(other.nrow_) {
-  other.nrow_ = 0;
-}
+  : data_(other.data_),
+    nrow_(other.nrow_),
+    mrow_(other.mrow_) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-/// @attention  It is shallow copy. For deep copy, uses mcnla::la::copy.
+/// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>& DenseMatrixCollection102<_Scalar>::operator=( const DenseMatrixCollection102 &other ) noexcept {
-  BaseType::operator=(other);
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val>& DenseMatrixCollection102Base<_Core, _Val>::operator=(
+    const DenseMatrixCollection &other
+) noexcept {
   data_ = other.data_;
   nrow_ = other.nrow_;
+  mrow_ = other.mrow_;
   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Move assignment operator.
+/// @brief  Copies the collection.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar>& DenseMatrixCollection102<_Scalar>::operator=( DenseMatrixCollection102 &&other ) noexcept {
-  BaseType::operator=(std::move(other));
-  data_ = std::move(other.data_);
-  nrow_ = other.nrow_; other.nrow_ = 0;
-  return *this;
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val> DenseMatrixCollection102Base<_Core, _Val>::copy() const noexcept {
+  return DenseMatrixCollection(nrow_, mrow_, data_.copy());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the dimensions are equal to the sizes.
 ///
-template <typename _Scalar>
-bool DenseMatrixCollection102<_Scalar>::isShrunk() const noexcept {
-  return (data_.nrow() % nrow_ == 0) && data_.isShrunk();
+template <class _Core, typename _Val>
+bool DenseMatrixCollection102Base<_Core, _Val>::isShrunk() const noexcept {
+  return (nrow_ == mrow_) && (data_.pitch() % mrow_ == 0) && data_.isShrunk();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the maximum number of rows.
+///
+template <class _Core, typename _Val>
+index_t DenseMatrixCollection102Base<_Core, _Val>::mrow() const noexcept {
+  return mrow_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw data.
 ///
-template <typename _Scalar>
-DenseMatrixRowMajor<_Scalar>& DenseMatrixCollection102<_Scalar>::data() noexcept {
+template <class _Core, typename _Val>
+GeMatS<_Core, DenseTag, _Val, Trans::TRANS>& DenseMatrixCollection102Base<_Core, _Val>::data() noexcept {
   return data_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  data
 ///
-template <typename _Scalar>
-const DenseMatrixRowMajor<_Scalar>& DenseMatrixCollection102<_Scalar>::data() const noexcept {
+template <class _Core, typename _Val>
+const GeMatS<_Core, DenseTag, _Val, Trans::TRANS>& DenseMatrixCollection102Base<_Core, _Val>::data() const noexcept {
   return data_;
 }
 
@@ -150,141 +191,149 @@ const DenseMatrixRowMajor<_Scalar>& DenseMatrixCollection102<_Scalar>::data() co
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Scalar> template <typename... Args>
-void DenseMatrixCollection102<_Scalar>::reconstruct(
-    Args... args
+template <class _Core, typename _Val> template <typename ..._Args>
+void DenseMatrixCollection102Base<_Core, _Val>::reconstruct(
+    _Args... args
 ) noexcept {
-  *this = DenseMatrixCollection102<_Scalar>(args...);
+  *this = DenseMatrixCollection102Base<_Core, _Val>(args...);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets a subcollection.
+///
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val> DenseMatrixCollection102Base<_Core, _Val>::operator()(
+    const IdxRange &idxrange
+) noexcept {
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange& )
+///
+template <class _Core, typename _Val>
+const DenseMatrixCollection102Base<_Core, _Val> DenseMatrixCollection102Base<_Core, _Val>::operator()(
+    const IdxRange &idxrange
+) const noexcept {
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange& )
+///
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val> DenseMatrixCollection102Base<_Core, _Val>::operator()(
+    const FullRange,
+    const FullRange,
+    const IdxRange &idxrange
+) noexcept {
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  operator()( const IdxRange& )
+///
+template <class _Core, typename _Val>
+const DenseMatrixCollection102Base<_Core, _Val> DenseMatrixCollection102Base<_Core, _Val>::operator()(
+    const FullRange,
+    const FullRange,
+    const IdxRange &idxrange
+) const noexcept {
+  return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets a collection of rows.
 ///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar> DenseMatrixCollection102<_Scalar>::operator()(
-    const IdxRange &idxrange
-) noexcept {
-  return SetType(nrow_, data_(idxrange * nrow_, ""));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const IdxRange& )
-///
-template <typename _Scalar>
-const DenseMatrixCollection102<_Scalar> DenseMatrixCollection102<_Scalar>::operator()(
-    const IdxRange &idxrange
-) const noexcept {
-  return SetType(nrow_, data_(idxrange * nrow_, ""));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const IdxRange& )
-///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar> DenseMatrixCollection102<_Scalar>::operator()(
-    const char*,
-    const char*,
-    const IdxRange &idxrange
-) noexcept {
-  return SetType(nrow_, data_(idxrange * nrow_, ""));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const IdxRange& )
-///
-template <typename _Scalar>
-const DenseMatrixCollection102<_Scalar> DenseMatrixCollection102<_Scalar>::operator()(
-    const char*,
-    const char*,
-    const IdxRange &idxrange
-) const noexcept {
-  return SetType(nrow_, data_(idxrange * nrow_, ""));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a collection of rows.
-///
-template <typename _Scalar>
-DenseMatrixCollection102<_Scalar> DenseMatrixCollection102<_Scalar>::operator()(
-    const char*,
+template <class _Core, typename _Val>
+DenseMatrixCollection102Base<_Core, _Val> DenseMatrixCollection102Base<_Core, _Val>::operator()(
+    const FullRange,
     const IdxRange &colrange,
-    const char*
+    const FullRange
 ) noexcept {
-  return SetType(nrow_, data_("", colrange));
+  return CollectionType(nrow_, mrow_, data_(""_, colrange));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  operator()( const char*, const IdxRange&, const char* )
+/// @copydoc  operator()( const FullRange, const IdxRange&, const FullRange )
 ///
-template <typename _Scalar>
-const DenseMatrixCollection102<_Scalar> DenseMatrixCollection102<_Scalar>::operator()(
-    const char*,
+template <class _Core, typename _Val>
+const DenseMatrixCollection102Base<_Core, _Val> DenseMatrixCollection102Base<_Core, _Val>::operator()(
+    const FullRange,
     const IdxRange &colrange,
-    const char*
+    const FullRange
 ) const noexcept {
-  return SetType(nrow_, data_("", colrange));
+  return CollectionType(nrow_, mrow_, data_(""_, colrange));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Unfolds the collection.
 ///
-template <typename _Scalar>
-DenseMatrixRowMajor<_Scalar> DenseMatrixCollection102<_Scalar>::unfold() noexcept {
+template <class _Core, typename _Val>
+GeMatS<_Core, DenseTag, _Val, Trans::TRANS>& DenseMatrixCollection102Base<_Core, _Val>::unfold() noexcept {
   return data_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  unfold
 ///
-template <typename _Scalar>
-const DenseMatrixRowMajor<_Scalar> DenseMatrixCollection102<_Scalar>::unfold() const noexcept {
+template <class _Core, typename _Val>
+const GeMatS<_Core, DenseTag, _Val, Trans::TRANS>& DenseMatrixCollection102Base<_Core, _Val>::unfold() const noexcept {
   return data_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixCollectionWrapper::isEmpty
+///
+template <class _Core, typename _Val>
+bool DenseMatrixCollection102Base<_Core, _Val>::isEmptyImpl() const noexcept {
+  return data_.isEmpty();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nrow
 ///
-template <typename _Scalar>
-index_t DenseMatrixCollection102<_Scalar>::nrowImpl() const noexcept {
+template <class _Core, typename _Val>
+index_t DenseMatrixCollection102Base<_Core, _Val>::nrowImpl() const noexcept {
   return nrow_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::ncol
 ///
-template <typename _Scalar>
-index_t DenseMatrixCollection102<_Scalar>::ncolImpl() const noexcept {
+template <class _Core, typename _Val>
+index_t DenseMatrixCollection102Base<_Core, _Val>::ncolImpl() const noexcept {
   return data_.ncol();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nmat
 ///
-template <typename _Scalar>
-index_t DenseMatrixCollection102<_Scalar>::nmatImpl() const noexcept {
-  return nrow_ ? (data_.nrow() / nrow_) : 0;
+template <class _Core, typename _Val>
+index_t DenseMatrixCollection102Base<_Core, _Val>::nmatImpl() const noexcept {
+  return mrow_ ? (data_.nrow() / mrow_) : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
-template <typename _Scalar>
-DenseMatrixRowMajor<_Scalar> DenseMatrixCollection102<_Scalar>::getMatrixImpl(
+template <class _Core, typename _Val>
+GeMatS<_Core, DenseTag, _Val, Trans::TRANS> DenseMatrixCollection102Base<_Core, _Val>::getImpl(
     const index_t idx
 ) noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
-  return data_(IdxRange{idx, (idx+1)} * nrow_, "");
+  return data_({idx*mrow_, idx*mrow_ + nrow_}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
-template <typename _Scalar>
-const DenseMatrixRowMajor<_Scalar> DenseMatrixCollection102<_Scalar>::getMatrixImpl(
+template <class _Core, typename _Val>
+const GeMatS<_Core, DenseTag, _Val, Trans::TRANS> DenseMatrixCollection102Base<_Core, _Val>::getImpl(
     const index_t idx
 ) const noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
-  return data_(IdxRange{idx, (idx+1)} * nrow_, "");
+  return data_({idx*mrow_, idx*mrow_ + nrow_}, ""_);
 }
 
 }  // namespace matrix

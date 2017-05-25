@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/orthogonalizer/orthogonalizer.hpp
-/// @brief   The definition of iSVD orthogonalizer interface.
+/// @brief   The iSVD orthogonalizer interface.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_ORTHOGONALIZER_ORTHOGONALIZER_HPP_
 
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/orthogonalizer/orthogonalizer_wrapper.hpp>
+#include <mcnla/isvd/core/stage_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Set, class _Tag> class Orthogonalizer;
+template <class _Tag, typename _Val> class Orthogonalizer;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -33,13 +33,8 @@ template <class _Set, class _Tag> class Orthogonalizer;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The orthogonalizer traits.
-///
-template <typename _Scalar, class _Tag>
-struct Traits<isvd::Orthogonalizer<_Scalar, _Tag>> {
-  using ScalarType = _Scalar;
-};
+template <class _Tag, typename _Val>
+MCNLA_TRAITS_DEF(VAL, isvd::Orthogonalizer<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 
@@ -49,15 +44,15 @@ struct Traits<isvd::Orthogonalizer<_Scalar, _Tag>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
-///
 /// The interface of iSVD orthogonalizer.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Tag     The orthogonalizer tag.
+/// @tparam  _Tag  The orthogonalizer tag.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar, class _Tag>
-class Orthogonalizer : public OrthogonalizerWrapper<Orthogonalizer<_Scalar, _Tag>> {};
+template <class _Tag, typename _Val>
+class Orthogonalizer : public StageWrapper<Orthogonalizer<_Tag, _Val>> {
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD orthogonalizer!");
+};
 
 }  // namespace isvd
 

@@ -23,48 +23,48 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the capacity of the first dimension index array.
 ///
-template <typename _Idx>
-index_t CooIdx0Storage<_Idx>::idx0Capacity() const noexcept {
+template <class _Core, typename _Idx>
+index_t CooIdx0Storage<_Core, _Idx>::idx0Capacity() const noexcept {
   return this->capacity();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the offset of the first dimension index array.
 ///
-template <typename _Idx>
-index_t CooIdx0Storage<_Idx>::idx0Offset() const noexcept {
+template <class _Core, typename _Idx>
+index_t CooIdx0Storage<_Core, _Idx>::idx0Offset() const noexcept {
   return this->offset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the first dimension index array.
 ///
-template <typename _Idx>
-Array<_Idx>& CooIdx0Storage<_Idx>::idx0() noexcept {
+template <class _Core, typename _Idx>
+typename CooIdx0Storage<_Core, _Idx>::IdxArrayType& CooIdx0Storage<_Core, _Idx>::idx0() noexcept {
   return this->val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  idx0
 ///
-template <typename _Idx>
-const Array<_Idx>& CooIdx0Storage<_Idx>::idx0() const noexcept {
+template <class _Core, typename _Idx>
+const typename CooIdx0Storage<_Core, _Idx>::IdxArrayType& CooIdx0Storage<_Core, _Idx>::idx0() const noexcept {
   return this->val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the raw first dimension index pointer.
 ///
-template <typename _Idx>
-_Idx* CooIdx0Storage<_Idx>::idx0Ptr() noexcept {
+template <class _Core, typename _Idx>
+_Idx* CooIdx0Storage<_Core, _Idx>::idx0Ptr() noexcept {
   return this->valPtr();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  idx0Ptr
 ///
-template <typename _Idx>
-const _Idx* CooIdx0Storage<_Idx>::idx0Ptr() const noexcept {
+template <class _Core, typename _Idx>
+const _Idx* CooIdx0Storage<_Core, _Idx>::idx0Ptr() const noexcept {
   return this->valPtr();
 }
 

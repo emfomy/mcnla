@@ -9,10 +9,8 @@
 #define MCNLA_CORE_MATRIX_BASE_VECTOR_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <iostream>
 #include <tuple>
 #include <mcnla/core/utility/crtp.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -25,13 +23,16 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_module
 /// The vector wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>> {
+class VectorWrapper {
+
+ public:
+
+  static constexpr index_t ndim = 1;
 
  private:
 
@@ -44,14 +45,12 @@ class VectorWrapper : public utility::CrtpBase<_Derived, VectorWrapper<_Derived>
 
  public:
 
-  // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const VectorWrapper<__Derived> &wrapper );
-
   // Gets information
-  inline index_t   length() const noexcept;
+  inline index_t   len() const noexcept;
   inline index_t   nelem() const noexcept;
   inline SizesType sizes() const noexcept;
+
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

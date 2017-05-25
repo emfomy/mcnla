@@ -28,20 +28,20 @@ namespace la {
 ///
 /// @attention  The out-of-range spaces are also changed.
 ///
-template <index_t idist, typename _Scalar>
+template <index_t idist, typename _Val>
 inline void larnv(
-    DenseVector<_Scalar> &x,
+    DenseVector<_Val> &x,
     index_t iseed[4]
 ) noexcept {
-  static_assert(traits::ScalarTraits<_Scalar>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
+  static_assert(traits::ValTraits<_Val>::is_real ? (1 <= idist && idist <= 3) : (1 <= idist && idist <= 5),
                 "Invalid idist!");
-  detail::larnv(idist, iseed, (x.length()-1) * x.stride() + 1, x.valPtr());
+  detail::larnv(idist, iseed, (x.len()-1) * x.stride() + 1, x.valPtr());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <index_t idist, typename _Scalar>
+template <index_t idist, typename _Val>
 inline void larnv(
-    DenseVector<_Scalar> &&x,
+    DenseVector<_Val> &&x,
     index_t iseed[4]
 ) noexcept {
   larnv<idist>(x, iseed);

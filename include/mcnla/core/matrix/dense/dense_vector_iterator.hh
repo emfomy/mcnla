@@ -8,10 +8,9 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_ITERATOR_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
+#include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
-#include <mcnla/core/matrix/dense/dense_iterator_base.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,54 +22,25 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseVector;
-template <typename _Scalar, class _Vector> class DenseVectorIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
-///
-template <typename _Scalar, class _Vector>
-struct Traits<matrix::DenseVectorIteratorBase<_Scalar, _Vector>> {
-  static constexpr index_t ndim = 1;
-  using ScalarType    = _Scalar;
-  using ContainerType = _Vector;
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
 /// The dense vector iterator.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val     The value type.
 /// @tparam  _Vector  The vector type.
 ///
 /// @see  DenseVectorIterator, DenseVectorConstIterator
 ///
-template <typename _Scalar, class _Vector>
-class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>> {
+template <typename _Val, class _Vector>
+class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val, _Vector>, _Vector, _Val> {
 
  private:
 
-  static constexpr index_t ndim = 1;
-  using ScalarType    = _Scalar;
+  using ValType       = _Val;
+  using ElemRefType   = _Val&;
+  using ElemPtrType   = _Val*;
   using ContainerType = _Vector;
 
-  using BaseType      = DenseIteratorBase<DenseVectorIteratorBase<_Scalar, _Vector>>;
+  using BaseType      = IteratorBase<DenseVectorIteratorBase<_Val, _Vector>, _Vector, _Val>;
 
  protected:
 
@@ -79,27 +49,28 @@ class DenseVectorIteratorBase : public DenseIteratorBase<DenseVectorIteratorBase
 
  public:
 
-  using BaseType::DenseIteratorBase;
+  using BaseType::IteratorBase;
   using BaseType::operator=;
 
   // Operators
-  template <typename __Scalar, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<__Scalar, __Vector> &iterator );
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<_Args...> &it ) noexcept;
 
   // Gets value
-  inline ScalarType& val() const noexcept;
+  inline ValType&    val() const noexcept;
   inline index_t     idx() const noexcept;
+  inline index_t     idx0() const noexcept;
   inline index_t     pos() const noexcept;
+  inline ElemRefType elemRef() const noexcept;
+  inline ElemPtrType elemPtr() const noexcept;
 
 };
 
-/// @ingroup  matrix_dense_module
-template <typename _Scalar>
-using DenseVectorIterator = DenseVectorIteratorBase<_Scalar, DenseVector<_Scalar>>;
+template <typename _Val>
+using DenseVectorIterator = DenseVectorIteratorBase<_Val, DenseVector<_Val>>;
 
-/// @ingroup  matrix_dense_module
-template <typename _Scalar>
-using DenseVectorConstIterator = DenseVectorIteratorBase<const _Scalar, const DenseVector<_Scalar>>;
+template <typename _Val>
+using DenseVectorConstIterator = DenseVectorIteratorBase<const _Val, const DenseVector<_Val>>;
 
 }  // namespace matrix
 

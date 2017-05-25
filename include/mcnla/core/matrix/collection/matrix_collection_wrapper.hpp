@@ -21,25 +21,27 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Default constructor.
+/// @brief  Determines if the memory size is zero.
 ///
-template <class _Derived>
-MatrixCollectionWrapper<_Derived>::MatrixCollectionWrapper() noexcept {}
+template <typename _Derived>
+bool MatrixCollectionWrapper<_Derived>::isEmpty() const noexcept {
+  return derived().isEmptyImpl();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the number of rows of matrix.
 ///
 template <class _Derived>
 index_t MatrixCollectionWrapper<_Derived>::nrow() const noexcept {
-  return this->derived().nrowImpl();
+  return derived().nrowImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of column of matrix.
+/// @brief  Gets the number of columns of matrix.
 ///
 template <class _Derived>
 index_t MatrixCollectionWrapper<_Derived>::ncol() const noexcept {
-  return this->derived().ncolImpl();
+  return derived().ncolImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +49,7 @@ index_t MatrixCollectionWrapper<_Derived>::ncol() const noexcept {
 ///
 template <class _Derived>
 index_t MatrixCollectionWrapper<_Derived>::nmat() const noexcept {
-  return this->derived().nmatImpl();
+  return derived().nmatImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +67,7 @@ template <class _Derived>
 MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
-  return this->derived().getMatrixImpl(idx);
+  return derived().getImpl(idx);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +77,7 @@ template <class _Derived>
 const MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
-  return this->derived().getMatrixImpl(idx);
+  return derived().getImpl(idx);
 }
 
 }  // namespace matrix

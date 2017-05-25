@@ -26,10 +26,10 @@ namespace la {
 /// @ingroup  la_coo_blas1_module
 /// @brief  Copies vector to another vector.
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void copy(
-    const CooVector<_Scalar> &x,
-          DenseVector<_Scalar> &y
+    const CooVector<_Val> &x,
+          DenseVector<_Val> &y
 ) noexcept {
   mcnla_assert_eq(x.sizes(), y.sizes());
 
@@ -40,10 +40,10 @@ inline void copy(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void copy(
-    const CooVector<_Scalar> &x,
-          DenseVector<_Scalar> &&y
+    const CooVector<_Val> &x,
+          DenseVector<_Val> &&y
 ) noexcept {
   copy(x, y);
 }
@@ -53,10 +53,10 @@ inline void copy(
 /// @ingroup  la_coo_blas1m_module
 /// @brief  Copies matrix to another matrix.
 ///
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void copy(
-    const CooMatrix<_Scalar, _transa> &a,
-          DenseMatrix<_Scalar, _transb> &b
+    const CooMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &b
 ) noexcept {
   static_assert(!isConj(_transa), "COO COPY does not support conjugate matrices!");
   static_assert(!isConj(_transb), "COO COPY does not support conjugate matrices!");
@@ -70,10 +70,10 @@ inline void copy(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transa, Trans _transb>
+template <typename _Val, Trans _transa, Trans _transb>
 inline void copy(
-    const CooMatrix<_Scalar, _transa> &a,
-          DenseMatrix<_Scalar, _transb> &&b
+    const CooMatrix<_Val, _transa> &a,
+          DenseMatrix<_Val, _transb> &&b
 ) noexcept {
   copy(a, b);
 }

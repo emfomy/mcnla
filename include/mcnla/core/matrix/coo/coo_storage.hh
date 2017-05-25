@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/dense/dense_storage.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,20 +22,20 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
 /// The coordinate list (COO) storage.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val     The value type.
+/// @tparam  _ArrayT  The array template.
 ///
-template <typename _Scalar>
-class CooStorage : protected DenseStorage<_Scalar> {
+template <class _Core, typename _Val>
+class CooStorage : protected DenseStorage<_Core, _Val> {
 
  private:
 
-  using ScalarType   = _Scalar;
-  using ValArrayType = Array<ScalarType>;
+  using ValType      = _Val;
+  using ValArrayType = ArrS<_Core, _Val>;
 
-  using BaseType     = DenseStorage<_Scalar>;
+  using BaseType     = DenseStorage<_Core, _Val>;
 
  protected:
 
@@ -54,11 +54,9 @@ class CooStorage : protected DenseStorage<_Scalar> {
   inline CooStorage( const index_t capacity, const index_t nnz = 0 ) noexcept;
   inline CooStorage( const ValArrayType &val, const index_t nnz = 0 ) noexcept;
   inline CooStorage( const CooStorage &other ) noexcept;
-  inline CooStorage( CooStorage &&other ) noexcept;
 
   // Operators
   inline CooStorage& operator=( const CooStorage &other ) noexcept;
-  inline CooStorage& operator=( CooStorage &&other ) noexcept;
 
  public:
 

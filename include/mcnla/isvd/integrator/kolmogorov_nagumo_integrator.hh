@@ -22,150 +22,105 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_integrator_module
-/// The Kolmogorov-Nagumo-type integrator tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct KolmogorovNagumoIntegratorTag {};
+template <typename _Val> using KolmogorovNagumoIntegrator = Integrator<KolmogorovNagumoIntegratorTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
 /// The Kolmogorov-Nagumo-type integrator.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The scalar type.
 ///
-template <typename _Scalar>
-class Integrator<_Scalar, KolmogorovNagumoIntegratorTag>
-  : public IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>> {
+template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class Integrator<KolmogorovNagumoIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class KolmogorovNagumoIntegrator
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<KolmogorovNagumoIntegrator<_Val>> {
 
-  friend IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>>;
+  friend StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
  private:
 
-  using ThisType = Integrator<_Scalar, KolmogorovNagumoIntegratorTag>;
-  using BaseType = IntegratorWrapper<Integrator<_Scalar, KolmogorovNagumoIntegratorTag>>;
-
- public:
-
-  using ScalarType     = _Scalar;
-
-  using ParametersType = Parameters<ScalarType>;
+  using BaseType = StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Kolmogorov-Nagumo-Type Integrator";
+  static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator";
 
-  /// The starting time
-  double moment0_;
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "copying Qc / iterating";
 
-  /// The ending time of rearrangeing Q
-  double moment1_;
+  /// The maximum number of iteration.
+  index_t max_iteration_;
 
-  /// The ending time of integrating
-  double moment2_;
+  /// The tolerance of convergence condition.
+  RealValT<_Val> tolerance_;
 
-  /// The ending time of gathering Qc
-  double moment3_;
+  /// The number of iteration.
+  index_t iteration_;
 
-  /// The communication time of integrating
-  double time2c_;
-
-  /// The number of rows of the matrix per MPI node.
-  index_t nrow_each_;
-
-  /// The number of rows of the matrix of all MPI nodes.
-  index_t nrow_all_;
-
-  /// The collection Q.
-  DenseMatrixCollection120<ScalarType> collection_q_;
-
-  /// The cut collection Q.
-  DenseMatrixCollection120<ScalarType> collection_q_cut_;
-
-  /// The matrix Qs.
-  DenseMatrixRowMajor<ScalarType> matrix_qs_;
-
-  /// The matrix Qjs.
-  DenseMatrixRowMajor<ScalarType> matrix_qjs_;
-
-  /// The matrix Qc.
-  DenseMatrixRowMajor<ScalarType> matrix_qc_;
-
-  /// The cut matrix Qc.
-  DenseMatrixRowMajor<ScalarType> matrix_qc_cut_;
-
-  /// The matrix Qcj.
-  DenseMatrixRowMajor<ScalarType> matrix_qcj_;
-
-  /// The matrix Bs.
-  DenseMatrixRowMajor<ScalarType> matrix_bs_;
+  /// The matrix B.
+  DenseMatrixRowMajor<_Val> matrix_b_;
 
   /// The matrix D.
-  DenseMatrixRowMajor<ScalarType> matrix_d_;
+  DenseMatrixRowMajor<_Val> matrix_d_;
 
   /// The matrix Z.
-  DenseMatrixRowMajor<ScalarType> matrix_z_;
+  DenseMatrixRowMajor<_Val> matrix_z_;
 
   /// The matrix C.
-  DenseMatrixRowMajor<ScalarType> matrix_c_;
+  DenseMatrixRowMajor<_Val> matrix_c_;
 
-  /// The matrix Xj.
-  DenseMatrixRowMajor<ScalarType> matrix_xj_;
+  /// The matrix X.
+  DenseMatrixRowMajor<_Val> matrix_x_;
 
   /// The temporary matrix.
-  DenseMatrixRowMajor<ScalarType> matrix_tmp_;
+  DenseMatrixRowMajor<_Val> matrix_tmp_;
 
   /// The vector E.
-  DenseVector<ScalarType> vector_e_;
+  DenseVector<_Val> vector_e_;
 
   /// The vector F.
-  DenseVector<ScalarType> vector_f_;
+  DenseVector<_Val> vector_f_;
 
   /// The SYEV engine.
-  la::SyevEngine<DenseSymmetricMatrixRowMajor<ScalarType>, 'V'> syev_engine_;
+  la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
 
   using BaseType::parameters_;
-  using BaseType::mpi_comm_;
-  using BaseType::mpi_root_;
-  using BaseType::iteration_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
+  using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 
   // Constructor
-  inline Integrator( const ParametersType &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Integrator( const Parameters<_Val> &parameters,
+                     const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-4 ) noexcept;
 
-  // Gets time
-  inline double time1() const noexcept;
-  inline double time2() const noexcept;
-  inline double time2c() const noexcept;
-  inline double time3() const noexcept;
+  // Gets parameters
+  inline index_t        maxIteration() const noexcept;
+  inline RealValT<_Val> tolerance() const noexcept;
+  inline index_t        iteration() const noexcept;
+
+  // Sets parameters
+  inline Integrator& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline Integrator& setTolerance( const RealValT<_Val> tolerance ) noexcept;
 
  protected:
 
   // Initializes
   void initializeImpl() noexcept;
 
-  // Integrates
-  void integrateImpl() noexcept;
-
-  // Outputs name
-  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
-
-  // Gets time
-  inline double timeImpl() const noexcept;
-
-  // Gets matrices
-  inline       DenseMatrixCollection120<ScalarType>& collectionQImpl() noexcept;
-  inline const DenseMatrixCollection120<ScalarType>& collectionQImpl() const noexcept;
-  inline       DenseMatrixRowMajor<ScalarType>& matrixQImpl() noexcept;
-  inline const DenseMatrixRowMajor<ScalarType>& matrixQImpl() const noexcept;
+  // Initializes
+  void runImpl( const DenseMatrixCollection201<_Val> &collection_q, DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
 
 };
-
-/// @ingroup  isvd_integrator_module
-template <typename _Scalar>
-using KolmogorovNagumoIntegrator = Integrator<_Scalar, KolmogorovNagumoIntegratorTag>;
 
 }  // namespace isvd
 

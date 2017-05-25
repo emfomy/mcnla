@@ -9,7 +9,7 @@
 #define MCNLA_ISVD_FORMER_FORMER_HPP_
 
 #include <mcnla/isvd/def.hpp>
-#include <mcnla/isvd/former/former_wrapper.hpp>
+#include <mcnla/isvd/core/stage_wrapper.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, class _Tag> class Former;
+template <class _Tag, typename _Val> class Former;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace isvd
@@ -33,13 +33,8 @@ template <typename _Scalar, class _Tag> class Former;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The former traits.
-///
-template <typename _Scalar, class _Tag>
-struct Traits<isvd::Former<_Scalar, _Tag>> {
-  using ScalarType = _Scalar;
-};
+template <class _Tag, typename _Val>
+MCNLA_TRAITS_DEF(VAL, isvd::Former<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 
@@ -49,15 +44,15 @@ struct Traits<isvd::Former<_Scalar, _Tag>> {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_former_module
-///
 /// The interface of iSVD former.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _Tag     The former tag.
+/// @tparam  _Tag  The former tag.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar, class _Tag>
-class Former : public FormerWrapper<Former<_Scalar, _Tag>> {};
+template <class _Tag, typename _Val>
+class Former : public StageWrapper<Former<_Tag, _Val>> {
+  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD former!");
+};
 
 }  // namespace isvd
 

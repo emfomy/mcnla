@@ -9,30 +9,8 @@
 #define MCNLA_CORE_LA_DEF_HPP_
 
 #include <mcnla/core/def.hpp>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  la_module  Linear Algebra Module
-/// @ingroup   core_module
-/// @brief     The Linear Algebra Module
-///
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  la_dense_module  Dense Linear Algebra Module
-/// @ingroup   la_module
-/// @brief     The Dense Linear Algebra Module
-///
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  la_coo_module  COO Linear Algebra Module
-/// @ingroup   la_module
-/// @brief     The COO Linear Algebra Module
-///
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @defgroup  la_wrapper_module  Linear Algebra Wrapper Module
-/// @ingroup   la_module
-/// @brief     The Linear Algebra Wrapper Module
-///
+#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -55,10 +33,10 @@ namespace detail {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
 ///
-template<typename _Scalar>
+template<typename _Val>
 static constexpr char toTransChar( const Trans trans ) {
-  return !isTrans(trans) ? ((isConj(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'R' : 'N')
-                         : ((isConj(trans) && traits::ScalarTraits<_Scalar>::is_complex) ? 'C' : 'T');
+  return !isTrans(trans) ? ((isConj(trans) && traits::ValTraits<_Val>::is_complex) ? 'R' : 'N')
+                         : ((isConj(trans) && traits::ValTraits<_Val>::is_complex) ? 'C' : 'T');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,4 +62,4 @@ using JobOption = char;
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_DEF_HPP_
+#endif  // MCNLA_CORE_LA_DEF_HPP

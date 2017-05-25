@@ -28,17 +28,17 @@ namespace la {
 ///
 /// @attention  the out-of-range spaces are also changed.
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void memset0(
-  DenseVector<_Scalar> &x
+  DenseVector<_Val> &x
 ) noexcept {
-  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Scalar));
+  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Val));
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void memset0(
-  DenseVector<_Scalar> &&x
+  DenseVector<_Val> &&x
 ) noexcept {
   memset0(x);
 }
@@ -50,17 +50,17 @@ inline void memset0(
 ///
 /// @attention  the out-of-range spaces are also changed.
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void memset0(
-  DenseMatrix<_Scalar, _trans> &x
+  DenseMatrix<_Val, _trans> &x
 ) noexcept {
-  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Scalar));
+  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Val));
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 inline void memset0(
-  DenseMatrix<_Scalar, _trans> &&x
+  DenseMatrix<_Val, _trans> &&x
 ) noexcept {
   memset0(x);
 }

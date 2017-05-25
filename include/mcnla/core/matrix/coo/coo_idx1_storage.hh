@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_IDX1_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_IDX1_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/dense/dense_storage.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,20 +22,20 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
 /// The coordinate list (COO) storage of the second dimension index.
 ///
-/// @tparam  _Idx  The index type.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Idx = index_t>
-class CooIdx1Storage : protected DenseStorage<_Idx> {
+template <class _Core, typename _Idx>
+class CooIdx1Storage : protected DenseStorage<_Core, _Idx> {
 
  private:
 
   using IdxType      = _Idx;
-  using IdxArrayType = Array<_Idx>;
+  using IdxArrayType = ArrS<_Core, _Idx>;
 
-  using BaseType     = DenseStorage<_Idx>;
+  using BaseType     = DenseStorage<_Core, _Idx>;
 
  protected:
 

@@ -9,9 +9,9 @@
 #define MCNLA_ISVD_FORMER_HPP_
 
 #include <mcnla/isvd/former/former.hpp>
-#include <mcnla/isvd/former/former_wrapper.hpp>
 
 #include <mcnla/isvd/former/svd_former.hpp>
-#include <mcnla/isvd/former/dummy_former.hpp>
+#include <mcnla/isvd/former/gramian_former.hpp>
+#include <mcnla/isvd/former/row_block_gramian_former.hpp>
 
 #endif  // MCNLA_ISVD_FORMER_HPP_

@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_UTILITY_TRAITS_HPP_
 #define MCNLA_CORE_UTILITY_TRAITS_HPP_
 
-#include <mcnla/core/def.hpp>
+#include <mcnla/core/utility/def.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -20,39 +20,63 @@ namespace mcnla {
 ///
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The traits interface.
-///
-/// @tparam  _Derived  The derived type.
-///
-template <typename _Derived> struct Traits {};
+/// @ingroup  utility_module
+template <typename ..._Args>
+using TrueType = std::true_type;
+
+/// @ingroup  utility_module
+template <typename ..._Args>
+using FalseType = std::false_type;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
-/// The scalar type traits.
+/// The enumeration of traits.
 ///
-/// @tparam  _Scalar  The scalar type.
+enum class TraitsTag {
+  VOID, REAL, COMPLEX, VAL, VECTOR, MATRIX,
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_module
+/// The traits interface.
 ///
-template <typename _Scalar>
-struct ScalarTraits {
-  static_assert(std::is_arithmetic<_Scalar>::value, "'_Scalar' must be a arithmetic type!");
-  using RealType = _Scalar;
-  using ComplexType = std::complex<_Scalar>;
+/// @tparam  _Type  The type.
+///
+template <typename _Type, TraitsTag _tag = TraitsTag::VOID>
+struct Traits {
+  static_assert(traits::FalseType<_Type>::value, "Error using non-specialized traits!");
+  using Type = void;
+};
+
+#define MCNLA_TRAITS_DEF( _tag, _Type, _value ) \
+  struct Traits<_Type, TraitsTag::_tag> { using Type = _value; };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_module
+/// The value type traits.
+///
+/// @tparam  _Val  The value type.
+///
+template <typename _Val>
+struct ValTraits {
+  static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
+  using RealType = _Val;
+  using ComplexType = std::complex<_Val>;
   static constexpr bool is_real = true;
   static constexpr bool is_complex = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
-/// @copydoc ScalarTraits
+/// @copydoc  ValTraits
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-struct ScalarTraits<std::complex<_Scalar>> {
-  static_assert(std::is_arithmetic<_Scalar>::value, "'_Scalar' must be a arithmetic type!");
-  using RealType = _Scalar;
-  using ComplexType = std::complex<_Scalar>;
+template <typename _Val>
+struct ValTraits<std::complex<_Val>> {
+  static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
+  using RealType = _Val;
+  using ComplexType = std::complex<_Val>;
   static constexpr bool is_real = false;
   static constexpr bool is_complex = true;
 };
@@ -61,47 +85,31 @@ struct ScalarTraits<std::complex<_Scalar>> {
 
 /// @ingroup  utility_module
 template <typename _Derived>
-using RealT = typename traits::Traits<_Derived>::RealType;
+using RealT = typename traits::Traits<_Derived, traits::TraitsTag::REAL>::Type;
 
 /// @ingroup  utility_module
 template <typename _Derived>
-using ComplexT = typename traits::Traits<_Derived>::ComplexType;
+using ComplexT = typename traits::Traits<_Derived, traits::TraitsTag::COMPLEX>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using ScalarT = typename traits::Traits<_Derived>::ScalarType;
+using ValT = typename traits::Traits<_Derived, traits::TraitsTag::VAL>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using VectorT = typename traits::Traits<_Derived>::VectorType;
+using VectorT = typename traits::Traits<_Derived, traits::TraitsTag::VECTOR>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using MatrixT = typename traits::Traits<_Derived>::MatrixType;
+using MatrixT = typename traits::Traits<_Derived, traits::TraitsTag::MATRIX>::Type;
 
 /// @ingroup  utility_module
-template <class _Derived>
-using SetT = typename traits::Traits<_Derived>::SetType;
+template <typename _Val>
+using RealValT = typename traits::ValTraits<_Val>::RealType;
 
 /// @ingroup  utility_module
-template <class _Derived>
-using ContainerT = typename traits::Traits<_Derived>::ContainerType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using IteratorT = typename traits::Traits<_Derived>::IteratorType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using ConstIteratorT = typename traits::Traits<_Derived>::ConstIteratorType;
-
-/// @ingroup  utility_module
-template <typename _Scalar>
-using RealScalarT = typename traits::ScalarTraits<_Scalar>::RealType;
-
-/// @ingroup  utility_module
-template <typename _Scalar>
-using ComplexScalarT = typename traits::ScalarTraits<_Scalar>::ComplexType;
+template <typename _Val>
+using ComplexValT = typename traits::ValTraits<_Val>::ComplexType;
 
 }  // namespace mcnla
 

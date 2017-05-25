@@ -64,9 +64,9 @@ static inline index_t iamin(
 
 #else  // MCNLA_USE_MKL
 
-template <typename _Scalar>
+template <typename _Val>
 inline index_t iamin(
-    const index_t n, const _Scalar* x, const index_t incx
+    const index_t n, const _Val* x, const index_t incx
 ) noexcept {
   if ( n < 1 || incx <= 0 ) { return -1; }
   if ( n == 1 ) { return 0; }

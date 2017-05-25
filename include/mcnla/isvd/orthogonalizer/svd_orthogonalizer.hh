@@ -22,69 +22,58 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_orthogonalizer_module
-/// The SVD orthogonalizer tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct SvdOrthogonalizerTag {};
+template <typename _Val> using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonalizerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_orthogonalizer_module
 /// The SVD orthogonalizer.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
-  : public OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>> {
+template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class Orthogonalizer<SvdOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class SvdOrthogonalizer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<SvdOrthogonalizer<_Val>> {
 
-  friend OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
+  friend StageWrapper<SvdOrthogonalizer<_Val>>;
 
  private:
 
-  using BaseType = OrthogonalizerWrapper<Orthogonalizer<_Scalar, SvdOrthogonalizerTag>>;
-
- public:
-
-  using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<ScalarType>;
-  using MatrixType     = MatrixT<DenseMatrixCollection120<ScalarType>>;
-
-  using ParametersType = Parameters<ScalarType>;
+  using BaseType = StageWrapper<SvdOrthogonalizer<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_= "SVD Orthogonalizer";
+  static constexpr const char* name_ = "SVD Orthogonalizer";
 
-  /// The starting time
-  double moment0_;
-
-  /// The ending time of orthogonalization
-  double moment1_;
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "orthogonalization";
 
   /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The empty matrix.
-  MatrixType matrix_empty_;
+  DenseMatrixRowMajor<_Val> matrix_empty_;
 
-  /// The random engine.
-  la::GesvdEngine<MatrixType, 'O', 'N'> gesvd_engine_;
+  /// The GESVD driver.
+  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'O', 'N'> gesvd_driver_;
 
   using BaseType::parameters_;
-  using BaseType::mpi_comm_;
-  using BaseType::mpi_root_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
+  using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 
   // Constructor
-  inline Orthogonalizer( const ParametersType &parameters,
-                         const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
-
-  // Gets time
-  inline double time1() const noexcept;
-  inline double time2() const noexcept;
+  inline Orthogonalizer( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -92,19 +81,9 @@ class Orthogonalizer<_Scalar, SvdOrthogonalizerTag>
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void orthogonalizeImpl( DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
-
-  // Outputs name
-  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
-
-  // Gets time
-  inline double timeImpl() const noexcept;
+  void runImpl( DenseMatrixCollection201<_Val> &collection_q ) noexcept;
 
 };
-
-/// @ingroup  isvd_orthogonalizer_module
-template <typename _Scalar>
-using SvdOrthogonalizer = Orthogonalizer<_Scalar, SvdOrthogonalizerTag>;
 
 }  // namespace isvd
 

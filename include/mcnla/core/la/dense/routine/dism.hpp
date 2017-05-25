@@ -38,53 +38,45 @@ namespace detail {
 //
 
 #ifdef MCNLA_USE_MKL
-
-template <typename _Scalar>
+template <typename _Val>
 inline void dismImpl2(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, Trans::NORMAL> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, Trans::NORMAL> &b,
+    const _Val alpha
 ) noexcept {
-  mcnla_assert_eq(a.size(), c.nrow());
-  mcnla_assert_eq(b.sizes(), c.sizes());
+  mcnla_assert_eq(a.size(), b.nrow());
 
   index_t idiag[1] = {0};
-  diasm('N', c.nrow(), c.ncol(), alpha, "TLNC",
-        a.valPtr(), a.size(), idiag, 1, b.valPtr(), b.pitch(), c.valPtr(), c.pitch());
+  diasm('N', b.nrow(), b.ncol(), alpha, "TLNC",
+        a.valPtr(), a.size(), idiag, 1, b.valPtr(), b.pitch(), b.valPtr(), b.pitch());
 }
-
-#endif  // MCNLA_USE_MKL
-
-template <typename _Scalar, Trans _transb>
+#else  // MCNLA_USE_MKL
+template <typename _Val>
 inline void dismImpl2(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, Trans::NORMAL> &b,
+    const _Val alpha
 ) noexcept {
-  mcnla_assert_eq(a.size(), c.nrow());
-  mcnla_assert_eq(b.sizes(), c.sizes());
+  mcnla_assert_eq(a.size(), b.nrow());
 
-  auto da = a.vectorize();
-  for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b(i, ""), c(i, ""), alpha / da(i), 0.0);
+  auto da = a.vec();
+  for ( index_t i = 0; i < da.len(); ++i ) {
+    la::scal(b(i, ""_), alpha / da(i));
   }
 }
+#endif  // MCNLA_USE_MKL
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val>
 inline void dismImpl2(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha
+          DenseMatrix<_Val, Trans::NORMAL> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+    const _Val alpha
 ) noexcept {
-  mcnla_assert_eq(a.size(), c.ncol());
-  mcnla_assert_eq(b.sizes(), c.sizes());
+  mcnla_assert_eq(a.size(), b.ncol());
 
-  auto da = a.vectorize();
-  for ( index_t i = 0; i < da.length(); ++i ) {
-    la::axpby(b("", i), c("", i), alpha / da(i), 0.0);
+  auto da = a.vec();
+  for ( index_t i = 0; i < da.len(); ++i ) {
+    la::scal(b(""_, i), alpha / da(i));
   }
 }
 
@@ -92,76 +84,68 @@ inline void dismImpl2(
 // Impl1 Left
 //
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val>
 inline void dismImpl1(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, Trans::NORMAL> &b,
+    const _Val alpha
 ) noexcept {
-  dismImpl2(a, b, c, alpha);
+  dismImpl2(a, b, alpha);
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val>
 inline void dismImpl1(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, Trans::TRANS> &c,
-    const _Scalar alpha
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, Trans::TRANS> &b,
+    const _Val alpha
 ) noexcept {
-  dismImpl2(b.t(), a.t(), c.t(), alpha);
+  dismImpl2(b.t(), a.t(), alpha);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, bool dummy = 0>
 inline void dismImpl1(
-    const DenseDiagonalMatrix<_Scalar> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const _Scalar alpha
+    const DenseDiagonalMatrix<_Val> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const _Val alpha
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(b);
-  static_cast<void>(c);
   static_cast<void>(alpha);
-  static_assert(!isConj(_transc), "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM does not support conjugate matrices!");
 }
 
 // ========================================================================================================================== //
 // Impl1 Right
 //
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val>
 inline void dismImpl1(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, Trans::NORMAL> &c,
-    const _Scalar alpha
+          DenseMatrix<_Val, Trans::NORMAL> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+    const _Val alpha
 ) noexcept {
-  dismImpl2(b, a, c, alpha);
+  dismImpl2(b, a, alpha);
 }
 
-template <typename _Scalar, Trans _transb>
+template <typename _Val>
 inline void dismImpl1(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, Trans::TRANS> &c,
-    const _Scalar alpha
+          DenseMatrix<_Val, Trans::TRANS> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+    const _Val alpha
 ) noexcept {
-  dismImpl2(a.t(), b.t(), c.t(), alpha);
+  dismImpl2(a.t(), b.t(), alpha);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb, bool dummy = 0>
 inline void dismImpl1(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const DenseDiagonalMatrix<_Scalar> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const _Scalar alpha
+          DenseMatrix<_Val, _transb> &b,
+    const DenseDiagonalMatrix<_Val> &a,
+    const _Val alpha
 ) noexcept {
   static_cast<void>(a);
   static_cast<void>(b);
-  static_cast<void>(c);
   static_cast<void>(alpha);
-  static_assert(!isConj(_transc), "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM does not support conjugate matrices!");
 }
 
 //@}
@@ -173,174 +157,85 @@ inline void dismImpl1(
 /// @brief  Solves a system of linear equations with a diagonal coefficient matrix and multiple right-hand sides.
 ///
 //@{
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void dism(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a.inv(), b, c, alpha);
+  detail::dismImpl1(a.inv(), b, alpha);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void dism(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+          DenseMatrix<_Val, _transb> &b,
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(b, a.inv(), c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void dism(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const char*,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  detail::dismImpl1(a.inv(), c, c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void dism(
-    const char*,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  detail::dismImpl1(c, a.inv(), c, alpha);
+  detail::dismImpl1(b, a.inv(), alpha);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void dism(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+          DenseMatrix<_Val, _transb> &&b,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(a.inv(), b, c, alpha);
+  detail::dismImpl1(a.inv(), b, alpha);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void dism(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+          DenseMatrix<_Val, _transb> &&b,
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  detail::dismImpl1(b, a.inv(), c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void dism(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const char*,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  detail::dismImpl1(a.inv(), c, c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void dism(
-    const char*,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  detail::dismImpl1(c, a.inv(), c, alpha);
+  detail::dismImpl1(b, a.inv(), alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_wrapper_module
-/// @brief  Solves a system of linear equations with multiple right-hand sides.
+/// @copydoc  mcnla::la::sm
 ///
 //@{
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void sm(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+          DenseMatrix<_Val, _transb> &b,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  dism(a, b, c, alpha);
+  dism(a, b, alpha);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void sm(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+          DenseMatrix<_Val, _transb> &b,
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  dism(b, a, c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void sm(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const char*,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  dism(a, c, c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void sm(
-    const char*,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  dism(c, a, c, alpha);
+  dism(b, a, alpha);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void sm(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const DenseMatrix<_Scalar, _transb> &b,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+          DenseMatrix<_Val, _transb> &&b,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  dism(a, b, c, alpha);
+  dism(a, b, alpha);
 }
 
-template <typename _Scalar, Trans _transb, Trans _transc>
+template <typename _Val, Trans _transb>
 inline void sm(
-    const DenseMatrix<_Scalar, _transb> &b,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
+          DenseMatrix<_Val, _transb> &&b,
+    const InverseView<DenseDiagonalMatrix<_Val>> &a,
+    const ValT<DenseMatrix<_Val, _transb>> alpha = 1
 ) noexcept {
-  dism(b, a, c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void sm(
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-    const char*,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  dism(a, c, c, alpha);
-}
-
-template <typename _Scalar, Trans _transc>
-inline void sm(
-    const char*,
-    const InverseView<DenseDiagonalMatrix<_Scalar>> &a,
-          DenseMatrix<_Scalar, _transc> &&c,
-    const ScalarT<DenseMatrix<_Scalar, _transc>> alpha = 1
-) noexcept {
-  dism(c, a, c, alpha);
+  dism(b, a, alpha);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

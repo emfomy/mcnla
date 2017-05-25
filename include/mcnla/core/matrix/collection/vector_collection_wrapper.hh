@@ -10,6 +10,7 @@
 
 #include <mcnla/core/matrix/def.hpp>
 #include <tuple>
+#include <mcnla/core/matrix/dense.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
@@ -24,13 +25,12 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_collection_module
 /// The vector collection wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class VectorCollectionWrapper : public utility::CrtpBase<_Derived, VectorCollectionWrapper<_Derived>> {
+class VectorCollectionWrapper {
 
  private:
 
@@ -39,18 +39,23 @@ class VectorCollectionWrapper : public utility::CrtpBase<_Derived, VectorCollect
  protected:
 
   // Constructors
-  inline VectorCollectionWrapper() noexcept;
+  inline VectorCollectionWrapper() noexcept = default;
 
  public:
 
   // Gets information
-  inline index_t length() const noexcept;
+  inline bool    isEmpty() const noexcept;
+  inline index_t len() const noexcept;
   inline index_t nvec() const noexcept;
   inline std::tuple<index_t, index_t> sizes() const noexcept;
 
   // Gets vector
   inline       VectorType operator()( const index_t idx ) noexcept;
   inline const VectorType operator()( const index_t idx ) const noexcept;
+
+ protected:
+
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

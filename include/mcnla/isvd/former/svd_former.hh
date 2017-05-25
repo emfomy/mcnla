@@ -22,93 +22,81 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_former_module
-/// The SVD former tag.
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct SvdFormerTag {};
+template <typename _Val> using SvdFormer = Former<SvdFormerTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
-///
 /// The SVD former.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar>
-class Former<_Scalar, SvdFormerTag>
-  : public FormerWrapper<Former<_Scalar, SvdFormerTag>> {
+template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class Former<SvdFormerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class SvdFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<SvdFormer<_Val>> {
 
-  friend FormerWrapper<Former<_Scalar, SvdFormerTag>>;
+  friend StageWrapper<SvdFormer<_Val>>;
 
  private:
 
-  using BaseType = FormerWrapper<Former<_Scalar, SvdFormerTag>>;
-
- public:
-
-  using ScalarType     = _Scalar;
-  using RealScalarType = RealScalarT<ScalarType>;
-
-  using ParametersType = Parameters<ScalarType>;
+  using BaseType = StageWrapper<SvdFormer<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Standard Former";
+  static constexpr const char* name_ = "SVD Former";
 
-  /// The starting time
-  double moment0_;
-
-  /// The ending time of Q' * A
-  double moment1_;
-
-  /// The ending time of SVD
-  double moment2_;
-
-  /// The ending time of Q * W
-  double moment3_;
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "forming";
 
   /// The matrix W.
-  DenseMatrixColMajor<ScalarType> matrix_w_;
+  DenseMatrixColMajor<_Val> matrix_w_;
+
+  /// The cut matrix W.
+  DenseMatrixColMajor<_Val> matrix_w_cut_;
 
   /// The vector S.
-  DenseVector<RealScalarType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The cut vector S.
-  DenseVector<RealScalarType> vector_s_cut_;
-
-  /// The matrix U.
-  DenseMatrixColMajor<ScalarType> matrix_u_;
+  DenseVector<RealValT<_Val>> vector_s_cut_;
 
   /// The cut matrix U.
-  DenseMatrixColMajor<ScalarType> matrix_u_cut_;
+  DenseMatrixColMajor<_Val> matrix_u_cut_;
 
   /// The matrix Vt.
-  DenseMatrixColMajor<ScalarType> matrix_vt_;
+  DenseMatrixColMajor<_Val> matrix_vt_;
 
   /// The cut matrix Vt.
-  DenseMatrixColMajor<ScalarType> matrix_vt_cut_;
+  DenseMatrixColMajor<_Val> matrix_vt_cut_;
 
   /// The empty matrix.
-  DenseMatrixColMajor<ScalarType> matrix_empty_;
+  DenseMatrixColMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdEngine<DenseMatrixColMajor<ScalarType>, 'S', 'O'> gesvd_engine_;
+  la::GesvdDriver<DenseMatrixColMajor<_Val>, 'S', 'O'> gesvd_driver_;
 
   using BaseType::parameters_;
-  using BaseType::mpi_comm_;
-  using BaseType::mpi_root_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
+  using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 
   // Constructor
-  inline Former( const ParametersType &parameters, const MPI_Comm mpi_comm, const mpi_int_t mpi_root ) noexcept;
+  inline Former( const Parameters<_Val> &parameters ) noexcept;
 
-  // Gets time
-  inline double time1() const noexcept;
-  inline double time2() const noexcept;
-  inline double time3() const noexcept;
+  // Gets matrices
+  inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixVt() const noexcept;
 
  protected:
 
@@ -117,24 +105,9 @@ class Former<_Scalar, SvdFormerTag>
 
   // Forms SVD
   template <class _Matrix>
-  void formImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ScalarType> &matrix_qc ) noexcept;
-
-  // Outputs name
-  inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
-
-  // Gets time
-  inline double timeImpl() const noexcept;
-
-  // Gets matrices
-  inline const DenseVector<RealScalarType>& vectorSImpl() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixUImpl() const noexcept;
-  inline const DenseMatrixColMajor<ScalarType>& matrixVtImpl() const noexcept;
+  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<_Val> &matrix_q ) noexcept;
 
 };
-
-/// @ingroup  isvd_former_module
-template <typename _Scalar>
-using SvdFormer = Former<_Scalar, SvdFormerTag>;
 
 }  // namespace isvd
 

@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_COO_COO_VECTOR_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_COO_COO_VECTOR_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/coo/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/coo/coo_storage.hpp>
 #include <mcnla/core/matrix/coo/coo_idx0_storage.hpp>
@@ -25,36 +25,36 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class CooMatrixStorage;
+template <class _Core, typename _Val> class CooMatrixStorage;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_coo_module
 /// The coordinate list (COO) vector storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Val     The value type.
+/// @tparam  _ArrayT  The array template.
 ///
 /// @todo  Add sorting routines.
 /// @todo  Add sorting attention to routines.
 ///
-template <typename _Scalar>
+template <class _Core, typename _Val>
 class CooVectorStorage
-  : public CooStorage<_Scalar>,
-    public CooIdx0Storage<index_t> {
+  : public CooStorage<_Core, _Val>,
+    public CooIdx0Storage<_Core, index_t> {
 
-  friend class CooMatrixStorage<_Scalar>;
+  friend class CooMatrixStorage<_Core, _Val>;
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<_Scalar>;
-  using IdxArrayType      = Array<index_t>;
+  using ValType           = _Val;
+  using ValArrayType      = ArrS<_Core, _Val>;
+  using IdxArrayType      = ArrS<_Core, index_t>;
   using DimsType          = std::tuple<index_t>;
 
-  using VectorStorageType = CooVectorStorage<_Scalar>;
+  using VectorStorageType = CooVectorStorage<_Core, _Val>;
 
-  using BaseType          = CooStorage<_Scalar>;
-  using Base0Type      = CooIdx0Storage<index_t>;
+  using BaseType          = CooStorage<_Core, _Val>;
+  using Base0Type         = CooIdx0Storage<_Core, index_t>;
 
  protected:
 
@@ -68,6 +68,8 @@ class CooVectorStorage
 
   using BaseType::val;
   using BaseType::valPtr;
+  using Base0Type::idx0;
+  using Base0Type::idx0Ptr;
 
  protected:
 
@@ -78,11 +80,9 @@ class CooVectorStorage
   inline CooVectorStorage( const index_t dim0, const index_t nnz,
                            const ValArrayType &val, const IdxArrayType &idx0, const index_t offset = 0 ) noexcept;
   inline CooVectorStorage( const CooVectorStorage &other ) noexcept;
-  inline CooVectorStorage( CooVectorStorage &&other ) noexcept;
 
   // Operators
   inline CooVectorStorage& operator=( const CooVectorStorage &other ) noexcept;
-  inline CooVectorStorage& operator=( CooVectorStorage &&other ) noexcept;
 
  public:
 
@@ -94,8 +94,8 @@ class CooVectorStorage
  protected:
 
   // Gets element
-  inline       ScalarType elemImpl( const index_t idx0 ) noexcept;
-  inline const ScalarType elemImpl( const index_t idx0 ) const noexcept;
+  inline       ValType elemImpl( const index_t idx0 ) noexcept;
+  inline const ValType elemImpl( const index_t idx0 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0 ) const noexcept;

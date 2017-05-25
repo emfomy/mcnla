@@ -1,6 +1,5 @@
 # check/check.cmake
 
-# Macro
 macro(_ADD_CHECK_PREDO checktype)
   # Set target name
   get_filename_component(checkname ${checkpath} NAME)
@@ -10,19 +9,15 @@ macro(_ADD_CHECK_PREDO checktype)
   set(checktarget mcnla_test_${checkname})
 
   # Set target
-  file(GLOB_RECURSE files "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}/${checktype}/*.cpp")
+  file(GLOB_RECURSE files "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}.cpp"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}/${checktype}.cpp"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/${checkpath}/${checktype}/*.cpp")
   list(SORT files)
   list(REVERSE files)
   add_executable(${checktarget} EXCLUDE_FROM_ALL ${checkmain} ${files})
-  target_include_directories(${checktarget} PUBLIC "${PROJECT_BINARY_DIR}/include")
-  target_include_directories(${checktarget} PUBLIC "${PROJECT_SOURCE_DIR}/include")
-  target_include_directories(${checktarget} SYSTEM PUBLIC ${INCS})
-  target_link_libraries(${checktarget} ${LIBS})
-  target_compile_definitions(${checktarget} PUBLIC ${DEFS})
+  mcnla_set_target(${checktarget})
   target_compile_definitions(${checktarget} PUBLIC ${defs})
   target_compile_definitions(${checktarget} PUBLIC "MCNLA_CHECK_NAME=\"${checkcomment}\"")
-  set_target_properties(${checktarget} PROPERTIES COMPILE_FLAGS ${COMFLGS})
-  set_target_properties(${checktarget} PROPERTIES LINK_FLAGS    ${LNKFLGS})
   set(CMAKE_CHECK_TARGETS ${CMAKE_CHECK_TARGETS} ${checktarget} PARENT_SCOPE)
   list(REVERSE files)
 endmacro()
@@ -36,13 +31,13 @@ macro(_ADD_CHECK checktype)
 
   # Add rule
   add_custom_target(
-    run_${checkname}
-    COMMAND ./${checktarget}
+    run_test_${checkname}
+    COMMAND $<TARGET_FILE:${checktarget}>
     DEPENDS ${checktarget}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Check test ${checkpath}"
   )
-  set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_${checkname} PARENT_SCOPE)
+  set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_test_${checkname} PARENT_SCOPE)
 endmacro()
 
 macro(_ADD_MPI_CHECK checktype)
@@ -54,17 +49,17 @@ macro(_ADD_MPI_CHECK checktype)
   _add_check_predo("${checktype}")
 
   foreach(procs ${ARGN})
-    add_test(NAME ${checkname0}_${procs} COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ./${checktarget})
+    add_test(NAME ${checkname0}_${procs} COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} $<TARGET_FILE:${checktarget}>)
 
     # Add rule
     add_custom_target(
-      run_${checkname}_${procs}
-      COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} ./${checktarget}
+      run_test_${checkname}_${procs}
+      COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} $<TARGET_FILE:${checktarget}>
       DEPENDS ${checktarget}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      COMMENT "Check test ${checkpath}"
+      COMMENT "Run test ${checkpath}"
     )
-    set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_${checkname0}_${procs} PARENT_SCOPE)
+    set(CMAKE_CHECK_RULES ${CMAKE_CHECK_RULES} run_test_${checkname0}_${procs} PARENT_SCOPE)
   endforeach()
 endmacro()
 

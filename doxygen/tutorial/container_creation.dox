@@ -1,0 +1,45 @@
+namespace mcnla {
+
+namespace matrix {
+
+/**
+  @page tutorial_container_creation Container Creation
+
+  <h3>Construct with Size Information</h3>
+
+  The following are the constructors for @ref DenseStorage "dense containers".
+
+  <table>
+  <tr><th> Command                                                              <th> Detail
+  <tr><td> `DenseVector           ( [len]        [, stride] [, capacity] )`<br>
+           `DenseVector           ( [sizes]      [, stride] [, capacity] )`     <td> Dense vector
+  <tr><td> `DenseMatrix           ( [nrow, ncol] [, pitch]  [, capacity] )`<br>
+           `DenseMatrix           ( [sizes]      [, pitch]  [, capacity] )`     <td> Dense matrix
+  <tr><td> `DenseSymmetricMatrix  ( [size]       [, pitch]  [, capacity] )`     <td> Dense symmetric matrix
+  <tr><td> `DenseTriangularMatrix ( [size]       [, pitch]  [, capacity] )`     <td> Dense triangular matrix
+  <tr><td> `DenseDiagonalMatrix   ( [size]       [, pitch]  [, capacity] )`     <td> Dense diagonal matrix
+  </table>
+
+  <h3>Construct with plain pointer</h3>
+
+  In order to use MCNLA containers with plain pointer, one should pack the pointer as a `std::shared_ptr`. For example,
+  @code
+    auto ptr = new double[20];
+    std::shared_ptr<double> sptr(ptr, std::default_delete<double[]>());
+  @endcode
+  Note that one should pay attention to the deleter. The default deleter of `std::shared_ptr` uses `delete`, but here one needs `delete[]` to delete the array. With `std::shared_ptr`, one <b>must not</b> delete the pointer manually.
+
+  Next, pack the `std::shared_ptr` into %Array to and use it to create the container. For example,
+  @code
+    Array<double> array(sptr, 20);
+    DenseVector<double> vec(5, 2, array, 4);
+  @endcode
+  Here `vec` is a @ref DenseVector with @ref DenseVector::len "length" 5, @ref DenseVector::stride "stride" 2. The @ref Array::size "memory size" of `vec` is 20, and the first element of `vec` stores in the 4th element in the memory.
+
+  @see  @ref matrix_module
+
+*/
+
+}  // namespace matrix
+
+}  // namespace mcnla

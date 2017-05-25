@@ -26,35 +26,35 @@ namespace la {
 /// @ingroup  la_dense_blas1_module
 /// @brief  Computes the product of a vector by a scalar.
 ///
-template <typename _Scalar>
+template <typename _Val>
 inline void scal(
-          DenseVector<_Scalar> &x,
-    const ScalarT<DenseVector<_Scalar>> alpha
+          DenseVector<_Val> &x,
+    const ValT<DenseVector<_Val>> alpha
 ) noexcept {
-  detail::scal(x.length(), alpha, x.valPtr(), x.stride());
+  detail::scal(x.len(), alpha, x.valPtr(), x.stride());
 }
 
-template <typename _Scalar>
+template <typename _Val>
 inline void scal(
-          DenseVector<std::complex<_Scalar>> &x,
-    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha
+          DenseVector<std::complex<_Val>> &x,
+    const RealValT<ValT<DenseVector<std::complex<_Val>>>> alpha
 ) noexcept {
-  detail::scal(x.length(), alpha, x.valPtr(), x.stride());
+  detail::scal(x.len(), alpha, x.valPtr(), x.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void scal(
-          DenseVector<_Scalar> &&x,
-    const ScalarT<DenseVector<_Scalar>> alpha
+          DenseVector<_Val> &&x,
+    const ValT<DenseVector<_Val>> alpha
 ) noexcept {
   scal(x, alpha);
 }
 
-template <typename _Scalar>
+template <typename _Val>
 inline void scal(
-          DenseVector<std::complex<_Scalar>> &&x,
-    const RealScalarT<ScalarT<DenseVector<std::complex<_Scalar>>>> alpha
+          DenseVector<std::complex<_Val>> &&x,
+    const RealValT<ValT<DenseVector<std::complex<_Val>>>> alpha
 ) noexcept {
   scal(x, alpha);
 }

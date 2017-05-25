@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_STORAGE_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/dense/dense_storage.hpp>
 #include <mcnla/core/matrix/kit/idx_range.hpp>
@@ -23,30 +23,26 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseMatrixStorage;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
 /// The dense vector storage class.
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Core  The core tag.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Scalar>
-class DenseVectorStorage : public DenseStorage<_Scalar> {
+template <class _Core, typename _Val>
+class DenseVectorStorage : public DenseStorage<_Core, _Val> {
 
-  friend class DenseMatrixStorage<_Scalar>;
+  friend class DenseMatrixStorage<_Core, _Val>;
 
  private:
 
-  using ScalarType        = _Scalar;
-  using ValArrayType      = Array<_Scalar>;
+  using ValType           = _Val;
+  using ValArrayType      = ArrS<_Core, _Val>;
   using DimsType          = std::tuple<index_t>;
 
-  using VectorStorageType = DenseVectorStorage<_Scalar>;
+  using VectorStorageType = DenseVectorStorage<_Core, _Val>;
 
-  using BaseType          = DenseStorage<_Scalar>;
+  using BaseType          = DenseStorage<_Core, _Val>;
 
  protected:
 
@@ -67,31 +63,31 @@ class DenseVectorStorage : public DenseStorage<_Scalar> {
   inline DenseVectorStorage( const index_t dim0, const index_t stride,
                              const ValArrayType &val, const index_t offset = 0 ) noexcept;
   inline DenseVectorStorage( const DenseVectorStorage &other ) noexcept;
-  inline DenseVectorStorage( DenseVectorStorage &&other ) noexcept;
 
   // Operators
   inline DenseVectorStorage& operator=( const DenseVectorStorage &other ) noexcept;
-  inline DenseVectorStorage& operator=( DenseVectorStorage &&other ) noexcept;
 
  public:
 
   // Gets information
   inline bool     isShrunk() const noexcept;
   inline index_t  dim0() const noexcept;
+  inline index_t  mdim0() const noexcept;
   inline DimsType dims() const noexcept;
+  inline DimsType mdims() const noexcept;
   inline index_t  stride() const noexcept;
 
  protected:
 
   // Gets element
-  inline       ScalarType& elemImpl( const index_t idx0 ) noexcept;
-  inline const ScalarType& elemImpl( const index_t idx0 ) const noexcept;
+  inline       ValType& elemImpl( const index_t idx0 ) noexcept;
+  inline const ValType& elemImpl( const index_t idx0 ) const noexcept;
 
   // Gets internal position
   inline index_t posImpl( const index_t idx0 ) const noexcept;
 
   // Resizes
-  inline void resizeImpl( const index_t dim0, const index_t stride = 1 ) noexcept;
+  inline void resizeImpl( const index_t dim0 ) noexcept;
 
   // Gets segment
   inline       VectorStorageType getVectorImpl( const IdxRange &range0 ) noexcept;

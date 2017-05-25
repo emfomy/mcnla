@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_102.hh
-/// @brief   The definition of dense matrix collection with dimension order [1 0 2].
+/// @brief   The definition of dense matrix collection with dimension order (dim1, dim0, dim2).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -9,9 +9,7 @@
 #define MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_102_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <tuple>
-#include <mcnla/core/matrix/collection/matrix_collection_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix.hpp>
+#include <mcnla/core/matrix/collection/dense_matrix_collection.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -24,115 +22,109 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar> class DenseMatrixCollection102;
+struct DenseMatrixCollection102Tag {};
+template <class _Core, typename _Val>
+using DenseMatrixCollection102Base = DenseMatrixCollection<DenseMatrixCollection102Tag, _Core, _Val, Trans::TRANS>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The traits of dense matrix collection with dimension order [1 0 2].
-///
-template <typename _Scalar>
-struct Traits<matrix::DenseMatrixCollection102<_Scalar>> {
-
-  using ScalarType  = _Scalar;
-  using RealType    = matrix::DenseMatrixCollection102<RealScalarT<_Scalar>>;
-  using ComplexType = matrix::DenseMatrixCollection102<ComplexScalarT<_Scalar>>;
-  using SetType     = matrix::DenseMatrixCollection102<_Scalar>;
-  using MatrixType  = matrix::DenseMatrixRowMajor<_Scalar>;
-
-};
-
-}  // namespace traits
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
+/// @ingroup  matrix_collection_module
+/// @see  DenseMatrixCollection102Base
+template <typename _Val>
+using DenseMatrixCollection102 = DenseMatrixCollection102Base<CpuTag, _Val>;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
-/// The dense matrix collection with dimension order [1 0 2].
+/// The dense matrix collection with dimension order (dim1, dim0, dim2).
 ///
-/// @tparam  _Scalar  The scalar type.
+/// @tparam  _Core  The core type.
+/// @tparam  _Val   The value type.
 ///
-template <typename _Scalar>
-class DenseMatrixCollection102
-  : public MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>> {
+template <class _Core, typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class DenseMatrixCollection<DenseMatrixCollection102Tag, _Core, _Val, Trans::TRANS>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseMatrixCollection102Base
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public MatrixCollectionWrapper<DenseMatrixCollection102Base<_Core, _Val>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollection102Base<_Core, _Val>>;
 
  public:
 
-  using ScalarType = _Scalar;
-  using SetType    = DenseMatrixCollection102<_Scalar>;
-  using MatrixType = DenseMatrixRowMajor<_Scalar>;
+  using ValType        = _Val;
+  using CollectionType = DenseMatrixCollection102Base<_Core, _Val>;
+  using MatrixType     = GeMatS<_Core, DenseTag, _Val, Trans::TRANS>;
 
  private:
 
-  using BaseType = MatrixCollectionWrapper<DenseMatrixCollection102<_Scalar>>;
+  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollection102Base<_Core, _Val>>;
+  using SizesType = std::tuple<index_t, index_t, index_t>;
 
  protected:
 
   /// The base data.
   MatrixType data_;
 
-  /// The number of columns in each matrix.
+  /// The number of rows in each matrix.
   index_t nrow_;
+
+  /// The maximum number of the rows.
+  index_t mrow_;
 
  public:
 
   // Constructors
-  inline DenseMatrixCollection102() noexcept;
-  inline DenseMatrixCollection102( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline DenseMatrixCollection102( const std::tuple<index_t, index_t, index_t> sizes ) noexcept;
-  inline DenseMatrixCollection102( const index_t ncol, const MatrixType &data ) noexcept;
-  inline DenseMatrixCollection102( const DenseMatrixCollection102 &other ) noexcept;
-  inline DenseMatrixCollection102( DenseMatrixCollection102 &&other ) noexcept;
+  inline DenseMatrixCollection() noexcept;
+  inline DenseMatrixCollection( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline DenseMatrixCollection( const SizesType sizes ) noexcept;
+  inline DenseMatrixCollection( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mrow ) noexcept;
+  inline DenseMatrixCollection( const SizesType sizes, const index_t mrow ) noexcept;
+  inline DenseMatrixCollection( const index_t nrow, const MatrixType &data ) noexcept;
+  inline DenseMatrixCollection( const index_t nrow, const index_t mrow, const MatrixType &data ) noexcept;
+  inline DenseMatrixCollection( const DenseMatrixCollection &other ) noexcept;
 
   // Operators
-  inline DenseMatrixCollection102& operator=( const DenseMatrixCollection102 &other ) noexcept;
-  inline DenseMatrixCollection102& operator=( DenseMatrixCollection102 &&other ) noexcept;
+  inline DenseMatrixCollection& operator=( const DenseMatrixCollection &other ) noexcept;
+
+  // Copy
+  inline DenseMatrixCollection copy() const noexcept;
 
   // Gets information
   inline bool isShrunk() const noexcept;
+  inline index_t mrow() const noexcept;
 
   // Gets data
   inline       MatrixType& data() noexcept;
   inline const MatrixType& data() const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
 
   // Gets collection
   using BaseType::operator();
-  inline       SetType operator()( const IdxRange &idxrange ) noexcept;
-  inline const SetType operator()( const IdxRange &idxrange ) const noexcept;
-  inline       SetType operator()( const char*, const char*, const IdxRange &idxrange ) noexcept;
-  inline const SetType operator()( const char*, const char*, const IdxRange &idxrange ) const noexcept;
-  inline       SetType operator()( const char*, const IdxRange &colrange, const char* ) noexcept;
-  inline const SetType operator()( const char*, const IdxRange &colrange, const char* ) const noexcept;
+  inline       CollectionType operator()( const IdxRange &idxrange ) noexcept;
+  inline const CollectionType operator()( const IdxRange &idxrange ) const noexcept;
+  inline       CollectionType operator()( const FullRange, const FullRange, const IdxRange &idxrange ) noexcept;
+  inline const CollectionType operator()( const FullRange, const FullRange, const IdxRange &idxrange ) const noexcept;
+  inline       CollectionType operator()( const FullRange, const IdxRange &colrange, const FullRange ) noexcept;
+  inline const CollectionType operator()( const FullRange, const IdxRange &colrange, const FullRange ) const noexcept;
 
   // Gets matrix
-  inline       MatrixType unfold() noexcept;
-  inline const MatrixType unfold() const noexcept;
+  inline       MatrixType& unfold() noexcept;
+  inline const MatrixType& unfold() const noexcept;
 
  protected:
 
   // Gets information
+  inline bool    isEmptyImpl() const noexcept;
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
   inline index_t nmatImpl() const noexcept;
 
   // Gets matrix
-  inline       MatrixType getMatrixImpl( const index_t idx ) noexcept;
-  inline const MatrixType getMatrixImpl( const index_t idx ) const noexcept;
+  inline       MatrixType getImpl( const index_t idx ) noexcept;
+  inline const MatrixType getImpl( const index_t idx ) const noexcept;
 
 };
 

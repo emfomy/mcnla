@@ -10,7 +10,6 @@
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
-#include <mcnla/core/random.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,71 +21,71 @@ namespace mcnla {
 //
 namespace isvd {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
-/// The Gaussian projection sketcher tag.
-///
-/// @tparam  _exponent  exponent of the power method.
-///
-template <index_t _exponent = 0>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 struct GaussianProjectionSketcherTag {};
+template <typename _Val> using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher.
 ///
-/// @tparam  _Scalar    The scalar type.
-/// @tparam  _exponent  exponent of the power method.
+/// @tparam  _Val  The value type.
 ///
-template <typename _Scalar, index_t _exponent>
-class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
-  : public SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>> {
+template <typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class Sketcher<GaussianProjectionSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class GaussianProjectionSketcher
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public StageWrapper<GaussianProjectionSketcher<_Val>> {
 
-  friend SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>>;
+  friend StageWrapper<GaussianProjectionSketcher<_Val>>;
 
  private:
 
-  using BaseType = SketcherWrapper<Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>>;
+  using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>>;
 
  public:
 
-  using ScalarType = _Scalar;
-
-  using ParametersType = Parameters<ScalarType>;
+//  using _Val = _Val;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_= "Gaussian Projection Sketcher";
+  static constexpr const char* name_ = "Gaussian Projection Sketcher";
 
-  /// The starting time
-  double moment0_;
+  /// The name of each part of the stage.
+  static constexpr const char* names_ = "random generating / projection";
 
-  /// The ending time of random generating
-  double moment1_;
+  /// The random seed.
+  index_t seed_;
 
-  /// The ending time of random sketching
-  double moment2_;
+  /// The exponent of power method.
+  index_t exponent_;
 
   /// The matrix Omega.
-  DenseMatrixRowMajor<ScalarType> matrix_omegas_;
-
-  /// The random engine
-  random::Engine<ScalarType> random_engine_;
+  DenseMatrixRowMajor<_Val> matrix_omegas_;
 
   using BaseType::parameters_;
-  using BaseType::mpi_comm_;
-  using BaseType::mpi_root_;
+  using BaseType::initialized_;
+  using BaseType::computed_;
+  using BaseType::moments_;
+  using BaseType::comm_times_;
 
  public:
 
   // Constructor
-  inline Sketcher( const ParametersType &parameters,
-                   const MPI_Comm mpi_comm, const mpi_int_t mpi_root, const index_t seed ) noexcept;
+  inline Sketcher( const Parameters<_Val> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
 
-  // Gets time
-  inline double time1() const noexcept;
-  inline double time2() const noexcept;
+  // Gets parameters
+  inline index_t seed() const noexcept;
+  inline index_t exponent() const noexcept;
+
+  // Sets parameters
+  inline Sketcher& setSeed( const index_t seed ) noexcept;
+  inline Sketcher& setExponent( const index_t exponent ) noexcept;
+
 
  protected:
 
@@ -95,22 +94,12 @@ class Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>
 
   // Random sketches
   template <class _Matrix>
-  void sketchImpl( const _Matrix &matrix_a, DenseMatrixCollection120<ScalarType> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection201<_Val> &collection_q ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
-  // Gets time
-  inline double timeImpl() const noexcept;
-
-  // Sets seed
-  inline void setSeedImpl( const index_t seed ) noexcept;
-
 };
-
-/// @ingroup  isvd_sketcher_module
-template <typename _Scalar, index_t _exponent = 0>
-using GaussianProjectionSketcher = Sketcher<_Scalar, GaussianProjectionSketcherTag<_exponent>>;
 
 }  // namespace isvd
 

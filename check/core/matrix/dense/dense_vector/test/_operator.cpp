@@ -9,7 +9,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     SCOPED_TRACE("Assignment Predo");
     VectorType vec1, vec2;
 
-    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.len(),    0);
     EXPECT_EQ(vec1.nelem(),  0);
     EXPECT_EQ(vec1.stride(), 1);
 
@@ -18,7 +18,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec1.capacity(), 0);
     EXPECT_EQ(vec1.offset(),   0);
 
-    EXPECT_EQ(vec2.length(), 0);
+    EXPECT_EQ(vec2.len(),    0);
     EXPECT_EQ(vec2.nelem(),  0);
     EXPECT_EQ(vec2.stride(), 1);
 
@@ -30,7 +30,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     SCOPED_TRACE("Copy Assignment");
     vec1 = vec;
 
-    EXPECT_EQ(vec1.length(), vec.length());
+    EXPECT_EQ(vec1.len(),    vec.len());
     EXPECT_EQ(vec1.nelem(),  vec.nelem());
     EXPECT_EQ(vec1.stride(), vec.stride());
 
@@ -40,31 +40,6 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec1.offset(),   vec.offset());
 
     EXPECT_EQ(vec1.valPtr(), vec.valPtr());
-
-
-    SCOPED_TRACE("Move Assignment");
-    vec2 = std::move(vec1);
-
-    EXPECT_EQ(vec1.length(), 0);
-    EXPECT_EQ(vec1.nelem(),  0);
-    EXPECT_EQ(vec1.stride(), 1);
-
-    EXPECT_TRUE(vec1.isShrunk());
-
-    EXPECT_EQ(vec1.capacity(), 0);
-    EXPECT_EQ(vec1.offset(),   0);
-
-
-    EXPECT_EQ(vec2.length(), vec.length());
-    EXPECT_EQ(vec2.nelem(),  vec.nelem());
-    EXPECT_EQ(vec2.stride(), vec.stride());
-
-    EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());
-
-    EXPECT_EQ(vec2.capacity(), vec.capacity());
-    EXPECT_EQ(vec2.offset(),   vec.offset());
-
-    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }
 
@@ -79,7 +54,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     SCOPED_TRACE("Assignment Predo");
     VectorType vec1, vec2;
 
-    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.len(),    0);
     EXPECT_EQ(vec1.nelem(),  0);
     EXPECT_EQ(vec1.stride(), 1);
 
@@ -88,7 +63,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec1.capacity(), 0);
     EXPECT_EQ(vec1.offset(),   0);
 
-    EXPECT_EQ(vec2.length(), 0);
+    EXPECT_EQ(vec2.len(),    0);
     EXPECT_EQ(vec2.nelem(),  0);
     EXPECT_EQ(vec2.stride(), 1);
 
@@ -100,7 +75,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     SCOPED_TRACE("Copy Assignment");
     vec1 = vec;
 
-    EXPECT_EQ(vec1.length(), vec.length());
+    EXPECT_EQ(vec1.len(),    vec.len());
     EXPECT_EQ(vec1.nelem(),  vec.nelem());
     EXPECT_EQ(vec1.stride(), vec.stride());
 
@@ -110,30 +85,5 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec1.offset(),   vec.offset());
 
     EXPECT_EQ(vec1.valPtr(), vec.valPtr());
-
-
-    SCOPED_TRACE("Move Assignment");
-    vec2 = std::move(vec1);
-
-    EXPECT_EQ(vec1.length(), 0);
-    EXPECT_EQ(vec1.nelem(),  0);
-    EXPECT_EQ(vec1.stride(), 1);
-
-    EXPECT_TRUE(vec1.isShrunk());
-
-    EXPECT_EQ(vec1.capacity(), 0);
-    EXPECT_EQ(vec1.offset(),   0);
-
-
-    EXPECT_EQ(vec2.length(), vec.length());
-    EXPECT_EQ(vec2.nelem(),  vec.nelem());
-    EXPECT_EQ(vec2.stride(), vec.stride());
-
-    EXPECT_EQ(vec2.isShrunk(), vec.isShrunk());
-
-    EXPECT_EQ(vec2.capacity(), vec.capacity());
-    EXPECT_EQ(vec2.offset(),   vec.offset());
-
-    EXPECT_EQ(vec2.valPtr(), vec.valPtr());
   }
 }

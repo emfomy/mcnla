@@ -27,11 +27,11 @@ namespace la {
 /// @brief  Finds the index of the element with minimum absolute value.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline index_t iamin(
-    const DenseVector<_Scalar> &x
+    const DenseVector<_Val> &x
 ) noexcept {
-  return detail::iamin(x.length(), x.valPtr(), x.stride());
+  return detail::iamin(x.len(), x.valPtr(), x.stride());
 }
 //@}
 
@@ -40,11 +40,11 @@ inline index_t iamin(
 /// @brief  Finds the element with minimum absolute value.
 ///
 //@{
-template <typename _Scalar>
-inline RealScalarT<_Scalar> amin(
-    const DenseVector<_Scalar> &x
+template <typename _Val>
+inline RealValT<_Val> amin(
+    const DenseVector<_Val> &x
 ) noexcept {
-  index_t idx = detail::iamin(x.length(), x.valPtr(), x.stride());
+  index_t idx = detail::iamin(x.len(), x.valPtr(), x.stride());
   return std::abs(x(idx));
 }
 //@}

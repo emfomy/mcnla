@@ -26,16 +26,16 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void recvImpl(
-          DenseStorage<_Scalar> &buffer,
+          DenseStorage<CpuTag, _Val> &buffer,
+    const mpi_int_t count,
     const mpi_int_t source,
     const mpi_int_t tag,
     const MPI_Comm comm,
-          MPI_Status &status,
-    const index_t count
+          MPI_Status &status
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Recv(buffer.valPtr(), count, datatype, source, tag, comm, &status);
 }
 
@@ -48,52 +48,56 @@ inline void recvImpl(
 /// @attention  @a buffer should be shrunk.
 ///
 //@{
-template <typename _Scalar>
-inline void recv(
-          DenseVector<_Scalar> &buffer,
+template <typename _Val>
+inline MPI_Status recv(
+          DenseVector<_Val> &buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
+  MPI_Status status;
+  detail::recvImpl(buffer, buffer.nelem(), source, tag, comm, status);
+  return status;
 }
 
-template <typename _Scalar, Trans _trans>
-inline void recv(
-          DenseMatrix<_Scalar, _trans> &buffer,
+template <typename _Val, Trans _trans>
+inline MPI_Status recv(
+          DenseMatrix<_Val, _trans> &buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(buffer.isShrunk());
-  detail::recvImpl(buffer, source, tag, comm, status, buffer.nelem());
+  MPI_Status status;
+  detail::recvImpl(buffer, buffer.nelem(), source, tag, comm, status);
+  return status;
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
-inline void recv(
-          DenseVector<_Scalar> &&buffer,
+template <typename _Val>
+inline MPI_Status recv(
+          DenseVector<_Val> &&buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
+  MPI_Status status;
   recv(buffer, source, tag, comm, status);
+  return status;
 }
 
-template <typename _Scalar, Trans _trans>
-inline void recv(
-          DenseMatrix<_Scalar, _trans> &&buffer,
+template <typename _Val, Trans _trans>
+inline MPI_Status recv(
+          DenseMatrix<_Val, _trans> &&buffer,
     const mpi_int_t source,
     const mpi_int_t tag,
-    const MPI_Comm comm,
-          MPI_Status &status
+    const MPI_Comm comm
 ) noexcept {
+  MPI_Status status;
   recv(buffer, source, tag, comm, status);
+  return status;
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

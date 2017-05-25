@@ -23,26 +23,23 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <typename __Scalar, Trans __trans, class __Matrix>
-std::ostream& operator<< (
+template <typename ..._Args>
+std::ostream& operator<<(
     std::ostream &os,
-    const DenseMatrixIteratorBase<__Scalar, __trans, __Matrix> &iterator
-) {
-  const index_t width_r = log10(iterator.container_->nrow())+1;
-  const index_t width_c = log10(iterator.container_->ncol())+1;
-  const index_t width   = std::max(width_r, width_c);
-  return os << "(" << std::setw(width) << iterator.rowidx() << ", "
-                   << std::setw(width) << iterator.colidx() << ")  "
-                   << std::setw(ios_width) << iterator.val();
+    const DenseMatrixIteratorBase<_Args...> &it
+) noexcept {
+  return os << "(" << std::setw(kOsIdxWidth) << it.rowidx() << ", "
+                   << std::setw(kOsIdxWidth) << it.colidx() << ")  "
+                   << std::setw(kOsValWidth) << it.val();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the value.
 ///
-/// @attention  Never call this when the iterator is at the end.
+/// @attention  Never call this method when the iterator is at the end.
 ///
-template <typename _Scalar, Trans _trans, class _Matrix>
-_Scalar& DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::val() const noexcept {
+template <typename _Val, Trans _trans, class _Matrix>
+_Val& DenseMatrixIteratorBase<_Val, _trans, _Matrix>::val() const noexcept {
   mcnla_assert_gelt(itidx_, 0, container_->nelem());
   return container_->valPtr()[pos()];
 }
@@ -50,27 +47,63 @@ _Scalar& DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::val() const noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the row index.
 ///
-template <typename _Scalar, Trans _trans, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::rowidx() const noexcept {
-  return !isTrans(_trans) ? itidx_ % container_->dim0() : itidx_ / container_->dim0();
+template <typename _Val, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::rowidx() const noexcept {
+  return !isTrans(_trans) ? idx0() : idx1();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the column index.
 ///
-template <typename _Scalar, Trans _trans, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::colidx() const noexcept {
-  return !isTrans(_trans) ? itidx_ / container_->dim0() : itidx_ % container_->dim0();
+template <typename _Val, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::colidx() const noexcept {
+  return !isTrans(_trans) ? idx1() : idx0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the first dimension index.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::idx0() const noexcept {
+  return itidx_ % container_->dim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the second dimension index.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::idx1() const noexcept {
+  return itidx_ / container_->dim0();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the internal position.
 ///
-/// @attention  Never call this when the iterator is at the end.
+/// @attention  Never call this method when the iterator is at the end.
 ///
-template <typename _Scalar, Trans _trans, class _Matrix>
-index_t DenseMatrixIteratorBase<_Scalar, _trans, _Matrix>::pos() const noexcept {
+template <typename _Val, Trans _trans, class _Matrix>
+index_t DenseMatrixIteratorBase<_Val, _trans, _Matrix>::pos() const noexcept {
   return container_->pos(rowidx(), colidx());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element reference.
+///
+/// @attention  Never call this method when the iterator is at the end.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+_Val& DenseMatrixIteratorBase<_Val, _trans, _Matrix>::elemRef() const noexcept {
+  return val();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the element pointer.
+///
+/// @attention  Never call this method when the iterator is at the end.
+///
+template <typename _Val, Trans _trans, class _Matrix>
+_Val* DenseMatrixIteratorBase<_Val, _trans, _Matrix>::elemPtr() const noexcept {
+  return &(val());
 }
 
 }  // namespace matrix

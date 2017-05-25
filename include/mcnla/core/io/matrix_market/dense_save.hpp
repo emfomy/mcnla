@@ -26,11 +26,13 @@ namespace io {
 /// @ingroup  io_module
 /// Save a dense vector into a Matrix Market file.
 ///
+/// @note  The file will be stored in column-major.
+///
 /// @todo  Write banner
 ///
-template <typename _Scalar>
+template <typename _Val>
 void saveMatrixMarket(
-    const matrix::DenseVector<_Scalar> &vector,
+    const matrix::DenseVector<_Val> &vector,
     const char *file
 ) noexcept {
   // Open file
@@ -44,11 +46,11 @@ void saveMatrixMarket(
   fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
-  fout << vector.dim0() << " 1" << std::endl;
+  fout << vector.len() << " 1" << std::endl;
 
   // Write values
-  for ( auto value : vector ) {
-    fout << value << std::endl;
+  for ( index_t i = 0; i < vector.len(); ++i ) {
+    fout << vector(i) << std::endl;
   }
 
   // Close file
@@ -59,11 +61,13 @@ void saveMatrixMarket(
 /// @ingroup  io_module
 /// Save a dense matrix into a Matrix Market file.
 ///
+/// @note  The file will be stored in column-major.
+///
 /// @todo  Write banner
 ///
-template <typename _Scalar, Trans _trans>
+template <typename _Val, Trans _trans>
 void saveMatrixMarket(
-    const matrix::DenseMatrix<_Scalar, _trans> &matrix,
+    const matrix::DenseMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
@@ -77,11 +81,13 @@ void saveMatrixMarket(
   fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
-  fout << matrix.dim0() << " " << matrix.dim1() << std::endl;
+  fout << matrix.nrow() << " " << matrix.ncol() << std::endl;
 
   // Write values
-  for ( auto value : matrix ) {
-    fout << value << std::endl;
+  for ( index_t j = 0; j < matrix.ncol(); ++j ) {
+    for ( index_t i = 0; i < matrix.nrow(); ++i ) {
+      fout << matrix(i, j) << std::endl;
+    }
   }
 
   // Close file
@@ -92,18 +98,15 @@ void saveMatrixMarket(
 /// @ingroup  io_module
 /// Save a dense vector set into a Matrix Market file.
 ///
+/// @note  The file will be stored in column-major.
+///
 /// @todo  Write banner
 ///
-template <class _Derived>
+template <class _Tag, typename _Val>
 void saveMatrixMarket(
-    const VectorCollectionWrapper<_Derived> &set,
+    const DenseVectorCollection<_Tag, CpuTag, _Val> &collection,
     const char *file
 ) noexcept {
-  using VectorType = VectorT<_Derived>;
-  using ScalarType = ScalarT<VectorType>;
-
-  static_assert(std::is_base_of<DenseVector<ScalarType>, VectorType>::value, "'_Derived' is not a dense vector!");
-
   // Open file
   std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
@@ -115,13 +118,13 @@ void saveMatrixMarket(
   fout << "%%MatrixMarket matrix array real general" << std::endl;
 
   // Write size
-  fout << set.dim0() << " " << set.nvec() << std::endl;
+  fout << collection.len() << " " << collection.nvec() << std::endl;
 
   // Write values
-  for ( auto i = 0; i < set.nvec(); ++i ) {
-    auto vector = set(i);
-    for ( auto value : vector ) {
-      fout << value << std::endl;
+  for ( index_t j = 0; j < collection.nvec(); ++j ) {
+    auto vector = collection(j);
+    for ( index_t i = 0; i < vector.len(); ++i ) {
+      fout << vector(i) << std::endl;
     }
   }
 
@@ -133,19 +136,15 @@ void saveMatrixMarket(
 /// @ingroup  io_module
 /// Save a dense vector set into a Matrix Market file.
 ///
+/// @note  The file will be stored in column-major.
+///
 /// @todo  Write banner
 ///
-template <class _Derived>
+template <class _Tag, typename _Val, Trans _trans>
 void saveMatrixMarket(
-    const MatrixCollectionWrapper<_Derived> &set,
+    const DenseMatrixCollection<_Tag, CpuTag, _Val, _trans> &collection,
     const char *file
 ) noexcept {
-  using MatrixType = MatrixT<_Derived>;
-  using ScalarType = ScalarT<MatrixType>;
-  constexpr Trans trans = MatrixType::trans;
-
-  static_assert(std::is_base_of<DenseMatrix<ScalarType, trans>, MatrixType>::value, "'_Derived' is not a dense matrix!");
-
   // Open file
   std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
@@ -154,16 +153,18 @@ void saveMatrixMarket(
   fout << std::scientific << std::setprecision(16);
 
   // Write banner
-  fout << "%%MatrixMarket cube array real general" << std::endl;
+  fout << "%%MatrixMarket 3D array real general" << std::endl;
 
   // Write size
-  fout << set.dim0() << " " << set.dim1() << " " << set.nmat() << std::endl;
+  fout << collection.nrow() << " " << collection.ncol() << " " << collection.nmat() << std::endl;
 
   // Write values
-  for ( auto i = 0; i < set.nmat(); ++i ) {
-    auto matrix = set(i);
-    for ( auto value : matrix ) {
-      fout << value;
+  for ( index_t k = 0; k < collection.nmat(); ++k ) {
+    auto matrix = collection(k);
+    for ( index_t j = 0; j < matrix.ncol(); ++j ) {
+      for ( index_t i = 0; i < matrix.nrow(); ++i ) {
+        fout << matrix(i, j) << std::endl;
+      }
     }
   }
 
@@ -171,7 +172,7 @@ void saveMatrixMarket(
   fout.close();
 }
 
-}  // namespace matrix
+}  // namespace io
 
 }  // namespace mcnla
 

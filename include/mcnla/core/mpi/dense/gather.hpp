@@ -26,15 +26,15 @@ namespace mpi {
 //
 namespace detail {
 
-template <typename _Scalar>
+template <typename _Val>
 inline void gatherImpl(
-    const DenseStorage<_Scalar> &send,
-          DenseStorage<_Scalar> &recv,
+    const DenseStorage<CpuTag, _Val> &send,
+          DenseStorage<CpuTag, _Val> &recv,
+    const mpi_int_t count,
     const mpi_int_t root,
-    const MPI_Comm comm,
-    const index_t count
+    const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiScalarTraits<_Scalar>::datatype;
+  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Gather(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, root, comm);
 }
 
@@ -48,10 +48,10 @@ inline void gatherImpl(
 /// @attention  @a send and @a recv should be shrunk.
 ///
 //@{
-template <typename _Scalar>
+template <typename _Val>
 inline void gather(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
@@ -60,41 +60,41 @@ inline void gather(
   if ( isCommRoot(root, comm) ) {
     mcnla_assert_eq(send.dim0() * commSize(comm), recv.dim0());
   }
-  detail::gatherImpl(send, recv, root, comm, send.nelem());
+  detail::gatherImpl(send, recv, send.nelem(), root, comm);
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void gather(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   mcnla_assert_true(send.isShrunk());
   mcnla_assert_true(recv.isShrunk());
   if ( isCommRoot(root, comm) ) {
-    mcnla_assert_eq(send.dim0(),                     recv.dim0());
+    mcnla_assert_eq(send.dim0(),                  recv.dim0());
     mcnla_assert_eq(send.dim1() * commSize(comm), recv.dim1());
   }
-  detail::gatherImpl(send, recv, root, comm, send.nelem());
+  detail::gatherImpl(send, recv, send.nelem(), root, comm);
 }
 //@}
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar>
+template <typename _Val>
 inline void gather(
-    const DenseVector<_Scalar> &send,
-          DenseVector<_Scalar> &&recv,
+    const DenseVector<_Val> &send,
+          DenseVector<_Val> &&recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
   gather(send, recv, root, comm);
 }
 
-template <typename _Scalar, Trans _transs, Trans _transr>
+template <typename _Val, Trans _trans>
 inline void gather(
-    const DenseMatrix<_Scalar, _transs> &send,
-          DenseMatrix<_Scalar, _transr> &&recv,
+    const DenseMatrix<_Val, _trans> &send,
+          DenseMatrix<_Val, _trans> &&recv,
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {

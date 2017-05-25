@@ -11,7 +11,7 @@
 #include <mcnla/core/utility/def.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 #include <mcnla/core/utility/memory.hpp>
+#include <mcnla/core/utility/time.hpp>
 #include <mcnla/core/utility/traits.hpp>
-#include <mcnla/core/utility/function.hpp>
 
 #endif  // MCNLA_CORE_UTILITY_HPP_

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/sketcher/column_sampling_sketcher.hpp
-/// @brief   The column sampling sketcher.
+/// @brief   The Gaussian projection sketcher.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -9,8 +9,8 @@
 #define MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_
 
 #include <mcnla/isvd/sketcher/column_sampling_sketcher.hh>
-#include <ctime>
 #include <mcnla/core/la.hpp>
+#include <mcnla/core/random.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,109 +23,90 @@ namespace mcnla {
 namespace isvd {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::SketcherWrapper
+/// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Scalar>
-Sketcher<_Scalar, ColumnSamplingSketcherTag>::Sketcher(
-    const ParametersType &parameters,
-    const MPI_Comm mpi_comm,
-    const mpi_int_t mpi_root,
+template <typename _Val>
+ColumnSamplingSketcher<_Val>::Sketcher(
+    const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
-  : BaseType(parameters, mpi_comm, mpi_root),
-    random_engine_(seed) {}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::initialize
-///
-template <typename _Scalar>
-void Sketcher<_Scalar, ColumnSamplingSketcherTag>::initializeImpl() noexcept {
-
-  const auto num_sketch_each = parameters_.numSketchEach();
-  const auto dim_sketch      = parameters_.dimSketch();
-
-  moment0_ = 0;
-  moment1_ = 0;
-  moment2_ = 0;
-
-  vector_idxs_.reconstruct(dim_sketch * num_sketch_each);
+  : BaseType(parameters) {
+  setSeed(seed);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::sketch
- ///
-template <typename _Scalar> template <class _Matrix>
-void Sketcher<_Scalar, ColumnSamplingSketcherTag>::sketchImpl(
+/// @copydoc  mcnla::isvd::StageWrapper::initialize
+///
+template <typename _Val>
+void ColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
+
+  const auto dim_sketch_each = parameters_.dimSketchEach();
+
+  vector_idxs_.reconstruct(dim_sketch_each);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Sketches.
+///
+/// @param  matrix_a      The matrix A.
+/// @param  collection_q  The matrix collection Q.
+///
+template <typename _Val> template <class _Matrix>
+void ColumnSamplingSketcher<_Val>::runImpl(
     const _Matrix &matrix_a,
-          DenseMatrixCollection120<ScalarType> &collection_q
+          DenseMatrixCollection201<_Val> &collection_q
 ) noexcept {
 
-  mcnla_assert_true(parameters_.isInitialized());
-
+  const auto mpi_comm        = parameters_.mpi_comm;
+  const auto mpi_root        = parameters_.mpi_root;
   const auto nrow            = parameters_.nrow();
   const auto ncol            = parameters_.ncol();
-  const auto num_sketch_each = parameters_.numSketchEach();
   const auto dim_sketch      = parameters_.dimSketch();
+  const auto dim_sketch_each = parameters_.dimSketchEach();
+  const auto num_sketch_each = parameters_.numSketchEach();
 
-  mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
-  mcnla_assert_eq(collection_q.sizes(),    std::make_tuple(nrow, dim_sketch, num_sketch_each));
+  mcnla_assert_eq(matrix_a.sizes(),     std::make_tuple(nrow, ncol));
+  mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  moment0_ = MPI_Wtime();
+  random::Streams streams(seed_, mpi_root, mpi_comm);
+
+  this->tic(); double comm_time = 0;
+  // ====================================================================================================================== //
+  // Random generating
 
   // Random sample Idxs using uniform distribution
-  random_engine_.uniform(vector_idxs_, 0, ncol);
-  moment1_ = MPI_Wtime();
+  random::uniformBits(streams, vector_idxs_);
+
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Projection
 
   // Copy columns
-  for ( index_t i = 0; i < dim_sketch * num_sketch_each; ++i ) {
-    la::copy(matrix_a("", vector_idxs_(i)), collection_q.unfold()("", i));
+  for ( index_t i = 0; i < dim_sketch_each; ++i ) {
+    la::copy(matrix_a(""_, abs(vector_idxs_(i)) % ncol), collection_q.unfold()(""_, i));
   }
-  moment2_ = MPI_Wtime();
+
+  this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::outputName
+/// @brief  Gets the random seed.
 ///
-///
-template <typename _Scalar>
-std::ostream&Sketcher<_Scalar, ColumnSamplingSketcherTag>::outputNameImpl(
-    std::ostream &os
-) const noexcept {
-  return (os << name_);
+template <typename _Val>
+index_t ColumnSamplingSketcher<_Val>::seed() const noexcept {
+  return seed_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::time
+/// @brief  Sets the random seed.
 ///
-template <typename _Scalar>
-double Sketcher<_Scalar, ColumnSamplingSketcherTag>::timeImpl() const noexcept {
-  return moment2_-moment0_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::time
-///
-template <typename _Scalar>
-double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time1() const noexcept {
-  return moment1_-moment0_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::time
-///
-template <typename _Scalar>
-double Sketcher<_Scalar, ColumnSamplingSketcherTag>::time2() const noexcept {
-  return moment2_-moment1_;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::isvd::SketcherWrapper::setSeed
-///
-template <typename _Scalar>
-void Sketcher<_Scalar, ColumnSamplingSketcherTag>::setSeedImpl(
+template <typename _Val>
+ColumnSamplingSketcher<_Val>& ColumnSamplingSketcher<_Val>::setSeed(
     const index_t seed
 ) noexcept {
-  random_engine_.setSeed(seed);
+  seed_ = seed;
+  computed_ = false;
+  return *this;
 }
 
 }  // namespace isvd

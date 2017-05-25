@@ -8,13 +8,12 @@
 #ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
+#include <mcnla/core/matrix/dense/def.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
-#include <mcnla/core/matrix/base/invertible_wrapper.hpp>
-#include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
+#include <mcnla/core/matrix/dense/dense_symmetric_matrix_base.hpp>
+#include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,39 +21,26 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Scalar, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
 //
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense symmetric matrix traits.
+/// The dense symmetric matrix instantiation type traits.
 ///
-template <typename _Scalar, Trans _trans, Uplo _uplo>
-struct Traits<matrix::DenseSymmetricMatrix<_Scalar, _trans, _uplo>> {
+template <typename _Type>
+struct IsDenseSymmetricMatrix : std::false_type {};
 
-  static constexpr index_t ndim = 2;
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, Trans _trans, Uplo _uplo>
+struct IsDenseSymmetricMatrix<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-  using ScalarType  = _Scalar;
-
-  using RealType    = matrix::DenseSymmetricMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType = matrix::DenseSymmetricMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
-
-  using VectorType  = matrix::DenseVector<_Scalar>;
-  using MatrixType  = matrix::DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
-};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The dense symmetric matrix assert.
+///
+#define assertDenseSymmetricMatrix( Type ) \
+    static_assert(traits::IsDenseSymmetricMatrix<Type>::value, "'"#Type"' is not a dense symmetric matrix!")
 
 }  // namespace traits
 
@@ -67,100 +53,44 @@ namespace matrix {
 /// @ingroup  matrix_dense_module
 /// The dense symmetric matrix class.
 ///
-/// @tparam  _Scalar  The scalar type.
-/// @tparam  _trans   The transpose storage layout.
-/// @tparam  _uplo    The triangular storage layout.
+/// @tparam  _Val    The value type.
+/// @tparam  _trans  The transpose storage layout.
+/// @tparam  _uplo   The triangular storage layout.
 ///
-template <typename _Scalar, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+template <typename _Val, Trans _trans, Uplo _uplo>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class SyMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
+#else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrix
-  : public DenseMatrixStorage<_Scalar>,
-    public MatrixWrapper<DenseSymmetricMatrix<_Scalar, _trans, _uplo>>,
-    public InvertibleWrapper<DenseSymmetricMatrix<_Scalar, _trans, _uplo>> {
+  : public DenseSymmetricMatrixBase_<CpuTag, _Val, _trans, _uplo>,
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+    public MatrixOstreamWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
-  static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
-  static_assert(!isUnitDiag(_uplo), "Unit-diagonal symmetric matrix is not supported!");
-
-  friend MatrixWrapper<DenseSymmetricMatrix<_Scalar, _trans, _uplo>>;
-  friend InvertibleWrapper<DenseSymmetricMatrix<_Scalar, _trans, _uplo>>;
-
- public:
-
-  static constexpr index_t ndim = 2;
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
-
-  using ScalarType    = _Scalar;
-  using ValArrayType  = Array<_Scalar>;
-
-  using RealType      = DenseSymmetricMatrix<RealScalarT<_Scalar>, _trans, _uplo>;
-  using ComplexType   = DenseSymmetricMatrix<ComplexScalarT<_Scalar>, _trans, _uplo>;
-
-  using VectorType    = DenseVector<_Scalar>;
-  using MatrixType    = DenseSymmetricMatrix<_Scalar, _trans, _uplo>;
-
-  using TransposeType = DenseSymmetricMatrix<_Scalar, changeTrans(_trans), changeUplo(_uplo)>;
-
-  using GeneralType   = DenseMatrix<_Scalar, _trans>;
+  friend MatrixOstreamWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>;
 
  private:
 
-  using BaseType      = DenseMatrixStorage<_Scalar>;
+  using BaseType = DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>;
 
  public:
 
-  // Constructors
-  inline DenseSymmetricMatrix() noexcept;
-  inline DenseSymmetricMatrix( const index_t size ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseSymmetricMatrix( const index_t size, const index_t pitch,
-                               const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseSymmetricMatrix( const DenseSymmetricMatrix &other ) noexcept;
-  inline DenseSymmetricMatrix( DenseSymmetricMatrix &&other ) noexcept;
+  using BaseType::DenseSymmetricMatrixBase;
 
-  // Operators
-  inline DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other ) noexcept;
-  inline DenseSymmetricMatrix& operator=( DenseSymmetricMatrix &&other ) noexcept;
-
-  // Gets information
-  inline index_t size() const noexcept;
-  inline index_t nnz() const noexcept;
-
-  // Gets element
-  inline ScalarType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
-
-  // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t size ) noexcept;
-
-  // Transpose
-  inline       TransposeType& t() noexcept;
-  inline const TransposeType& t() const noexcept;
-
-  // Change view
-  inline       GeneralType& viewGeneral() noexcept;
-  inline const GeneralType& viewGeneral() const noexcept;
-
- protected:
-
-  // Gets information
-  inline index_t nrowImpl() const noexcept;
-  inline index_t ncolImpl() const noexcept;
-
-  // Gets base class
-  inline       BaseType& base() noexcept;
-  inline const BaseType& base() const noexcept;
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseSymmetricMatrixBase_::operator=
+  DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 
 /// @ingroup  matrix_dense_module
-template <typename _Scalar, Uplo _uplo = Uplo::UPPER>
-using DenseSymmetricMatrixColMajor = DenseSymmetricMatrix<_Scalar, Trans::NORMAL, _uplo>;
+template <typename _Val, Uplo _uplo = Uplo::UPPER>
+using DenseSymmetricMatrixColMajor = DenseSymmetricMatrix<_Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
-template <typename _Scalar, Uplo _uplo = Uplo::LOWER>
-using DenseSymmetricMatrixRowMajor = DenseSymmetricMatrix<_Scalar, Trans::TRANS, _uplo>;
+template <typename _Val, Uplo _uplo = Uplo::LOWER>
+using DenseSymmetricMatrixRowMajor = DenseSymmetricMatrix<_Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix
 
