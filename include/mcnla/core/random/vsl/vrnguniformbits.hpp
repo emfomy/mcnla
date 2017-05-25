@@ -31,11 +31,11 @@ namespace detail {
 ///
 //@{
 static inline index_t vRngUniformBits(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, int *r
-) noexcept { return viRngUniformBits32(method, stream, n, static_cast<unsigned int*>(static_cast<void*>(r))); }
+    const index_t method, VSLStreamStatePtr stream, const index_t n, int32_t *r
+) noexcept { return virnguniformbits32_(&method, &stream, &n, static_cast<unsigned int*>(static_cast<void*>(r))); }
 static inline index_t vRngUniformBits(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, long long* r
-) noexcept { return viRngUniformBits64(method, stream, n, static_cast<unsigned long long*>(static_cast<void*>(r))); }
+    const index_t method, VSLStreamStatePtr stream, const index_t n, int64_t *r
+) noexcept { return virnguniformbits64_(&method, &stream, &n, static_cast<unsigned MKL_INT64*>(static_cast<void*>(r))); }
 //@}
 
 }  // namespace detail

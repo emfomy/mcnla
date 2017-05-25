@@ -31,14 +31,14 @@ namespace detail {
 
 static inline void uniformBitsImpl(
     VSLStreamStatePtr stream,
-    DenseVector<int> &&vector
+    DenseVector<int32_t> &&vector
 ) noexcept {
   detail::vRngUniformBits(VSL_RNG_METHOD_UNIFORMBITS32_STD, stream, vector.len(), vector.valPtr());
 }
 
 static inline void uniformBitsImpl(
     VSLStreamStatePtr stream,
-    DenseVector<long long> &&vector
+    DenseVector<int64_t> &&vector
 ) noexcept {
   detail::vRngUniformBits(VSL_RNG_METHOD_UNIFORMBITS64_STD, stream, vector.len(), vector.valPtr());
 }

@@ -32,10 +32,10 @@ namespace detail {
 //@{
 static inline index_t vRngGaussian(
     const index_t method, VSLStreamStatePtr stream, const index_t n, float *r, const float a, const float sigma
-) noexcept { return vsRngGaussian(method, stream, n, r, a, sigma); }
+) noexcept { return vsrnggaussian_(&method, &stream, &n, r, &a, &sigma); }
 static inline index_t vRngGaussian(
     const index_t method, VSLStreamStatePtr stream, const index_t n, double *r, const double a, const double sigma
-) noexcept { return vdRngGaussian(method, stream, n, r, a, sigma); }
+) noexcept { return vdrnggaussian_(&method, &stream, &n, r, &a, &sigma); }
 //@}
 
 }  // namespace detail
