@@ -47,20 +47,21 @@ Use the following command to set options
 ```
 ccmake <path-to-source>
 ```
-* Set 'MCNLA_BUILD_DRIVER'  to build driver codes.
+
+* Set 'MCNLA_BLAS'          to select BLAS/LAPACK library.
 * Set 'MCNLA_BUILD_DEMO'    to build demo codes.
+* Set 'MCNLA_BUILD_DOC'     to build documentation.
+* Set 'MCNLA_BUILD_DRIVER'  to build driver codes.
 * Set 'MCNLA_BUILD_REPORT'  to build report codes.
 * Set 'MCNLA_BUILD_TEST'    to build test codes.
-* Set 'MCNLA_BUILD_DOC'     to build documentation.
-
+* Set 'MCNLA_INSTALL_DEMO'  to install demos.
 <!-- * Set `MCNLA_USE_GPU`       to enable GPU support. -->
-* Set 'MCNLA_USE_MKL'       to enable Intel MKL.
 * Set 'MCNLA_INT_SIZE'      to select system integer size.
-* Set 'MCNLA_BLAS'          to select BLAS/LAPACK library.
-* Set 'MCNLA_OMP'           to select OpenMP library. (Require Intel MKL)
+* Set 'MCNLA_OMP'           to select OpenMP library.             (Require 'MCNLA_BLAS = MKL')
 
-* Set 'MKL_ROOT'            for the root path of Intel MKL.
-* Set 'GTEST_ROOT'          for the root path of Google Test.
+* Set 'INTEL_ROOT'          for the root path of Intel libraries. (Require 'MCNLA_BLAS = MKL')
+* Set 'MKL_ROOT'            for the root path of Intel MKL.       (Require 'MCNLA_BLAS = MKL')
+* Set 'GTEST_ROOT'          for the root path of Google Test.     (Require 'MCNLA_BUILD_TEST')
 
 * Set 'MPI_PROCS'           to set the number of MPI processes used in demo codes.
 
@@ -109,8 +110,8 @@ ccmake <path-to-source>
 ### `std::bad_alloc` occurs. What should I do?
 
 * Possible issues:
-	- Not enough memory. You might request a vector/matrix which size exceed your memory size.
-	- Index overflow. Use 64-bit integer instead of 32-bit integer. For example, if you request a `1e5` x `1e5` matrix, there will be `1e10` elements, which is larger than the maximum number in 32-bit integer (about `2.1e9`). Using 64-bit integer may solve this problem.
+  - Not enough memory. You might request a vector/matrix which size exceed your memory size.
+  - Index overflow. Use 64-bit integer instead of 32-bit integer. For example, if you request a `1e5` x `1e5` matrix, there will be `1e10` elements, which is larger than the maximum number in 32-bit integer (about `2.1e9`). Using 64-bit integer may solve this problem.
 
 ## Reference
 * [Ting-Li Chen, Dawei D. Chang, Su-Yun Huang, Hung Chen, Chienyao Lin, Weichung Wang, “Integrating Multiple Random Sketches for Singular Value Decomposition”](https://arxiv.org/abs/1608.08285)

@@ -17,7 +17,7 @@ set_property(CACHE MCNLA_INT_SIZE PROPERTY STRINGS "32;64")
 set(MCNLA_BLAS "BLAS" CACHE STRING "Selected BLAS/LAPACK library.")
 set_property(CACHE MCNLA_BLAS PROPERTY STRINGS "BLAS;MKL")
 
-set(MCNLA_OMP "OFF" CACHE STRING "Selected OpenMP library. (Require Intel MKL)")
+set(MCNLA_OMP "OFF" CACHE STRING "Selected OpenMP library. (Require 'MCNLA_BLAS = MKL')")
 set_property(CACHE MCNLA_OMP PROPERTY STRINGS "OFF;GOMP;IOMP")
 
 # option(MCNLA_USE_GPU       "Enable GPU support."   "OFF")
