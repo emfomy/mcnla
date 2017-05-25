@@ -120,7 +120,7 @@ index_t Parameters<_Val>::ncolTotal() const noexcept {
 ///
 template<typename _Val>
 IdxRange Parameters<_Val>::rowrange() const noexcept {
-  auto range = IdxRange{mpi_rank, mpi_rank+1} * nrowEach();
+  auto range = I_{mpi_rank, mpi_rank+1} * nrowEach();
   if ( range.begin > nrow() ) { range.begin = nrow(); }
   if ( range.end > nrow() ) { range.end = nrow(); }
   return range;
@@ -131,7 +131,7 @@ IdxRange Parameters<_Val>::rowrange() const noexcept {
 ///
 template<typename _Val>
 IdxRange Parameters<_Val>::colrange() const noexcept {
-  auto range = IdxRange{mpi_rank, mpi_rank+1} * ncolEach();
+  auto range = I_{mpi_rank, mpi_rank+1} * ncolEach();
   if ( range.begin > ncol() ) { range.begin = ncol(); }
   if ( range.end > ncol() ) { range.end = ncol(); }
   return range;
