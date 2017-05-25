@@ -47,23 +47,22 @@ Use the following command to set options
 ```
 ccmake <path-to-source>
 ```
+* Set 'MCNLA_BUILD_DRIVER'  to build driver codes.
+* Set 'MCNLA_BUILD_DEMO'    to build demo codes.
+* Set 'MCNLA_BUILD_REPORT'  to build report codes.
+* Set 'MCNLA_BUILD_TEST'    to build test codes.
+* Set 'MCNLA_BUILD_DOC'     to build documentation.
 
-* Set `MCNLA_BUILD_DRIVER` to build driver codes.
-* Set `MCNLA_BUILD_DEMO`   to build demo codes.
-* Set `MCNLA_BUILD_REPORT` to build report codes.
-* Set `MCNLA_BUILD_TEST`   to build test codes.
-* Set `MCNLA_BUILD_DOC`    to build documentation.
+<!-- * Set `MCNLA_USE_GPU`       to enable GPU support. -->
+* Set 'MCNLA_USE_MKL'       to enable Intel MKL.
+* Set 'MCNLA_INT_SIZE'      to select system integer size.
+* Set 'MCNLA_BLAS'          to select BLAS/LAPACK library.
+* Set 'MCNLA_OMP'           to select OpenMP library. (Require Intel MKL)
 
-* Set `MCNLA_INSTALL_DEMO` to install demos.
+* Set 'MKL_ROOT'            for the root path of Intel MKL.
+* Set 'GTEST_ROOT'          for the root path of Google Test.
 
-* Set `MCNLA_USE_ILP64`    to change the system integer size. (`OFF`: 32-bit / `ON`: 64-bit)
-* Set `MCNLA_USE_MKL`      to enable Intel MKL.
-<!-- * Set `MCNLA_USE_GPU`      to enable GPU support. -->
-* Set `MCNLA_USE_OMP`      to enable multithread MKL. (Require `MCNLA_USE_MKL`)
-* Set `MCNLA_USE_IOMP`     to enable Intel OMP.       (Require `MCNLA_USE_OMP`)
-
-* Set `MKL_ROOT`   for the root path of Intel MKL. (Automatically set if environment variable `MKLROOT` is set.)
-* Set `GTEST_ROOT` for the root path of Google Test.
+* Set 'MPI_PROCS'           to set the number of MPI processes used in demo codes.
 
 ### Makefile
 
