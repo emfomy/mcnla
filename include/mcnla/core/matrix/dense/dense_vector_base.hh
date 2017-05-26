@@ -117,8 +117,8 @@ class DenseVectorBase_
   inline index_t toDim0( const SizesType sizes ) const noexcept;
   inline index_t toDim0( const index_t len ) const noexcept;
 
-  MCNLA_CRTP_BASE(BaseType);
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

@@ -120,8 +120,8 @@ class DenseTriangularMatrixBase_
   inline index_t mrowImpl() const noexcept;
   inline index_t mcolImpl() const noexcept;
 
-  MCNLA_CRTP_BASE(BaseType);
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

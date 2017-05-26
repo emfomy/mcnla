@@ -174,7 +174,7 @@ class CooMatrix
   inline       IdxArrayType& toIdx1(       IdxArrayType &rowidx,       IdxArrayType &colidx ) const noexcept;
   inline const IdxArrayType& toIdx1( const IdxArrayType &rowidx, const IdxArrayType &colidx ) const noexcept;
 
-  MCNLA_CRTP_BASE(BaseType);
+  MCNLA_CRTP_BASE(BaseType)
 
 };
 

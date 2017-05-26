@@ -85,7 +85,7 @@ class ArrayBase_
 
  protected:
 
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

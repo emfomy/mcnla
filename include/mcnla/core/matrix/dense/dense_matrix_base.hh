@@ -193,8 +193,8 @@ class DenseMatrixBase_
   inline const IdxRange colfullrange() const noexcept;
   inline const IdxRange rowfullrange() const noexcept;
 
-  MCNLA_CRTP_BASE(BaseType);
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

@@ -260,7 +260,7 @@ CooVectorStorage<_Core, _Val> CooMatrixStorage<_Core, _Val>::getVector0Impl(
   mcnla_assert_gelt(idx1, 0, dim1_);
   index_t pos, nnz;
   posImpl(idx1, pos, nnz);
-  return VectorStorageType(dim0_, nnz, val_, this->idx0(), pos);
+  return VectorStorageType(dim0_, nnz, this->val(), this->idx0(), pos);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,7 +273,7 @@ const CooVectorStorage<_Core, _Val> CooMatrixStorage<_Core, _Val>::getVector0Imp
   mcnla_assert_gelt(idx1, 0, dim1_);
   index_t pos, nnz;
   posImpl(idx1, pos, nnz);
-  return VectorStorageType(dim0_, nnz, val_, this->idx0(), pos);
+  return VectorStorageType(dim0_, nnz, this->val(), this->idx0(), pos);
 }
 
 }  // namespace matrix
