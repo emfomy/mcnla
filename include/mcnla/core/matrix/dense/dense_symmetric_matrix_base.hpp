@@ -87,7 +87,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-SyMatS<_Core, DenseTag, _Val, _trans, _uplo>& DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
+SyMatT<_Core, DenseTag, _Val, _trans, _uplo>& DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
     const DerivedType &other
 ) noexcept {
   BaseType::operator=(other);
@@ -98,7 +98,7 @@ SyMatS<_Core, DenseTag, _Val, _trans, _uplo>& DenseSymmetricMatrixBase<_Core, _V
 /// @brief  Copies the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-SyMatS<_Core, DenseTag, _Val, _trans, _uplo> DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
+SyMatT<_Core, DenseTag, _Val, _trans, _uplo> DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
   DenseSymmetricMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -160,7 +160,7 @@ void DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::resize(
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
+SyMatT<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
@@ -169,7 +169,7 @@ SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
 /// @copydoc  t
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
+const SyMatT<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
@@ -178,7 +178,7 @@ const SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
 /// @brief  Gets the full view of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-GeMatS<_Core, DenseTag, _Val, _trans>&
+GeMatT<_Core, DenseTag, _Val, _trans>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::full() noexcept {
   return static_cast<GeneralType&>(base());
 }
@@ -187,7 +187,7 @@ GeMatS<_Core, DenseTag, _Val, _trans>&
 /// @copydoc  full
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const GeMatS<_Core, DenseTag, _Val, _trans>&
+const GeMatT<_Core, DenseTag, _Val, _trans>&
     DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::full() const noexcept {
   return static_cast<const GeneralType&>(base());
 }

@@ -174,7 +174,7 @@ index_t DenseMatrixCollection012Base<_Core, _Val>::mcol() const noexcept {
 /// @brief  Gets the raw data.
 ///
 template <class _Core, typename _Val>
-GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::data() noexcept {
+GeMatT<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::data() noexcept {
   return data_;
 }
 
@@ -182,7 +182,7 @@ GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core
 /// @copydoc  data
 ///
 template <class _Core, typename _Val>
-const GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::data() const noexcept {
+const GeMatT<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::data() const noexcept {
   return data_;
 }
 
@@ -270,7 +270,7 @@ const DenseMatrixCollection012Base<_Core, _Val> DenseMatrixCollection012Base<_Co
 /// @brief  Unfolds the collection.
 ///
 template <class _Core, typename _Val>
-GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::unfold() noexcept {
+GeMatT<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::unfold() noexcept {
   return data_;
 }
 
@@ -278,7 +278,7 @@ GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core
 /// @copydoc  unfold
 ///
 template <class _Core, typename _Val>
-const GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::unfold() const noexcept {
+const GeMatT<_Core, DenseTag, _Val, Trans::NORMAL>& DenseMatrixCollection012Base<_Core, _Val>::unfold() const noexcept {
   return data_;
 }
 
@@ -318,7 +318,7 @@ index_t DenseMatrixCollection012Base<_Core, _Val>::nmatImpl() const noexcept {
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
 template <class _Core, typename _Val>
-GeMatS<_Core, DenseTag, _Val, Trans::NORMAL> DenseMatrixCollection012Base<_Core, _Val>::getImpl(
+GeMatT<_Core, DenseTag, _Val, Trans::NORMAL> DenseMatrixCollection012Base<_Core, _Val>::getImpl(
     const index_t idx
 ) noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
@@ -329,7 +329,7 @@ GeMatS<_Core, DenseTag, _Val, Trans::NORMAL> DenseMatrixCollection012Base<_Core,
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
 template <class _Core, typename _Val>
-const GeMatS<_Core, DenseTag, _Val, Trans::NORMAL> DenseMatrixCollection012Base<_Core, _Val>::getImpl(
+const GeMatT<_Core, DenseTag, _Val, Trans::NORMAL> DenseMatrixCollection012Base<_Core, _Val>::getImpl(
     const index_t idx
 ) const noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());

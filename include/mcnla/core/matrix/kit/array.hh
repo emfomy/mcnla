@@ -17,6 +17,15 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  The traits namespace.
+//
+namespace traits {
+
+MCNLA_ARR_TRAITS_DEF(CpuTag, matrix::Array)
+
+}  // namespace traits
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The matrix namespace.
 //
 namespace matrix {
@@ -28,13 +37,7 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class ArrS<CpuTag, _Val>
-  : public ArrayBase<CpuTag, _Val> {
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class Array
-  : public ArrayBase_<CpuTag, _Val> {
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class Array : public ArrayBase<CpuTag, _Val> {
 
  private:
 
@@ -50,8 +53,8 @@ class Array
   using BaseType::ArrayBase;
 
   // Constructors
-  inline ArrS() noexcept;
-  inline ArrS( const index_t size, const index_t offset = 0 ) noexcept;
+  inline Array() noexcept;
+  inline Array( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Copy
   inline Array<_Val> copy() const noexcept;

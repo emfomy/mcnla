@@ -26,20 +26,11 @@ template <class _Core, typename _Val> class DenseStorage;
 template <class _Core, typename _Val> class DenseVectorStorage;
 template <class _Core, typename _Val> class DenseMatrixStorage;
 
-template <typename _Val>
-using DenseVector = GeVecS<CpuTag, DenseTag, _Val>;
-
-template <typename _Val, Trans _trans = Trans::NORMAL>
-using DenseMatrix = GeMatS<CpuTag, DenseTag, _Val, _trans>;
-
-template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-using DenseSymmetricMatrix = SyMatS<CpuTag, DenseTag, _Val, _trans, _uplo>;
-
-template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
-using DenseTriangularMatrix = TrMatS<CpuTag, DenseTag, _Val, _trans, _uplo>;
-
-template <typename _Val>
-using DenseDiagonalMatrix = DiMatS<CpuTag, DenseTag, _Val>;
+template <typename _Val> class DenseVector;
+template <typename _Val, Trans _trans> class DenseMatrix;
+template <typename _Val, Trans _trans, Uplo _uplo> class DenseSymmetricMatrix;
+template <typename _Val, Trans _trans, Uplo _uplo> class DenseTriangularMatrix;
+template <typename _Val> class DenseDiagonalMatrix;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix

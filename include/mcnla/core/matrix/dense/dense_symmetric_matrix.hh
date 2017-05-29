@@ -59,7 +59,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class SyMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
+class SyMatT<CpuTag, DenseTag, _Val, _trans, _uplo>
   : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrix

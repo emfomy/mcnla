@@ -41,12 +41,12 @@ class DenseDiagonalMatrixBase
 class DenseDiagonalMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
-    public DenseMatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
-    public InvertibleWrapper<DiMatS<_Core, DenseTag, _Val>> {
+    public DenseMatrixWrapper<DiMatT<_Core, DenseTag, _Val>>,
+    public InvertibleWrapper<DiMatT<_Core, DenseTag, _Val>> {
 
  private:
 
-  using DerivedType = DiMatS<_Core, DenseTag, _Val>;
+  using DerivedType = DiMatT<_Core, DenseTag, _Val>;
 
   friend MatrixWrapper<DerivedType>;
   friend DenseMatrixWrapper<DerivedType>;
@@ -55,12 +55,12 @@ class DenseDiagonalMatrixBase_
  public:
 
   using ValType       = _Val;
-  using ValArrayType  = ArrS<_Core, _Val>;
+  using ValArrayType  = ArrT<_Core, _Val>;
 
-  using VectorType    = GeVecS<_Core, DenseTag, _Val>;
-  using MatrixType    = DiMatS<_Core, DenseTag, _Val>;
+  using VectorType    = GeVecT<_Core, DenseTag, _Val>;
+  using MatrixType    = DiMatT<_Core, DenseTag, _Val>;
 
-  using TransposeType = DiMatS<_Core, DenseTag, _Val>;
+  using TransposeType = DiMatT<_Core, DenseTag, _Val>;
 
  private:
 

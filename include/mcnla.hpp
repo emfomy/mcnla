@@ -10,7 +10,8 @@
 
 #include <mcnla/def.hpp>
 #include <mcnla/core.hpp>
-#include <mcnla/isvd.hpp>
+#pragma warning
+// #include <mcnla/isvd.hpp>
 
 // #ifdef MCNLA_USE_GPU
 //   #include <mcnla/core_gpu.hpp>

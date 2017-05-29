@@ -56,9 +56,7 @@ namespace matrix {
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <class _Tag, class _Core, typename _Val, Trans _trans>
-class DenseMatrixCollection : public MatrixCollectionWrapper<DenseMatrixCollection<_Tag, _Core, _Val, _trans>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized dense matrix collection!");
-};
+class DenseMatrixCollection : public MatrixCollectionWrapper<DenseMatrixCollection<_Tag, _Core, _Val, _trans>>;
 
 }  // namespace matrix
 

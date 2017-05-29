@@ -50,9 +50,7 @@ namespace isvd {
 /// @tparam  _Val  The value type.
 ///
 template <class _Tag, typename _Val>
-class Converter : public StageWrapper<Converter<_Tag, _Val>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD converter!");
-};
+class Converter : public StageWrapper<Converter<_Tag, _Val>>;
 
 }  // namespace isvd
 

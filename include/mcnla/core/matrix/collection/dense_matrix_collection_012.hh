@@ -53,7 +53,7 @@ class DenseMatrixCollection012Base
 
   using ValType        = _Val;
   using CollectionType = DenseMatrixCollection012Base<_Core, _Val>;
-  using MatrixType     = GeMatS<_Core, DenseTag, _Val, Trans::NORMAL>;
+  using MatrixType     = GeMatT<_Core, DenseTag, _Val, Trans::NORMAL>;
 
  private:
 

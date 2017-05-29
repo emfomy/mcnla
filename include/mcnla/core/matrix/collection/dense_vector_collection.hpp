@@ -54,9 +54,7 @@ namespace matrix {
 /// @tparam  _Val   The value type.
 ///
 template <class _Tag, class _Core, typename _Val>
-class DenseVectorCollection : public VectorCollectionWrapper<DenseVectorCollection<_Tag, _Core, _Val>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized dense vector collection!");
-};
+class DenseVectorCollection : public VectorCollectionWrapper<DenseVectorCollection<_Tag, _Core, _Val>>;
 
 }  // namespace matrix
 

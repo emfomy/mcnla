@@ -29,7 +29,6 @@ template <typename ..._Args>
 using FalseType = std::false_type;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct DerivedTraitsTag {};
 struct RealTraitsTag {};
 struct ComplexTraitsTag {};
 struct ValTraitsTag {};
@@ -44,10 +43,7 @@ struct MatrixTraitsTag {};
 /// @tparam  _Type  The type.
 ///
 template <typename _Type, class _tag = void>
-struct Traits {
-  static_assert(traits::FalseType<_Type>::value, "Error using non-specialized traits!");
-  using Type = void;
-};
+struct Traits;
 
 #define MCNLA_TRAITS_DEF( _tag, _Type, _value ) \
   struct Traits<_Type, _tag ## TraitsTag> { using Type = _value; };
@@ -83,10 +79,6 @@ struct ValTraits<std::complex<_Val>> {
 };
 
 }  // namespace traits
-
-/// @ingroup  utility_module
-template <typename _Derived>
-using DerivedT = typename traits::Traits<_Derived, traits::DerivedTraitsTag>::Type;
 
 /// @ingroup  utility_module
 template <typename _Derived>

@@ -16,6 +16,8 @@
 ///
 int main( int argc, char **argv ) {
 
+  mcnla::matrix::Array<int> arr;
+
 //   mcnla::init(argc, argv);
 
 //   const auto mpi_comm = MPI_COMM_WORLD;

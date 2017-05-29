@@ -50,9 +50,7 @@ namespace isvd {
 /// @tparam  _Val  The value type.
 ///
 template <class _Tag, typename _Val>
-class Integrator : public StageWrapper<Integrator<_Tag, _Val>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD integrator!");
-};
+class Integrator : public StageWrapper<Integrator<_Tag, _Val>>;
 
 }  // namespace isvd
 

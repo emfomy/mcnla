@@ -37,7 +37,7 @@ class DenseVectorStorage : public DenseStorage<_Core, _Val> {
  private:
 
   using ValType           = _Val;
-  using ValArrayType      = ArrS<_Core, _Val>;
+  using ValArrayType      = ArrT<_Core, _Val>;
   using DimsType          = std::tuple<index_t>;
 
   using VectorStorageType = DenseVectorStorage<_Core, _Val>;

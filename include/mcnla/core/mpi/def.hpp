@@ -82,10 +82,7 @@ namespace traits {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-struct MpiValTraits {
-  static_assert(traits::FalseType<_Val>::value, "Error using non-specialized MPI data type traits!");
-  static constexpr const MPI_Datatype &datatype = nullptr;
-};
+struct MpiValTraits;
 
 #define MCNLA_MPI_VAL_TRAITS_DEF( _Type, _value ) \
   template <> struct MpiValTraits<_Type> { static constexpr const MPI_Datatype &datatype = _value; };
@@ -99,6 +96,8 @@ MCNLA_MPI_VAL_TRAITS_DEF(float,                MPI_REAL4)
 MCNLA_MPI_VAL_TRAITS_DEF(double,               MPI_REAL8)
 MCNLA_MPI_VAL_TRAITS_DEF(std::complex<float>,  MPI_COMPLEX8)
 MCNLA_MPI_VAL_TRAITS_DEF(std::complex<double>, MPI_COMPLEX16)
+
+#undef MCNLA_MPI_VAL_TRAITS_DEF
 
 }  // namespace traits
 
