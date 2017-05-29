@@ -16,8 +16,6 @@
 ///
 int main( int argc, char **argv ) {
 
-  mcnla::matrix::CooMatrixColMajor<double> mat;
-
 //   mcnla::init(argc, argv);
 
 //   const auto mpi_comm = MPI_COMM_WORLD;

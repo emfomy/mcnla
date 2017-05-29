@@ -34,7 +34,7 @@ template <class _Tag, typename _Val> class Integrator;
 namespace traits {
 
 template <class _Tag, typename _Val>
-MCNLA_TRAITS_DEF(VAL, isvd::Integrator<_Tag MCNLA_COMMA _Val>, _Val)
+MCNLA_TRAITS_DEF(Val, isvd::Integrator<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 

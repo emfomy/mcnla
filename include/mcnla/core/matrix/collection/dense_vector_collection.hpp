@@ -34,10 +34,10 @@ template <class _Tag, class _Core, typename _Val> class DenseVectorCollection;
 namespace traits {
 
 template <class _Tag, class _Core, typename _Val>
-MCNLA_TRAITS_DEF(VAL, matrix::DenseVectorCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val>, _Val)
+MCNLA_TRAITS_DEF(Val, matrix::DenseVectorCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val>, _Val)
 
 template <class _Tag, class _Core, typename _Val>
-MCNLA_TRAITS_DEF(VECTOR, matrix::DenseVectorCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val>, matrix::DenseVector<_Val>)
+MCNLA_TRAITS_DEF(Vector, matrix::DenseVectorCollection<_Tag MCNLA_COMMA _Core MCNLA_COMMA _Val>, matrix::DenseVector<_Val>)
 
 }  // namespace traits
 

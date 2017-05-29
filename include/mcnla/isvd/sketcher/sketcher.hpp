@@ -34,7 +34,7 @@ template <class _Tag, typename _Val> class Sketcher;
 namespace traits {
 
 template <class _Tag, typename _Val>
-MCNLA_TRAITS_DEF(VAL, isvd::Sketcher<_Tag MCNLA_COMMA _Val>, _Val)
+MCNLA_TRAITS_DEF(Val, isvd::Sketcher<_Tag MCNLA_COMMA _Val>, _Val)
 
 }  // namespace traits
 

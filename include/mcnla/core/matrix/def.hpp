@@ -131,67 +131,67 @@ namespace traits {
 // Real traits
 
 template <class _Core, class _Storage, typename _Val>
-MCNLA_TRAITS_DEF(REAL, MCNLA_MATRIX_GEVEC(_Val), MCNLA_MATRIX_GEVEC(RealValT<_Val>))
+MCNLA_TRAITS_DEF(Real, MCNLA_MATRIX_GEVEC(_Val), MCNLA_MATRIX_GEVEC(RealValT<_Val>))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans>
-MCNLA_TRAITS_DEF(REAL, MCNLA_MATRIX_GEMAT(_Val, _trans), MCNLA_MATRIX_GEMAT(RealValT<_Val>, _trans))
+MCNLA_TRAITS_DEF(Real, MCNLA_MATRIX_GEMAT(_Val, _trans), MCNLA_MATRIX_GEMAT(RealValT<_Val>, _trans))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(REAL, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), MCNLA_MATRIX_SYMAT(RealValT<_Val>, _trans, _uplo))
+MCNLA_TRAITS_DEF(Real, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), MCNLA_MATRIX_SYMAT(RealValT<_Val>, _trans, _uplo))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(REAL, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), MCNLA_MATRIX_TRMAT(RealValT<_Val>, _trans, _uplo))
+MCNLA_TRAITS_DEF(Real, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), MCNLA_MATRIX_TRMAT(RealValT<_Val>, _trans, _uplo))
 
 template <class _Core, class _Storage, typename _Val>
-MCNLA_TRAITS_DEF(REAL, MCNLA_MATRIX_DIMAT(_Val), MCNLA_MATRIX_DIMAT(RealValT<_Val>))
+MCNLA_TRAITS_DEF(Real, MCNLA_MATRIX_DIMAT(_Val), MCNLA_MATRIX_DIMAT(RealValT<_Val>))
 
 // Complex traits
 
 template <class _Core, class _Storage, typename _Val>
-MCNLA_TRAITS_DEF(COMPLEX, MCNLA_MATRIX_GEVEC(_Val), MCNLA_MATRIX_GEVEC(ComplexValT<_Val>))
+MCNLA_TRAITS_DEF(Complex, MCNLA_MATRIX_GEVEC(_Val), MCNLA_MATRIX_GEVEC(ComplexValT<_Val>))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans>
-MCNLA_TRAITS_DEF(COMPLEX, MCNLA_MATRIX_GEMAT(_Val, _trans), MCNLA_MATRIX_GEMAT(ComplexValT<_Val>, _trans))
+MCNLA_TRAITS_DEF(Complex, MCNLA_MATRIX_GEMAT(_Val, _trans), MCNLA_MATRIX_GEMAT(ComplexValT<_Val>, _trans))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(COMPLEX, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), MCNLA_MATRIX_SYMAT(ComplexValT<_Val>, _trans, _uplo))
+MCNLA_TRAITS_DEF(Complex, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), MCNLA_MATRIX_SYMAT(ComplexValT<_Val>, _trans, _uplo))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(COMPLEX, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), MCNLA_MATRIX_TRMAT(ComplexValT<_Val>, _trans, _uplo))
+MCNLA_TRAITS_DEF(Complex, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), MCNLA_MATRIX_TRMAT(ComplexValT<_Val>, _trans, _uplo))
 
 template <class _Core, class _Storage, typename _Val>
-MCNLA_TRAITS_DEF(COMPLEX, MCNLA_MATRIX_DIMAT(_Val), MCNLA_MATRIX_DIMAT(ComplexValT<_Val>))
+MCNLA_TRAITS_DEF(Complex, MCNLA_MATRIX_DIMAT(_Val), MCNLA_MATRIX_DIMAT(ComplexValT<_Val>))
 
 // Value traits
 
 template <class _Core, class _Storage, typename _Val>
-MCNLA_TRAITS_DEF(VAL, MCNLA_MATRIX_GEVEC(_Val), _Val)
+MCNLA_TRAITS_DEF(Val, MCNLA_MATRIX_GEVEC(_Val), _Val)
 
 template <class _Core, class _Storage, typename _Val, Trans _trans>
-MCNLA_TRAITS_DEF(VAL, MCNLA_MATRIX_GEMAT(_Val, _trans), _Val)
+MCNLA_TRAITS_DEF(Val, MCNLA_MATRIX_GEMAT(_Val, _trans), _Val)
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(VAL, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), _Val)
+MCNLA_TRAITS_DEF(Val, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), _Val)
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(VAL, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), _Val)
+MCNLA_TRAITS_DEF(Val, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), _Val)
 
 template <class _Core, class _Storage, typename _Val>
-MCNLA_TRAITS_DEF(VAL, MCNLA_MATRIX_DIMAT(_Val), _Val)
+MCNLA_TRAITS_DEF(Val, MCNLA_MATRIX_DIMAT(_Val), _Val)
 
 // Vector traits
 
 template <class _Core, class _Storage, typename _Val, Trans _trans>
-MCNLA_TRAITS_DEF(VECTOR, MCNLA_MATRIX_GEMAT(_Val, _trans), MCNLA_MATRIX_GEVEC(_Val))
+MCNLA_TRAITS_DEF(Vector, MCNLA_MATRIX_GEMAT(_Val, _trans), MCNLA_MATRIX_GEVEC(_Val))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(VECTOR, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), MCNLA_MATRIX_GEVEC(_Val))
+MCNLA_TRAITS_DEF(Vector, MCNLA_MATRIX_SYMAT(_Val, _trans, _uplo), MCNLA_MATRIX_GEVEC(_Val))
 
 template <class _Core, class _Storage, typename _Val, Trans _trans, Uplo _uplo>
-MCNLA_TRAITS_DEF(VECTOR, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), MCNLA_MATRIX_GEVEC(_Val))
+MCNLA_TRAITS_DEF(Vector, MCNLA_MATRIX_TRMAT(_Val, _trans, _uplo), MCNLA_MATRIX_GEVEC(_Val))
 
 template <class _Core, class _Storage, typename _Val>
-MCNLA_TRAITS_DEF(VECTOR, MCNLA_MATRIX_DIMAT(_Val), MCNLA_MATRIX_GEVEC(_Val))
+MCNLA_TRAITS_DEF(Vector, MCNLA_MATRIX_DIMAT(_Val), MCNLA_MATRIX_GEVEC(_Val))
 
 #undef MCNLA_MATRIX_GEVEC
 #undef MCNLA_MATRIX_GEMAT
