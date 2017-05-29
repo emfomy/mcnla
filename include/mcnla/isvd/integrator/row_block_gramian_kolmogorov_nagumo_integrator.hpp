@@ -83,8 +83,8 @@ void Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::runImpl(
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
   mcnla_assert_eq(matrix_qbarj.sizes(),  std::make_tuple(nrow_rank, dim_sketch));
 
-  auto &matrix_qsj  = collection_qj.unfold();                   // matrix Qs.
-  auto &matrix_q0j  = collection_qj(0);                         // matrix Q0.
+  auto &matrix_qsj  = collection_qj.unfold();                  // matrix Qs.
+  auto &matrix_q0j  = collection_qj(0);                        // matrix Q0.
   auto &symatrix_bs = matrix_bs_.template sym<Uplo::UPPER>();  // matrix Bs.
 
   _Val one_n = 1.0/num_sketch, one_n2 = (1.0/num_sketch)/num_sketch;
