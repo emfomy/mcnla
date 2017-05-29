@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockExtrinsicMeanIntegrator<_Val>::Integrator(
+Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::Integrator(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ RowBlockExtrinsicMeanIntegrator<_Val>::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockExtrinsicMeanIntegrator<_Val>::initializeImpl() noexcept {
+void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow             = parameters_.nrow();
   const auto dim_sketch       = parameters_.dimSketch();
@@ -63,7 +63,7 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::initializeImpl() noexcept {
 /// @param  matrix_qbar    The matrix Qbar.
 ///
 template <typename _Val>
-void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
+void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
           DenseMatrixRowMajor<_Val>      &matrix_qbar

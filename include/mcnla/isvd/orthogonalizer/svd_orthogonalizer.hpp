@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-SvdOrthogonalizer<_Val>::Orthogonalizer(
+Orthogonalizer<SvdOrthogonalizerTag, _Val>::Orthogonalizer(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ SvdOrthogonalizer<_Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void SvdOrthogonalizer<_Val>::initializeImpl() noexcept {
+void Orthogonalizer<SvdOrthogonalizerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
@@ -49,7 +49,7 @@ void SvdOrthogonalizer<_Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val>
-void SvdOrthogonalizer<_Val>::runImpl(
+void Orthogonalizer<SvdOrthogonalizerTag, _Val>::runImpl(
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 

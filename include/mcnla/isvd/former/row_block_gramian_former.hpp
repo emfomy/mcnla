@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockGramianFormer<_Val>::Former(
+Former<RowBlockGramianFormerTag, _Val>::Former(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ RowBlockGramianFormer<_Val>::Former(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockGramianFormer<_Val>::initializeImpl() noexcept {
+void Former<RowBlockGramianFormerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto nrow_each  = parameters_.nrowEach();
@@ -64,7 +64,7 @@ void RowBlockGramianFormer<_Val>::initializeImpl() noexcept {
 /// @param  matrix_qj  The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void RowBlockGramianFormer<_Val>::runImpl(
+void Former<RowBlockGramianFormerTag, _Val>::runImpl(
     const _Matrix &matrix_aj,
     const DenseMatrixRowMajor<_Val> &matrix_qj
 ) noexcept {
@@ -122,7 +122,7 @@ void RowBlockGramianFormer<_Val>::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& RowBlockGramianFormer<_Val>::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& Former<RowBlockGramianFormerTag, _Val>::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -131,7 +131,7 @@ const DenseVector<RealValT<_Val>>& RowBlockGramianFormer<_Val>::vectorS() const 
 /// @brief  Gets the left singular vectors (row-block).
 ///
 template <typename _Val>
-const DenseMatrixRowMajor<_Val>& RowBlockGramianFormer<_Val>::matrixUj() const noexcept {
+const DenseMatrixRowMajor<_Val>& Former<RowBlockGramianFormerTag, _Val>::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_uj_cut_;
 }

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/sketcher/column_sampling_sketcher.hpp
-/// @brief   The Gaussian projection sketcher.
+/// @brief   The Column sampling sketcher.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -26,7 +26,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-ColumnSamplingSketcher<_Val>::Sketcher(
+Sketcher<ColumnSamplingSketcherTag, _Val>::Sketcher(
     const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
@@ -38,7 +38,7 @@ ColumnSamplingSketcher<_Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void ColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
+void Sketcher<ColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
 
   const auto dim_sketch_each = parameters_.dimSketchEach();
 
@@ -52,7 +52,7 @@ void ColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val> template <class _Matrix>
-void ColumnSamplingSketcher<_Val>::runImpl(
+void Sketcher<ColumnSamplingSketcherTag, _Val>::runImpl(
     const _Matrix &matrix_a,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
@@ -93,7 +93,7 @@ void ColumnSamplingSketcher<_Val>::runImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t ColumnSamplingSketcher<_Val>::seed() const noexcept {
+index_t Sketcher<ColumnSamplingSketcherTag, _Val>::seed() const noexcept {
   return seed_;
 }
 
@@ -101,7 +101,7 @@ index_t ColumnSamplingSketcher<_Val>::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-ColumnSamplingSketcher<_Val>& ColumnSamplingSketcher<_Val>::setSeed(
+ColumnSamplingSketcher<_Val>& Sketcher<ColumnSamplingSketcherTag, _Val>::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;

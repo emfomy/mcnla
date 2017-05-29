@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-GramianOrthogonalizer<_Val>::Orthogonalizer(
+Orthogonalizer<GramianOrthogonalizerTag, _Val>::Orthogonalizer(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ GramianOrthogonalizer<_Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void GramianOrthogonalizer<_Val>::initializeImpl() noexcept {
+void Orthogonalizer<GramianOrthogonalizerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -52,7 +52,7 @@ void GramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val>
-void GramianOrthogonalizer<_Val>::runImpl(
+void Orthogonalizer<GramianOrthogonalizerTag, _Val>::runImpl(
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
