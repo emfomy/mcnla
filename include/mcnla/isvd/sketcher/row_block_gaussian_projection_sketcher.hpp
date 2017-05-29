@@ -12,6 +12,12 @@
 #include <mcnla/core/la.hpp>
 #include <mcnla/core/random.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP RowBlockGaussianProjectionSketcher<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -26,7 +32,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::Sketcher(
+MCNLA_TEP::Sketcher(
     const Parameters<_Val> &parameters,
     const index_t seed,
     const index_t exponent
@@ -40,7 +46,7 @@ Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto ncol             = parameters_.ncol();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
@@ -55,7 +61,7 @@ void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::initializeImpl() noe
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::runImpl(
+void MCNLA_TEP::runImpl(
     const _Matrix &matrix_aj,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
@@ -97,7 +103,7 @@ void Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::runImpl(
 ///
 ///
 template <typename _Val>
-std::ostream& Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::outputNameImpl(
+std::ostream& MCNLA_TEP::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_ << " (Power " << exponent_ << ")");
@@ -107,7 +113,7 @@ std::ostream& Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::outputNameI
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::seed() const noexcept {
+index_t MCNLA_TEP::seed() const noexcept {
   return seed_;
 }
 
@@ -115,7 +121,7 @@ index_t Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::seed() const noex
 /// @brief  Gets the exponent of power method.
 ///
 template <typename _Val>
-index_t Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::exponent() const noexcept {
+index_t MCNLA_TEP::exponent() const noexcept {
   return exponent_;
 }
 
@@ -123,7 +129,7 @@ index_t Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::exponent() const 
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-RowBlockGaussianProjectionSketcher<_Val>& Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::setSeed(
+RowBlockGaussianProjectionSketcher<_Val>& MCNLA_TEP::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -137,7 +143,7 @@ RowBlockGaussianProjectionSketcher<_Val>& Sketcher<RowBlockGaussianProjectionSke
 /// @attention  Row-block version supports zero exponent only.
 ///
 template <typename _Val>
-RowBlockGaussianProjectionSketcher<_Val>& Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>::setExponent(
+RowBlockGaussianProjectionSketcher<_Val>& MCNLA_TEP::setExponent(
     const index_t exponent
 ) noexcept {
   mcnla_assert_eq(exponent, 0);
@@ -149,5 +155,7 @@ RowBlockGaussianProjectionSketcher<_Val>& Sketcher<RowBlockGaussianProjectionSke
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HPP_

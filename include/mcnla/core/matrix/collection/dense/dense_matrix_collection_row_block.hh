@@ -30,7 +30,11 @@ namespace matrix {
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseMatrixCollectionRowBlockBase
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public MatrixCollectionWrapper<GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>> {
 
   friend MatrixCollectionWrapper<GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>>;
@@ -114,19 +118,25 @@ class GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>
 
 };
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val, Trans _trans>
+using DenseMatrixCollectionRowBlockBase = GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 /// @ingroup  matrix_collection_module
+/// @see  DenseMatrixCollectionRowBlockBase
 template <typename _Val, Trans _trans>
-using DenseMatrixCollectionRowBlock = DenseMatrixCollection<RowBlockTag, _Val, _trans>;
+using DenseMatrixCollectionRowBlock = DenseMatrixCollectionRowBlockBase<CpuTag, _Val, _trans>;
 
 /// @ingroup  matrix_collection_module
-/// @see  DenseMatrixCollectionRowBlock
+/// @see  DenseMatrixCollectionRowBlockBase
 template <typename _Val>
-using DenseMatrixCollectionRowBlockColMajor = GeMatCollS<RowBlockTag, CpuTag, DenseTag, _Val, Trans::NORMAL>;
+using DenseMatrixCollectionRowBlockColMajor = DenseMatrixCollectionRowBlock<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_collection_module
-/// @see  DenseMatrixCollectionRowBlock
+/// @see  DenseMatrixCollectionRowBlockBase
 template <typename _Val>
-using DenseMatrixCollectionRowBlockRowMajor = GeMatCollS<RowBlockTag, CpuTag, DenseTag, _Val, Trans::TRANS>;
+using DenseMatrixCollectionRowBlockRowMajor = DenseMatrixCollectionRowBlock<_Val, Trans::TRANS>;
 
 }  // namespace matrix
 

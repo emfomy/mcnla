@@ -11,6 +11,12 @@
 #include <mcnla/isvd/converter/dummy_converter.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Converter<DummyConverterTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP DummyConverter<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Converter<DummyConverterTag, _Val>::Converter(
+MCNLA_TEP::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +40,7 @@ Converter<DummyConverterTag, _Val>::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Converter<DummyConverterTag, _Val>::initializeImpl() noexcept {}
+void MCNLA_TEP::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -42,7 +48,7 @@ void Converter<DummyConverterTag, _Val>::initializeImpl() noexcept {}
 /// @note  Do nothing.
 ///
 template <typename _Val> template <typename ..._Args>
-void Converter<DummyConverterTag, _Val>::runImpl(
+void MCNLA_TEP::runImpl(
     _Args...
 ) noexcept {
   this->tic();
@@ -51,5 +57,7 @@ void Converter<DummyConverterTag, _Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_CONVERTER_DUMMY_CONVERTER_HPP_

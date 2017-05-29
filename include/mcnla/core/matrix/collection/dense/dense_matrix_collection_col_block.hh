@@ -30,7 +30,11 @@ namespace matrix {
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseMatrixCollectionColBlockBase
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>> {
 
   friend MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>>;
@@ -67,7 +71,7 @@ class GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>
   inline GeMatCollS( const SizesType sizes, const index_t mcol ) noexcept;
   inline GeMatCollS( const index_t ncol, const MatrixType &data ) noexcept;
   inline GeMatCollS( const index_t ncol, const index_t mcol, const MatrixType &data ) noexcept;
-  inline GeMatCollS( const GeMatCollS &other ) noexcept;
+  inline GeMatCollS( const CollectionType &other ) noexcept;
 
   // Operators
   inline CollectionType& operator=( const CollectionType &other ) noexcept;
@@ -77,7 +81,6 @@ class GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>
 
   // Gets information
   inline bool isShrunk() const noexcept;
-  inline index_t mrow() const noexcept;
   inline index_t mcol() const noexcept;
 
   // Gets data
@@ -115,19 +118,25 @@ class GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>
 
 };
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val, Trans _trans>
+using DenseMatrixCollectionColBlockBase = GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 /// @ingroup  matrix_collection_module
+/// @see  DenseMatrixCollectionColBlockBase
 template <typename _Val, Trans _trans>
-using DenseMatrixCollectionColBlock = DenseMatrixCollection<ColBlockTag, _Val, _trans>;
+using DenseMatrixCollectionColBlock = DenseMatrixCollectionColBlockBase<CpuTag, _Val, _trans>;
 
 /// @ingroup  matrix_collection_module
-/// @see  DenseMatrixCollectionColBlock
+/// @see  DenseMatrixCollectionColBlockBase
 template <typename _Val>
-using DenseMatrixCollectionColBlockColMajor = GeMatCollS<ColBlockTag, CpuTag, DenseTag, _Val, Trans::NORMAL>;
+using DenseMatrixCollectionColBlockColMajor = DenseMatrixCollectionColBlock<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_collection_module
-/// @see  DenseMatrixCollectionColBlock
+/// @see  DenseMatrixCollectionColBlockBase
 template <typename _Val>
-using DenseMatrixCollectionColBlockRowMajor = GeMatCollS<ColBlockTag, CpuTag, DenseTag, _Val, Trans::TRANS>;
+using DenseMatrixCollectionColBlockRowMajor = DenseMatrixCollectionColBlock<_Val, Trans::TRANS>;
 
 }  // namespace matrix
 

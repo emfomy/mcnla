@@ -12,6 +12,12 @@
 #include <mcnla/core/la.hpp>
 #include <mcnla/core/random.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Sketcher<GaussianProjectionSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP GaussianProjectionSketcher<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -26,7 +32,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Sketcher<GaussianProjectionSketcherTag, _Val>::Sketcher(
+MCNLA_TEP::Sketcher(
     const Parameters<_Val> &parameters,
     const index_t seed,
     const index_t exponent
@@ -40,7 +46,7 @@ Sketcher<GaussianProjectionSketcherTag, _Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Sketcher<GaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto ncol            = parameters_.ncol();
   const auto dim_sketch_each = parameters_.dimSketchEach();
@@ -55,7 +61,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val> template <class _Matrix>
-void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
+void MCNLA_TEP::runImpl(
     const _Matrix &matrix_a,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
@@ -98,7 +104,7 @@ void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
 ///
 ///
 template <typename _Val>
-std::ostream& Sketcher<GaussianProjectionSketcherTag, _Val>::outputNameImpl(
+std::ostream& MCNLA_TEP::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_ << " (Power " << exponent_ << ")");
@@ -108,7 +114,7 @@ std::ostream& Sketcher<GaussianProjectionSketcherTag, _Val>::outputNameImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t Sketcher<GaussianProjectionSketcherTag, _Val>::seed() const noexcept {
+index_t MCNLA_TEP::seed() const noexcept {
   return seed_;
 }
 
@@ -116,7 +122,7 @@ index_t Sketcher<GaussianProjectionSketcherTag, _Val>::seed() const noexcept {
 /// @brief  Gets the exponent of power method.
 ///
 template <typename _Val>
-index_t Sketcher<GaussianProjectionSketcherTag, _Val>::exponent() const noexcept {
+index_t MCNLA_TEP::exponent() const noexcept {
   return exponent_;
 }
 
@@ -124,7 +130,7 @@ index_t Sketcher<GaussianProjectionSketcherTag, _Val>::exponent() const noexcept
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-GaussianProjectionSketcher<_Val>& Sketcher<GaussianProjectionSketcherTag, _Val>::setSeed(
+GaussianProjectionSketcher<_Val>& MCNLA_TEP::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -136,7 +142,7 @@ GaussianProjectionSketcher<_Val>& Sketcher<GaussianProjectionSketcherTag, _Val>:
 /// @brief  Sets the exponent of power method.
 ///
 template <typename _Val>
-GaussianProjectionSketcher<_Val>& Sketcher<GaussianProjectionSketcherTag, _Val>::setExponent(
+GaussianProjectionSketcher<_Val>& MCNLA_TEP::setExponent(
     const index_t exponent
 ) noexcept {
   mcnla_assert_ge(exponent, 0);
@@ -148,5 +154,7 @@ GaussianProjectionSketcher<_Val>& Sketcher<GaussianProjectionSketcherTag, _Val>:
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HPP_

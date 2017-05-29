@@ -12,6 +12,12 @@
 #include <mcnla/core/la.hpp>
 #include <mcnla/core/random.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Sketcher<RowBlockColumnSamplingSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP RowBlockColumnSamplingSketcher<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -26,7 +32,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::Sketcher(
+MCNLA_TEP::Sketcher(
     const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
@@ -38,7 +44,7 @@ Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
@@ -52,7 +58,7 @@ void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::initializeImpl() noexcep
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::runImpl(
+void MCNLA_TEP::runImpl(
     const _Matrix &matrix_aj,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
@@ -96,7 +102,7 @@ void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::runImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::seed() const noexcept {
+index_t MCNLA_TEP::seed() const noexcept {
   return seed_;
 }
 
@@ -104,7 +110,7 @@ index_t Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::seed() const noexcept
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-RowBlockColumnSamplingSketcher<_Val>& Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::setSeed(
+RowBlockColumnSamplingSketcher<_Val>& MCNLA_TEP::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -115,5 +121,7 @@ RowBlockColumnSamplingSketcher<_Val>& Sketcher<RowBlockColumnSamplingSketcherTag
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_COLUMN_SAMPLING_SKETCHER_HPP_
