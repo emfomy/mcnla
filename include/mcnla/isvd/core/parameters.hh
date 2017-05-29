@@ -106,8 +106,8 @@ class Parameters {
   inline Parameters& setNumSketchEach( const index_t num_sketch_each ) noexcept;
 
   // Create matrices
-  inline DenseMatrixCollection201<_Val> createCollectionQ() const noexcept;
-  inline DenseMatrixCollection201<_Val> createCollectionQj() const noexcept;
+  inline DenseMatrixCollectionColBlockRowMajor<_Val> createCollectionQ() const noexcept;
+  inline DenseMatrixCollectionColBlockRowMajor<_Val> createCollectionQj() const noexcept;
   inline DenseMatrixRowMajor<_Val> createMatrixQ() const noexcept;
   inline DenseMatrixRowMajor<_Val> createMatrixQj() const noexcept;
   inline DenseMatrixRowMajor<_Val> createMatrixU() const noexcept;

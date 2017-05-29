@@ -87,7 +87,9 @@ DenseVectorBase<_Core, _Val>::DenseVectorBase(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::DenseVectorBase( const DerivedType &other ) noexcept
+DenseVectorBase<_Core, _Val>::DenseVectorBase(
+    const DenseVectorBase &other
+) noexcept
   : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,8 +98,8 @@ DenseVectorBase<_Core, _Val>::DenseVectorBase( const DerivedType &other ) noexce
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val>
-GeVecT<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::operator=(
-    const DerivedType &other
+GeVecS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::operator=(
+    const DenseVectorBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();
@@ -107,7 +109,7 @@ GeVecT<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::operator=(
 /// @brief  Copies the vector.
 ///
 template <class _Core, typename _Val>
-GeVecT<_Core, DenseTag, _Val> DenseVectorBase<_Core, _Val>::copy() const noexcept {
+GeVecS<_Core, DenseTag, _Val> DenseVectorBase<_Core, _Val>::copy() const noexcept {
   DenseVectorBase retval(this->len(), this->stride(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -176,7 +178,7 @@ void DenseVectorBase<_Core, _Val>::resize(
 /// @brief  Gets the diagonal view of the matrix.
 ///
 template <class _Core, typename _Val>
-DiMatT<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() noexcept {
+DiMatS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() noexcept {
   return static_cast<DiagonalType&>(base());
 }
 
@@ -184,7 +186,7 @@ DiMatT<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() noexcept {
 /// @copydoc  diag
 ///
 template <class _Core, typename _Val>
-const DiMatT<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() const noexcept {
+const DiMatS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() const noexcept {
   return static_cast<const DiagonalType&>(base());
 }
 
@@ -192,7 +194,7 @@ const DiMatT<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::diag() const 
 /// @brief  Gets a vector segment.
 ///
 template <class _Core, typename _Val>
-GeVecT<_Core, DenseTag, _Val> DenseVectorBase<_Core, _Val>::operator()(
+GeVecS<_Core, DenseTag, _Val> DenseVectorBase<_Core, _Val>::operator()(
     const IdxRange &range
 ) noexcept {
   return static_cast<VectorType&&>(this->getVectorImpl(range));
@@ -202,7 +204,7 @@ GeVecT<_Core, DenseTag, _Val> DenseVectorBase<_Core, _Val>::operator()(
 /// @brief  Gets a vector segment.
 ///
 template <class _Core, typename _Val>
-const GeVecT<_Core, DenseTag, _Val> DenseVectorBase<_Core, _Val>::operator()(
+const GeVecS<_Core, DenseTag, _Val> DenseVectorBase<_Core, _Val>::operator()(
     const IdxRange &range
 ) const noexcept {
   return static_cast<const VectorType&&>(this->getVectorImpl(range));

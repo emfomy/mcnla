@@ -77,7 +77,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::DenseDiagonalMatrixBase(
 ///
 template <class _Core, typename _Val>
 DenseDiagonalMatrixBase<_Core, _Val>::DenseDiagonalMatrixBase(
-    const DerivedType &other
+    const DenseDiagonalMatrixBase &other
 ) noexcept
   : BaseType(other) {}
 
@@ -87,8 +87,8 @@ DenseDiagonalMatrixBase<_Core, _Val>::DenseDiagonalMatrixBase(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val>
-DiMatT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::operator=(
-    const DerivedType &other
+DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::operator=(
+    const DenseDiagonalMatrixBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();
@@ -98,7 +98,7 @@ DiMatT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::operator=(
 /// @brief  Copies the matrix.
 ///
 template <class _Core, typename _Val>
-DiMatT<_Core, DenseTag, _Val> DenseDiagonalMatrixBase<_Core, _Val>::copy() const noexcept {
+DiMatS<_Core, DenseTag, _Val> DenseDiagonalMatrixBase<_Core, _Val>::copy() const noexcept {
   DenseDiagonalMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -156,7 +156,7 @@ void DenseDiagonalMatrixBase<_Core, _Val>::reconstruct(
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val>
-DiMatT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() noexcept {
+DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() noexcept {
   return derived();
 }
 
@@ -164,7 +164,7 @@ DiMatT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() noexcep
 /// @copydoc  t
 ///
 template <class _Core, typename _Val>
-const DiMatT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() const noexcept {
+const DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() const noexcept {
   return derived();
 }
 
@@ -172,7 +172,7 @@ const DiMatT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::t() c
 /// @brief  Gets the vector view of the matrix.
 ///
 template <class _Core, typename _Val>
-GeVecT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vec() noexcept {
+GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vec() noexcept {
   return static_cast<VectorType&>(base());
 }
 
@@ -180,7 +180,7 @@ GeVecT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vec() noexc
 /// @copydoc  vec
 ///
 template <class _Core, typename _Val>
-const GeVecT<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vec() const noexcept {
+const GeVecS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::vec() const noexcept {
   return static_cast<const VectorType&>(base());
 }
 

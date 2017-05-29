@@ -14,7 +14,7 @@ TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   const auto mpi_root = 0;
 
   // Reads data
-  mcnla::matrix::DenseMatrixCollection201<ValType> qi_true;
+  mcnla::matrix::DenseMatrixCollectionColBlockRowMajor<ValType> qi_true;
   mcnla::matrix::DenseMatrixRowMajor<ValType> qbar_true;
   mcnla::io::loadMatrixMarket(qi_true, COLLECTION_Q_PATH);
   mcnla::io::loadMatrixMarket(qbar_true, MATRIX_Q_PATH);

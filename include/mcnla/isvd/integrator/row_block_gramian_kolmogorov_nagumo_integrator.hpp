@@ -69,7 +69,7 @@ void RowBlockGramianKolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept 
 ///
 template <typename _Val>
 void RowBlockGramianKolmogorovNagumoIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<_Val> &collection_qj,
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
           DenseMatrixRowMajor<_Val> &matrix_qbarj
 ) noexcept {
 

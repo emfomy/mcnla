@@ -69,7 +69,7 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   DenseMatrixRowMajor<_Val> matrix_bs_;
 
   /// The matrix B.
-  DenseMatrixCollection102<_Val> collection_b_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
 
   /// The matrix D.
   DenseMatrixRowMajor<_Val> matrix_d_;
@@ -84,10 +84,10 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   DenseMatrixRowMajor<_Val> matrix_cinv_;
 
   /// The matrix Sf.
-  DenseMatrixCollection012<_Val> collection_sf_;
+  DenseMatrixCollectionColBlockColMajor<_Val> collection_sf_;
 
   /// The matrix Tf.
-  DenseMatrixCollection012<_Val> collection_tf_;
+  DenseMatrixCollectionColBlockColMajor<_Val> collection_tf_;
 
   /// The vector E.
   DenseVector<_Val> vector_e_;
@@ -125,7 +125,7 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollection201<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
 
 };
 

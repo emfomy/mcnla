@@ -81,7 +81,7 @@ class SvdOrthogonalizer
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection201<_Val> &collection_q ) noexcept;
+  void runImpl( DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q ) noexcept;
 
 };
 

@@ -21,7 +21,7 @@ namespace mcnla {
 namespace matrix {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class Array;
+template <typename _Val> using Array = ArrS<CpuTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix

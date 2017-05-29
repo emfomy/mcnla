@@ -53,7 +53,7 @@ void RowBlockGramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void RowBlockGramianOrthogonalizer<_Val>::runImpl(
-    DenseMatrixCollection201<_Val> &collection_qj
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;

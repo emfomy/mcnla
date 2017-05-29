@@ -59,7 +59,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class SyMatT<CpuTag, DenseTag, _Val, _trans, _uplo>
+class SyMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
   : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrix
@@ -85,11 +85,13 @@ class DenseSymmetricMatrix
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseSymmetricMatrix
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
 using DenseSymmetricMatrixColMajor = DenseSymmetricMatrix<_Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
+/// @see  DenseSymmetricMatrix
 using DenseSymmetricMatrixRowMajor = DenseSymmetricMatrix<_Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix

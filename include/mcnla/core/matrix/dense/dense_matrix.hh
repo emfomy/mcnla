@@ -62,7 +62,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class GeMatT<CpuTag, DenseTag, _Val, _trans>
+class GeMatS<CpuTag, DenseTag, _Val, _trans>
   : public DenseMatrixBase<CpuTag, _Val, _trans>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrix
@@ -101,10 +101,12 @@ class DenseMatrix
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseMatrix
 template <typename _Val>
 using DenseMatrixColMajor = DenseMatrix<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseMatrix
 template <typename _Val>
 using DenseMatrixRowMajor = DenseMatrix<_Val, Trans::TRANS>;
 

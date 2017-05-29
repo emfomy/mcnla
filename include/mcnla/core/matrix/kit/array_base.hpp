@@ -51,7 +51,7 @@ ArrayBase<_Core, _Val>::ArrayBase(
 ///
 template <class _Core, typename _Val>
 ArrayBase<_Core, _Val>::ArrayBase(
-    const DerivedType &other
+    const ArrayBase &other
 ) noexcept
   : BaseType(other),
     size_(other.size_),
@@ -63,8 +63,8 @@ ArrayBase<_Core, _Val>::ArrayBase(
 /// @attention  It is shallow copy (creates an alias).
 ///
 template <class _Core, typename _Val>
-ArrT<_Core, _Val>& ArrayBase<_Core, _Val>::operator=(
-    const DerivedType &other
+ArrS<_Core, _Val>& ArrayBase<_Core, _Val>::operator=(
+    const ArrayBase &other
 ) noexcept {
   BaseType::operator=(other);
   size_   = other.size_;
@@ -77,7 +77,7 @@ ArrT<_Core, _Val>& ArrayBase<_Core, _Val>::operator=(
 /// Add @a offset to @ref offset_.
 ///
 template <class _Core, typename _Val>
-ArrT<_Core, _Val>& ArrayBase<_Core, _Val>::operator>>=(
+ArrS<_Core, _Val>& ArrayBase<_Core, _Val>::operator>>=(
     const index_t offset
 ) noexcept {
   offset_ += offset;
@@ -90,7 +90,7 @@ ArrT<_Core, _Val>& ArrayBase<_Core, _Val>::operator>>=(
 /// Subtract @ref offset_ by @a offset.
 ///
 template <class _Core, typename _Val>
-ArrT<_Core, _Val>& ArrayBase<_Core, _Val>::operator<<=(
+ArrS<_Core, _Val>& ArrayBase<_Core, _Val>::operator<<=(
     const index_t offset
 ) noexcept {
   offset_ -= offset;
@@ -102,7 +102,7 @@ ArrT<_Core, _Val>& ArrayBase<_Core, _Val>::operator<<=(
 /// @copydoc  operator>>=
 ///
 template <class _Core, typename _Val>
-ArrT<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
+ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
     const index_t offset
 ) noexcept {
   auto retval = derived();
@@ -114,7 +114,7 @@ ArrT<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
 /// @copydoc  operator>>=
 ///
 template <class _Core, typename _Val>
-const ArrT<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
+const ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
     const index_t offset
 ) const noexcept {
   auto retval = derived();
@@ -126,7 +126,7 @@ const ArrT<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
 /// @copydoc  operator<<=
 ///
 template <class _Core, typename _Val>
-ArrT<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
+ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
     const index_t offset
 ) noexcept {
   auto retval = derived();
@@ -138,7 +138,7 @@ ArrT<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
 /// @copydoc  operator<<=
 ///
 template <class _Core, typename _Val>
-const ArrT<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
+const ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
     const index_t offset
 ) const noexcept {
   auto retval = derived();

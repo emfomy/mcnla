@@ -104,7 +104,7 @@ void saveMatrixMarket(
 ///
 template <class _Tag, typename _Val>
 void saveMatrixMarket(
-    const DenseVectorCollection<_Tag, CpuTag, _Val> &collection,
+    const DenseVectorCollection<_Tag, _Val> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -142,7 +142,7 @@ void saveMatrixMarket(
 ///
 template <class _Tag, typename _Val, Trans _trans>
 void saveMatrixMarket(
-    const DenseMatrixCollection<_Tag, CpuTag, _Val, _trans> &collection,
+    const DenseMatrixCollection<_Tag, _Val, _trans> &collection,
     const char *file
 ) noexcept {
   // Open file

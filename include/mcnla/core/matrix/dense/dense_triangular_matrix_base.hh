@@ -43,14 +43,14 @@ class DenseTriangularMatrixBase
 class DenseTriangularMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
-    public DenseMatrixWrapper<TrMatT<_Core, DenseTag, _Val, _trans, _uplo>>,
-    public InvertibleWrapper<TrMatT<_Core, DenseTag, _Val, _trans, _uplo>> {
+    public DenseMatrixWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
+    public InvertibleWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
  private:
 
-  using DerivedType = TrMatT<_Core, DenseTag, _Val, _trans, _uplo>;
+  using DerivedType = TrMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
   friend MatrixWrapper<DerivedType>;
   friend DenseMatrixWrapper<DerivedType>;
@@ -62,14 +62,14 @@ class DenseTriangularMatrixBase_
   static constexpr Uplo uplo   = _uplo;
 
   using ValType       = _Val;
-  using ValArrayType  = ArrT<_Core, _Val>;
+  using ValArrayType  = ArrS<_Core, _Val>;
 
-  using VectorType    = GeVecT<_Core, DenseTag, _Val>;
-  using MatrixType    = TrMatT<_Core, DenseTag, _Val, _trans, _uplo>;
+  using VectorType    = GeVecS<_Core, DenseTag, _Val>;
+  using MatrixType    = TrMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
-  using TransposeType = TrMatT<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>;
+  using TransposeType = TrMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>;
 
-  using GeneralType   = GeMatT<_Core, DenseTag, _Val, _trans>;
+  using GeneralType   = GeMatS<_Core, DenseTag, _Val, _trans>;
 
  private:
 
@@ -84,10 +84,10 @@ class DenseTriangularMatrixBase_
   inline DenseTriangularMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseTriangularMatrixBase( const index_t size, const index_t pitch,
                                     const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseTriangularMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseTriangularMatrixBase( const DenseTriangularMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseTriangularMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;

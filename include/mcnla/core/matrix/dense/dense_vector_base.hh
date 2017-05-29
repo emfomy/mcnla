@@ -41,12 +41,12 @@ class DenseVectorBase
 class DenseVectorBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
-    public DenseVectorWrapper<GeVecT<_Core, DenseTag, _Val>>,
-    public InvertibleWrapper<GeVecT<_Core, DenseTag, _Val>> {
+    public DenseVectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
+    public InvertibleWrapper<GeVecS<_Core, DenseTag, _Val>> {
 
  private:
 
-  using DerivedType = GeVecT<_Core, DenseTag, _Val>;
+  using DerivedType = GeVecS<_Core, DenseTag, _Val>;
 
   friend VectorWrapper<DerivedType>;
   friend DenseVectorWrapper<DerivedType>;
@@ -55,12 +55,12 @@ class DenseVectorBase_
  public:
 
   using ValType      = _Val;
-  using ValArrayType = ArrT<_Core, _Val>;
+  using ValArrayType = ArrS<_Core, _Val>;
   using SizesType    = std::tuple<index_t>;
 
-  using VectorType   = GeVecT<_Core, DenseTag, _Val>;
+  using VectorType   = GeVecS<_Core, DenseTag, _Val>;
 
-  using DiagonalType = DiMatT<_Core, DenseTag, _Val>;
+  using DiagonalType = DiMatS<_Core, DenseTag, _Val>;
 
  private:
 
@@ -76,10 +76,10 @@ class DenseVectorBase_
   inline DenseVectorBase( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
   inline DenseVectorBase( const index_t len, const index_t stride,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseVectorBase( const DerivedType &other ) noexcept;
+  inline DenseVectorBase( const DenseVectorBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseVectorBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;

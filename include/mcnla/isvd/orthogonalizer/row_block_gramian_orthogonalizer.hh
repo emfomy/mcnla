@@ -60,13 +60,13 @@ class RowBlockGramianOrthogonalizer
   static constexpr const char* names_ = "orthogonalization";
 
   /// The matrices W.
-  DenseMatrixCollection102<_Val> collection_w_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_w_;
 
   /// The matrix S.
   DenseMatrixColMajor<_Val> matrix_s_;
 
   /// The temporary matrices.
-  DenseMatrixCollection201<_Val> collection_tmp_;
+  DenseMatrixCollectionColBlockRowMajor<_Val> collection_tmp_;
 
   /// The empty matrix.
   DenseMatrixRowMajor<_Val> matrix_empty_;
@@ -91,7 +91,7 @@ class RowBlockGramianOrthogonalizer
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection201<_Val> &collection_qj ) noexcept;
+  void runImpl( DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj ) noexcept;
 
 };
 

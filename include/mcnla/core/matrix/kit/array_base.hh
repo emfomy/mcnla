@@ -22,6 +22,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val>
+using ArrayBase = ArrayBase_<_Core, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_kit_module
 /// The base array.
@@ -30,11 +35,16 @@ namespace matrix {
 /// @tparam  _Val   The value type.
 ///
 template <class _Core, typename _Val>
-class ArrayBase : public std::shared_ptr<_Val> {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+class ArrayBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class ArrayBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public std::shared_ptr<_Val> {
 
  private:
 
-  using DerivedType = ArrT<_Core, _Val>;
+  using DerivedType = ArrS<_Core, _Val>;
   using BaseType    = std::shared_ptr<_Val>;
 
  protected:
@@ -50,10 +60,10 @@ class ArrayBase : public std::shared_ptr<_Val> {
   // Constructors
   inline ArrayBase() noexcept;
   inline ArrayBase( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline ArrayBase( const DerivedType &other ) noexcept;
+  inline ArrayBase( const ArrayBase &other ) noexcept;
 
   // Operators
-  inline       DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline       DerivedType& operator=( const ArrayBase &other ) noexcept;
   inline       DerivedType& operator>>=( const index_t offset ) noexcept;
   inline       DerivedType& operator<<=( const index_t offset ) noexcept;
   inline       DerivedType  operator>>( const index_t offset ) noexcept;

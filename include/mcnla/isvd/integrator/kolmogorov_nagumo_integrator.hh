@@ -118,7 +118,7 @@ class KolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollection201<_Val> &collection_q, DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q, DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
 
 };
 

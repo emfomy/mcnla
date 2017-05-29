@@ -41,12 +41,12 @@ class DenseDiagonalMatrixBase
 class DenseDiagonalMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
-    public DenseMatrixWrapper<DiMatT<_Core, DenseTag, _Val>>,
-    public InvertibleWrapper<DiMatT<_Core, DenseTag, _Val>> {
+    public DenseMatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
+    public InvertibleWrapper<DiMatS<_Core, DenseTag, _Val>> {
 
  private:
 
-  using DerivedType = DiMatT<_Core, DenseTag, _Val>;
+  using DerivedType = DiMatS<_Core, DenseTag, _Val>;
 
   friend MatrixWrapper<DerivedType>;
   friend DenseMatrixWrapper<DerivedType>;
@@ -55,12 +55,12 @@ class DenseDiagonalMatrixBase_
  public:
 
   using ValType       = _Val;
-  using ValArrayType  = ArrT<_Core, _Val>;
+  using ValArrayType  = ArrS<_Core, _Val>;
 
-  using VectorType    = GeVecT<_Core, DenseTag, _Val>;
-  using MatrixType    = DiMatT<_Core, DenseTag, _Val>;
+  using VectorType    = GeVecS<_Core, DenseTag, _Val>;
+  using MatrixType    = DiMatS<_Core, DenseTag, _Val>;
 
-  using TransposeType = DiMatT<_Core, DenseTag, _Val>;
+  using TransposeType = DiMatS<_Core, DenseTag, _Val>;
 
  private:
 
@@ -75,10 +75,10 @@ class DenseDiagonalMatrixBase_
   inline DenseDiagonalMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseDiagonalMatrixBase( const index_t size, const index_t pitch,
                                   const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseDiagonalMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseDiagonalMatrixBase( const DenseDiagonalMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseDiagonalMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;

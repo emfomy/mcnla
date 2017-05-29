@@ -64,8 +64,8 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<_Val> &collection_qj,
-    const DenseMatrixCollection201<_Val> &collection_q,
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
           DenseMatrixRowMajor<_Val>      &matrix_qbar
 ) noexcept {
 

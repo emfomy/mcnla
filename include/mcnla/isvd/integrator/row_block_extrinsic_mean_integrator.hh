@@ -59,13 +59,13 @@ class RowBlockExtrinsicMeanIntegrator
   DenseMatrixRowMajor<_Val> matrix_bsj_;
 
   /// The collection Bi.
-  DenseMatrixCollection102<_Val> collection_bi_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_bi_;
 
   /// The collection Bi0.
-  DenseMatrixCollection102<_Val> collection_bi0_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_bi0_;
 
   /// The collection G.
-  DenseMatrixCollection102<_Val> collection_g_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_g_;
 
   /// The matrix G0.
   DenseMatrixRowMajor<_Val> matrix_g0_;
@@ -102,7 +102,7 @@ class RowBlockExtrinsicMeanIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollection201<_Val> &collection_qj, const DenseMatrixCollection201<_Val> &collection_q,
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
                 DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
 
 };

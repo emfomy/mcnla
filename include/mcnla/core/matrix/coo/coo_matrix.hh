@@ -179,10 +179,12 @@ class CooMatrix
 };
 
 /// @ingroup  matrix_coo_module
+/// @see  CooMatrix
 template <typename _Val>
 using CooMatrixColMajor = CooMatrix<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_coo_module
+/// @see  CooMatrix
 template <typename _Val>
 using CooMatrixRowMajor = CooMatrix<_Val, Trans::TRANS>;
 

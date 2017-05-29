@@ -67,7 +67,7 @@ void KolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void KolmogorovNagumoIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<_Val> &collection_q,
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
           DenseMatrixRowMajor<_Val> &matrix_qbar
 ) noexcept {
 

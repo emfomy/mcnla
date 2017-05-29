@@ -58,7 +58,7 @@ namespace matrix {
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class GeVecT<CpuTag, DenseTag, _Val>
+class GeVecS<CpuTag, DenseTag, _Val>
   : public DenseVectorBase<CpuTag, _Val>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseVector

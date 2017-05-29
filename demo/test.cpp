@@ -16,7 +16,7 @@
 ///
 int main( int argc, char **argv ) {
 
-  mcnla::matrix::Array<int> arr;
+  mcnla::matrix::DenseMatrixCollectionColBlockColMajor<double> coll;
 
 //   mcnla::init(argc, argv);
 

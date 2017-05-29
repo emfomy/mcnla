@@ -50,7 +50,7 @@ void SvdOrthogonalizer<_Val>::initializeImpl() noexcept {
 ///
 template <typename _Val>
 void SvdOrthogonalizer<_Val>::runImpl(
-          DenseMatrixCollection201<_Val> &collection_q
+          DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();

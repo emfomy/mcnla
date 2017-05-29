@@ -11,7 +11,7 @@
 #include <mcnla.hpp>
 
 struct Data {
-  mcnla::matrix::DenseMatrixCollection201<ValType> collection_q;
+  mcnla::matrix::DenseMatrixCollectionColBlockRowMajor<ValType> collection_q;
   mcnla::matrix::DenseMatrixRowMajor<ValType> matrix_q;
 
   Data( const mcnla::isvd::Parameters<ValType> &parameters ) noexcept

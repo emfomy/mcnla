@@ -54,7 +54,7 @@ void RowBlockColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
 template <typename _Val> template <class _Matrix>
 void RowBlockColumnSamplingSketcher<_Val>::runImpl(
     const _Matrix &matrix_aj,
-          DenseMatrixCollection201<_Val> &collection_qj
+          DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm         = parameters_.mpi_comm;

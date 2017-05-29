@@ -59,7 +59,7 @@ namespace matrix {
 ///
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class TrMatT<CpuTag, DenseTag, _Val, _trans, _uplo>
+class TrMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
   : public DenseTriangularMatrixBase<CpuTag, _Val, _trans, _uplo>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrix
@@ -85,10 +85,12 @@ class DenseTriangularMatrix
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseTriangularMatrix
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
 using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseTriangularMatrix
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
 using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Val, Trans::TRANS, _uplo>;
 

@@ -43,15 +43,15 @@ class DenseSymmetricMatrixBase
 class DenseSymmetricMatrixBase_
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
-    public DenseMatrixWrapper<SyMatT<_Core, DenseTag, _Val, _trans, _uplo>>,
-    public InvertibleWrapper<SyMatT<_Core, DenseTag, _Val, _trans, _uplo>> {
+    public DenseMatrixWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
+    public InvertibleWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans),    "Conjugate matrix is not supported!");
   static_assert(!isUnitDiag(_uplo), "Unit-diagonal symmetric matrix is not supported!");
 
  private:
 
-  using DerivedType = SyMatT<_Core, DenseTag, _Val, _trans, _uplo>;
+  using DerivedType = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
   friend MatrixWrapper<DerivedType>;
   friend DenseMatrixWrapper<DerivedType>;
@@ -63,14 +63,14 @@ class DenseSymmetricMatrixBase_
   static constexpr Uplo uplo   = _uplo;
 
   using ValType       = _Val;
-  using ValArrayType  = ArrT<_Core, _Val>;
+  using ValArrayType  = ArrS<_Core, _Val>;
 
-  using VectorType    = GeVecT<_Core, DenseTag, _Val>;
-  using MatrixType    = SyMatT<_Core, DenseTag, _Val, _trans, _uplo>;
+  using VectorType    = GeVecS<_Core, DenseTag, _Val>;
+  using MatrixType    = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
-  using TransposeType = SyMatT<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>;
+  using TransposeType = SyMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>;
 
-  using GeneralType   = GeMatT<_Core, DenseTag, _Val, _trans>;
+  using GeneralType   = GeMatS<_Core, DenseTag, _Val, _trans>;
 
  private:
 
@@ -85,10 +85,10 @@ class DenseSymmetricMatrixBase_
   inline DenseSymmetricMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseSymmetricMatrixBase( const index_t size, const index_t pitch,
                                    const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseSymmetricMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseSymmetricMatrixBase( const DenseSymmetricMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseSymmetricMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;

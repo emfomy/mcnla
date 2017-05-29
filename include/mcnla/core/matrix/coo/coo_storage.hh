@@ -33,7 +33,7 @@ class CooStorage : private DenseStorage<_Core, _Val> {
  private:
 
   using ValType      = _Val;
-  using ValArrayType = ArrT<_Core, _Val>;
+  using ValArrayType = ArrS<_Core, _Val>;
 
   using BaseType     = DenseStorage<_Core, _Val>;
 
