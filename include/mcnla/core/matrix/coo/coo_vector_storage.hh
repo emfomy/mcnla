@@ -61,7 +61,6 @@ class CooVectorStorage
   /// The size in the first dimension.
   index_t dim0_;
 
-  using BaseType::val_;
   using BaseType::nnz_;
 
  public:

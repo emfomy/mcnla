@@ -24,7 +24,7 @@ namespace matrix {
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Core, typename _Val>
-using class ArrayBase = ArrayBase_<_Core, _Val>;
+using ArrayBase = ArrayBase_<_Core, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,10 +60,10 @@ class ArrayBase_
   // Constructors
   inline ArrayBase() noexcept;
   inline ArrayBase( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline ArrayBase( const DerivedType &other ) noexcept;
+  inline ArrayBase( const ArrayBase &other ) noexcept;
 
   // Operators
-  inline       DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline       DerivedType& operator=( const ArrayBase &other ) noexcept;
   inline       DerivedType& operator>>=( const index_t offset ) noexcept;
   inline       DerivedType& operator<<=( const index_t offset ) noexcept;
   inline       DerivedType  operator>>( const index_t offset ) noexcept;
@@ -85,7 +85,7 @@ class ArrayBase_
 
  protected:
 
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

@@ -26,7 +26,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockColumnSamplingSketcher<_Val>::Sketcher(
+Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::Sketcher(
     const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
@@ -38,7 +38,7 @@ RowBlockColumnSamplingSketcher<_Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
+void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::initializeImpl() noexcept {
 
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
@@ -52,9 +52,9 @@ void RowBlockColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void RowBlockColumnSamplingSketcher<_Val>::runImpl(
+void Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::runImpl(
     const _Matrix &matrix_aj,
-          DenseMatrixCollection201<_Val> &collection_qj
+          DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm         = parameters_.mpi_comm;
@@ -96,7 +96,7 @@ void RowBlockColumnSamplingSketcher<_Val>::runImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t RowBlockColumnSamplingSketcher<_Val>::seed() const noexcept {
+index_t Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::seed() const noexcept {
   return seed_;
 }
 
@@ -104,7 +104,7 @@ index_t RowBlockColumnSamplingSketcher<_Val>::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-RowBlockColumnSamplingSketcher<_Val>& RowBlockColumnSamplingSketcher<_Val>::setSeed(
+RowBlockColumnSamplingSketcher<_Val>& Sketcher<RowBlockColumnSamplingSketcherTag, _Val>::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;

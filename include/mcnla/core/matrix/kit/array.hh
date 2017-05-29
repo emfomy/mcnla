@@ -29,11 +29,9 @@ namespace matrix {
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class ArrS<CpuTag, _Val>
-  : public ArrayBase<CpuTag, _Val> {
+class ArrS<CpuTag, _Val> : public ArrayBase<CpuTag, _Val> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class Array
-  : public ArrayBase_<CpuTag, _Val> {
+class Array : public ArrayBase_<CpuTag, _Val> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
  private:
@@ -54,7 +52,7 @@ class Array
   inline ArrS( const index_t size, const index_t offset = 0 ) noexcept;
 
   // Copy
-  inline Array<_Val> copy() const noexcept;
+  inline ArrS copy() const noexcept;
 
 };
 

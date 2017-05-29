@@ -31,7 +31,7 @@ endmacro()
 set_target(demo demo.cpp)
 
 # Set target (demo_plain)
-# set_target(demo_plain demo_plain.cpp)
+set_target(demo_plain demo_plain.cpp)
 
 # Set target (example)
 set_target(example example.cpp ${PROJECT_SOURCE_DIR}/data/a.mtx /dev/null /dev/null /dev/null)

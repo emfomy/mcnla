@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/collection/matrix_collection_wrapper.hh
+/// @file    include/mcnla/core/matrix/collection/base/matrix_collection_wrapper.hh
 /// @brief   The definition of matrix collection wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_COLLECTION_MATRIX_COLLECTION_WRAPPER_HH_
-#define MCNLA_CORE_MATRIX_COLLECTION_MATRIX_COLLECTION_WRAPPER_HH_
+#ifndef MCNLA_CORE_MATRIX_COLLECTION_BASE_MATRIX_COLLECTION_WRAPPER_HH_
+#define MCNLA_CORE_MATRIX_COLLECTION_BASE_MATRIX_COLLECTION_WRAPPER_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/collection/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/dense.hpp>
 #include <mcnla/core/utility/crtp.hpp>
@@ -64,4 +64,4 @@ class MatrixCollectionWrapper {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_COLLECTION_MATRIX_COLLECTION_WRAPPER_HH_
+#endif  // MCNLA_CORE_MATRIX_COLLECTION_BASE_MATRIX_COLLECTION_WRAPPER_HH_

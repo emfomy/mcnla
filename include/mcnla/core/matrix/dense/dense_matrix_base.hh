@@ -97,10 +97,10 @@ class DenseMatrixBase_
   inline DenseMatrixBase( const SizesType sizes, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseMatrixBase( const DenseMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;
@@ -193,8 +193,8 @@ class DenseMatrixBase_
   inline const IdxRange colfullrange() const noexcept;
   inline const IdxRange rowfullrange() const noexcept;
 
-  MCNLA_CRTP_BASE(BaseType);
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

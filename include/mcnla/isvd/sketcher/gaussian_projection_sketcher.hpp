@@ -26,7 +26,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-GaussianProjectionSketcher<_Val>::Sketcher(
+Sketcher<GaussianProjectionSketcherTag, _Val>::Sketcher(
     const Parameters<_Val> &parameters,
     const index_t seed,
     const index_t exponent
@@ -40,7 +40,7 @@ GaussianProjectionSketcher<_Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void GaussianProjectionSketcher<_Val>::initializeImpl() noexcept {
+void Sketcher<GaussianProjectionSketcherTag, _Val>::initializeImpl() noexcept {
 
   const auto ncol            = parameters_.ncol();
   const auto dim_sketch_each = parameters_.dimSketchEach();
@@ -55,9 +55,9 @@ void GaussianProjectionSketcher<_Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val> template <class _Matrix>
-void GaussianProjectionSketcher<_Val>::runImpl(
+void Sketcher<GaussianProjectionSketcherTag, _Val>::runImpl(
     const _Matrix &matrix_a,
-          DenseMatrixCollection201<_Val> &collection_q
+          DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
@@ -98,7 +98,7 @@ void GaussianProjectionSketcher<_Val>::runImpl(
 ///
 ///
 template <typename _Val>
-std::ostream& GaussianProjectionSketcher<_Val>::outputNameImpl(
+std::ostream& Sketcher<GaussianProjectionSketcherTag, _Val>::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_ << " (Power " << exponent_ << ")");
@@ -108,7 +108,7 @@ std::ostream& GaussianProjectionSketcher<_Val>::outputNameImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t GaussianProjectionSketcher<_Val>::seed() const noexcept {
+index_t Sketcher<GaussianProjectionSketcherTag, _Val>::seed() const noexcept {
   return seed_;
 }
 
@@ -116,7 +116,7 @@ index_t GaussianProjectionSketcher<_Val>::seed() const noexcept {
 /// @brief  Gets the exponent of power method.
 ///
 template <typename _Val>
-index_t GaussianProjectionSketcher<_Val>::exponent() const noexcept {
+index_t Sketcher<GaussianProjectionSketcherTag, _Val>::exponent() const noexcept {
   return exponent_;
 }
 
@@ -124,7 +124,7 @@ index_t GaussianProjectionSketcher<_Val>::exponent() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-GaussianProjectionSketcher<_Val>& GaussianProjectionSketcher<_Val>::setSeed(
+GaussianProjectionSketcher<_Val>& Sketcher<GaussianProjectionSketcherTag, _Val>::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -136,7 +136,7 @@ GaussianProjectionSketcher<_Val>& GaussianProjectionSketcher<_Val>::setSeed(
 /// @brief  Sets the exponent of power method.
 ///
 template <typename _Val>
-GaussianProjectionSketcher<_Val>& GaussianProjectionSketcher<_Val>::setExponent(
+GaussianProjectionSketcher<_Val>& Sketcher<GaussianProjectionSketcherTag, _Val>::setExponent(
     const index_t exponent
 ) noexcept {
   mcnla_assert_ge(exponent, 0);

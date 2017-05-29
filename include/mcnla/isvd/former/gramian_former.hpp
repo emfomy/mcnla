@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-GramianFormer<_Val>::Former(
+Former<GramianFormerTag, _Val>::Former(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ GramianFormer<_Val>::Former(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void GramianFormer<_Val>::initializeImpl() noexcept {
+void Former<GramianFormerTag, _Val>::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -59,7 +59,7 @@ void GramianFormer<_Val>::initializeImpl() noexcept {
 /// @param  matrix_q    The matrix Q.
 ///
 template <typename _Val> template <class _Matrix>
-void GramianFormer<_Val>::runImpl(
+void Former<GramianFormerTag, _Val>::runImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<_Val> &matrix_q
 ) noexcept {
@@ -109,7 +109,7 @@ void GramianFormer<_Val>::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& GramianFormer<_Val>::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& Former<GramianFormerTag, _Val>::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -118,7 +118,7 @@ const DenseVector<RealValT<_Val>>& GramianFormer<_Val>::vectorS() const noexcept
 /// @brief  Gets the left singular vectors.
 ///
 template <typename _Val>
-const DenseMatrixColMajor<_Val>& GramianFormer<_Val>::matrixU() const noexcept {
+const DenseMatrixColMajor<_Val>& Former<GramianFormerTag, _Val>::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
 }

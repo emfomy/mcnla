@@ -1,15 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/collection/dense_matrix_collection_201.hh
-/// @brief   The definition of dense matrix collection with dimension order (dim2, dim0, dim1).
+/// @file    include/mcnla/core/matrix/collection/dense/dense_matrix_collection_col_block.hh
+/// @brief   The definition of dense matrix collection of column-blocks.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_201_HH_
-#define MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_201_HH_
+#ifndef MCNLA_CORE_MATRIX_COLLECTION_DENSE_DENSE_MATRIX_COLLECTION_COL_BLOCK_HH_
+#define MCNLA_CORE_MATRIX_COLLECTION_DENSE_DENSE_MATRIX_COLLECTION_COL_BLOCK_HH_
 
-#include <mcnla/core/matrix/def.hpp>
-#include <mcnla/core/matrix/collection/dense_matrix_collection.hpp>
+#include <mcnla/core/matrix/collection/dense/def.hpp>
+#include <mcnla/core/matrix/collection/base/matrix_collection_wrapper.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -21,43 +21,29 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct DenseMatrixCollection201Tag {};
-template <class _Core, typename _Val>
-using DenseMatrixCollection201Base = DenseMatrixCollection<DenseMatrixCollection201Tag, _Core, _Val, Trans::TRANS>;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-/// @ingroup  matrix_collection_module
-/// @see  DenseMatrixCollection201Base
-template <typename _Val>
-using DenseMatrixCollection201 = DenseMatrixCollection201Base<CpuTag, _Val>;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
-/// The dense matrix collection with dimension order (dim2, dim0, dim1).
+/// dense matrix collection of column-blocks.
 ///
-/// @tparam  _Core  The core type.
-/// @tparam  _Val   The value type.
+/// @tparam  _Core   The core type.
+/// @tparam  _Val    The value type.
+/// @tparam  _trans  The transpose storage layout.
 ///
-template <class _Core, typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class DenseMatrixCollection<DenseMatrixCollection201Tag, _Core, _Val, Trans::TRANS>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class DenseMatrixCollection201Base
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public MatrixCollectionWrapper<DenseMatrixCollection201Base<_Core, _Val>> {
+template <class _Core, typename _Val, Trans _trans>
+class GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>
+  : public MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>> {
 
-  friend MatrixCollectionWrapper<DenseMatrixCollection201Base<_Core, _Val>>;
+  friend MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>>;
 
  public:
 
   using ValType        = _Val;
-  using CollectionType = DenseMatrixCollection201Base<_Core, _Val>;
-  using MatrixType     = GeMatS<_Core, DenseTag, _Val, Trans::TRANS>;
+  using CollectionType = GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>;
+  using MatrixType     = GeMatS<_Core, DenseTag, _Val, _trans>;
 
  private:
 
-  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollection201Base<_Core, _Val>>;
+  using BaseType  = MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>>;
   using SizesType = std::tuple<index_t, index_t, index_t>;
 
  protected:
@@ -74,20 +60,20 @@ class DenseMatrixCollection201Base
  public:
 
   // Constructors
-  inline DenseMatrixCollection() noexcept;
-  inline DenseMatrixCollection( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline DenseMatrixCollection( const SizesType sizes ) noexcept;
-  inline DenseMatrixCollection( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mcol ) noexcept;
-  inline DenseMatrixCollection( const SizesType sizes, const index_t mcol ) noexcept;
-  inline DenseMatrixCollection( const index_t ncol, const MatrixType &data ) noexcept;
-  inline DenseMatrixCollection( const index_t ncol, const index_t mcol, const MatrixType &data ) noexcept;
-  inline DenseMatrixCollection( const DenseMatrixCollection &other ) noexcept;
+  inline GeMatCollS() noexcept;
+  inline GeMatCollS( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline GeMatCollS( const SizesType sizes ) noexcept;
+  inline GeMatCollS( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mcol ) noexcept;
+  inline GeMatCollS( const SizesType sizes, const index_t mcol ) noexcept;
+  inline GeMatCollS( const index_t ncol, const MatrixType &data ) noexcept;
+  inline GeMatCollS( const index_t ncol, const index_t mcol, const MatrixType &data ) noexcept;
+  inline GeMatCollS( const GeMatCollS &other ) noexcept;
 
   // Operators
-  inline DenseMatrixCollection& operator=( const DenseMatrixCollection &other ) noexcept;
+  inline CollectionType& operator=( const CollectionType &other ) noexcept;
 
   // Copy
-  inline DenseMatrixCollection copy() const noexcept;
+  inline CollectionType copy() const noexcept;
 
   // Gets information
   inline bool isShrunk() const noexcept;
@@ -129,8 +115,22 @@ class DenseMatrixCollection201Base
 
 };
 
+/// @ingroup  matrix_collection_module
+template <typename _Val, Trans _trans>
+using DenseMatrixCollectionColBlock = DenseMatrixCollection<ColBlockTag, _Val, _trans>;
+
+/// @ingroup  matrix_collection_module
+/// @see  DenseMatrixCollectionColBlock
+template <typename _Val>
+using DenseMatrixCollectionColBlockColMajor = GeMatCollS<ColBlockTag, CpuTag, DenseTag, _Val, Trans::NORMAL>;
+
+/// @ingroup  matrix_collection_module
+/// @see  DenseMatrixCollectionColBlock
+template <typename _Val>
+using DenseMatrixCollectionColBlockRowMajor = GeMatCollS<ColBlockTag, CpuTag, DenseTag, _Val, Trans::TRANS>;
+
 }  // namespace matrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_MATRIX_COLLECTION_201_HH_
+#endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_DENSE_MATRIX_COLLECTION_COL_BLOCK_HH_

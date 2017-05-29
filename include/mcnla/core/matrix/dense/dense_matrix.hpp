@@ -24,7 +24,7 @@ namespace matrix {
 /// @brief  Finds the iterator to element
 ///
 template <typename _Val, Trans _trans>
-DenseMatrixIterator<_Val, _trans> DenseMatrix<_Val, _trans>::find(
+DenseMatrixIterator<_Val, _trans> GeMatS<CpuTag, DenseTag, _Val, _trans>::find(
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
@@ -38,7 +38,7 @@ DenseMatrixIterator<_Val, _trans> DenseMatrix<_Val, _trans>::find(
 /// @copydoc  find
 ///
 template <typename _Val, Trans _trans>
-DenseMatrixConstIterator<_Val, _trans> DenseMatrix<_Val, _trans>::find(
+DenseMatrixConstIterator<_Val, _trans> GeMatS<CpuTag, DenseTag, _Val, _trans>::find(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -52,7 +52,7 @@ DenseMatrixConstIterator<_Val, _trans> DenseMatrix<_Val, _trans>::find(
 /// @copydoc  find
 ///
 template <typename _Val, Trans _trans>
-DenseMatrixConstIterator<_Val, _trans> DenseMatrix<_Val, _trans>::cfind(
+DenseMatrixConstIterator<_Val, _trans> GeMatS<CpuTag, DenseTag, _Val, _trans>::cfind(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {

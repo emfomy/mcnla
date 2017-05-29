@@ -87,7 +87,9 @@ DenseVectorBase<_Core, _Val>::DenseVectorBase(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::DenseVectorBase( const DerivedType &other ) noexcept
+DenseVectorBase<_Core, _Val>::DenseVectorBase(
+    const DenseVectorBase &other
+) noexcept
   : BaseType(other) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +99,7 @@ DenseVectorBase<_Core, _Val>::DenseVectorBase( const DerivedType &other ) noexce
 ///
 template <class _Core, typename _Val>
 GeVecS<_Core, DenseTag, _Val>& DenseVectorBase<_Core, _Val>::operator=(
-    const DerivedType &other
+    const DenseVectorBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();

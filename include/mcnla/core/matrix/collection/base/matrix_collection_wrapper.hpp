@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/collection/vector_collection_wrapper.hpp
-/// @brief   The vector collection wrapper.
+/// @file    include/mcnla/core/matrix/collection/base/matrix_collection_wrapper.hpp
+/// @brief   The matrix collection wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_COLLECTION_VECTOR_COLLECTION_WRAPPER_HPP_
-#define MCNLA_CORE_MATRIX_COLLECTION_VECTOR_COLLECTION_WRAPPER_HPP_
+#ifndef MCNLA_CORE_MATRIX_COLLECTION_BASE_MATRIX_COLLECTION_WRAPPER_HPP_
+#define MCNLA_CORE_MATRIX_COLLECTION_BASE_MATRIX_COLLECTION_WRAPPER_HPP_
 
-#include <mcnla/core/matrix/collection/vector_collection_wrapper.hh>
+#include <mcnla/core/matrix/collection/base/matrix_collection_wrapper.hh>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -23,40 +23,48 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Determines if the memory size is zero.
 ///
-template <class _Derived>
-bool VectorCollectionWrapper<_Derived>::isEmpty() const noexcept {
+template <typename _Derived>
+bool MatrixCollectionWrapper<_Derived>::isEmpty() const noexcept {
   return derived().isEmptyImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the length of vector.
+/// @brief  Gets the number of rows of matrix.
 ///
 template <class _Derived>
-index_t VectorCollectionWrapper<_Derived>::len() const noexcept {
-  return derived().lenImpl();
+index_t MatrixCollectionWrapper<_Derived>::nrow() const noexcept {
+  return derived().nrowImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the number of vectors.
+/// @brief  Gets the number of columns of matrix.
 ///
 template <class _Derived>
-index_t VectorCollectionWrapper<_Derived>::nvec() const noexcept {
-  return derived().nvecImpl();
+index_t MatrixCollectionWrapper<_Derived>::ncol() const noexcept {
+  return derived().ncolImpl();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the number of matrices.
+///
+template <class _Derived>
+index_t MatrixCollectionWrapper<_Derived>::nmat() const noexcept {
+  return derived().nmatImpl();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
 template <class _Derived>
-std::tuple<index_t, index_t> VectorCollectionWrapper<_Derived>::sizes() const noexcept {
-  return std::make_tuple(len(), nvec());
+std::tuple<index_t, index_t, index_t> MatrixCollectionWrapper<_Derived>::sizes() const noexcept {
+  return std::make_tuple(nrow(), ncol(), nmat());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets a vector
+/// @brief  Gets a matrix.
 ///
 template <class _Derived>
-VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
+MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) noexcept {
   return derived().getImpl(idx);
@@ -66,7 +74,7 @@ VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
 /// @copydoc  operator()( const index_t )
 ///
 template <class _Derived>
-const VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
+const MatrixT<_Derived> MatrixCollectionWrapper<_Derived>::operator()(
     const index_t idx
 ) const noexcept {
   return derived().getImpl(idx);
@@ -76,4 +84,4 @@ const VectorT<_Derived> VectorCollectionWrapper<_Derived>::operator()(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_COLLECTION_VECTOR_COLLECTION_WRAPPER_HPP_
+#endif  // MCNLA_CORE_MATRIX_COLLECTION_BASE_MATRIX_COLLECTION_WRAPPER_HPP_

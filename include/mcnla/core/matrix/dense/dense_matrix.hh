@@ -101,10 +101,12 @@ class DenseMatrix
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseMatrix
 template <typename _Val>
 using DenseMatrixColMajor = DenseMatrix<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseMatrix
 template <typename _Val>
 using DenseMatrixRowMajor = DenseMatrix<_Val, Trans::TRANS>;
 

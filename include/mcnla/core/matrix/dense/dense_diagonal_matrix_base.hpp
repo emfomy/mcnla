@@ -77,7 +77,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::DenseDiagonalMatrixBase(
 ///
 template <class _Core, typename _Val>
 DenseDiagonalMatrixBase<_Core, _Val>::DenseDiagonalMatrixBase(
-    const DerivedType &other
+    const DenseDiagonalMatrixBase &other
 ) noexcept
   : BaseType(other) {}
 
@@ -88,7 +88,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::DenseDiagonalMatrixBase(
 ///
 template <class _Core, typename _Val>
 DiMatS<_Core, DenseTag, _Val>& DenseDiagonalMatrixBase<_Core, _Val>::operator=(
-    const DerivedType &other
+    const DenseDiagonalMatrixBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();

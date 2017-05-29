@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MatrixFromRowBlockConverter<_Val>::Converter(
+Converter<MatrixFromRowBlockConverterTag, _Val>::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ MatrixFromRowBlockConverter<_Val>::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MatrixFromRowBlockConverter<_Val>::initializeImpl() noexcept {}
+void Converter<MatrixFromRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,7 +43,7 @@ void MatrixFromRowBlockConverter<_Val>::initializeImpl() noexcept {}
 /// @param  matrix    The matrix.
 ///
 template <typename _Val>
-void MatrixFromRowBlockConverter<_Val>::runImpl(
+void Converter<MatrixFromRowBlockConverterTag, _Val>::runImpl(
     const DenseMatrixRowMajor<_Val> &matrix_j,
           DenseMatrixRowMajor<_Val> &matrix
 ) noexcept {

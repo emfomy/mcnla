@@ -85,11 +85,13 @@ class DenseSymmetricMatrix
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseSymmetricMatrix
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
 using DenseSymmetricMatrixColMajor = DenseSymmetricMatrix<_Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
+/// @see  DenseSymmetricMatrix
 using DenseSymmetricMatrixRowMajor = DenseSymmetricMatrix<_Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix

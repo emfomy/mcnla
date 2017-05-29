@@ -59,10 +59,9 @@ ccmake <path-to-source>
 * Set 'MCNLA_INT_SIZE'      to select system integer size.
 * Set 'MCNLA_OMP'           to select OpenMP library.             (Require 'MCNLA_BLAS = MKL')
 
+* Set 'GTEST_ROOT'          for the root path of Google Test.     (Require 'MCNLA_BUILD_TEST')
 * Set 'INTEL_ROOT'          for the root path of Intel libraries. (Require 'MCNLA_BLAS = MKL')
 * Set 'MKL_ROOT'            for the root path of Intel MKL.       (Require 'MCNLA_BLAS = MKL')
-* Set 'GTEST_ROOT'          for the root path of Google Test.     (Require 'MCNLA_BUILD_TEST')
-
 * Set 'MPI_PROCS'           to set the number of MPI processes used in demo codes.
 
 ### Makefile

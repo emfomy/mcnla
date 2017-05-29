@@ -1,14 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/collection/vector_collection_wrapper.hh
+/// @file    include/mcnla/core/matrix/collection/base/vector_collection_wrapper.hh
 /// @brief   The definition of vector collection wrapper.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_COLLECTION_VECTOR_COLLECTION_WRAPPER_HH_
-#define MCNLA_CORE_MATRIX_COLLECTION_VECTOR_COLLECTION_WRAPPER_HH_
+#ifndef MCNLA_CORE_MATRIX_COLLECTION_BASE_VECTOR_COLLECTION_WRAPPER_HH_
+#define MCNLA_CORE_MATRIX_COLLECTION_BASE_VECTOR_COLLECTION_WRAPPER_HH_
 
-#include <mcnla/core/matrix/def.hpp>
+#include <mcnla/core/matrix/collection/def.hpp>
 #include <tuple>
 #include <mcnla/core/matrix/dense.hpp>
 #include <mcnla/core/utility/crtp.hpp>
@@ -63,4 +63,4 @@ class VectorCollectionWrapper {
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_COLLECTION_VECTOR_COLLECTION_WRAPPER_HH_
+#endif  // MCNLA_CORE_MATRIX_COLLECTION_BASE_VECTOR_COLLECTION_WRAPPER_HH_

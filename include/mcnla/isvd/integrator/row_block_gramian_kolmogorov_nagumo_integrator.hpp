@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockGramianKolmogorovNagumoIntegrator<_Val>::Integrator(
+Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::Integrator(
     const Parameters<_Val> &parameters,
     const index_t max_iteration,
     const RealValT<_Val> tolerance
@@ -39,7 +39,7 @@ RowBlockGramianKolmogorovNagumoIntegrator<_Val>::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockGramianKolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
+void Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::initializeImpl() noexcept {
 
   const auto dim_sketch       = parameters_.dimSketch();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
@@ -68,8 +68,8 @@ void RowBlockGramianKolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept 
 /// @param  matrix_qbarj   The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void RowBlockGramianKolmogorovNagumoIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<_Val> &collection_qj,
+void Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::runImpl(
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
           DenseMatrixRowMajor<_Val> &matrix_qbarj
 ) noexcept {
 
@@ -215,7 +215,7 @@ void RowBlockGramianKolmogorovNagumoIntegrator<_Val>::runImpl(
 /// @brief  Gets the maximum number of iteration.
 ///
 template <typename _Val>
-index_t RowBlockGramianKolmogorovNagumoIntegrator<_Val>::maxIteration() const noexcept {
+index_t Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::maxIteration() const noexcept {
   return max_iteration_;
 }
 
@@ -223,7 +223,7 @@ index_t RowBlockGramianKolmogorovNagumoIntegrator<_Val>::maxIteration() const no
 /// @brief  Gets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RealValT<_Val> RowBlockGramianKolmogorovNagumoIntegrator<_Val>::tolerance() const noexcept {
+RealValT<_Val> Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::tolerance() const noexcept {
   return tolerance_;
 }
 
@@ -231,7 +231,7 @@ RealValT<_Val> RowBlockGramianKolmogorovNagumoIntegrator<_Val>::tolerance() cons
 /// @brief  Gets the number of iteration.
 ///
 template <typename _Val>
-index_t RowBlockGramianKolmogorovNagumoIntegrator<_Val>::iteration() const noexcept {
+index_t Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
 }
@@ -240,7 +240,7 @@ index_t RowBlockGramianKolmogorovNagumoIntegrator<_Val>::iteration() const noexc
 /// @brief  Sets the maximum number of iteration.
 ///
 template <typename _Val>
-RowBlockGramianKolmogorovNagumoIntegrator<_Val>& RowBlockGramianKolmogorovNagumoIntegrator<_Val>::setMaxIteration(
+RowBlockGramianKolmogorovNagumoIntegrator<_Val>& Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
@@ -254,7 +254,7 @@ RowBlockGramianKolmogorovNagumoIntegrator<_Val>& RowBlockGramianKolmogorovNagumo
 /// @brief  Sets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RowBlockGramianKolmogorovNagumoIntegrator<_Val>& RowBlockGramianKolmogorovNagumoIntegrator<_Val>::setTolerance(
+RowBlockGramianKolmogorovNagumoIntegrator<_Val>& Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>::setTolerance(
     const RealValT<_Val> tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);

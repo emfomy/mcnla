@@ -85,10 +85,12 @@ class DenseTriangularMatrix
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseTriangularMatrix
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
 using DenseTriangularMatrixColMajor = DenseTriangularMatrix<_Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseTriangularMatrix
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
 using DenseTriangularMatrixRowMajor = DenseTriangularMatrix<_Val, Trans::TRANS, _uplo>;
 

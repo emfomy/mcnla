@@ -34,7 +34,7 @@ template <class _Tag, typename _Val> class Integrator;
 namespace traits {
 
 template <class _Tag, typename _Val>
-MCNLA_TRAITS_DEF(VAL, isvd::Integrator<_Tag MCNLA_COMMA _Val>, _Val)
+MCNLA_TRAITS_DEF(Val, MCNLA_(isvd::Integrator<_Tag, _Val>), _Val)
 
 }  // namespace traits
 
@@ -49,10 +49,7 @@ namespace isvd {
 /// @tparam  _Tag  The integrator tag.
 /// @tparam  _Val  The value type.
 ///
-template <class _Tag, typename _Val>
-class Integrator : public StageWrapper<Integrator<_Tag, _Val>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD integrator!");
-};
+template <class _Tag, typename _Val> class Integrator;
 
 }  // namespace isvd
 

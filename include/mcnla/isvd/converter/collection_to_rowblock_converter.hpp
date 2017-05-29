@@ -25,7 +25,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-CollectionToRowBlockConverter<_Val>::Converter(
+Converter<CollectionToRowBlockConverterTag, _Val>::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +34,7 @@ CollectionToRowBlockConverter<_Val>::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void CollectionToRowBlockConverter<_Val>::initializeImpl() noexcept {}
+void Converter<CollectionToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,9 +43,9 @@ void CollectionToRowBlockConverter<_Val>::initializeImpl() noexcept {}
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void CollectionToRowBlockConverter<_Val>::runImpl(
-    DenseMatrixCollection201<_Val> &collection_q,
-    DenseMatrixCollection201<_Val> &collection_qj
+void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
@@ -67,8 +67,8 @@ void CollectionToRowBlockConverter<_Val>::runImpl(
   auto matrix_qs_full = collection_q.unfold();
   matrix_qs_full.resize(nrow_total, ""_);
 
-  DenseMatrixCollection102<_Val> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
-  DenseMatrixCollection201<_Val> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
+  DenseMatrixCollectionColBlockRowMajor<_Val> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
 
   this->tic(); double comm_moment, comm_time = 0.0;
   // ====================================================================================================================== //
