@@ -38,7 +38,7 @@ struct RowBlockTag {};
 /// @tparam  _Storage  The storage tag.
 /// @tparam  _Val      The value type.
 ///
-/// @see  Array, ArrayGpu
+/// @see  DenseVectorCollection, DenseVectorCollectionGpu
 ///
 template <class _Tag, class _Core, class _Storage, typename _Val> class GeVecCollS;
 
@@ -51,7 +51,7 @@ template <class _Tag, class _Core, class _Storage, typename _Val> class GeVecCol
 /// @tparam  _Val      The value type.
 /// @tparam  _trans    The transpose storage layout.
 ///
-/// @see  Array, ArrayGpu
+/// @see  DenseMatrixCollection, DenseMatrixCollectionGpu
 ///
 template <class _Tag, class _Core, class _Storage, typename _Val, Trans _trans> class GeMatCollS;
 
