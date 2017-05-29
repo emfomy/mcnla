@@ -11,6 +11,12 @@
 #include <mcnla/isvd/converter/collection_from_rowblock_converter.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Converter<CollectionFromRowBlockConverterTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP CollectionFromRowBlockConverter<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-CollectionFromRowBlockConverter<_Val>::Converter(
+MCNLA_TEP::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +40,7 @@ CollectionFromRowBlockConverter<_Val>::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void CollectionFromRowBlockConverter<_Val>::initializeImpl() noexcept {}
+void MCNLA_TEP::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,9 +49,9 @@ void CollectionFromRowBlockConverter<_Val>::initializeImpl() noexcept {}
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void CollectionFromRowBlockConverter<_Val>::runImpl(
-    DenseMatrixCollection201<_Val> &collection_qj,
-    DenseMatrixCollection201<_Val> &collection_q
+void MCNLA_TEP::runImpl(
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
@@ -67,8 +73,8 @@ void CollectionFromRowBlockConverter<_Val>::runImpl(
   auto matrix_qs_full = collection_q.unfold();
   matrix_qs_full.resize(nrow_total, ""_);
 
-  DenseMatrixCollection201<_Val> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
-  DenseMatrixCollection102<_Val> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
+  DenseMatrixCollectionColBlockRowMajor<_Val> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
 
   this->tic(); double comm_moment, comm_time = 0.0;
   // ====================================================================================================================== //
@@ -90,5 +96,7 @@ void CollectionFromRowBlockConverter<_Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROWBLOCK_CONVERTER_HPP_

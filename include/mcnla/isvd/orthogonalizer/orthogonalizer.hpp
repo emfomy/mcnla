@@ -34,7 +34,7 @@ template <class _Tag, typename _Val> class Orthogonalizer;
 namespace traits {
 
 template <class _Tag, typename _Val>
-MCNLA_TRAITS_DEF(VAL, isvd::Orthogonalizer<_Tag MCNLA_COMMA _Val>, _Val)
+MCNLA_TRAITS_DEF(Val, MCNLA_(isvd::Orthogonalizer<_Tag, _Val>), _Val)
 
 }  // namespace traits
 
@@ -49,10 +49,7 @@ namespace isvd {
 /// @tparam  _Tag  The orthogonalizer tag.
 /// @tparam  _Val  The value type.
 ///
-template <class _Tag, typename _Val>
-class Orthogonalizer : public StageWrapper<Orthogonalizer<_Tag, _Val>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD orthogonalizer!");
-};
+template <class _Tag, typename _Val> class Orthogonalizer;
 
 }  // namespace isvd
 

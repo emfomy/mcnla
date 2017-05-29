@@ -85,10 +85,10 @@ class DenseSymmetricMatrixBase_
   inline DenseSymmetricMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseSymmetricMatrixBase( const index_t size, const index_t pitch,
                                    const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseSymmetricMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseSymmetricMatrixBase( const DenseSymmetricMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseSymmetricMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;
@@ -121,8 +121,8 @@ class DenseSymmetricMatrixBase_
   inline index_t mrowImpl() const noexcept;
   inline index_t mcolImpl() const noexcept;
 
-  MCNLA_CRTP_BASE(BaseType);
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

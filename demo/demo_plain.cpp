@@ -55,7 +55,7 @@ int main( int argc, char **argv ) {
   int Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
   int m0        = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
   int n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
-  int k0        = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  int k0        = ( argc > ++argi ) ? atof(argv[argi]) : 10;
   int p         = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   int q         = ( argc > ++argi ) ? atof(argv[argi]) : 0;
   int num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;

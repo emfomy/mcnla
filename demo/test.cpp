@@ -16,6 +16,8 @@
 ///
 int main( int argc, char **argv ) {
 
+  mcnla::matrix::DenseMatrixCollectionColBlockColMajor<double> coll;
+
 //   mcnla::init(argc, argv);
 
 //   const auto mpi_comm = MPI_COMM_WORLD;

@@ -76,10 +76,10 @@ class DenseVectorBase_
   inline DenseVectorBase( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
   inline DenseVectorBase( const index_t len, const index_t stride,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseVectorBase( const DerivedType &other ) noexcept;
+  inline DenseVectorBase( const DenseVectorBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseVectorBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;
@@ -117,8 +117,8 @@ class DenseVectorBase_
   inline index_t toDim0( const SizesType sizes ) const noexcept;
   inline index_t toDim0( const index_t len ) const noexcept;
 
-  MCNLA_CRTP_BASE(BaseType);
-  MCNLA_CRTP_DERIVED(DerivedType);
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

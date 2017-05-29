@@ -11,6 +11,12 @@
 #include <mcnla/isvd/orthogonalizer/gramian_orthogonalizer.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Orthogonalizer<GramianOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP GramianOrthogonalizer<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-GramianOrthogonalizer<_Val>::Orthogonalizer(
+MCNLA_TEP::Orthogonalizer(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +40,7 @@ GramianOrthogonalizer<_Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void GramianOrthogonalizer<_Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -52,8 +58,8 @@ void GramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val>
-void GramianOrthogonalizer<_Val>::runImpl(
-    DenseMatrixCollection201<_Val> &collection_q
+void MCNLA_TEP::runImpl(
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();
@@ -97,5 +103,7 @@ void GramianOrthogonalizer<_Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HPP_

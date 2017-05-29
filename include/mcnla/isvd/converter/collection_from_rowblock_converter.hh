@@ -69,7 +69,7 @@ class CollectionFromRowBlockConverter
   void initializeImpl() noexcept;
 
   // Converts data
-  void runImpl( DenseMatrixCollection201<_Val> &collection_qj, DenseMatrixCollection201<_Val> &collection_q ) noexcept;
+  void runImpl( DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q ) noexcept;
 
 };
 

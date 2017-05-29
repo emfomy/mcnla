@@ -11,6 +11,12 @@
 #include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Orthogonalizer<SvdOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP SvdOrthogonalizer<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-SvdOrthogonalizer<_Val>::Orthogonalizer(
+MCNLA_TEP::Orthogonalizer(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +40,7 @@ SvdOrthogonalizer<_Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void SvdOrthogonalizer<_Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
@@ -49,8 +55,8 @@ void SvdOrthogonalizer<_Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val>
-void SvdOrthogonalizer<_Val>::runImpl(
-          DenseMatrixCollection201<_Val> &collection_q
+void MCNLA_TEP::runImpl(
+          DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();
@@ -74,5 +80,7 @@ void SvdOrthogonalizer<_Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HPP_

@@ -1,7 +1,7 @@
 namespace mcnla {
 
 /**
-  @page tutorial_linear_algebra Simple Linear Algebra Routines
+  @page tutorial_linear_algebra Linear Algebra Routines
 
   <h3>BLAS/LAPACK</h3>
 

@@ -11,6 +11,12 @@
 #include <mcnla/isvd/former/row_block_gramian_former.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Former<RowBlockGramianFormerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP RowBlockGramianFormer<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockGramianFormer<_Val>::Former(
+MCNLA_TEP::Former(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +40,7 @@ RowBlockGramianFormer<_Val>::Former(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockGramianFormer<_Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto nrow_each  = parameters_.nrowEach();
@@ -64,7 +70,7 @@ void RowBlockGramianFormer<_Val>::initializeImpl() noexcept {
 /// @param  matrix_qj  The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void RowBlockGramianFormer<_Val>::runImpl(
+void MCNLA_TEP::runImpl(
     const _Matrix &matrix_aj,
     const DenseMatrixRowMajor<_Val> &matrix_qj
 ) noexcept {
@@ -122,7 +128,7 @@ void RowBlockGramianFormer<_Val>::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& RowBlockGramianFormer<_Val>::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& MCNLA_TEP::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -131,7 +137,7 @@ const DenseVector<RealValT<_Val>>& RowBlockGramianFormer<_Val>::vectorS() const 
 /// @brief  Gets the left singular vectors (row-block).
 ///
 template <typename _Val>
-const DenseMatrixRowMajor<_Val>& RowBlockGramianFormer<_Val>::matrixUj() const noexcept {
+const DenseMatrixRowMajor<_Val>& MCNLA_TEP::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_uj_cut_;
 }
@@ -139,5 +145,7 @@ const DenseMatrixRowMajor<_Val>& RowBlockGramianFormer<_Val>::matrixUj() const n
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HPP_

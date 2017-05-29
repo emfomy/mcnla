@@ -51,7 +51,7 @@ ArrayBase<_Core, _Val>::ArrayBase(
 ///
 template <class _Core, typename _Val>
 ArrayBase<_Core, _Val>::ArrayBase(
-    const DerivedType &other
+    const ArrayBase &other
 ) noexcept
   : BaseType(other),
     size_(other.size_),
@@ -64,7 +64,7 @@ ArrayBase<_Core, _Val>::ArrayBase(
 ///
 template <class _Core, typename _Val>
 ArrS<_Core, _Val>& ArrayBase<_Core, _Val>::operator=(
-    const DerivedType &other
+    const ArrayBase &other
 ) noexcept {
   BaseType::operator=(other);
   size_   = other.size_;

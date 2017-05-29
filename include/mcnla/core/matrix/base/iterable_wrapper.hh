@@ -49,9 +49,7 @@ class IterableWrapper {
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  MCNLA_CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

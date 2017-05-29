@@ -77,7 +77,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase(
-    const DerivedType &other
+    const DenseTriangularMatrixBase &other
 ) noexcept
   : BaseType(other) {}
 
@@ -88,7 +88,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 TrMatS<_Core, DenseTag, _Val, _trans, _uplo>& DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
-    const DerivedType &other
+    const DenseTriangularMatrixBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();

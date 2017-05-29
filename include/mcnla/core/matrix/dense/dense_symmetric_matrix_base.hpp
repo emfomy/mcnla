@@ -77,7 +77,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
-    const DerivedType &other
+    const DenseSymmetricMatrixBase &other
 ) noexcept
   : BaseType(other) {}
 
@@ -88,7 +88,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::DenseSymmetricMatrixBase(
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 SyMatS<_Core, DenseTag, _Val, _trans, _uplo>& DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
-    const DerivedType &other
+    const DenseSymmetricMatrixBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();

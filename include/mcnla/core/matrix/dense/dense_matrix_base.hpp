@@ -111,7 +111,7 @@ DenseMatrixBase<_Core, _Val, _trans>::DenseMatrixBase(
 ///
 template <class _Core, typename _Val, Trans _trans>
 DenseMatrixBase<_Core, _Val, _trans>::DenseMatrixBase(
-    const DerivedType &other
+    const DenseMatrixBase &other
 ) noexcept
   : BaseType(other) {}
 
@@ -122,7 +122,7 @@ DenseMatrixBase<_Core, _Val, _trans>::DenseMatrixBase(
 ///
 template <class _Core, typename _Val, Trans _trans>
 GeMatS<_Core, DenseTag, _Val, _trans>& DenseMatrixBase<_Core, _Val, _trans>::operator=(
-    const DerivedType &other
+    const DenseMatrixBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();

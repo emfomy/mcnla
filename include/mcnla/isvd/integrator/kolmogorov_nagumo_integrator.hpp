@@ -11,6 +11,12 @@
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Integrator<KolmogorovNagumoIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP KolmogorovNagumoIntegrator<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-KolmogorovNagumoIntegrator<_Val>::Integrator(
+MCNLA_TEP::Integrator(
     const Parameters<_Val> &parameters,
     const index_t max_iteration,
     const RealValT<_Val> tolerance
@@ -39,7 +45,7 @@ KolmogorovNagumoIntegrator<_Val>::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void KolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
@@ -66,8 +72,8 @@ void KolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
 /// @param  matrix_qbar   The matrix Qbar.
 ///
 template <typename _Val>
-void KolmogorovNagumoIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<_Val> &collection_q,
+void MCNLA_TEP::runImpl(
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
           DenseMatrixRowMajor<_Val> &matrix_qbar
 ) noexcept {
 
@@ -179,7 +185,7 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
 /// @brief  Gets the maximum number of iteration.
 ///
 template <typename _Val>
-index_t KolmogorovNagumoIntegrator<_Val>::maxIteration() const noexcept {
+index_t MCNLA_TEP::maxIteration() const noexcept {
   return max_iteration_;
 }
 
@@ -187,7 +193,7 @@ index_t KolmogorovNagumoIntegrator<_Val>::maxIteration() const noexcept {
 /// @brief  Gets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RealValT<_Val> KolmogorovNagumoIntegrator<_Val>::tolerance() const noexcept {
+RealValT<_Val> MCNLA_TEP::tolerance() const noexcept {
   return tolerance_;
 }
 
@@ -195,7 +201,7 @@ RealValT<_Val> KolmogorovNagumoIntegrator<_Val>::tolerance() const noexcept {
 /// @brief  Gets the number of iteration.
 ///
 template <typename _Val>
-index_t KolmogorovNagumoIntegrator<_Val>::iteration() const noexcept {
+index_t MCNLA_TEP::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
 }
@@ -204,7 +210,7 @@ index_t KolmogorovNagumoIntegrator<_Val>::iteration() const noexcept {
 /// @brief  Sets the maximum number of iteration.
 ///
 template <typename _Val>
-KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setMaxIteration(
+KolmogorovNagumoIntegrator<_Val>& MCNLA_TEP::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
@@ -218,7 +224,7 @@ KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setMaxIterat
 /// @brief  Sets the tolerance of convergence condition.
 ///
 template <typename _Val>
-KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setTolerance(
+KolmogorovNagumoIntegrator<_Val>& MCNLA_TEP::setTolerance(
     const RealValT<_Val> tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
@@ -231,5 +237,7 @@ KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setTolerance
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_

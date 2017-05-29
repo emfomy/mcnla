@@ -94,7 +94,7 @@ class RowBlockGaussianProjectionSketcher
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_aj, DenseMatrixCollection201<_Val> &collection_qj ) noexcept;
+  void runImpl( const _Matrix &matrix_aj, DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
