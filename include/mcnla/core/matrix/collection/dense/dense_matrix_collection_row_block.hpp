@@ -10,6 +10,12 @@
 
 #include <mcnla/core/matrix/collection/dense/dense_matrix_collection_row_block.hh>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP DenseMatrixCollectionRowBlockBase<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -24,7 +30,7 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS() noexcept
+MCNLA_TEP::GeMatCollS() noexcept
   : data_(),
     nrow_(0),
     mrow_(0) {}
@@ -33,7 +39,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS() noexcept
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
+MCNLA_TEP::GeMatCollS(
     const index_t nrow,
     const index_t ncol,
     const index_t nmat
@@ -50,7 +56,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
+MCNLA_TEP::GeMatCollS(
     const SizesType sizes
 ) noexcept
   : GeMatCollS(std::get<0>(sizes), std::get<1>(sizes), std::get<2>(sizes)) {}
@@ -59,7 +65,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
+MCNLA_TEP::GeMatCollS(
     const index_t nrow,
     const index_t ncol,
     const index_t nmat,
@@ -78,7 +84,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
+MCNLA_TEP::GeMatCollS(
     const SizesType sizes,
     const index_t mrow
 ) noexcept
@@ -88,7 +94,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
 /// @brief  Construct with given raw data.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
+MCNLA_TEP::GeMatCollS(
     const index_t nrow,
     const MatrixType &data
 ) noexcept
@@ -104,7 +110,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
 /// @brief  Construct with given raw data.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
+MCNLA_TEP::GeMatCollS(
     const index_t nrow,
     const index_t mrow,
     const MatrixType &data
@@ -124,8 +130,8 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
-    const GeMatCollS &other
+MCNLA_TEP::GeMatCollS(
+    const CollectionType &other
 ) noexcept
   : data_(other.data_),
     nrow_(other.nrow_),
@@ -137,8 +143,8 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::GeMatCollS(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::operator=(
-    const GeMatCollS &other
+GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>& MCNLA_TEP::operator=(
+    const CollectionType &other
 ) noexcept {
   data_ = other.data_;
   nrow_ = other.nrow_;
@@ -150,8 +156,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, 
 /// @brief  Copies the collection.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>
-    GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::copy() const noexcept {
+GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> MCNLA_TEP::copy() const noexcept {
   return GeMatCollS(nrow_, mrow_, data_.copy());
 }
 
@@ -159,7 +164,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>
 /// @brief  Determines if the dimensions are equal to the sizes.
 ///
 template <class _Core, typename _Val, Trans _trans>
-bool GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::isShrunk() const noexcept {
+bool MCNLA_TEP::isShrunk() const noexcept {
   return (nrow_ == mrow_) && (data_.pitch() % mrow_ == 0) && data_.isShrunk();
 }
 
@@ -167,7 +172,7 @@ bool GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::isShrunk() const no
 /// @brief  Gets the maximum number of rows.
 ///
 template <class _Core, typename _Val, Trans _trans>
-index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::mrow() const noexcept {
+index_t MCNLA_TEP::mrow() const noexcept {
   return mrow_;
 }
 
@@ -175,7 +180,7 @@ index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::mrow() const noe
 /// @brief  Gets the raw data.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::data() noexcept {
+GeMatS<_Core, DenseTag, _Val, _trans>& MCNLA_TEP::data() noexcept {
   return data_;
 }
 
@@ -183,7 +188,7 @@ GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, DenseTag, 
 /// @copydoc  data
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::data() const noexcept {
+const GeMatS<_Core, DenseTag, _Val, _trans>& MCNLA_TEP::data() const noexcept {
   return data_;
 }
 
@@ -193,7 +198,7 @@ const GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, Dens
 /// @attention  The data is also reallocated.
 ///
 template <class _Core, typename _Val, Trans _trans> template <typename ..._Args>
-void GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::reconstruct(
+void MCNLA_TEP::reconstruct(
     _Args... args
 ) noexcept {
   *this = GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>(args...);
@@ -203,7 +208,7 @@ void GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::reconstruct(
 /// @brief  Gets a subcollection.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::operator()(
+GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> MCNLA_TEP::operator()(
     const IdxRange &idxrange
 ) noexcept {
   return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
@@ -213,7 +218,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _
 /// @copydoc  operator()( const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::operator()(
+const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> MCNLA_TEP::operator()(
     const IdxRange &idxrange
 ) const noexcept {
   return CollectionType(nrow_, mrow_, data_(idxrange * mrow_, ""_));
@@ -223,7 +228,7 @@ const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlock
 /// @copydoc  operator()( const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::operator()(
+GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> MCNLA_TEP::operator()(
     const FullRange,
     const FullRange,
     const IdxRange &idxrange
@@ -235,7 +240,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _
 /// @copydoc  operator()( const IdxRange& )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::operator()(
+const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> MCNLA_TEP::operator()(
     const FullRange,
     const FullRange,
     const IdxRange &idxrange
@@ -247,7 +252,7 @@ const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlock
 /// @brief  Gets a collection of rows.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::operator()(
+GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> MCNLA_TEP::operator()(
     const FullRange,
     const IdxRange &colrange,
     const FullRange
@@ -259,7 +264,7 @@ GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _
 /// @copydoc  operator()( const FullRange, const IdxRange&, const FullRange )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::operator()(
+const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> MCNLA_TEP::operator()(
     const FullRange,
     const IdxRange &colrange,
     const FullRange
@@ -271,7 +276,7 @@ const GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans> GeMatCollS<RowBlock
 /// @brief  Unfolds the collection.
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::unfold() noexcept {
+GeMatS<_Core, DenseTag, _Val, _trans>& MCNLA_TEP::unfold() noexcept {
   return data_;
 }
 
@@ -279,7 +284,7 @@ GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, DenseTag, 
 /// @copydoc  unfold
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::unfold() const noexcept {
+const GeMatS<_Core, DenseTag, _Val, _trans>& MCNLA_TEP::unfold() const noexcept {
   return data_;
 }
 
@@ -287,7 +292,7 @@ const GeMatS<_Core, DenseTag, _Val, _trans>& GeMatCollS<RowBlockTag, _Core, Dens
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::isEmpty
 ///
 template <class _Core, typename _Val, Trans _trans>
-bool GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::isEmptyImpl() const noexcept {
+bool MCNLA_TEP::isEmptyImpl() const noexcept {
   return data_.isEmpty();
 }
 
@@ -295,7 +300,7 @@ bool GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::isEmptyImpl() const
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nrow
 ///
 template <class _Core, typename _Val, Trans _trans>
-index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::nrowImpl() const noexcept {
+index_t MCNLA_TEP::nrowImpl() const noexcept {
   return nrow_;
 }
 
@@ -303,7 +308,7 @@ index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::nrowImpl() const
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::ncol
 ///
 template <class _Core, typename _Val, Trans _trans>
-index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::ncolImpl() const noexcept {
+index_t MCNLA_TEP::ncolImpl() const noexcept {
   return data_.ncol();
 }
 
@@ -311,7 +316,7 @@ index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::ncolImpl() const
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::nmat
 ///
 template <class _Core, typename _Val, Trans _trans>
-index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::nmatImpl() const noexcept {
+index_t MCNLA_TEP::nmatImpl() const noexcept {
   return mrow_ ? (data_.nrow() / mrow_) : 0;
 }
 
@@ -319,7 +324,7 @@ index_t GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::nmatImpl() const
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
 template <class _Core, typename _Val, Trans _trans>
-GeMatS<_Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::getImpl(
+GeMatS<_Core, DenseTag, _Val, _trans> MCNLA_TEP::getImpl(
     const index_t idx
 ) noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
@@ -330,7 +335,7 @@ GeMatS<_Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _
 /// @copydoc  mcnla::matrix::MatrixCollectionWrapper::operator()( const index_t )
 ///
 template <class _Core, typename _Val, Trans _trans>
-const GeMatS<_Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>::getImpl(
+const GeMatS<_Core, DenseTag, _Val, _trans> MCNLA_TEP::getImpl(
     const index_t idx
 ) const noexcept {
   mcnla_assert_gelt(idx, 0, this->nmat());
@@ -340,5 +345,7 @@ const GeMatS<_Core, DenseTag, _Val, _trans> GeMatCollS<RowBlockTag, _Core, Dense
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_DENSE_MATRIX_COLLECTION_ROW_BLOCK_HPP_

@@ -11,6 +11,12 @@
 #include <mcnla/isvd/integrator/row_block_extrinsic_mean_integrator.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP RowBlockExtrinsicMeanIntegrator<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::Integrator(
+MCNLA_TEP::Integrator(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +40,7 @@ Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::initializeImpl() noexcept {
+void MCNLA_TEP::initializeImpl() noexcept {
 
   const auto nrow             = parameters_.nrow();
   const auto dim_sketch       = parameters_.dimSketch();
@@ -63,7 +69,7 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::initializeImpl() noex
 /// @param  matrix_qbar    The matrix Qbar.
 ///
 template <typename _Val>
-void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
+void MCNLA_TEP::runImpl(
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
           DenseMatrixRowMajor<_Val>      &matrix_qbar
@@ -159,5 +165,7 @@ void Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_EXTRINSIC_MEAN_INTEGRATOR_HPP_

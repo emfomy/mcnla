@@ -1,0 +1,20 @@
+namespace mcnla {
+
+/**
+  @page tutorial_literal Literals
+
+  <h3>Literals</h3>
+
+  In MCNLA, we define some literals.
+
+  Command                  | Detail
+  ------------------------ | ------------------------
+  `123_i`                  | @ref index_t "index_t" 123
+  `""_`                    | matrix::FullRange
+  `I_{2, 4}`               | matrix::IdxRange {2, 4}
+
+  These literals are also available in the global namespace unless 'MCNLA_DISABLE_LITERAL' is defined.
+
+*/
+
+}  // namespace mcnla

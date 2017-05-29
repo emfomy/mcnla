@@ -36,8 +36,6 @@ Please use the following commands to create Makefiles
 mkdir build
 cd build
 cmake <path-to-source>
-make check
-make install
 ```
 
 ### Options

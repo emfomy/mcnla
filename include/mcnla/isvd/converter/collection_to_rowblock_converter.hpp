@@ -11,6 +11,12 @@
 #include <mcnla/isvd/converter/collection_to_rowblock_converter.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Converter<CollectionToRowBlockConverterTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP CollectionToRowBlockConverter<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-Converter<CollectionToRowBlockConverterTag, _Val>::Converter(
+MCNLA_TEP::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -34,7 +40,7 @@ Converter<CollectionToRowBlockConverterTag, _Val>::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void Converter<CollectionToRowBlockConverterTag, _Val>::initializeImpl() noexcept {}
+void MCNLA_TEP::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -43,7 +49,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::initializeImpl() noexcep
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
+void MCNLA_TEP::runImpl(
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
@@ -91,5 +97,7 @@ void Converter<CollectionToRowBlockConverterTag, _Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_ISVD_CONVERTER_COLLECTION_TO_ROWBLOCK_CONVERTER_HPP_

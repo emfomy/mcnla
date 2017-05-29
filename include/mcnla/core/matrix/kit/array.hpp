@@ -11,6 +11,12 @@
 #include <mcnla/core/matrix/kit/array.hh>
 #include <mcnla/core/utility/memory.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP ArrS<CpuTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TEP Array<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,14 +31,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <typename _Val>
-ArrS<CpuTag, _Val>::ArrS() noexcept
+MCNLA_TEP::ArrS() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <typename _Val>
-ArrS<CpuTag, _Val>::ArrS(
+MCNLA_TEP::ArrS(
     const index_t size,
     const index_t offset
 ) noexcept
@@ -42,7 +48,7 @@ ArrS<CpuTag, _Val>::ArrS(
 /// @brief  Copies the array.
 ///
 template <typename _Val>
-ArrS<CpuTag, _Val> ArrS<CpuTag, _Val>::copy() const noexcept {
+ArrS<CpuTag, _Val> MCNLA_TEP::copy() const noexcept {
   ArrS retval(size_, offset_);
   utility::memcpy(*retval, **this, size_);
   return retval;
@@ -51,5 +57,7 @@ ArrS<CpuTag, _Val> ArrS<CpuTag, _Val>::copy() const noexcept {
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TEP
 
 #endif  // MCNLA_CORE_MATRIX_KIT_ARRAY_HPP_
