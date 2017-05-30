@@ -67,11 +67,11 @@ int main( int argc, char **argv ) {
             << ", N = " << parameters.numSketch() << std::endl;
     dispParam();
     std::cout << mpi_size << " nodes / "
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
               << omp_get_max_threads()
-#else  //MCNLA_USE_OMP
+#else  // _OPENMP
               << 1
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
               << " threads per node" << std::endl << std::endl;
   }
 

@@ -11,7 +11,7 @@
 #include <mcnla/core/random/def.hpp>
 #include <mcnla/core/random/streams.hpp>
 
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
   #include <omp.h>
 #endif  // MCNLA_USE_MKL
 
@@ -40,9 +40,9 @@ inline void uniformBits(
     const Streams &streams,
           DenseVector<_Val> &vector
 ) noexcept {
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
   #pragma omp parallel for
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
   for ( index_t i = 0; i < streams.ompSize(); ++i ) {
     index_t len = vector.len() / streams.ompSize();
     index_t start = len * i;
