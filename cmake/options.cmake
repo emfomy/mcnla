@@ -1,6 +1,6 @@
 # Set install prefix
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_VERSION}" CACHE PATH "The install path prefix." FORCE)
+  set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_MAJOR_VERSION}.${MCNLA_MINOR_VERSION}" CACHE PATH "The install path prefix." FORCE)
 endif()
 
 # Set options
