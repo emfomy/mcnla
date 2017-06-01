@@ -1,6 +1,6 @@
 # Set install prefix
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_VERSION}" CACHE PATH "The install path prefix." FORCE)
+  set(CMAKE_INSTALL_PREFIX "/opt/mcnla-${MCNLA_MAJOR_VERSION}.${MCNLA_MINOR_VERSION}" CACHE PATH "The install path prefix." FORCE)
 endif()
 
 # Set options
@@ -49,15 +49,7 @@ else()
   set(MCNLA_USE_MKL "OFF")
 endif()
 
-if(MCNLA_OMP STREQUAL "GOMP")
-  list(APPEND DEFS "MCNLA_USE_OMP")
-  set(MKL_OMP "GOMP")
-elseif(MCNLA_OMP STREQUAL "IOMP")
-  list(APPEND DEFS "MCNLA_USE_OMP")
-  set(MKL_OMP "IOMP")
-else()
-  set(MKL_OMP "OFF")
-endif()
+set(MKL_OMP ${MCNLA_OMP})
 
 # if(MCNLA_USE_GPU)
 #   list(APPEND DEFS "MCNLA_USE_GPU")

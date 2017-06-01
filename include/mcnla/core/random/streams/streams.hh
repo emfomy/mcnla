@@ -12,9 +12,9 @@
 #include <vector>
 #include <mcnla/core/mpi.hpp>
 
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
   #include <omp.h>
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
 
 #ifdef MCNLA_USE_MKL
   #include <mkl.h>

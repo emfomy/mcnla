@@ -20,13 +20,14 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+/// @ingroup  matrix_collection_module
 template <class _Tag, typename _Val>
 using DenseVectorCollection = GeVecCollS<_Tag, CpuTag, DenseTag, _Val>;
 
+/// @ingroup  matrix_collection_module
+/// @see  DenseMatrixCollectionColBlock, DenseMatrixCollectionRowBlock
 template <class _Tag, typename _Val, Trans _trans>
 using DenseMatrixCollection = GeMatCollS<_Tag, CpuTag, DenseTag, _Val, _trans>;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 }  // namespace matrix
 

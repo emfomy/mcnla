@@ -28,11 +28,11 @@ namespace random {
 Streams::Streams(
     const index_t seed
 ) noexcept
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
   : omp_size_(omp_get_max_threads()),
-#else  // MCNLA_USE_OMP
+#else  // _OPENMP
   : omp_size_(1),
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
     streams_(omp_size_) {
   setSeedImpl(seed);
 }
@@ -46,11 +46,11 @@ Streams::Streams(
     const mpi_int_t mpi_root,
     const MPI_Comm mpi_comm
 ) noexcept
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
   : omp_size_(omp_get_max_threads()),
-#else  // MCNLA_USE_OMP
+#else  // _OPENMP
   : omp_size_(1),
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
     streams_(omp_size_) {
   setSeedsImpl(seed, mpi_root, mpi_comm);
 }

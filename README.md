@@ -20,7 +20,7 @@ Monte Carlo Numerical Linear Algebra Package
 * C++ compiler with C++11 support ([GCC](https://gcc.gnu.org) 5+ recommended).
 * [BLAS](http://www.netlib.org/blas) & [LAPACK](http://www.netlib.org/lapack) library.
 * [OpenMP](http://openmp.org) Library.
-* MPI Library ([OpenMPI](https://www.open-mpi.org) or [MPICH](http://www.mpich.org)).
+* MPI Library ([MPICH](http://www.mpich.org) or [OpenMPI](https://www.open-mpi.org)).
 
 ### Optional
 * [Intel&reg; Math Kernel Library](https://software.intel.com/en-us/intel-mkl) (**Recommended** for better performance, used for BLAS & LAPACK).
@@ -78,7 +78,6 @@ ccmake <path-to-source>
 * Define `MCNLA_USE_ILP64`        to use 64-bit integer.
 * Define `MCNLA_USE_MKL`          to enable Intel MKL.
 <!-- * Define `MCNLA_USE_GPU`          to enable GPU support. -->
-* Define `MCNLA_USE_OMP`          to enable multithread support.
 * Define `MCNLA_DISABLE_LITERAL`  to disable literal definition in global namespace.
 
 ## Q&amp;A
