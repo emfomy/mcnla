@@ -9,13 +9,6 @@ if(MCNLA_BUILD_BIN)
   set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -g -Wall -Wextra -pedantic")
   # set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -pedantic")
 
-  # OpenMP
-  find_package(OpenMP REQUIRED)
-  if(OpenMP_FOUND)
-    set(COMFLGS "${COMFLGS} ${OpenMP_CXX_FLAGS}")
-    set(LNKFLGS "${LNKFLGS} ${OpenMP_CXX_FLAGS}")
-  endif()
-
   # MPI
   find_package(MPI REQUIRED)
   if(MPI_FOUND)
@@ -41,6 +34,24 @@ if(MCNLA_BUILD_BIN)
     if(LAPACK_FOUND)
       list(APPEND LIBS "${LAPACK_LIBRARIES}")
     endif()
+  endif()
+
+  # OpenMP
+  if(MCNLA_OMP)
+    set(OpenMP ${MCNLA_OMP})
+
+    find_package(OpenMP REQUIRED)
+    if(OpenMP_FOUND)
+      set(COMFLGS "${COMFLGS} ${OpenMP_CXX_FLAGS}")
+      set(LNKFLGS "${LNKFLGS} ${OpenMP_CXX_FLAGS}")
+    endif()
+
+    find_package(OpenMPLib REQUIRED)
+    if(OpenMPLib_FOUND)
+      list(APPEND LIBS "${OpenMP_LIBRARIES}")
+    endif()
+
+    unset(OpenMP)
   endif()
 endif()
 
