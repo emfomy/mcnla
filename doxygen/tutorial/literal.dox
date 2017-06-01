@@ -13,7 +13,7 @@ namespace mcnla {
   `""_`                    | matrix::FullRange
   `I_{2, 4}`               | matrix::IdxRange {2, 4}
 
-  These literals are also available in the global namespace unless 'MCNLA_DISABLE_LITERAL' is defined.
+  These literals are also available in the global namespace <b>unless</b> 'MCNLA_DISABLE_LITERAL' is defined.
 
 */
 
