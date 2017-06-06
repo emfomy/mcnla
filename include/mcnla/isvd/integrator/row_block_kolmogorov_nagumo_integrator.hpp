@@ -59,7 +59,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
   matrix_dc_.reconstruct(dim_sketch, dim_sketch);
   matrix_z_.reconstruct(dim_sketch, dim_sketch);
   matrix_c_.reconstruct(dim_sketch, dim_sketch);
-  symatrix_cinv_.reconstruct(dim_sketch);
+  matrix_cinv_.reconstruct(dim_sketch, dim_sketch);
 
   vector_l_.reconstruct(dim_sketch);
   vector_ls_.reconstruct(dim_sketch);
@@ -91,9 +91,6 @@ void MCNLA_TMP::runImpl(
 
   auto &matrix_qsj = collection_qj.unfold();  // matrix Qs.
   auto &matrix_qcj = matrix_qbarj;            // matrix Qc.
-
-  auto &matrix_lz    = symatrix_cinv_.full();  // sqrt(L) * Z.
-  auto &matrix_linvz = matrix_z_;              // sqrt(L) \ Z.
 
   auto &matrix_fc    = matrix_c_;  // matrix Fc.
 
@@ -151,20 +148,20 @@ void MCNLA_TMP::runImpl(
       vector_ls_(i) = std::sqrt(vector_l_(i));
     }
 
-    // Compute sqrt(L) * Z
-    la::mm(vector_ls_.diag(), matrix_z_, matrix_lz);
+    // Tmp := L * Z
+    la::mm(vector_ls_.diag(), matrix_z_, matrix_cinv_);
 
-    // Compute sqrt(L) \ Z
-    la::sm(vector_ls_.diag().inv(), matrix_linvz);
+    // Z := L \ Z
+    la::sm(vector_ls_.diag().inv(), matrix_z_);
 
-    // C := Z' * L * Z
-    la::mm(matrix_lz.t(), matrix_lz, matrix_c_);
+    // C := Tmp' * Tmp
+    la::mm(matrix_cinv_.t(), matrix_cinv_, matrix_c_);
 
-    // inv(C) := Z' * inv(L) * Z
-    la::rk(matrix_linvz.t(), symatrix_cinv_);
+    // inv(C) := Z' * Z
+    la::rk(matrix_z_.t(), matrix_cinv_.sym());
 
     // Fc := C - Dc * inv(C)
-    la::mm(matrix_dc_, symatrix_cinv_, matrix_c_, -1.0, 1.0);
+    la::mm(matrix_dc_, matrix_cinv_.sym(), matrix_c_, -1.0, 1.0);
 
     // ================================================================================================================== //
     // Qc := Qc * Fc + Gc * inv(C)
@@ -174,7 +171,7 @@ void MCNLA_TMP::runImpl(
     la::mm(matrix_tmp_, matrix_fc, matrix_qcj);
 
     // Qc += Gc * inv(C)
-    la::mm(matrix_gcj_, symatrix_cinv_, matrix_qcj, 1.0, 1.0);
+    la::mm(matrix_gcj_, matrix_cinv_.sym(), matrix_qcj, 1.0, 1.0);
 
     // ================================================================================================================== //
     // Check convergence: || I - C ||_F / sqrt(k) < tol

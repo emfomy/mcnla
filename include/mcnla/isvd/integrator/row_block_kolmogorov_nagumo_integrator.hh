@@ -83,7 +83,7 @@ class RowBlockKolmogorovNagumoIntegrator
   DenseMatrixRowMajor<_Val> matrix_c_;
 
   /// The matrix inv(C).
-  DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
+  DenseMatrixRowMajor<_Val> matrix_cinv_;
 
   /// The vector L.
   DenseVector<_Val> vector_l_;
