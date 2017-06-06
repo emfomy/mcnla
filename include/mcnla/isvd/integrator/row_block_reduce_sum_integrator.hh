@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/row_block_kolmogorov_nagumo_integrator.hh
-/// @brief   The definition of Kolmogorov-Nagumo-type integrator (row-block version).
+/// @file    include/mcnla/isvd/integrator/row_block_reduce_sum_integrator.hh
+/// @brief   The definition of reduce-sum integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
-#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HH_
+#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
@@ -23,34 +23,34 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockKolmogorovNagumoIntegratorTag {};
-template <typename _Val> using RowBlockKolmogorovNagumoIntegrator = Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>;
+struct RowBlockReduceSumIntegratorTag {};
+template <typename _Val> using RowBlockReduceSumIntegrator = Integrator<RowBlockReduceSumIntegratorTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
-/// The Kolmogorov-Nagumo-type integrator (row-block version).
+/// The reduce-sum integrator (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
+class Integrator<RowBlockReduceSumIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockKolmogorovNagumoIntegrator
+class RowBlockReduceSumIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>> {
+  : public StageWrapper<RowBlockReduceSumIntegrator<_Val>> {
 
-  friend StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
+  friend StageWrapper<RowBlockReduceSumIntegrator<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
+  using BaseType = StageWrapper<RowBlockReduceSumIntegrator<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Row-Block Version)";
+  static constexpr const char* name_ = "Reduce-Sum Integrator (Row-Block Version)";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "copying Qc / iterating";
@@ -64,17 +64,11 @@ class RowBlockKolmogorovNagumoIntegrator
   /// The number of iteration.
   index_t iteration_;
 
-  /// The matrix Gcj.
-  DenseMatrixRowMajor<_Val> matrix_gcj_;
+  /// The matrix B.
+  DenseMatrixRowMajor<_Val> matrix_b_;
 
-  /// The temporary matrix.
-  DenseMatrixRowMajor<_Val> matrix_tmp_;
-
-  /// The matrix Bc.
-  DenseMatrixRowMajor<_Val> matrix_bc_;
-
-  /// The matrix Dc.
-  DenseMatrixRowMajor<_Val> matrix_dc_;
+  /// The matrix D.
+  DenseMatrixRowMajor<_Val> matrix_d_;
 
   /// The matrix Z.
   DenseMatrixRowMajor<_Val> matrix_z_;
@@ -82,14 +76,17 @@ class RowBlockKolmogorovNagumoIntegrator
   /// The matrix C.
   DenseMatrixRowMajor<_Val> matrix_c_;
 
-  /// The matrix inv(C).
-  DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
+  /// The matrix Xj.
+  DenseMatrixRowMajor<_Val> matrix_xj_;
 
-  /// The vector L.
-  DenseVector<_Val> vector_l_;
+  /// The temporary matrix.
+  DenseMatrixRowMajor<_Val> matrix_tmp_;
 
-  /// The vector sqrt(L).
-  DenseVector<_Val> vector_ls_;
+  /// The vector E.
+  DenseVector<_Val> vector_e_;
+
+  /// The vector F.
+  DenseVector<_Val> vector_f_;
 
   /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
@@ -129,4 +126,4 @@ class RowBlockKolmogorovNagumoIntegrator
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HH_

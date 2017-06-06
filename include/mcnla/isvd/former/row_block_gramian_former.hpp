@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP Former<RowBlockGramianFormerTag, _Val>
+  #define MCNLA_TMP Former<RowBlockGramianFormerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP RowBlockGramianFormer<_Val>
+  #define MCNLA_TMP RowBlockGramianFormer<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TEP::Former(
+MCNLA_TMP::Former(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -40,7 +40,7 @@ MCNLA_TEP::Former(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TEP::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto nrow_each  = parameters_.nrowEach();
@@ -70,7 +70,7 @@ void MCNLA_TEP::initializeImpl() noexcept {
 /// @param  matrix_qj  The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void MCNLA_TEP::runImpl(
+void MCNLA_TMP::runImpl(
     const _Matrix &matrix_aj,
     const DenseMatrixRowMajor<_Val> &matrix_qj
 ) noexcept {
@@ -128,7 +128,7 @@ void MCNLA_TEP::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& MCNLA_TEP::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -137,7 +137,7 @@ const DenseVector<RealValT<_Val>>& MCNLA_TEP::vectorS() const noexcept {
 /// @brief  Gets the left singular vectors (row-block).
 ///
 template <typename _Val>
-const DenseMatrixRowMajor<_Val>& MCNLA_TEP::matrixUj() const noexcept {
+const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_uj_cut_;
 }
@@ -146,6 +146,6 @@ const DenseMatrixRowMajor<_Val>& MCNLA_TEP::matrixUj() const noexcept {
 
 }  // namespace mcnla
 
-#undef MCNLA_TEP
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HPP_

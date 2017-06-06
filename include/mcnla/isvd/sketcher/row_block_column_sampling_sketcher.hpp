@@ -13,9 +13,9 @@
 #include <mcnla/core/random.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP Sketcher<RowBlockColumnSamplingSketcherTag, _Val>
+  #define MCNLA_TMP Sketcher<RowBlockColumnSamplingSketcherTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP RowBlockColumnSamplingSketcher<_Val>
+  #define MCNLA_TMP RowBlockColumnSamplingSketcher<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TEP::Sketcher(
+MCNLA_TMP::Sketcher(
     const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
@@ -44,7 +44,7 @@ MCNLA_TEP::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TEP::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
@@ -58,7 +58,7 @@ void MCNLA_TEP::initializeImpl() noexcept {
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void MCNLA_TEP::runImpl(
+void MCNLA_TMP::runImpl(
     const _Matrix &matrix_aj,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
@@ -102,7 +102,7 @@ void MCNLA_TEP::runImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t MCNLA_TEP::seed() const noexcept {
+index_t MCNLA_TMP::seed() const noexcept {
   return seed_;
 }
 
@@ -110,7 +110,7 @@ index_t MCNLA_TEP::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-RowBlockColumnSamplingSketcher<_Val>& MCNLA_TEP::setSeed(
+RowBlockColumnSamplingSketcher<_Val>& MCNLA_TMP::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -122,6 +122,6 @@ RowBlockColumnSamplingSketcher<_Val>& MCNLA_TEP::setSeed(
 
 }  // namespace mcnla
 
-#undef MCNLA_TEP
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_COLUMN_SAMPLING_SKETCHER_HPP_

@@ -13,9 +13,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP Converter<MatrixToRowBlockConverterTag, _Val>
+  #define MCNLA_TMP Converter<MatrixToRowBlockConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP MatrixToRowBlockConverter<_Val>
+  #define MCNLA_TMP MatrixToRowBlockConverter<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TEP::Converter(
+MCNLA_TMP::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -41,7 +41,7 @@ MCNLA_TEP::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TEP::initializeImpl() noexcept {}
+void MCNLA_TMP::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -50,7 +50,7 @@ void MCNLA_TEP::initializeImpl() noexcept {}
 /// @param  matrix_j  The matrix (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void MCNLA_TEP::runImpl(
+void MCNLA_TMP::runImpl(
     const DenseMatrixRowMajor<_Val> &matrix,
           DenseMatrixRowMajor<_Val> &matrix_j
 ) noexcept {
@@ -90,6 +90,6 @@ void MCNLA_TEP::runImpl(
 
 }  // namespace mcnla
 
-#undef  MCNLA_TEP
+#undef  MCNLA_TMP
 
 #endif  // MCNLA_ISVD_CONVERTER_MATRIX_TO_ROWBLOCK_CONVERTER_HPP_
