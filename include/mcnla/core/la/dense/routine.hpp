@@ -24,6 +24,7 @@
 
 // BLAS 3
 #include <mcnla/core/la/dense/routine/gemm.hpp>
+#include <mcnla/core/la/dense/routine/gemmt.hpp>
 #include <mcnla/core/la/dense/routine/symm.hpp>
 #include <mcnla/core/la/dense/routine/syrk.hpp>
 #include <mcnla/core/la/dense/routine/syr2k.hpp>

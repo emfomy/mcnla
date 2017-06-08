@@ -53,7 +53,7 @@ class RowBlockKolmogorovNagumoIntegrator
   static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Row-Block Version)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "copying Qc / iterating";
+  static constexpr const char* names_ = "initializing / iterating";
 
   /// The maximum number of iteration.
   index_t max_iteration_;
@@ -70,8 +70,8 @@ class RowBlockKolmogorovNagumoIntegrator
   /// The temporary matrix.
   DenseMatrixRowMajor<_Val> matrix_tmp_;
 
-  /// The matrix Bc.
-  DenseMatrixRowMajor<_Val> matrix_bc_;
+  /// The matrix Bc and Bgc.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
 
   /// The matrix Dc.
   DenseMatrixRowMajor<_Val> matrix_dc_;
@@ -121,7 +121,8 @@ class RowBlockKolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+                      DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
 
 };
 

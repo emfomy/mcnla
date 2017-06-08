@@ -102,8 +102,9 @@ class RowBlockExtrinsicMeanIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
-                DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+                const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
+                      DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
 
 };
 

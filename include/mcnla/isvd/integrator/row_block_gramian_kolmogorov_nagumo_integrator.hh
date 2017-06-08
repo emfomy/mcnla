@@ -125,7 +125,8 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+                      DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
 
 };
 
