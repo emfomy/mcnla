@@ -171,11 +171,11 @@ void MCNLA_TMP::runImpl(
     la::mm(matrix_x_, matrix_d_.sym(), matrix_qc, 1.0, 1.0);
 
     // ================================================================================================================== //
-    // Check convergence: || I - C ||_F / sqrt(k) < tol
+    // Check convergence: || I - C ||_F < tol
     for ( auto &v : vector_e_ ) {
       v -= 1.0;
     }
-    is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
+    is_converged = !(la::nrm2(vector_e_) >= tolerance_);
   }
 
   this->toc(comm_time);

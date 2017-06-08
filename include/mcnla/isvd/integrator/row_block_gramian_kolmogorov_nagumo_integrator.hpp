@@ -52,11 +52,12 @@ void MCNLA_TMP::initializeImpl() noexcept {
 
   matrix_bs_.reconstruct(dim_sketch_total, dim_sketch_total);
   collection_b_.reconstruct(dim_sketch, dim_sketch_total, 2);
+  matrix_bgc_.reconstruct(dim_sketch, dim_sketch_total);
 
-  matrix_d_.reconstruct(dim_sketch, dim_sketch);
-  matrix_z_.reconstruct(dim_sketch, dim_sketch);
+  matrix_dc_.reconstruct(dim_sketch, dim_sketch);
+  symatrix_z_.reconstruct(dim_sketch);
   matrix_c_.reconstruct(dim_sketch, dim_sketch);
-  matrix_cinv_.reconstruct(dim_sketch, dim_sketch);
+  symatrix_cinv_.reconstruct(dim_sketch);
 
   collection_ft_.reconstruct(dim_sketch, dim_sketch, 2);
   collection_et_.reconstruct(dim_sketch_total, dim_sketch, 2);
@@ -89,11 +90,11 @@ void MCNLA_TMP::runImpl(
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
   mcnla_assert_eq(matrix_qbarj.sizes(),  std::make_tuple(nrow_rank, dim_sketch));
 
-  auto &matrix_qsj  = collection_qj.unfold();                  // matrix Qs.
-  auto &matrix_q0j  = collection_qj(0);                        // matrix Q0.
-  auto &symatrix_bs = matrix_bs_.template sym<Uplo::UPPER>();  // matrix Bs.
+  auto &matrix_qsj  = collection_qj.unfold();  // matrix Qs.
+  auto &matrix_q0j  = collection_qj(0);        // matrix Q0.
+  auto &symatrix_bs = matrix_bs_.symu();       // matrix Bs.
 
-  _Val one_n = 1.0/num_sketch, one_n2 = (1.0/num_sketch)/num_sketch;
+  _Val one_n = 1.0/num_sketch;
   this->tic(); double comm_moment, comm_time = 0;
   // ====================================================================================================================== //
   // Initializing
@@ -109,7 +110,7 @@ void MCNLA_TMP::runImpl(
   // Bc := Q0' * Qs
   la::copy(matrix_bs_({0, dim_sketch}, ""_), collection_b_(0));
 
-  // F := I, E := O
+  // F~ := I, E~ := O
   la::memset0(collection_ft_(0));
   la::memset0(collection_et_(0));
   for ( index_t i = 0; i < dim_sketch; ++i ) {
@@ -125,31 +126,33 @@ void MCNLA_TMP::runImpl(
   for ( iteration_ = 0; iteration_ < max_iteration_ && !is_converged; ++iteration_ ) {
 
     auto &&matrix_bc  = collection_b_(is_odd);    // matrix Bc.
-    auto &&matrix_ftc = collection_ft_(is_odd);   // matrix ~Fc.
-    auto &&matrix_etc = collection_et_(is_odd);   // matrix ~Ec.
     auto &&matrix_bp  = collection_b_(!is_odd);   // matrix B+.
-    auto &&matrix_ffp = collection_ft_(!is_odd);  // matrix ~F+.
-    auto &&matrix_efp = collection_et_(!is_odd);  // matrix ~E+.
-    auto &matrix_f    = matrix_c_;                // matrix F.
-    auto &matrix_e    = matrix_efp;               // matrix E.
+    auto &&matrix_ftc = collection_ft_(is_odd);   // matrix F~c.
+    auto &&matrix_ftp = collection_ft_(!is_odd);  // matrix F~+.
+    auto &&matrix_etc = collection_et_(is_odd);   // matrix E~c.
+    auto &&matrix_etp = collection_et_(!is_odd);  // matrix E~+.
     is_odd = !is_odd;
 
     // ================================================================================================================== //
-    // Z := 1/N^2 * Bc * Bs * Bc' - 1/N^2 * Bc * Bc' * Bc * Bc'
+    // Compute B and D
+
+    // Bgc := 1/N * Bc * Bs
+    la::mm(matrix_bc, symatrix_bs, matrix_bgc_, one_n);
 
     // Dc := 1/N * Bc * Bc'
-    la::mm(matrix_bc, matrix_bc.t(), matrix_d_, one_n);
+    la::mm(matrix_bc, matrix_bc.t(), matrix_dc_, one_n);
 
-    // Z := 1/N^2 * Bc * Bs * Bc' - Dc^2
-    la::mm(matrix_bc, symatrix_bs, matrix_bp);
-    la::mm(matrix_bp, matrix_bc.t(), matrix_z_, one_n2);
-    la::rk(matrix_d_, matrix_z_.sym(), -1.0, 1.0);
+    // Dgc(Z) := 1/N * Bgc * Bc'
+    la::mm(matrix_bgc_, matrix_bc.t(), symatrix_z_, one_n);
 
     // ================================================================================================================== //
-    // C := sqrt( I/2 + sqrt( I/4 - Z ) )
+    // Compute C and inv(C)
+
+    // Z := Dgc - Dc^2
+    la::rk(matrix_dc_, symatrix_z_, -1.0, 1.0);
 
     // Compute the eigen-decomposition of Z -> Z' * L * Z
-    syev_driver_(matrix_z_.sym(), vector_l_);
+    syev_driver_(symatrix_z_, vector_l_);
 
     // L := sqrt( I/2 + sqrt( I/4 - L ) )
     for ( index_t i = 0; i < dim_sketch; ++i ) {
@@ -157,59 +160,62 @@ void MCNLA_TMP::runImpl(
       vector_ls_(i) = std::sqrt(vector_l_(i));
     }
 
-    // Tmp := L * Z
-    la::mm(vector_ls_.diag(), matrix_z_, matrix_cinv_);
+    auto &matrix_lz    = symatrix_cinv_.full();
+    auto &matrix_linvz = symatrix_z_.full();
 
-    // Z := L \ Z
-    la::sm(vector_ls_.diag().inv(), matrix_z_);
+    // Compute sqrt(L) * Z
+    la::mm(vector_ls_.diag(), symatrix_z_.full(), matrix_lz);
 
-    // C := Tmp' * Tmp
-    la::mm(matrix_cinv_.t(), matrix_cinv_, matrix_c_);
+    // Compute sqrt(L) \ Z
+    la::sm(vector_ls_.diag().inv(), matrix_linvz);
 
-    // inv(C) := Z' * Z
-    la::mm(matrix_z_.t(), matrix_z_, matrix_cinv_);
+    // C := Z' * L * Z
+    la::mm(matrix_lz.t(), symatrix_cinv_.full(), matrix_c_);
+
+    // inv(C) := Z' * inv(L) * Z
+    la::rk(matrix_linvz.t(), symatrix_cinv_);
 
     // ================================================================================================================== //
     // Compute F and E
 
-    // Fc := C - Dc * inv(C)
-    la::mm(matrix_d_, matrix_cinv_, matrix_f, -1.0, 1.0);
+    // Fc(C) := C - Dc * inv(C)
+    la::mm(matrix_dc_, symatrix_cinv_, matrix_c_, -1.0, 1.0);
 
-    // Ec := 1/N * Bc' * inv(C)
-    la::mm(matrix_bc.t(), matrix_cinv_, matrix_e, one_n);
-
-    // ================================================================================================================== //
-    // Update Bc
-
-    // Bp := Fc' * Bc + Ec' * Bs
-    la::mm(matrix_f.t(), matrix_bc, matrix_bp);
-    la::mm(matrix_e.t(), symatrix_bs, matrix_bp, 1.0, 1.0);
+    // Ec(E~+) = 1/N * Bc' * inv(C)
+    la::mm(matrix_bc.t(), symatrix_cinv_, matrix_etp, one_n);
 
     // ================================================================================================================== //
-    // Update ~F and ~E
+    // Update B
 
-    // ~Fp := ~Fc * Fc
-    la::mm(matrix_ftc, matrix_f, matrix_ffp);
-
-    // ~Ep := ~Ec * Fc + Ec
-    la::mm(matrix_etc, matrix_f, matrix_efp, 1.0, 1.0);
+    // Bp := Fc' * Bc + inv(C)' * Bgc
+    la::mm(matrix_c_.t(), matrix_bc, matrix_bp);
+    la::mm(symatrix_cinv_.t(), matrix_bgc_, matrix_bp, 1.0, 1.0);
 
     // ================================================================================================================== //
-    // Check convergence: || I - C ||_F / sqrt(k) < tol
+    // Update F~ and E~
+
+    // F~p := F~c * Fc
+    la::mm(matrix_ftc, matrix_c_, matrix_ftp);
+
+    // E~p := E~c * Fc + Ec
+    la::mm(matrix_etc, matrix_c_, matrix_etp, 1.0, 1.0);
+
+    // ================================================================================================================== //
+    // Check convergence: || I - C ||_F < tol
     for ( auto &v : vector_l_ ) {
       v -= 1.0;
     }
-    is_converged = !(la::nrm2(vector_l_) / std::sqrt(dim_sketch) >= tolerance_);
+    is_converged = !(la::nrm2(vector_l_) >= tolerance_);
   }
 
   this->toc(comm_time);
   // ====================================================================================================================== //
   // Forming Qbar
 
-  auto &&matrix_ft = collection_ft_(is_odd);  // matrix ~F.
-  auto &&matrix_et = collection_et_(is_odd);  // matrix ~E.
+  auto &&matrix_ft = collection_ft_(is_odd);  // matrix F~.
+  auto &&matrix_et = collection_et_(is_odd);  // matrix E~.
 
-  // Qj := Q0j * ~F + Qsj * ~E
+  // Qj := Q0j * F~ + Qsj * E~
   la::mm(matrix_q0j, matrix_ft, matrix_qbarj);
   la::mm(matrix_qsj, matrix_et, matrix_qbarj, 1.0, 1.0);
 

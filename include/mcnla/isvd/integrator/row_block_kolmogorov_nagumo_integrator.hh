@@ -64,26 +64,29 @@ class RowBlockKolmogorovNagumoIntegrator
   /// The number of iteration.
   index_t iteration_;
 
+  /// The matrix Q+j.
+  DenseMatrixRowMajor<_Val> matrix_qpj_;
+
   /// The matrix Gcj.
   DenseMatrixRowMajor<_Val> matrix_gcj_;
 
-  /// The temporary matrix.
-  DenseMatrixRowMajor<_Val> matrix_tmp_;
-
-  /// The matrix Bc and Bgc.
+  /// The matrix Bc and B+.
   DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
+
+  /// The matrix Bgc.
+  DenseMatrixRowMajor<_Val> matrix_bgc_;
 
   /// The matrix Dc.
   DenseMatrixRowMajor<_Val> matrix_dc_;
 
   /// The matrix Z.
-  DenseMatrixRowMajor<_Val> matrix_z_;
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_z_;
 
   /// The matrix C.
   DenseMatrixRowMajor<_Val> matrix_c_;
 
   /// The matrix inv(C).
-  DenseMatrixRowMajor<_Val> matrix_cinv_;
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
 
   /// The vector L.
   DenseVector<_Val> vector_l_;

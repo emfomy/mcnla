@@ -68,20 +68,23 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   /// The matrix Bs.
   DenseMatrixRowMajor<_Val> matrix_bs_;
 
-  /// The matrix B.
+  /// The matrix Bc and B+.
   DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
 
+  /// The matrix Bgc.
+  DenseMatrixRowMajor<_Val> matrix_bgc_;
+
   /// The matrix Dc.
-  DenseMatrixRowMajor<_Val> matrix_d_;
+  DenseMatrixRowMajor<_Val> matrix_dc_;
 
   /// The matrix Z.
-  DenseMatrixRowMajor<_Val> matrix_z_;
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_z_;
 
   /// The matrix C.
   DenseMatrixRowMajor<_Val> matrix_c_;
 
   /// The matrix inv(C).
-  DenseMatrixRowMajor<_Val> matrix_cinv_;
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
 
   /// The matrix ~F.
   DenseMatrixCollectionColBlockColMajor<_Val> collection_ft_;
