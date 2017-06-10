@@ -95,7 +95,7 @@ void MCNLA_TMP::runImpl(
   // Vt := Q' * A
   la::mm(matrix_q.t(), matrix_a, matrix_vt_);
 
-  // Compute the SVD of Vt -> W * S * Vt
+  // svd(Vt) = W * S * Vt
   gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
 
   // U := Q * W

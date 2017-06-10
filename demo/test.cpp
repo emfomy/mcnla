@@ -37,7 +37,7 @@ int main( int argc, char **argv ) {
   }
 
   int m = 5, n = 8, lda = 10;
-  mcnla::matrix::DenseMatrixColMajor<double> a(m, n, lda);
+  mcnla::matrix::DenseMatrixRowMajor<double> a(m, n, lda);
   mcnla::matrix::DenseVector<double> d(m);
   mcnla::matrix::DenseVector<double> e(m-1);
   mcnla::matrix::DenseVector<double> tauq(m);
@@ -45,7 +45,7 @@ int main( int argc, char **argv ) {
 
   mcnla::matrix::DenseVector<double> work;
 
-  mcnla::random::Streams streams(rand());
+  mcnla::random::Streams streams(0);
   mcnla::random::gaussian(streams, a.vec());
   disp(a);
 
@@ -54,7 +54,7 @@ int main( int argc, char **argv ) {
   work.reconstruct(lwork1);
   mcnla::la::gebrd(a, d, e, tauq, taup, work);
 
-  mcnla::matrix::DenseMatrixColMajor<double> u(m, m);
+  mcnla::matrix::DenseMatrixRowMajor<double> u(m, m);
   mcnla::la::memset0(u.vec());
   for ( auto i = 0; i < m; ++i ) {
     u(i, i) = 1;
@@ -65,7 +65,7 @@ int main( int argc, char **argv ) {
   work.reconstruct(lwork2);
   mcnla::la::ormbr<mcnla::la::Vect::Q>(a, u, tauq, work);
 
-  mcnla::matrix::DenseMatrixColMajor<double> vt(n, n);
+  mcnla::matrix::DenseMatrixRowMajor<double> vt(n, n);
   mcnla::la::memset0(vt.vec());
   for ( auto i = 0; i < n; ++i ) {
     vt(i, i) = 1;

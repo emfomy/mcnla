@@ -144,7 +144,7 @@ void MCNLA_TMP::runImpl(
     // Z := Dgc - Dc^2
     la::rk(matrix_dc_, symatrix_z_, -1.0, 1.0);
 
-    // Compute the eigen-decomposition of Z -> Z' * S * Z
+    // eig(Z) = Z' * S * Z
     syev_driver_(symatrix_z_, vector_s_);
 
     // S := sqrt( I/2 + sqrt( I/4 - S ) )

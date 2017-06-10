@@ -82,7 +82,7 @@ void MCNLA_TMP::runImpl(
     la::mm(collection_q(i).t(), collection_q(i), collection_w_(i));
   }
 
-  // Compute the eigen-decomposition of Wi -> Wi' * Si * Wi
+  // eig(Wi) = Wi' * Si * Wi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
     gesvd_driver_(collection_w_(i), matrix_s_(""_, i), matrix_empty_, matrix_empty_);
   }

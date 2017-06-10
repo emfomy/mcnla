@@ -105,7 +105,7 @@ static constexpr bool isTrans( const Vect vect ) noexcept {
 }
 
 /// @ingroup  la_module
-static constexpr Vect changePQ( const Vect vect ) noexcept {
+static constexpr Vect changeQP( const Vect vect ) noexcept {
   return vect ^ Vect::P;
 }
 

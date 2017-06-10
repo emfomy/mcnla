@@ -139,11 +139,11 @@ inline index_t bdsqrQuery(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _TypeA, class _TypeD, class _TypeE, class _TypeU, class _TypeVt, class _TypeWork>
 inline void bdsqr(
-    _TypeA    &&a,
-    _TypeD    &&d,
-    _TypeE    &&e,
-    _TypeU    &&u,
-    _TypeVt   &&vt,
+    _TypeA &&a,
+    _TypeD &&d,
+    _TypeE &&e,
+    _TypeU &&u,
+    _TypeVt &&vt,
     _TypeWork &&work
 ) noexcept {
   detail::bdsqrImpl1(a, d, e, u, vt, work);

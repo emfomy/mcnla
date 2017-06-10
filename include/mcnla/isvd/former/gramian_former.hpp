@@ -97,7 +97,7 @@ void MCNLA_TMP::runImpl(
   // W := QtA * QtA'
   la::rk(matrix_qta_, matrix_w_.sym());
 
-  // Compute the eigen-decomposition of W -> W * S * W'
+  // eig(W) = W * S * W'
   syev_driver_(matrix_w_.sym(), vector_s_);
 
   // S := sqrt(S)

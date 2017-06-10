@@ -109,7 +109,7 @@ void MCNLA_TMP::runImpl(
     // Gi := Bi * Bi'
     la::rk(collection_bi_(i), collection_g_(i).sym());
 
-    // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
+    // eig(Gi) = Gi' * S * Gi
     syev_driver_(collection_g_(i).sym(), vector_s_);
 
   }

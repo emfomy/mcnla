@@ -178,9 +178,9 @@ inline index_t gebrdQuery(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _TypeA, class _TypeD, class _TypeE, class _TypeTauq, class _TypeTaup, class _TypeWork>
 inline void gebrd(
-    _TypeA    &&a,
-    _TypeD    &&d,
-    _TypeE    &&e,
+    _TypeA &&a,
+    _TypeD &&d,
+    _TypeE &&e,
     _TypeTauq &&tauq,
     _TypeTaup &&taup,
     _TypeWork &&work

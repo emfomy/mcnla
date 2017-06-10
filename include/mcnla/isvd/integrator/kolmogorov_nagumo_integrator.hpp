@@ -139,7 +139,7 @@ void MCNLA_TMP::runImpl(
     // Z := sum(X' * X)
     la::rk(matrix_x_.t(), matrix_z_.sym());
 
-    // Compute the eigen-decomposition of Z -> Z' * E * Z
+    // eig(Z) = Z' * E * Z
     syev_driver_(matrix_z_.sym(), vector_e_);
 
     // E := sqrt( I/2 + sqrt( I/4 - E ) )

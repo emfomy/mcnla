@@ -110,7 +110,7 @@ void MCNLA_TMP::runImpl(
   mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
 
-  // Compute the eigen-decomposition of W -> W * S * W'
+  // eig(W) = W * S * W'
   syev_driver_(matrix_w_.sym(), vector_s_);
 
   // S := sqrt(S)

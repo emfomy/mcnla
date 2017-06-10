@@ -58,17 +58,20 @@ class RowBlockReduceSumIntegrator
   /// The collection B.
   DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
 
-  /// The matrix W.
-  DenseMatrixRowMajor<_Val> matrix_w_;
-
-  /// The matrix Tt.
-  DenseMatrixRowMajor<_Val> matrix_tt_;
+  /// The matrix T.
+  DenseMatrixColMajor<_Val> matrix_t_;
 
   /// The vector S.
   DenseVector<_Val> vector_s_;
 
+  /// The temporary matrix.
+  DenseMatrixRowMajor<_Val> matrix_tmp_;
+
+  /// The empty matrix.
+  DenseMatrixRowMajor<_Val> matrix_empty_;
+
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'V'> gesvd_driver_;
+  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'O', 'S'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

@@ -122,7 +122,7 @@ inline void ormbrImpl2(
           DenseMatrix<_Val, Trans::NORMAL> &c,
           _Type &work
 ) noexcept {
-  ormbrImpl3<changePQ(_vect)>(a.t(), c, tau, work);
+  ormbrImpl3<changeQP(_vect)>(a.t(), tau, c, work);
 }
 
 template <Vect _vect, typename _Val, Trans _transa, class _Type, bool dummy = 0>
@@ -160,7 +160,7 @@ inline void ormbrImpl2(
     const DenseVector<_Val> &tau,
           _Type &work
 ) noexcept {
-  ormbrImpl3<changePQ(_vect)>(a.t(), c, tau, work);
+  ormbrImpl3<changeQP(_vect)>(a.t(), c, tau, work);
 }
 
 template <Vect _vect, typename _Val, Trans _transa, class _Type, bool dummy = 0>
@@ -272,7 +272,7 @@ inline void ormbr(
     const DenseVector<_Val> &tau,
           DenseVector<_Val> &work
 ) noexcept {
-  detail::ormbrImpl1<_vect>(a, tau, c, work);
+  detail::ormbrImpl1<_vect>(a, c, tau, work);
 }
 
 template <Vect _vect, typename _Val, Trans _transa, Trans _transc>
@@ -315,7 +315,7 @@ template <Vect _vect, typename _Val, Trans _transa, class _TypeC, class _TypeWor
 inline void ormbr(
     const DenseMatrix<_Val, _transa> &a,
     const DenseVector<_Val> &tau,
-    _TypeC    &&c,
+    _TypeC &&c,
     _TypeWork &&work
 ) noexcept {
   detail::ormbrImpl1<_vect>(a, tau, c, work);
@@ -324,7 +324,7 @@ inline void ormbr(
 template <Vect _vect, typename _Val, Trans _transa, class _TypeC, class _TypeWork>
 inline void ormbr(
     const DenseMatrix<_Val, _transa> &a,
-    _TypeC    &&c,
+    _TypeC &&c,
     const DenseVector<_Val> &tau,
     _TypeWork &&work
 ) noexcept {
