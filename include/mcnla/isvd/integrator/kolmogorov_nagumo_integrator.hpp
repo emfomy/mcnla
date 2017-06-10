@@ -51,7 +51,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
   const auto dim_sketch      = parameters_.dimSketch();
   const auto dim_sketch_each = parameters_.dimSketchEach();
 
-  matrix_b_.reconstruct(dim_sketch, dim_sketch_each);
+  matrix_b_.reconstruct(dim_sketch_each, dim_sketch);
   matrix_d_.reconstruct(dim_sketch, dim_sketch);
   matrix_z_.reconstruct(dim_sketch, dim_sketch);
   matrix_c_.reconstruct(dim_sketch, dim_sketch);
@@ -116,14 +116,14 @@ void MCNLA_TMP::runImpl(
     // ================================================================================================================== //
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
-    // B := sum( Qc' * Qs )
-    la::mm(matrix_qc.t(), matrix_qs, matrix_b_);
+    // B := sum( Qs' * Qc )
+    la::mm(matrix_qs.t(), matrix_qc, matrix_b_);
 
-    // D := B * B'
-    la::rk(matrix_b_, matrix_d_.sym());
+    // D := B' * B
+    la::rk(matrix_b_.t(), matrix_d_.sym());
 
-    // X := 1/N * Qs * B'
-    la::mm(matrix_qs, matrix_b_.t(), matrix_x_, 1.0/num_sketch);
+    // X := 1/N * Qs * B
+    la::mm(matrix_qs, matrix_b_, matrix_x_, 1.0/num_sketch);
 
     // X -= 1/N * Qc * D
     la::mm(matrix_qc, matrix_d_.sym(), matrix_x_, -1.0/num_sketch, 1.0);

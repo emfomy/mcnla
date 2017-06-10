@@ -51,8 +51,8 @@ void MCNLA_TMP::initializeImpl() noexcept {
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
   matrix_bs_.reconstruct(dim_sketch_total, dim_sketch_total);
-  collection_b_.reconstruct(dim_sketch, dim_sketch_total, 2);
-  matrix_bgc_.reconstruct(dim_sketch, dim_sketch_total);
+  collection_b_.reconstruct(dim_sketch_total, dim_sketch, 2);
+  matrix_bgc_.reconstruct(dim_sketch_total, dim_sketch);
 
   matrix_dc_.reconstruct(dim_sketch, dim_sketch);
   symatrix_z_.reconstruct(dim_sketch);
@@ -62,8 +62,8 @@ void MCNLA_TMP::initializeImpl() noexcept {
   collection_ft_.reconstruct(dim_sketch, dim_sketch, 2);
   collection_et_.reconstruct(dim_sketch_total, dim_sketch, 2);
 
-  vector_l_.reconstruct(dim_sketch);
-  vector_ls_.reconstruct(dim_sketch);
+  vector_s_.reconstruct(dim_sketch);
+  vector_ss_.reconstruct(dim_sketch);
 
   syev_driver_.reconstruct(dim_sketch);
 }
@@ -92,7 +92,7 @@ void MCNLA_TMP::runImpl(
 
   auto &matrix_qsj  = collection_qj.unfold();  // matrix Qs.
   auto &matrix_q0j  = collection_qj(0);        // matrix Q0.
-  auto &symatrix_bs = matrix_bs_.symu();       // matrix Bs.
+  auto &symatrix_bs = matrix_bs_.syml();       // matrix Bs.
 
   _Val one_n = 1.0/num_sketch;
   this->tic(); double comm_moment, comm_time = 0;
@@ -107,8 +107,8 @@ void MCNLA_TMP::runImpl(
   mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
   comm_time = utility::getTime() - comm_moment;
 
-  // Bc := Q0' * Qs
-  la::copy(matrix_bs_({0, dim_sketch}, ""_), collection_b_(0));
+  // Bc := Qs' * Q0
+  la::copy(matrix_bs_(""_, {0, dim_sketch}), collection_b_(0));
 
   // F~ := I, E~ := O
   la::memset0(collection_ft_(0));
@@ -136,14 +136,14 @@ void MCNLA_TMP::runImpl(
     // ================================================================================================================== //
     // Compute B and D
 
-    // Bgc := 1/N * Bc * Bs
-    la::mm(matrix_bc, symatrix_bs, matrix_bgc_, one_n);
+    // Bgc := 1/N * Bs * Bc
+    la::mm(symatrix_bs, matrix_bc, matrix_bgc_, one_n);
 
-    // Dc := 1/N * Bc * Bc'
-    la::mm(matrix_bc, matrix_bc.t(), matrix_dc_, one_n);
+    // Dc := 1/N * Bc' * Bc
+    la::mm(matrix_bc.t(), matrix_bc, matrix_dc_, one_n);
 
-    // Dgc(Z) := 1/N * Bgc * Bc'
-    la::mm(matrix_bgc_, matrix_bc.t(), symatrix_z_, one_n);
+    // Dgc(Z) := 1/N * Bc' * Bgc
+    la::mm(matrix_bc.t(), matrix_bgc_, symatrix_z_, one_n);
 
     // ================================================================================================================== //
     // Compute C and inv(C)
@@ -151,29 +151,29 @@ void MCNLA_TMP::runImpl(
     // Z := Dgc - Dc^2
     la::rk(matrix_dc_, symatrix_z_, -1.0, 1.0);
 
-    // Compute the eigen-decomposition of Z -> Z' * L * Z
-    syev_driver_(symatrix_z_, vector_l_);
+    // Compute the eigen-decomposition of Z -> Z' * S * Z
+    syev_driver_(symatrix_z_, vector_s_);
 
-    // L := sqrt( I/2 + sqrt( I/4 - L ) )
+    // S := sqrt( I/2 + sqrt( I/4 - S ) )
     for ( index_t i = 0; i < dim_sketch; ++i ) {
-      vector_l_(i) = std::sqrt(0.5 + std::sqrt(0.25 - vector_l_(i)));
-      vector_ls_(i) = std::sqrt(vector_l_(i));
+      vector_s_(i) = std::sqrt(0.5 + std::sqrt(0.25 - vector_s_(i)));
+      vector_ss_(i) = std::sqrt(vector_s_(i));
     }
 
-    auto &matrix_lz    = symatrix_cinv_.full();
-    auto &matrix_linvz = symatrix_z_.full();
+    auto &matrix_sz    = symatrix_cinv_.full();
+    auto &matrix_sinvz = symatrix_z_.full();
 
-    // Compute sqrt(L) * Z
-    la::mm(vector_ls_.diag(), symatrix_z_.full(), matrix_lz);
+    // Compute sqrt(S) * Z
+    la::mm(vector_ss_.diag(), symatrix_z_.full(), matrix_sz);
 
-    // Compute sqrt(L) \ Z
-    la::sm(vector_ls_.diag().inv(), matrix_linvz);
+    // Compute sqrt(S) \ Z
+    la::sm(vector_ss_.diag().inv(), matrix_sinvz);
 
-    // C := Z' * L * Z
-    la::mm(matrix_lz.t(), symatrix_cinv_.full(), matrix_c_);
+    // C := Z' * S * Z
+    la::mm(matrix_sz.t(), symatrix_cinv_.full(), matrix_c_);
 
-    // inv(C) := Z' * inv(L) * Z
-    la::rk(matrix_linvz.t(), symatrix_cinv_);
+    // inv(C) := Z' * inv(S) * Z
+    la::rk(matrix_sinvz.t(), symatrix_cinv_);
 
     // ================================================================================================================== //
     // Compute F and E
@@ -181,15 +181,15 @@ void MCNLA_TMP::runImpl(
     // Fc(C) := C - Dc * inv(C)
     la::mm(matrix_dc_, symatrix_cinv_, matrix_c_, -1.0, 1.0);
 
-    // Ec(E~+) = 1/N * Bc' * inv(C)
-    la::mm(matrix_bc.t(), symatrix_cinv_, matrix_etp, one_n);
+    // Ec(E~+) = 1/N * Bc * inv(C)
+    la::mm(matrix_bc, symatrix_cinv_, matrix_etp, one_n);
 
     // ================================================================================================================== //
     // Update B
 
-    // Bp := Fc' * Bc + inv(C)' * Bgc
-    la::mm(matrix_c_.t(), matrix_bc, matrix_bp);
-    la::mm(symatrix_cinv_.t(), matrix_bgc_, matrix_bp, 1.0, 1.0);
+    // B+ := Bc * Fc + Bgc * inv(C)
+    la::mm(matrix_bc, matrix_c_, matrix_bp);
+    la::mm(matrix_bgc_, symatrix_cinv_, matrix_bp, 1.0, 1.0);
 
     // ================================================================================================================== //
     // Update F~ and E~
@@ -202,10 +202,10 @@ void MCNLA_TMP::runImpl(
 
     // ================================================================================================================== //
     // Check convergence: || I - C ||_F < tol
-    for ( auto &v : vector_l_ ) {
+    for ( auto &v : vector_s_ ) {
       v -= 1.0;
     }
-    is_converged = !(la::nrm2(vector_l_) >= tolerance_);
+    is_converged = !(la::nrm2(vector_s_) >= tolerance_);
   }
 
   this->toc(comm_time);

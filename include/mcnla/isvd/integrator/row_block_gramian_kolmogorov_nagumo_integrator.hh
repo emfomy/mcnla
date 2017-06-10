@@ -87,16 +87,16 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
 
   /// The matrix ~F.
-  DenseMatrixCollectionColBlockColMajor<_Val> collection_ft_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_ft_;
 
   /// The matrix ~E.
-  DenseMatrixCollectionColBlockColMajor<_Val> collection_et_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_et_;
 
-  /// The vector L.
-  DenseVector<_Val> vector_l_;
+  /// The vector S.
+  DenseVector<_Val> vector_s_;
 
-  /// The vector sqrt(L).
-  DenseVector<_Val> vector_ls_;
+  /// The vector sqrt(S).
+  DenseVector<_Val> vector_ss_;
 
   /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;

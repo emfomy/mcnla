@@ -11,6 +11,9 @@ if(GTEST_FOUND)
   list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")
 endif()
 
+# Set data path
+list(APPEND DEFS "-DMCNLA_DATA_PATH=\"${PROJECT_SOURCE_DIR}/data\"")
+
 # Add check tests
 include(check.cmake)
 
