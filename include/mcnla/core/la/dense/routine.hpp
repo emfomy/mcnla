@@ -39,9 +39,6 @@
 // LAPACK linear equation
 
 // LAPACK least squares
-#include <mcnla/core/la/dense/routine/gebrd.hpp>
-#include <mcnla/core/la/dense/routine/ormbr.hpp>
-#include <mcnla/core/la/dense/routine/bdsqr.hpp>
 #include <mcnla/core/la/dense/routine/gesvd.hpp>
 #include <mcnla/core/la/dense/routine/syev.hpp>
 
