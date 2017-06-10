@@ -53,43 +53,22 @@ class RowBlockReduceSumIntegrator
   static constexpr const char* name_ = "Reduce-Sum Integrator (Row-Block Version)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "copying Qc / iterating";
+  static constexpr const char* names_ = "loop";
 
-  /// The maximum number of iteration.
-  index_t max_iteration_;
+  /// The collection B.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
 
-  /// The tolerance of convergence condition.
-  RealValT<_Val> tolerance_;
+  /// The matrix W.
+  DenseMatrixRowMajor<_Val> matrix_w_;
 
-  /// The number of iteration.
-  index_t iteration_;
+  /// The matrix Tt.
+  DenseMatrixRowMajor<_Val> matrix_tt_;
 
-  /// The matrix B.
-  DenseMatrixRowMajor<_Val> matrix_b_;
+  /// The vector S.
+  DenseVector<_Val> vector_s_;
 
-  /// The matrix D.
-  DenseMatrixRowMajor<_Val> matrix_d_;
-
-  /// The matrix Z.
-  DenseMatrixRowMajor<_Val> matrix_z_;
-
-  /// The matrix C.
-  DenseMatrixRowMajor<_Val> matrix_c_;
-
-  /// The matrix Xj.
-  DenseMatrixRowMajor<_Val> matrix_xj_;
-
-  /// The temporary matrix.
-  DenseMatrixRowMajor<_Val> matrix_tmp_;
-
-  /// The vector E.
-  DenseVector<_Val> vector_e_;
-
-  /// The vector F.
-  DenseVector<_Val> vector_f_;
-
-  /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
+  /// The GESVD driver.
+  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'V'> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -100,17 +79,7 @@ class RowBlockReduceSumIntegrator
  public:
 
   // Constructor
-  inline Integrator( const Parameters<_Val> &parameters,
-                     const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-4 ) noexcept;
-
-  // Gets parameters
-  inline index_t        maxIteration() const noexcept;
-  inline RealValT<_Val> tolerance() const noexcept;
-  inline index_t        iteration() const noexcept;
-
-  // Sets parameters
-  inline Integrator& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline Integrator& setTolerance( const RealValT<_Val> tolerance ) noexcept;
+  inline Integrator( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -118,7 +87,7 @@ class RowBlockReduceSumIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
+  void runImpl( DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
 
 };
 

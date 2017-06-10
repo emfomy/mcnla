@@ -16,7 +16,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes a matrix-matrix product with general matrices.
 extern void sgemmt_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT n,
                     const FORTRAN_INT k, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT lda,
                     const FORTRAN_REAL4 b, const FORTRAN_INT ldb, const FORTRAN_REAL4 beta, FORTRAN_REAL4 c,
@@ -35,6 +34,10 @@ extern void zgemmt_( const FORTRAN_CHAR1 uplo, const FORTRAN_CHAR1 transa, const
                     const FORTRAN_INT ldc );
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_end.h>
+
+#else  // MCNLA_USE_MKL
+
+#include <mcnla/core/la/raw/blas/gemm.hpp>
 
 #endif  // MCNLA_USE_MKL
 
@@ -56,9 +59,6 @@ namespace la {
 namespace detail {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes a matrix-matrix product with general matrices but updates only the upper or lower triangular part of the
-///         result matrix.
-///
 /// @note  The routine calls mcnla::la::gemm instead if there is no MKL support.
 ///
 //@{
@@ -94,7 +94,9 @@ static inline void gemmt(
     const char uplo, const char transa, const char transb, const index_t n, const index_t k,
     const _Val alpha, const _Val *a, const index_t lda, const _Val *b, const index_t ldb,
     const _Val beta, _Val *c, const index_t ldc
-) noexcept { gemm(transa, transb, n, n, k, alpha, a, lda, b, ldb, beta, c, ldc); }
+) noexcept { static_cast<void>(uplo);
+  gemm(transa, transb, n, n, k, alpha, a, lda, b, ldb, beta, c, ldc);
+}
 
 #endif  // MCNLA_USE_MKL
 //@}

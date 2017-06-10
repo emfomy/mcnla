@@ -58,6 +58,75 @@ static constexpr char toDiagChar( Uplo uplo ) {
 ///
 using JobOption = char;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_module
+/// The enumeration VECT used in LAPACK.
+///
+enum class Vect {
+  Q  = 0x0,     ///< Matrix Q
+  P  = 0x1,     ///< Matrix P
+  QT = 0x2,     ///< Matrix Qt
+  PT = P | QT,  ///< Matrix Pt
+};
+
+/// @ingroup  la_module
+static constexpr bool operator !( const Vect vect ) noexcept {
+  return !static_cast<bool>(vect);
+}
+
+/// @ingroup  la_module
+static constexpr Vect operator|( const Vect a, const Vect b ) noexcept {
+  return static_cast<Vect>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+/// @ingroup  la_module
+static constexpr Vect operator&( const Vect a, const Vect b ) noexcept {
+  return static_cast<Vect>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+/// @ingroup  la_module
+static constexpr Vect operator^( const Vect a, const Vect b ) noexcept {
+  return static_cast<Vect>(static_cast<int>(a) ^ static_cast<int>(b));
+}
+
+/// @ingroup  la_module
+static constexpr bool isQ( const Vect vect ) noexcept {
+  return !(vect & Vect::P);
+}
+
+/// @ingroup  la_module
+static constexpr bool isP( const Vect vect ) noexcept {
+  return !!(vect & Vect::P);
+}
+
+/// @ingroup  la_module
+static constexpr bool isTrans( const Vect vect ) noexcept {
+  return !!(vect & Vect::QT);
+}
+
+/// @ingroup  la_module
+static constexpr Vect changePQ( const Vect vect ) noexcept {
+  return vect ^ Vect::P;
+}
+
+/// @ingroup  la_module
+static constexpr Vect changeTrans( const Vect vect ) noexcept {
+  return vect ^ Vect::QT;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Convert VECT option to char.
+///
+//@{
+static constexpr char toVectChar( const Vect vect ) {
+  return isQ(vect) ? 'Q' : 'P';
+}
+
+static constexpr char toTransChar( const Vect vect ) {
+  return !isTrans(vect) ? 'N' : 'T';
+}
+//@}
+
 }  // namespace la
 
 }  // namespace mcnla

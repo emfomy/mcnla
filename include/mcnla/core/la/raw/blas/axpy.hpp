@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes a vector-scalar product and adds the result to a vector.
 extern void saxpy_( const FORTRAN_INT n, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 x, const FORTRAN_INT incx,
                     FORTRAN_REAL4 y, const FORTRAN_INT incy );
 extern void daxpy_( const FORTRAN_INT n, const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 x, const FORTRAN_INT incx,
@@ -43,9 +42,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes a vector-scalar product and adds the result to a vector.
-///
 //@{
 static inline void axpy(
     const index_t n, const float alpha,

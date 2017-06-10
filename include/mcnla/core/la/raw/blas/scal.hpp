@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes the product of a vector by a scalar.
 extern void sscal_(  const FORTRAN_INT n, const FORTRAN_REAL4 alpha, FORTRAN_REAL4 x, const FORTRAN_INT incx );
 extern void dscal_(  const FORTRAN_INT n, const FORTRAN_REAL8 alpha, FORTRAN_REAL8 x, const FORTRAN_INT incx );
 extern void cscal_(  const FORTRAN_INT n, const FORTRAN_COMP4 alpha, FORTRAN_COMP4 x, const FORTRAN_INT incx );
@@ -41,9 +40,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the product of a vector by a scalar.
-///
 //@{
 static inline void scal(
     const index_t n, const float alpha, float* x, const index_t incx

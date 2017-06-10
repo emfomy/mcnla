@@ -147,10 +147,8 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
     MatrixType &u,
     MatrixType &vt
 ) noexcept {
-  mcnla_assert_gt(nrow_, 0);
-  mcnla_assert_gt(ncol_, 0);
   mcnla_assert_eq(a.sizes(),  std::make_tuple(nrow_, ncol_));
-  mcnla_assert_eq(s.len(), std::min(nrow_, ncol_));
+  mcnla_assert_eq(s.len(),    std::min(nrow_, ncol_));
   mcnla_assert_true(s.isShrunk());
 
   if ( __jobu == 'A' ) {

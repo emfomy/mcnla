@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Finds the index of the element with maximum absolute value.
 extern CPP_INT isamax_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
 extern CPP_INT idamax_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
 extern CPP_INT icamax_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
@@ -39,9 +38,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Finds the index of the element with maximum absolute value.
-///
 //@{
 static inline index_t iamax(
     const index_t n, const float* x, const index_t incx

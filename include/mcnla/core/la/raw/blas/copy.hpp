@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Copies vector to another vector.
 extern void scopy_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx, FORTRAN_REAL4 y,
                     const FORTRAN_INT incy );
 extern void dcopy_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx, FORTRAN_REAL8 y,
@@ -43,9 +42,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Copies vector to another vector.
-///
 //@{
 static inline void copy(
     const index_t n, const float* x, const index_t incx, float* y, const index_t incy

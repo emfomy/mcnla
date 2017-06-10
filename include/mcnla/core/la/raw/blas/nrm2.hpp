@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes the Euclidean norm of a vector.
 extern CPP_REAL4 snrm2_(  const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
 extern CPP_REAL8 dnrm2_(  const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
 extern CPP_REAL4 scnrm2_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
@@ -39,9 +38,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the Euclidean norm of a vector.
-///
 //@{
 static inline float nrm2(
     const index_t n, const float* x, const index_t incx

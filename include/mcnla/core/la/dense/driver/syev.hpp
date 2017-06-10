@@ -137,7 +137,6 @@ void SyevDriver<_Matrix, _jobz>::compute(
     MatrixType &a,
     RealVectorType &w
 ) noexcept {
-  mcnla_assert_gt(size_, 0);
   mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
   mcnla_assert_eq(w.len(), size_);
   mcnla_assert_true(w.isShrunk());

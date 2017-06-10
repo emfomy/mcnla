@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/spblas_plugin_begin.h>
 
-// Solves a system of linear matrix equations for a sparse matrix in the diagonal format.
 extern void mkl_sdiasm_( const FORTRAN_CHAR1 transa, const FORTRAN_INT m, const FORTRAN_INT n, const FORTRAN_REAL4 alpha,
                          const FORTRAN_CHAR1 matdescra, const FORTRAN_REAL4 val, const FORTRAN_INT lval,
                          const FORTRAN_INT idiag, const FORTRAN_INT ndiag, const FORTRAN_REAL4 b, const FORTRAN_INT ldb,
@@ -51,9 +50,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Solves a system of linear matrix equations for a sparse matrix in the diagonal format.
-///
 //@{
 static inline void diasm(
     const char transa, const index_t m, const index_t n, const float alpha, const char *matdescra,
