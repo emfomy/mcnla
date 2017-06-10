@@ -14,6 +14,7 @@ include(report.cmake)
 add_report(integrator kolmogorov_nagumo_integrator)
 add_report(integrator row_block_kolmogorov_nagumo_integrator)
 add_report(integrator row_block_gramian_kolmogorov_nagumo_integrator)
+add_report(integrator row_block_reduce_sum_integrator)
 
 # Add rule 'build_report'
 add_custom_target(
