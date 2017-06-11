@@ -167,11 +167,11 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   auto vt_pitch = (vt.pitch() > 0) ? vt.pitch() : 1;
 
   if ( !isTrans(trans) ) {
-    mcnla_assert_pass(detail::gesvd(__jobu, __jobvt, a.nrow(), a.ncol(), a.valPtr(), a.pitch(),
+    mcnla_assert_pass(detail::gesvd(__jobu, __jobvt, nrow_, ncol_, a.valPtr(), a.pitch(),
                                     s.valPtr(), u.valPtr(), u_pitch, vt.valPtr(), vt_pitch,
                                     work_.valPtr(), work_.len(), rwork_.valPtr()));
   } else {
-    mcnla_assert_pass(detail::gesvd(__jobvt, __jobu, a.ncol(), a.nrow(), a.valPtr(), a.pitch(),
+    mcnla_assert_pass(detail::gesvd(__jobvt, __jobu, ncol_, nrow_, a.valPtr(), a.pitch(),
                                     s.valPtr(), vt.valPtr(), vt_pitch, u.valPtr(), u_pitch,
                                     work_.valPtr(), work_.len(), rwork_.valPtr()));
   }

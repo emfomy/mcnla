@@ -36,6 +36,16 @@ int main( int argc, char **argv ) {
               << " threads per node" << std::endl << std::endl;
   }
 
+  int n = 8, lda = 10;
+  mcnla::matrix::DenseMatrixRowMajor<double> a(n, n, lda);
+
+  mcnla::random::Streams streams(0);
+  mcnla::random::gaussian(streams, a.vec());
+  disp(a);
+
+  mcnla::la::getrfi(a);
+  disp(a);
+
   mcnla::finalize();
 
   return 0;

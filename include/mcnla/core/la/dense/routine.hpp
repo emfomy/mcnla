@@ -37,6 +37,7 @@
 #include <mcnla/core/la/dense/routine/nrmf.hpp>
 
 // LAPACK linear equation
+#include <mcnla/core/la/dense/routine/getrfi.hpp>
 
 // LAPACK least squares
 #include <mcnla/core/la/dense/routine/gesvd.hpp>

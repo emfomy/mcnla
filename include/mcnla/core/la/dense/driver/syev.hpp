@@ -51,7 +51,7 @@ SyevDriver<_Matrix, _jobz>::SyevDriver(
     const MatrixType &a
 ) noexcept
   : SyevDriver(a.nrow()) {
-  mcnla_assert_eq(a.nrow(), a.ncol());
+  mcnla_assert_true(a.isSquare());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ void SyevDriver<_Matrix, _jobz>::compute(
   mcnla_assert_eq(w.len(), size_);
   mcnla_assert_true(w.isShrunk());
 
-  mcnla_assert_pass(detail::syev(__jobz, toUploChar(uplo, trans), a.nrow(), a.valPtr(), a.pitch(),
+  mcnla_assert_pass(detail::syev(__jobz, toUploChar(uplo, trans), size_, a.valPtr(), a.pitch(),
                                  w.valPtr(), work_.valPtr(), work_.len(), rwork_.valPtr()));
 }
 
