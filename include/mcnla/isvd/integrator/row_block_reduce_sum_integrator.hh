@@ -62,7 +62,7 @@ class RowBlockReduceSumIntegrator
   DenseMatrixColMajor<_Val> matrix_t_;
 
   /// The vector S.
-  DenseVector<_Val> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The temporary matrix.
   DenseMatrixRowMajor<_Val> matrix_tmp_;

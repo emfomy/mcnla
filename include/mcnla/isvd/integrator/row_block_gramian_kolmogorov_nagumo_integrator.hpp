@@ -65,7 +65,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
   vector_s_.reconstruct(dim_sketch);
   vector_ss_.reconstruct(dim_sketch);
 
-  syev_driver_.reconstruct(dim_sketch);
+  syev_driver_.reconstruct(symatrix_z_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ void MCNLA_TMP::runImpl(
     // Dc := 1/N * Bc' * Bc
     la::mm(matrix_bc.t(), matrix_bc, matrix_dc_, one_n);
 
-    // Dgc(Z) := 1/N * Bc' * Bgc
+    // Dgc [in Z] := 1/N * Bc' * Bgc
     la::mm(matrix_bc.t(), matrix_bgc_, symatrix_z_, one_n);
 
     // ================================================================================================================== //
@@ -178,26 +178,26 @@ void MCNLA_TMP::runImpl(
     // ================================================================================================================== //
     // Compute F and E
 
-    // Fc(C) := C - Dc * inv(C)
+    // Fc [in C] := C - Dc * inv(C)
     la::mm(matrix_dc_, symatrix_cinv_, matrix_c_, -1.0, 1.0);
 
-    // Ec(E~+) = 1/N * Bc * inv(C)
+    // Ec [in E~+] := 1/N * Bc * inv(C)
     la::mm(matrix_bc, symatrix_cinv_, matrix_etp, one_n);
 
     // ================================================================================================================== //
     // Update B
 
-    // B+ := Bc * Fc + Bgc * inv(C)
+    // B+ := Bc * Fc [in C] + Bgc * inv(C)
     la::mm(matrix_bc, matrix_c_, matrix_bp);
     la::mm(matrix_bgc_, symatrix_cinv_, matrix_bp, 1.0, 1.0);
 
     // ================================================================================================================== //
     // Update F~ and E~
 
-    // F~p := F~c * Fc
+    // F~p := F~c * Fc [in C]
     la::mm(matrix_ftc, matrix_c_, matrix_ftp);
 
-    // E~p := E~c * Fc + Ec
+    // E~p := E~c * Fc [in C] + Ec [in E~+]
     la::mm(matrix_etc, matrix_c_, matrix_etp, 1.0, 1.0);
 
     // ================================================================================================================== //
@@ -215,7 +215,7 @@ void MCNLA_TMP::runImpl(
   auto &&matrix_ft = collection_ft_(is_odd);  // matrix F~.
   auto &&matrix_et = collection_et_(is_odd);  // matrix E~.
 
-  // Qj := Q0j * F~ + Qsj * E~
+  // Qbar := Q0 * F~ + Qs * E~
   la::mm(matrix_q0j, matrix_ft, matrix_qbarj);
   la::mm(matrix_qsj, matrix_et, matrix_qbarj, 1.0, 1.0);
 

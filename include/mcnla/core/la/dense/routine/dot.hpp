@@ -26,6 +26,7 @@ namespace la {
 /// @ingroup  la_dense_blas1_module
 /// @brief  Computes a vector-vector dot product.
 ///
+//@{
 template <typename _Val>
 inline _Val dot(
     const DenseVector<_Val> &x,
@@ -34,6 +35,14 @@ inline _Val dot(
   mcnla_assert_eq(x.sizes(), y.sizes());
   return detail::dot(x.len(), x.valPtr(), x.stride(), y.valPtr(), y.stride());
 }
+
+template <typename _Val>
+inline _Val dot(
+    const DenseVector<_Val> &x
+) noexcept {
+  return detail::dot(x.len(), x.valPtr(), x.stride(), x.valPtr(), x.stride());
+}
+//@}
 
 }  // namespace la
 

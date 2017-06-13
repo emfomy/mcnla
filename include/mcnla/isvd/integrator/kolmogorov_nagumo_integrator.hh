@@ -43,6 +43,8 @@ class KolmogorovNagumoIntegrator
 
   friend StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
+  static_assert(traits::ValTraits<_Val>::is_real, "Kolmogorov-Nagumo-type integrator dost not support complex value!");
+
  private:
 
   using BaseType = StageWrapper<KolmogorovNagumoIntegrator<_Val>>;

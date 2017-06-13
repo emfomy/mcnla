@@ -52,7 +52,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
   vector_s_.reconstruct(dim_sketch);
 
   matrix_tmp_.reconstruct(nrow_rank, dim_sketch);
-  gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
+  gesvd_driver_.reconstruct(collection_b_(0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,11 +100,9 @@ void MCNLA_TMP::runImpl(
       // svd(B(i)) = W * S * T'
       gesvd_driver_(matrix_w, vector_s_, matrix_empty_, matrix_t_.t());
 
-      // Q(i) *= W
+      // Q(i) := Q(i) * W + Q(i+h) * T
       la::copy(matrix_qij, matrix_tmp_);
       la::mm(matrix_tmp_, matrix_w, matrix_qij);
-
-      // Q(i+h) *= T
       la::mm(matrix_qihj, matrix_t_, matrix_qij, 1.0, 1.0);
 
       // Q(i) *= 1/sqrt(2) * sqrt(I + S)

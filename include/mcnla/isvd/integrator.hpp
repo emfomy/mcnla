@@ -11,6 +11,7 @@
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/isvd/integrator/row_block_kolmogorov_nagumo_integrator.hpp>
 #include <mcnla/isvd/integrator/row_block_gramian_kolmogorov_nagumo_integrator.hpp>
+#include <mcnla/isvd/integrator/row_block_wen_yin_integrator.hpp>
 #include <mcnla/isvd/integrator/row_block_reduce_sum_integrator.hpp>
 #include <mcnla/isvd/integrator/row_block_extrinsic_mean_integrator.hpp>
 

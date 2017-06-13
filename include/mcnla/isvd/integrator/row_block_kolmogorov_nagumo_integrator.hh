@@ -43,6 +43,8 @@ class RowBlockKolmogorovNagumoIntegrator
 
   friend StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
+  static_assert(traits::ValTraits<_Val>::is_real, "Kolmogorov-Nagumo-type integrator dost not support complex value!");
+
  private:
 
   using BaseType = StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
@@ -64,14 +66,14 @@ class RowBlockKolmogorovNagumoIntegrator
   /// The number of iteration.
   index_t iteration_;
 
-  /// The matrix Q+j.
-  DenseMatrixRowMajor<_Val> matrix_qpj_;
+  /// The matrix Qc and Q+.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_qcj_;
 
-  /// The matrix Gcj.
+  /// The matrix Gc.
   DenseMatrixRowMajor<_Val> matrix_gcj_;
 
   /// The matrix Bc and B+.
-  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_bc_;
 
   /// The matrix Bgc.
   DenseMatrixRowMajor<_Val> matrix_bgc_;
