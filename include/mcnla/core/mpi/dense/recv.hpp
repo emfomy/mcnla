@@ -35,7 +35,7 @@ inline void recvImpl(
     const MPI_Comm comm,
           MPI_Status &status
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Recv(buffer.valPtr(), count, datatype, source, tag, comm, &status);
 }
 

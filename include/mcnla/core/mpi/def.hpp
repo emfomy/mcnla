@@ -85,7 +85,7 @@ template <typename _Val>
 struct MpiValTraits;
 
 #define MCNLA_MPI_VAL_TRAITS_DEF( _Type, _value ) \
-  template <> struct MpiValTraits<_Type> { static constexpr const MPI_Datatype &datatype = _value; };
+  template <> struct MpiValTraits<_Type> { static constexpr const MPI_Datatype datatype = _value; };
 
 MCNLA_MPI_VAL_TRAITS_DEF(char,                 MPI_CHARACTER)
 MCNLA_MPI_VAL_TRAITS_DEF(int8_t,               MPI_INTEGER1)

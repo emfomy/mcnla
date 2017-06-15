@@ -76,7 +76,7 @@ void MCNLA_TMP::runImpl(
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<index_t>::datatype;
   index_t seed_tmp = seed_;
   MPI_Bcast(&seed_tmp, 1, datatype, mpi_root, mpi_comm);
   random::Streams streams(seed_tmp);

@@ -11,13 +11,13 @@ option(MCNLA_BUILD_TEST    "Build test codes."     "OFF")
 option(MCNLA_BUILD_DOC     "Build documentation."  "OFF")
 option(MCNLA_INSTALL_DEMO  "Install demos."        "OFF")
 
-set(MCNLA_INT_SIZE "32" CACHE STRING "System integer size.")
+set(MCNLA_INT_SIZE "32" CACHE STRING "System integer size. [32/64]")
 set_property(CACHE MCNLA_INT_SIZE PROPERTY STRINGS "32;64")
 
-set(MCNLA_BLAS "BLAS" CACHE STRING "Selected BLAS/LAPACK library.")
+set(MCNLA_BLAS "BLAS" CACHE STRING "Selected BLAS/LAPACK library. [BLAS/MKL]")
 set_property(CACHE MCNLA_BLAS PROPERTY STRINGS "BLAS;MKL")
 
-set(MCNLA_OMP "OFF" CACHE STRING "Selected OpenMP library. (Require 'MCNLA_BLAS = MKL')")
+set(MCNLA_OMP "OFF" CACHE STRING "Selected OpenMP library. [OFF/GOMP/IOMP] (Require 'MCNLA_BLAS = MKL')")
 set_property(CACHE MCNLA_OMP PROPERTY STRINGS "OFF;GOMP;IOMP")
 
 # option(MCNLA_USE_GPU       "Enable GPU support."   "OFF")
