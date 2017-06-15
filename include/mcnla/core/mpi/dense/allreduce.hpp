@@ -34,7 +34,7 @@ inline void allreduceImpl(
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Allreduce(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
 }
 
@@ -45,7 +45,7 @@ inline void allreduceImpl(
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Allreduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, comm);
 }
 

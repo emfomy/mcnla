@@ -34,7 +34,7 @@ inline void sendImpl(
     const mpi_int_t tag,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Send(buffer.valPtr(), count, datatype, dest, tag, comm);
 }
 

@@ -35,7 +35,7 @@ inline void reduceImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Reduce(send.valPtr(), recv.valPtr(), count, datatype, op, root, comm);
 }
 
@@ -47,7 +47,7 @@ inline void reduceImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   if ( isCommRoot(root, comm) ) {
     MPI_Reduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, root, comm);
   } else {

@@ -120,7 +120,7 @@ void MCNLA_TEP::runImpl(
 
   // Broadcast G0
   if ( mpi_rank == 0 ) {
-    la::omatcopy(collection_g_(0), matrix_g0_);
+    la::copy(collection_g_(0), matrix_g0_);
   }
   comm_moment = utility::getTime();
   mpi::bcast(matrix_g0_, 0, mpi_comm);

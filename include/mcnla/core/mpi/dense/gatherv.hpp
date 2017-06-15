@@ -36,7 +36,7 @@ inline void gathervImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Gatherv(send.valPtr(), sendcount, datatype, recv.valPtr(), recvcounts, displs, datatype, root, comm);
 }
 

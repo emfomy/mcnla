@@ -143,7 +143,7 @@ void Streams::setSeedsImpl(
     std::seed_seq seq{seed};
     seq.generate(seeds.begin(), seeds.end());
   }
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<index_t>::datatype;
   index_t seed_tmp;
   MPI_Scatter(seeds.data(), 1, datatype, &seed_tmp, 1, datatype, mpi_root, mpi_comm);
   setSeedImpl(seed_tmp);

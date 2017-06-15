@@ -48,12 +48,12 @@ static constexpr size_t kOsIdxWidth = 6;
 
 /// @ingroup  core_module
 /// The index type literal.
-static inline mcnla::index_t operator""_i( unsigned long long int idx ) { return idx; }
+static inline mcnla::index_t operator"" _i( unsigned long long int idx ) { return idx; }
 
 }  // namespace mcnla
 
 #ifndef MCNLA_DISABLE_LITERAL
-using mcnla::operator""_i;
+using mcnla::operator"" _i;
 #endif  // MCNLA_DISABLE_LITERAL
 
 #ifdef MCNLA_USE_MKL

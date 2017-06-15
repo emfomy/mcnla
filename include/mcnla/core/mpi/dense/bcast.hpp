@@ -33,7 +33,7 @@ inline void bcastImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Bcast(buffer.valPtr(), count, datatype, root, comm);
 }
 
