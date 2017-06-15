@@ -151,7 +151,8 @@ inline void copy(
     const DenseMatrix<_Val, _transa> &a,
           DenseMatrix<_Val, _transb> &b
 ) noexcept {
-  if ( a.isShrunk() && b.isShrunk() ) {
+  mcnla_assert_eq(a.sizes(), b.sizes());
+  if ( a.isShrunk() && b.isShrunk() && _transa == _transb ) {
     copy(a.vec(), b.vec());
   } else {
     omatcopy(a, b, 1);
@@ -164,7 +165,8 @@ inline void copy(
     const DenseMatrix<_Val, _transa> &a,
           DenseMatrix<_Val, _transb> &&b
 ) noexcept {
-  if ( a.isShrunk() && b.isShrunk() ) {
+  mcnla_assert_eq(a.sizes(), b.sizes());
+  if ( a.isShrunk() && b.isShrunk() && _transa == _transb ) {
     copy(a.vec(), b.vec());
   } else {
     omatcopy(a, b, 1);
