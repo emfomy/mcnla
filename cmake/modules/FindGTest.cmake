@@ -203,8 +203,8 @@ if(GTEST_FOUND)
   _gtest_append_debugs(GTEST_MAIN_LIBRARIES GTEST_MAIN_LIBRARY)
   set(GTEST_BOTH_LIBRARIES ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
 
-  include(CMakeFindDependencyMacro)
-  find_dependency(Threads)
+  # include(CMakeFindDependencyMacro)
+  # find_dependency(Threads)
 
   if(NOT TARGET GTest::GTest)
     add_library(GTest::GTest UNKNOWN IMPORTED)
