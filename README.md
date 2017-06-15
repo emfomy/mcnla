@@ -16,7 +16,7 @@ Monte Carlo Numerical Linear Algebra Package
 * @ref tutorial_main
 
 ## Requirements
-* [CMake](https://cmake.org) 3+.
+* [CMake](https://cmake.org) 2.8+ (CMake 3+ recommended).
 * C++ compiler with C++11 support ([GCC](https://gcc.gnu.org) 5+ recommended).
 * [BLAS](http://www.netlib.org/blas) & [LAPACK](http://www.netlib.org/lapack) library.
 * [OpenMP](http://openmp.org) Library.
@@ -46,7 +46,7 @@ Use the following command to set options
 ccmake <path-to-source>
 ```
 
-* Set 'MCNLA_BLAS'          to select BLAS/LAPACK library.
+* Set 'MCNLA_BLAS'          to select BLAS/LAPACK library. \[BLAS/MKL\]
 * Set 'MCNLA_BUILD_DEMO'    to build demo codes.
 * Set 'MCNLA_BUILD_DOC'     to build documentation.
 * Set 'MCNLA_BUILD_DRIVER'  to build driver codes.
@@ -54,12 +54,12 @@ ccmake <path-to-source>
 * Set 'MCNLA_BUILD_TEST'    to build test codes.
 * Set 'MCNLA_INSTALL_DEMO'  to install demos.
 <!-- * Set `MCNLA_USE_GPU`       to enable GPU support. -->
-* Set 'MCNLA_INT_SIZE'      to select system integer size.
-* Set 'MCNLA_OMP'           to select OpenMP library.             (Require 'MCNLA_BLAS = MKL')
+* Set 'MCNLA_INT_SIZE'      to select system integer size. \[32/64\]
+* Set 'MCNLA_OMP'           to select OpenMP library. \[OFF/GOMP/IOMP\] (Require 'MCNLA_BLAS = MKL')
 
-* Set 'GTEST_ROOT'          for the root path of Google Test.     (Require 'MCNLA_BUILD_TEST')
-* Set 'INTEL_ROOT'          for the root path of Intel libraries. (Require 'MCNLA_BLAS = MKL')
-* Set 'MKL_ROOT'            for the root path of Intel MKL.       (Require 'MCNLA_BLAS = MKL')
+* Set 'GTEST_ROOT'          for the root path of Google Test.           (Require 'MCNLA_BUILD_TEST')
+* Set 'INTEL_ROOT'          for the root path of Intel libraries.       (Require 'MCNLA_BLAS = MKL')
+* Set 'MKL_ROOT'            for the root path of Intel MKL.             (Require 'MCNLA_BLAS = MKL')
 * Set 'MPI_PROCS'           to set the number of MPI processes used in demo codes.
 
 ### Makefile
