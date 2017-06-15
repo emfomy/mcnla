@@ -93,21 +93,26 @@ void MCNLA_TMP::runImpl(
   auto &matrix_qsj = collection_qj.unfold();  // matrix Qs.
 
   _Val one_n = 1.0/num_sketch;
+
   this->tic(); double comm_moment, comm_time = 0;
   // ====================================================================================================================== //
   // Initializing
 
-  auto &&matrix_bc  = collection_bc_(0);   // matrix Bc.
-  auto &&matrix_qcj = collection_qcj_(0);  // matrix Qc.
+  {
 
-  // Qc := Q0
-  la::copy(collection_qj(0), matrix_qcj);
+    auto &&matrix_bc  = collection_bc_(0);   // matrix Bc.
+    auto &&matrix_qcj = collection_qcj_(0);  // matrix Qc.
 
-  // Bc := Qs' * Qc
-  la::mm(matrix_qsj.t(), matrix_qcj, matrix_bc);
-  comm_moment = utility::getTime();
-  mpi::allreduce(matrix_bc, MPI_SUM, mpi_comm);
-  comm_time += utility::getTime() - comm_moment;
+    // Qc := Q0
+    la::copy(collection_qj(0), matrix_qcj);
+
+    // Bc := Qs' * Qc
+    la::mm(matrix_qsj.t(), matrix_qcj, matrix_bc);
+    comm_moment = utility::getTime();
+    mpi::allreduce(matrix_bc, MPI_SUM, mpi_comm);
+    comm_time += utility::getTime() - comm_moment;
+
+  }
 
   this->toc(comm_time);
   // ====================================================================================================================== //

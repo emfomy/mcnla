@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/row_block_gramian_kolmogorov_nagumo_integrator.hh
-/// @brief   The definition of Gramian Kolmogorov-Nagumo-type integrator (row-block version).
+/// @file    include/mcnla/isvd/integrator/row_block_gramian_wen_yin_integrator.hh
+/// @brief   The definition of Gramian Wen-Yin line search integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
-#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_WEN_YIN_INTEGRATOR_HH_
+#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_WEN_YIN_INTEGRATOR_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
@@ -23,32 +23,32 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockGramianKolmogorovNagumoIntegratorTag {};
+struct RowBlockGramianWenYinIntegratorTag {};
 template <typename _Val>
-using RowBlockGramianKolmogorovNagumoIntegrator = Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>;
+using RowBlockGramianWenYinIntegrator = Integrator<RowBlockGramianWenYinIntegratorTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
-/// The Gramian Kolmogorov-Nagumo-type integrator (row-block version).
+/// The Gramian Wen-Yin line search integrator (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>
+class Integrator<RowBlockGramianWenYinIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockGramianKolmogorovNagumoIntegrator
+class RowBlockGramianWenYinIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>> {
+  : public StageWrapper<RowBlockGramianWenYinIntegrator<_Val>> {
 
-  friend StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>>;
+  friend StageWrapper<RowBlockGramianWenYinIntegrator<_Val>>;
 
-  static_assert(traits::ValTraits<_Val>::is_real, "Kolmogorov-Nagumo-type integrator dost not support complex value!");
+  static_assert(traits::ValTraits<_Val>::is_real, "Wen-Yin line search integrator dost not support complex value!");
 
  private:
 
-  using BaseType = StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>>;
+  using BaseType = StageWrapper<RowBlockGramianWenYinIntegrator<_Val>>;
 
  protected:
 
@@ -67,6 +67,27 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   /// The number of iteration.
   index_t iteration_;
 
+  /// The initial step size.
+  _Val tau0_ = 1.0;
+
+  /// The maximum predicting step size.
+  _Val taumax_ = 1e14;
+
+  /// The minimum predicting step size.
+  _Val taumin_ = 1e-14;
+
+  /// The maximum number of iteration in predicting step size.
+  index_t taumaxiter_ = 20;
+
+  /// The scaling parameter for step size searching.
+  _Val beta_ = 0.5;
+
+  /// The parameter for step size searching.
+  _Val sigma_ = 1e-4;
+
+  /// The parameter for next step searching.
+  _Val eta_ = 0.85;
+
   /// The matrix Bs.
   DenseMatrixRowMajor<_Val> matrix_bs_;
 
@@ -76,17 +97,14 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   /// The matrix Bgc.
   DenseMatrixRowMajor<_Val> matrix_bgc_;
 
-  /// The matrix Dc.
-  DenseMatrixRowMajor<_Val> matrix_dc_;
+  /// The matrix Dc and D+.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_dc_;
 
-  /// The matrix Z.
-  DenseSymmetricMatrixRowMajor<_Val> symatrix_z_;
+  /// The matrix Dgc.
+  DenseMatrixRowMajor<_Val> matrix_dgc_;
 
   /// The matrix C.
   DenseMatrixRowMajor<_Val> matrix_c_;
-
-  /// The matrix inv(C).
-  DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
 
   /// The matrix ~F.
   DenseMatrixCollectionRowBlockRowMajor<_Val> collection_ff_;
@@ -94,14 +112,29 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   /// The matrix ~E.
   DenseMatrixCollectionRowBlockRowMajor<_Val> collection_ee_;
 
-  /// The vector S.
-  DenseVector<_Val> vector_s_;
+  /// The matrix Phi1.
+  DenseMatrixRowMajor<_Val> matrix_phi1_;
 
-  /// The vector sqrt(S).
-  DenseVector<_Val> vector_ss_;
+  /// The matrix Phi2.
+  DenseMatrixRowMajor<_Val> matrix_phi2_;
 
-  /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
+  /// The matrix Upsilon1.
+  DenseMatrixRowMajor<_Val> matrix_upsolon1_;
+
+  /// The matrix Upsilon2.
+  DenseMatrixRowMajor<_Val> matrix_upsolon2_;
+
+  /// The matrix Bc' * Upsilon1.
+  DenseMatrixRowMajor<_Val> matrix_bct_upsolon1_;
+
+  /// The matrix Bc' * Upsilon2.
+  DenseMatrixRowMajor<_Val> matrix_bct_upsolon2_;
+
+  /// The matrix Bs * Upsilon.
+  DenseMatrixRowMajor<_Val> matrix_bs_upsolon_;
+
+  /// The GETRFI driver.
+  la::GetrfiDriver<DenseMatrixRowMajor<_Val>> getrfi_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -113,7 +146,7 @@ class RowBlockGramianKolmogorovNagumoIntegrator
 
   // Constructor
   inline Integrator( const Parameters<_Val> &parameters,
-                     const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-4 ) noexcept;
+                     const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-3 ) noexcept;
 
   // Gets parameters
   inline index_t        maxIteration() const noexcept;
@@ -139,4 +172,4 @@ class RowBlockGramianKolmogorovNagumoIntegrator
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
+#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_WEN_YIN_INTEGRATOR_HH_

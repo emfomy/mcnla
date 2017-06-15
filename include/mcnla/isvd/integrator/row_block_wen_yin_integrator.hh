@@ -107,7 +107,7 @@ class RowBlockWenYinIntegrator
   /// The matrix Dc.
   DenseMatrixRowMajor<_Val> matrix_dc_;
 
-  /// The matrix Dc.
+  /// The matrix Dgc.
   DenseMatrixRowMajor<_Val> matrix_dgc_;
 
   /// The matrix C.
