@@ -3,7 +3,7 @@ namespace mcnla {
 namespace matrix {
 
 /**
-  @page tutorial_data_structure Data Structures
+  @page tutorial_matrix_data_structure Data Structures
 
   <h3>%Array</h3>
 

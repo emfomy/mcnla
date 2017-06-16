@@ -3,7 +3,7 @@ namespace mcnla {
 namespace matrix {
 
 /**
-  @page tutorial_container_creation Container Creation
+  @page tutorial_matrix_creation Container Creation
 
   <h3>Construct with Size Information</h3>
 

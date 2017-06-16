@@ -3,10 +3,7 @@
 
   <h4>Subpages</h4>
 
-  - @subpage tutorial_data_structure
-  - @subpage tutorial_container_creation
-  - @subpage tutorial_container_usage
-  - @subpage tutorial_literal
-  - @subpage tutorial_linear_algebra
+  - @subpage tutorial_matrix
+  - @subpage tutorial_la
   - @subpage tutorial_isvd
 */
