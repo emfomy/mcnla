@@ -42,6 +42,8 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   using VectorStorageType = DenseVectorStorage<_Core, _Val>;
   using MatrixStorageType = DenseMatrixStorage<_Core, _Val>;
 
+  using VectorType        = GeVecS<_Core, DenseTag, _Val>;
+
   using BaseType          = DenseStorage<_Core, _Val>;
 
  protected:
@@ -84,6 +86,10 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   inline DimsType mdims() const noexcept;
   inline index_t  pitch() const noexcept;
 
+  // Gets the storage vector
+  inline       VectorType unfold() noexcept;
+  inline const VectorType unfold() const noexcept;
+
  protected:
 
   // Gets element
@@ -109,10 +115,6 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   inline const VectorStorageType getDiagImpl( const index_t idx ) const noexcept;
   inline       VectorStorageType vecImpl() noexcept;
   inline const VectorStorageType vecImpl() const noexcept;
-
-  // Gets the storage vector
-  inline       VectorStorageType unfoldImpl() noexcept;
-  inline const VectorStorageType unfoldImpl() const noexcept;
 
 };
 

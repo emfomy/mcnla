@@ -174,10 +174,6 @@ class DenseMatrixBase_
   inline       VectorType vec() noexcept;
   inline const VectorType vec() const noexcept;
 
-  // Gets storage vector
-  inline       VectorType unfold() noexcept;
-  inline const VectorType unfold() const noexcept;
-
  protected:
 
   // Gets information

@@ -396,7 +396,7 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagIm
 ///
 /// @attention  The matrices must be shrunk.
 ///
-/// @see  expand
+/// @see  unfold
 ///
 template <class _Core, typename _Val>
 DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vecImpl() noexcept {
@@ -424,16 +424,16 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vecImpl()
 /// @see  vecImpl
 ///
 template <class _Core, typename _Val>
-DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::unfoldImpl() noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
+GeVecS<_Core, DenseTag, _Val> DenseMatrixStorage<_Core, _Val>::unfold() noexcept {
+  return VectorType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  unfoldImpl
+/// @copydoc  unfold
 ///
 template <class _Core, typename _Val>
-const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::unfoldImpl() const noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixStorage<_Core, _Val>::unfold() const noexcept {
+  return VectorType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 }  // namespace matrix

@@ -643,22 +643,6 @@ const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::vec() 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::DenseMatrixStorage::unfoldImpl
-///
-template <class _Core, typename _Val, Trans _trans>
-GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::unfold() noexcept {
-  return static_cast<VectorType&&>(this->unfoldImpl());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  expand
-///
-template <class _Core, typename _Val, Trans _trans>
-const GeVecS<_Core, DenseTag, _Val> DenseMatrixBase<_Core, _Val, _trans>::unfold() const noexcept {
-  return static_cast<const VectorType&&>(this->unfoldImpl());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::matrix::MatrixWrapper::nrow
 ///
 template <class _Core, typename _Val, Trans _trans>
