@@ -61,8 +61,8 @@ void MCNLA_TMP::initializeImpl() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Forms SVD.
 ///
-/// @param  matrix_a    The matrix A.
-/// @param  matrix_q    The matrix Q.
+/// @param  matrix_a  The matrix A.
+/// @param  matrix_q  The matrix Q.
 ///
 template <typename _Val> template <class _Matrix>
 void MCNLA_TMP::runImpl(

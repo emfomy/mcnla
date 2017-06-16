@@ -50,8 +50,8 @@ TEST(RowBlockWenYinIntegratorTest, Test) {
   // Creates matrices
   auto qi    = parameters.createCollectionQ();
   auto qij   = parameters.createCollectionQj();
-  auto qbar  = parameters.createMatrixQ();
-  auto qbarj = parameters.createMatrixQj();
+  auto qbar  = parameters.createMatrixQbar();
+  auto qbarj = parameters.createMatrixQbarj();
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {

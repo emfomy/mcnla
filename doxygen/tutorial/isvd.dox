@@ -1,9 +1,11 @@
 /**
-  @page tutorial_isvd iSVD Module
+  @page tutorial_isvd iSVD Tutorial
 
   @see  @ref isvd_module
 
   <h4>Subpages</h4>
 
-  - @subpage tutorial_isvd_isvd
+  - @subpage tutorial_isvd_example
+  - @subpage tutorial_isvd_stage
+  - @subpage tutorial_isvd_storage
 */

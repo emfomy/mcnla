@@ -1,7 +1,7 @@
 namespace mcnla {
 
 /**
-  @page tutorial_isvd_exampl iSVD Example
+  @page tutorial_isvd_example iSVD Example
 
   <h3>iSVD</h3>
 
@@ -72,8 +72,6 @@ namespace mcnla {
   Remember to @ref finalize MCNLA.
 
   @snippetlineno demo/example.cpp final-mcnla
-
-  @see  @ref isvd_module
 
 */
 

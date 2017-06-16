@@ -39,8 +39,6 @@ namespace mcnla {
   `la::rk&zwnj;(a, c, alpha, beta)`                                | @f$C \gets \alpha A A^* + \beta C@f$
   `la::r2k&zwnj;(a, b, c, alpha, beta)`                            | @f$C \gets \alpha A B^* + \overline{\alpha} B A^* + \beta C@f$
 
-  @see  @ref la_module
-
 */
 
 }  // namespace mcnla

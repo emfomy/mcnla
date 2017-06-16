@@ -140,8 +140,8 @@ int main( int argc, char **argv ) {
   auto matrix_aj     = matrix_a(parameters.rowrange(), ""_);
   auto collection_q  = parameters.createCollectionQ();
   auto collection_qj = parameters.createCollectionQj();
-  auto matrix_q      = parameters.createMatrixQ();
-  auto matrix_qj     = parameters.createMatrixQj();
+  auto matrix_qbar      = parameters.createMatrixQbar();
+  auto matrix_qbarj     = parameters.createMatrixQbarj();
 
   // ====================================================================================================================== //
   // Display driver
@@ -168,19 +168,19 @@ int main( int argc, char **argv ) {
 
     sketcher(matrix_aj, collection_qj);
     orthogonalizer(collection_qj);
-    integrator(collection_qj, matrix_qj);
-    if_converter(matrix_qj, matrix_q);
-    former(matrix_a, matrix_q);
+    integrator(collection_qj, matrix_qbarj);
+    if_converter(matrix_qbarj, matrix_qbar);
+    former(matrix_a, matrix_qbar);
 
     // sketcher(matrix_a, collection_q);
     // orthogonalizer(collection_q);
-    // integrator(collection_q, matrix_q);
-    // former(matrix_a, matrix_q);
+    // integrator(collection_q, matrix_qbar);
+    // former(matrix_a, matrix_qbar);
 
     MPI_Barrier(mpi_comm);
 
     // Check result
-    if ( mpi_rank == mpi_root  ) {
+    if ( mpi_rank == mpi_root ) {
       ValType smax, smin, smean, frerr;
       check_u(former.matrixU(), matrix_u_true, smax, smin, smean);
       check(matrix_a, former.matrixU(), former.matrixVt(), former.vectorS(), frerr);

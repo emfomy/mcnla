@@ -108,8 +108,8 @@ class Parameters {
   // Create matrices
   inline DenseMatrixCollectionColBlockRowMajor<_Val> createCollectionQ() const noexcept;
   inline DenseMatrixCollectionColBlockRowMajor<_Val> createCollectionQj() const noexcept;
-  inline DenseMatrixRowMajor<_Val> createMatrixQ() const noexcept;
-  inline DenseMatrixRowMajor<_Val> createMatrixQj() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixQbar() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixQbarj() const noexcept;
   inline DenseMatrixRowMajor<_Val> createMatrixU() const noexcept;
   inline DenseMatrixRowMajor<_Val> createMatrixUj() const noexcept;
 

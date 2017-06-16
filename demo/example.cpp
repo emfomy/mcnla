@@ -68,8 +68,8 @@ int main( int argc, char **argv ) {
   // Allocate variables
   auto matrix_aj     = matrix_a(parameters.rowrange(), ""_);
   auto collection_qj = parameters.createCollectionQj();
-  auto matrix_qj     = parameters.createMatrixQj();
-  auto matrix_q      = parameters.createMatrixQ();
+  auto matrix_qbarj  = parameters.createMatrixQbarj();
+  auto matrix_qbar   = parameters.createMatrixQbar();
   /// [alloc-var]
 
   /// [disp-stage]
@@ -86,9 +86,9 @@ int main( int argc, char **argv ) {
   // Run iSVD
   sketcher(matrix_aj, collection_qj);
   orthogonalizer(collection_qj);
-  integrator(collection_qj, matrix_qj);
-  if_converter(matrix_qj, matrix_q);
-  former(matrix_a, matrix_q);
+  integrator(collection_qj, matrix_qbarj);
+  if_converter(matrix_qbarj, matrix_qbar);
+  former(matrix_a, matrix_qbar);
   /// [run-isvd]
 
   /// [disp-time]
