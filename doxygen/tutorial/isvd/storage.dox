@@ -7,7 +7,7 @@ namespace isvd {
 
   <h3>Notations</h3>
 
-  In the following, denote @ref Parameters::mpi_size "K" as the number of MPI nodes, @ref Parameters::numSketch "N" as the number of sketches, and @ref Parameters::numSketchEach "Nj" as the number of sketches per MPI node (i.e. @f$N_j = N / K@f$).
+  In the following, denote @ref Parameters::mpi_size "P" as the number of MPI nodes, @ref Parameters::numSketch "N" as the number of sketches, and @ref Parameters::numSketchEach "Nj" as the number of sketches per MPI node (i.e. @f$N_j = N / P@f$).
 
   <h3>General Storage</h3>
 
@@ -22,27 +22,27 @@ namespace isvd {
   @f[
     \boldsymbol{A} =
       \begin{bmatrix}
-        A^{(1)} \\ A^{(2)} \\ \vdots \\ A^{(K)}
+        A^{(1)} \\ A^{(2)} \\ \vdots \\ A^{(P)}
       \end{bmatrix},
     \qquad
     \boldsymbol{Y}_{[i]} =
       \begin{bmatrix}
-        Y^{(1)}_{[i]} \\ Y^{(2)}_{[i]} \\ \vdots \\ Y^{(K)}_{[i]}
+        Y^{(1)}_{[i]} \\ Y^{(2)}_{[i]} \\ \vdots \\ Y^{(P)}_{[i]}
       \end{bmatrix},
     \qquad
     \boldsymbol{Q}_{[i]} =
       \begin{bmatrix}
-        Q^{(1)}_{[i]} \\ Q^{(2)}_{[i]} \\ \vdots \\ Q^{(K)}_{[i]}
+        Q^{(1)}_{[i]} \\ Q^{(2)}_{[i]} \\ \vdots \\ Q^{(P)}_{[i]}
       \end{bmatrix},
     \qquad
     \overline{\boldsymbol{Q}} =
       \begin{bmatrix}
-        \overline{Q}^{(1)} \\ \overline{Q}^{(2)} \\ \vdots \\ \overline{Q}^{(K)}
+        \overline{Q}^{(1)} \\ \overline{Q}^{(2)} \\ \vdots \\ \overline{Q}^{(P)}
       \end{bmatrix},
     \qquad
     \widehat{\boldsymbol{U}} =
       \begin{bmatrix}
-        \widehat{U}^{(1)} \\ \widehat{U}^{(2)} \\ \vdots \\ \widehat{U}^{(K)}
+        \widehat{U}^{(1)} \\ \widehat{U}^{(2)} \\ \vdots \\ \widehat{U}^{(P)}
       \end{bmatrix}.
   @f]
 
