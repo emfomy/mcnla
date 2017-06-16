@@ -40,7 +40,7 @@ template <typename _Val>
 inline _Val dot(
     const DenseVector<_Val> &x
 ) noexcept {
-  return detail::dot(x.len(), x.valPtr(), x.stride(), x.valPtr(), x.stride());
+  return dot(x, x);
 }
 //@}
 

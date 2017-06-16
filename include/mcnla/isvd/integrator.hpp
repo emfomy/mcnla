@@ -15,7 +15,6 @@
 
 // Wen-Yin line search
 #include <mcnla/isvd/integrator/row_block_wen_yin_integrator.hpp>
-#pragma warning
 #include <mcnla/isvd/integrator/row_block_gramian_wen_yin_integrator.hpp>
 
 // Reduce-sum

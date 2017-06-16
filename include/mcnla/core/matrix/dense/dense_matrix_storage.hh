@@ -110,6 +110,10 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   inline       VectorStorageType vecImpl() noexcept;
   inline const VectorStorageType vecImpl() const noexcept;
 
+  // Gets the storage vector
+  inline       VectorStorageType unfoldImpl() noexcept;
+  inline const VectorStorageType unfoldImpl() const noexcept;
+
 };
 
 }  // namespace matrix

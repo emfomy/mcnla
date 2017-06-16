@@ -169,11 +169,14 @@ class DenseMatrixBase_
   inline const VectorType operator()( const index_t rowidx, const IdxRange &colrange ) const noexcept;
   inline       VectorType operator()( const index_t rowidx, const FullRange ) noexcept;
   inline const VectorType operator()( const index_t rowidx, const FullRange ) const noexcept;
-
   inline       VectorType getDiag( const index_t idx = 0 ) noexcept;
   inline const VectorType getDiag( const index_t idx = 0 ) const noexcept;
   inline       VectorType vec() noexcept;
   inline const VectorType vec() const noexcept;
+
+  // Gets storage vector
+  inline       VectorType unfold() noexcept;
+  inline const VectorType unfold() const noexcept;
 
  protected:
 

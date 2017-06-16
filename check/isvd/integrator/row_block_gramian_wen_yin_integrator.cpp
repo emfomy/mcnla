@@ -38,7 +38,7 @@ TEST(RowBlockGramianWenYinIntegratorTest, Test) {
   parameters.sync();
 
   // Initializes integrator
-  mcnla::isvd::RowBlockGramianWenYinIntegrator<ValType> integrator(parameters, 256, 1e-4);
+  mcnla::isvd::RowBlockGramianWenYinIntegrator<ValType> integrator(parameters, 256, 1e-3);
   integrator.initialize();
 
   // Initializes converter
