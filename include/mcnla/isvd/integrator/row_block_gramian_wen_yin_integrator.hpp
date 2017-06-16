@@ -142,11 +142,11 @@ void MCNLA_TMP::runImpl(
       matrix_ffc(i, i) = 1.0;
     }
 
-    // taug := tau0; zeta := 1; phi := 1/2N * norm( Bc )_F
-    taug = tau0_, zeta = 1.0, phi = one_2n * la::dot(matrix_bc.vec());
+    // taug := tau0; zeta := 1; phi := 1/2N * norm( Bc )_F^2
+    taug = tau0_, zeta = 1.0, phi = one_2n * la::nrmf2(matrix_bc);
 
-    // mu := tr( Dgc ) - norm( Dc )_F
-    mu = la::asum(matrix_dgc_.diag().vec()) - la::dot(matrix_dc.vec());
+    // mu := tr( Dgc ) - norm( Dc )_F^2
+    mu = la::asum(matrix_dgc_.diag().vec()) - la::nrmf2(matrix_dc);
 
   }
 
@@ -187,9 +187,9 @@ void MCNLA_TMP::runImpl(
       // C := [ Dc/2 - I/tau , I/2          ;
       //       -Dgc/2,        -Dc/2 - I/tau ]
       la::memset0(matrix_c_);
-      la::omatcopy(matrix_dc,  matrix_c11,  0.5);
+      la::omatcopy(matrix_dc,   matrix_c11,  0.5);
       la::omatcopy(matrix_dgc_, matrix_c21, -0.5);
-      la::omatcopy(matrix_dc,  matrix_c22, -0.5);
+      la::omatcopy(matrix_dc,   matrix_c22, -0.5);
       for ( auto &v : matrix_c11.getDiag() ) { v -= 1.0/tau; }
       for ( auto &v : matrix_c12.getDiag() ) { v += 0.5; }
       for ( auto &v : matrix_c22.getDiag() ) { v -= 1.0/tau; }
@@ -206,8 +206,8 @@ void MCNLA_TMP::runImpl(
       la::mm(matrix_bc,   matrix_fc, matrix_bp);
       la::mm(matrix_bgc_, matrix_fgc, matrix_bp, 1.0, 1.0);
 
-      // ~phi := 1/2N * norm( Bp )_F
-      phit = one_2n * la::dot(matrix_bp.vec());
+      // ~phi := 1/2N * norm( Bp )_F^2
+      phit = one_2n * la::nrmf2(matrix_bp);
 
       // Check condition
       if ( phit >= phi + tau * sigma_ * mu ) {
@@ -230,7 +230,7 @@ void MCNLA_TMP::runImpl(
 
     // E~p := E~c * Fc + Ec [in Upsilon1]
     la::copy(matrix_upsolon1_, matrix_eep);
-    la::mm(matrix_eec, matrix_fc, matrix_upsolon1_, 1.0, 1.0);
+    la::mm(matrix_eec, matrix_fc, matrix_eep, 1.0, 1.0);
 
     // Bg+[in Bgc] := 1/N * Bs * B+
     la::mm(symatrix_bs, matrix_bp, matrix_bgc_, one_n);
@@ -238,11 +238,11 @@ void MCNLA_TMP::runImpl(
     // D+ := 1/N * B+' * B+
     la::mm(matrix_bp.t(), matrix_bp, matrix_dp, one_n);
 
-    // Dg+ [in Dgc] := 1/N * Bc' * Bg+ [in Bgc]
-    la::mm(matrix_bc.t(), matrix_bgc_, matrix_dgc_, one_n);
+    // Dg+ [in Dgc] := 1/N * B+' * Bg+ [in Bgc]
+    la::mm(matrix_bp.t(), matrix_bgc_, matrix_dgc_, one_n);
 
-    // mu := tr( Dg+ [in Dgc] ) - norm( D+ )_F
-    mu = la::asum(matrix_dgc_.diag().vec()) - la::dot(matrix_dp.vec());
+    // mu := tr( Dg+ [in Dgc] ) - norm( D+ )_F^2
+    mu = la::asum(matrix_dgc_.diag().vec()) - la::nrmf2(matrix_dp);
 
     // ================================================================================================================== //
     // Check convergence: mu  < tol^2
@@ -260,7 +260,7 @@ void MCNLA_TMP::runImpl(
 
     // Phi1 := Fc - I
     la::copy(matrix_fc, matrix_phi1_);
-    for ( auto &v : matrix_fc.getDiag() ) { v -= 1.0; }
+    for ( auto &v : matrix_phi1_.getDiag() ) { v -= 1.0; }
 
     // Upsilon2 := 1/N * (B+ - Bc) - Ec [in Upsilon1] * D+
     la::copy(matrix_bp, matrix_upsolon2_);
@@ -311,7 +311,6 @@ void MCNLA_TMP::runImpl(
     taug = std::abs(t1/t2);
     if ( taug < taumin_ ) { taug = taumin_; }
     if ( taug > taumax_ ) { taug = taumax_; }
-
   }
 
   this->toc(comm_time);
