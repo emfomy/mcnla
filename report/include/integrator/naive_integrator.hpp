@@ -16,7 +16,7 @@ struct Data {
 
   Data( const mcnla::isvd::Parameters<ValType> &parameters ) noexcept
     : collection_q(parameters.createCollectionQ()),
-      matrix_q(parameters.createMatrixQ()) {
+      matrix_q(parameters.createMatrixQbar()) {
     mcnla::random::Streams streams(0);
     mcnla::random::gaussian(streams, collection_q.unfold().vec());
     mcnla::isvd::GramianOrthogonalizer<ValType> orthogonalizer(parameters);

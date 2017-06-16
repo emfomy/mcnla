@@ -25,7 +25,7 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @brief  The eigenvalue driver of symmetric / Hermitian matrices.
+/// @brief  The eigenvalue decomposition driver of symmetric / Hermitian matrices.
 ///
 /// @tparam  _Matrix  The matrix type.
 ///

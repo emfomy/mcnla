@@ -50,8 +50,8 @@ TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   // Creates matrices
   auto qi    = parameters.createCollectionQ();
   auto qij   = parameters.createCollectionQj();
-  auto qbar  = parameters.createMatrixQ();
-  auto qbarj = parameters.createMatrixQj();
+  auto qbar  = parameters.createMatrixQbar();
+  auto qbarj = parameters.createMatrixQbarj();
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {
@@ -66,7 +66,7 @@ TEST(RowBlockKolmogorovNagumoIntegratorTest, Test) {
   // Checks result
   if ( mpi_rank == mpi_root ) {
     ASSERT_EQ(qbar.sizes(), qbar_true.sizes());
-    ASSERT_EQ(integrator.iteration(), 41);
+    ASSERT_EQ(integrator.iteration(), 81);
     for ( auto ir = 0; ir < m; ++ir ) {
       for ( auto ic = 0; ic < k; ++ic ) {
         ASSERT_NEAR(qbar(ir, ic), qbar_true(ir, ic), 1e-8) << "(ir, ic) =  (" << ir << ", " << ic << ")";

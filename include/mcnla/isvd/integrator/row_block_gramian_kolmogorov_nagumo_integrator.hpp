@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>
+  #define MCNLA_TMP Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP RowBlockGramianKolmogorovNagumoIntegrator<_Val>
+  #define MCNLA_TMP RowBlockGramianKolmogorovNagumoIntegrator<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TEP::Integrator(
+MCNLA_TMP::Integrator(
     const Parameters<_Val> &parameters,
     const index_t max_iteration,
     const RealValT<_Val> tolerance
@@ -45,26 +45,27 @@ MCNLA_TEP::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TEP::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto dim_sketch       = parameters_.dimSketch();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
   matrix_bs_.reconstruct(dim_sketch_total, dim_sketch_total);
-  collection_b_.reconstruct(dim_sketch, dim_sketch_total, 2);
+  collection_bc_.reconstruct(dim_sketch_total, dim_sketch, 2);
+  matrix_bgc_.reconstruct(dim_sketch_total, dim_sketch);
 
-  matrix_d_.reconstruct(dim_sketch, dim_sketch);
-  matrix_z_.reconstruct(dim_sketch, dim_sketch);
+  matrix_dc_.reconstruct(dim_sketch, dim_sketch);
+  symatrix_z_.reconstruct(dim_sketch);
   matrix_c_.reconstruct(dim_sketch, dim_sketch);
-  matrix_cinv_.reconstruct(dim_sketch, dim_sketch);
+  symatrix_cinv_.reconstruct(dim_sketch);
 
-  collection_sf_.reconstruct(dim_sketch, dim_sketch, 2);
-  collection_tf_.reconstruct(dim_sketch_total, dim_sketch, 2);
+  collection_ff_.reconstruct(dim_sketch, dim_sketch, 2);
+  collection_ee_.reconstruct(dim_sketch_total, dim_sketch, 2);
 
-  vector_e_.reconstruct(dim_sketch);
-  vector_f_.reconstruct(dim_sketch);
+  vector_s_.reconstruct(dim_sketch);
+  vector_ss_.reconstruct(dim_sketch);
 
-  syev_driver_.reconstruct(dim_sketch);
+  syev_driver_.reconstruct(symatrix_z_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ void MCNLA_TEP::initializeImpl() noexcept {
 /// @param  matrix_qbarj   The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void MCNLA_TEP::runImpl(
+void MCNLA_TMP::runImpl(
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
           DenseMatrixRowMajor<_Val> &matrix_qbarj
 ) noexcept {
@@ -89,31 +90,40 @@ void MCNLA_TEP::runImpl(
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
   mcnla_assert_eq(matrix_qbarj.sizes(),  std::make_tuple(nrow_rank, dim_sketch));
 
-  auto &matrix_qsj  = collection_qj.unfold();                  // matrix Qs.
-  auto &matrix_q0j  = collection_qj(0);                        // matrix Q0.
-  auto &symatrix_bs = matrix_bs_.template sym<Uplo::UPPER>();  // matrix Bs.
+  auto &matrix_qsj  = collection_qj.unfold();  // matrix Qs.
+  auto &matrix_q0j  = collection_qj(0);        // matrix Q0.
+  auto &symatrix_bs = matrix_bs_.syml();       // matrix Bs.
 
-  _Val one_n = 1.0/num_sketch, one_n2 = (1.0/num_sketch)/num_sketch;
+  _Val one_n = 1.0/num_sketch;
+
   this->tic(); double comm_moment, comm_time = 0;
   // ====================================================================================================================== //
   // Initializing
 
-  la::memset0(matrix_bs_({0, dim_sketch}, ""_));
+  {
 
-  // Bs := Qs' * Qs
-  la::rk(matrix_qsj.t(), symatrix_bs);
-  comm_moment = utility::getTime();
-  mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
-  comm_time = utility::getTime() - comm_moment;
+    auto &&matrix_bc  = collection_bc_(0);  // matrix Bc.
+    auto &&matrix_ffc = collection_ff_(0);  // matrix F~c.
+    auto &&matrix_eec = collection_ee_(0);  // matrix E~c.
 
-  // Bc := Q0' * Qs
-  la::copy(matrix_bs_({0, dim_sketch}, ""_), collection_b_(0));
+    la::memset0(matrix_bs_({0, dim_sketch}, ""_));
 
-  // S := I, T := O
-  la::memset0(collection_sf_(0));
-  la::memset0(collection_tf_(0));
-  for ( index_t i = 0; i < dim_sketch; ++i ) {
-    collection_sf_(0)(i, i) = 1.0;
+    // Bs := Qs' * Qs
+    la::rk(matrix_qsj.t(), symatrix_bs);
+    comm_moment = utility::getTime();
+    mpi::allreduce(matrix_bs_, MPI_SUM, mpi_comm);
+    comm_time = utility::getTime() - comm_moment;
+
+    // Bc := Qs' * Q0
+    la::copy(matrix_bs_(""_, {0, dim_sketch}), matrix_bc);
+
+    // F~ := I, E~ := O
+    la::memset0(matrix_ffc);
+    la::memset0(matrix_eec);
+    for ( index_t i = 0; i < dim_sketch; ++i ) {
+      matrix_ffc(i, i) = 1.0;
+    }
+
   }
 
   this->toc(comm_time);
@@ -124,95 +134,93 @@ void MCNLA_TEP::runImpl(
   bool is_odd = false;
   for ( iteration_ = 0; iteration_ < max_iteration_ && !is_converged; ++iteration_ ) {
 
-    auto &&matrix_bc  = collection_b_(is_odd);    // matrix Bc.
-    auto &&matrix_sfc = collection_sf_(is_odd);   // matrix Sfc.
-    auto &&matrix_tfc = collection_tf_(is_odd);   // matrix Tfc.
-    auto &&matrix_bp  = collection_b_(!is_odd);   // matrix B+.
-    auto &&matrix_sfp = collection_sf_(!is_odd);  // matrix Sf+.
-    auto &&matrix_tfp = collection_tf_(!is_odd);  // matrix Tf+.
-    auto &matrix_s    = matrix_c_;                // matrix S.
-    auto &matrix_t    = matrix_tfp;               // matrix T.
+    auto &&matrix_bc  = collection_bc_(is_odd);    // matrix Bc.
+    auto &&matrix_bp  = collection_bc_(!is_odd);   // matrix B+.
+    auto &&matrix_ffc = collection_ff_(is_odd);   // matrix F~c.
+    auto &&matrix_ffp = collection_ff_(!is_odd);  // matrix F~+.
+    auto &&matrix_eec = collection_ee_(is_odd);   // matrix E~c.
+    auto &&matrix_eep = collection_ee_(!is_odd);  // matrix E~+.
     is_odd = !is_odd;
 
     // ================================================================================================================== //
-    // Z := 1/N^2 * Bc * Bs * Bc' - 1/N^2 * Bc * Bc' * Bc * Bc'
+    // Compute B and D
 
-    // D := 1/N * Bc * Bc'
-    la::mm(matrix_bc, matrix_bc.t(), matrix_d_, one_n);
+    // Bgc := 1/N * Bs * Bc
+    la::mm(symatrix_bs, matrix_bc, matrix_bgc_, one_n);
 
-    // Z := 1/N^2 * Bc * Bs * Bc' - D^2
-    la::mm(matrix_bc, symatrix_bs, matrix_bp);
-    la::mm(matrix_bp, matrix_bc.t(), matrix_z_, one_n2);
-    la::rk(matrix_d_, matrix_z_.sym(), -1.0, 1.0);
+    // Dc := 1/N * Bc' * Bc
+    la::mm(matrix_bc.t(), matrix_bc, matrix_dc_, one_n);
+
+    // Dgc [in Z] := 1/N * Bc' * Bgc
+    la::mm(matrix_bc.t(), matrix_bgc_, symatrix_z_, one_n);
 
     // ================================================================================================================== //
-    // C := sqrt( I/2 + sqrt( I/4 - Z ) )
+    // Compute C and inv(C)
 
-    // Compute the eigen-decomposition of Z -> Z' * E * Z
-    syev_driver_(matrix_z_.sym(), vector_e_);
+    // Z := Dgc - Dc^2
+    la::rk(matrix_dc_, symatrix_z_, -1.0, 1.0);
 
-    // E := sqrt( I/2 + sqrt( I/4 - E ) )
-    // F := sqrt( E )
+    // eig(Z) = Z' * S * Z
+    syev_driver_(symatrix_z_, vector_s_);
+
+    // S := sqrt( I/2 + sqrt( I/4 - S ) )
     for ( index_t i = 0; i < dim_sketch; ++i ) {
-      vector_e_(i) = std::sqrt(0.5 + std::sqrt(0.25 - vector_e_(i)));
-      vector_f_(i) = std::sqrt(vector_e_(i));
+      vector_s_(i) = std::sqrt(0.5 + std::sqrt(0.25 - vector_s_(i)));
+      vector_ss_(i) = std::sqrt(vector_s_(i));
     }
 
-    // Tmp := F * Z
-    la::mm(vector_f_.diag(), matrix_z_, matrix_cinv_);
+    auto &matrix_sz    = symatrix_cinv_.full();
+    auto &matrix_sinvz = symatrix_z_.full();
 
-    // Z := F \ Z
-    la::sm(vector_f_.diag().inv(), matrix_z_);
+    // Compute sqrt(S) * Z
+    la::mm(vector_ss_.diag(), symatrix_z_.full(), matrix_sz);
 
-    // C := Tmp' * Tmp
-    la::mm(matrix_cinv_.t(), matrix_cinv_, matrix_c_);
+    // Compute sqrt(S) \ Z
+    la::sm(vector_ss_.diag().inv(), matrix_sinvz);
 
-    // inv(C) := Z' * Z
-    la::mm(matrix_z_.t(), matrix_z_, matrix_cinv_);
+    // C := Z' * S * Z
+    la::mm(matrix_sz.t(), symatrix_cinv_.full(), matrix_c_);
 
-    // ================================================================================================================== //
-    // Compute S and T
-
-    // S := C - D * inv(C)
-    la::mm(matrix_d_, matrix_cinv_, matrix_s, -1.0, 1.0);
-
-    // T := 1/N * Bc' * inv(C)
-    la::mm(matrix_bc.t(), matrix_cinv_, matrix_t, one_n);
+    // inv(C) := Z' * inv(S) * Z
+    la::rk(matrix_sinvz.t(), symatrix_cinv_);
 
     // ================================================================================================================== //
-    // Update Bc
+    // Update for next iteration
 
-    // Bp := S' * Bc + T' * Bs
-    la::mm(matrix_s.t(), matrix_bc, matrix_bp);
-    la::mm(matrix_t.t(), symatrix_bs, matrix_bp, 1.0, 1.0);
+    // Fc [in C] := C - Dc * inv(C)
+    la::mm(matrix_dc_, symatrix_cinv_, matrix_c_, -1.0, 1.0);
+
+    // Ec [in E~+] := 1/N * Bc * inv(C)
+    la::mm(matrix_bc, symatrix_cinv_, matrix_eep, one_n);
+
+    // F~p := F~c * Fc [in C]
+    la::mm(matrix_ffc, matrix_c_, matrix_ffp);
+
+    // E~p := E~c * Fc [in C] + Ec [in E~+]
+    la::mm(matrix_eec, matrix_c_, matrix_eep, 1.0, 1.0);
+
+    // B+ := Bc * Fc [in C] + Bgc * inv(C)
+    la::mm(matrix_bc, matrix_c_, matrix_bp);
+    la::mm(matrix_bgc_, symatrix_cinv_, matrix_bp, 1.0, 1.0);
 
     // ================================================================================================================== //
-    // Update Sf and Tf
-
-    // Sfp := Sfc * S
-    la::mm(matrix_sfc, matrix_s, matrix_sfp);
-
-    // Tfp := Tfc * S + T
-    la::mm(matrix_tfc, matrix_s, matrix_tfp, 1.0, 1.0);
-
-    // ================================================================================================================== //
-    // Check convergence: || I - C ||_F / sqrt(k) < tol
-    for ( auto &v : vector_e_ ) {
+    // Check convergence: || I - C ||_F < tol
+    for ( auto &v : vector_s_ ) {
       v -= 1.0;
     }
-    is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
+    is_converged = !(la::nrm2(vector_s_) >= tolerance_);
   }
 
   this->toc(comm_time);
   // ====================================================================================================================== //
   // Forming Qbar
 
-  auto &&matrix_sf = collection_sf_(is_odd);  // matrix Sf.
-  auto &&matrix_tf = collection_tf_(is_odd);  // matrix Tf.
+  auto &&matrix_ff = collection_ff_(is_odd);  // matrix F~.
+  auto &&matrix_ee = collection_ee_(is_odd);  // matrix E~.
 
-  // Qj := Q0j * Sf + Qsj * Tf
-  la::mm(matrix_q0j, matrix_sf, matrix_qbarj);
-  la::mm(matrix_qsj, matrix_tf, matrix_qbarj, 1.0, 1.0);
+  // Qbar := Q0 * F~ + Qs * E~
+  la::mm(matrix_q0j, matrix_ff, matrix_qbarj);
+  la::mm(matrix_qsj, matrix_ee, matrix_qbarj, 1.0, 1.0);
 
   this->toc(comm_time);
 }
@@ -221,7 +229,7 @@ void MCNLA_TEP::runImpl(
 /// @brief  Gets the maximum number of iteration.
 ///
 template <typename _Val>
-index_t MCNLA_TEP::maxIteration() const noexcept {
+index_t MCNLA_TMP::maxIteration() const noexcept {
   return max_iteration_;
 }
 
@@ -229,7 +237,7 @@ index_t MCNLA_TEP::maxIteration() const noexcept {
 /// @brief  Gets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RealValT<_Val> MCNLA_TEP::tolerance() const noexcept {
+RealValT<_Val> MCNLA_TMP::tolerance() const noexcept {
   return tolerance_;
 }
 
@@ -237,7 +245,7 @@ RealValT<_Val> MCNLA_TEP::tolerance() const noexcept {
 /// @brief  Gets the number of iteration.
 ///
 template <typename _Val>
-index_t MCNLA_TEP::iteration() const noexcept {
+index_t MCNLA_TMP::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
 }
@@ -246,7 +254,7 @@ index_t MCNLA_TEP::iteration() const noexcept {
 /// @brief  Sets the maximum number of iteration.
 ///
 template <typename _Val>
-RowBlockGramianKolmogorovNagumoIntegrator<_Val>& MCNLA_TEP::setMaxIteration(
+RowBlockGramianKolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
@@ -260,7 +268,7 @@ RowBlockGramianKolmogorovNagumoIntegrator<_Val>& MCNLA_TEP::setMaxIteration(
 /// @brief  Sets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RowBlockGramianKolmogorovNagumoIntegrator<_Val>& MCNLA_TEP::setTolerance(
+RowBlockGramianKolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setTolerance(
     const RealValT<_Val> tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
@@ -274,6 +282,6 @@ RowBlockGramianKolmogorovNagumoIntegrator<_Val>& MCNLA_TEP::setTolerance(
 
 }  // namespace mcnla
 
-#undef MCNLA_TEP
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_

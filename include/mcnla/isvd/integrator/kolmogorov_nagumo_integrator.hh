@@ -43,6 +43,8 @@ class KolmogorovNagumoIntegrator
 
   friend StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
 
+  static_assert(traits::ValTraits<_Val>::is_real, "Kolmogorov-Nagumo-type integrator dost not support complex value!");
+
  private:
 
   using BaseType = StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
@@ -118,7 +120,8 @@ class KolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q, DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
+                      DenseMatrixRowMajor<_Val> &matrix_qbar ) noexcept;
 
 };
 

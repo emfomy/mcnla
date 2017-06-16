@@ -16,7 +16,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Performs scaling and out-place transposition/copying of matrices.
 extern void mkl_somatcopy_( const FORTRAN_CHAR1 ordering, const FORTRAN_CHAR1 trans, const FORTRAN_INT rows,
                             const FORTRAN_INT cols, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT lda,
                             const FORTRAN_REAL4 b, const FORTRAN_INT ldb );
@@ -55,9 +54,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Performs scaling and out-place transposition/copying of matrices.
-///
 //@{
 #ifdef MCNLA_USE_MKL
 

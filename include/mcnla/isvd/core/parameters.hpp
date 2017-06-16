@@ -289,7 +289,7 @@ DenseMatrixCollectionColBlockRowMajor<_Val> Parameters<_Val>::createCollectionQj
 /// @brief  Creates matrix Q.
 ///
 template<typename _Val>
-DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQbar() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowTotal(), dimSketch());
   return retval({0_i, nrow()}, ""_);
 }
@@ -298,7 +298,7 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
 /// @brief  Creates matrix Qj (j-th row-block, where j is the MPI rank).
 ///
 template<typename _Val>
-DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQj() const noexcept {
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQbarj() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowEach(), dimSketch());
   return retval({0_i, nrowRank()}, ""_);
 }

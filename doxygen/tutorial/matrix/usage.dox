@@ -3,7 +3,7 @@ namespace mcnla {
 namespace matrix {
 
 /**
-  @page tutorial_container_usage Container Usage
+  @page tutorial_matrix_usage Container Usage
 
   <h3>MATLAB-Like Operation</h3>
 
@@ -48,8 +48,6 @@ namespace matrix {
   `a.t()`                  | transpose `a`
   `a.c()`                  | conjugate `a`
   `a.h()`                  | conjugate transpose `a`
-
-  @see  @ref matrix_module
 
 */
 

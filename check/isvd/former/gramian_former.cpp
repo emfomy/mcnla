@@ -42,7 +42,7 @@ TEST(GramianFormerTest, Test) {
   former.initialize();
 
   // Creates matrices
-  auto qbar = parameters.createMatrixQ();
+  auto qbar = parameters.createMatrixQbar();
   auto u_true_cut = u_true(""_, {0_i, k});
 
   // Copies data

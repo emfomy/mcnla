@@ -14,15 +14,12 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes a matrix-matrix product where one input matrix is symmetric.
 extern void ssymm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT m, const FORTRAN_INT n,
                     const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT lda, const FORTRAN_REAL4 b,
                     const FORTRAN_INT ldb, const FORTRAN_REAL4 beta, FORTRAN_REAL4 c, const FORTRAN_INT ldc );
 extern void dsymm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT m, const FORTRAN_INT n,
                     const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 a, const FORTRAN_INT lda, const FORTRAN_REAL8 b,
                     const FORTRAN_INT ldb, const FORTRAN_REAL8 beta, FORTRAN_REAL8 c, const FORTRAN_INT ldc );
-
-// Computes a matrix-matrix product where one input matrix is Hermitian.
 extern void chemm_( const FORTRAN_CHAR1 side, const FORTRAN_CHAR1 uplo, const FORTRAN_INT m, const FORTRAN_INT n,
                     const FORTRAN_COMP4 alpha, const FORTRAN_COMP4 a, const FORTRAN_INT lda, const FORTRAN_COMP4 b,
                     const FORTRAN_INT ldb, const FORTRAN_COMP4 beta, FORTRAN_COMP4 c, const FORTRAN_INT ldc );
@@ -49,9 +46,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes a matrix-matrix product where one input matrix is symmetric/Hermitian.
-///
 //@{
 static inline void symm(
     const char side, const char uplo, const index_t m, const index_t n,

@@ -393,15 +393,15 @@ const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::getDiagIm
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Vectorize the matrix.
-/// Returns a vector containing all elements between (0, 0) and (#dim0_-1, #dim1_-1) in the memory.
 ///
-/// @note  The length of the output vector is #pitch_ &times; (#dim1_-1) + #dim0_.
+/// @attention  The matrices must be shrunk.
 ///
-/// @attention  The output vector contains the out-of-range spaces.
+/// @see  unfold
 ///
 template <class _Core, typename _Val>
 DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vecImpl() noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
+  mcnla_assert_eq(dim0_, pitch_);
+  return VectorStorageType(dim1_ * dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -409,7 +409,31 @@ DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vecImpl() noexc
 ///
 template <class _Core, typename _Val>
 const DenseVectorStorage<_Core, _Val> DenseMatrixStorage<_Core, _Val>::vecImpl() const noexcept {
-  return VectorStorageType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
+  mcnla_assert_eq(dim0_, pitch_);
+  return VectorStorageType(dim1_ * dim0_, 1, val_, posImpl(0_i, 0_i));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Unfold the matrix.
+/// Returns a vector containing all elements between (0, 0) and (#dim0_-1, #dim1_-1) in the memory.
+///
+/// @note  The length of the output vector is #pitch_ &times; (#dim1_-1) + #dim0_.
+///
+/// @attention  The output vector contains the out-of-range spaces.
+///
+/// @see  vecImpl
+///
+template <class _Core, typename _Val>
+GeVecS<_Core, DenseTag, _Val> DenseMatrixStorage<_Core, _Val>::unfold() noexcept {
+  return VectorType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  unfold
+///
+template <class _Core, typename _Val>
+const GeVecS<_Core, DenseTag, _Val> DenseMatrixStorage<_Core, _Val>::unfold() const noexcept {
+  return VectorType(pitch_ * (dim1_-1) + dim0_, 1, val_, posImpl(0_i, 0_i));
 }
 
 }  // namespace matrix

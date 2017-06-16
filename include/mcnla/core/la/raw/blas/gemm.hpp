@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes a matrix-matrix product with general matrices.
 extern void sgemm_( const FORTRAN_CHAR1 transa, const FORTRAN_CHAR1 transb, const FORTRAN_INT m, const FORTRAN_INT n,
                     const FORTRAN_INT k, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 a, const FORTRAN_INT lda,
                     const FORTRAN_REAL4 b, const FORTRAN_INT ldb, const FORTRAN_REAL4 beta, FORTRAN_REAL4 c,
@@ -51,9 +50,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes a matrix-matrix product with general matrices.
-///
 //@{
 static inline void gemm(
     const char transa, const char transb, const index_t m, const index_t n, const index_t k,

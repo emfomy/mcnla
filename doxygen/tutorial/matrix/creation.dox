@@ -3,7 +3,7 @@ namespace mcnla {
 namespace matrix {
 
 /**
-  @page tutorial_container_creation Container Creation
+  @page tutorial_matrix_creation Container Creation
 
   <h3>Construct with Size Information</h3>
 
@@ -35,8 +35,6 @@ namespace matrix {
     DenseVector<double> vec(5, 2, array, 4);
   @endcode
   Here `vec` is a @ref DenseVector with @ref DenseVector::len "length" 5, @ref DenseVector::stride "stride" 2. The @ref Array::size "memory size" of `vec` is 20, and the first element of `vec` stores in the 4th element in the memory.
-
-  @see  @ref matrix_module
 
 */
 

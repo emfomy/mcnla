@@ -88,7 +88,7 @@ inline void syr2kImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(dummy && false, "SYR2K does not support conjugate matrices!");
+  static_assert(dummy && false, "SYR2K for conjugate matrices is not implemented!");
 }
 
 //@}

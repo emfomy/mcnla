@@ -24,6 +24,7 @@
 
 // BLAS 3
 #include <mcnla/core/la/dense/routine/gemm.hpp>
+#include <mcnla/core/la/dense/routine/gemmt.hpp>
 #include <mcnla/core/la/dense/routine/symm.hpp>
 #include <mcnla/core/la/dense/routine/syrk.hpp>
 #include <mcnla/core/la/dense/routine/syr2k.hpp>
@@ -36,10 +37,11 @@
 #include <mcnla/core/la/dense/routine/nrmf.hpp>
 
 // LAPACK linear equation
+#include <mcnla/core/la/dense/routine/getrfi.hpp>
 
 // LAPACK least squares
-#include <mcnla/core/la/dense/routine/syev.hpp>
 #include <mcnla/core/la/dense/routine/gesvd.hpp>
+#include <mcnla/core/la/dense/routine/syev.hpp>
 
 // LAPACK auxiliary
 #include <mcnla/core/la/dense/routine/larnv.hpp>

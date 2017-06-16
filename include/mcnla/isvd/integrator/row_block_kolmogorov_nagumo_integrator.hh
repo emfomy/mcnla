@@ -43,6 +43,8 @@ class RowBlockKolmogorovNagumoIntegrator
 
   friend StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
 
+  static_assert(traits::ValTraits<_Val>::is_real, "Kolmogorov-Nagumo-type integrator dost not support complex value!");
+
  private:
 
   using BaseType = StageWrapper<RowBlockKolmogorovNagumoIntegrator<_Val>>;
@@ -53,7 +55,7 @@ class RowBlockKolmogorovNagumoIntegrator
   static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Row-Block Version)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "copying Qc / iterating";
+  static constexpr const char* names_ = "initializing / iterating";
 
   /// The maximum number of iteration.
   index_t max_iteration_;
@@ -64,29 +66,35 @@ class RowBlockKolmogorovNagumoIntegrator
   /// The number of iteration.
   index_t iteration_;
 
-  /// The matrix B.
-  DenseMatrixRowMajor<_Val> matrix_b_;
+  /// The matrix Qc and Q+.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_qcj_;
 
-  /// The matrix D.
-  DenseMatrixRowMajor<_Val> matrix_d_;
+  /// The matrix Gc.
+  DenseMatrixRowMajor<_Val> matrix_gcj_;
+
+  /// The matrix Bc and B+.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_bc_;
+
+  /// The matrix Bgc.
+  DenseMatrixRowMajor<_Val> matrix_bgc_;
+
+  /// The matrix Dc.
+  DenseMatrixRowMajor<_Val> matrix_dc_;
 
   /// The matrix Z.
-  DenseMatrixRowMajor<_Val> matrix_z_;
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_z_;
 
   /// The matrix C.
   DenseMatrixRowMajor<_Val> matrix_c_;
 
-  /// The matrix Xj.
-  DenseMatrixRowMajor<_Val> matrix_xj_;
+  /// The matrix inv(C).
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
 
-  /// The temporary matrix.
-  DenseMatrixRowMajor<_Val> matrix_tmp_;
+  /// The vector S.
+  DenseVector<_Val> vector_s_;
 
-  /// The vector E.
-  DenseVector<_Val> vector_e_;
-
-  /// The vector F.
-  DenseVector<_Val> vector_f_;
+  /// The vector sqrt(S).
+  DenseVector<_Val> vector_ss_;
 
   /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
@@ -118,7 +126,8 @@ class RowBlockKolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+                      DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
 
 };
 

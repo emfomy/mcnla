@@ -111,8 +111,8 @@ int main( int argc, char **argv ) {
   // Allocate variables
   auto matrix_aj     = matrix_a(parameters.rowrange(), ""_);
   auto collection_qj = parameters.createCollectionQj();
-  auto matrix_qj     = parameters.createMatrixQj();
-  auto matrix_q      = parameters.createMatrixQ();
+  auto matrix_qj     = parameters.createMatrixQbarj();
+  auto matrix_q      = parameters.createMatrixQbar();
 
   // ====================================================================================================================== //
   // Display stage names

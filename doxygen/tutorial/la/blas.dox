@@ -1,7 +1,7 @@
 namespace mcnla {
 
 /**
-  @page tutorial_linear_algebra Linear Algebra Routines
+  @page tutorial_la_blas Linear Algebra Routines
 
   <h3>BLAS/LAPACK</h3>
 
@@ -38,8 +38,6 @@ namespace mcnla {
   `la::sm&zwnj;(b, a.inv(), alpha)`                                | @f$B \gets \alpha B A^{-1}@f$
   `la::rk&zwnj;(a, c, alpha, beta)`                                | @f$C \gets \alpha A A^* + \beta C@f$
   `la::r2k&zwnj;(a, b, c, alpha, beta)`                            | @f$C \gets \alpha A B^* + \overline{\alpha} B A^* + \beta C@f$
-
-  @see  @ref la_module
 
 */
 

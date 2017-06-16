@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP Former<GramianFormerTag, _Val>
+  #define MCNLA_TMP Former<GramianFormerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP GramianFormer<_Val>
+  #define MCNLA_TMP GramianFormer<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TEP::Former(
+MCNLA_TMP::Former(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -40,7 +40,7 @@ MCNLA_TEP::Former(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TEP::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -61,11 +61,11 @@ void MCNLA_TEP::initializeImpl() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Forms SVD.
 ///
-/// @param  matrix_a    The matrix A.
-/// @param  matrix_q    The matrix Q.
+/// @param  matrix_a  The matrix A.
+/// @param  matrix_q  The matrix Q.
 ///
 template <typename _Val> template <class _Matrix>
-void MCNLA_TEP::runImpl(
+void MCNLA_TMP::runImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<_Val> &matrix_q
 ) noexcept {
@@ -97,7 +97,7 @@ void MCNLA_TEP::runImpl(
   // W := QtA * QtA'
   la::rk(matrix_qta_, matrix_w_.sym());
 
-  // Compute the eigen-decomposition of W -> W * S * W'
+  // eig(W) = W * S * W'
   syev_driver_(matrix_w_.sym(), vector_s_);
 
   // S := sqrt(S)
@@ -115,7 +115,7 @@ void MCNLA_TEP::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val>
-const DenseVector<RealValT<_Val>>& MCNLA_TEP::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -124,7 +124,7 @@ const DenseVector<RealValT<_Val>>& MCNLA_TEP::vectorS() const noexcept {
 /// @brief  Gets the left singular vectors.
 ///
 template <typename _Val>
-const DenseMatrixColMajor<_Val>& MCNLA_TEP::matrixU() const noexcept {
+const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
 }
@@ -133,6 +133,6 @@ const DenseMatrixColMajor<_Val>& MCNLA_TEP::matrixU() const noexcept {
 
 }  // namespace mcnla
 
-#undef MCNLA_TEP
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_FORMER_GRAMIAN_FORMER_HPP_

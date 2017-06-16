@@ -44,6 +44,8 @@ class RowBlockGramianKolmogorovNagumoIntegrator
 
   friend StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>>;
 
+  static_assert(traits::ValTraits<_Val>::is_real, "Kolmogorov-Nagumo-type integrator dost not support complex value!");
+
  private:
 
   using BaseType = StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>>;
@@ -68,32 +70,35 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   /// The matrix Bs.
   DenseMatrixRowMajor<_Val> matrix_bs_;
 
-  /// The matrix B.
-  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_b_;
+  /// The matrix Bc and B+.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_bc_;
 
-  /// The matrix D.
-  DenseMatrixRowMajor<_Val> matrix_d_;
+  /// The matrix Bgc.
+  DenseMatrixRowMajor<_Val> matrix_bgc_;
+
+  /// The matrix Dc.
+  DenseMatrixRowMajor<_Val> matrix_dc_;
 
   /// The matrix Z.
-  DenseMatrixRowMajor<_Val> matrix_z_;
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_z_;
 
   /// The matrix C.
   DenseMatrixRowMajor<_Val> matrix_c_;
 
   /// The matrix inv(C).
-  DenseMatrixRowMajor<_Val> matrix_cinv_;
+  DenseSymmetricMatrixRowMajor<_Val> symatrix_cinv_;
 
-  /// The matrix Sf.
-  DenseMatrixCollectionColBlockColMajor<_Val> collection_sf_;
+  /// The matrix ~F.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_ff_;
 
-  /// The matrix Tf.
-  DenseMatrixCollectionColBlockColMajor<_Val> collection_tf_;
+  /// The matrix ~E.
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_ee_;
 
-  /// The vector E.
-  DenseVector<_Val> vector_e_;
+  /// The vector S.
+  DenseVector<_Val> vector_s_;
 
-  /// The vector F.
-  DenseVector<_Val> vector_f_;
+  /// The vector sqrt(S).
+  DenseVector<_Val> vector_ss_;
 
   /// The SYEV driver.
   la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
@@ -125,7 +130,8 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   void initializeImpl() noexcept;
 
   // Initializes
-  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
+  void runImpl( const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+                      DenseMatrixRowMajor<_Val> &matrix_qbarj ) noexcept;
 
 };
 

@@ -111,7 +111,7 @@ inline void dismImpl1(
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(alpha);
-  static_assert(dummy && false, "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM for conjugate matrices is not implemented!");
 }
 
 // ========================================================================================================================== //
@@ -145,7 +145,7 @@ inline void dismImpl1(
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(alpha);
-  static_assert(dummy && false, "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM for conjugate matrices is not implemented!");
 }
 
 //@}

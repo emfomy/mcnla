@@ -48,8 +48,8 @@ TEST(RowBlockGramianFormerTest, Test) {
   post_converter.initialize();
 
   // Creates matrices
-  auto qbar   = parameters.createMatrixQ();
-  auto qbarj  = parameters.createMatrixQj();
+  auto qbar   = parameters.createMatrixQbar();
+  auto qbarj  = parameters.createMatrixQbarj();
   auto u      = parameters.createMatrixU();
   auto aj     = a(parameters.rowrange(), ""_);
   auto u_true = u_true_all(""_, {0_i, k});

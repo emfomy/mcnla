@@ -20,7 +20,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), 0);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -37,7 +37,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), 0);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -54,7 +54,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -71,7 +71,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 }
 
@@ -96,7 +96,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), 0);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -113,7 +113,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), 0);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -130,7 +130,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -147,7 +147,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 }
 
@@ -175,7 +175,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat1.capacity(), pitch * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -192,7 +192,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat1.capacity(), pitch * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -209,7 +209,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -226,7 +226,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -271,7 +271,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), pitch * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -288,7 +288,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), pitch * ncol);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -305,7 +305,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -322,7 +322,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -367,7 +367,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * pitch);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -384,7 +384,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * pitch);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -401,7 +401,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -418,7 +418,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -463,7 +463,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * pitch);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -480,7 +480,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), nrow * pitch);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -497,7 +497,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {
@@ -514,7 +514,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, Constructor) {
     EXPECT_EQ(mat1.capacity(), memsize);
     EXPECT_EQ(mat1.offset(),   0);
 
-    mat1.vec();
+    mat1.unfold();
   }
 
   {

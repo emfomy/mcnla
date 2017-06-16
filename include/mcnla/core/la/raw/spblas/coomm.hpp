@@ -51,9 +51,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes matrix-matrix product of a sparse matrix stored in the coordinate format.
-///
 //@{
 static inline void coomm(
     const char transa, const index_t m, const index_t n, const index_t k, const float alpha, const char *matdescra,

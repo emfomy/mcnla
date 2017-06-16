@@ -14,15 +14,12 @@
 
 #include <mcnla/core/la/raw/plugin/lapack_plugin_begin.h>
 
-// Computes all eigenvalues and, optionally, eigenvectors of a symmetric matrix.
 extern void ssyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_REAL4 a,
                     const FORTRAN_INT lda, FORTRAN_REAL4 w, FORTRAN_REAL4 work, const FORTRAN_INT lwork,
                     FORTRAN_INT info );
 extern void dsyev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_REAL8 a,
                     const FORTRAN_INT lda, FORTRAN_REAL8 w, FORTRAN_REAL8 work, const FORTRAN_INT lwork,
                     FORTRAN_INT info );
-
-// Computes all eigenvalues and, optionally, eigenvectors of a Hermitian matrix.
 extern void cheev_( const FORTRAN_CHAR1 jobz, const FORTRAN_CHAR1 uplo, const FORTRAN_INT n, FORTRAN_COMP4 a,
                     const FORTRAN_INT lda, FORTRAN_REAL4 w, FORTRAN_COMP4 work, const FORTRAN_INT lwork, FORTRAN_REAL4 rwork,
                     FORTRAN_INT info );
@@ -49,9 +46,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes all eigenvalues and, optionally, eigenvectors of a symmetric or Hermitian matrix.
-///
 //@{
 static inline index_t syev(
     const char jobz, const char uplo, const index_t n,

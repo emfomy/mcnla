@@ -25,7 +25,7 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @brief  The singular value driver of general rectangular matrices.
+/// @brief  The singular value decomposition driver of general rectangular matrices.
 ///
 /// @see  mcnla::la::gesvd
 ///
@@ -77,7 +77,7 @@ class GesvdDriver {
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
   inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
 
-  // Computes eigenvalues
+  // Computes singular values
   template <class _TypeA, class _TypeS>
   inline void computeValues( _TypeA &&a, _TypeS &&s ) noexcept;
 

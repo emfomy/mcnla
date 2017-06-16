@@ -26,14 +26,24 @@ namespace la {
 /// @ingroup  la_dense_blas1m_module
 /// @brief  Computes the Frobenius norm of a matrix.
 ///
-//@{
 template <typename _Val, Trans _trans>
 inline RealValT<_Val> nrmf(
     const DenseMatrix<_Val, _trans> &a
 ) noexcept {
   return detail::lange('F', a.dim0(), a.dim1(), a.valPtr(), a.pitch(), nullptr);
 }
-//@}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_dense_blas1m_module
+/// @brief  Computes the square of the Frobenius norm of a matrix.
+///
+template <typename _Val, Trans _trans>
+inline RealValT<_Val> nrmf2(
+    const DenseMatrix<_Val, _trans> &a
+) noexcept {
+  auto val = nrmf(a);
+  return val * val;
+}
 
 }  // namespace la
 

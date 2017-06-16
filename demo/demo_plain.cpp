@@ -369,11 +369,11 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, k, mj, k, 1.0, matrix_d, k, matrix_tmp, mj, 1.0, matrix_qjt, k);
 
     // ================================================================================================================== //
-    // Check convergence: || I - C ||_F / sqrt(k) < tol
+    // Check convergence: || I - C ||_F < tol
     for ( auto i = 0; i < k; ++i ) {
       vector_e[i] = vector_e[i] - 1.0;
     }
-    is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tol);
+    is_converged = !(cblas_dnrm2(k, vector_e, 1) > tol);
   }
 
   // Free memory

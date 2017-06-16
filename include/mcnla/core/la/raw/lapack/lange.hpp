@@ -14,8 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/lapack_plugin_begin.h>
 
-// Returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general
-// rectangular matrix.
 extern CPP_REAL4 slange_( const FORTRAN_CHAR1 norm, const FORTRAN_INT m, const FORTRAN_INT n, const FORTRAN_REAL4 a,
                           const FORTRAN_INT lda, FORTRAN_REAL4 work );
 extern CPP_REAL8 dlange_( const FORTRAN_CHAR1 norm, const FORTRAN_INT m, const FORTRAN_INT n, const FORTRAN_REAL8 a,
@@ -44,10 +42,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a
-///         general rectangular matrix.
-///
 //@{
 static inline float lange(
     const char norm, const index_t m, const index_t n, const float *a, const index_t lda, float *work

@@ -1,0 +1,9 @@
+/**
+  @page tutorial_la Linear Algebra Tutorial
+
+  @see  @ref la_module
+
+  <h4>Subpages</h4>
+
+  - @subpage tutorial_la_blas
+*/

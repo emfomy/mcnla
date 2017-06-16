@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>
+  #define MCNLA_TMP Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP RowBlockExtrinsicMeanIntegrator<_Val>
+  #define MCNLA_TMP RowBlockExtrinsicMeanIntegrator<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TEP::Integrator(
+MCNLA_TMP::Integrator(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -40,7 +40,7 @@ MCNLA_TEP::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TEP::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow             = parameters_.nrow();
   const auto dim_sketch       = parameters_.dimSketch();
@@ -69,7 +69,7 @@ void MCNLA_TEP::initializeImpl() noexcept {
 /// @param  matrix_qbar    The matrix Qbar.
 ///
 template <typename _Val>
-void MCNLA_TEP::runImpl(
+void MCNLA_TMP::runImpl(
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
           DenseMatrixRowMajor<_Val>      &matrix_qbar
@@ -109,7 +109,7 @@ void MCNLA_TEP::runImpl(
     // Gi := Bi * Bi'
     la::rk(collection_bi_(i), collection_g_(i).sym());
 
-    // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
+    // eig(Gi) = Gi' * S * Gi
     syev_driver_(collection_g_(i).sym(), vector_s_);
 
   }
@@ -166,6 +166,6 @@ void MCNLA_TEP::runImpl(
 
 }  // namespace mcnla
 
-#undef MCNLA_TEP
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_EXTRINSIC_MEAN_INTEGRATOR_HPP_

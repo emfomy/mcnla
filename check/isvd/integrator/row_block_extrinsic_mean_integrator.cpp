@@ -48,7 +48,7 @@ TEST(RowBlockExtrinsicMeanIntegratorTest, Test) {
   // Creates matrices
   auto qi    = parameters.createCollectionQ();
   auto qij   = parameters.createCollectionQj();
-  auto qbar  = parameters.createMatrixQ();
+  auto qbar  = parameters.createMatrixQbar();
 
   // Copies data
   for ( auto i = 0; i < Nj; i++ ) {

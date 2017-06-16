@@ -3,7 +3,7 @@ namespace mcnla {
 namespace matrix {
 
 /**
-  @page tutorial_data_structure Data Structures
+  @page tutorial_matrix_data_structure Data Structures
 
   <h3>%Array</h3>
 
@@ -81,8 +81,6 @@ namespace matrix {
   where `a_val = a.val()` is the raw value array, and `a_ridx = a.rowidx()` and `a_cidx = a.colidx()` are the raw index arrays.
 
   Extra variables @ref CooMatrix::idx0 "idx0" and @ref CooMatrix::idx1 "idx1" are the aliases of the index arrays in storage order: (@ref CooMatrix::idx0 "idx0", @ref CooMatrix::idx1 "idx1") = (@ref CooMatrix::rowidx "rowidx", @ref CooMatrix::colidx "colidx") for column-major layout, and (@ref CooMatrix::idx0 "idx0", @ref CooMatrix::idx1 "idx1") = (@ref CooMatrix::colidx "colidx", @ref CooMatrix::rowidx "rowidx") for row-major layout.
-
-  @see  @ref matrix_module
 
 */
 

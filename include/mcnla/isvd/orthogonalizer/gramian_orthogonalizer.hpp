@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP Orthogonalizer<GramianOrthogonalizerTag, _Val>
+  #define MCNLA_TMP Orthogonalizer<GramianOrthogonalizerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TEP GramianOrthogonalizer<_Val>
+  #define MCNLA_TMP GramianOrthogonalizer<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TEP::Orthogonalizer(
+MCNLA_TMP::Orthogonalizer(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -40,7 +40,7 @@ MCNLA_TEP::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TEP::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -58,7 +58,7 @@ void MCNLA_TEP::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val>
-void MCNLA_TEP::runImpl(
+void MCNLA_TMP::runImpl(
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
@@ -82,7 +82,7 @@ void MCNLA_TEP::runImpl(
     la::mm(collection_q(i).t(), collection_q(i), collection_w_(i));
   }
 
-  // Compute the eigen-decomposition of Wi -> Wi' * Si * Wi
+  // eig(Wi) = Wi' * Si * Wi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
     gesvd_driver_(collection_w_(i), matrix_s_(""_, i), matrix_empty_, matrix_empty_);
   }
@@ -104,6 +104,6 @@ void MCNLA_TEP::runImpl(
 
 }  // namespace mcnla
 
-#undef MCNLA_TEP
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HPP_

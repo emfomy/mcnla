@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes the sum of magnitudes of the vector elements.
 extern CPP_REAL4 sasum_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
 extern CPP_REAL8 dasum_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
 extern CPP_COMP4 casum_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
@@ -39,9 +38,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the sum of magnitudes of the vector elements.
-///
 //@{
 static inline float asum(
     const index_t n, const float* x, const index_t incx
