@@ -8,6 +8,19 @@ else()
   set(findtype "")
 endif()
 
+# Check compiler support
+if(MCNLA_BUILD_BIN)
+  include(CheckCXXCompilerFlag)
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  if(NOT COMPILER_SUPPORTS_CXX11)
+    message(
+      FATAL_ERROR
+      "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. "
+      "Please use a diffferent C++ compiler."
+    )
+  endif()
+endif()
+
 # Set default variables
 set(INCS "")
 set(LIBS "")
@@ -65,7 +78,7 @@ endif()
 #   find_package(MAGMA ${findtype})
 #   if(MAGMA_FOUND)
 #     list(APPEND INCS "${MAGMA_INCLUDES}")
-#     list(APPEND LIBS "${MAGMA_LIBRARIES}" "${CUDA_CUDART_LIBRARY}" "${CUDA_cublas_LIBRARY}" "${CUDA_cusparse_LIBRARY}")
+#     list(APPEND LIBS "${MAGMA_SPARSE_LIBRARY}" "${MAGMA_LIBRARY}" "${CUDA_cusparse_LIBRARY}" "${CUDA_cublas_LIBRARY}" "${CUDA_CUDART_LIBRARY}")
 #   endif()
 # endif()
 

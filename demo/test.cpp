@@ -36,7 +36,7 @@ int main( int argc, char **argv ) {
               << " threads per node" << std::endl << std::endl;
   }
 
-//   mcnla::finalize();
+  mcnla::finalize();
 
   return 0;
 }
