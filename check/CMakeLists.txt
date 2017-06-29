@@ -28,7 +28,8 @@ add_mpi_check(isvd/sketcher/column_sampling_sketcher "Column Sampling Sketcher t
 add_mpi_check(isvd/sketcher/row_block_gaussian_projection_sketcher "Row-Block Gaussian Projection Sketcher test" "RowBlockGaussianProjectionSketcherTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/sketcher/row_block_column_sampling_sketcher "Row-Block Column Sampling Sketcher test" "RowBlockColumnSamplingSketcherTest" 1 2 3 4 6 12)
 
-add_mpi_check(isvd/orthogonalizer/svd_orthogonalizer "SVD Orthogonalizer test" "SvdOrthogonalizerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/orthogonalizer/qr_orthogonalizer "SVD Orthogonalizer test" "SvdOrthogonalizerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/orthogonalizer/svd_orthogonalizer "QR Orthogonalizer test" "QrOrthogonalizerTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/orthogonalizer/gramian_orthogonalizer "Gramian Orthogonalizer test" "GramianOrthogonalizerTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/orthogonalizer/row_block_gramian_orthogonalizer "Row-Block Gramian Orthogonalizer test" "RowBlockGramianOrthogonalizerTest" 1 2 3 4 6 12)
 
