@@ -89,8 +89,8 @@ void DenseGetrfiDriver<_Val, _trans>::reconstruct(
 /// @brief  Gets the sizes.
 ///
 template <typename _Val, Trans _trans>
-std::tuple<index_t> DenseGetrfiDriver<_Val, _trans>::sizes() const noexcept {
-  return std::make_tuple(size_);
+std::tuple<index_t, index_t> DenseGetrfiDriver<_Val, _trans>::sizes() const noexcept {
+  return std::make_tuple(size_, size_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

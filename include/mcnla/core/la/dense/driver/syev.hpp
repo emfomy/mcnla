@@ -90,8 +90,8 @@ void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::reconstruct(
 /// @brief  Gets the sizes.
 ///
 template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
-std::tuple<index_t> DenseSyevDriver<_jobz, _Val, _trans, _uplo>::sizes() const noexcept {
-  return std::make_tuple(size_);
+std::tuple<index_t, index_t> DenseSyevDriver<_jobz, _Val, _trans, _uplo>::sizes() const noexcept {
+  return std::make_tuple(size_, size_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

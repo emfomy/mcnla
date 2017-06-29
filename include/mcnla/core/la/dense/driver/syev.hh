@@ -76,7 +76,7 @@ class DenseSyevDriver {
   inline void reconstruct( _Args... args ) noexcept;
 
   // Get sizes
-  inline std::tuple<index_t> sizes() const noexcept;
+  inline std::tuple<index_t, index_t> sizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;
