@@ -34,7 +34,7 @@ inline void gesvdImpl(
     DenseMatrix<_Val, _trans> &u,
     DenseMatrix<_Val, _trans> &vt
 ) noexcept {
-  GesvdDriver<DenseMatrix<_Val, _trans>, _jobu, _jobvt> driver(a);
+  DenseGesvdDriver<_jobu, _jobvt, _Val, _trans> driver(a);
   driver(a, s, u, vt);
 }
 
@@ -42,9 +42,9 @@ inline void gesvdImpl(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @copydoc  mcnla::la::GesvdDriver::compute
+/// @copydoc  mcnla::la::DenseGesvdDriver::compute
 ///
-/// @see  mcnla::la::GesvdDriver
+/// @see  mcnla::la::DenseGesvdDriver
 ///
 template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
 inline void gesvd(

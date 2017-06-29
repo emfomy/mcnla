@@ -80,7 +80,7 @@ class SvdFormer
   DenseMatrixColMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixColMajor<_Val>, 'S', 'O'> gesvd_driver_;
+  la::DenseGesvdDriverColMajor<'S', 'O', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

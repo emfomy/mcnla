@@ -117,7 +117,7 @@ class RowBlockWenYinIntegrator
   DenseVector<_Val> vector_t_;
 
   /// The GETRFI driver.
-  la::GetrfiDriver<DenseMatrixRowMajor<_Val>> getrfi_driver_;
+  la::DenseGetrfiDriverRowMajor<_Val> getrfi_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

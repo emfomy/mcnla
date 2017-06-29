@@ -24,8 +24,8 @@ namespace la {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver() noexcept
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::DenseGesvdDriver() noexcept
   : nrow_(0),
     ncol_(0),
     work_(),
@@ -34,8 +34,8 @@ GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::DenseGesvdDriver(
     const index_t nrow, const index_t ncol
 ) noexcept
   : nrow_(nrow),
@@ -49,18 +49,18 @@ GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-GesvdDriver<_Matrix, _jobu, _jobvt>::GesvdDriver(
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::DenseGesvdDriver(
     const MatrixType &a
 ) noexcept
-  : GesvdDriver(a.nrow(), a.ncol()) {}
+  : DenseGesvdDriver(a.nrow(), a.ncol()) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
 template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
-void GesvdDriver<_Matrix, _jobu, _jobvt>::operator()(
+void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::operator()(
     _TypeA &&a,
     _TypeS &&s,
     _TypeU &&u,
@@ -72,8 +72,8 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes singular values only.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <class _TypeA, class _TypeS>
-void GesvdDriver<_Matrix, _jobu, _jobvt>::computeValues(
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans> template <class _TypeA, class _TypeS>
+void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::computeValues(
     _TypeA &&a,
     _TypeS &&s
 ) noexcept {
@@ -83,50 +83,50 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::computeValues(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Reconstruct the driver.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt> template <typename ..._Args>
-void GesvdDriver<_Matrix, _jobu, _jobvt>::reconstruct(
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans> template <typename ..._Args>
+void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::reconstruct(
     _Args... args
 ) noexcept {
-  *this = GesvdDriver<_Matrix, _jobu, _jobvt>(args...);
+  *this = DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-std::tuple<index_t, index_t> GesvdDriver<_Matrix, _jobu, _jobvt>::sizes() const noexcept {
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+std::tuple<index_t, index_t> DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::sizes() const noexcept {
   return std::make_tuple(nrow_, ncol_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the workspace
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-VectorT<_Matrix>& GesvdDriver<_Matrix, _jobu, _jobvt>::getWork() noexcept {
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+DenseVector<_Val>& DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::getWork() noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getWork
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-const VectorT<_Matrix>& GesvdDriver<_Matrix, _jobu, _jobvt>::getWork() const noexcept {
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+const DenseVector<_Val>& DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::getWork() const noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the real workspace
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-RealT<VectorT<_Matrix>>& GesvdDriver<_Matrix, _jobu, _jobvt>::getRwork() noexcept {
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+DenseVector<RealValT<_Val>>& DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::getRwork() noexcept {
   return rwork_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getRwork
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-const RealT<VectorT<_Matrix>>& GesvdDriver<_Matrix, _jobu, _jobvt>::getRwork() const noexcept {
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+const DenseVector<RealValT<_Val>>& DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::getRwork() const noexcept {
   return rwork_;
 }
 
@@ -139,9 +139,9 @@ const RealT<VectorT<_Matrix>>& GesvdDriver<_Matrix, _jobu, _jobvt>::getRwork() c
 ///                                                   in column-wise for row-major storage.
 /// @attention  Matrix @a a will be destroyed!
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
 template <JobOption __jobu, JobOption __jobvt>
-void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
+void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::compute(
     MatrixType &a,
     RealVectorType &s,
     MatrixType &u,
@@ -166,7 +166,7 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
   auto u_pitch  = (u.pitch()  > 0) ? u.pitch()  : 1;
   auto vt_pitch = (vt.pitch() > 0) ? vt.pitch() : 1;
 
-  if ( !isTrans(trans) ) {
+  if ( !isTrans(_trans) ) {
     mcnla_assert_pass(detail::gesvd(__jobu, __jobvt, nrow_, ncol_, a.valPtr(), a.pitch(),
                                     s.valPtr(), u.valPtr(), u_pitch, vt.valPtr(), vt_pitch,
                                     work_.valPtr(), work_.len(), rwork_.valPtr()));
@@ -180,12 +180,12 @@ void GesvdDriver<_Matrix, _jobu, _jobvt>::compute(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Query the optimal workspace size.
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-index_t GesvdDriver<_Matrix, _jobu, _jobvt>::query(
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+index_t DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::query(
     const index_t nrow, const index_t ncol
 ) noexcept {
   ValType lwork;
-  if ( !isTrans(trans) ) {
+  if ( !isTrans(_trans) ) {
     mcnla_assert_pass(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
                                     nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr));
   } else {

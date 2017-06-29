@@ -91,7 +91,7 @@ class KolmogorovNagumoIntegrator
   DenseVector<_Val> vector_f_;
 
   /// The SYEV engine.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
+  la::DenseSyevDriverRowMajor<'V', _Val> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

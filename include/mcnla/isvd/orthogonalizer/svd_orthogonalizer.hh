@@ -62,7 +62,7 @@ class SvdOrthogonalizer
   DenseMatrixRowMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'O', 'N'> gesvd_driver_;
+  la::DenseGesvdDriverRowMajor<'O', 'N', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

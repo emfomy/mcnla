@@ -27,20 +27,16 @@ namespace la {
 /// @ingroup  la_dense_lapack_le_module
 /// @brief  The LU-inverse driver of general square matrices.
 ///
-/// @see  mcnla::la::getrf, mcnla::la::getri
+/// @note  This driver runs GETRF and GETRI.
 ///
-template <class _Matrix>
-class GetrfiDriver {
-
-  assertDenseMatrix(_Matrix);
+template <typename _Val, Trans _trans>
+class DenseGetrfiDriver {
 
  private:
 
-  static constexpr Trans trans = _Matrix::trans;
-
-  using ValType       = ValT<_Matrix>;
-  using MatrixType    = _Matrix;
-  using VectorType    = VectorT<_Matrix>;
+  using ValType       = _Val;
+  using MatrixType    = DenseMatrix<_Val, _trans>;
+  using VectorType    = DenseVector<_Val>;
   using IdxVectorType = DenseVector<index_t>;
 
  protected:
@@ -48,7 +44,7 @@ class GetrfiDriver {
   /// The matrix size.
   index_t size_;
 
-  /// The workspace.
+  /// The pivot indices.
   IdxVectorType ipiv_;
 
   /// The workspace.
@@ -57,9 +53,9 @@ class GetrfiDriver {
  public:
 
   // Constructors
-  inline GetrfiDriver() noexcept;
-  inline GetrfiDriver( const index_t size ) noexcept;
-  inline GetrfiDriver( const MatrixType &a ) noexcept;
+  inline DenseGetrfiDriver() noexcept;
+  inline DenseGetrfiDriver( const index_t size ) noexcept;
+  inline DenseGetrfiDriver( const MatrixType &a ) noexcept;
 
   // Operators
   inline void operator()( MatrixType &a ) noexcept;
@@ -85,6 +81,16 @@ class GetrfiDriver {
   inline index_t query( const index_t size ) noexcept;
 
 };
+
+/// @ingroup  la_dense_lapack_ls_module
+/// @see  DenseGetrfiDriver
+template <typename _Val>
+using DenseGetrfiDriverColMajor = DenseGetrfiDriver<_Val, Trans::NORMAL>;
+
+/// @ingroup  la_dense_lapack_ls_module
+template <typename _Val>
+/// @see  DenseGetrfiDriver
+using DenseGetrfiDriverRowMajor = DenseGetrfiDriver<_Val, Trans::TRANS>;
 
 }  // namespace la
 

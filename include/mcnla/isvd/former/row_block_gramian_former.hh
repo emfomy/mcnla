@@ -77,7 +77,7 @@ class RowBlockGramianFormer
   DenseMatrixColMajor<_Val> matrix_qtaj_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixColMajor<_Val>, 'V'> syev_driver_;
+  la::DenseSyevDriverColMajor<'V', _Val> syev_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
