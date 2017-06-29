@@ -67,19 +67,6 @@ set(MKL_OMP ${MCNLA_OMP})
 #   endif()
 # endif()
 
-# Check compiler support
-if(MCNLA_BUILD_BIN)
-  include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  if(NOT COMPILER_SUPPORTS_CXX11)
-    message(
-      FATAL_ERROR
-      "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. "
-      "Please use a diffferent C++ compiler."
-    )
-  endif()
-endif()
-
 # Enable testing
 if(MCNLA_BUILD_TEST)
   enable_testing()

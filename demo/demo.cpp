@@ -81,7 +81,8 @@ int main( int argc, char **argv ) {
 #else  // _OPENMP
               << 1
 #endif  // _OPENMP
-              << " threads per node" << std::endl << std::endl;
+              << " threads per node" << std::endl;
+    std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
   }
   assert((k+p) <= m && m <= n);
 

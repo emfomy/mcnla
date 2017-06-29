@@ -105,7 +105,7 @@ void MCNLA_TMP::runImpl(
       la::mm(matrix_tmp_, matrix_w, matrix_qij);
       la::mm(matrix_qihj, matrix_t_, matrix_qij, 1.0, 1.0);
 
-      // Q(i) *= 1/sqrt(2) * sqrt(I + S)
+      // Q(i) /= sqrt(2(I + S))
       for ( index_t ii = 0; ii < dim_sketch; ++ii ) {
         vector_s_(ii) = 1.0 / sqrt(2.0 * (1 + vector_s_(ii)));
       }
