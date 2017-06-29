@@ -90,7 +90,7 @@ class DenseSyevDriver {
   template <JobOption __jobz = _jobz>
   inline void compute( MatrixType &a, RealVectorType &w ) noexcept;
 
-  // Queries
+  // Queries workspace size
   inline index_t query( const index_t size ) noexcept;
 
 };

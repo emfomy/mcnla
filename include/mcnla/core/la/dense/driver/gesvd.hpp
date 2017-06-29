@@ -147,8 +147,8 @@ void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::compute(
     MatrixType &u,
     MatrixType &vt
 ) noexcept {
-  mcnla_assert_eq(a.sizes(),  std::make_tuple(nrow_, ncol_));
-  mcnla_assert_eq(s.len(),    std::min(nrow_, ncol_));
+  mcnla_assert_eq(a.sizes(), this->sizes());
+  mcnla_assert_eq(s.len(),   std::min(nrow_, ncol_));
   mcnla_assert_true(s.isShrunk());
 
   if ( __jobu == 'A' ) {

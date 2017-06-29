@@ -96,7 +96,7 @@ class DenseGesvdDriver {
   template <JobOption __jobu = _jobu, JobOption __jobvt = _jobvt>
   inline void compute( MatrixType &a, RealVectorType &s, MatrixType &u, MatrixType &vt ) noexcept;
 
-  // Queries
+  // Queries workspace size
   inline index_t query( const index_t nrow, const index_t ncol ) noexcept;
 
 };

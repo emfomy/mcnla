@@ -50,11 +50,11 @@ namespace detail {
 static inline index_t syev(
     const char jobz, const char uplo, const index_t n,
     float *a, const index_t lda, float *w, float *work, const index_t lwork, float *rwork
-) noexcept { index_t info; ssyev_(&jobz, &uplo, &n, a, &lda, w, work, &lwork, &info); return info; static_cast<void>(rwork); }
+) noexcept { static_cast<void>(rwork); index_t info; ssyev_(&jobz, &uplo, &n, a, &lda, w, work, &lwork, &info); return info; }
 static inline index_t syev(
     const char jobz, const char uplo, const index_t n,
     double *a, const index_t lda, double *w, double *work, const index_t lwork, double *rwork
-) noexcept { index_t info; dsyev_(&jobz, &uplo, &n, a, &lda, w, work, &lwork, &info); return info; static_cast<void>(rwork); }
+) noexcept { static_cast<void>(rwork); index_t info; dsyev_(&jobz, &uplo, &n, a, &lda, w, work, &lwork, &info); return info; }
 static inline index_t syev(
     const char jobz, const char uplo, const index_t n,
     std::complex<float> *a, const index_t lda, float *w, std::complex<float> *work, const index_t lwork, float *rwork

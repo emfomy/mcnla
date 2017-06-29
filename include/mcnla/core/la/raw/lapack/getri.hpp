@@ -46,23 +46,19 @@ namespace detail {
 static inline index_t getri(
     const index_t n, float *a, const index_t lda, const index_t *ipiv,
     float *work, const index_t lwork
-) noexcept {index_t info; sgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; sgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info; }
 static inline index_t getri(
     const index_t n, double *a, const index_t lda, const index_t *ipiv,
     double *work, const index_t lwork
-) noexcept {index_t info; dgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; dgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info; }
 static inline index_t getri(
     const index_t n, std::complex<float> *a, const index_t lda, const index_t *ipiv,
     std::complex<float> *work, const index_t lwork
-) noexcept {index_t info; cgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; cgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info; }
 static inline index_t getri(
     const index_t n, std::complex<double> *a, const index_t lda, const index_t *ipiv,
     std::complex<double> *work, const index_t lwork
-) noexcept {index_t info; zgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; zgetri_(&n, a, &lda, ipiv, work, &lwork, &info); return info; }
 //@}
 
 }  // namespace detail

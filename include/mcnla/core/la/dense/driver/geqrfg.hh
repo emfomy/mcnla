@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/la/dense/driver/getrfi.hh
-/// @brief   The definition of LAPACK GETRF+GETRI driver.
+/// @file    include/mcnla/core/la/dense/driver/geqrfg.hh
+/// @brief   The definition of LAPACK GEQRF+ORGQR driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LA_DENSE_DRIVER_GETRFI_DRIVER_HH_
-#define MCNLA_CORE_LA_DENSE_DRIVER_GETRFI_DRIVER_HH_
+#ifndef MCNLA_CORE_LA_DENSE_DRIVER_GEQRFG_DRIVER_HH_
+#define MCNLA_CORE_LA_DENSE_DRIVER_GEQRFG_DRIVER_HH_
 
 #include <mcnla/core/la/def.hpp>
 #include <tuple>
@@ -24,28 +24,30 @@ namespace mcnla {
 namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_lapack_le_module
-/// @brief  The LU-inverse driver of general square matrices.
+/// @ingroup  la_dense_lapack_ls_module
+/// @brief  The QR-orthogonalization driver of general matrices.
 ///
-/// @note  This driver runs GETRF and GETRI.
+/// @note  This driver runs GEQRF and ORGQR.
 ///
 template <typename _Val, Trans _trans>
-class DenseGetrfiDriver {
+class DenseGeqrfgDriver {
 
  private:
 
-  using ValType       = _Val;
-  using MatrixType    = DenseMatrix<_Val, _trans>;
-  using VectorType    = DenseVector<_Val>;
-  using IdxVectorType = DenseVector<index_t>;
+  using ValType    = _Val;
+  using MatrixType = DenseMatrix<_Val, _trans>;
+  using VectorType = DenseVector<_Val>;
 
  protected:
 
-  /// The matrix size.
-  index_t size_;
+  /// The number of rows.
+  index_t nrow_;
 
-  /// The pivot indices.
-  IdxVectorType ipiv_;
+  /// The number of columns.
+  index_t ncol_;
+
+  /// The elementary reflectors.
+  VectorType tau_;
 
   /// The workspace.
   VectorType work_;
@@ -53,9 +55,9 @@ class DenseGetrfiDriver {
  public:
 
   // Constructors
-  inline DenseGetrfiDriver() noexcept;
-  inline DenseGetrfiDriver( const index_t size ) noexcept;
-  inline DenseGetrfiDriver( const MatrixType &a ) noexcept;
+  inline DenseGeqrfgDriver() noexcept;
+  inline DenseGeqrfgDriver( const index_t nrow, const index_t ncol ) noexcept;
+  inline DenseGeqrfgDriver( const MatrixType &a ) noexcept;
 
   // Operators
   inline void operator()( MatrixType &a ) noexcept;
@@ -66,7 +68,8 @@ class DenseGetrfiDriver {
   inline void reconstruct( _Args... args ) noexcept;
 
   // Get sizes
-  inline std::tuple<index_t> sizes() const noexcept;
+  inline std::tuple<index_t, index_t> sizes() const noexcept;
+  inline index_t ncolQ() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;
@@ -78,22 +81,22 @@ class DenseGetrfiDriver {
   inline void compute( MatrixType &a ) noexcept;
 
   // Queries workspace size
-  inline index_t query( const index_t size ) noexcept;
+  inline index_t query( const index_t nrow, const index_t ncol ) noexcept;
 
 };
 
 /// @ingroup  la_dense_lapack_ls_module
-/// @see  DenseGetrfiDriver
+/// @see  DenseGeqrfgDriver
 template <typename _Val>
-using DenseGetrfiDriverColMajor = DenseGetrfiDriver<_Val, Trans::NORMAL>;
+using DenseGeqrfgDriverColMajor = DenseGeqrfgDriver<_Val, Trans::NORMAL>;
 
 /// @ingroup  la_dense_lapack_ls_module
 template <typename _Val>
-/// @see  DenseGetrfiDriver
-using DenseGetrfiDriverRowMajor = DenseGetrfiDriver<_Val, Trans::TRANS>;
+/// @see  DenseGeqrfgDriver
+using DenseGeqrfgDriverRowMajor = DenseGeqrfgDriver<_Val, Trans::TRANS>;
 
 }  // namespace la
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_DENSE_DRIVER_GETRFI_DRIVER_HH_
+#endif  // MCNLA_CORE_LA_DENSE_DRIVER_GEQRFG_DRIVER_HH_
