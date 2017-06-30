@@ -70,12 +70,20 @@ class DenseGesvdDriver {
   inline DenseGesvdDriver( const MatrixType &a ) noexcept;
 
   // Operators
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
   inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void operator()( MatrixType &a, VectorType &s, MatrixType &u, MatrixType &vt ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Computes singular values
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeS>
   inline void computeValues( _TypeA &&a, _TypeS &&s ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void computeValues( MatrixType &a, VectorType &s ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Resizes
   template <typename ..._Args>

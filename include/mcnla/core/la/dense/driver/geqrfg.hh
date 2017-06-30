@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/la/dense/driver/geqrfg.hh
-/// @brief   The definition of LAPACK GEQRF+ORGQR driver.
+/// @brief   The definition of LAPACK GEQRFGF+ORGQR driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -25,12 +25,16 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @brief  The QR-orthogonalization driver of general matrices.
+/// @brief  The QR decomposition driver of general matrices.
 ///
-/// @note  This driver runs GEQRF and ORGQR.
+/// @note  This driver runs GEQRFGF and ORGQR.
 ///
-template <typename _Val, Trans _trans>
+template <JobOption _jobq, JobOption _jobr, typename _Val, Trans _trans>
 class DenseGeqrfgDriver {
+
+  static_assert(_jobq == 'S' || _jobq == 'O' || _jobq == 'N', "Job undefined!");
+  static_assert(_jobr == 'S' || _jobr == 'O' || _jobr == 'N', "Job undefined!");
+  static_assert(_jobq != 'O' || _jobr != 'O', "Job conflict!");
 
  private:
 
@@ -46,9 +50,6 @@ class DenseGeqrfgDriver {
   /// The number of columns.
   index_t ncol_;
 
-  /// The elementary reflectors.
-  VectorType tau_;
-
   /// The workspace.
   VectorType work_;
 
@@ -60,8 +61,12 @@ class DenseGeqrfgDriver {
   inline DenseGeqrfgDriver( const MatrixType &a ) noexcept;
 
   // Operators
-  inline void operator()( MatrixType &a ) noexcept;
-  inline void operator()( MatrixType &&a ) noexcept;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  template <class _TypeA, class _TypeTau, class _TypeQ, class _TypeR>
+  inline void operator()( _TypeA &&a, _TypeTau &&tau, _TypeQ &&q, _TypeR &&r ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void operator()( MatrixType &a, VectorType &tau, MatrixType &q, MatrixType &r ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Resizes
   template <typename ..._Args>
@@ -78,7 +83,7 @@ class DenseGeqrfgDriver {
  protected:
 
   // Computes
-  inline void compute( MatrixType &a ) noexcept;
+  inline void compute( MatrixType &a, VectorType &tau, MatrixType &q, MatrixType &r ) noexcept;
 
   // Queries workspace size
   inline index_t query( const index_t nrow, const index_t ncol ) noexcept;
@@ -87,13 +92,13 @@ class DenseGeqrfgDriver {
 
 /// @ingroup  la_dense_lapack_ls_module
 /// @see  DenseGeqrfgDriver
-template <typename _Val>
-using DenseGeqrfgDriverColMajor = DenseGeqrfgDriver<_Val, Trans::NORMAL>;
+template <JobOption _jobq, JobOption _jobr, typename _Val>
+using DenseGeqrfgDriverColMajor = DenseGeqrfgDriver<_jobq, _jobr, _Val, Trans::NORMAL>;
 
 /// @ingroup  la_dense_lapack_ls_module
-template <typename _Val>
+template <JobOption _jobq, JobOption _jobr, typename _Val>
 /// @see  DenseGeqrfgDriver
-using DenseGeqrfgDriverRowMajor = DenseGeqrfgDriver<_Val, Trans::TRANS>;
+using DenseGeqrfgDriverRowMajor = DenseGeqrfgDriver<_jobq, _jobr, _Val, Trans::TRANS>;
 
 }  // namespace la
 

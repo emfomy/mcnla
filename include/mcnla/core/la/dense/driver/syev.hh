@@ -64,12 +64,20 @@ class DenseSyevDriver {
   inline DenseSyevDriver( const MatrixType &a ) noexcept;
 
   // Operators
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeW>
   inline void operator()( _TypeA &&a, _TypeW &&w ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void operator()( MatrixType &a, VectorType &w ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Computes eigenvalues
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeW>
   inline void computeValues( _TypeA &&a, _TypeW &&w ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void computeValues( MatrixType &a, VectorType &w ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Resizes
   template <typename ..._Args>

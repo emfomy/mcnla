@@ -59,7 +59,9 @@ class DenseGetrfiDriver {
 
   // Operators
   inline void operator()( MatrixType &a ) noexcept;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   inline void operator()( MatrixType &&a ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Resizes
   template <typename ..._Args>

@@ -59,12 +59,20 @@ DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::DenseGesvdDriver(
 /// @copydoc  compute
 ///
 template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
 void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::operator()(
     _TypeA &&a,
     _TypeS &&s,
     _TypeU &&u,
     _TypeVt &&vt
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::operator()(
+    MatrixType &a,
+    VectorType &s,
+    MatrixType &u,
+    MatrixType &vt
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 ) noexcept {
   compute(a, s, u, vt);
 }
@@ -72,10 +80,17 @@ void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes singular values only.
 ///
-template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans> template <class _TypeA, class _TypeS>
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _TypeA, class _TypeS>
 void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::computeValues(
     _TypeA &&a,
     _TypeS &&s
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::computeValues(
+    MatrixType &a,
+    VectorType &s
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 ) noexcept {
   compute<'N', 'N'>(a, s, matrix_empty_, matrix_empty_);
 }

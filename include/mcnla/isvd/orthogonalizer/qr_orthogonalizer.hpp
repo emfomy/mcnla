@@ -45,6 +45,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
 
+  vector_tau_.reconstruct(dim_sketch);
   geqrfg_driver_.reconstruct(nrow, dim_sketch);
 }
 
@@ -70,7 +71,7 @@ void MCNLA_TMP::runImpl(
 
   // Orthogonalizes
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    geqrfg_driver_(collection_q(i));
+    geqrfg_driver_(collection_q(i), vector_tau_, matrix_empty_, matrix_empty_);
   }
 
   this->toc(comm_time);

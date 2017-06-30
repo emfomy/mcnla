@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/la/dense/routine/geqrfg.hpp
-/// @brief   The LAPACK GEQRF+ORGQR routine.
+/// @brief   The LAPACK GEQRFGF+ORGQR routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -23,25 +23,31 @@ namespace mcnla {
 namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_lapack_le_module
+/// @ingroup  la_dense_lapack_ls_module
 /// @copydoc  mcnla::la::DenseGeqrfgDriver::compute
 ///
 /// @see  mcnla::la::DenseGeqrfgDriver
 ///
-template <typename _Val, Trans _trans>
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
 inline void geqrfg(
-    DenseMatrix<_Val, _trans> &a
+    DenseMatrix<_Val, _trans> &a,
+    DenseVector<_Val> &tau,
+    DenseMatrix<_Val, _trans> &q,
+    DenseMatrix<_Val, _trans> &r
 ) noexcept {
-  DenseGeqrfgDriver<_Val, _trans> driver(a);
-  driver(a);
+  DenseGeqrfgDriver<_jobu, _jobvt, _Val, _trans> driver(a);
+  driver(a, tau, q, r);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans>
+template <JobOption _jobu, JobOption _jobvt, class _TypeA, class _TypeTau, class _TypeQ, class _TypeR>
 inline void geqrfg(
-    DenseMatrix<_Val, _trans> &&a
+    _TypeA   &&a,
+    _TypeTau &&tau,
+    _TypeQ   &&q,
+    _TypeR   &&r
 ) noexcept {
-  geqrfg(a);
+  geqrfg<_jobu, _jobvt>(a, tau, q, r);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

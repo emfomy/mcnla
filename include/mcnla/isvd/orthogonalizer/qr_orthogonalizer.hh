@@ -55,8 +55,14 @@ class QrOrthogonalizer
   /// The name of each part of the stage.
   static constexpr const char* names_ = "orthogonalization";
 
+  /// The vector Tau.
+  DenseVector<_Val> vector_tau_;
+
+  /// The empty matrix.
+  DenseMatrixRowMajor<_Val> matrix_empty_;
+
   /// The GEQRFG driver.
-  la::DenseGeqrfgDriverRowMajor<_Val> geqrfg_driver_;
+  la::DenseGeqrfgDriverRowMajor<'O', 'N', _Val> geqrfg_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

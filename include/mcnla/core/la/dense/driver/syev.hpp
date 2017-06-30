@@ -57,10 +57,17 @@ DenseSyevDriver<_jobz, _Val, _trans, _uplo>::DenseSyevDriver(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
-template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo> template <class _TypeA, class _TypeW>
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _TypeA, class _TypeW>
 void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::operator()(
     _TypeA &&a,
     _TypeW &&w
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::operator()(
+    MatrixType &a,
+    VectorType &w
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 ) noexcept {
   compute(a, w);
 }
@@ -68,10 +75,17 @@ void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes eigenvalues only.
 ///
-template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo> template <class _TypeA, class _TypeW>
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _TypeA, class _TypeW>
 void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::computeValues(
     _TypeA &&a,
     _TypeW &&w
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::computeValues(
+    MatrixType &a,
+    VectorType &w
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 ) noexcept {
   compute<'N'>(a, w);
 }

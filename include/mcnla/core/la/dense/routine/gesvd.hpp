@@ -23,24 +23,6 @@ namespace mcnla {
 namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace
-//
-namespace detail {
-
-template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
-inline void gesvdImpl(
-    DenseMatrix<_Val, _trans> &a,
-    DenseVector<RealValT<_Val>> &s,
-    DenseMatrix<_Val, _trans> &u,
-    DenseMatrix<_Val, _trans> &vt
-) noexcept {
-  DenseGesvdDriver<_jobu, _jobvt, _Val, _trans> driver(a);
-  driver(a, s, u, vt);
-}
-
-}  // namespace detail
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
 /// @copydoc  mcnla::la::DenseGesvdDriver::compute
 ///
@@ -53,7 +35,8 @@ inline void gesvd(
     DenseMatrix<_Val, _trans> &u,
     DenseMatrix<_Val, _trans> &vt
 ) noexcept {
-  detail::gesvdImpl<_jobu, _jobvt>(a, s, u, vt);
+  DenseGesvdDriver<_jobu, _jobvt, _Val, _trans> driver(a);
+  driver(a, s, u, vt);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -64,7 +47,7 @@ inline void gesvd(
     _TypeU &&u,
     _TypeVt &&vt
 ) noexcept {
-  detail::gesvdImpl<_jobu, _jobvt>(a, s, u, vt);
+  gesvd<_jobu, _jobvt>(a, s, u, vt);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
