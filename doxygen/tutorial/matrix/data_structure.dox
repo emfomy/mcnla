@@ -7,9 +7,9 @@ namespace matrix {
 
   <h3>%Array</h3>
 
-  All the data structures used in MCNLA uses @ref Array to store data. The @ref Array stores a `std::shared_ptr` of `std::valarray` of the scalars. The variable @ref Array::offset "offset" marks the offset of the @ref Array.
+  All the data structures used in MCNLA uses @ref Array to store data. The @ref Array stores a `std::shared_ptr` of an array of the scalars. The variable @ref Array::offset "offset" marks the offset of the @ref Array.
 
-  Let `a` be an @ref Array of @ref Array::size "size" `n` with @ref Array::offset "offset" `k`, then `a` contains a `std::valarray` with length `n`, and the first data of `a` is stored at the `o`-th position; that is, the `std::valarray` stores
+  Let `a` be an @ref Array of @ref Array::size "size" `n` with @ref Array::offset "offset" `k`, then `a` contains an array with length `n`, and the first data of `a` is stored at the `o`-th position; that is, the array stores
   @code
     a[-k], a[-k+1], ..., a[-1], a[0], a[1], ..., a[n-k-1]
   @endcode
@@ -17,7 +17,7 @@ namespace matrix {
   An extra variable @ref Array::capacity "capacity" returns `(n-k)`, the maximum size that the data can be; that is, @ref Array::capacity "capacity" + @ref Array::offset "offset" = @ref Array::size "size".
 
   @ref Array provides several operations:
-  - @ref Array::operator[] "a[i]": gets the `i`-th element of the data; that is, the `(i+k)`-th element in the `std::valarray`.
+  - @ref Array::operator[] "a[i]": gets the `i`-th element of the data; that is, the `(i+k)`-th element in the the array.
   - @ref Array::operator* "*a": gets the raw pointer; that is, the address of `a[0]`.
   - @ref Array::operator[] "b = a": copies `a` to `b`.
   - @ref Array::operator>> "b = a >> i": right shift the array; that is, `b[x+i] = a[x]`.
