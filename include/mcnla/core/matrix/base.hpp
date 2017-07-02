@@ -20,6 +20,7 @@
 
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
+#include <mcnla/core/matrix/base/transposable_wrapper.hpp>
 
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 

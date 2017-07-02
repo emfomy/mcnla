@@ -32,7 +32,7 @@ namespace matrix {
 template <class _Core, typename _Val>
 class DenseVectorStorage : public DenseStorage<_Core, _Val> {
 
-  friend class DenseMatrixStorage<_Core, _Val>;
+  friend DenseMatrixStorage<_Core, _Val>;
 
  private:
 

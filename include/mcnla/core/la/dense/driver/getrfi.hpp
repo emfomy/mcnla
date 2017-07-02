@@ -40,7 +40,7 @@ DenseGetrfiDriver<_Val, _trans>::DenseGetrfiDriver(
 ) noexcept
   : size_(size),
     ipiv_(size),
-    work_(query(size)) {
+    work_(query()) {
   mcnla_assert_gt(size_, 0);
 }
 
@@ -109,7 +109,7 @@ const DenseVector<_Val>& DenseGetrfiDriver<_Val, _trans>::getWork() const noexce
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the inverse of an general matrix using LU factorization.
+/// @brief  Computes the inverse of a general matrix using LU factorization.
 ///
 /// @attention  Matrix @a a will be destroyed!
 ///
@@ -127,12 +127,8 @@ void DenseGetrfiDriver<_Val, _trans>::compute(
 /// @brief  Query the optimal workspace size.
 ///
 template <typename _Val, Trans _trans>
-index_t DenseGetrfiDriver<_Val, _trans>::query(
-    const index_t size
-) noexcept {
-  ValType lwork;
-  mcnla_assert_pass(detail::getri(size, nullptr, size, nullptr, &lwork, -1));
-  return lwork;
+index_t DenseGetrfiDriver<_Val, _trans>::query() noexcept {
+  return size_ * kBlockSize;
 }
 
 }  // namespace la

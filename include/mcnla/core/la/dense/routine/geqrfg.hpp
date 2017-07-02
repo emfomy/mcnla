@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/la/dense/routine/geqrfg.hpp
-/// @brief   The LAPACK GEQRFGF+ORGQR routine.
+/// @brief   The LAPACK GEQRF+ORGQR routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

@@ -43,7 +43,7 @@ class DenseSyevDriver {
   using VectorType     = DenseVector<_Val>;
   using RealVectorType = DenseVector<RealValT<_Val>>;
 
-  static constexpr bool is_real = traits::ValTraits<ValType>::is_real;
+  static constexpr bool is_real_ = traits::ValTraits<ValType>::is_real;
 
  protected:
 
@@ -99,7 +99,8 @@ class DenseSyevDriver {
   inline void compute( MatrixType &a, RealVectorType &w ) noexcept;
 
   // Queries workspace size
-  inline index_t query( const index_t size ) noexcept;
+  inline index_t query() noexcept;
+  inline index_t rquery() noexcept;
 
 };
 

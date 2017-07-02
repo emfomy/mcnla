@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/la/raw/lapack/geqrf.hpp
-/// @brief   The LAPACK GEQRFGF.
+/// @brief   The LAPACK GEQRF.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_LA_RAW_LAPACK_GEQRFGF_HPP_
-#define MCNLA_CORE_LA_RAW_LAPACK_GEQRFGF_HPP_
+#ifndef MCNLA_CORE_LA_RAW_LAPACK_GEQRF_HPP_
+#define MCNLA_CORE_LA_RAW_LAPACK_GEQRF_HPP_
 
 #include <mcnla/core/la/def.hpp>
 
@@ -67,4 +67,4 @@ static inline index_t geqrf(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_LA_RAW_LAPACK_GEQRFGF_HPP_
+#endif  // MCNLA_CORE_LA_RAW_LAPACK_GEQRF_HPP_

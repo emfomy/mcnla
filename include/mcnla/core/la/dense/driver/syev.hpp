@@ -38,8 +38,8 @@ DenseSyevDriver<_jobz, _Val, _trans, _uplo>::DenseSyevDriver(
     const index_t size
 ) noexcept
   : size_(size),
-    work_(query(size)),
-    rwork_(is_real ? RealVectorType() : RealVectorType(3*size)) {
+    work_(query()),
+    rwork_(rquery()) {
   mcnla_assert_gt(size_, 0);
 }
 
@@ -163,12 +163,18 @@ void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::compute(
 /// @brief  Query the optimal workspace size.
 ///
 template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
-index_t DenseSyevDriver<_jobz, _Val, _trans, _uplo>::query(
-    const index_t size
-) noexcept {
+index_t DenseSyevDriver<_jobz, _Val, _trans, _uplo>::query() noexcept {
   ValType lwork;
-  mcnla_assert_pass(detail::syev(_jobz, toUploChar(_uplo, _trans), size, nullptr, size, nullptr, &lwork, -1, nullptr));
+  mcnla_assert_pass(detail::syev(_jobz, toUploChar(_uplo, _trans), size_, nullptr, size_, nullptr, &lwork, -1, nullptr));
   return lwork;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Query the optimal real workspace size.
+///
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSyevDriver<_jobz, _Val, _trans, _uplo>::rquery() noexcept {
+  return is_real_ ? 0 : (3 * size_);
 }
 
 }  // namespace la

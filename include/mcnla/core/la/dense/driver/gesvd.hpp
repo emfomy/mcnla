@@ -40,8 +40,8 @@ DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::DenseGesvdDriver(
 ) noexcept
   : nrow_(nrow),
     ncol_(ncol),
-    work_(query(nrow, ncol)),
-    rwork_(is_real ? RealVectorType() : RealVectorType(5 * std::min(nrow, ncol))) {
+    work_(query()),
+    rwork_(rquery()) {
   mcnla_assert_gt(nrow_, 0);
   mcnla_assert_gt(ncol_, 0);
 }
@@ -196,18 +196,24 @@ void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::compute(
 /// @brief  Query the optimal workspace size.
 ///
 template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
-index_t DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::query(
-    const index_t nrow, const index_t ncol
-) noexcept {
+index_t DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::query() noexcept {
   ValType lwork;
   if ( !isTrans(_trans) ) {
-    mcnla_assert_pass(detail::gesvd(_jobu, _jobvt, nrow, ncol, nullptr, nrow, nullptr,
-                                    nullptr, nrow, nullptr, ncol, &lwork, -1, nullptr));
+    mcnla_assert_pass(detail::gesvd(_jobu, _jobvt, nrow_, ncol_, nullptr, nrow_, nullptr,
+                                    nullptr, nrow_, nullptr, ncol_, &lwork, -1, nullptr));
   } else {
-    mcnla_assert_pass(detail::gesvd(_jobvt, _jobu, ncol, nrow, nullptr, ncol, nullptr,
-                                    nullptr, ncol, nullptr, nrow, &lwork, -1, nullptr));
+    mcnla_assert_pass(detail::gesvd(_jobvt, _jobu, ncol_, nrow_, nullptr, ncol_, nullptr,
+                                    nullptr, ncol_, nullptr, nrow_, &lwork, -1, nullptr));
   }
   return lwork;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Query the optimal real workspace size.
+///
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+index_t DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::rquery() noexcept {
+  return is_real_ ? 0 : (5 * std::min(nrow_, ncol_));
 }
 
 }  // namespace la

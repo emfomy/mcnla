@@ -80,7 +80,7 @@ class DenseGetrfiDriver {
   inline void compute( MatrixType &a ) noexcept;
 
   // Queries workspace size
-  inline index_t query( const index_t size ) noexcept;
+  inline index_t query() noexcept;
 
 };
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/la/dense/driver/geqrfg.hpp
-/// @brief   The LAPACK GEQRFGF+ORGQR driver.
+/// @brief   The LAPACK GEQRF+ORGQR driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -44,7 +44,7 @@ DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::DenseGeqrfgDriver(
 ) noexcept
   : nrow_(nrow),
     ncol_(ncol),
-    work_(query(nrow, ncol)) {
+    work_(query()) {
   mcnla_assert_gt(nrow_, 0);
   mcnla_assert_gt(ncol_, 0);
 }
@@ -123,7 +123,7 @@ const DenseVector<_Val>& DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::getWork(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the inverse of an general matrix using LU factorization.
+/// @brief  Computes the QR decomposition of a general matrix.
 ///
 /// @attention  Matrix @a a will be destroyed!
 ///
@@ -155,7 +155,7 @@ void DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::compute(
     if ( !isTrans(_trans) ) {
       detail::lacpy('U', ncolQ(), ncol_, a.valPtr(), a.pitch(), r.valPtr(), r.pitch());
     } else {
-      detail::lacpy('L', ncolQ(), ncol_, a.valPtr(), a.pitch(), r.valPtr(), r.pitch());
+      detail::lacpy('L', ncol_, ncolQ(), a.valPtr(), a.pitch(), r.valPtr(), r.pitch());
     }
   }
 
@@ -183,27 +183,8 @@ void DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::compute(
 /// @brief  Query the optimal workspace size.
 ///
 template <JobOption _jobq, JobOption _jobr, typename _Val, Trans _trans>
-index_t DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::query(
-    const index_t nrow_,
-    const index_t ncol_
-) noexcept {
-  ValType lwork1 = 0, lwork2 = 0;
-
-  if ( !isTrans(_trans) ) {
-    mcnla_assert_pass(detail::geqrf(nrow_, ncol_, nullptr, nrow_, nullptr, &lwork1, -1));
-  } else {
-    mcnla_assert_pass(detail::gelqf(ncol_, nrow_, nullptr, ncol_, nullptr, &lwork1, -1));
-  }
-
-  if ( _jobq != 'N' ) {
-    if ( !isTrans(_trans) ) {
-      mcnla_assert_pass(detail::orgqr(nrow_, ncolQ(), ncolQ(), nullptr, nrow_, nullptr, &lwork2, -1));
-    } else {
-      mcnla_assert_pass(detail::orglq(ncolQ(), nrow_, ncolQ(), nullptr, ncol_, nullptr, &lwork2, -1));
-    }
-  }
-
-  return std::max(lwork1, lwork2);
+index_t DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::query() noexcept {
+  return !isTrans(_trans) ? (ncol_ * kBlockSize) : (nrow_ * kBlockSize);
 }
 
 }  // namespace la

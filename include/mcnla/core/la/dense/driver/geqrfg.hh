@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/la/dense/driver/geqrfg.hh
-/// @brief   The definition of LAPACK GEQRFGF+ORGQR driver.
+/// @brief   The definition of LAPACK GEQRF+ORGQR driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -27,7 +27,7 @@ namespace la {
 /// @ingroup  la_dense_lapack_ls_module
 /// @brief  The QR decomposition driver of general matrices.
 ///
-/// @note  This driver runs GEQRFGF and ORGQR.
+/// @note  This driver runs GEQRF and ORGQR.
 ///
 template <JobOption _jobq, JobOption _jobr, typename _Val, Trans _trans>
 class DenseGeqrfgDriver {
@@ -86,7 +86,7 @@ class DenseGeqrfgDriver {
   inline void compute( MatrixType &a, VectorType &tau, MatrixType &q, MatrixType &r ) noexcept;
 
   // Queries workspace size
-  inline index_t query( const index_t nrow, const index_t ncol ) noexcept;
+  inline index_t query() noexcept;
 
 };
 

@@ -46,6 +46,10 @@ using size_t = std::size_t;
 static constexpr size_t kOsValWidth = 14;
 static constexpr size_t kOsIdxWidth = 6;
 
+/// @ingroup  constexpr
+/// The block size
+static constexpr index_t kBlockSize = 64;
+
 /// @ingroup  core_module
 /// The index type literal.
 static inline mcnla::index_t operator"" _i( unsigned long long int idx ) { return idx; }
