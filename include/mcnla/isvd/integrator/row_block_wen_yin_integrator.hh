@@ -54,7 +54,7 @@ class RowBlockWenYinIntegrator
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Row-Block Version)";
+  static constexpr const char* name_ = "Wen-Yin Line Search Integrator (Row-Block Version)";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "initializing / iterating";
