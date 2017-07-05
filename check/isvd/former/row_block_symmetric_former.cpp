@@ -1,13 +1,13 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/former/row_block_gramian_former.hpp>
+#include <mcnla/isvd/former/row_block_symmetric_former.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
-#define MATRIX_A_PATH MCNLA_DATA_PATH "/a.mtx"
+#define MATRIX_A_PATH MCNLA_DATA_PATH "/a_sym.mtx"
 #define MATRIX_Q_PATH MCNLA_DATA_PATH "/q.mtx"
-#define MATRIX_U_PATH MCNLA_DATA_PATH "/u.mtx"
+#define MATRIX_U_PATH MCNLA_DATA_PATH "/u_sym.mtx"
 
-TEST(RowBlockGramianFormerTest, Test) {
+TEST(RowBlockSymmetricFormerTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -38,7 +38,7 @@ TEST(RowBlockGramianFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::RowBlockGramianFormer<ValType> former(parameters);
+  mcnla::isvd::RowBlockSymmetricFormer<ValType> former(parameters);
   former.initialize();
 
   // Initializes converter

@@ -45,6 +45,8 @@ add_mpi_check(isvd/former/svd_former "SVD Former test" "SvdFormerTest" 1)
 add_mpi_check(isvd/former/gramian_former "Gramian Former test" "GramianFormerTest" 1)
 add_mpi_check(isvd/former/row_block_gramian_former "Row-BLock Gramian Former test" "RowBlockGramianFormerTest" 1 2 3 4 6 12)
 
+add_mpi_check(isvd/former/row_block_symmetric_former "Row-BLock Symmetric Former test" "RowBlockSymmetricFormerTest" 1 2 3 4 6 12)
+
 # Add rule 'build_test'
 add_custom_target(
   build_test

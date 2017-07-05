@@ -18,7 +18,7 @@ TEST(ColumnSamplingSketcherTest, Test) {
   const mcnla::index_t m  = a.nrow();
   const mcnla::index_t n  = a.ncol();
   const mcnla::index_t k  = 6;
-  const mcnla::index_t p  = 6;
+  const mcnla::index_t p  = 5;
   const mcnla::index_t Nj = 1;
 
   // Sets parameters
