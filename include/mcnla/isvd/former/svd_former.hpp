@@ -126,9 +126,9 @@ const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
 /// @brief  Gets the right singular vectors.
 ///
 template <typename _Val>
-const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixVt() const noexcept {
+const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixV() const noexcept {
   mcnla_assert_true(this->isComputed());
-  return matrix_vt_cut_;
+  return matrix_vt_cut_.t();
 }
 
 }  // namespace isvd

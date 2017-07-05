@@ -53,14 +53,14 @@ void MCNLA_TMP::initializeImpl() noexcept {
 
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
-  syev_driver_.reconstruct(dim_sketch);
+  gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 
   matrix_qta_.reconstruct(dim_sketch, ncol_total); matrix_qta_.resize(""_, ncol);
   matrix_qtaj_.reconstruct(dim_sketch, ncol_each); matrix_qtaj_.resize(""_, ncol_rank);
   matrix_uj_cut_.reconstruct(nrow_each, rank);     matrix_uj_cut_.resize(nrow_rank, ""_);
 
-  matrix_w_cut_  = matrix_w_(""_, {dim_sketch-rank, dim_sketch});
-  vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});
+  matrix_w_cut_  = matrix_w_(""_, {0, rank});
+  vector_s_cut_  = vector_s_({0, rank});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,13 +105,13 @@ void MCNLA_TMP::runImpl(
   comm_time += utility::getTime() - comm_moment;
 
   // W := sum( QtAj * QtAj' )
-  la::rk(matrix_qtaj_, matrix_w_.sym());
+  la::mm(matrix_qtaj_, matrix_qtaj_.t(), matrix_w_);
   comm_moment = utility::getTime();
   mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
 
   // eig(W) = W * S * W'
-  syev_driver_(matrix_w_.sym(), vector_s_);
+  gesvd_driver_(matrix_w_, vector_s_, matrix_empty_, matrix_empty_);
 
   // S := sqrt(S)
   for ( auto &v : vector_s_ ) {

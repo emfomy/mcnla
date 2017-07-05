@@ -73,8 +73,11 @@ class GramianFormer
   /// The matrix Q'*A.
   DenseMatrixColMajor<_Val> matrix_qta_;
 
-  /// The SYEV driver.
-  la::DenseSyevDriverColMajor<'V', _Val> syev_driver_;
+  /// The empty matrix.
+  DenseMatrixColMajor<_Val> matrix_empty_;
+
+  /// The GESVD driver.
+  la::DenseGesvdDriverColMajor<'O', 'N', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -90,7 +93,7 @@ class GramianFormer
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
   inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<_Val>& matrixVt() const noexcept = delete;
+  inline const DenseMatrixRowMajor<_Val>& matrixV() const noexcept = delete;
 
  protected:
 

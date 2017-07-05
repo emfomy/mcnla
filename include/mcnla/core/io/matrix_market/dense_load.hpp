@@ -42,7 +42,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size
@@ -93,7 +93,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size
@@ -146,7 +146,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size
@@ -200,7 +200,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size

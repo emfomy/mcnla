@@ -96,7 +96,7 @@ class SvdFormer
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
   inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<_Val>& matrixVt() const noexcept;
+  inline const DenseMatrixRowMajor<_Val>& matrixV() const noexcept;
 
  protected:
 

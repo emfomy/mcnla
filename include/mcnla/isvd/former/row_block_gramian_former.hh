@@ -76,8 +76,11 @@ class RowBlockGramianFormer
   /// The matrix Q'*A (row-block).
   DenseMatrixColMajor<_Val> matrix_qtaj_;
 
-  /// The SYEV driver.
-  la::DenseSyevDriverColMajor<'V', _Val> syev_driver_;
+  /// The empty matrix.
+  DenseMatrixColMajor<_Val> matrix_empty_;
+
+  /// The GESVD driver.
+  la::DenseGesvdDriverColMajor<'O', 'N', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -93,7 +96,7 @@ class RowBlockGramianFormer
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
   inline const DenseMatrixRowMajor<_Val>& matrixUj() const noexcept;
-  inline const DenseMatrixColMajor<_Val>& matrixVtj() const noexcept = delete;
+  inline const DenseMatrixRowMajor<_Val>& matrixVj() const noexcept = delete;
 
  protected:
 

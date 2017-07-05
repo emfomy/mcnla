@@ -24,7 +24,7 @@ int main( int argc, char **argv ) {
   // Check input
   if ( argc < 5 && mcnla::mpi::isCommRoot(mpi_root, MPI_COMM_WORLD) ) {
     std::cout << "Usage: " << argv[0]
-              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <Vt-mtx-file>"
+              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <V-mtx-file>"
               << std::endl << std::endl;
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
@@ -116,9 +116,9 @@ int main( int argc, char **argv ) {
   /// [save-data]
   // Save matrix
   if ( mcnla::mpi::isCommRoot(mpi_root, MPI_COMM_WORLD) ) {
-    mcnla::io::saveMatrixMarket(former.vectorS(),  argv[2]);
-    mcnla::io::saveMatrixMarket(former.matrixU(),  argv[3]);
-    mcnla::io::saveMatrixMarket(former.matrixVt(), argv[4]);
+    mcnla::io::saveMatrixMarket(former.vectorS(), argv[2]);
+    mcnla::io::saveMatrixMarket(former.matrixU(), argv[3]);
+    mcnla::io::saveMatrixMarket(former.matrixV(), argv[4]);
   }
   /// [save-data]
 

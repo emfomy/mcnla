@@ -50,12 +50,12 @@ void MCNLA_TMP::initializeImpl() noexcept {
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
   matrix_qta_.reconstruct(dim_sketch, ncol);
-  syev_driver_.reconstruct(dim_sketch);
+  gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 
   matrix_u_cut_.reconstruct(nrow, rank);
 
-  matrix_w_cut_  = matrix_w_(""_, {dim_sketch-rank, dim_sketch});
-  vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});
+  matrix_w_cut_ = matrix_w_(""_, {0, rank});
+  vector_s_cut_ = vector_s_({0, rank});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,10 +95,10 @@ void MCNLA_TMP::runImpl(
   la::mm(matrix_q.t(), matrix_a, matrix_qta_);
 
   // W := QtA * QtA'
-  la::rk(matrix_qta_, matrix_w_.sym());
+  la::mm(matrix_qta_, matrix_qta_.t(), matrix_w_);
 
   // eig(W) = W * S * W'
-  syev_driver_(matrix_w_.sym(), vector_s_);
+  gesvd_driver_(matrix_w_, vector_s_, matrix_empty_, matrix_empty_);
 
   // S := sqrt(S)
   for ( auto &v : vector_s_ ) {

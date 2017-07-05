@@ -41,7 +41,7 @@ int main( int argc, char **argv ) {
   // Check input
   if ( argc < 5 && mpi_rank == mpi_root ) {
     std::cout << "Usage: " << argv[0]
-              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <Vt-mtx-file>"
+              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <V-mtx-file>"
                  " [#sketch-per-node] [rank] [over-sampling-rank] [tolerance] [maxiter]"
               << std::endl << std::endl;
     MPI_Abort(mpi_comm, 1);
@@ -141,7 +141,7 @@ int main( int argc, char **argv ) {
   // Display results
   if ( mpi_rank == mpi_root ) {
     double frerr;
-    check(matrix_a, former.matrixU(), former.matrixVt(), former.vectorS(), frerr);
+    check(matrix_a, former.matrixU(), former.matrixV(), former.vectorS(), frerr);
     auto time_s  = sketcher.time();
     auto time_o  = orthogonalizer.time();
     auto time_i  = integrator.time();
@@ -165,14 +165,14 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Save matrices
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Save S  into "  << argv[2] << "." << std::endl;
+    std::cout << "Save S into "  << argv[2] << "." << std::endl;
     mcnla::io::saveMatrixMarket(former.vectorS(), argv[2]);
 
-    std::cout << "Save U  into "  << argv[3] << "." << std::endl;
+    std::cout << "Save U into "  << argv[3] << "." << std::endl;
     mcnla::io::saveMatrixMarket(former.matrixU(), argv[3]);
 
-    std::cout << "Save Vt into " << argv[4] << "." << std::endl;
-    mcnla::io::saveMatrixMarket(former.matrixVt(), argv[4]);
+    std::cout << "Save V into " << argv[4] << "." << std::endl;
+    mcnla::io::saveMatrixMarket(former.matrixV(), argv[4]);
 
     std::cout << std::endl;
   }
