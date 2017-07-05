@@ -31,7 +31,7 @@ template <typename _Val> using SvdFormer = Former<SvdFormerTag, _Val>;
 /// @ingroup  isvd_former_module
 /// The SVD former.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val   The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

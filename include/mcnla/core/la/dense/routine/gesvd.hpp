@@ -40,14 +40,11 @@ inline void gesvd(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <JobOption _jobu, JobOption _jobvt, class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
+template <JobOption _jobu, JobOption _jobvt, class ..._Args>
 inline void gesvd(
-    _TypeA &&a,
-    _TypeS &&s,
-    _TypeU &&u,
-    _TypeVt &&vt
+    _Args&&... args
 ) noexcept {
-  gesvd<_jobu, _jobvt>(a, s, u, vt);
+  gesvd<_jobu, _jobvt>(args...);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

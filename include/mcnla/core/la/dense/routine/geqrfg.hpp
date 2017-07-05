@@ -40,14 +40,11 @@ inline void geqrfg(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <JobOption _jobu, JobOption _jobvt, class _TypeA, class _TypeTau, class _TypeQ, class _TypeR>
+template <JobOption _jobu, JobOption _jobvt, class ..._Args>
 inline void geqrfg(
-    _TypeA   &&a,
-    _TypeTau &&tau,
-    _TypeQ   &&q,
-    _TypeR   &&r
+    _Args&&... args
 ) noexcept {
-  geqrfg<_jobu, _jobvt>(a, tau, q, r);
+  geqrfg<_jobu, _jobvt>(args...);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

@@ -110,4 +110,15 @@ using mcnla::operator"" _i;
 /// @ingroup  core_module
 #define disp( expression ) std::cout << #expression << ":\n" << expression << std::endl;
 
+/// @ingroup  core_module
+#ifdef NDEBUG
+  #define warning( expression ) static_cast<void>(0)
+#else  // NDEBUG
+  #ifndef MCNLA_USE_GTEST
+    #define warning( expression ) std::cout << "Warning: " << #expression << std::endl;
+  #else  // MCNLA_USE_GTEST
+    #define warning( expression ) FAIL() << "Warning: " << #expression << std::endl;
+  #endif  // MCNLA_USE_GTEST
+#endif  // NDEBUG
+
 #endif  // MCNLA_DEF_HPP_

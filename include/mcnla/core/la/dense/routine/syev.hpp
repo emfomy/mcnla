@@ -38,12 +38,11 @@ inline void syev(
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <JobOption _jobz, class _TypeA, class _TypeW>
+template <JobOption _jobz, class ..._Args>
 inline void syev(
-    _TypeA &&a,
-    _TypeW &&w
+    _Args&&... args
 ) noexcept {
-  syev<_jobz>(a, w);
+  syev<_jobz>(args...);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
