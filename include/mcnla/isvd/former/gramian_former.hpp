@@ -49,7 +49,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
-  matrix_qta_.reconstruct(dim_sketch, ncol);
+  matrix_z_.reconstruct(ncol, dim_sketch);
   gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 
   matrix_u_cut_.reconstruct(nrow, rank);
@@ -91,11 +91,11 @@ void MCNLA_TMP::runImpl(
   // ====================================================================================================================== //
   // Start
 
-  // QtA := Q' * A
-  la::mm(matrix_q.t(), matrix_a, matrix_qta_);
+  // Z := A' * Q
+  la::mm(matrix_a.t(), matrix_q, matrix_z_);
 
-  // W := QtA * QtA'
-  la::mm(matrix_qta_, matrix_qta_.t(), matrix_w_);
+  // W := Z * Z'
+  la::mm(matrix_z_.t(), matrix_z_, matrix_w_);
 
   // eig(W) = W * S * W'
   gesvd_driver_(matrix_w_, vector_s_, matrix_empty_, matrix_empty_);

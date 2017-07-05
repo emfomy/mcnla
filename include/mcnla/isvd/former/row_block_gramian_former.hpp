@@ -55,9 +55,9 @@ void MCNLA_TMP::initializeImpl() noexcept {
   vector_s_.reconstruct(dim_sketch);
   gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 
-  matrix_qta_.reconstruct(dim_sketch, ncol_total); matrix_qta_.resize(""_, ncol);
-  matrix_qtaj_.reconstruct(dim_sketch, ncol_each); matrix_qtaj_.resize(""_, ncol_rank);
-  matrix_uj_cut_.reconstruct(nrow_each, rank);     matrix_uj_cut_.resize(nrow_rank, ""_);
+  matrix_z_.reconstruct(ncol_total, dim_sketch); matrix_z_.resize(ncol, ""_);
+  matrix_zj_.reconstruct(ncol_each, dim_sketch); matrix_zj_.resize(ncol_rank, ""_);
+  matrix_uj_cut_.reconstruct(nrow_each, rank);   matrix_uj_cut_.resize(nrow_rank, ""_);
 
   matrix_w_cut_  = matrix_w_(""_, {0, rank});
   vector_s_cut_  = vector_s_({0, rank});
@@ -89,23 +89,23 @@ void MCNLA_TMP::runImpl(
   mcnla_assert_eq(matrix_aj.sizes(), std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(matrix_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch));
 
-  auto matrix_qta_full = matrix_qta_;
-  matrix_qta_full.resize(""_, ncol_total);
-  auto matrix_qtaj_full = matrix_qtaj_;
-  matrix_qtaj_full.resize(""_, ncol_each);
+  auto matrix_z_full = matrix_z_;
+  matrix_z_full.resize(ncol_total, ""_);
+  auto matrix_zj_full = matrix_zj_;
+  matrix_zj_full.resize(ncol_each, ""_);
 
   this->tic(); double comm_moment, comm_time = 0;
   // ====================================================================================================================== //
   // Start
 
-  // QtA := sum( Qj' * Aj )
-  la::mm(matrix_qj.t(), matrix_aj, matrix_qta_);
+  // Z := sum( Aj' * Qj )
+  la::mm(matrix_aj.t(), matrix_qj, matrix_z_);
   comm_moment = utility::getTime();
-  mpi::reduceScatterBlock(matrix_qta_full, matrix_qtaj_full, MPI_SUM, mpi_comm);
+  mpi::reduceScatterBlock(matrix_z_full, matrix_zj_full, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
 
-  // W := sum( QtAj * QtAj' )
-  la::mm(matrix_qtaj_, matrix_qtaj_.t(), matrix_w_);
+  // W := sum( Zj' * Zj )
+  la::mm(matrix_zj_.t(), matrix_zj_, matrix_w_);
   comm_moment = utility::getTime();
   mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;

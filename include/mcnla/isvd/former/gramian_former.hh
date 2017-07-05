@@ -70,8 +70,8 @@ class GramianFormer
   /// The cut matrix U.
   DenseMatrixColMajor<_Val> matrix_u_cut_;
 
-  /// The matrix Q'*A.
-  DenseMatrixColMajor<_Val> matrix_qta_;
+  /// The matrix Z.
+  DenseMatrixRowMajor<_Val> matrix_z_;
 
   /// The empty matrix.
   DenseMatrixColMajor<_Val> matrix_empty_;

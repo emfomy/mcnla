@@ -56,10 +56,10 @@ class RowBlockGramianFormer
   static constexpr const char* names_ = "forming";
 
   /// The matrix W.
-  DenseMatrixColMajor<_Val> matrix_w_;
+  DenseMatrixRowMajor<_Val> matrix_w_;
 
   /// The cut matrix W.
-  DenseMatrixColMajor<_Val> matrix_w_cut_;
+  DenseMatrixRowMajor<_Val> matrix_w_cut_;
 
   /// The vector S.
   DenseVector<RealValT<_Val>> vector_s_;
@@ -70,17 +70,17 @@ class RowBlockGramianFormer
   /// The cut matrix U (row-block).
   DenseMatrixRowMajor<_Val> matrix_uj_cut_;
 
-  /// The matrix Q'*A.
-  DenseMatrixColMajor<_Val> matrix_qta_;
+  /// The matrix Z.
+  DenseMatrixRowMajor<_Val> matrix_z_;
 
-  /// The matrix Q'*A (row-block).
-  DenseMatrixColMajor<_Val> matrix_qtaj_;
+  /// The matrix Z (row-block).
+  DenseMatrixRowMajor<_Val> matrix_zj_;
 
   /// The empty matrix.
-  DenseMatrixColMajor<_Val> matrix_empty_;
+  DenseMatrixRowMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::DenseGesvdDriverColMajor<'O', 'N', _Val> gesvd_driver_;
+  la::DenseGesvdDriverRowMajor<'O', 'N', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
