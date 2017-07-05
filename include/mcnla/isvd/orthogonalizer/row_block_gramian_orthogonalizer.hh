@@ -47,10 +47,6 @@ class RowBlockGramianOrthogonalizer
 
   using BaseType = StageWrapper<RowBlockGramianOrthogonalizer<_Val>>;
 
- public:
-
-//  using _Val = _Val;
-
  protected:
 
   /// The name.

@@ -38,7 +38,7 @@ TEST(GramianFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::GramianFormer<ValType> former(parameters);
+  mcnla::isvd::GramianFormer<ValType, true> former(parameters);
   former.initialize();
 
   // Creates matrices

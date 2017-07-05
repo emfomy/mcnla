@@ -49,8 +49,9 @@ int main( int argc, char **argv ) {
   mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters);
   mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
-  mcnla::isvd::SvdFormer<double> former(parameters);
-  mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
+  mcnla::isvd::RowBlockGramianFormer<double, true> former(parameters);
+  mcnla::isvd::MatrixFromRowBlockConverter<double> fe_converter(parameters);
+  mcnla::isvd::MatrixFromColBlockConverter<double> fe_converter2(parameters);
 
   // Initialize stages
   mcnla::index_t maxiter = 256;
@@ -61,7 +62,8 @@ int main( int argc, char **argv ) {
   orthogonalizer.initialize();
   integrator.initialize();
   former.initialize();
-  if_converter.initialize();
+  fe_converter.initialize();
+  fe_converter2.initialize();
   /// [alloc-stage]
 
   /// [alloc-var]
@@ -69,7 +71,8 @@ int main( int argc, char **argv ) {
   auto matrix_aj     = matrix_a(parameters.rowrange(), ""_);
   auto collection_qj = parameters.createCollectionQj();
   auto matrix_qbarj  = parameters.createMatrixQbarj();
-  auto matrix_qbar   = parameters.createMatrixQbar();
+  auto matrix_u      = parameters.createMatrixU();
+  auto matrix_v      = parameters.createMatrixV();
   /// [alloc-var]
 
   /// [disp-stage]
@@ -87,8 +90,9 @@ int main( int argc, char **argv ) {
   sketcher(matrix_aj, collection_qj);
   orthogonalizer(collection_qj);
   integrator(collection_qj, matrix_qbarj);
-  if_converter(matrix_qbarj, matrix_qbar);
-  former(matrix_a, matrix_qbar);
+  former(matrix_aj, matrix_qbarj);
+  fe_converter(former.matrixUj(), matrix_u);
+  fe_converter2(former.matrixVj().t(), matrix_v.t());
   /// [run-isvd]
 
   /// [disp-time]
@@ -100,8 +104,9 @@ int main( int argc, char **argv ) {
     auto time_f  = former.time();
     auto time_so = 0.0;
     auto time_oi = 0.0;
-    auto time_if = if_converter.time();
-    auto time    = time_s + time_o + time_i + time_if + time_f;
+    auto time_if = 0.0;
+    auto time_fe = fe_converter.time();
+    auto time    = time_s + time_o + time_i + time_if + time_f + time_fe;
     std::cout << "Average total computing time:   " << time    << " seconds." << std::endl;
     std::cout << "Average sketching time:         " << time_s  << " seconds." << std::endl;
     std::cout << "Average orthogonalizing time:   " << time_o  << " seconds." << std::endl;
@@ -110,6 +115,7 @@ int main( int argc, char **argv ) {
     std::cout << "Average converting time (S->O): " << time_so << " seconds." << std::endl;
     std::cout << "Average converting time (O->I): " << time_oi << " seconds." << std::endl;
     std::cout << "Average converting time (I->F): " << time_if << " seconds." << std::endl;
+    std::cout << "Average converting time (F->@): " << time_if << " seconds." << std::endl;
   }
   /// [disp-time]
 
@@ -117,8 +123,8 @@ int main( int argc, char **argv ) {
   // Save matrix
   if ( mcnla::mpi::isCommRoot(mpi_root, MPI_COMM_WORLD) ) {
     mcnla::io::saveMatrixMarket(former.vectorS(), argv[2]);
-    mcnla::io::saveMatrixMarket(former.matrixU(), argv[3]);
-    mcnla::io::saveMatrixMarket(former.matrixV(), argv[4]);
+    mcnla::io::saveMatrixMarket(matrix_u, argv[3]);
+    mcnla::io::saveMatrixMarket(matrix_v, argv[4]);
   }
   /// [save-data]
 

@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Former<RowBlockSymmetricFormerTag, _Val>
+  #define MCNLA_TMP Former<RowBlockSymmetricFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP RowBlockSymmetricFormer<_Val>
+  #define MCNLA_TMP RowBlockSymmetricFormer<_Val, _jobv>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 MCNLA_TMP::Former(
     const Parameters<_Val> &parameters
 ) noexcept
@@ -39,7 +39,7 @@ MCNLA_TMP::Former(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
@@ -72,7 +72,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 ///
 /// @attention  The full matrix A must be symmetric.
 ///
-template <typename _Val> template <class _Matrix>
+template <typename _Val, bool _jobv> template <class _Matrix>
 void MCNLA_TMP::runImpl(
     const _Matrix &matrix_aj,
     const DenseMatrixRowMajor<_Val> &matrix_qj
@@ -130,7 +130,7 @@ void MCNLA_TMP::runImpl(
 ///
 /// @attention  The eigenvalues are sorted in ascending order.
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
@@ -141,7 +141,7 @@ const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
 ///
 /// @attention  The eigenvalues are sorted in ascending order.
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_uj_cut_;

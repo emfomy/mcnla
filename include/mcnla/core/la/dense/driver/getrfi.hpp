@@ -128,7 +128,9 @@ void DenseGetrfiDriver<_Val, _trans>::compute(
 ///
 template <typename _Val, Trans _trans>
 index_t DenseGetrfiDriver<_Val, _trans>::query() noexcept {
-  return size_ * kBlockSize;
+  ValType lwork;
+  mcnla_assert_pass(detail::getri(size_, nullptr, size_, nullptr, &lwork, -1));
+  return lwork;
 }
 
 }  // namespace la

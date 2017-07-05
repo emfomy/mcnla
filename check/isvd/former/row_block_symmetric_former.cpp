@@ -38,7 +38,7 @@ TEST(RowBlockSymmetricFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::RowBlockSymmetricFormer<ValType> former(parameters);
+  mcnla::isvd::RowBlockSymmetricFormer<ValType, true> former(parameters);
   former.initialize();
 
   // Initializes converter

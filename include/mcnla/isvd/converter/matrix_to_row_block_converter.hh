@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/converter/dummy_converter.hh
-/// @brief   The definition of dummy converter.
+/// @file    include/mcnla/isvd/converter/matrix_to_row_block_converter.hh
+/// @brief   The definition of the converter that converts a matrix to row-block storage.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_DUMMY_CONVERTER_HH_
-#define MCNLA_ISVD_CONVERTER_DUMMY_CONVERTER_HH_
+#ifndef MCNLA_ISVD_CONVERTER_MATRIX_TO_ROW_BLOCK_CONVERTER_HH_
+#define MCNLA_ISVD_CONVERTER_MATRIX_TO_ROW_BLOCK_CONVERTER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/converter/converter.hpp>
@@ -22,29 +22,29 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct DummyConverterTag {};
-template <typename _Val> using DummyConverter = Converter<DummyConverterTag, _Val>;
+struct MatrixToRowBlockConverterTag {};
+template <typename _Val> using MatrixToRowBlockConverter = Converter<MatrixToRowBlockConverterTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module
-/// The dummy converter.
+/// The converter that converts a matrix to row-block storage.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <class _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Converter<DummyConverterTag, _Val>
+class Converter<MatrixToRowBlockConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class DummyConverter
+class MatrixToRowBlockConverter
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<DummyConverter<_Val>> {
+  : public StageWrapper<MatrixToRowBlockConverter<_Val>> {
 
-  friend StageWrapper<DummyConverter<_Val>>;
+  friend StageWrapper<MatrixToRowBlockConverter<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<DummyConverter<_Val>>;
+  using BaseType = StageWrapper<MatrixToRowBlockConverter<_Val>>;
 
  protected:
 
@@ -65,8 +65,7 @@ class DummyConverter
   void initializeImpl() noexcept;
 
   // Converts data
-  template <typename ..._Args>
-  void runImpl( _Args... arg ) noexcept;
+  void runImpl( const DenseMatrixRowMajor<_Val> &matrix_j, DenseMatrixRowMajor<_Val> &matrix ) noexcept;
 
 };
 
@@ -74,4 +73,4 @@ class DummyConverter
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CONVERTER_DUMMY_CONVERTER_HH_
+#endif  // MCNLA_ISVD_CONVERTER_MATRIX_TO_ROW_BLOCK_CONVERTER_HH_

@@ -184,7 +184,23 @@ void DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::compute(
 ///
 template <JobOption _jobq, JobOption _jobr, typename _Val, Trans _trans>
 index_t DenseGeqrfgDriver<_jobq, _jobr, _Val, _trans>::query() noexcept {
-  return !isTrans(_trans) ? (ncol_ * kBlockSize) : (nrow_ * kBlockSize);
+  ValType lwork1 = 0, lwork2 = 0;
+
+  if ( !isTrans(_trans) ) {
+    mcnla_assert_pass(detail::geqrf(nrow_, ncol_, nullptr, nrow_, nullptr, &lwork1, -1));
+  } else {
+    mcnla_assert_pass(detail::gelqf(ncol_, nrow_, nullptr, ncol_, nullptr, &lwork1, -1));
+  }
+
+  if ( _jobq != 'N' ) {
+    if ( !isTrans(_trans) ) {
+      mcnla_assert_pass(detail::orgqr(nrow_, ncolQ(), ncolQ(), nullptr, nrow_, nullptr, &lwork2, -1));
+    } else {
+      mcnla_assert_pass(detail::orglq(ncolQ(), nrow_, ncolQ(), nullptr, ncol_, nullptr, &lwork2, -1));
+    }
+  }
+
+  return std::max(lwork1, lwork2);
 }
 
 }  // namespace la

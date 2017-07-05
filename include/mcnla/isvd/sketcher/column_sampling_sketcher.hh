@@ -46,10 +46,6 @@ class ColumnSamplingSketcher
 
   using BaseType = StageWrapper<ColumnSamplingSketcher<_Val>>;
 
- public:
-
-//  using _Val = _Val;
-
  protected:
 
   /// The name.

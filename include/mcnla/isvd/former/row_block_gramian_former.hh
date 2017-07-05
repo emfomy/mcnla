@@ -23,8 +23,8 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockGramianFormerTag {};
-template <typename _Val> using RowBlockGramianFormer = Former<RowBlockGramianFormerTag, _Val>;
+template <bool _jobv> struct RowBlockGramianFormerTag {};
+template <typename _Val, bool _jobv = false> using RowBlockGramianFormer = Former<RowBlockGramianFormerTag<_jobv>, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,19 +33,20 @@ template <typename _Val> using RowBlockGramianFormer = Former<RowBlockGramianFor
 ///
 /// @tparam  _Val  The value type.
 ///
-template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Former<RowBlockGramianFormerTag, _Val>
+template <typename _Val, bool _jobv>
+class Former<RowBlockGramianFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, bool _jobv = false>
 class RowBlockGramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockGramianFormer<_Val>> {
+  : public StageWrapper<RowBlockGramianFormer<_Val, _jobv>> {
 
-  friend StageWrapper<RowBlockGramianFormer<_Val>>;
+  friend StageWrapper<RowBlockGramianFormer<_Val, _jobv>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockGramianFormer<_Val>>;
+  using BaseType = StageWrapper<RowBlockGramianFormer<_Val, _jobv>>;
 
  protected:
 
@@ -69,6 +70,9 @@ class RowBlockGramianFormer
 
   /// The cut matrix U (row-block).
   DenseMatrixRowMajor<_Val> matrix_uj_cut_;
+
+  /// The cut matrix V (row-block).
+  DenseMatrixRowMajor<_Val> matrix_vj_cut_;
 
   /// The matrix Z.
   DenseMatrixRowMajor<_Val> matrix_z_;
@@ -96,7 +100,7 @@ class RowBlockGramianFormer
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
   inline const DenseMatrixRowMajor<_Val>& matrixUj() const noexcept;
-  inline const DenseMatrixRowMajor<_Val>& matrixVj() const noexcept = delete;
+  inline const DenseMatrixRowMajor<_Val>& matrixVj() const noexcept;
 
  protected:
 

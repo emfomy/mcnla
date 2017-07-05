@@ -46,10 +46,6 @@ class GaussianProjectionSketcher
 
   using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>>;
 
- public:
-
-//  using _Val = _Val;
-
  protected:
 
   /// The name.

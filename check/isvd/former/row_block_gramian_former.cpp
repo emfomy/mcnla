@@ -38,7 +38,7 @@ TEST(RowBlockGramianFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::RowBlockGramianFormer<ValType> former(parameters);
+  mcnla::isvd::RowBlockGramianFormer<ValType, true> former(parameters);
   former.initialize();
 
   // Initializes converter

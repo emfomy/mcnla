@@ -164,7 +164,9 @@ void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::compute(
 ///
 template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
 index_t DenseSyevDriver<_jobz, _Val, _trans, _uplo>::query() noexcept {
-  return size_ * kBlockSize;
+  ValType lwork;
+  mcnla_assert_pass(detail::syev(_jobz, toUploChar(_uplo, _trans), size_, nullptr, size_, nullptr, &lwork, -1, nullptr));
+  return lwork;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

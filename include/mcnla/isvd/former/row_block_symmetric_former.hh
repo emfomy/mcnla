@@ -23,8 +23,8 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockSymmetricFormerTag {};
-template <typename _Val> using RowBlockSymmetricFormer = Former<RowBlockSymmetricFormerTag, _Val>;
+template <bool _jobv> struct RowBlockSymmetricFormerTag {};
+template <typename _Val, bool _jobv = false> using RowBlockSymmetricFormer = Former<RowBlockSymmetricFormerTag<_jobv>, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,19 +36,20 @@ template <typename _Val> using RowBlockSymmetricFormer = Former<RowBlockSymmetri
 /// @attention  The full matrix A must be symmetric.
 /// @attention  The eigenvalues are sorted in ascending order.
 ///
-template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Former<RowBlockSymmetricFormerTag, _Val>
+  template <typename _Val, bool _jobv>
+class Former<RowBlockSymmetricFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, bool _jobv = false>
 class RowBlockSymmetricFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockSymmetricFormer<_Val>> {
+  : public StageWrapper<RowBlockSymmetricFormer<_Val, _jobv>> {
 
-  friend StageWrapper<RowBlockSymmetricFormer<_Val>>;
+  friend StageWrapper<RowBlockSymmetricFormer<_Val, _jobv>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockSymmetricFormer<_Val>>;
+  using BaseType = StageWrapper<RowBlockSymmetricFormer<_Val, _jobv>>;
 
  protected:
 

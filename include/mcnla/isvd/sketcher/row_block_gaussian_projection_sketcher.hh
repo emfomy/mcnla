@@ -46,10 +46,6 @@ class RowBlockGaussianProjectionSketcher
 
   using BaseType = StageWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
 
- public:
-
-//  using _Val = _Val;
-
  protected:
 
   /// The name.

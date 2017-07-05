@@ -112,6 +112,8 @@ class Parameters {
   inline DenseMatrixRowMajor<_Val> createMatrixQbarj() const noexcept;
   inline DenseMatrixRowMajor<_Val> createMatrixU() const noexcept;
   inline DenseMatrixRowMajor<_Val> createMatrixUj() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixV() const noexcept;
+  inline DenseMatrixRowMajor<_Val> createMatrixVj() const noexcept;
 
 };
 

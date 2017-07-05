@@ -197,7 +197,15 @@ void DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::compute(
 ///
 template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
 index_t DenseGesvdDriver<_jobu, _jobvt, _Val, _trans>::query() noexcept {
-  return (nrow_ + ncol_) * kBlockSize;
+  ValType lwork;
+  if ( !isTrans(_trans) ) {
+    mcnla_assert_pass(detail::gesvd(_jobu, _jobvt, nrow_, ncol_, nullptr, nrow_, nullptr,
+                                    nullptr, nrow_, nullptr, ncol_, &lwork, -1, nullptr));
+  } else {
+    mcnla_assert_pass(detail::gesvd(_jobvt, _jobu, ncol_, nrow_, nullptr, ncol_, nullptr,
+                                    nullptr, ncol_, nullptr, nrow_, &lwork, -1, nullptr));
+  }
+  return lwork;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

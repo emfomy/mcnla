@@ -38,7 +38,7 @@ TEST(SvdFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::SvdFormer<ValType> former(parameters);
+  mcnla::isvd::SvdFormer<ValType, true> former(parameters);
   former.initialize();
 
   // Creates matrices

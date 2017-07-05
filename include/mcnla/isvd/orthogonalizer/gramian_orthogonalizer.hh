@@ -47,10 +47,6 @@ class GramianOrthogonalizer
 
   using BaseType = StageWrapper<GramianOrthogonalizer<_Val>>;
 
- public:
-
-//  using _Val = _Val;
-
  protected:
 
   /// The name.
