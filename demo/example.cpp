@@ -22,11 +22,14 @@ int main( int argc, char **argv ) {
   srand(time(NULL));
 
   // Check input
-  if ( argc < 5 && mcnla::mpi::isCommRoot(mpi_root, MPI_COMM_WORLD) ) {
-    std::cout << "Usage: " << argv[0]
-              << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <V-mtx-file>"
-              << std::endl << std::endl;
-    MPI_Abort(MPI_COMM_WORLD, 1);
+  if ( argc < 5 ) {
+    if ( mcnla::mpi::isCommRoot(mpi_root, MPI_COMM_WORLD) ) {
+      std::cout << "Usage: " << argv[0]
+                << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <V-mtx-file>"
+                << std::endl << std::endl;
+      MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
   }
   /// [init-mcnla]
 
