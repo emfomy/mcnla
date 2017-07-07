@@ -1,15 +1,15 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/converter/matrix_to_rowblock_converter.hpp
-/// @brief   The converter that converts a matrix to row-block version.
+/// @file    include/mcnla/isvd/converter/matrix_to_row_block_converter.hpp
+/// @brief   The converter that converts a matrix to row-block storage.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_MATRIX_TO_ROWBLOCK_CONVERTER_HPP_
-#define MCNLA_ISVD_CONVERTER_MATRIX_TO_ROWBLOCK_CONVERTER_HPP_
+#ifndef MCNLA_ISVD_CONVERTER_MATRIX_TO_ROW_BLOCK_CONVERTER_HPP_
+#define MCNLA_ISVD_CONVERTER_MATRIX_TO_ROW_BLOCK_CONVERTER_HPP_
 
-#include <mcnla/isvd/converter/matrix_to_rowblock_converter.hh>
+#include <mcnla/isvd/converter/matrix_to_row_block_converter.hh>
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -92,4 +92,4 @@ void MCNLA_TMP::runImpl(
 
 #undef  MCNLA_TMP
 
-#endif  // MCNLA_ISVD_CONVERTER_MATRIX_TO_ROWBLOCK_CONVERTER_HPP_
+#endif  // MCNLA_ISVD_CONVERTER_MATRIX_TO_ROW_BLOCK_CONVERTER_HPP_

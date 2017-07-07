@@ -54,7 +54,7 @@ class RowBlockWenYinIntegrator
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Kolmogorov-Nagumo-Type Integrator (Row-Block Version)";
+  static constexpr const char* name_ = "Wen-Yin Line Search Integrator (Row-Block Version)";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "initializing / iterating";
@@ -117,7 +117,7 @@ class RowBlockWenYinIntegrator
   DenseVector<_Val> vector_t_;
 
   /// The GETRFI driver.
-  la::GetrfiDriver<DenseMatrixRowMajor<_Val>> getrfi_driver_;
+  la::DenseGetrfiDriverRowMajor<_Val> getrfi_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

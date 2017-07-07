@@ -46,6 +46,10 @@ using size_t = std::size_t;
 static constexpr size_t kOsValWidth = 14;
 static constexpr size_t kOsIdxWidth = 6;
 
+/// @ingroup  constexpr
+/// The block size
+static constexpr index_t kBlockSize = 64;
+
 /// @ingroup  core_module
 /// The index type literal.
 static inline mcnla::index_t operator"" _i( unsigned long long int idx ) { return idx; }
@@ -105,5 +109,16 @@ using mcnla::operator"" _i;
 
 /// @ingroup  core_module
 #define disp( expression ) std::cout << #expression << ":\n" << expression << std::endl;
+
+/// @ingroup  core_module
+#ifdef NDEBUG
+  #define warning( expression ) static_cast<void>(0)
+#else  // NDEBUG
+  #ifndef MCNLA_USE_GTEST
+    #define warning( expression ) std::cout << "Warning: " << #expression << std::endl;
+  #else  // MCNLA_USE_GTEST
+    #define warning( expression ) FAIL() << "Warning: " << #expression << std::endl;
+  #endif  // MCNLA_USE_GTEST
+#endif  // NDEBUG
 
 #endif  // MCNLA_DEF_HPP_

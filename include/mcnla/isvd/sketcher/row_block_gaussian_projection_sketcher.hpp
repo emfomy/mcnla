@@ -81,7 +81,7 @@ void MCNLA_TMP::runImpl(
   MPI_Bcast(&seed_tmp, 1, datatype, mpi_root, mpi_comm);
   random::Streams streams(seed_tmp);
 
-  this->tic(); double comm_time = 0;
+  this->tic(); double comm_moment, comm_time = 0;
   // ====================================================================================================================== //
   // Random generating
 
@@ -94,6 +94,13 @@ void MCNLA_TMP::runImpl(
 
   // Q := A * Omega
   la::mm(matrix_aj, matrix_omegas_, collection_qj.unfold());
+  for ( index_t i = 0; i < exponent_; ++i ) {
+    la::mm(matrix_aj.t(), collection_qj.unfold(), matrix_omegas_);
+    comm_moment = utility::getTime();
+    mpi::allreduce(matrix_omegas_, MPI_SUM, mpi_comm);
+    comm_time += utility::getTime() - comm_moment;
+    la::mm(matrix_aj, matrix_omegas_, collection_qj.unfold());
+  }
 
   this->toc(comm_time);
 }

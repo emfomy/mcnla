@@ -80,10 +80,10 @@ class RowBlockExtrinsicMeanIntegrator
   DenseMatrixRowMajor<_Val> matrix_empty_;
 
   /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixRowMajor<_Val>, 'V'> syev_driver_;
+  la::DenseSyevDriverRowMajor<'V', _Val> syev_driver_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'O', 'N'> gesvd_driver_;
+  la::DenseGesvdDriverRowMajor<'O', 'N', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

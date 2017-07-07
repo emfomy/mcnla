@@ -25,8 +25,8 @@ namespace la {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Matrix>
-GetrfiDriver<_Matrix>::GetrfiDriver() noexcept
+template <typename _Val, Trans _trans>
+DenseGetrfiDriver<_Val, _trans>::DenseGetrfiDriver() noexcept
   : size_(0),
     ipiv_(),
     work_() {}
@@ -34,91 +34,90 @@ GetrfiDriver<_Matrix>::GetrfiDriver() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix>
-GetrfiDriver<_Matrix>::GetrfiDriver(
+template <typename _Val, Trans _trans>
+DenseGetrfiDriver<_Val, _trans>::DenseGetrfiDriver(
     const index_t size
 ) noexcept
   : size_(size),
     ipiv_(size),
-    work_(query(size)) {
+    work_(query()) {
   mcnla_assert_gt(size_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix>
-GetrfiDriver<_Matrix>::GetrfiDriver(
+template <typename _Val, Trans _trans>
+DenseGetrfiDriver<_Val, _trans>::DenseGetrfiDriver(
     const MatrixType &a
 ) noexcept
-  : GetrfiDriver(a.nrow()) {
+  : DenseGetrfiDriver(a.nrow()) {
   mcnla_assert_true(a.isSquare());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
-template <class _Matrix>
-void GetrfiDriver<_Matrix>::operator()(
+template <typename _Val, Trans _trans>
+void DenseGetrfiDriver<_Val, _trans>::operator()(
     MatrixType &a
 ) noexcept {
   compute(a);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  compute
-///
-template <class _Matrix>
-void GetrfiDriver<_Matrix>::operator()(
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, Trans _trans>
+void DenseGetrfiDriver<_Val, _trans>::operator()(
     MatrixType &&a
 ) noexcept {
   compute(a);
 }
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Reconstruct the driver.
 ///
-template <class _Matrix> template <typename ..._Args>
-void GetrfiDriver<_Matrix>::reconstruct(
+template <typename _Val, Trans _trans> template <typename ..._Args>
+void DenseGetrfiDriver<_Val, _trans>::reconstruct(
     _Args... args
 ) noexcept {
-  *this = GetrfiDriver<_Matrix>(args...);
+  *this = DenseGetrfiDriver<_Val, _trans>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
-template <class _Matrix>
-std::tuple<index_t> GetrfiDriver<_Matrix>::sizes() const noexcept {
-  return std::make_tuple(size_);
+template <typename _Val, Trans _trans>
+std::tuple<index_t, index_t> DenseGetrfiDriver<_Val, _trans>::sizes() const noexcept {
+  return std::make_tuple(size_, size_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the workspace
 ///
-template <class _Matrix>
-VectorT<_Matrix>& GetrfiDriver<_Matrix>::getWork() noexcept {
+template <typename _Val, Trans _trans>
+DenseVector<_Val>& DenseGetrfiDriver<_Val, _trans>::getWork() noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getWork
 ///
-template <class _Matrix>
-const VectorT<_Matrix>& GetrfiDriver<_Matrix>::getWork() const noexcept {
+template <typename _Val, Trans _trans>
+const DenseVector<_Val>& DenseGetrfiDriver<_Val, _trans>::getWork() const noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the inverse of an general matrix using LU factorization.
+/// @brief  Computes the inverse of a general matrix using LU factorization.
 ///
 /// @attention  Matrix @a a will be destroyed!
 ///
-template <class _Matrix>
-void GetrfiDriver<_Matrix>::compute(
+template <typename _Val, Trans _trans>
+void DenseGetrfiDriver<_Val, _trans>::compute(
     MatrixType &a
 ) noexcept {
-  mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
+  mcnla_assert_eq(a.sizes(), this->sizes());
 
   mcnla_assert_pass(detail::getrf(size_, size_, a.valPtr(), a.pitch(), ipiv_.valPtr()));
   mcnla_assert_pass(detail::getri(size_, a.valPtr(), a.pitch(), ipiv_.valPtr(), work_.valPtr(), work_.len()));
@@ -127,12 +126,10 @@ void GetrfiDriver<_Matrix>::compute(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Query the optimal workspace size.
 ///
-template <class _Matrix>
-index_t GetrfiDriver<_Matrix>::query(
-    const index_t size
-) noexcept {
+template <typename _Val, Trans _trans>
+index_t DenseGetrfiDriver<_Val, _trans>::query() noexcept {
   ValType lwork;
-  mcnla_assert_pass(detail::getri(size, nullptr, size, nullptr, &lwork, -1));
+  mcnla_assert_pass(detail::getri(size_, nullptr, size_, nullptr, &lwork, -1));
   return lwork;
 }
 

@@ -24,8 +24,8 @@ namespace la {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Matrix, JobOption _jobz>
-SyevDriver<_Matrix, _jobz>::SyevDriver() noexcept
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+DenseSyevDriver<_jobz, _Val, _trans, _uplo>::DenseSyevDriver() noexcept
   : size_(0),
     work_(),
     rwork_() {}
@@ -33,34 +33,41 @@ SyevDriver<_Matrix, _jobz>::SyevDriver() noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobz>
-SyevDriver<_Matrix, _jobz>::SyevDriver(
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+DenseSyevDriver<_jobz, _Val, _trans, _uplo>::DenseSyevDriver(
     const index_t size
 ) noexcept
   : size_(size),
-    work_(query(size)),
-    rwork_(is_real ? RealVectorType() : RealVectorType(3*size)) {
+    work_(query()),
+    rwork_(rquery()) {
   mcnla_assert_gt(size_, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
-template <class _Matrix, JobOption _jobz>
-SyevDriver<_Matrix, _jobz>::SyevDriver(
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+DenseSyevDriver<_jobz, _Val, _trans, _uplo>::DenseSyevDriver(
     const MatrixType &a
 ) noexcept
-  : SyevDriver(a.nrow()) {
+  : DenseSyevDriver(a.nrow()) {
   mcnla_assert_true(a.isSquare());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  compute
 ///
-template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
-void SyevDriver<_Matrix, _jobz>::operator()(
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _TypeA, class _TypeW>
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::operator()(
     _TypeA &&a,
     _TypeW &&w
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::operator()(
+    MatrixType &a,
+    VectorType &w
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 ) noexcept {
   compute(a, w);
 }
@@ -68,10 +75,17 @@ void SyevDriver<_Matrix, _jobz>::operator()(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Computes eigenvalues only.
 ///
-template <class _Matrix, JobOption _jobz> template <class _TypeA, class _TypeW>
-void SyevDriver<_Matrix, _jobz>::computeValues(
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _TypeA, class _TypeW>
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::computeValues(
     _TypeA &&a,
     _TypeW &&w
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::computeValues(
+    MatrixType &a,
+    VectorType &w
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 ) noexcept {
   compute<'N'>(a, w);
 }
@@ -79,50 +93,50 @@ void SyevDriver<_Matrix, _jobz>::computeValues(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Reconstruct the driver.
 ///
-template <class _Matrix, JobOption _jobz> template <typename ..._Args>
-void SyevDriver<_Matrix, _jobz>::reconstruct(
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo> template <typename ..._Args>
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::reconstruct(
     _Args... args
 ) noexcept {
-  *this = SyevDriver<_Matrix, _jobz>(args...);
+  *this = DenseSyevDriver<_jobz, _Val, _trans, _uplo>(args...);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the sizes.
 ///
-template <class _Matrix, JobOption _jobz>
-std::tuple<index_t> SyevDriver<_Matrix, _jobz>::sizes() const noexcept {
-  return std::make_tuple(size_);
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+std::tuple<index_t, index_t> DenseSyevDriver<_jobz, _Val, _trans, _uplo>::sizes() const noexcept {
+  return std::make_tuple(size_, size_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the workspace
 ///
-template <class _Matrix, JobOption _jobz>
-VectorT<_Matrix>& SyevDriver<_Matrix, _jobz>::getWork() noexcept {
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+DenseVector<_Val>& DenseSyevDriver<_jobz, _Val, _trans, _uplo>::getWork() noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getWork
 ///
-template <class _Matrix, JobOption _jobz>
-const VectorT<_Matrix>& SyevDriver<_Matrix, _jobz>::getWork() const noexcept {
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+const DenseVector<_Val>& DenseSyevDriver<_jobz, _Val, _trans, _uplo>::getWork() const noexcept {
   return work_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the real workspace
 ///
-template <class _Matrix, JobOption _jobz>
-RealT<VectorT<_Matrix>>& SyevDriver<_Matrix, _jobz>::getRwork() noexcept {
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+DenseVector<RealValT<_Val>>& DenseSyevDriver<_jobz, _Val, _trans, _uplo>::getRwork() noexcept {
   return rwork_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  getRwork
 ///
-template <class _Matrix, JobOption _jobz>
-const RealT<VectorT<_Matrix>>& SyevDriver<_Matrix, _jobz>::getRwork() const noexcept {
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+const DenseVector<RealValT<_Val>>& DenseSyevDriver<_jobz, _Val, _trans, _uplo>::getRwork() const noexcept {
   return rwork_;
 }
 
@@ -132,29 +146,35 @@ const RealT<VectorT<_Matrix>>& SyevDriver<_Matrix, _jobz>::getRwork() const noex
 /// @attention  The eigenvectors are Stored in columnwise for column-major storage, in rowwise for row-major storage.
 /// @attention  Matrix @a a will be destroyed!
 ///
-template <class _Matrix, JobOption _jobz> template <JobOption __jobz>
-void SyevDriver<_Matrix, _jobz>::compute(
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo> template <JobOption __jobz>
+void DenseSyevDriver<_jobz, _Val, _trans, _uplo>::compute(
     MatrixType &a,
     RealVectorType &w
 ) noexcept {
-  mcnla_assert_eq(a.sizes(), std::make_tuple(size_, size_));
+  mcnla_assert_eq(a.sizes(), this->sizes());
   mcnla_assert_eq(w.len(), size_);
   mcnla_assert_true(w.isShrunk());
 
-  mcnla_assert_pass(detail::syev(__jobz, toUploChar(uplo, trans), size_, a.valPtr(), a.pitch(),
+  mcnla_assert_pass(detail::syev(__jobz, toUploChar(_uplo, _trans), size_, a.valPtr(), a.pitch(),
                                  w.valPtr(), work_.valPtr(), work_.len(), rwork_.valPtr()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Query the optimal workspace size.
 ///
-template <class _Matrix, JobOption _jobz>
-index_t SyevDriver<_Matrix, _jobz>::query(
-    const index_t size
-) noexcept {
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSyevDriver<_jobz, _Val, _trans, _uplo>::query() noexcept {
   ValType lwork;
-  mcnla_assert_pass(detail::syev(_jobz, toUploChar(uplo, trans), size, nullptr, size, nullptr, &lwork, -1, nullptr));
+  mcnla_assert_pass(detail::syev(_jobz, toUploChar(_uplo, _trans), size_, nullptr, size_, nullptr, &lwork, -1, nullptr));
   return lwork;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Query the optimal real workspace size.
+///
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseSyevDriver<_jobz, _Val, _trans, _uplo>::rquery() noexcept {
+  return is_real_ ? 0 : (3 * size_);
 }
 
 }  // namespace la

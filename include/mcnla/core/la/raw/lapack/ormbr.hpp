@@ -55,26 +55,22 @@ static inline index_t ormbr(
     const char vect, const char side, const char trans, const index_t m, const index_t n, const index_t k,
     const float *a, const index_t lda, const float *tau,
     float *c, const index_t ldc, float *work, const index_t lwork
-) noexcept {index_t info; sormbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; sormbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info; }
 static inline index_t ormbr(
     const char vect, const char side, const char trans, const index_t m, const index_t n, const index_t k,
     const double *a, const index_t lda, const double *tau,
     double *c, const index_t ldc, double *work, const index_t lwork
-) noexcept {index_t info; dormbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; dormbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info; }
 static inline index_t ormbr(
     const char vect, const char side, const char trans, const index_t m, const index_t n, const index_t k,
     const std::complex<float> *a, const index_t lda, const std::complex<float> *tau,
     std::complex<float> *c, const index_t ldc, std::complex<float> *work, const index_t lwork
-) noexcept {index_t info; cunmbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; cunmbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info; }
 static inline index_t ormbr(
     const char vect, const char side, const char trans, const index_t m, const index_t n, const index_t k,
     const std::complex<double> *a, const index_t lda, const std::complex<double> *tau,
     std::complex<double> *c, const index_t ldc, std::complex<double> *work, const index_t lwork
-) noexcept {index_t info; zunmbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; zunmbr_(&vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc, work, &lwork, &info); return info; }
 //@}
 
 }  // namespace detail

@@ -23,8 +23,8 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct GramianFormerTag {};
-template <typename _Val> using GramianFormer = Former<GramianFormerTag, _Val>;
+template <bool _jobv> struct GramianFormerTag {};
+template <typename _Val, bool _jobv = false> using GramianFormer = Former<GramianFormerTag<_jobv>, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,19 +33,20 @@ template <typename _Val> using GramianFormer = Former<GramianFormerTag, _Val>;
 ///
 /// @tparam  _Val  The value type.
 ///
-template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Former<GramianFormerTag, _Val>
+template <typename _Val, bool _jobv>
+class Former<GramianFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, bool _jobv = false>
 class GramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<GramianFormer<_Val>> {
+  : public StageWrapper<GramianFormer<_Val, _jobv>> {
 
-  friend StageWrapper<GramianFormer<_Val>>;
+  friend StageWrapper<GramianFormer<_Val, _jobv>>;
 
  private:
 
-  using BaseType    = StageWrapper<GramianFormer<_Val>>;
+  using BaseType    = StageWrapper<GramianFormer<_Val, _jobv>>;
 
  protected:
 
@@ -70,11 +71,17 @@ class GramianFormer
   /// The cut matrix U.
   DenseMatrixColMajor<_Val> matrix_u_cut_;
 
-  /// The matrix Q'*A.
-  DenseMatrixColMajor<_Val> matrix_qta_;
+  /// The cut matrix V.
+  DenseMatrixColMajor<_Val> matrix_v_cut_;
 
-  /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixColMajor<_Val>, 'V'> syev_driver_;
+  /// The matrix Z.
+  DenseMatrixRowMajor<_Val> matrix_z_;
+
+  /// The empty matrix.
+  DenseMatrixColMajor<_Val> matrix_empty_;
+
+  /// The GESVD driver.
+  la::DenseGesvdDriverColMajor<'O', 'N', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -90,7 +97,7 @@ class GramianFormer
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
   inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<_Val>& matrixVt() const noexcept = delete;
+  inline const DenseMatrixColMajor<_Val>& matrixV() const noexcept;
 
  protected:
 

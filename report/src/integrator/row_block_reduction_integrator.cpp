@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    report/row_block_reduce_sum_integrator.cpp
-/// @brief   The report for reduce-sum integrator (row-block version).
+/// @file    report/row_block_reduction_integrator.cpp
+/// @brief   The report for reduction integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
 using ValType = double;
-#define Stage RowBlockReduceSumIntegrator
+#define Stage RowBlockReductionIntegrator
 
 #include "../../include/integrator/row_block_integrator.hpp"
 

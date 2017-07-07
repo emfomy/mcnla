@@ -24,7 +24,7 @@ void check_u( const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
 
 void check( const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_a,
             const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
-            const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_vt,
+            const mcnla::matrix::DenseMatrixRowMajor<ValType> &matrix_v,
             const mcnla::matrix::DenseVector<ValType> &vector_s,
             ValType &frerr ) noexcept;
 
@@ -184,7 +184,7 @@ int main( int argc, char **argv ) {
     if ( mpi_rank == mpi_root ) {
       ValType smax, smin, smean, frerr;
       check_u(former.matrixU(), matrix_u_true, smax, smin, smean);
-      check(matrix_a, former.matrixU(), former.matrixVt(), former.vectorS(), frerr);
+      check(matrix_a, former.matrixU(), former.matrixV(), former.vectorS(), frerr);
       auto iter    = integrator.iteration();
       auto time_s  = sketcher.time();
       auto time_o  = orthogonalizer.time();
@@ -320,7 +320,7 @@ void check_u(
 void check(
     const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_a,
     const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
-    const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_vt,
+    const mcnla::matrix::DenseMatrixRowMajor<ValType> &matrix_v,
     const mcnla::matrix::DenseVector<ValType>         &vector_s,
           ValType &frerr
 ) noexcept {
@@ -330,7 +330,7 @@ void check(
 
   // A_tmp -= U * S * V'
   mcnla::la::mm(""_, vector_s.diag(), matrix_u_tmp);
-  mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
+  mcnla::la::mm(matrix_u_tmp, matrix_v.t(), matrix_a_tmp, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
   frerr = mcnla::la::nrmf(matrix_a_tmp) / mcnla::la::nrmf(matrix_a);

@@ -45,20 +45,16 @@ namespace detail {
 //@{
 static inline index_t getrf(
     const index_t m, const index_t n, float *a, const index_t lda, index_t *ipiv
-) noexcept {index_t info; sgetrf_(&m, &n, a, &lda, ipiv, &info); return info;
-}
+) noexcept { index_t info; sgetrf_(&m, &n, a, &lda, ipiv, &info); return info; }
 static inline index_t getrf(
     const index_t m, const index_t n, double *a, const index_t lda, index_t *ipiv
-) noexcept {index_t info; dgetrf_(&m, &n, a, &lda, ipiv, &info); return info;
-}
+) noexcept { index_t info; dgetrf_(&m, &n, a, &lda, ipiv, &info); return info; }
 static inline index_t getrf(
     const index_t m, const index_t n, std::complex<float> *a, const index_t lda, index_t *ipiv
-) noexcept {index_t info; cgetrf_(&m, &n, a, &lda, ipiv, &info); return info;
-}
+) noexcept { index_t info; cgetrf_(&m, &n, a, &lda, ipiv, &info); return info; }
 static inline index_t getrf(
     const index_t m, const index_t n, std::complex<double> *a, const index_t lda, index_t *ipiv
-) noexcept {index_t info; zgetrf_(&m, &n, a, &lda, ipiv, &info); return info;
-}
+) noexcept { index_t info; zgetrf_(&m, &n, a, &lda, ipiv, &info); return info; }
 //@}
 
 }  // namespace detail

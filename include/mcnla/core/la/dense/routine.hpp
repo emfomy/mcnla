@@ -40,10 +40,12 @@
 #include <mcnla/core/la/dense/routine/getrfi.hpp>
 
 // LAPACK least squares
+#include <mcnla/core/la/dense/routine/geqrfg.hpp>
 #include <mcnla/core/la/dense/routine/gesvd.hpp>
 #include <mcnla/core/la/dense/routine/syev.hpp>
 
 // LAPACK auxiliary
+#include <mcnla/core/la/dense/routine/lacpy.hpp>
 #include <mcnla/core/la/dense/routine/larnv.hpp>
 
 #endif  // MCNLA_CORE_LA_DENSE_ROUTINE_HPP_

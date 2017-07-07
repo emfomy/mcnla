@@ -55,25 +55,29 @@ static inline index_t bdsqr(
     const char uplo, const index_t n, const index_t ncvt, const index_t nru, const index_t ncc,
     float *d, float *e, float *vt, const index_t ldvt, float *u, const index_t ldu,
     float *c, const index_t ldc, float *work
-) noexcept {index_t info; sbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, work, &info); return info;
+) noexcept {
+  index_t info; sbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, work, &info); return info;
 }
 static inline index_t bdsqr(
     const char uplo, const index_t n, const index_t ncvt, const index_t nru, const index_t ncc,
     double *d, double *e, double *vt, const index_t ldvt, double *u, const index_t ldu,
     double *c, const index_t ldc, double *work
-) noexcept {index_t info; dbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, work, &info); return info;
+) noexcept {
+  index_t info; dbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, work, &info); return info;
 }
 static inline index_t bdsqr(
     const char uplo, const index_t n, const index_t ncvt, const index_t nru, const index_t ncc,
     float *d, float *e, std::complex<float> *vt, const index_t ldvt, std::complex<float> *u, const index_t ldu,
     std::complex<float> *c, const index_t ldc, float *rwork
-) noexcept {index_t info; cbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, rwork, &info); return info;
+) noexcept {
+  index_t info; cbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, rwork, &info); return info;
 }
 static inline index_t gebrd(
     const char uplo, const index_t n, const index_t ncvt, const index_t nru, const index_t ncc,
     double *d, double *e, std::complex<double> *vt, const index_t ldvt, std::complex<double> *u, const index_t ldu,
     std::complex<double> *c, const index_t ldc, double *rwork
-) noexcept {index_t info; zbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, rwork, &info); return info;
+) noexcept {
+  index_t info; zbdsqr_(&uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu, c, &ldc, rwork, &info); return info;
 }
 //@}
 

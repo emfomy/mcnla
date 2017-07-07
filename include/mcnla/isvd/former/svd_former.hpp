@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Former<SvdFormerTag, _Val>
+  #define MCNLA_TMP Former<SvdFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP SvdFormer<_Val>
+  #define MCNLA_TMP SvdFormer<_Val, _jobv>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 MCNLA_TMP::Former(
     const Parameters<_Val> &parameters
 ) noexcept
@@ -39,7 +39,7 @@ MCNLA_TMP::Former(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
@@ -65,7 +65,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  matrix_a  The matrix A.
 /// @param  matrix_q  The matrix Q.
 ///
-template <typename _Val> template <class _Matrix>
+template <typename _Val, bool _jobv> template <class _Matrix>
 void MCNLA_TMP::runImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<_Val> &matrix_q
@@ -107,7 +107,7 @@ void MCNLA_TMP::runImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the singular values.
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
@@ -116,7 +116,7 @@ const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the left singular vectors.
 ///
-template <typename _Val>
+template <typename _Val, bool _jobv>
 const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
@@ -125,10 +125,11 @@ const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the right singular vectors.
 ///
-template <typename _Val>
-const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixVt() const noexcept {
+template <typename _Val, bool _jobv>
+const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixV() const noexcept {
   mcnla_assert_true(this->isComputed());
-  return matrix_vt_cut_;
+  mcnla_assert_true(_jobv);
+  return matrix_vt_cut_.t();
 }
 
 }  // namespace isvd

@@ -42,7 +42,7 @@ class CooVectorStorage
   : public CooStorage<_Core, _Val>,
     public CooIdx0Storage<_Core, index_t> {
 
-  friend class CooMatrixStorage<_Core, _Val>;
+  friend CooMatrixStorage<_Core, _Val>;
 
  private:
 

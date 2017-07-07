@@ -46,10 +46,6 @@ class DummyConverter
 
   using BaseType = StageWrapper<DummyConverter<_Val>>;
 
- public:
-
-//  using _Val = _Val;
-
  protected:
 
   using BaseType::parameters_;

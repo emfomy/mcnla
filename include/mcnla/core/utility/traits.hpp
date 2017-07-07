@@ -59,7 +59,7 @@ struct ValTraits {
   static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
   using RealType = _Val;
   using ComplexType = std::complex<_Val>;
-  static constexpr bool is_real = true;
+  static constexpr bool is_real    = true;
   static constexpr bool is_complex = false;
 };
 
@@ -74,7 +74,7 @@ struct ValTraits<std::complex<_Val>> {
   static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
   using RealType = _Val;
   using ComplexType = std::complex<_Val>;
-  static constexpr bool is_real = false;
+  static constexpr bool is_real    = false;
   static constexpr bool is_complex = true;
 };
 

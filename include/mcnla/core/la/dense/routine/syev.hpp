@@ -24,26 +24,25 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @copydoc  mcnla::la::SyevDriver::compute
+/// @copydoc  mcnla::la::DenseSyevDriver::compute
 ///
-/// @see  mcnla::la::SyevDriver
+/// @see  mcnla::la::DenseSyevDriver
 ///
 template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
 inline void syev(
     DenseSymmetricMatrix<_Val, _trans, _uplo> &a,
     DenseVector<RealValT<_Val>> &w
 ) noexcept {
-  SyevDriver<DenseSymmetricMatrix<_Val, _trans, _uplo>, _jobz> driver(a);
+  DenseSyevDriver<_jobz, _Val, _trans, _uplo> driver(a);
   driver(a, w);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <JobOption _jobz, Uplo _uplo = Uplo::LOWER, class _TypeA, class _TypeW>
+template <JobOption _jobz, class ..._Args>
 inline void syev(
-    _TypeA &&a,
-    _TypeW &&w
+    _Args&&... args
 ) noexcept {
-  syev<_jobz, _uplo>(a, w);
+  syev<_jobz>(args...);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

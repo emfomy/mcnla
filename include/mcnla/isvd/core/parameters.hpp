@@ -321,6 +321,24 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixUj() const noexcept {
   return retval({0_i, nrowRank()}, ""_);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix V.
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixV() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(ncolTotal(), rank());
+  return retval({0_i, ncol()}, ""_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix Vj (j-th row-block, where j is the MPI rank).
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixVj() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(ncolEach(), rank());
+  return retval({0_i, ncolRank()}, ""_);
+}
+
 }  // namespace isvd
 
 }  // namespace mcnla

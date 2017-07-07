@@ -10,6 +10,7 @@
 
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
 
+#include <mcnla/isvd/orthogonalizer/qr_orthogonalizer.hpp>
 #include <mcnla/isvd/orthogonalizer/svd_orthogonalizer.hpp>
 #include <mcnla/isvd/orthogonalizer/gramian_orthogonalizer.hpp>
 #include <mcnla/isvd/orthogonalizer/row_block_gramian_orthogonalizer.hpp>

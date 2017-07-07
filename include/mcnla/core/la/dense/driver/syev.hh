@@ -31,24 +31,19 @@ namespace la {
 ///
 /// @see  mcnla::la::syev
 ///
-template <class _Matrix, JobOption _jobz>
-class SyevDriver {
-
-  assertDenseSymmetricMatrix(_Matrix);
+template <JobOption _jobz, typename _Val, Trans _trans, Uplo _uplo>
+class DenseSyevDriver {
 
   static_assert(_jobz == 'N' || _jobz == 'V', "Job undefined!");
 
  private:
 
-  static constexpr Trans trans = _Matrix::trans;
-  static constexpr Uplo  uplo  = _Matrix::uplo;
+  using ValType        = _Val;
+  using MatrixType     = DenseSymmetricMatrix<_Val, _trans, _uplo>;
+  using VectorType     = DenseVector<_Val>;
+  using RealVectorType = DenseVector<RealValT<_Val>>;
 
-  using ValType        = ValT<_Matrix>;
-  using VectorType     = VectorT<_Matrix>;
-  using RealVectorType = RealT<VectorT<_Matrix>>;
-  using MatrixType     = _Matrix;
-
-  static constexpr bool is_real = traits::ValTraits<ValType>::is_real;
+  static constexpr bool is_real_ = traits::ValTraits<ValType>::is_real;
 
  protected:
 
@@ -64,24 +59,32 @@ class SyevDriver {
  public:
 
   // Constructor
-  inline SyevDriver() noexcept;
-  inline SyevDriver( const index_t size ) noexcept;
-  inline SyevDriver( const MatrixType &a ) noexcept;
+  inline DenseSyevDriver() noexcept;
+  inline DenseSyevDriver( const index_t size ) noexcept;
+  inline DenseSyevDriver( const MatrixType &a ) noexcept;
 
   // Operators
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeW>
   inline void operator()( _TypeA &&a, _TypeW &&w ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void operator()( MatrixType &a, VectorType &w ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Computes eigenvalues
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeW>
   inline void computeValues( _TypeA &&a, _TypeW &&w ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void computeValues( MatrixType &a, VectorType &w ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Resizes
   template <typename ..._Args>
   inline void reconstruct( _Args... args ) noexcept;
 
   // Get sizes
-  inline std::tuple<index_t> sizes() const noexcept;
+  inline std::tuple<index_t, index_t> sizes() const noexcept;
 
   // Gets workspaces
   inline       VectorType& getWork() noexcept;
@@ -95,10 +98,21 @@ class SyevDriver {
   template <JobOption __jobz = _jobz>
   inline void compute( MatrixType &a, RealVectorType &w ) noexcept;
 
-  // Queries
-  inline index_t query( const index_t size ) noexcept;
+  // Queries workspace size
+  inline index_t query() noexcept;
+  inline index_t rquery() noexcept;
 
 };
+
+/// @ingroup  la_dense_lapack_ls_module
+/// @see  DenseSyevDriver
+template <JobOption _jobz, typename _Val, Uplo _uplo = Uplo::UPPER>
+using DenseSyevDriverColMajor = DenseSyevDriver<_jobz, _Val, Trans::NORMAL, _uplo>;
+
+/// @ingroup  la_dense_lapack_ls_module
+template <JobOption _jobz, typename _Val, Uplo _uplo = Uplo::LOWER>
+/// @see  DenseSyevDriver
+using DenseSyevDriverRowMajor = DenseSyevDriver<_jobz, _Val, Trans::TRANS, _uplo>;
 
 }  // namespace la
 

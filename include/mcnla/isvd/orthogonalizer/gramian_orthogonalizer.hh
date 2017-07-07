@@ -47,10 +47,6 @@ class GramianOrthogonalizer
 
   using BaseType = StageWrapper<GramianOrthogonalizer<_Val>>;
 
- public:
-
-//  using _Val = _Val;
-
  protected:
 
   /// The name.
@@ -72,7 +68,7 @@ class GramianOrthogonalizer
   DenseMatrixRowMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixRowMajor<_Val>, 'N', 'O'> gesvd_driver_;
+  la::DenseGesvdDriverRowMajor<'N', 'O', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

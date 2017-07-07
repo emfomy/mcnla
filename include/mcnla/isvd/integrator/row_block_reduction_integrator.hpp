@@ -1,20 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/row_block_reduce_sum_integrator.hpp
-/// @brief   The reduce-sum integrator (row-block version).
+/// @file    include/mcnla/isvd/integrator/row_block_reduction_integrator.hpp
+/// @brief   The reduction integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HPP_
-#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HPP_
+#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HPP_
+#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HPP_
 
-#include <mcnla/isvd/integrator/row_block_reduce_sum_integrator.hh>
+#include <mcnla/isvd/integrator/row_block_reduction_integrator.hh>
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Integrator<RowBlockReduceSumIntegratorTag, _Val>
+  #define MCNLA_TMP Integrator<RowBlockReductionIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP RowBlockReduceSumIntegrator<_Val>
+  #define MCNLA_TMP RowBlockReductionIntegrator<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,4 +125,4 @@ void MCNLA_TMP::runImpl(
 
 #undef MCNLA_TMP
 
-#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HPP_
+#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HPP_

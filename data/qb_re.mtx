@@ -1,5 +1,5 @@
 %%MatrixMarket matrix array real general
-% The matrix Qbar from reduce-sum integrator (with N = 12)
+% The matrix Qbar from reduction integrator (with N = 12)
 101 11
  0.03929317825156019
  0.1403762403370943

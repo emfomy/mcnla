@@ -23,29 +23,31 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct SvdFormerTag {};
-template <typename _Val> using SvdFormer = Former<SvdFormerTag, _Val>;
+template <bool _jobv> struct SvdFormerTag {};
+template <typename _Val, bool _jobv = false> using SvdFormer = Former<SvdFormerTag<_jobv>, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
 /// The SVD former.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val   The value type.
+/// @tparam  _jobv  Computes V or not.
 ///
-template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Former<SvdFormerTag, _Val>
+template <typename _Val, bool _jobv>
+class Former<SvdFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, bool _jobv = false>
 class SvdFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<SvdFormer<_Val>> {
+  : public StageWrapper<SvdFormer<_Val, _jobv>> {
 
-  friend StageWrapper<SvdFormer<_Val>>;
+  friend StageWrapper<SvdFormer<_Val, _jobv>>;
 
  private:
 
-  using BaseType = StageWrapper<SvdFormer<_Val>>;
+  using BaseType = StageWrapper<SvdFormer<_Val, _jobv>>;
 
  protected:
 
@@ -80,7 +82,7 @@ class SvdFormer
   DenseMatrixColMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixColMajor<_Val>, 'S', 'O'> gesvd_driver_;
+  la::DenseGesvdDriverColMajor<'S', (_jobv ? 'O' : 'N'), _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -96,7 +98,7 @@ class SvdFormer
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
   inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<_Val>& matrixVt() const noexcept;
+  inline const DenseMatrixRowMajor<_Val>& matrixV() const noexcept;
 
  protected:
 

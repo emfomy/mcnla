@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/integrator/row_block_reduce_sum_integrator.hpp>
+#include <mcnla/isvd/integrator/row_block_reduction_integrator.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define COLLECTION_Q_PATH MCNLA_DATA_PATH "/qi.mtx"
-#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_rs.mtx"
+#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_re.mtx"
 
-TEST(RowBlockReduceSumIntegratorTest, Test) {
+TEST(RowBlockReductionIntegratorTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -38,7 +38,7 @@ TEST(RowBlockReduceSumIntegratorTest, Test) {
   parameters.sync();
 
   // Initializes integrator
-  mcnla::isvd::RowBlockReduceSumIntegrator<ValType> integrator(parameters);
+  mcnla::isvd::RowBlockReductionIntegrator<ValType> integrator(parameters);
   integrator.initialize();
 
   // Initializes converter

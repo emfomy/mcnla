@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/converter/matrix_from_rowblock_converter.hh
-/// @brief   The definition of the converter that converts a matrix from row-block version.
+/// @file    include/mcnla/isvd/converter/collection_from_row_block_converter.hh
+/// @brief   The definition of the converter that converts collection Q from row-block storage.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROWBLOCK_CONVERTER_HH_
-#define MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROWBLOCK_CONVERTER_HH_
+#ifndef MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROW_BLOCK_CONVERTER_HH_
+#define MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROW_BLOCK_CONVERTER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/converter/converter.hpp>
@@ -22,33 +22,29 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct MatrixFromRowBlockConverterTag {};
-template <typename _Val> using MatrixFromRowBlockConverter = Converter<MatrixFromRowBlockConverterTag, _Val>;
+struct CollectionFromRowBlockConverterTag {};
+template <typename _Val> using CollectionFromRowBlockConverter = Converter<CollectionFromRowBlockConverterTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_converter_module
-/// The converter that converts a matrix from row-block version.
+/// The converter that converts collection Q from row-block storage.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <class _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Converter<MatrixFromRowBlockConverterTag, _Val>
+class Converter<CollectionFromRowBlockConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class MatrixFromRowBlockConverter
+class CollectionFromRowBlockConverter
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<MatrixFromRowBlockConverter<_Val>> {
+  : public StageWrapper<CollectionFromRowBlockConverter<_Val>> {
 
-  friend StageWrapper<MatrixFromRowBlockConverter<_Val>>;
+  friend StageWrapper<CollectionFromRowBlockConverter<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<MatrixFromRowBlockConverter<_Val>>;
-
- public:
-
-//  using _Val = _Val;
+  using BaseType = StageWrapper<CollectionFromRowBlockConverter<_Val>>;
 
  protected:
 
@@ -69,7 +65,7 @@ class MatrixFromRowBlockConverter
   void initializeImpl() noexcept;
 
   // Converts data
-  void runImpl( const DenseMatrixRowMajor<_Val> &matrix, DenseMatrixRowMajor<_Val> &matrix_j ) noexcept;
+  void runImpl( DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj, DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q ) noexcept;
 
 };
 
@@ -77,4 +73,4 @@ class MatrixFromRowBlockConverter
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROWBLOCK_CONVERTER_HH_
+#endif  // MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROW_BLOCK_CONVERTER_HH_

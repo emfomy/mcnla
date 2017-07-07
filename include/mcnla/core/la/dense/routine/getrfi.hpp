@@ -23,31 +23,17 @@ namespace mcnla {
 namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The detail namespace
-//
-namespace detail {
-
-template <typename _Val, Trans _trans>
-inline void getrfiImpl(
-    DenseMatrix<_Val, _trans> &a
-) noexcept {
-  GetrfiDriver<DenseMatrix<_Val, _trans>> driver(a);
-  driver(a);
-}
-
-}  // namespace detail
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_le_module
-/// @copydoc  mcnla::la::GetrfiDriver::compute
+/// @copydoc  mcnla::la::DenseGetrfiDriver::compute
 ///
-/// @see  mcnla::la::GetrfiDriver
+/// @see  mcnla::la::DenseGetrfiDriver
 ///
 template <typename _Val, Trans _trans>
 inline void getrfi(
     DenseMatrix<_Val, _trans> &a
 ) noexcept {
-  detail::getrfiImpl(a);
+  DenseGetrfiDriver<_Val, _trans> driver(a);
+  driver(a);
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -55,7 +41,7 @@ template <typename _Val, Trans _trans>
 inline void getrfi(
     DenseMatrix<_Val, _trans> &&a
 ) noexcept {
-  detail::getrfiImpl(a);
+  getrfi(a);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

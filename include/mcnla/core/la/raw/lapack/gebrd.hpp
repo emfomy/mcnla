@@ -51,26 +51,22 @@ static inline index_t gebrd(
     const index_t m, const index_t n, float *a, const index_t lda,
     float *d, float *e, float *tauq, float *taup,
     float *work, const index_t lwork
-) noexcept {index_t info; sgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; sgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info; }
 static inline index_t gebrd(
     const index_t m, const index_t n, double *a, const index_t lda,
     double *d, double *e, double *tauq, double *taup,
     double *work, const index_t lwork
-) noexcept {index_t info; dgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; dgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info; }
 static inline index_t gebrd(
     const index_t m, const index_t n, std::complex<float> *a, const index_t lda,
     float *d, float *e, std::complex<float> *tauq, std::complex<float> *taup,
     std::complex<float> *work, const index_t lwork
-) noexcept {index_t info; cgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; cgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info; }
 static inline index_t gebrd(
     const index_t m, const index_t n, std::complex<double> *a, const index_t lda,
     double *d, double *e, std::complex<double> *tauq, std::complex<double> *taup,
     std::complex<double> *work, const index_t lwork
-) noexcept {index_t info; zgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info;
-}
+) noexcept { index_t info; zgebrd_(&m, &n, a, &lda, d, e, tauq, taup, work, &lwork, &info); return info; }
 //@}
 
 }  // namespace detail
