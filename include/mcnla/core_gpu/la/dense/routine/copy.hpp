@@ -32,7 +32,7 @@ inline void copy(
           DenseVectorGpu<_Val> &y
 ) noexcept {
   mcnla_assert_eq(x.sizes(), y.sizes());
-  detail::gpu::copy(x.length(), x.valPtr(), x.stride(), y.valPtr(), y.stride());
+  detail::gpu::copy(x.len(), x.valPtr(), x.stride(), y.valPtr(), y.stride());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

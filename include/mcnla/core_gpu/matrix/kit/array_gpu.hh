@@ -30,7 +30,7 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class ArrS<GpuTag, _Val>
-  : public ArrayBase<CpuTag, _Val> {
+  : public ArrayBase<GpuTag, _Val> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class ArrayGpu
   : public ArrayBase_<GpuTag, _Val> {

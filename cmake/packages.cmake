@@ -70,6 +70,13 @@ if(MCNLA_OMP)
   endif()
 
   unset(OpenMP)
+elseif(MCNLA_USE_GPU)
+  find_package(OpenMP ${findtype})
+  if(OpenMP_FOUND)
+    set(COMFLGS "${COMFLGS} ${OpenMP_CXX_FLAGS}")
+    set(LNKFLGS "${LNKFLGS} ${OpenMP_CXX_FLAGS}")
+  endif()
+  unset(OpenMP)
 endif()
 
 # CUDA & MAGMA
