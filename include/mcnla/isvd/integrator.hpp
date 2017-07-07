@@ -18,7 +18,7 @@
 #include <mcnla/isvd/integrator/row_block_gramian_wen_yin_integrator.hpp>
 
 // Reduce-sum
-#include <mcnla/isvd/integrator/row_block_reduce_sum_integrator.hpp>
+#include <mcnla/isvd/integrator/row_block_reduction_integrator.hpp>
 
 // Extrinsic mean
 #include <mcnla/isvd/integrator/row_block_extrinsic_mean_integrator.hpp>

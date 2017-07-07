@@ -38,7 +38,7 @@ add_mpi_check(isvd/integrator/row_block_kolmogorov_nagumo_integrator "Row-Block 
 add_mpi_check(isvd/integrator/row_block_gramian_kolmogorov_nagumo_integrator "Row-Block Gramian Kolmogorov-Nagumo-Type Integrator test" "RowBlockGramianKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_wen_yin_integrator "Row-Block Wen-Yin Line Search Integrator test" "RowBlockWenYinIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_gramian_wen_yin_integrator "Row-Block Gramian Wen-Yin Line Search Integrator test" "RowBlockGramianWenYinIntegratorTest" 1 2 3 4 6 12)
-add_mpi_check(isvd/integrator/row_block_reduce_sum_integrator "Row-Block Reduce-Sum Integrator test" "RowBlockReduceSumIntegratorTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/integrator/row_block_reduction_integrator "Row-Block Reduction Integrator test" "RowBlockReductionIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_extrinsic_mean_integrator "Row-Block Extrinsic Mean Integrator test" "RowBlockExtrinsicMeanIntegratorTest" 1 2 3 4 6 12)
 
 add_mpi_check(isvd/former/svd_former "SVD Former test" "SvdFormerTest" 1)
