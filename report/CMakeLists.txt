@@ -16,7 +16,7 @@ add_report(integrator row_block_kolmogorov_nagumo_integrator)
 add_report(integrator row_block_gramian_kolmogorov_nagumo_integrator)
 add_report(integrator row_block_wen_yin_integrator)
 add_report(integrator row_block_gramian_wen_yin_integrator)
-add_report(integrator row_block_reduce_sum_integrator)
+add_report(integrator row_block_reduction_integrator)
 
 # Add rule 'build_report'
 add_custom_target(

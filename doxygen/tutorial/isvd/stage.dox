@@ -47,11 +47,11 @@ namespace isvd {
 
   Nota the Gramian version is slower unless the number of iteration is extreme large.
 
-  <h4>Reduce-Sum %Integrator</h4>
+  <h4>Reduction %Integrator</h4>
 
-  The @ref RowBlockReduceSumIntegrator finds the average using divide and conquer algorithm.
+  The @ref RowBlockReductionIntegrator finds the average using divide and conquer algorithm.
 
-  Nota the reduce-sum integrator is faster but less accurate.
+  Nota the reduction integrator is faster but less accurate.
 
   <h3>%Former</h3>
 

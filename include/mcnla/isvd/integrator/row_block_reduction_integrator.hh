@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/integrator/row_block_reduce_sum_integrator.hh
-/// @brief   The definition of reduce-sum integrator (row-block version).
+/// @file    include/mcnla/isvd/integrator/row_block_reduction_integrator.hh
+/// @brief   The definition of reduction integrator (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HH_
-#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HH_
+#ifndef MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HH_
+#define MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/integrator/integrator.hpp>
@@ -23,29 +23,29 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockReduceSumIntegratorTag {};
-template <typename _Val> using RowBlockReduceSumIntegrator = Integrator<RowBlockReduceSumIntegratorTag, _Val>;
+struct RowBlockReductionIntegratorTag {};
+template <typename _Val> using RowBlockReductionIntegrator = Integrator<RowBlockReductionIntegratorTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_integrator_module
-/// The reduce-sum integrator (row-block version).
+/// The reduction integrator (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockReduceSumIntegratorTag, _Val>
+class Integrator<RowBlockReductionIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockReduceSumIntegrator
+class RowBlockReductionIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockReduceSumIntegrator<_Val>> {
+  : public StageWrapper<RowBlockReductionIntegrator<_Val>> {
 
-  friend StageWrapper<RowBlockReduceSumIntegrator<_Val>>;
+  friend StageWrapper<RowBlockReductionIntegrator<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockReduceSumIntegrator<_Val>>;
+  using BaseType = StageWrapper<RowBlockReductionIntegrator<_Val>>;
 
  protected:
 
@@ -98,4 +98,4 @@ class RowBlockReduceSumIntegrator
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCE_SUM_INTEGRATOR_HH_
+#endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HH_
