@@ -1,11 +1,13 @@
 #include <gtest/gtest.h>
-#include <mcnla/isvd/sketcher/row_block_column_sampling_sketcher.hpp>
+#pragma warning
+// #include <mcnla/isvd_gpu/sketcher/row_block_gaussian_projection_sketcher_gpu.hpp>
+#include <mcnla.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define MATRIX_A_PATH MCNLA_DATA_PATH "/a.mtx"
 
-TEST(RowBlockColumnSamplingSketcherTest, Test) {
+TEST(RowBlockGaussianProjectionSketcherGpuTest, Test) {
   using ValType = double;
   const auto mpi_comm = MPI_COMM_WORLD;
   const auto mpi_root = 0;
@@ -27,7 +29,7 @@ TEST(RowBlockColumnSamplingSketcherTest, Test) {
   parameters.sync();
 
   // Initializes sketcher
-  mcnla::isvd::RowBlockColumnSamplingSketcher<ValType> sketcher(parameters);
+  mcnla::isvd::RowBlockGaussianProjectionSketcherGpu<ValType> sketcher(parameters);
   sketcher.initialize();
 
   // Creates matrices

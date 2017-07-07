@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    src/isvd.cpp
+/// @file    src/isvd_dense.cpp
 /// @brief   The iSVD driver for dense matrix
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
@@ -8,6 +8,22 @@
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
+
+#ifndef  STYPE
+#define STYPE RowBlockGaussianProjectionSketcher
+#endif  // STYPE
+
+#ifndef  OTYPE
+#define OTYPE RowBlockGramianOrthogonalizer
+#endif  // OTYPE
+
+#ifndef  ITYPE
+#define ITYPE RowBlockWenYinIntegrator
+#endif  // ITYPE
+
+#ifndef  FTYPE
+#define FTYPE RowBlockGramianFormer
+#endif  // FTYPE
 
 void check( const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
             const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_uj,
@@ -103,10 +119,10 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Allocate stages
-  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters);
-  mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
-  mcnla::isvd::RowBlockWenYinIntegrator<double> integrator(parameters);
-  mcnla::isvd::RowBlockGramianFormer<double, true> former(parameters);
+  mcnla::isvd::STYPE<double> sketcher(parameters);
+  mcnla::isvd::OTYPE<double> orthogonalizer(parameters);
+  mcnla::isvd::ITYPE<double> integrator(parameters);
+  mcnla::isvd::FTYPE<double, true> former(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> fe_converter(parameters);
   mcnla::isvd::MatrixFromColBlockConverter<double> fe_converter2(parameters);
 

@@ -81,7 +81,7 @@ inline void copy(
           DenseMatrixGpu<_Val, _trans> &b
 ) noexcept {
   mcnla_assert_eq(a.sizes(), b.sizes());
-  detail::gpu::setmatrix(a.dim0, a.dim1(), a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
+  detail::gpu::setmatrix(a.dim0(), a.dim1(), a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -104,7 +104,7 @@ inline void copy(
           DenseMatrix<_Val, _trans> &b
 ) noexcept {
   mcnla_assert_eq(a.sizes(), b.sizes());
-  detail::gpu::getmatrix(a.dim0, a.dim1(), a.len(), a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
+  detail::gpu::getmatrix(a.dim0(), a.dim1(), a.valPtr(), a.pitch(), b.valPtr(), b.pitch());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
