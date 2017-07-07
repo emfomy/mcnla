@@ -10,7 +10,7 @@
 
 #include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/matrix_wrapper.hpp>
-#include <mcnla/core/matrix/base/sparse_wrapper.hpp>
+#include <mcnla/core/matrix/base/sparse_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_matrix_storage.hpp>
@@ -23,41 +23,9 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, Trans _trans> class CooMatrix;
-template <typename _Val> class CooVector;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
 //
 namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO matrix traits.
-///
-template <typename _Val, Trans _trans>
-struct Traits<matrix::CooMatrix<_Val, _trans>> {
-
-  static constexpr Trans trans = _trans;
-
-  using ValType           = _Val;
-
-  using RealType          = matrix::CooMatrix<RealValT<_Val>, _trans>;
-  using ComplexType       = matrix::CooMatrix<ComplexValT<_Val>, _trans>;
-
-  using VectorType        = matrix::CooVector<_Val>;
-  using MatrixType        = matrix::CooMatrix<_Val, _trans>;
-
-  using IteratorType      = matrix::CooMatrixIterator<_Val, _trans>;
-  using ConstIteratorType = matrix::CooMatrixConstIterator<_Val, _trans>;
-};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO matrix instantiation type traits.
@@ -65,11 +33,10 @@ struct Traits<matrix::CooMatrix<_Val, _trans>> {
 template <typename _Type>
 struct IsCooMatrix : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsCooMatrix
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans>
 struct IsCooMatrix<matrix::CooMatrix<_Val, _trans>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO matrix assert.
@@ -95,15 +62,15 @@ template <typename _Val, Trans _trans = Trans::NORMAL>
 class CooMatrix
   : public CooMatrixStorage<CpuTag, _Val>,
     public MatrixWrapper<CooMatrix<_Val, _trans>>,
-    public SparseWrapper<CooMatrix<_Val, _trans>>,
-    public IterableWrapper<CooMatrix<_Val, _trans>>,
+    public SparseOstreamWrapper<CooMatrix<_Val, _trans>>,
+    public IterableWrapper<CooMatrix<_Val, _trans>, CooMatrixIterator<_Val, _trans>, CooMatrixConstIterator<_Val, _trans>>,
     public InvertibleWrapper<CooMatrix<_Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
 
   friend MatrixWrapper<CooMatrix<_Val, _trans>>;
-  friend SparseWrapper<CooMatrix<_Val, _trans>>;
-  friend IterableWrapper<CooMatrix<_Val, _trans>>;
+  friend SparseOstreamWrapper<CooMatrix<_Val, _trans>>;
+  friend IterableWrapper<CooMatrix<_Val, _trans>, CooMatrixIterator<_Val, _trans>, CooMatrixConstIterator<_Val, _trans>>;
   friend InvertibleWrapper<CooMatrix<_Val, _trans>>;
 
  public:
@@ -114,9 +81,6 @@ class CooMatrix
   using ValArrayType      = Array<_Val>;
   using IdxArrayType      = Array<index_t>;
   using SizesType         = std::tuple<index_t, index_t>;
-
-  using RealType          = CooMatrix<RealValT<_Val>, _trans>;
-  using ComplexType       = CooMatrix<ComplexValT<_Val>, _trans>;
 
   using VectorType        = CooVector<_Val>;
   using MatrixType        = CooMatrix<_Val, _trans>;
@@ -174,8 +138,8 @@ class CooMatrix
   inline index_t pos( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol, const index_t nnz ) noexcept;
 
   // Transpose/Conjugate
@@ -210,17 +174,17 @@ class CooMatrix
   inline       IdxArrayType& toIdx1(       IdxArrayType &rowidx,       IdxArrayType &colidx ) const noexcept;
   inline const IdxArrayType& toIdx1( const IdxArrayType &rowidx, const IdxArrayType &colidx ) const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType)
 
 };
 
 /// @ingroup  matrix_coo_module
+/// @see  CooMatrix
 template <typename _Val>
 using CooMatrixColMajor = CooMatrix<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_coo_module
+/// @see  CooMatrix
 template <typename _Val>
 using CooMatrixRowMajor = CooMatrix<_Val, Trans::TRANS>;
 

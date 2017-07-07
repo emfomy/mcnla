@@ -58,8 +58,8 @@ inline void copy(
     const CooMatrix<_Val, _transa> &a,
           DenseMatrix<_Val, _transb> &b
 ) noexcept {
-  static_assert(!isConj(_transa), "COO COPY does not support conjugate matrices!");
-  static_assert(!isConj(_transb), "COO COPY does not support conjugate matrices!");
+  static_assert(!isConj(_transa), "COO COPY for conjugate matrices is not implemented!");
+  static_assert(!isConj(_transb), "COO COPY for conjugate matrices is not implemented!");
 
   mcnla_assert_eq(a.sizes(), b.sizes());
 

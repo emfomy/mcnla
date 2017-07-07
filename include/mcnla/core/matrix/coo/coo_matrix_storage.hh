@@ -63,7 +63,6 @@ class CooMatrixStorage
   /// The size in the second dimension.
   index_t dim1_;
 
-  using BaseType::val_;
   using BaseType::nnz_;
 
  public:

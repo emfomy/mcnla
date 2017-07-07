@@ -11,6 +11,12 @@
 #include <mcnla/isvd/orthogonalizer/gramian_orthogonalizer.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP Orthogonalizer<GramianOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP GramianOrthogonalizer<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,8 +31,8 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-GramianOrthogonalizer<_Val>::Orthogonalizer(
-    const Parameters<ValType> &parameters
+MCNLA_TMP::Orthogonalizer(
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -34,7 +40,7 @@ GramianOrthogonalizer<_Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void GramianOrthogonalizer<_Val>::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto num_sketch_each = parameters_.numSketchEach();
@@ -52,8 +58,8 @@ void GramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val>
-void GramianOrthogonalizer<_Val>::runImpl(
-    DenseMatrixCollection201<ValType> &collection_q
+void MCNLA_TMP::runImpl(
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
 
   const auto nrow            = parameters_.nrow();
@@ -76,7 +82,7 @@ void GramianOrthogonalizer<_Val>::runImpl(
     la::mm(collection_q(i).t(), collection_q(i), collection_w_(i));
   }
 
-  // Compute the eigen-decomposition of Wi -> Wi' * Si * Wi
+  // eig(Wi) = Wi' * Si * Wi
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
     gesvd_driver_(collection_w_(i), matrix_s_(""_, i), matrix_empty_, matrix_empty_);
   }
@@ -85,9 +91,9 @@ void GramianOrthogonalizer<_Val>::runImpl(
   for ( auto &v : matrix_s_ ) {
     v = std::sqrt(v);
   }
-  la::copy(matrix_qs.vectorize(), collection_tmp_.unfold().vectorize());
+  la::copy(matrix_qs.vec(), collection_tmp_.unfold().vec());
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
-    la::sm(matrix_s_(""_, i).viewDiagonal().inv(), collection_w_(i));
+    la::sm(matrix_s_(""_, i).diag().inv(), collection_w_(i));
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_q(i));
   }
 
@@ -97,5 +103,7 @@ void GramianOrthogonalizer<_Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HPP_

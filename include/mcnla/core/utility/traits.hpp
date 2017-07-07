@@ -21,8 +21,20 @@ namespace mcnla {
 namespace traits {
 
 /// @ingroup  utility_module
-template <typename... _Args>
+template <typename ..._Args>
+using TrueType = std::true_type;
+
+/// @ingroup  utility_module
+template <typename ..._Args>
 using FalseType = std::false_type;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+struct RealTraitsTag {};
+struct ComplexTraitsTag {};
+struct ValTraitsTag {};
+struct VectorTraitsTag {};
+struct MatrixTraitsTag {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
@@ -30,10 +42,11 @@ using FalseType = std::false_type;
 ///
 /// @tparam  _Type  The type.
 ///
-template <typename _Type>
-struct Traits {
-  static_assert(traits::FalseType<_Type>::value, "Error using non-specialized traits!");
-};
+template <typename _Type, class _tag = void>
+struct Traits;
+
+#define MCNLA_TRAITS_DEF( _tag, _Type, _value ) \
+  struct Traits<_Type, _tag ## TraitsTag> { using Type = _value; };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
@@ -46,13 +59,13 @@ struct ValTraits {
   static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
   using RealType = _Val;
   using ComplexType = std::complex<_Val>;
-  static constexpr bool is_real = true;
+  static constexpr bool is_real    = true;
   static constexpr bool is_complex = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  utility_module
-/// @copydoc ValTraits
+/// @copydoc  ValTraits
 ///
 /// @tparam  _Val  The value type.
 ///
@@ -61,67 +74,31 @@ struct ValTraits<std::complex<_Val>> {
   static_assert(std::is_arithmetic<_Val>::value, "'_Val' must be a arithmetic type!");
   using RealType = _Val;
   using ComplexType = std::complex<_Val>;
-  static constexpr bool is_real = false;
+  static constexpr bool is_real    = false;
   static constexpr bool is_complex = true;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The true type.
-///
-template <class _Type>
-struct True {
-  static constexpr bool value = true;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The false type.
-///
-template <class _Type>
-struct False {
-  static constexpr bool value = false;
 };
 
 }  // namespace traits
 
 /// @ingroup  utility_module
 template <typename _Derived>
-using RealT = typename traits::Traits<_Derived>::RealType;
+using RealT = typename traits::Traits<_Derived, traits::RealTraitsTag>::Type;
 
 /// @ingroup  utility_module
 template <typename _Derived>
-using ComplexT = typename traits::Traits<_Derived>::ComplexType;
+using ComplexT = typename traits::Traits<_Derived, traits::ComplexTraitsTag>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using ValT = typename traits::Traits<_Derived>::ValType;
+using ValT = typename traits::Traits<_Derived, traits::ValTraitsTag>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using IdxT = typename traits::Traits<_Derived>::IdxType;
+using VectorT = typename traits::Traits<_Derived, traits::VectorTraitsTag>::Type;
 
 /// @ingroup  utility_module
 template <class _Derived>
-using VectorT = typename traits::Traits<_Derived>::VectorType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using MatrixT = typename traits::Traits<_Derived>::MatrixType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using CollectionT = typename traits::Traits<_Derived>::CollectionType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using ContainerT = typename traits::Traits<_Derived>::ContainerType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using IteratorT = typename traits::Traits<_Derived>::IteratorType;
-
-/// @ingroup  utility_module
-template <class _Derived>
-using ConstIteratorT = typename traits::Traits<_Derived>::ConstIteratorType;
+using MatrixT = typename traits::Traits<_Derived, traits::MatrixTraitsTag>::Type;
 
 /// @ingroup  utility_module
 template <typename _Val>

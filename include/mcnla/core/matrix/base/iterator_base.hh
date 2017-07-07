@@ -24,27 +24,21 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The iterator interface.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Derived    The derived type.
+/// @tparam  _Container  The container type.
+/// @tparam  _Elem       The element type.
+/// @tparam  _ElemRef    The reference type of element.
+/// @tparam  _ElemPtr    The pointer type of element.
 ///
-template <class _Derived>
-class IteratorBase
-  : public std::iterator<std::random_access_iterator_tag, typename traits::Traits<_Derived>::ElemType> {
-
- private:
-
-  static constexpr index_t ndim = traits::Traits<_Derived>::ndim;
-  using ElemType      = typename traits::Traits<_Derived>::ElemType;
-  using ElemRefType   = typename traits::Traits<_Derived>::ElemRefType;
-  using ElemPtrType   = typename traits::Traits<_Derived>::ElemPtrType;
-  using ContainerType = ContainerT<_Derived>;
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef = _Elem&, typename _ElemPtr = _Elem*>
+class IteratorBase : public std::iterator<std::random_access_iterator_tag, _Elem> {
 
  protected:
 
   /// The container.
-  ContainerType *container_;
+  _Container *container_;
 
   /// The iterator index.
   index_t itidx_;
@@ -53,15 +47,15 @@ class IteratorBase
 
   // Constructors
   inline IteratorBase() noexcept;
-  inline IteratorBase( ContainerType *container, const index_t itidx = 0 ) noexcept;
+  inline IteratorBase( _Container *container, const index_t itidx = 0 ) noexcept;
   inline IteratorBase( const IteratorBase &other ) noexcept;
 
   // Assignment operators
   inline _Derived& operator=( const IteratorBase &other ) noexcept;
 
   // Member access operators
-  inline ElemRefType operator*() const noexcept;
-  inline ElemPtrType operator->() const noexcept;
+  inline _ElemRef operator*() const noexcept;
+  inline _ElemPtr operator->() const noexcept;
 
   // Comparison operators
   inline bool operator==( const IteratorBase &other ) const noexcept;
@@ -82,11 +76,11 @@ class IteratorBase
   inline _Derived  operator-(  const index_t num ) const noexcept;
 
   inline index_t operator-( const IteratorBase &other ) const noexcept;
-  template <class __Derived>
-  friend inline __Derived operator+( const index_t num, const IteratorBase<__Derived> iterator ) noexcept;
+  template <class __Derived, typename ...__Args>
+  friend inline __Derived operator+( const index_t num, const IteratorBase<__Derived, __Args...> iterator ) noexcept;
 
   // Gets data
-  inline ContainerType* container() const noexcept;
+  inline _Container* container() const noexcept;
   inline index_t        itidx() const noexcept;
 
   // Sets to begin/end
@@ -94,14 +88,12 @@ class IteratorBase
   inline _Derived& setEnd() noexcept;
 
   // Gets the begin/end iterator
-  static inline _Derived beginImpl( ContainerType *container ) noexcept;
-  static inline _Derived endImpl( ContainerType *container ) noexcept;
+  static inline _Derived beginImpl( _Container *container ) noexcept;
+  static inline _Derived endImpl( _Container *container ) noexcept;
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

@@ -23,6 +23,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val>
+using DenseDiagonalMatrixBase = DenseDiagonalMatrixBase_<_Core, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix base class.
 ///
@@ -30,9 +35,13 @@ namespace matrix {
 /// @tparam  _Val    The value type.
 ///
 template <class _Core, typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseDiagonalMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseDiagonalMatrixBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
-    public MatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
+    public DenseMatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
     public InvertibleWrapper<DiMatS<_Core, DenseTag, _Val>> {
 
  private:
@@ -40,15 +49,13 @@ class DenseDiagonalMatrixBase
   using DerivedType = DiMatS<_Core, DenseTag, _Val>;
 
   friend MatrixWrapper<DerivedType>;
+  friend DenseMatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
 
   using ValType       = _Val;
   using ValArrayType  = ArrS<_Core, _Val>;
-
-  using RealType      = DiMatS<_Core, DenseTag, RealValT<_Val>>;
-  using ComplexType   = DiMatS<_Core, DenseTag, ComplexValT<_Val>>;
 
   using VectorType    = GeVecS<_Core, DenseTag, _Val>;
   using MatrixType    = DiMatS<_Core, DenseTag, _Val>;
@@ -68,10 +75,10 @@ class DenseDiagonalMatrixBase
   inline DenseDiagonalMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseDiagonalMatrixBase( const index_t size, const index_t pitch,
                                   const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseDiagonalMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseDiagonalMatrixBase( const DenseDiagonalMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseDiagonalMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;
@@ -85,31 +92,27 @@ class DenseDiagonalMatrixBase
   inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
 
   // Transpose/Conjugate
   inline       TransposeType& t() noexcept;
   inline const TransposeType& t() const noexcept;
 
   // Changes view
-  inline       VectorType& viewVector() noexcept;
-  inline const VectorType& viewVector() const noexcept;
-
-  // Gets vector
-  inline       VectorType& vectorize() noexcept;
-  inline const VectorType& vectorize() const noexcept;
+  inline       VectorType& vec() noexcept;
+  inline const VectorType& vec() const noexcept;
 
  protected:
 
   // Gets information
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
+  inline index_t mrowImpl() const noexcept;
+  inline index_t mcolImpl() const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-  CRTP_DERIVED(DerivedType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

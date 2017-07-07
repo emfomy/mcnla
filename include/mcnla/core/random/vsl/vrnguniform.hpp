@@ -31,14 +31,17 @@ namespace detail {
 ///
 //@{
 static inline index_t vRngUniform(
-    const index_t method, VSLStreamStatePtr stream, const index_t n, int *r, const int a, const int b
-) noexcept { return viRngUniform(method, stream, n, r, a, b); }
-static inline index_t vRngUniform(
     const index_t method, VSLStreamStatePtr stream, const index_t n, float *r, const float a, const float b
-) noexcept { return vsRngUniform(method, stream, n, r, a, b); }
+) noexcept { return vsrnguniform_(&method, &stream, &n, r, &a, &b); }
 static inline index_t vRngUniform(
     const index_t method, VSLStreamStatePtr stream, const index_t n, double *r, const double a, const double b
-) noexcept { return vdRngUniform(method, stream, n, r, a, b); }
+) noexcept { return vdrnguniform_(&method, &stream, &n, r, &a, &b); }
+static inline index_t vRngUniform(
+    const index_t method, VSLStreamStatePtr stream, const index_t n, int32_t *r, const int32_t a, const int32_t b
+) noexcept { return virnguniform_(&method, &stream, &n, r, &a, &b); }
+static inline index_t vRngUniform(
+    const index_t method, VSLStreamStatePtr stream, const index_t n, int64_t *r, const int64_t a, const int64_t b
+) noexcept = delete;
 //@}
 
 }  // namespace detail

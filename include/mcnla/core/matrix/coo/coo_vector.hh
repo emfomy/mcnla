@@ -10,7 +10,7 @@
 
 #include <mcnla/core/matrix/coo/def.hpp>
 #include <mcnla/core/matrix/base/vector_wrapper.hpp>
-#include <mcnla/core/matrix/base/sparse_wrapper.hpp>
+#include <mcnla/core/matrix/base/sparse_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/coo/coo_vector_storage.hpp>
@@ -22,37 +22,9 @@
 namespace mcnla {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val> class CooVector;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The traits namespace.
 //
 namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The COO vector traits.
-///
-template <typename _Val>
-struct Traits<matrix::CooVector<_Val>> {
-
-  using ValType           = _Val;
-
-  using RealType          = matrix::CooVector<RealValT<_Val>>;
-  using ComplexType       = matrix::CooVector<ComplexValT<_Val>>;
-
-  using VectorType        = matrix::CooVector<_Val>;
-
-  using IteratorType      = matrix::CooVectorIterator<_Val>;
-  using ConstIteratorType = matrix::CooVectorConstIterator<_Val>;
-};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO vector instantiation type traits.
@@ -60,11 +32,10 @@ struct Traits<matrix::CooVector<_Val>> {
 template <typename _Type>
 struct IsCooVector : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsCooVector
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
 struct IsCooVector<matrix::CooVector<_Val>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The COO vector assert.
@@ -89,13 +60,13 @@ template <typename _Val>
 class CooVector
   : public CooVectorStorage<CpuTag, _Val>,
     public VectorWrapper<CooVector<_Val>>,
-    public SparseWrapper<CooVector<_Val>>,
-    public IterableWrapper<CooVector<_Val>>,
+    public SparseOstreamWrapper<CooVector<_Val>>,
+    public IterableWrapper<CooVector<_Val>, CooVectorIterator<_Val>, CooVectorConstIterator<_Val>>,
     public InvertibleWrapper<CooVector<_Val>> {
 
   friend VectorWrapper<CooVector<_Val>>;
-  friend SparseWrapper<CooVector<_Val>>;
-  friend IterableWrapper<CooVector<_Val>>;
+  friend SparseOstreamWrapper<CooVector<_Val>>;
+  friend IterableWrapper<CooVector<_Val>, CooVectorIterator<_Val>, CooVectorConstIterator<_Val>>;
   friend InvertibleWrapper<CooVector<_Val>>;
 
  public:
@@ -104,9 +75,6 @@ class CooVector
   using ValArrayType      = Array<_Val>;
   using IdxArrayType      = Array<index_t>;
   using SizesType         = std::tuple<index_t>;
-
-  using RealType          = CooVector<RealValT<_Val>>;
-  using ComplexType       = CooVector<ComplexValT<_Val>>;
 
   using VectorType        = CooVector<_Val>;
 
@@ -121,11 +89,11 @@ class CooVector
 
   // Constructors
   inline CooVector() noexcept;
-  inline CooVector( const index_t length, const index_t nnz = 0 ) noexcept;
+  inline CooVector( const index_t len, const index_t nnz = 0 ) noexcept;
   inline CooVector( const SizesType sizes, const index_t nnz = 0 ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz, const index_t capacity ) noexcept;
+  inline CooVector( const index_t len, const index_t nnz, const index_t capacity ) noexcept;
   inline CooVector( const SizesType sizes, const index_t nnz, const index_t capacity ) noexcept;
-  inline CooVector( const index_t length, const index_t nnz,
+  inline CooVector( const index_t len, const index_t nnz,
                     const ValArrayType &val, const IdxArrayType &idx0, const index_t offset = 0 ) noexcept;
   inline CooVector( const CooVector &other ) noexcept;
 
@@ -153,22 +121,20 @@ class CooVector
   inline index_t pos( const index_t idx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t length, const index_t nnz = 0 ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
+  inline void resize( const index_t len, const index_t nnz = 0 ) noexcept;
 
  protected:
 
   // Gets information
-  inline index_t lengthImpl() const noexcept;
+  inline index_t lenImpl() const noexcept;
 
   // Convert sizes to dims
   inline index_t toDim0( const SizesType sizes ) const noexcept;
-  inline index_t toDim0( const index_t length ) const noexcept;
+  inline index_t toDim0( const index_t len ) const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType)
 
 };
 

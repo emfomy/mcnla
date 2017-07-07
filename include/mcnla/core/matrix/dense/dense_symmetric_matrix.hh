@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_symmetric_matrix_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
@@ -26,34 +26,15 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense symmetric matrix traits.
-///
-template <typename _Val, Trans _trans, Uplo _uplo>
-struct Traits<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> {
-
-  static constexpr Trans trans = _trans;
-  static constexpr Uplo uplo = _uplo;
-
-  using ValType     = _Val;
-
-  using RealType    = matrix::DenseSymmetricMatrix<RealValT<_Val>, _trans, _uplo>;
-  using ComplexType = matrix::DenseSymmetricMatrix<ComplexValT<_Val>, _trans, _uplo>;
-
-  using VectorType  = matrix::DenseVector<_Val>;
-  using MatrixType  = matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix instantiation type traits.
 ///
 template <typename _Type>
 struct IsDenseSymmetricMatrix : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseSymmetricMatrix
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans, Uplo _uplo>
 struct IsDenseSymmetricMatrix<matrix::DenseSymmetricMatrix<_Val, _trans, _uplo>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix assert.
@@ -79,13 +60,14 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class SyMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrix
+  : public DenseSymmetricMatrixBase_<CpuTag, _Val, _trans, _uplo>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseSymmetricMatrixBase<CpuTag, _Val, _trans, _uplo>,
-    public DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>> {
+    public MatrixOstreamWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>> {
 
-  friend DenseMatrixWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>;
+  friend MatrixOstreamWrapper<DenseSymmetricMatrix<_Val, _trans, _uplo>>;
 
  private:
 
@@ -95,14 +77,21 @@ class DenseSymmetricMatrix
 
   using BaseType::DenseSymmetricMatrixBase;
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseSymmetricMatrixBase_::operator=
+  DenseSymmetricMatrix& operator=( const DenseSymmetricMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseSymmetricMatrix
 template <typename _Val, Uplo _uplo = Uplo::UPPER>
 using DenseSymmetricMatrixColMajor = DenseSymmetricMatrix<_Val, Trans::NORMAL, _uplo>;
 
 /// @ingroup  matrix_dense_module
 template <typename _Val, Uplo _uplo = Uplo::LOWER>
+/// @see  DenseSymmetricMatrix
 using DenseSymmetricMatrixRowMajor = DenseSymmetricMatrix<_Val, Trans::TRANS, _uplo>;
 
 }  // namespace matrix

@@ -59,8 +59,8 @@ inline void dismImpl2(
 ) noexcept {
   mcnla_assert_eq(a.size(), b.nrow());
 
-  auto da = a.viewVector();
-  for ( index_t i = 0; i < da.length(); ++i ) {
+  auto da = a.vec();
+  for ( index_t i = 0; i < da.len(); ++i ) {
     la::scal(b(i, ""_), alpha / da(i));
   }
 }
@@ -74,8 +74,8 @@ inline void dismImpl2(
 ) noexcept {
   mcnla_assert_eq(a.size(), b.ncol());
 
-  auto da = a.viewVector();
-  for ( index_t i = 0; i < da.length(); ++i ) {
+  auto da = a.vec();
+  for ( index_t i = 0; i < da.len(); ++i ) {
     la::scal(b(""_, i), alpha / da(i));
   }
 }
@@ -111,7 +111,7 @@ inline void dismImpl1(
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(alpha);
-  static_assert(dummy && false, "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM for conjugate matrices is not implemented!");
 }
 
 // ========================================================================================================================== //
@@ -145,7 +145,7 @@ inline void dismImpl1(
   static_cast<void>(a);
   static_cast<void>(b);
   static_cast<void>(alpha);
-  static_assert(dummy && false, "DISM does not support conjugate matrices!");
+  static_assert(dummy && false, "DISM for conjugate matrices is not implemented!");
 }
 
 //@}

@@ -11,9 +11,9 @@
 #include <mcnla/def.hpp>
 #include <mpi.h>
 
-#ifdef MCNLA_USE_GPU
-  #include <magma.h>
-#endif  // MCNLA_USE_GPU
+// #ifdef MCNLA_USE_GPU
+//   #include <magma.h>
+// #endif  // MCNLA_USE_GPU
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -41,9 +41,9 @@ struct CooTag {};
 ///
 static inline void init( int &argc, char **&argv ) {
   MPI_Init(&argc, &argv);
-#ifdef MCNLA_USE_GPU
-  magma_init();
-#endif  // MCNLA_USE_GPU
+// #ifdef MCNLA_USE_GPU
+//   magma_init();
+// #endif  // MCNLA_USE_GPU
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,9 +51,9 @@ static inline void init( int &argc, char **&argv ) {
 /// Finalizes the environment (including MPI and MAGMA).
 ///
 static inline void finalize() {
-#ifdef MCNLA_USE_GPU
-  magma_finalize();
-#endif  // MCNLA_USE_GPU
+// #ifdef MCNLA_USE_GPU
+//   magma_finalize();
+// #endif  // MCNLA_USE_GPU
   MPI_Finalize();
 }
 

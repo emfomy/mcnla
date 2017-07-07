@@ -37,12 +37,12 @@ class StageWrapper {
 
  public:
 
-  using ValType = ValT<_Derived>;
+  using _Val = ValT<_Derived>;
 
  protected:
 
   /// The parameters
-  const Parameters<ValType> &parameters_;
+  const Parameters<_Val> &parameters_;
 
   /// The tag shows if the stage is initialized.
   bool initialized_ = false;
@@ -59,19 +59,19 @@ class StageWrapper {
  protected:
 
   // Constructor
-  inline StageWrapper( const Parameters<ValType> &parameters ) noexcept;
+  inline StageWrapper( const Parameters<_Val> &parameters ) noexcept;
 
  public:
 
   // Initializes
-  template <typename... Args>
-  inline void initialize( Args... arg ) noexcept;
+  template <typename ..._Args>
+  inline void initialize( _Args... arg ) noexcept;
 
   // Operators
-  template <typename... Args>
-  inline void operator()( Args... arg ) noexcept;
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<__Derived> &wrapper ) noexcept;
+  template <typename ..._Args>
+  inline void operator()( _Args... arg ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const StageWrapper<_Args...> &wrapper ) noexcept;
 
   // Gets data
   inline bool isInitialized() const noexcept;
@@ -95,9 +95,7 @@ class StageWrapper {
   inline void tic() noexcept;
   inline void toc( double &comm_time ) noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 
 };

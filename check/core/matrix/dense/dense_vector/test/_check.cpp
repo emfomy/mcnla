@@ -5,32 +5,32 @@ TYPED_TEST(DenseVectorTest, Check) {
 }
 
 TYPED_TEST(DenseVectorTest_Size8_Stride1, Check) {
-  const auto length   = this->length_;
+  const auto len      = this->len_;
   const auto stride   = this->stride_;
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto vec      = this->vec_;
   const auto valptr0  = this->valptr0_;
 
-  EXPECT_EQ(vec.length(), length);
-  EXPECT_EQ(vec.nelem(),  length);
+  EXPECT_EQ(vec.len(),    len);
+  EXPECT_EQ(vec.nelem(),  len);
   EXPECT_EQ(vec.stride(), stride);
 
-  EXPECT_EQ(vec.sizes(),  std::make_tuple(length));
+  EXPECT_EQ(vec.sizes(),  std::make_tuple(len));
 
   EXPECT_TRUE(vec.isShrunk());
 
   EXPECT_EQ(vec.capacity(), capacity);
   EXPECT_EQ(vec.offset(),   offset);
 
-  EXPECT_EQ(vec.capacity(), length);
+  EXPECT_EQ(vec.capacity(), len);
 
-  for ( auto i = 0; i < length; ++i ) {
+  for ( auto i = 0; i < len; ++i ) {
     EXPECT_EQ(vec(i), valptr0[offset + i]);
   }
 
   std::queue<TypeParam> tmp;
-  for ( auto i = 0; i < length; ++i ) {
+  for ( auto i = 0; i < len; ++i ) {
     tmp.push(valptr0[offset + i]);
   }
   for ( auto value : vec ) {
@@ -46,32 +46,32 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Check) {
 
 
 TYPED_TEST(DenseVectorTest_Size8_Stride3, Check) {
-  const auto length   = this->length_;
+  const auto len      = this->len_;
   const auto stride   = this->stride_;
   const auto capacity = this->capacity_;
   const auto offset   = this->offset_;
   const auto vec      = this->vec_;
   const auto valptr0  = this->valptr0_;
 
-  EXPECT_EQ(vec.length(), length);
-  EXPECT_EQ(vec.nelem(),  length);
+  EXPECT_EQ(vec.len(),    len);
+  EXPECT_EQ(vec.nelem(),  len);
   EXPECT_EQ(vec.stride(), stride);
 
-  EXPECT_EQ(vec.sizes(),  std::make_tuple(length));
+  EXPECT_EQ(vec.sizes(),  std::make_tuple(len));
 
   EXPECT_FALSE(vec.isShrunk());
 
   EXPECT_EQ(vec.capacity(), capacity);
   EXPECT_EQ(vec.offset(),   offset);
 
-  EXPECT_EQ(vec.capacity(), length * stride - (stride-1));
+  EXPECT_EQ(vec.capacity(), len * stride - (stride-1));
 
-  for ( auto i = 0; i < length; ++i ) {
+  for ( auto i = 0; i < len; ++i ) {
     EXPECT_EQ(vec(i), valptr0[offset + i*stride]);
   }
 
   std::queue<TypeParam> tmp;
-  for ( auto i = 0; i < length; ++i ) {
+  for ( auto i = 0; i < len; ++i ) {
     tmp.push(valptr0[offset + i*stride]);
   }
   for ( auto value : vec ) {

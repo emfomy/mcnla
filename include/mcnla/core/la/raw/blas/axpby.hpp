@@ -16,7 +16,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Scales two vectors, adds them to one another and stores result in the vector.
 extern void saxpby_( const FORTRAN_INT n, const FORTRAN_REAL4 alpha, const FORTRAN_REAL4 x, const FORTRAN_INT incx,
                      const FORTRAN_REAL4 beta, FORTRAN_REAL4 y, const FORTRAN_INT incy );
 extern void daxpby_( const FORTRAN_INT n, const FORTRAN_REAL8 alpha, const FORTRAN_REAL8 x, const FORTRAN_INT incx,
@@ -52,9 +51,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Scales two vectors, adds them to one another and stores result in the vector.
-///
 //@{
 #ifdef MCNLA_USE_MKL
 

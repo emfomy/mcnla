@@ -82,81 +82,22 @@ namespace traits {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-struct MpiValTraits {
-  static_assert(traits::FalseType<_Val>::value, "Error using non-specialized MPI data type traits!");
-};
+struct MpiValTraits;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 8-bit character MPI data type traits.
-///
-template <>
-struct MpiValTraits<char> {
-  static constexpr const MPI_Datatype &datatype = MPI_CHARACTER;
-};
+#define MCNLA_MPI_VAL_TRAITS_DEF( _Type, _value ) \
+  template <> struct MpiValTraits<_Type> { static constexpr const MPI_Datatype datatype = _value; };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 8-bit integer MPI data type traits.
-///
-template <>
-struct MpiValTraits<int8_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER1;
-};
+MCNLA_MPI_VAL_TRAITS_DEF(char,                 MPI_CHARACTER)
+MCNLA_MPI_VAL_TRAITS_DEF(int8_t,               MPI_INTEGER1)
+MCNLA_MPI_VAL_TRAITS_DEF(int16_t,              MPI_INTEGER2)
+MCNLA_MPI_VAL_TRAITS_DEF(int32_t,              MPI_INTEGER4)
+MCNLA_MPI_VAL_TRAITS_DEF(int64_t,              MPI_INTEGER8)
+MCNLA_MPI_VAL_TRAITS_DEF(float,                MPI_REAL4)
+MCNLA_MPI_VAL_TRAITS_DEF(double,               MPI_REAL8)
+MCNLA_MPI_VAL_TRAITS_DEF(std::complex<float>,  MPI_COMPLEX8)
+MCNLA_MPI_VAL_TRAITS_DEF(std::complex<double>, MPI_COMPLEX16)
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 16-bit integer MPI data type traits.
-///
-template <>
-struct MpiValTraits<int16_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER2;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 32-bit integer MPI data type traits.
-///
-template <>
-struct MpiValTraits<int32_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER4;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 64-bit integer MPI data type traits.
-///
-template <>
-struct MpiValTraits<int64_t> {
-  static constexpr const MPI_Datatype &datatype = MPI_INTEGER8;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 32-bit floating point MPI data type traits.
-///
-template <>
-struct MpiValTraits<float> {
-  static constexpr const MPI_Datatype &datatype = MPI_REAL4;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The 64-bit floating point MPI data type traits.
-///
-template <>
-struct MpiValTraits<double> {
-  static constexpr const MPI_Datatype &datatype = MPI_REAL8;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The complex float MPI data type traits.
-///
-template <>
-struct MpiValTraits<std::complex<float>> {
-  static constexpr const MPI_Datatype &datatype = MPI_COMPLEX8;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The complex double MPI data type traits.
-///
-template <>
-struct MpiValTraits<std::complex<double>> {
-  static constexpr const MPI_Datatype &datatype = MPI_COMPLEX16;
-};
+#undef MCNLA_MPI_VAL_TRAITS_DEF
 
 }  // namespace traits
 

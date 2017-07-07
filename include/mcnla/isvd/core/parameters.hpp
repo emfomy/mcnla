@@ -72,7 +72,7 @@ index_t Parameters<_Val>::ncol() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::nrowRank() const noexcept {
-  return rowrange().length();
+  return rowrange().len();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ index_t Parameters<_Val>::nrowRank() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::ncolRank() const noexcept {
-  return colrange().length();
+  return colrange().len();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ index_t Parameters<_Val>::ncolTotal() const noexcept {
 ///
 template<typename _Val>
 IdxRange Parameters<_Val>::rowrange() const noexcept {
-  auto range = IdxRange{mpi_rank, mpi_rank+1} * nrowEach();
+  auto range = I_{mpi_rank, mpi_rank+1} * nrowEach();
   if ( range.begin > nrow() ) { range.begin = nrow(); }
   if ( range.end > nrow() ) { range.end = nrow(); }
   return range;
@@ -131,7 +131,7 @@ IdxRange Parameters<_Val>::rowrange() const noexcept {
 ///
 template<typename _Val>
 IdxRange Parameters<_Val>::colrange() const noexcept {
-  auto range = IdxRange{mpi_rank, mpi_rank+1} * ncolEach();
+  auto range = I_{mpi_rank, mpi_rank+1} * ncolEach();
   if ( range.begin > ncol() ) { range.begin = ncol(); }
   if ( range.end > ncol() ) { range.end = ncol(); }
   return range;
@@ -271,8 +271,8 @@ Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
 /// @brief  Creates matrix collection Q.
 ///
 template<typename _Val>
-DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQ() const noexcept {
-  DenseMatrixCollection201<_Val> retval(nrowTotal(), dimSketch(), numSketchEach());
+DenseMatrixCollectionColBlockRowMajor<_Val> Parameters<_Val>::createCollectionQ() const noexcept {
+  DenseMatrixCollectionColBlockRowMajor<_Val> retval(nrowTotal(), dimSketch(), numSketchEach());
   return retval({0_i, nrow()}, ""_, ""_);
 }
 
@@ -280,8 +280,8 @@ DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQ() const noexc
 /// @brief  Creates matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template<typename _Val>
-DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
-  DenseMatrixCollection201<_Val> retval(nrowEach(), dimSketch(), numSketch());
+DenseMatrixCollectionColBlockRowMajor<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
+  DenseMatrixCollectionColBlockRowMajor<_Val> retval(nrowEach(), dimSketch(), numSketch());
   return retval({0_i, nrowRank()}, ""_, ""_);
 }
 
@@ -289,7 +289,7 @@ DenseMatrixCollection201<_Val> Parameters<_Val>::createCollectionQj() const noex
 /// @brief  Creates matrix Q.
 ///
 template<typename _Val>
-DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQbar() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowTotal(), dimSketch());
   return retval({0_i, nrow()}, ""_);
 }
@@ -298,7 +298,7 @@ DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQ() const noexcept {
 /// @brief  Creates matrix Qj (j-th row-block, where j is the MPI rank).
 ///
 template<typename _Val>
-DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQj() const noexcept {
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixQbarj() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowEach(), dimSketch());
   return retval({0_i, nrowRank()}, ""_);
 }
@@ -319,6 +319,24 @@ template<typename _Val>
 DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixUj() const noexcept {
   DenseMatrixRowMajor<_Val> retval(nrowEach(), rank());
   return retval({0_i, nrowRank()}, ""_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix V.
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixV() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(ncolTotal(), rank());
+  return retval({0_i, ncol()}, ""_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix Vj (j-th row-block, where j is the MPI rank).
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixVj() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(ncolEach(), rank());
+  return retval({0_i, ncolRank()}, ""_);
 }
 
 }  // namespace isvd

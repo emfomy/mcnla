@@ -28,11 +28,11 @@ namespace random {
 Streams::Streams(
     const index_t seed
 ) noexcept
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
   : omp_size_(omp_get_max_threads()),
-#else  // MCNLA_USE_OMP
+#else  // _OPENMP
   : omp_size_(1),
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
     streams_(omp_size_) {
   setSeedImpl(seed);
 }
@@ -46,11 +46,11 @@ Streams::Streams(
     const mpi_int_t mpi_root,
     const MPI_Comm mpi_comm
 ) noexcept
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
   : omp_size_(omp_get_max_threads()),
-#else  // MCNLA_USE_OMP
+#else  // _OPENMP
   : omp_size_(1),
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
     streams_(omp_size_) {
   setSeedsImpl(seed, mpi_root, mpi_comm);
 }
@@ -143,7 +143,7 @@ void Streams::setSeedsImpl(
     std::seed_seq seq{seed};
     seq.generate(seeds.begin(), seeds.end());
   }
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<index_t>::datatype;
   index_t seed_tmp;
   MPI_Scatter(seeds.data(), 1, datatype, &seed_tmp, 1, datatype, mpi_root, mpi_comm);
   setSeedImpl(seed_tmp);

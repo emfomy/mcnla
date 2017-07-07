@@ -24,10 +24,10 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <typename __Val, class __Vector>
+template <typename ..._Args>
 std::ostream& operator<<(
     std::ostream &os,
-    const DenseVectorIteratorBase<__Val, __Vector> &it
+    const DenseVectorIteratorBase<_Args...> &it
 ) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << it.idx() << ")  "
                    << std::setw(kOsValWidth) << it.val();

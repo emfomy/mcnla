@@ -14,8 +14,8 @@ TEST(SvdOrthogonalizerTest, Test) {
   const auto mpi_root = 0;
 
   // Reads data
-  mcnla::matrix::DenseMatrixCollection201<ValType> yi_true;
-  mcnla::matrix::DenseMatrixCollection201<ValType> qi_true;
+  mcnla::matrix::DenseMatrixCollectionColBlockRowMajor<ValType> yi_true;
+  mcnla::matrix::DenseMatrixCollectionColBlockRowMajor<ValType> qi_true;
   mcnla::io::loadMatrixMarket(yi_true, COLLECTION_Y_PATH);
   mcnla::io::loadMatrixMarket(qi_true, COLLECTION_Q_PATH);
 
@@ -51,26 +51,24 @@ TEST(SvdOrthogonalizerTest, Test) {
   // Integrates
   orthogonalizer(qi);
 
+  // Gather result
+  mcnla::matrix::DenseMatrixCollectionColBlockColMajor<ValType> qi0(qi.sizes());
+  mcnla::matrix::DenseMatrixCollectionColBlockColMajor<ValType> qis(qi.nrow(), qi.ncol(), N);
+  mcnla::la::copy(qi.unfold(), qi0.unfold());
+  mcnla::mpi::gather(qi0.unfold(), qis.unfold(), mpi_root, mpi_comm);
+
   // Checks result
   if ( mpi_rank == mpi_root ) {
-    for ( auto j = 0; j < K; ++j ) {
-      if ( j != mpi_root ) {
-        mcnla::mpi::recv(qi.unfold(), j, j, mpi_comm);
-      }
-      for ( auto i = 0; i < Nj; ++i ) {
-        mcnla::matrix::DenseSymmetricMatrixRowMajor<ValType> qqt(m);
-        mcnla::matrix::DenseSymmetricMatrixRowMajor<ValType> qqt_true(m);
-        mcnla::la::rk(qi(i), qqt);
-        mcnla::la::rk(qi_true(i+j*Nj), qqt_true);
-        for ( auto ir = 0; ir < m; ++ir ) {
-          for ( auto ic = 0; ic <= ir; ++ic ) {
-            ASSERT_NEAR(qqt(ir, ic), qqt_true(ir, ic), 1e-8) << "(ir, ic) =  (" << ir << ", " << ic << ")"
-                                                             << ", i = " << i << ", j = " << j;
-          }
+    for ( auto i = 0; i < N; ++i ) {
+      mcnla::matrix::DenseSymmetricMatrixRowMajor<ValType> qqt(m);
+      mcnla::matrix::DenseSymmetricMatrixRowMajor<ValType> qqt_true(m);
+      mcnla::la::rk(qis(i), qqt);
+      mcnla::la::rk(qi_true(i), qqt_true);
+      for ( auto ir = 0; ir < m; ++ir ) {
+        for ( auto ic = 0; ic <= ir; ++ic ) {
+          ASSERT_NEAR(qqt(ir, ic), qqt_true(ir, ic), 1e-8) << "(ir, ic) =  (" << ir << ", " << ic << ")" << ", i = " << i;
         }
       }
     }
-  } else {
-    mcnla::mpi::send(qi.unfold(), mpi_root, mpi_rank, mpi_comm);
   }
 }

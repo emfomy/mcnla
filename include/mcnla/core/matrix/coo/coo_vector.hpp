@@ -32,10 +32,10 @@ CooVector<_Val>::CooVector() noexcept
 ///
 template <typename _Val>
 CooVector<_Val>::CooVector(
-    const index_t length,
+    const index_t len,
     const index_t nnz
 ) noexcept
-  : BaseType(toDim0(length), nnz) {}
+  : BaseType(toDim0(len), nnz) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -52,11 +52,11 @@ CooVector<_Val>::CooVector(
 ///
 template <typename _Val>
 CooVector<_Val>::CooVector(
-    const index_t length,
+    const index_t len,
     const index_t nnz,
     const index_t capacity
 ) noexcept
-  : BaseType(toDim0(length), nnz, capacity) {}
+  : BaseType(toDim0(len), nnz, capacity) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
@@ -74,13 +74,13 @@ CooVector<_Val>::CooVector(
 ///
 template <typename _Val>
 CooVector<_Val>::CooVector(
-    const index_t length,
+    const index_t len,
     const index_t nnz,
     const ValArrayType &val,
     const IdxArrayType &idx0,
     const index_t offset
 ) noexcept
-  : BaseType(toDim0(length), nnz, val, idx0, offset) {}
+  : BaseType(toDim0(len), nnz, val, idx0, offset) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
@@ -109,7 +109,7 @@ CooVector<_Val>& CooVector<_Val>::operator=(
 ///
 template <typename _Val>
 CooVector<_Val> CooVector<_Val>::copy() const noexcept {
-  return CooVector(this->length(), this->nnz(), this->val().copy(), this->idx0().copy(), this->offset());
+  return CooVector(this->len(), this->nnz(), this->val().copy(), this->idx0().copy(), this->offset());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,9 +195,9 @@ index_t CooVector<_Val>::pos(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Val> template <typename... Args>
+template <typename _Val> template <typename ..._Args>
 void CooVector<_Val>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = CooVector<_Val>(args...);
 }
@@ -207,17 +207,17 @@ void CooVector<_Val>::reconstruct(
 ///
 template <typename _Val>
 void CooVector<_Val>::resize(
-    const index_t length,
+    const index_t len,
     const index_t nnz
 ) noexcept {
-  this->resizeImpl(length, nnz);
+  this->resizeImpl(len, nnz);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  mcnla::matrix::VectorWrapper::length
+/// @copydoc  mcnla::matrix::VectorWrapper::len
 ///
 template <typename _Val>
-index_t CooVector<_Val>::lengthImpl() const noexcept {
+index_t CooVector<_Val>::lenImpl() const noexcept {
   return this->dim0();
 }
 
@@ -236,9 +236,9 @@ index_t CooVector<_Val>::toDim0(
 ///
 template <typename _Val>
 index_t CooVector<_Val>::toDim0(
-    const index_t length
+    const index_t len
 ) const noexcept {
-  return length;
+  return len;
 }
 
 }  // namespace matrix

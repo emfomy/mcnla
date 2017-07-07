@@ -33,13 +33,8 @@ template <class _Tag, typename _Val> class Sketcher;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The sketcher traits.
-///
 template <class _Tag, typename _Val>
-struct Traits<isvd::Sketcher<_Tag, _Val>> {
-  using ValType = _Val;
-};
+MCNLA_TRAITS_DEF(Val, MCNLA_(isvd::Sketcher<_Tag, _Val>), _Val)
 
 }  // namespace traits
 
@@ -54,10 +49,7 @@ namespace isvd {
 /// @tparam  _Tag  The sketcher tag.
 /// @tparam  _Val  The value type.
 ///
-template <class _Tag, typename _Val>
-class Sketcher : public StageWrapper<Sketcher<_Tag, _Val>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD sketcher!");
-};
+template <class _Tag, typename _Val> class Sketcher;
 
 }  // namespace isvd
 

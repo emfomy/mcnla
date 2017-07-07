@@ -254,9 +254,9 @@ index_t CooMatrix<_Val, _trans>::pos(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <typename _Val, Trans _trans> template <typename... Args>
+template <typename _Val, Trans _trans> template <typename ..._Args>
 void CooMatrix<_Val, _trans>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = CooMatrix<_Val, _trans>(args...);
 }

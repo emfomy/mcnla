@@ -4,8 +4,8 @@
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define MATRIX_A_PATH MCNLA_DATA_PATH "/a.mtx"
-#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_kn.mtx"
-#define MATRIX_U_PATH MCNLA_DATA_PATH "/u_kn.mtx"
+#define MATRIX_Q_PATH MCNLA_DATA_PATH "/q.mtx"
+#define MATRIX_U_PATH MCNLA_DATA_PATH "/u.mtx"
 
 TEST(GramianFormerTest, Test) {
   using ValType = double;
@@ -15,21 +15,21 @@ TEST(GramianFormerTest, Test) {
 
   // Reads data
   mcnla::matrix::DenseMatrixColMajor<ValType> a;
-  mcnla::matrix::DenseMatrixRowMajor<ValType> qbar_true;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> q_true;
   mcnla::matrix::DenseMatrixColMajor<ValType> u_true;
   mcnla::io::loadMatrixMarket(a, MATRIX_A_PATH);
-  mcnla::io::loadMatrixMarket(qbar_true, MATRIX_Q_PATH);
+  mcnla::io::loadMatrixMarket(q_true, MATRIX_Q_PATH);
   mcnla::io::loadMatrixMarket(u_true, MATRIX_U_PATH);
 
   // Checks size
-  ASSERT_EQ(a.nrow(), qbar_true.nrow());
-  ASSERT_EQ(qbar_true.sizes(), u_true.sizes());
+  ASSERT_EQ(a.nrow(), q_true.nrow());
+  ASSERT_EQ(q_true.sizes(), u_true.sizes());
 
   // Gets size
   const mcnla::index_t m  = a.nrow();
   const mcnla::index_t n  = a.ncol();
-  const mcnla::index_t k  = qbar_true.ncol() / 2;
-  const mcnla::index_t p  = qbar_true.ncol() - k;
+  const mcnla::index_t k  = q_true.ncol() / 2;
+  const mcnla::index_t p  = q_true.ncol() - k;
   const mcnla::index_t Nj = 1;
 
   // Sets parameters
@@ -38,18 +38,18 @@ TEST(GramianFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::GramianFormer<ValType> former(parameters);
+  mcnla::isvd::GramianFormer<ValType, true> former(parameters);
   former.initialize();
 
   // Creates matrices
-  auto qbar = parameters.createMatrixQ();
+  auto q = parameters.createMatrixQbar();
   auto u_true_cut = u_true(""_, {0_i, k});
 
   // Copies data
-  mcnla::la::copy(qbar_true, qbar);
+  mcnla::la::copy(q_true, q);
 
   // Integrates
-  former(a, qbar);
+  former(a, q);
 
   // Gets results
   auto u = former.matrixU();

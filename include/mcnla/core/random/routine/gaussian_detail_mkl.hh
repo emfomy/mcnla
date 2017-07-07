@@ -36,7 +36,7 @@ static inline void gaussianImpl(
     const _Val a,
     const _Val sigma
 ) noexcept {
-  detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, vector.length(), vector.valPtr(), a, sigma);
+  detail::vRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, vector.len(), vector.valPtr(), a, sigma);
 }
 
 }  // namespace detail

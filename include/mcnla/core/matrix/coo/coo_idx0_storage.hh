@@ -28,7 +28,7 @@ namespace matrix {
 /// @tparam  _Idx   The index type.
 ///
 template <class _Core, typename _Idx>
-class CooIdx0Storage : protected DenseStorage<_Core, _Idx> {
+class CooIdx0Storage : private DenseStorage<_Core, _Idx> {
 
  private:
 

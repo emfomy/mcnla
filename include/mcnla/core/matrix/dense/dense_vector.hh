@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_vector_wrapper.hpp>
+#include <mcnla/core/matrix/base/vector_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_iterator.hpp>
@@ -27,33 +27,15 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector traits.
-///
-template <typename _Val>
-struct Traits<matrix::DenseVector<_Val>> {
-
-  using ValType           = _Val;
-
-  using RealType          = matrix::DenseVector<RealValT<_Val>>;
-  using ComplexType       = matrix::DenseVector<ComplexValT<_Val>>;
-
-  using VectorType        = matrix::DenseVector<_Val>;
-
-  using IteratorType      = matrix::DenseVectorIterator<_Val>;
-  using ConstIteratorType = matrix::DenseVectorConstIterator<_Val>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector instantiation type traits.
 ///
 template <typename _Type>
 struct IsDenseVector : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseVector
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
 struct IsDenseVector<matrix::DenseVector<_Val>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector assert.
@@ -77,15 +59,16 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeVecS<CpuTag, DenseTag, _Val>
+  : public DenseVectorBase<CpuTag, _Val>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseVector
+  : public DenseVectorBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseVectorBase<CpuTag, _Val>,
-    public DenseVectorWrapper<DenseVector<_Val>>,
-    public IterableWrapper<DenseVector<_Val>> {
+    public VectorOstreamWrapper<DenseVector<_Val>>,
+    public IterableWrapper<DenseVector<_Val>, DenseVectorIterator<_Val>, DenseVectorConstIterator<_Val>> {
 
-  friend DenseVectorWrapper<DenseVector<_Val>>;
-  friend IterableWrapper<DenseVector<_Val>>;
+  friend VectorOstreamWrapper<DenseVector<_Val>>;
+  friend IterableWrapper<DenseVector<_Val>, DenseVectorIterator<_Val>, DenseVectorConstIterator<_Val>>;
 
  private:
 
@@ -97,6 +80,11 @@ class DenseVector
  public:
 
   using BaseType::DenseVectorBase;
+
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseVectorBase_::operator=
+  DenseVector& operator=( const DenseVector &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Finds the iterator
   inline IteratorType      find( const index_t idx ) noexcept;

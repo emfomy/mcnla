@@ -11,6 +11,12 @@
 #include <mcnla/isvd/former/gramian_former.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP Former<GramianFormerTag<_jobv>, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP GramianFormer<_Val, _jobv>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -24,17 +30,17 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Val>
-GramianFormer<_Val>::Former(
-    const Parameters<ValType> &parameters
+template <typename _Val, bool _jobv>
+MCNLA_TMP::Former(
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
-template <typename _Val>
-void GramianFormer<_Val>::initializeImpl() noexcept {
+template <typename _Val, bool _jobv>
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -43,25 +49,28 @@ void GramianFormer<_Val>::initializeImpl() noexcept {
 
   matrix_w_.reconstruct(dim_sketch, dim_sketch);
   vector_s_.reconstruct(dim_sketch);
-  matrix_qta_.reconstruct(dim_sketch, ncol);
-  syev_driver_.reconstruct(dim_sketch);
+  matrix_z_.reconstruct(ncol, dim_sketch);
+  gesvd_driver_.reconstruct(dim_sketch, dim_sketch);
 
   matrix_u_cut_.reconstruct(nrow, rank);
+  if ( _jobv ) {
+    matrix_v_cut_.reconstruct(ncol, rank);
+  }
 
-  matrix_w_cut_  = matrix_w_(""_, {dim_sketch-rank, dim_sketch});
-  vector_s_cut_  = vector_s_({dim_sketch-rank, dim_sketch});
+  matrix_w_cut_ = matrix_w_(""_, {0, rank});
+  vector_s_cut_ = vector_s_({0, rank});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Forms SVD.
 ///
-/// @param  matrix_a    The matrix A.
-/// @param  matrix_q    The matrix Q.
+/// @param  matrix_a  The matrix A.
+/// @param  matrix_q  The matrix Q.
 ///
-template <typename _Val> template <class _Matrix>
-void GramianFormer<_Val>::runImpl(
+template <typename _Val, bool _jobv> template <class _Matrix>
+void MCNLA_TMP::runImpl(
     const _Matrix &matrix_a,
-    const DenseMatrixRowMajor<ValType> &matrix_q
+    const DenseMatrixRowMajor<_Val> &matrix_q
 ) noexcept {
 
   const auto mpi_root   = parameters_.mpi_root;
@@ -85,14 +94,14 @@ void GramianFormer<_Val>::runImpl(
   // ====================================================================================================================== //
   // Start
 
-  // QtA := Q' * A
-  la::mm(matrix_q.t(), matrix_a, matrix_qta_);
+  // Z := A' * Q
+  la::mm(matrix_a.t(), matrix_q, matrix_z_);
 
-  // W := QtA * QtA'
-  la::rk(matrix_qta_, matrix_w_.viewSymmetric());
+  // W := Z * Z'
+  la::mm(matrix_z_.t(), matrix_z_, matrix_w_);
 
-  // Compute the eigen-decomposition of W -> W * S * W'
-  syev_driver_(matrix_w_.viewSymmetric(), vector_s_);
+  // eig(W) = W * S * W'
+  gesvd_driver_(matrix_w_, vector_s_, matrix_empty_, matrix_empty_);
 
   // S := sqrt(S)
   for ( auto &v : vector_s_ ) {
@@ -102,14 +111,20 @@ void GramianFormer<_Val>::runImpl(
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
 
+  if ( _jobv ) {
+    // V := Z * W * inv(S)
+    la::mm(matrix_z_, matrix_w_cut_, matrix_v_cut_);
+    la::sm(matrix_v_cut_, vector_s_cut_.diag().inv());
+  }
+
   this->toc(comm_time);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the singular values.
 ///
-template <typename _Val>
-const DenseVector<RealValT<_Val>>& GramianFormer<_Val>::vectorS() const noexcept {
+template <typename _Val, bool _jobv>
+const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -117,14 +132,26 @@ const DenseVector<RealValT<_Val>>& GramianFormer<_Val>::vectorS() const noexcept
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the left singular vectors.
 ///
-template <typename _Val>
-const DenseMatrixColMajor<_Val>& GramianFormer<_Val>::matrixU() const noexcept {
+template <typename _Val, bool _jobv>
+const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Gets the right singular vectors.
+///
+template <typename _Val, bool _jobv>
+const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixV() const noexcept {
+  mcnla_assert_true(this->isComputed());
+  mcnla_assert_true(_jobv);
+  return matrix_v_cut_;
 }
 
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_FORMER_GRAMIAN_FORMER_HPP_

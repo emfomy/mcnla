@@ -25,14 +25,12 @@ namespace la {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  la_dense_lapack_ls_module
-/// @brief  The singular value driver of general rectangular matrices.
+/// @brief  The singular value decomposition driver of general rectangular matrices.
 ///
 /// @see  mcnla::la::gesvd
 ///
-template <class _Matrix, JobOption _jobu, JobOption _jobvt>
-class GesvdDriver {
-
-  assertDenseMatrix(_Matrix);
+template <JobOption _jobu, JobOption _jobvt, typename _Val, Trans _trans>
+class DenseGesvdDriver {
 
   static_assert(_jobu  == 'A' || _jobu  == 'S' || _jobu  == 'O' || _jobu  == 'N', "Job undefined!");
   static_assert(_jobvt == 'A' || _jobvt == 'S' || _jobvt == 'O' || _jobvt == 'N', "Job undefined!");
@@ -40,14 +38,12 @@ class GesvdDriver {
 
  private:
 
-  static constexpr Trans trans = _Matrix::trans;
+  using ValType        = _Val;
+  using MatrixType     = DenseMatrix<_Val, _trans>;
+  using VectorType     = DenseVector<_Val>;
+  using RealVectorType = DenseVector<RealValT<_Val>>;
 
-  using ValType        = ValT<_Matrix>;
-  using VectorType     = VectorT<_Matrix>;
-  using RealVectorType = RealT<VectorT<_Matrix>>;
-  using MatrixType     = _Matrix;
-
-  static constexpr bool is_real = traits::ValTraits<ValType>::is_real;
+  static constexpr bool is_real_ = traits::ValTraits<ValType>::is_real;
 
  protected:
 
@@ -69,21 +65,29 @@ class GesvdDriver {
  public:
 
   // Constructors
-  inline GesvdDriver() noexcept;
-  inline GesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
-  inline GesvdDriver( const MatrixType &a ) noexcept;
+  inline DenseGesvdDriver() noexcept;
+  inline DenseGesvdDriver( const index_t nrow, const index_t ncol ) noexcept;
+  inline DenseGesvdDriver( const MatrixType &a ) noexcept;
 
   // Operators
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeS, class _TypeU, class _TypeVt>
   inline void operator()( _TypeA &&a, _TypeS &&s, _TypeU &&u, _TypeVt &&vt ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void operator()( MatrixType &a, VectorType &s, MatrixType &u, MatrixType &vt ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
-  // Computes eigenvalues
+  // Computes singular values
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
   template <class _TypeA, class _TypeS>
   inline void computeValues( _TypeA &&a, _TypeS &&s ) noexcept;
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  inline void computeValues( MatrixType &a, VectorType &s ) noexcept;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
 
   // Get sizes
   inline std::tuple<index_t, index_t> sizes() const noexcept;
@@ -100,10 +104,21 @@ class GesvdDriver {
   template <JobOption __jobu = _jobu, JobOption __jobvt = _jobvt>
   inline void compute( MatrixType &a, RealVectorType &s, MatrixType &u, MatrixType &vt ) noexcept;
 
-  // Queries
-  inline index_t query( const index_t nrow, const index_t ncol ) noexcept;
+  // Queries workspace size
+  inline index_t query() noexcept;
+  inline index_t rquery() noexcept;
 
 };
+
+/// @ingroup  la_dense_lapack_ls_module
+/// @see  DenseGesvdDriver
+template <JobOption _jobu, JobOption _jobvt, typename _Val>
+using DenseGesvdDriverColMajor = DenseGesvdDriver<_jobu, _jobvt, _Val, Trans::NORMAL>;
+
+/// @ingroup  la_dense_lapack_ls_module
+template <JobOption _jobu, JobOption _jobvt, typename _Val>
+/// @see  DenseGesvdDriver
+using DenseGesvdDriverRowMajor = DenseGesvdDriver<_jobu, _jobvt, _Val, Trans::TRANS>;
 
 }  // namespace la
 

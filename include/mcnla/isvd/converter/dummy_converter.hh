@@ -46,10 +46,6 @@ class DummyConverter
 
   using BaseType = StageWrapper<DummyConverter<_Val>>;
 
- public:
-
-  using ValType = _Val;
-
  protected:
 
   using BaseType::parameters_;
@@ -61,7 +57,7 @@ class DummyConverter
  public:
 
   // Constructor
-  inline Converter( const Parameters<ValType> &parameters ) noexcept;
+  inline Converter( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -69,8 +65,8 @@ class DummyConverter
   void initializeImpl() noexcept;
 
   // Converts data
-  template <typename... Args>
-  void runImpl( Args... arg ) noexcept;
+  template <typename ..._Args>
+  void runImpl( _Args... arg ) noexcept;
 
 };
 

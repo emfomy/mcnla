@@ -13,7 +13,7 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, Constructor) {
   using VectorType = mcnla::matrix::DenseVector<TypeParam>;
   using ArrayType  = mcnla::matrix::Array<TypeParam>;
 
-  const auto length   = this->length_;
+  const auto len      = this->len_;
   const auto stride   = this->stride_;
   const auto memsize  = this->memsize_;
   const auto capacity = this->capacity_;
@@ -22,10 +22,10 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride1, Constructor) {
 
   ArrayType array(memsize, offset+1);
 
-  EXPECT_DEATH(VectorType vec1(length, stride, array), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, capacity-1), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.val(), -(offset+1)), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.val(), 1), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, array), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, capacity-1), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, vec.val(), -(offset+1)), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, vec.val(), 1), "");
 }
 
 
@@ -33,7 +33,7 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride3, Constructor) {
   using VectorType = mcnla::matrix::DenseVector<TypeParam>;
   using ArrayType  = mcnla::matrix::Array<TypeParam>;
 
-  const auto length   = this->length_;
+  const auto len      = this->len_;
   const auto stride   = this->stride_;
   const auto memsize  = this->memsize_;
   const auto capacity = this->capacity_;
@@ -42,8 +42,8 @@ TYPED_TEST(DenseVectorDeathTest_Size8_Stride3, Constructor) {
 
   ArrayType array(memsize, offset+1);
 
-  EXPECT_DEATH(VectorType vec1(length, stride, array), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, capacity-1), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.val(), -(offset+1)), "");
-  EXPECT_DEATH(VectorType vec1(length, stride, vec.val(), 1), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, array), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, capacity-1), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, vec.val(), -(offset+1)), "");
+  EXPECT_DEATH(VectorType vec1(len, stride, vec.val(), 1), "");
 }

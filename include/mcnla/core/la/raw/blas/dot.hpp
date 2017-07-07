@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Computes a vector-vector dot product.
 extern CPP_REAL4 sdot_(  const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx, const FORTRAN_REAL4 y,
                          const FORTRAN_INT incy );
 extern CPP_REAL8 ddot_(  const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx, const FORTRAN_REAL8 y,
@@ -47,9 +46,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes a vector-vector dot product.
-///
 //@{
 static inline float dot(
     const index_t n, const float* x, const index_t incx, const float* y, const index_t incy

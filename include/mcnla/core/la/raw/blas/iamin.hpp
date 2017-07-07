@@ -16,7 +16,6 @@
 
 #include <mcnla/core/la/raw/plugin/blas_plugin_begin.h>
 
-// Finds the index of the element with minimum absolute value.
 extern CPP_INT isamin_( const FORTRAN_INT n, const FORTRAN_REAL4 x, const FORTRAN_INT incx );
 extern CPP_INT idamin_( const FORTRAN_INT n, const FORTRAN_REAL8 x, const FORTRAN_INT incx );
 extern CPP_INT icamin_( const FORTRAN_INT n, const FORTRAN_COMP4 x, const FORTRAN_INT incx );
@@ -43,9 +42,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Finds the index of the element with minimum absolute value.
-///
 //@{
 #ifdef MCNLA_USE_MKL
 
@@ -65,7 +61,7 @@ static inline index_t iamin(
 #else  // MCNLA_USE_MKL
 
 template <typename _Val>
-inline index_t iamin(
+static inline index_t iamin(
     const index_t n, const _Val* x, const index_t incx
 ) noexcept {
   if ( n < 1 || incx <= 0 ) { return -1; }

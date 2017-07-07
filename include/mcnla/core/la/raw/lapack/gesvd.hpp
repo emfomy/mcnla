@@ -14,7 +14,6 @@
 
 #include <mcnla/core/la/raw/plugin/lapack_plugin_begin.h>
 
-// Computes the singular value decomposition of a general rectangular matrix.
 extern void sgesvd_( const FORTRAN_CHAR1 jobu, const FORTRAN_CHAR1 jobvt, const FORTRAN_INT m, const FORTRAN_INT n,
                      FORTRAN_REAL4 a, const FORTRAN_INT lda, FORTRAN_REAL4 s, FORTRAN_REAL4 u, const FORTRAN_INT ldu,
                      FORTRAN_REAL4 vt, const FORTRAN_INT ldvt, FORTRAN_REAL4 work, const FORTRAN_INT lwork,
@@ -51,9 +50,6 @@ namespace la {
 //
 namespace detail {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Computes the singular value decomposition of a general rectangular matrix.
-///
 //@{
 static inline index_t gesvd(
     const char jobu, const char jobvt, const index_t m, const index_t n,

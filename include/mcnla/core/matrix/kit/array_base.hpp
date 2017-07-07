@@ -51,7 +51,7 @@ ArrayBase<_Core, _Val>::ArrayBase(
 ///
 template <class _Core, typename _Val>
 ArrayBase<_Core, _Val>::ArrayBase(
-    const DerivedType &other
+    const ArrayBase &other
 ) noexcept
   : BaseType(other),
     size_(other.size_),
@@ -64,12 +64,12 @@ ArrayBase<_Core, _Val>::ArrayBase(
 ///
 template <class _Core, typename _Val>
 ArrS<_Core, _Val>& ArrayBase<_Core, _Val>::operator=(
-    const DerivedType &other
+    const ArrayBase &other
 ) noexcept {
   BaseType::operator=(other);
   size_   = other.size_;
   offset_ = other.offset_;
-  return this->derived();
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ ArrS<_Core, _Val>& ArrayBase<_Core, _Val>::operator>>=(
 ) noexcept {
   offset_ += offset;
   mcnla_assert_gele(offset_, 0, size_);
-  return this->derived();
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ ArrS<_Core, _Val>& ArrayBase<_Core, _Val>::operator<<=(
 ) noexcept {
   offset_ -= offset;
   mcnla_assert_gele(offset_, 0, size_);
-  return this->derived();
+  return derived();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ template <class _Core, typename _Val>
 ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
     const index_t offset
 ) noexcept {
-  auto retval = this->derived();
+  auto retval = derived();
   retval >>= offset;
   return retval;
 }
@@ -117,7 +117,7 @@ template <class _Core, typename _Val>
 const ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator>>(
     const index_t offset
 ) const noexcept {
-  auto retval = this->derived();
+  auto retval = derived();
   retval >>= offset;
   return retval;
 }
@@ -129,7 +129,7 @@ template <class _Core, typename _Val>
 ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
     const index_t offset
 ) noexcept {
-  auto retval = this->derived();
+  auto retval = derived();
   retval <<= offset;
   return retval;
 }
@@ -141,7 +141,7 @@ template <class _Core, typename _Val>
 const ArrS<_Core, _Val> ArrayBase<_Core, _Val>::operator<<(
     const index_t offset
 ) const noexcept {
-  auto retval = this->derived();
+  auto retval = derived();
   retval <<= offset;
   return retval;
 }

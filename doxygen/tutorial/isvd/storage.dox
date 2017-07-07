@@ -1,0 +1,63 @@
+namespace mcnla {
+
+namespace isvd {
+
+/**
+  @page tutorial_isvd_storage Row-Block Storage
+
+  <h3>Notations</h3>
+
+  In the following, denote @ref Parameters::mpi_size "P" as the number of MPI nodes, @ref Parameters::numSketch "N" as the number of sketches, and @ref Parameters::numSketchEach "Nj" as the number of sketches per MPI node (i.e. @f$N_j = N / P@f$).
+
+  <h3>General Storage</h3>
+
+  In general, we storage @f$\boldsymbol{A}@f$ in all the MPI node, and put the @f$i@f$-th samples (@f$\boldsymbol{Y}_{[i]}@f$ and @f$\boldsymbol{Q}_{[i]}@f$) in the @f$j@f$-th MPI-rank, where @f$i = j N_j, \dotsc, (j+1) N_j - 1@f$. In forming stage, we computes the SVD in a single MPI node.
+
+  One may allocate the matrices using @ref Parameters::createCollectionQ, @ref Parameters::createMatrixQbar, and @ref Parameters::createMatrixU.
+
+  <h3>Row-Block Storage</h3>
+
+  In Row-Block versions, we storage the matrices in row-blocks, and stores the @f$j@f$-th block in the @f$j@f$-th MPI-rank.
+
+  @f[
+    \boldsymbol{A} =
+      \begin{bmatrix}
+        A^{(1)} \\ A^{(2)} \\ \vdots \\ A^{(P)}
+      \end{bmatrix},
+    \qquad
+    \boldsymbol{Y}_{[i]} =
+      \begin{bmatrix}
+        Y^{(1)}_{[i]} \\ Y^{(2)}_{[i]} \\ \vdots \\ Y^{(P)}_{[i]}
+      \end{bmatrix},
+    \qquad
+    \boldsymbol{Q}_{[i]} =
+      \begin{bmatrix}
+        Q^{(1)}_{[i]} \\ Q^{(2)}_{[i]} \\ \vdots \\ Q^{(P)}_{[i]}
+      \end{bmatrix},
+    \qquad
+    \overline{\boldsymbol{Q}} =
+      \begin{bmatrix}
+        \overline{Q}^{(1)} \\ \overline{Q}^{(2)} \\ \vdots \\ \overline{Q}^{(P)}
+      \end{bmatrix},
+    \qquad
+    \widehat{\boldsymbol{U}} =
+      \begin{bmatrix}
+        \widehat{U}^{(1)} \\ \widehat{U}^{(2)} \\ \vdots \\ \widehat{U}^{(P)}
+      \end{bmatrix}.
+  @f]
+
+  The indices of the blocks can be computes by @ref Parameters::rowrange and @ref Parameters::colrange.
+
+  One may allocate the matrices using @ref Parameters::createCollectionQj, @ref Parameters::createMatrixQbarj, and @ref Parameters::createMatrixUj.
+
+  <h3>Converters</h3>
+
+  We also provided some @ref isvd_converter_module "converters" for changing matrices from row-block storage to general storage, or vice versa.
+
+
+
+*/
+
+}  // namespace isvd
+
+}  // namespace mcnla

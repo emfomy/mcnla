@@ -12,6 +12,12 @@
 #include <mcnla/core/la.hpp>
 #include <mcnla/core/random.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP Sketcher<RowBlockColumnSamplingSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP RowBlockColumnSamplingSketcher<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -26,8 +32,8 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockColumnSamplingSketcher<_Val>::Sketcher(
-    const Parameters<ValType> &parameters,
+MCNLA_TMP::Sketcher(
+    const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
   : BaseType(parameters) {
@@ -38,7 +44,7 @@ RowBlockColumnSamplingSketcher<_Val>::Sketcher(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
@@ -52,9 +58,9 @@ void RowBlockColumnSamplingSketcher<_Val>::initializeImpl() noexcept {
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void RowBlockColumnSamplingSketcher<_Val>::runImpl(
+void MCNLA_TMP::runImpl(
     const _Matrix &matrix_aj,
-          DenseMatrixCollection201<ValType> &collection_qj
+          DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm         = parameters_.mpi_comm;
@@ -68,7 +74,7 @@ void RowBlockColumnSamplingSketcher<_Val>::runImpl(
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<index_t>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<index_t>::datatype;
   index_t seed_tmp = seed_;
   MPI_Bcast(&seed_tmp, 1, datatype, mpi_root, mpi_comm);
   random::Streams streams(seed_tmp);
@@ -96,7 +102,7 @@ void RowBlockColumnSamplingSketcher<_Val>::runImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t RowBlockColumnSamplingSketcher<_Val>::seed() const noexcept {
+index_t MCNLA_TMP::seed() const noexcept {
   return seed_;
 }
 
@@ -104,7 +110,7 @@ index_t RowBlockColumnSamplingSketcher<_Val>::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-RowBlockColumnSamplingSketcher<_Val>& RowBlockColumnSamplingSketcher<_Val>::setSeed(
+RowBlockColumnSamplingSketcher<_Val>& MCNLA_TMP::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -115,5 +121,7 @@ RowBlockColumnSamplingSketcher<_Val>& RowBlockColumnSamplingSketcher<_Val>::setS
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_COLUMN_SAMPLING_SKETCHER_HPP_

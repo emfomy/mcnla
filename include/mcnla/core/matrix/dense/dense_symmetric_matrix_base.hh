@@ -23,6 +23,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+using DenseSymmetricMatrixBase = DenseSymmetricMatrixBase_<_Core, _Val, _trans, _uplo>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense symmetric matrix base class.
 ///
@@ -32,9 +37,13 @@ namespace matrix {
 /// @tparam  _uplo   The triangular storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseSymmetricMatrixBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
-    public MatrixWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
+    public DenseMatrixWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
     public InvertibleWrapper<SyMatS<_Core, DenseTag, _Val, _trans, _uplo>> {
 
   static_assert(!isConj(_trans),    "Conjugate matrix is not supported!");
@@ -45,6 +54,7 @@ class DenseSymmetricMatrixBase
   using DerivedType = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
 
   friend MatrixWrapper<DerivedType>;
+  friend DenseMatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -54,9 +64,6 @@ class DenseSymmetricMatrixBase
 
   using ValType       = _Val;
   using ValArrayType  = ArrS<_Core, _Val>;
-
-  using RealType      = SyMatS<_Core, DenseTag, RealValT<_Val>, _trans, _uplo>;
-  using ComplexType   = SyMatS<_Core, DenseTag, ComplexValT<_Val>, _trans, _uplo>;
 
   using VectorType    = GeVecS<_Core, DenseTag, _Val>;
   using MatrixType    = SyMatS<_Core, DenseTag, _Val, _trans, _uplo>;
@@ -78,10 +85,10 @@ class DenseSymmetricMatrixBase
   inline DenseSymmetricMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseSymmetricMatrixBase( const index_t size, const index_t pitch,
                                    const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseSymmetricMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseSymmetricMatrixBase( const DenseSymmetricMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseSymmetricMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;
@@ -94,8 +101,8 @@ class DenseSymmetricMatrixBase
   inline ValType operator()( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
   inline void resize( const index_t size ) noexcept;
 
   // Transpose/Conjugate
@@ -103,19 +110,19 @@ class DenseSymmetricMatrixBase
   inline const TransposeType& t() const noexcept;
 
   // Change view
-  inline       GeneralType& viewGeneral() noexcept;
-  inline const GeneralType& viewGeneral() const noexcept;
+  inline       GeneralType& full() noexcept;
+  inline const GeneralType& full() const noexcept;
 
  protected:
 
   // Gets information
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
+  inline index_t mrowImpl() const noexcept;
+  inline index_t mcolImpl() const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-  CRTP_DERIVED(DerivedType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

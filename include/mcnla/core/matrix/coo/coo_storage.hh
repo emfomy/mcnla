@@ -28,7 +28,7 @@ namespace matrix {
 /// @tparam  _ArrayT  The array template.
 ///
 template <class _Core, typename _Val>
-class CooStorage : protected DenseStorage<_Core, _Val> {
+class CooStorage : private DenseStorage<_Core, _Val> {
 
  private:
 
@@ -46,8 +46,6 @@ class CooStorage : protected DenseStorage<_Core, _Val> {
 
   using BaseType::val;
   using BaseType::valPtr;
-
- protected:
 
   // Constructors
   inline CooStorage() noexcept;

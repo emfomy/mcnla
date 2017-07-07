@@ -13,7 +13,10 @@
 
 #include <mcnla/core/matrix/base/dense_vector_wrapper.hpp>
 #include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
-#include <mcnla/core/matrix/base/sparse_wrapper.hpp>
+
+#include <mcnla/core/matrix/base/vector_ostream_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
+#include <mcnla/core/matrix/base/sparse_ostream_wrapper.hpp>
 
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>

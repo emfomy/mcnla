@@ -33,13 +33,8 @@ template <class _Tag, typename _Val> class Converter;
 //
 namespace traits {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The converter traits.
-///
 template <class _Tag, typename _Val>
-struct Traits<isvd::Converter<_Tag, _Val>> {
-  using ValType = _Val;
-};
+MCNLA_TRAITS_DEF(Val, MCNLA_(isvd::Converter<_Tag, _Val>), _Val)
 
 }  // namespace traits
 
@@ -54,10 +49,7 @@ namespace isvd {
 /// @tparam  _Tag  The converter tag.
 /// @tparam  _Val  The value type.
 ///
-template <class _Tag, typename _Val>
-class Converter : public StageWrapper<Converter<_Tag, _Val>> {
-  static_assert(traits::FalseType<_Tag>::value, "Error using non-specialized iSVD converter!");
-};
+template <class _Tag, typename _Val> class Converter;
 
 }  // namespace isvd
 

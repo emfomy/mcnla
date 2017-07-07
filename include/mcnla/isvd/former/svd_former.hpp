@@ -11,6 +11,12 @@
 #include <mcnla/isvd/former/svd_former.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP Former<SvdFormerTag<_jobv>, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP SvdFormer<_Val, _jobv>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -24,17 +30,17 @@ namespace isvd {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
-template <typename _Val>
-SvdFormer<_Val>::Former(
-    const Parameters<ValType> &parameters
+template <typename _Val, bool _jobv>
+MCNLA_TMP::Former(
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
-template <typename _Val>
-void SvdFormer<_Val>::initializeImpl() noexcept {
+template <typename _Val, bool _jobv>
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -59,10 +65,10 @@ void SvdFormer<_Val>::initializeImpl() noexcept {
 /// @param  matrix_a  The matrix A.
 /// @param  matrix_q  The matrix Q.
 ///
-template <typename _Val> template <class _Matrix>
-void SvdFormer<_Val>::runImpl(
+template <typename _Val, bool _jobv> template <class _Matrix>
+void MCNLA_TMP::runImpl(
     const _Matrix &matrix_a,
-    const DenseMatrixRowMajor<ValType> &matrix_q
+    const DenseMatrixRowMajor<_Val> &matrix_q
 ) noexcept {
 
   const auto mpi_root   = parameters_.mpi_root;
@@ -89,7 +95,7 @@ void SvdFormer<_Val>::runImpl(
   // Vt := Q' * A
   la::mm(matrix_q.t(), matrix_a, matrix_vt_);
 
-  // Compute the SVD of Vt -> W * S * Vt
+  // svd(Vt) = W * S * Vt
   gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
 
   // U := Q * W
@@ -101,8 +107,8 @@ void SvdFormer<_Val>::runImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the singular values.
 ///
-template <typename _Val>
-const DenseVector<RealValT<_Val>>& SvdFormer<_Val>::vectorS() const noexcept {
+template <typename _Val, bool _jobv>
+const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -110,8 +116,8 @@ const DenseVector<RealValT<_Val>>& SvdFormer<_Val>::vectorS() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the left singular vectors.
 ///
-template <typename _Val>
-const DenseMatrixColMajor<_Val>& SvdFormer<_Val>::matrixU() const noexcept {
+template <typename _Val, bool _jobv>
+const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
 }
@@ -119,14 +125,17 @@ const DenseMatrixColMajor<_Val>& SvdFormer<_Val>::matrixU() const noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the right singular vectors.
 ///
-template <typename _Val>
-const DenseMatrixColMajor<_Val>& SvdFormer<_Val>::matrixVt() const noexcept {
+template <typename _Val, bool _jobv>
+const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixV() const noexcept {
   mcnla_assert_true(this->isComputed());
-  return matrix_vt_cut_;
+  mcnla_assert_true(_jobv);
+  return matrix_vt_cut_.t();
 }
 
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_FORMER_SVD_FORMER_HPP_

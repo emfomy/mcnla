@@ -1,5 +1,4 @@
 # Functions
-
 macro(MCNLA_SET_TARGET target)
 	set_target_properties(${target} PROPERTIES SUFFIX "${BIN_SUFFIX}")
 	target_include_directories(${target} SYSTEM PUBLIC ${INCS})

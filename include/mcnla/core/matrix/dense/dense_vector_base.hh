@@ -23,6 +23,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val>
+using DenseVectorBase = DenseVectorBase_<_Core, _Val>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector base class.
 ///
@@ -30,9 +35,13 @@ namespace matrix {
 /// @tparam  _Val   The value type.
 ///
 template <class _Core, typename _Val>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseVectorBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseVectorBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
-    public VectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
+    public DenseVectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
     public InvertibleWrapper<GeVecS<_Core, DenseTag, _Val>> {
 
  private:
@@ -40,6 +49,7 @@ class DenseVectorBase
   using DerivedType = GeVecS<_Core, DenseTag, _Val>;
 
   friend VectorWrapper<DerivedType>;
+  friend DenseVectorWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -47,9 +57,6 @@ class DenseVectorBase
   using ValType      = _Val;
   using ValArrayType = ArrS<_Core, _Val>;
   using SizesType    = std::tuple<index_t>;
-
-  using RealType     = GeVecS<_Core, DenseTag, RealValT<_Val>>;
-  using ComplexType  = GeVecS<_Core, DenseTag, ComplexValT<_Val>>;
 
   using VectorType   = GeVecS<_Core, DenseTag, _Val>;
 
@@ -63,16 +70,16 @@ class DenseVectorBase
 
   // Constructors
   inline DenseVectorBase() noexcept;
-  inline DenseVectorBase( const index_t length, const index_t stride = 1 ) noexcept;
+  inline DenseVectorBase( const index_t len, const index_t stride = 1 ) noexcept;
   inline DenseVectorBase( const SizesType sizes, const index_t stride = 1 ) noexcept;
-  inline DenseVectorBase( const index_t length, const index_t stride, const index_t capacity ) noexcept;
+  inline DenseVectorBase( const index_t len, const index_t stride, const index_t capacity ) noexcept;
   inline DenseVectorBase( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseVectorBase( const index_t length, const index_t stride,
+  inline DenseVectorBase( const index_t len, const index_t stride,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseVectorBase( const DerivedType &other ) noexcept;
+  inline DenseVectorBase( const DenseVectorBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseVectorBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;
@@ -88,14 +95,13 @@ class DenseVectorBase
   inline index_t pos( const index_t idx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
-  inline void resize( const index_t length ) noexcept;
-  inline void resize( const index_t length, const index_t stride ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
+  inline void resize( const index_t len ) noexcept;
 
   // Changes view
-  inline       DiagonalType& viewDiagonal() noexcept;
-  inline const DiagonalType& viewDiagonal() const noexcept;
+  inline       DiagonalType& diag() noexcept;
+  inline const DiagonalType& diag() const noexcept;
 
   // Gets segment
   inline       VectorType operator()( const IdxRange &range ) noexcept;
@@ -104,16 +110,15 @@ class DenseVectorBase
  protected:
 
   // Gets information
-  inline index_t lengthImpl() const noexcept;
+  inline index_t lenImpl() const noexcept;
+  inline index_t mlenImpl() const noexcept;
 
   // Convert sizes to dims
   inline index_t toDim0( const SizesType sizes ) const noexcept;
-  inline index_t toDim0( const index_t length ) const noexcept;
+  inline index_t toDim0( const index_t len ) const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-  CRTP_DERIVED(DerivedType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

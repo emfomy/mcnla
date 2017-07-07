@@ -24,7 +24,7 @@ void check_u( const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
 
 void check( const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_a,
             const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
-            const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_vt,
+            const mcnla::matrix::DenseMatrixRowMajor<ValType> &matrix_v,
             const mcnla::matrix::DenseVector<ValType> &vector_s,
             ValType &frerr ) noexcept;
 
@@ -34,8 +34,8 @@ void check( const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_a,
 int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
-  // Initialize MPI
-  MPI_Init(&argc, &argv);
+  // Initialize MCNLA
+  mcnla::init(argc, argv);
   auto mpi_comm = MPI_COMM_WORLD;
   auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -76,12 +76,13 @@ int main( int argc, char **argv ) {
             << ", tol = " << tol
             << ", maxiter = " << maxiter << std::endl;
     std::cout << mpi_size << " nodes / "
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
               << omp_get_max_threads()
-#else  //MCNLA_USE_OMP
+#else  // _OPENMP
               << 1
-#endif  // MCNLA_USE_OMP
-              << " threads per node" << std::endl << std::endl;
+#endif  // _OPENMP
+              << " threads per node" << std::endl;
+    std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
   }
   assert((k+p) <= m && m <= n);
 
@@ -140,8 +141,8 @@ int main( int argc, char **argv ) {
   auto matrix_aj     = matrix_a(parameters.rowrange(), ""_);
   auto collection_q  = parameters.createCollectionQ();
   auto collection_qj = parameters.createCollectionQj();
-  auto matrix_q      = parameters.createMatrixQ();
-  auto matrix_qj     = parameters.createMatrixQj();
+  auto matrix_qbar      = parameters.createMatrixQbar();
+  auto matrix_qbarj     = parameters.createMatrixQbarj();
 
   // ====================================================================================================================== //
   // Display driver
@@ -168,22 +169,22 @@ int main( int argc, char **argv ) {
 
     sketcher(matrix_aj, collection_qj);
     orthogonalizer(collection_qj);
-    integrator(collection_qj, matrix_qj);
-    if_converter(matrix_qj, matrix_q);
-    former(matrix_a, matrix_q);
+    integrator(collection_qj, matrix_qbarj);
+    if_converter(matrix_qbarj, matrix_qbar);
+    former(matrix_a, matrix_qbar);
 
     // sketcher(matrix_a, collection_q);
     // orthogonalizer(collection_q);
-    // integrator(collection_q, matrix_q);
-    // former(matrix_a, matrix_q);
+    // integrator(collection_q, matrix_qbar);
+    // former(matrix_a, matrix_qbar);
 
     MPI_Barrier(mpi_comm);
 
     // Check result
-    if ( mpi_rank == mpi_root  ) {
+    if ( mpi_rank == mpi_root ) {
       ValType smax, smin, smean, frerr;
       check_u(former.matrixU(), matrix_u_true, smax, smin, smean);
-      check(matrix_a, former.matrixU(), former.matrixVt(), former.vectorS(), frerr);
+      check(matrix_a, former.matrixU(), former.matrixV(), former.vectorS(), frerr);
       auto iter    = integrator.iteration();
       auto time_s  = sketcher.time();
       auto time_o  = orthogonalizer.time();
@@ -238,7 +239,7 @@ int main( int argc, char **argv ) {
     std::cout << std::endl;
   }
 
-  MPI_Finalize();
+  mcnla::finalize();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,8 +264,8 @@ void create(
 
   // Generate E & U & V using normal random
   mcnla::random::Streams streams(rand());
-  mcnla::random::gaussian(streams, matrix_u.vectorize());
-  mcnla::random::gaussian(streams, matrix_v.vectorize());
+  mcnla::random::gaussian(streams, matrix_u.vec());
+  mcnla::random::gaussian(streams, matrix_v.vec());
 
   // Orthogonalize U & V
   mcnla::la::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
@@ -282,7 +283,7 @@ void create(
   }
 
   // A := U * S * V'
-  mcnla::la::mm(""_, vector_s.viewDiagonal(), matrix_u);
+  mcnla::la::mm(""_, vector_s.diag(), matrix_u);
   mcnla::la::mm(matrix_u, matrix_v.t(), matrix_a);
 
   // Compute excepted error
@@ -310,7 +311,7 @@ void check_u(
   mcnla::la::gesvd<'N', 'N'>(matrix_u2, vector_s, matrix_empty, matrix_empty);
   smax  = mcnla::la::amax(vector_s);
   smin  = mcnla::la::amin(vector_s);
-  smean = mcnla::la::asum(vector_s) / vector_s.length();
+  smean = mcnla::la::asum(vector_s) / vector_s.len();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +320,7 @@ void check_u(
 void check(
     const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_a,
     const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_u,
-    const mcnla::matrix::DenseMatrixColMajor<ValType> &matrix_vt,
+    const mcnla::matrix::DenseMatrixRowMajor<ValType> &matrix_v,
     const mcnla::matrix::DenseVector<ValType>         &vector_s,
           ValType &frerr
 ) noexcept {
@@ -328,8 +329,8 @@ void check(
   auto matrix_u_tmp = matrix_u.copy();
 
   // A_tmp -= U * S * V'
-  mcnla::la::mm(""_, vector_s.viewDiagonal(), matrix_u_tmp);
-  mcnla::la::mm(matrix_u_tmp, matrix_vt, matrix_a_tmp, -1.0, 1.0);
+  mcnla::la::mm(""_, vector_s.diag(), matrix_u_tmp);
+  mcnla::la::mm(matrix_u_tmp, matrix_v.t(), matrix_a_tmp, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
   frerr = mcnla::la::nrmf(matrix_a_tmp) / mcnla::la::nrmf(matrix_a);

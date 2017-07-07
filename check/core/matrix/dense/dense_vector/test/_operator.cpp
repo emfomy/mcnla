@@ -9,7 +9,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     SCOPED_TRACE("Assignment Predo");
     VectorType vec1, vec2;
 
-    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.len(),    0);
     EXPECT_EQ(vec1.nelem(),  0);
     EXPECT_EQ(vec1.stride(), 1);
 
@@ -18,7 +18,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     EXPECT_EQ(vec1.capacity(), 0);
     EXPECT_EQ(vec1.offset(),   0);
 
-    EXPECT_EQ(vec2.length(), 0);
+    EXPECT_EQ(vec2.len(),    0);
     EXPECT_EQ(vec2.nelem(),  0);
     EXPECT_EQ(vec2.stride(), 1);
 
@@ -30,7 +30,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, Assignment) {
     SCOPED_TRACE("Copy Assignment");
     vec1 = vec;
 
-    EXPECT_EQ(vec1.length(), vec.length());
+    EXPECT_EQ(vec1.len(),    vec.len());
     EXPECT_EQ(vec1.nelem(),  vec.nelem());
     EXPECT_EQ(vec1.stride(), vec.stride());
 
@@ -54,7 +54,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     SCOPED_TRACE("Assignment Predo");
     VectorType vec1, vec2;
 
-    EXPECT_EQ(vec1.length(), 0);
+    EXPECT_EQ(vec1.len(),    0);
     EXPECT_EQ(vec1.nelem(),  0);
     EXPECT_EQ(vec1.stride(), 1);
 
@@ -63,7 +63,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     EXPECT_EQ(vec1.capacity(), 0);
     EXPECT_EQ(vec1.offset(),   0);
 
-    EXPECT_EQ(vec2.length(), 0);
+    EXPECT_EQ(vec2.len(),    0);
     EXPECT_EQ(vec2.nelem(),  0);
     EXPECT_EQ(vec2.stride(), 1);
 
@@ -75,7 +75,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, Assignment) {
     SCOPED_TRACE("Copy Assignment");
     vec1 = vec;
 
-    EXPECT_EQ(vec1.length(), vec.length());
+    EXPECT_EQ(vec1.len(),    vec.len());
     EXPECT_EQ(vec1.nelem(),  vec.nelem());
     EXPECT_EQ(vec1.stride(), vec.stride());
 

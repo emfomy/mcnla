@@ -13,4 +13,6 @@
 #include <mcnla/core/io/matrix_market/coo_load.hpp>
 #include <mcnla/core/io/matrix_market/coo_save.hpp>
 
+#include <mcnla/core/io/matrix_market/dense_load_row_block.hpp>
+
 #endif  // MCNLA_CORE_IO_MATRIX_MATKET_HPP_

@@ -30,7 +30,7 @@ template <typename _Val> using GaussianProjectionSketcher = Sketcher<GaussianPro
 /// @ingroup  isvd_sketcher_module
 /// The Gaussian projection sketcher.
 ///
-/// @tparam  _Val    The value type.
+/// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -45,10 +45,6 @@ class GaussianProjectionSketcher
  private:
 
   using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>>;
-
- public:
-
-  using ValType = _Val;
 
  protected:
 
@@ -65,7 +61,7 @@ class GaussianProjectionSketcher
   index_t exponent_;
 
   /// The matrix Omega.
-  DenseMatrixRowMajor<ValType> matrix_omegas_;
+  DenseMatrixRowMajor<_Val> matrix_omegas_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -76,7 +72,7 @@ class GaussianProjectionSketcher
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
+  inline Sketcher( const Parameters<_Val> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
@@ -94,7 +90,7 @@ class GaussianProjectionSketcher
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection201<_Val> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;

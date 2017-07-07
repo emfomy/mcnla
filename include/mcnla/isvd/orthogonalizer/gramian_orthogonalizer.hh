@@ -47,10 +47,6 @@ class GramianOrthogonalizer
 
   using BaseType = StageWrapper<GramianOrthogonalizer<_Val>>;
 
- public:
-
-  using ValType = _Val;
-
  protected:
 
   /// The name.
@@ -60,19 +56,19 @@ class GramianOrthogonalizer
   static constexpr const char* names_ = "orthogonalization";
 
   /// The matrices W.
-  DenseMatrixCollection102<ValType> collection_w_;
+  DenseMatrixCollectionRowBlockRowMajor<_Val> collection_w_;
 
   /// The matrix S.
-  DenseMatrixColMajor<ValType> matrix_s_;
+  DenseMatrixColMajor<_Val> matrix_s_;
 
   /// The temporary matrices.
-  DenseMatrixCollection201<ValType> collection_tmp_;
+  DenseMatrixCollectionColBlockRowMajor<_Val> collection_tmp_;
 
   /// The empty matrix.
-  DenseMatrixRowMajor<ValType> matrix_empty_;
+  DenseMatrixRowMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixRowMajor<ValType>, 'N', 'O'> gesvd_driver_;
+  la::DenseGesvdDriverRowMajor<'N', 'O', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -83,7 +79,7 @@ class GramianOrthogonalizer
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters<ValType> &parameters ) noexcept;
+  inline Orthogonalizer( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -91,7 +87,7 @@ class GramianOrthogonalizer
   void initializeImpl() noexcept;
 
   // Orthogonalizes
-  void runImpl( DenseMatrixCollection201<ValType> &collection_q ) noexcept;
+  void runImpl( DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q ) noexcept;
 
 };
 

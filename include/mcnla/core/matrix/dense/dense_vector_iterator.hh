@@ -11,41 +11,11 @@
 #include <mcnla/core/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/base/iterator_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
-#include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
 namespace mcnla {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The matrix namespace.
-//
-namespace matrix {
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <typename _Val, class _Vector> class DenseVectorIteratorBase;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
-}  // namespace matrix
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  The traits namespace.
-//
-namespace traits {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense vector iterator traits.
-///
-template <typename _Val, class _Vector>
-struct Traits<matrix::DenseVectorIteratorBase<_Val, _Vector>> {
-  using ElemType      = _Val;
-  using ElemRefType   = _Val&;
-  using ElemPtrType   = _Val*;
-  using ContainerType = _Vector;
-};
-
-}  // namespace traits
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The matrix namespace.
@@ -61,17 +31,16 @@ namespace matrix {
 /// @see  DenseVectorIterator, DenseVectorConstIterator
 ///
 template <typename _Val, class _Vector>
-class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val, _Vector>> {
+class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val, _Vector>, _Vector, _Val> {
 
  private:
 
   using ValType       = _Val;
-  using ElemType      = _Val;
   using ElemRefType   = _Val&;
   using ElemPtrType   = _Val*;
   using ContainerType = _Vector;
 
-  using BaseType      = IteratorBase<DenseVectorIteratorBase<_Val, _Vector>>;
+  using BaseType      = IteratorBase<DenseVectorIteratorBase<_Val, _Vector>, _Vector, _Val>;
 
  protected:
 
@@ -84,8 +53,8 @@ class DenseVectorIteratorBase : public IteratorBase<DenseVectorIteratorBase<_Val
   using BaseType::operator=;
 
   // Operators
-  template <typename __Val, class __Vector>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<__Val, __Vector> &it ) noexcept;
+  template <typename ..._Args>
+  friend inline std::ostream& operator<<( std::ostream &os, const DenseVectorIteratorBase<_Args...> &it ) noexcept;
 
   // Gets value
   inline ValType&    val() const noexcept;

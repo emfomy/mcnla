@@ -26,19 +26,25 @@ find_library(
   DOC "The library of MAGMA."
 )
 
+find_library(
+  MAGMA_SPARSE_LIBRARY
+  NAMES magma_sparse
+  HINTS "${MAGMA_ROOT}/lib"
+  DOC "The spaarse library of MAGMA."
+)
+
 ################################################################################
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-  MAGMA DEFAULT_MSG MAGMA_LIBRARY MAGMA_INCLUDE
+  MAGMA DEFAULT_MSG MAGMA_LIBRARY MAGMA_SPARSE_LIBRARY MAGMA_INCLUDE
 )
 
-mark_as_advanced(MAGMA_LIBRARY MAGMA_INCLUDE)
+mark_as_advanced(MAGMA_LIBRARY MAGMA_SPARSE_LIBRARY MAGMA_INCLUDE)
 
 ################################################################################
 
 set(MAGMA_INCLUDES  "${MAGMA_INCLUDE}")
-set(MAGMA_LIBRARIES "${MAGMA_LIBRARY}")
 if(MAGMA_ROOT STREQUAL "" AND DEFINED MAGMA_INCLUDE)
   get_filename_component(MAGMA_ROOT "${MAGMA_INCLUDE}/.." REALPATH)
 endif()

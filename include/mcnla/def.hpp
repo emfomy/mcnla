@@ -22,6 +22,8 @@
 #include <type_traits>
 #include <mcnla/config.hpp>
 
+#define MCNLA_( ... ) __VA_ARGS__
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The MCNLA namespace
 ///
@@ -44,17 +46,25 @@ using size_t = std::size_t;
 static constexpr size_t kOsValWidth = 14;
 static constexpr size_t kOsIdxWidth = 6;
 
+/// @ingroup  constexpr
+/// The block size
+static constexpr index_t kBlockSize = 64;
+
+/// @ingroup  core_module
+/// The index type literal.
+static inline mcnla::index_t operator"" _i( unsigned long long int idx ) { return idx; }
+
 }  // namespace mcnla
+
+#ifndef MCNLA_DISABLE_LITERAL
+using mcnla::operator"" _i;
+#endif  // MCNLA_DISABLE_LITERAL
 
 #ifdef MCNLA_USE_MKL
 #define MKL_INT mcnla::index_t
 #define MKL_Complex8 std::complex<float>
 #define MKL_Complex16 std::complex<double>
 #endif  // MCNLA_USE_MKL
-
-/// @ingroup  core_module
-/// The index type literal.
-static inline mcnla::index_t operator""_i( unsigned long long int idx ) { return idx; }
 
 /// @ingroup  core_module
 //@{
@@ -99,5 +109,16 @@ static inline mcnla::index_t operator""_i( unsigned long long int idx ) { return
 
 /// @ingroup  core_module
 #define disp( expression ) std::cout << #expression << ":\n" << expression << std::endl;
+
+/// @ingroup  core_module
+#ifdef NDEBUG
+  #define warning( expression ) static_cast<void>(0)
+#else  // NDEBUG
+  #ifndef MCNLA_USE_GTEST
+    #define warning( expression ) std::cout << "Warning: " << #expression << std::endl;
+  #else  // MCNLA_USE_GTEST
+    #define warning( expression ) FAIL() << "Warning: " << #expression << std::endl;
+  #endif  // MCNLA_USE_GTEST
+#endif  // NDEBUG
 
 #endif  // MCNLA_DEF_HPP_

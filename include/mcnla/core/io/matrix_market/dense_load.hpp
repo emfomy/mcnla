@@ -42,7 +42,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size
@@ -93,7 +93,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size
@@ -137,7 +137,7 @@ inline void loadMatrixMarket(
 ///
 template <class _Tag, typename _Val>
 void loadMatrixMarket(
-    DenseVectorCollection<_Tag, CpuTag, _Val> &collection,
+    DenseVectorCollection<_Tag, _Val> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -146,7 +146,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size
@@ -173,7 +173,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Tag, typename _Val>
 inline void loadMatrixMarket(
-    DenseVectorCollection<_Tag, CpuTag, _Val> &&collection,
+    DenseVectorCollection<_Tag, _Val> &&collection,
     const char *file
 ) noexcept {
   loadMatrixMarket(collection, file);
@@ -191,7 +191,7 @@ inline void loadMatrixMarket(
 ///
 template <class _Tag, typename _Val, Trans _trans>
 void loadMatrixMarket(
-    DenseMatrixCollection<_Tag, CpuTag, _Val, _trans> &collection,
+    DenseMatrixCollection<_Tag, _Val, _trans> &collection,
     const char *file
 ) noexcept {
   // Open file
@@ -200,7 +200,7 @@ void loadMatrixMarket(
 
   // Skip comment
   while ( fin.peek() == '%' ) {
-    fin.ignore(4096, '\n');
+    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // Get size
@@ -229,7 +229,7 @@ void loadMatrixMarket(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <class _Tag, typename _Val, Trans _trans>
 inline void loadMatrixMarket(
-    DenseMatrixCollection<_Tag, CpuTag, _Val, _trans> &&collection,
+    DenseMatrixCollection<_Tag, _Val, _trans> &&collection,
     const char *file
 ) noexcept {
   loadMatrixMarket(collection, file);

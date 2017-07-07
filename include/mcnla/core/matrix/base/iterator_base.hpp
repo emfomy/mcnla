@@ -23,17 +23,17 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Default constructor.
 ///
-template <class _Derived>
-IteratorBase<_Derived>::IteratorBase() noexcept
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::IteratorBase() noexcept
   : container_(nullptr),
     itidx_(0) {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given container.
 ///
-template <class _Derived>
-IteratorBase<_Derived>::IteratorBase(
-    ContainerType *container,
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::IteratorBase(
+    _Container *container,
     const index_t itidx
 ) noexcept
   : container_(container),
@@ -42,8 +42,8 @@ IteratorBase<_Derived>::IteratorBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy constructor.
 ///
-template <class _Derived>
-IteratorBase<_Derived>::IteratorBase(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::IteratorBase(
     const IteratorBase &other
 ) noexcept
   : container_(other.container_),
@@ -52,8 +52,8 @@ IteratorBase<_Derived>::IteratorBase(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copy assignment operator.
 ///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::operator=(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator=(
     const IteratorBase &other
 ) noexcept {
   container_ = other.container_; itidx_ = other.itidx_;
@@ -65,8 +65,8 @@ _Derived& IteratorBase<_Derived>::operator=(
 ///
 /// @attention  Never call this method when the iterator is at the end.
 ///
-template <class _Derived>
-typename IteratorBase<_Derived>::ElemRefType IteratorBase<_Derived>::operator*() const noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_ElemRef IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator*() const noexcept {
   return derived().elemRef();
 }
 
@@ -75,16 +75,16 @@ typename IteratorBase<_Derived>::ElemRefType IteratorBase<_Derived>::operator*()
 ///
 /// @attention  Never call this method when the iterator is at the end.
 ///
-template <class _Derived>
-typename IteratorBase<_Derived>::ElemPtrType IteratorBase<_Derived>::operator->() const noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_ElemPtr IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator->() const noexcept {
   return derived().elemPtr();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Equal-to operator.
 ///
-template <class _Derived>
-bool IteratorBase<_Derived>::operator==(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator==(
     const IteratorBase &other
 ) const noexcept {
   mcnla_assert_eq(container_, other.container_);
@@ -94,8 +94,8 @@ bool IteratorBase<_Derived>::operator==(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Not-equal-to operator.
 ///
-template <class _Derived>
-bool IteratorBase<_Derived>::operator!=(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator!=(
     const IteratorBase &other
 ) const noexcept {
   return !(*this == other);
@@ -104,8 +104,8 @@ bool IteratorBase<_Derived>::operator!=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Greater-than operator.
 ///
-template <class _Derived>
-bool IteratorBase<_Derived>::operator>(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator>(
     const IteratorBase &other
 ) const noexcept {
   mcnla_assert_eq(container_, other.container_);
@@ -115,8 +115,8 @@ bool IteratorBase<_Derived>::operator>(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Less-than operator.
 ///
-template <class _Derived>
-bool IteratorBase<_Derived>::operator<(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator<(
     const IteratorBase &other
 ) const noexcept {
   mcnla_assert_eq(container_, other.container_);
@@ -126,8 +126,8 @@ bool IteratorBase<_Derived>::operator<(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Less-than or equal-to operator.
 ///
-template <class _Derived>
-bool IteratorBase<_Derived>::operator<=(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator<=(
     const IteratorBase &other
 ) const noexcept {
   return !(*this > other);
@@ -136,8 +136,8 @@ bool IteratorBase<_Derived>::operator<=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Greater-than or equal-to operator.
 ///
-template <class _Derived>
-bool IteratorBase<_Derived>::operator>=(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator>=(
     const IteratorBase &other
 ) const noexcept {
   return !(*this < other);
@@ -146,8 +146,8 @@ bool IteratorBase<_Derived>::operator>=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Prefix increment operator.
 ///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::operator++() noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator++() noexcept {
   mcnla_assert_ne(container_, nullptr);
 
   const auto nnz = container_->nnz();
@@ -160,8 +160,8 @@ _Derived& IteratorBase<_Derived>::operator++() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Prefix decrement operator.
 ///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::operator--() noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator--() noexcept {
   mcnla_assert_ne(container_, nullptr);
 
   if ( --itidx_ < 0 ) {
@@ -173,8 +173,8 @@ _Derived& IteratorBase<_Derived>::operator--() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Postfix increment operator.
 ///
-template <class _Derived>
-_Derived IteratorBase<_Derived>::operator++( int ) noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator++( int ) noexcept {
   auto retval(*this);
   ++(*this);
   return retval;
@@ -183,8 +183,8 @@ _Derived IteratorBase<_Derived>::operator++( int ) noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Postfix decrement operator.
 ///
-template <class _Derived>
-_Derived IteratorBase<_Derived>::operator--( int ) noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator--( int ) noexcept {
   auto retval(*this);
   --(*this);
   return retval;
@@ -193,8 +193,8 @@ _Derived IteratorBase<_Derived>::operator--( int ) noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition operator.
 ///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::operator+=(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator+=(
     const index_t num
 ) noexcept {
   mcnla_assert_ne(container_, nullptr);
@@ -210,8 +210,8 @@ _Derived& IteratorBase<_Derived>::operator+=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction operator.
 ///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::operator-=(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator-=(
     const index_t num
 ) noexcept {
   mcnla_assert_ne(container_, nullptr);
@@ -226,8 +226,8 @@ _Derived& IteratorBase<_Derived>::operator-=(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition assignment operator.
 ///
-template <class _Derived>
-_Derived IteratorBase<_Derived>::operator+(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator+(
     const index_t num
 ) const noexcept {
   auto retval(*this);
@@ -237,8 +237,8 @@ _Derived IteratorBase<_Derived>::operator+(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction assignment operator.
 ///
-template <class _Derived>
-_Derived IteratorBase<_Derived>::operator-(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator-(
     const index_t num
 ) const noexcept {
   auto retval(*this);
@@ -248,8 +248,8 @@ _Derived IteratorBase<_Derived>::operator-(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Subtraction assignment operator.
 ///
-template <class _Derived>
-index_t IteratorBase<_Derived>::operator-(
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+index_t IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator-(
     const IteratorBase &other
 ) const noexcept {
   mcnla_assert_ne(container_, nullptr);
@@ -259,10 +259,10 @@ index_t IteratorBase<_Derived>::operator-(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Addition assignment operator.
 ///
-template <class __Derived>
+template <class __Derived, typename ...__Args>
 __Derived operator+(
     const index_t num,
-    const IteratorBase<__Derived> &it
+    const IteratorBase<__Derived, __Args...> &it
 ) noexcept {
   return (it + num);
 }
@@ -270,24 +270,24 @@ __Derived operator+(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the iterator index.
 ///
-template <class _Derived>
-index_t IteratorBase<_Derived>::itidx() const noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+index_t IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::itidx() const noexcept {
   return itidx_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the container.
 ///
-template <class _Derived>
-ContainerT<_Derived>* IteratorBase<_Derived>::container() const noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Container* IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::container() const noexcept {
   return container_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to beginning.
 ///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::setBegin() noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::setBegin() noexcept {
   itidx_ = 0;
   return derived();
 }
@@ -295,8 +295,8 @@ _Derived& IteratorBase<_Derived>::setBegin() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the iterator to end.
 ///
-template <class _Derived>
-_Derived& IteratorBase<_Derived>::setEnd() noexcept {
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::setEnd() noexcept {
   itidx_ = (container_ != nullptr) ? container_->nnz() : 0;
   return derived();
 }
@@ -304,9 +304,9 @@ _Derived& IteratorBase<_Derived>::setEnd() noexcept {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to beginning iterator.
 ///
-template <class _Derived>
-_Derived IteratorBase<_Derived>::beginImpl(
-    ContainerType *container
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::beginImpl(
+    _Container *container
 ) noexcept {
   _Derived retval(container); retval.setBegin(); return retval;
 }
@@ -314,9 +314,9 @@ _Derived IteratorBase<_Derived>::beginImpl(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Gets the to end iterator.
 ///
-template <class _Derived>
-_Derived IteratorBase<_Derived>::endImpl(
-    ContainerType *container
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+_Derived IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::endImpl(
+    _Container *container
 ) noexcept {
   _Derived retval(container); retval.setEnd(); return retval;
 }

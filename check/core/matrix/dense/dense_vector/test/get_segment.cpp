@@ -12,7 +12,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride1, GetSegment) {
 
   auto segment = vec({idx0, idx0+idxs});
 
-  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.len(),    idxs);
   EXPECT_EQ(segment.nelem(),  idxs);
   EXPECT_EQ(segment.stride(), stride);
 
@@ -54,7 +54,7 @@ TYPED_TEST(DenseVectorTest_Size8_Stride3, GetSegment) {
 
   auto segment = vec({idx0, idx0+idxs});
 
-  EXPECT_EQ(segment.length(), idxs);
+  EXPECT_EQ(segment.len(),    idxs);
   EXPECT_EQ(segment.nelem(),  idxs);
   EXPECT_EQ(segment.stride(), stride);
 

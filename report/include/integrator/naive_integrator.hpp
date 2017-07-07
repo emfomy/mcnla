@@ -11,14 +11,14 @@
 #include <mcnla.hpp>
 
 struct Data {
-  mcnla::matrix::DenseMatrixCollection201<ValType> collection_q;
+  mcnla::matrix::DenseMatrixCollectionColBlockRowMajor<ValType> collection_q;
   mcnla::matrix::DenseMatrixRowMajor<ValType> matrix_q;
 
   Data( const mcnla::isvd::Parameters<ValType> &parameters ) noexcept
     : collection_q(parameters.createCollectionQ()),
-      matrix_q(parameters.createMatrixQ()) {
+      matrix_q(parameters.createMatrixQbar()) {
     mcnla::random::Streams streams(0);
-    mcnla::random::gaussian(streams, collection_q.unfold().vectorize());
+    mcnla::random::gaussian(streams, collection_q.unfold().vec());
     mcnla::isvd::GramianOrthogonalizer<ValType> orthogonalizer(parameters);
     orthogonalizer.initialize();
     orthogonalizer(collection_q);

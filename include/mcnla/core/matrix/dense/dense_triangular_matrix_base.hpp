@@ -77,7 +77,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase(
-    const DerivedType &other
+    const DenseTriangularMatrixBase &other
 ) noexcept
   : BaseType(other) {}
 
@@ -87,9 +87,8 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType&
-  DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
-    const DerivedType &other
+TrMatS<_Core, DenseTag, _Val, _trans, _uplo>& DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::operator=(
+    const DenseTriangularMatrixBase &other
 ) noexcept {
   BaseType::operator=(other);
   return derived();
@@ -99,8 +98,7 @@ typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType&
 /// @brief  Copies the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DerivedType
-    DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
+TrMatS<_Core, DenseTag, _Val, _trans, _uplo> DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::copy() const noexcept {
   DenseTriangularMatrixBase retval(this->size(), this->pitch(), this->val().copy(), this->offset());
   return retval.derived();
 }
@@ -143,9 +141,9 @@ _Val DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::operator()(
 ///
 /// @attention  The data is also reallocated.
 ///
-template <class _Core, typename _Val, Trans _trans, Uplo _uplo> template <typename... Args>
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo> template <typename ..._Args>
 void DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::reconstruct(
-    Args... args
+    _Args... args
 ) noexcept {
   *this = DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>(args...);
 }
@@ -166,7 +164,7 @@ void DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::resize(
 /// @attention  The storage layout is also changed.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+TrMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::t() noexcept {
   return static_cast<TransposeType&>(base());
 }
@@ -175,26 +173,26 @@ typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
 /// @copydoc  t
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::TransposeType&
+const TrMatS<_Core, DenseTag, _Val, changeTrans(_trans), changeUplo(_uplo)>&
     DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::t() const noexcept {
   return static_cast<const TransposeType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Gets the general view of the matrix.
+/// @brief  Gets the full view of the matrix.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
-    DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() noexcept {
+GeMatS<_Core, DenseTag, _Val, _trans>&
+    DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::full() noexcept {
   return static_cast<GeneralType&>(base());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc  viewGeneral
+/// @copydoc  full
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-const typename DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::GeneralType&
-    DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::viewGeneral() const noexcept {
+const GeMatS<_Core, DenseTag, _Val, _trans>&
+    DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::full() const noexcept {
   return static_cast<const GeneralType&>(base());
 }
 
@@ -212,6 +210,22 @@ index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::nrowImpl() const 
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
 index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::ncolImpl() const noexcept {
   return !isTrans(_trans) ? this->dim1() : this->dim0();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mrow
+///
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mrowImpl() const noexcept {
+  return !isTrans(_trans) ? this->mdim0() : this->mdim1();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::DenseMatrixWrapper::mcol
+///
+template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
+index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mcolImpl() const noexcept {
+  return !isTrans(_trans) ? this->mdim1() : this->mdim0();
 }
 
 }  // namespace matrix

@@ -30,7 +30,7 @@ template <typename _Val> using RowBlockColumnSamplingSketcher = Sketcher<RowBloc
 /// @ingroup  isvd_sketcher_module
 /// The column sampling sketcher (row-block version).
 ///
-/// @tparam  _Val    The value type.
+/// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -45,10 +45,6 @@ class RowBlockColumnSamplingSketcher
  private:
 
   using BaseType = StageWrapper<RowBlockColumnSamplingSketcher<_Val>>;
-
- public:
-
-  using ValType = _Val;
 
  protected:
 
@@ -73,7 +69,7 @@ class RowBlockColumnSamplingSketcher
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<ValType> &parameters, const index_t seed = rand() ) noexcept;
+  inline Sketcher( const Parameters<_Val> &parameters, const index_t seed = rand() ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
@@ -88,7 +84,7 @@ class RowBlockColumnSamplingSketcher
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, DenseMatrixCollection201<ValType> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q ) noexcept;
 
 };
 

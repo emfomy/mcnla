@@ -11,6 +11,7 @@
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/la/raw/blas/nrm2.hpp>
+#include <mcnla/core/la/dense/routine/dot.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -30,7 +31,7 @@ template <typename _Val>
 inline RealValT<_Val> nrm2(
     const DenseVector<_Val> &x
 ) noexcept {
-  return detail::nrm2(x.length(), x.valPtr(), x.stride());
+  return detail::nrm2(x.len(), x.valPtr(), x.stride());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,6 +43,28 @@ inline RealValT<_Val> nrmf(
     const DenseVector<_Val> &x
 ) noexcept {
   return nrm2(x);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_dense_blas1_module
+/// @brief  Computes square of the Euclidean norm of a vector.
+///
+template <typename _Val>
+inline RealValT<_Val> nrm22(
+    const DenseVector<_Val> &x
+) noexcept {
+  return dot(x, x);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  la_dense_blas1_module
+/// @brief  Computes the Frobenius norm of a vector.
+///
+template <typename _Val>
+inline RealValT<_Val> nrmf2(
+    const DenseVector<_Val> &x
+) noexcept {
+  return nrm22(x);
 }
 
 }  // namespace la

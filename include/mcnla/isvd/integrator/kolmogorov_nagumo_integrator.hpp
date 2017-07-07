@@ -11,6 +11,12 @@
 #include <mcnla/isvd/integrator/kolmogorov_nagumo_integrator.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP Integrator<KolmogorovNagumoIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP KolmogorovNagumoIntegrator<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,10 +31,10 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-KolmogorovNagumoIntegrator<_Val>::Integrator(
-    const Parameters<ValType> &parameters,
+MCNLA_TMP::Integrator(
+    const Parameters<_Val> &parameters,
     const index_t max_iteration,
-    const RealValType tolerance
+    const RealValT<_Val> tolerance
 ) noexcept
   : BaseType(parameters) {
   setMaxIteration(max_iteration);
@@ -39,13 +45,13 @@ KolmogorovNagumoIntegrator<_Val>::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void KolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow            = parameters_.nrow();
   const auto dim_sketch      = parameters_.dimSketch();
   const auto dim_sketch_each = parameters_.dimSketchEach();
 
-  matrix_b_.reconstruct(dim_sketch, dim_sketch_each);
+  matrix_b_.reconstruct(dim_sketch_each, dim_sketch);
   matrix_d_.reconstruct(dim_sketch, dim_sketch);
   matrix_z_.reconstruct(dim_sketch, dim_sketch);
   matrix_c_.reconstruct(dim_sketch, dim_sketch);
@@ -66,9 +72,9 @@ void KolmogorovNagumoIntegrator<_Val>::initializeImpl() noexcept {
 /// @param  matrix_qbar   The matrix Qbar.
 ///
 template <typename _Val>
-void KolmogorovNagumoIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<ValType> &collection_q,
-          DenseMatrixRowMajor<ValType> &matrix_qbar
+void MCNLA_TMP::runImpl(
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
+          DenseMatrixRowMajor<_Val> &matrix_qbar
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
@@ -110,17 +116,17 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
     // ================================================================================================================== //
     // X = (I - Qc * Qc') * sum(Qi * Qi')/N * Qc
 
-    // B := sum( Qc' * Qs )
-    la::mm(matrix_qc.t(), matrix_qs, matrix_b_);
+    // B := sum( Qs' * Qc )
+    la::mm(matrix_qs.t(), matrix_qc, matrix_b_);
 
-    // D := B * B'
-    la::rk(matrix_b_, matrix_d_.viewSymmetric());
+    // D := B' * B
+    la::rk(matrix_b_.t(), matrix_d_.sym());
 
-    // X := 1/N * Qs * B'
-    la::mm(matrix_qs, matrix_b_.t(), matrix_x_, 1.0/num_sketch);
+    // X := 1/N * Qs * B
+    la::mm(matrix_qs, matrix_b_, matrix_x_, 1.0/num_sketch);
 
     // X -= 1/N * Qc * D
-    la::mm(matrix_qc, matrix_d_.viewSymmetric(), matrix_x_, -1.0/num_sketch, 1.0);
+    la::mm(matrix_qc, matrix_d_.sym(), matrix_x_, -1.0/num_sketch, 1.0);
 
     // Reduce sum X
     comm_moment = utility::getTime();
@@ -131,10 +137,10 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
     // C := sqrt( I/2 + sqrt( I/4 - X' * X ) )
 
     // Z := sum(X' * X)
-    la::rk(matrix_x_.t(), matrix_z_.viewSymmetric());
+    la::rk(matrix_x_.t(), matrix_z_.sym());
 
-    // Compute the eigen-decomposition of Z -> Z' * E * Z
-    syev_driver_(matrix_z_.viewSymmetric(), vector_e_);
+    // eig(Z) = Z' * E * Z
+    syev_driver_(matrix_z_.sym(), vector_e_);
 
     // E := sqrt( I/2 + sqrt( I/4 - E ) )
     for ( index_t i = 0; i < dim_sketch; ++i ) {
@@ -143,33 +149,33 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
     }
 
     // D := F * Z
-    la::mm(vector_f_.viewDiagonal(), matrix_z_, matrix_d_);
+    la::mm(vector_f_.diag(), matrix_z_, matrix_d_);
 
     // Z := F \ Z
-    la::sm(vector_f_.viewDiagonal().inv(), matrix_z_);
+    la::sm(vector_f_.diag().inv(), matrix_z_);
 
     // C := D' * D
-    la::rk(matrix_d_.t(), matrix_c_.viewSymmetric());
+    la::rk(matrix_d_.t(), matrix_c_.sym());
 
     // inv(C) := Z' * Z
-    la::rk(matrix_z_.t(), matrix_d_.viewSymmetric());
+    la::rk(matrix_z_.t(), matrix_d_.sym());
 
     // ================================================================================================================== //
     // Qc := Qc * C + X * inv(C)
 
     // Qc *= C
-    la::copy(matrix_qc.vectorize(), matrix_tmp_.vectorize());
-    la::mm(matrix_tmp_, matrix_c_.viewSymmetric(), matrix_qc);
+    la::copy(matrix_qc.vec(), matrix_tmp_.vec());
+    la::mm(matrix_tmp_, matrix_c_.sym(), matrix_qc);
 
     // Qc += X * inv(C)
-    la::mm(matrix_x_, matrix_d_.viewSymmetric(), matrix_qc, 1.0, 1.0);
+    la::mm(matrix_x_, matrix_d_.sym(), matrix_qc, 1.0, 1.0);
 
     // ================================================================================================================== //
-    // Check convergence: || I - C ||_F / sqrt(k) < tol
+    // Check convergence: || I - C ||_F < tol
     for ( auto &v : vector_e_ ) {
       v -= 1.0;
     }
-    is_converged = !(la::nrm2(vector_e_) / std::sqrt(dim_sketch) >= tolerance_);
+    is_converged = !(la::nrm2(vector_e_) >= tolerance_);
   }
 
   this->toc(comm_time);
@@ -179,7 +185,7 @@ void KolmogorovNagumoIntegrator<_Val>::runImpl(
 /// @brief  Gets the maximum number of iteration.
 ///
 template <typename _Val>
-index_t KolmogorovNagumoIntegrator<_Val>::maxIteration() const noexcept {
+index_t MCNLA_TMP::maxIteration() const noexcept {
   return max_iteration_;
 }
 
@@ -187,7 +193,7 @@ index_t KolmogorovNagumoIntegrator<_Val>::maxIteration() const noexcept {
 /// @brief  Gets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RealValT<_Val> KolmogorovNagumoIntegrator<_Val>::tolerance() const noexcept {
+RealValT<_Val> MCNLA_TMP::tolerance() const noexcept {
   return tolerance_;
 }
 
@@ -195,7 +201,7 @@ RealValT<_Val> KolmogorovNagumoIntegrator<_Val>::tolerance() const noexcept {
 /// @brief  Gets the number of iteration.
 ///
 template <typename _Val>
-index_t KolmogorovNagumoIntegrator<_Val>::iteration() const noexcept {
+index_t MCNLA_TMP::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
 }
@@ -204,7 +210,7 @@ index_t KolmogorovNagumoIntegrator<_Val>::iteration() const noexcept {
 /// @brief  Sets the maximum number of iteration.
 ///
 template <typename _Val>
-KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setMaxIteration(
+KolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
@@ -218,8 +224,8 @@ KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setMaxIterat
 /// @brief  Sets the tolerance of convergence condition.
 ///
 template <typename _Val>
-KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setTolerance(
-    const RealValType tolerance
+KolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setTolerance(
+    const RealValT<_Val> tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
   tolerance_ = tolerance;
@@ -231,5 +237,7 @@ KolmogorovNagumoIntegrator<_Val>& KolmogorovNagumoIntegrator<_Val>::setTolerance
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_

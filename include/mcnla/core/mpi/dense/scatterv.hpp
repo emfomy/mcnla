@@ -36,7 +36,7 @@ inline void scattervImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  constexpr const MPI_Datatype &datatype = traits::MpiValTraits<_Val>::datatype;
+  constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Scatterv(send.valPtr(), sendcounts, displs, datatype, recv.valPtr(), recvcount, datatype, root, comm);
 }
 

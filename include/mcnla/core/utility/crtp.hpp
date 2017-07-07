@@ -10,11 +10,11 @@
 
 #include <mcnla/core/utility/def.hpp>
 
-#define CRTP_BASE( _Base ) \
+#define MCNLA_CRTP_BASE( _Base ) \
     inline _Base& base() noexcept { return static_cast<_Base&>(*this); } \
-    inline const _Base& base() const noexcept { return static_cast<const _Base&>(*this); }
+    inline const _Base& base() const noexcept { return static_cast<const _Base&>(*this); } \
 
-#define CRTP_DERIVED( _Derived ) \
+#define MCNLA_CRTP_DERIVED( _Derived ) \
     inline _Derived& derived() noexcept { return static_cast<_Derived&>(*this); } \
     inline const _Derived& derived() const noexcept { return static_cast<const _Derived&>(*this); }
 

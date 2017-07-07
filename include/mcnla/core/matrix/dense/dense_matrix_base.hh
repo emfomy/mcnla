@@ -23,6 +23,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val, Trans _trans>
+using DenseMatrixBase = DenseMatrixBase_<_Core, _Val, _trans>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix base class.
 ///
@@ -31,9 +36,13 @@ namespace matrix {
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+class DenseMatrixBase_
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
-    public MatrixWrapper<GeMatS<_Core, DenseTag, _Val, _trans>>,
+    public DenseMatrixWrapper<GeMatS<_Core, DenseTag, _Val, _trans>>,
     public InvertibleWrapper<GeMatS<_Core, DenseTag, _Val, _trans>> {
 
   static_assert(!isConj(_trans), "Conjugate matrix is not supported!");
@@ -43,6 +52,7 @@ class DenseMatrixBase
   using DerivedType = GeMatS<_Core, DenseTag, _Val, _trans>;
 
   friend MatrixWrapper<DerivedType>;
+  friend DenseMatrixWrapper<DerivedType>;
   friend InvertibleWrapper<DerivedType>;
 
  public:
@@ -87,10 +97,10 @@ class DenseMatrixBase
   inline DenseMatrixBase( const SizesType sizes, const index_t pitch, const index_t capacity ) noexcept;
   inline DenseMatrixBase( const index_t nrow, const index_t ncol, const index_t pitch,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseMatrixBase( const DerivedType &other ) noexcept;
+  inline DenseMatrixBase( const DenseMatrixBase &other ) noexcept;
 
   // Operators
-  inline DerivedType& operator=( const DerivedType &other ) noexcept;
+  inline DerivedType& operator=( const DenseMatrixBase &other ) noexcept;
 
   // Copy
   inline DerivedType copy() const noexcept;
@@ -106,8 +116,8 @@ class DenseMatrixBase
   inline index_t pos( const index_t rowidx, const index_t colidx ) const noexcept;
 
   // Resizes
-  template <typename... Args>
-  inline void reconstruct( Args... args ) noexcept;
+  template <typename ..._Args>
+  inline void reconstruct( _Args... args ) noexcept;
   inline void resize( const index_t nrow, const index_t ncol ) noexcept;
   inline void resize( const index_t nrow, const FullRange ) noexcept;
   inline void resize( const FullRange, const index_t ncol ) noexcept;
@@ -122,17 +132,25 @@ class DenseMatrixBase
 
   // Change view
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline       SymmetricType<_uplo>& viewSymmetric() noexcept;
+  inline       SymmetricType<_uplo>& sym() noexcept;
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline const SymmetricType<_uplo>& viewSymmetric() const noexcept;
+  inline const SymmetricType<_uplo>& sym() const noexcept;
+  inline       SymmetricType<Uplo::UPPER>& symu() noexcept;
+  inline const SymmetricType<Uplo::UPPER>& symu() const noexcept;
+  inline       SymmetricType<Uplo::LOWER>& syml() noexcept;
+  inline const SymmetricType<Uplo::LOWER>& syml() const noexcept;
 
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline       TriangularType<_uplo>& viewTriangular() noexcept;
+  inline       TriangularType<_uplo>& tri() noexcept;
   template <Uplo _uplo = Uplo::UPPER ^ _trans>
-  inline const TriangularType<_uplo>& viewTriangular() const noexcept;
+  inline const TriangularType<_uplo>& tri() const noexcept;
+  inline       TriangularType<Uplo::UPPER>& triu() noexcept;
+  inline const TriangularType<Uplo::UPPER>& triu() const noexcept;
+  inline       TriangularType<Uplo::LOWER>& tril() noexcept;
+  inline const TriangularType<Uplo::LOWER>& tril() const noexcept;
 
-  inline       DiagonalType viewDiagonal() noexcept;
-  inline const DiagonalType viewDiagonal() const noexcept;
+  inline       DiagonalType diag() noexcept;
+  inline const DiagonalType diag() const noexcept;
 
   // Gets matrix block
   inline       MatrixType operator()( const IdxRange &rowrange, const IdxRange &colrange ) noexcept;
@@ -151,17 +169,18 @@ class DenseMatrixBase
   inline const VectorType operator()( const index_t rowidx, const IdxRange &colrange ) const noexcept;
   inline       VectorType operator()( const index_t rowidx, const FullRange ) noexcept;
   inline const VectorType operator()( const index_t rowidx, const FullRange ) const noexcept;
-
-  inline       VectorType getDiagonal( const index_t idx = 0 ) noexcept;
-  inline const VectorType getDiagonal( const index_t idx = 0 ) const noexcept;
-  inline       VectorType vectorize() noexcept;
-  inline const VectorType vectorize() const noexcept;
+  inline       VectorType getDiag( const index_t idx = 0 ) noexcept;
+  inline const VectorType getDiag( const index_t idx = 0 ) const noexcept;
+  inline       VectorType vec() noexcept;
+  inline const VectorType vec() const noexcept;
 
  protected:
 
   // Gets information
   inline index_t nrowImpl() const noexcept;
   inline index_t ncolImpl() const noexcept;
+  inline index_t mrowImpl() const noexcept;
+  inline index_t mcolImpl() const noexcept;
 
   // Convert sizes to dims
   inline index_t toDim0( const SizesType sizes ) const noexcept;
@@ -173,10 +192,8 @@ class DenseMatrixBase
   inline const IdxRange colfullrange() const noexcept;
   inline const IdxRange rowfullrange() const noexcept;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_BASE(BaseType);
-  CRTP_DERIVED(DerivedType);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_BASE(BaseType)
+  MCNLA_CRTP_DERIVED(DerivedType)
 
 };
 

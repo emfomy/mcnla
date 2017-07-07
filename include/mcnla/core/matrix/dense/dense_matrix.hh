@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/base/iterable_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_base.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_iterator.hpp>
@@ -30,36 +30,15 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense matrix traits.
-///
-template <typename _Val, Trans _trans>
-struct Traits<matrix::DenseMatrix<_Val, _trans>> {
-
-  static constexpr Trans trans = _trans;
-
-  using ValType           = _Val;
-
-  using RealType          = matrix::DenseMatrix<RealValT<_Val>, _trans>;
-  using ComplexType       = matrix::DenseMatrix<ComplexValT<_Val>, _trans>;
-
-  using VectorType        = matrix::DenseVector<_Val>;
-  using MatrixType        = matrix::DenseMatrix<_Val, _trans>;
-
-  using IteratorType      = matrix::DenseMatrixIterator<_Val, _trans>;
-  using ConstIteratorType = matrix::DenseMatrixConstIterator<_Val, _trans>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix instantiation type traits.
 ///
 template <typename _Type>
 struct IsDenseMatrix : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseMatrix
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans>
 struct IsDenseMatrix<matrix::DenseMatrix<_Val, _trans>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense matrix assert.
@@ -84,15 +63,17 @@ namespace matrix {
 template <typename _Val, Trans _trans>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeMatS<CpuTag, DenseTag, _Val, _trans>
+  : public DenseMatrixBase<CpuTag, _Val, _trans>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrix
+  : public DenseMatrixBase_<CpuTag, _Val, _trans>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseMatrixBase<CpuTag, _Val, _trans>,
-    public DenseMatrixWrapper<DenseMatrix<_Val, _trans>>,
-    public IterableWrapper<DenseMatrix<_Val, _trans>> {
+    public MatrixOstreamWrapper<DenseMatrix<_Val, _trans>>,
+    public IterableWrapper<DenseMatrix<_Val, _trans>,
+                           DenseMatrixIterator<_Val, _trans>, DenseMatrixConstIterator<_Val, _trans>> {
 
-  friend DenseMatrixWrapper<DenseMatrix<_Val, _trans>>;
-  friend IterableWrapper<DenseMatrix<_Val, _trans>>;
+  friend MatrixOstreamWrapper<DenseMatrix<_Val, _trans>>;
+  friend IterableWrapper<DenseMatrix<_Val, _trans>, DenseMatrixIterator<_Val, _trans>, DenseMatrixConstIterator<_Val, _trans>>;
 
  public:
 
@@ -107,6 +88,11 @@ class DenseMatrix
 
   using BaseType::DenseMatrixBase;
 
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseMatrixBase_::operator=
+  DenseMatrix& operator=( const DenseMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
   // Finds the iterator
   inline IteratorType      find( const index_t rowidx, const index_t colidx ) noexcept;
   inline ConstIteratorType find( const index_t rowidx, const index_t colidx ) const noexcept;
@@ -115,10 +101,12 @@ class DenseMatrix
 };
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseMatrix
 template <typename _Val>
 using DenseMatrixColMajor = DenseMatrix<_Val, Trans::NORMAL>;
 
 /// @ingroup  matrix_dense_module
+/// @see  DenseMatrix
 template <typename _Val>
 using DenseMatrixRowMajor = DenseMatrix<_Val, Trans::TRANS>;
 

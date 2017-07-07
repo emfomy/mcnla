@@ -11,6 +11,9 @@ if(GTEST_FOUND)
   list(APPEND LIBS "${GTEST_BOTH_LIBRARIES}")
 endif()
 
+# Set data path
+list(APPEND DEFS "-DMCNLA_DATA_PATH=\"${PROJECT_SOURCE_DIR}/data\"")
+
 # Add check tests
 include(check.cmake)
 
@@ -25,18 +28,24 @@ add_mpi_check(isvd/sketcher/column_sampling_sketcher "Column Sampling Sketcher t
 add_mpi_check(isvd/sketcher/row_block_gaussian_projection_sketcher "Row-Block Gaussian Projection Sketcher test" "RowBlockGaussianProjectionSketcherTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/sketcher/row_block_column_sampling_sketcher "Row-Block Column Sampling Sketcher test" "RowBlockColumnSamplingSketcherTest" 1 2 3 4 6 12)
 
+add_mpi_check(isvd/orthogonalizer/qr_orthogonalizer "QR Orthogonalizer test" "QrOrthogonalizerTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/orthogonalizer/svd_orthogonalizer "SVD Orthogonalizer test" "SvdOrthogonalizerTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/orthogonalizer/gramian_orthogonalizer "Gramian Orthogonalizer test" "GramianOrthogonalizerTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/orthogonalizer/row_block_gramian_orthogonalizer "Row-Block Gramian Orthogonalizer test" "RowBlockGramianOrthogonalizerTest" 1 2 3 4 6 12)
 
 add_mpi_check(isvd/integrator/kolmogorov_nagumo_integrator "Kolmogorov-Nagumo-Type Integrator test" "KolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_kolmogorov_nagumo_integrator "Row-Block Kolmogorov-Nagumo-Type Integrator test" "RowBlockKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
-add_mpi_check(isvd/integrator/row_block_fast_kolmogorov_nagumo_integrator "Fast Row-Block Kolmogorov-Nagumo-Type Integrator test" "RowBlockFastKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/integrator/row_block_gramian_kolmogorov_nagumo_integrator "Row-Block Gramian Kolmogorov-Nagumo-Type Integrator test" "RowBlockGramianKolmogorovNagumoIntegratorTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/integrator/row_block_wen_yin_integrator "Row-Block Wen-Yin Line Search Integrator test" "RowBlockWenYinIntegratorTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/integrator/row_block_gramian_wen_yin_integrator "Row-Block Gramian Wen-Yin Line Search Integrator test" "RowBlockGramianWenYinIntegratorTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/integrator/row_block_reduction_integrator "Row-Block Reduction Integrator test" "RowBlockReductionIntegratorTest" 1 2 3 4 6 12)
 add_mpi_check(isvd/integrator/row_block_extrinsic_mean_integrator "Row-Block Extrinsic Mean Integrator test" "RowBlockExtrinsicMeanIntegratorTest" 1 2 3 4 6 12)
 
 add_mpi_check(isvd/former/svd_former "SVD Former test" "SvdFormerTest" 1)
 add_mpi_check(isvd/former/gramian_former "Gramian Former test" "GramianFormerTest" 1)
 add_mpi_check(isvd/former/row_block_gramian_former "Row-BLock Gramian Former test" "RowBlockGramianFormerTest" 1 2 3 4 6 12)
+
+add_mpi_check(isvd/former/row_block_symmetric_former "Row-BLock Symmetric Former test" "RowBlockSymmetricFormerTest" 1 2 3 4 6 12)
 
 # Add rule 'build_test'
 add_custom_target(

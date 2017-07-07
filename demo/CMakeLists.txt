@@ -20,7 +20,7 @@ macro(SET_TARGET target files)
   # Add run rule
   add_custom_target(
     run_${target}
-    COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} $<TARGET_FILE:mcnla_${target}>
+    COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${MPI_PROCS} $<TARGET_FILE:mcnla_${target}> ${ARGN}
     DEPENDS mcnla_${target}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Running ${target}"
@@ -30,8 +30,11 @@ endmacro()
 # Set target (demo)
 set_target(demo demo.cpp)
 
-# Set target (demo_plain)
+# # Set target (demo_plain)
 # set_target(demo_plain demo_plain.cpp)
+
+# Set target (example)
+set_target(example example.cpp ${PROJECT_SOURCE_DIR}/data/a.mtx /dev/null /dev/null /dev/null)
 
 # Set target (test)
 set_target(test test.cpp)

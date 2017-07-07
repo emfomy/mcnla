@@ -42,7 +42,7 @@ class CooVectorStorage
   : public CooStorage<_Core, _Val>,
     public CooIdx0Storage<_Core, index_t> {
 
-  friend class CooMatrixStorage<_Core, _Val>;
+  friend CooMatrixStorage<_Core, _Val>;
 
  private:
 
@@ -61,7 +61,6 @@ class CooVectorStorage
   /// The size in the first dimension.
   index_t dim0_;
 
-  using BaseType::val_;
   using BaseType::nnz_;
 
  public:

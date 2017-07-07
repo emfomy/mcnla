@@ -13,7 +13,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch8, GetRowSegment) {
 
   auto segment = mat(rowidx, {col0, col0+cols});
 
-  EXPECT_EQ(segment.length(), cols);
+  EXPECT_EQ(segment.len(),    cols);
   EXPECT_EQ(segment.nelem(),  cols);
   EXPECT_EQ(segment.stride(), pitch);
 
@@ -56,7 +56,7 @@ TYPED_TEST(DenseMatrixTest_ColMajor_Size8x5_Pitch10, GetRowSegment) {
 
   auto segment = mat(rowidx, {col0, col0+cols});
 
-  EXPECT_EQ(segment.length(), cols);
+  EXPECT_EQ(segment.len(),    cols);
   EXPECT_EQ(segment.nelem(),  cols);
   EXPECT_EQ(segment.stride(), pitch);
 
@@ -99,7 +99,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch5, GetRowSegment) {
 
   auto segment = mat(rowidx, {col0, col0+cols});
 
-  EXPECT_EQ(segment.length(), cols);
+  EXPECT_EQ(segment.len(),    cols);
   EXPECT_EQ(segment.nelem(),  cols);
   EXPECT_EQ(segment.stride(), 1);
 
@@ -142,7 +142,7 @@ TYPED_TEST(DenseMatrixTest_RowMajor_Size8x5_Pitch10, GetRowSegment) {
 
   auto segment = mat(rowidx, {col0, col0+cols});
 
-  EXPECT_EQ(segment.length(), cols);
+  EXPECT_EQ(segment.len(),    cols);
   EXPECT_EQ(segment.nelem(),  cols);
   EXPECT_EQ(segment.stride(), 1);
 

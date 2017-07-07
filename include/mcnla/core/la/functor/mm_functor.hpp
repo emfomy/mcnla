@@ -47,6 +47,22 @@ void MmFunctor<_Matrix, _transb, _transc>::operator()(
   la::mm(matrix_, b, c, alpha, beta);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::nrow
+///
+template <class _Matrix, Trans _transb, Trans _transc>
+index_t MmFunctor<_Matrix, _transb, _transc>::nrowImpl() const noexcept {
+  return matrix_.nrow();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @copydoc  mcnla::matrix::MatrixWrapper::ncol
+///
+template <class _Matrix, Trans _transb, Trans _transc>
+index_t MmFunctor<_Matrix, _transb, _transc>::ncolImpl() const noexcept {
+  return matrix_.ncol();
+}
+
 }  // namespace matrix
 
 }  // namespace mcnla

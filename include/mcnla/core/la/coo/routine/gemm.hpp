@@ -68,7 +68,7 @@ inline void gemmImpl3(
   mcnla_assert_eq(a.nrow(), b.ncol());
 
   if ( c.isShrunk() ) {
-    la::scal(c.vectorize(), beta);
+    la::scal(c.vec(), beta);
   } else {
     for ( index_t i = 0; i < c.nrow(); ++i ) {
       la::scal(c(""_, i), beta);
@@ -198,7 +198,7 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(dummy && false, "COO GEMM does not support conjugate matrices!");
+  static_assert(dummy && false, "COO GEMM for conjugate matrices is not implemented!");
 }
 
 // ========================================================================================================================== //
@@ -240,7 +240,7 @@ inline void gemmImpl1(
   static_cast<void>(c);
   static_cast<void>(alpha);
   static_cast<void>(beta);
-  static_assert(dummy && false, "COO GEMM does not support conjugate matrices!");
+  static_assert(dummy && false, "COO GEMM for conjugate matrices is not implemented!");
 }
 
 //@}

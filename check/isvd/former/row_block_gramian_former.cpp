@@ -4,8 +4,8 @@
 #include <mcnla/core/io/matrix_market.hpp>
 
 #define MATRIX_A_PATH MCNLA_DATA_PATH "/a.mtx"
-#define MATRIX_Q_PATH MCNLA_DATA_PATH "/qb_kn.mtx"
-#define MATRIX_U_PATH MCNLA_DATA_PATH "/u_kn.mtx"
+#define MATRIX_Q_PATH MCNLA_DATA_PATH "/q.mtx"
+#define MATRIX_U_PATH MCNLA_DATA_PATH "/u.mtx"
 
 TEST(RowBlockGramianFormerTest, Test) {
   using ValType = double;
@@ -15,21 +15,21 @@ TEST(RowBlockGramianFormerTest, Test) {
 
   // Reads data
   mcnla::matrix::DenseMatrixRowMajor<ValType> a;
-  mcnla::matrix::DenseMatrixRowMajor<ValType> qbar_true;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> q_true;
   mcnla::matrix::DenseMatrixRowMajor<ValType> u_true_all;
   mcnla::io::loadMatrixMarket(a, MATRIX_A_PATH);
-  mcnla::io::loadMatrixMarket(qbar_true, MATRIX_Q_PATH);
+  mcnla::io::loadMatrixMarket(q_true, MATRIX_Q_PATH);
   mcnla::io::loadMatrixMarket(u_true_all, MATRIX_U_PATH);
 
   // Checks size
-  ASSERT_EQ(a.nrow(), qbar_true.nrow());
-  ASSERT_EQ(qbar_true.sizes(), u_true_all.sizes());
+  ASSERT_EQ(a.nrow(), q_true.nrow());
+  ASSERT_EQ(q_true.sizes(), u_true_all.sizes());
 
   // Gets size
   const mcnla::index_t m  = a.nrow();
   const mcnla::index_t n  = a.ncol();
-  const mcnla::index_t k  = qbar_true.ncol() / 2;
-  const mcnla::index_t p  = qbar_true.ncol() - k;
+  const mcnla::index_t k  = q_true.ncol() / 2;
+  const mcnla::index_t p  = q_true.ncol() - k;
   const mcnla::index_t Nj = 1;
 
   // Sets parameters
@@ -38,7 +38,7 @@ TEST(RowBlockGramianFormerTest, Test) {
   parameters.sync();
 
   // Initializes former
-  mcnla::isvd::RowBlockGramianFormer<ValType> former(parameters);
+  mcnla::isvd::RowBlockGramianFormer<ValType, true> former(parameters);
   former.initialize();
 
   // Initializes converter
@@ -48,18 +48,18 @@ TEST(RowBlockGramianFormerTest, Test) {
   post_converter.initialize();
 
   // Creates matrices
-  auto qbar   = parameters.createMatrixQ();
-  auto qbarj  = parameters.createMatrixQj();
+  auto q      = parameters.createMatrixQbar();
+  auto qj     = parameters.createMatrixQbarj();
   auto u      = parameters.createMatrixU();
   auto aj     = a(parameters.rowrange(), ""_);
   auto u_true = u_true_all(""_, {0_i, k});
 
   // Copies data
-  mcnla::la::copy(qbar_true, qbar);
+  mcnla::la::copy(q_true, q);
 
   // Integrates
-  pre_converter(qbar, qbarj);
-  former(aj, qbarj);
+  pre_converter(q, qj);
+  former(aj, qj);
 
   // Gets result
   post_converter(former.matrixUj(), u);

@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix_base.hpp>
 #include <mcnla/core/matrix/dense/dense_vector.hpp>
 #include <mcnla/core/utility/traits.hpp>
@@ -25,31 +25,15 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense diagonal matrix traits.
-///
-template <typename _Val>
-struct Traits<matrix::DenseDiagonalMatrix<_Val>> {
-
-  using ValType     = _Val;
-
-  using RealType    = matrix::DenseDiagonalMatrix<RealValT<_Val>>;
-  using ComplexType = matrix::DenseDiagonalMatrix<ComplexValT<_Val>>;
-
-  using VectorType  = matrix::DenseVector<_Val>;
-  using MatrixType  = matrix::DenseDiagonalMatrix<_Val>;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix instantiation type traits.
 ///
 template <typename _Type>
 struct IsDenseDiagonalMatrix : std::false_type {};
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @copydoc IsDenseDiagonalMatrix
-///
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
 struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Val>> : std::true_type {};
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix assert.
@@ -73,13 +57,14 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DiMatS<CpuTag, DenseTag, _Val>
+  : public DenseDiagonalMatrixBase<CpuTag, _Val>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseDiagonalMatrix
+  : public DenseDiagonalMatrixBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseDiagonalMatrixBase<CpuTag, _Val>,
-    public DenseMatrixWrapper<DenseDiagonalMatrix<_Val>> {
+    public MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>> {
 
-  friend DenseMatrixWrapper<DenseDiagonalMatrix<_Val>>;
+  friend MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>>;
 
  private:
 
@@ -88,6 +73,11 @@ class DenseDiagonalMatrix
  public:
 
   using BaseType::DenseDiagonalMatrixBase;
+
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
+  /// @copydoc DenseDiagonalMatrixBase_::operator=
+  DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other );
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 };
 

@@ -65,8 +65,6 @@ if(MKL_OMP STREQUAL "GOMP")
     DOC "The GNU thread library of Intel MKL."
   )
   set(MKL_LIBRARY_THREAD ${MKL_LIBRARY_GNU_THREAD})
-  set(GOMP_LIBRARY "-lgomp" CACHE STRING "The GNU thread library." FORCE)
-  set(OMP_LIBRARY ${GOMP_LIBRARY})
 elseif(MKL_OMP STREQUAL "IOMP")
   find_library(
     MKL_LIBRARY_INTEL_THREAD
@@ -75,13 +73,6 @@ elseif(MKL_OMP STREQUAL "IOMP")
     DOC "The Intel thread library of Intel MKL."
   )
   set(MKL_LIBRARY_THREAD ${MKL_LIBRARY_INTEL_THREAD})
-  find_library(
-    IOMP_LIBRARY
-    NAMES iomp5
-    HINTS "${INTEL_ROOT}/lib/intel64"
-    DOC "The Intel thread library."
-  )
-  set(OMP_LIBRARY ${IOMP_LIBRARY})
 else()
   find_library(
     MKL_LIBRARY_SEQUENTIAL
@@ -90,7 +81,6 @@ else()
     DOC "The sequential library of Intel MKL."
   )
   set(MKL_LIBRARY_THREAD ${MKL_LIBRARY_SEQUENTIAL})
-  unset(OMP_LIBRARY)
 endif()
 
 find_library(
@@ -106,7 +96,7 @@ include(FindPackageHandleStandardArgs)
 set(MKL_LIBS "${MKL_LIBRARY_LP};${MKL_LIBRARY_THREAD};${MKL_LIBRARY_CORE}")
 if(MKL_OMP)
   find_package_handle_standard_args(
-    MKL DEFAULT_MSG MKL_LIBS MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP OMP_LIBRARY MKL_INCLUDE MKL_FLAG
+    MKL DEFAULT_MSG MKL_LIBS MKL_LIBRARY_CORE MKL_LIBRARY_THREAD MKL_LIBRARY_LP MKL_INCLUDE MKL_FLAG
   )
 else()
   find_package_handle_standard_args(
@@ -114,8 +104,8 @@ else()
   )
 endif()
 
-mark_as_advanced(MKL_LIBRARY_CORE MKL_LIBRARY_GNU_THREAD MKL_LIBRARY_INTEL_THREAD MKL_LIBRARY_SEQUENTIAL MKL_LIBRARY_LP GOMP_LIBRARY IOMP_LIBRARY MKL_INCLUDE MKL_FLAG)
+mark_as_advanced(MKL_LIBRARY_CORE MKL_LIBRARY_GNU_THREAD MKL_LIBRARY_INTEL_THREAD MKL_LIBRARY_SEQUENTIAL MKL_LIBRARY_LP MKL_INCLUDE MKL_FLAG)
 
 set(MKL_INCLUDES  "${MKL_INCLUDE}")
-set(MKL_LIBRARIES "-Wl,--start-group ${MKL_LIBRARY_CORE} ${MKL_LIBRARY_THREAD} ${MKL_LIBRARY_LP} -Wl,--end-group ${OMP_LIBRARY} -lpthread -lm -ldl")
+set(MKL_LIBRARIES "-Wl,--no-as-needed" "${MKL_LIBRARY_CORE}" "${MKL_LIBRARY_THREAD}" "${MKL_LIBRARY_LP}" "pthread" "m" "dl")
 set(MKL_FLAGS     "${MKL_FLAG}")

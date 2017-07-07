@@ -11,6 +11,12 @@
 #include <mcnla/isvd/integrator/row_block_extrinsic_mean_integrator.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP RowBlockExtrinsicMeanIntegrator<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,8 +31,8 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockExtrinsicMeanIntegrator<_Val>::Integrator(
-    const Parameters<ValType> &parameters
+MCNLA_TMP::Integrator(
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -34,7 +40,7 @@ RowBlockExtrinsicMeanIntegrator<_Val>::Integrator(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockExtrinsicMeanIntegrator<_Val>::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow             = parameters_.nrow();
   const auto dim_sketch       = parameters_.dimSketch();
@@ -63,10 +69,10 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::initializeImpl() noexcept {
 /// @param  matrix_qbar    The matrix Qbar.
 ///
 template <typename _Val>
-void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
-    const DenseMatrixCollection201<ValType> &collection_qj,
-    const DenseMatrixCollection201<ValType> &collection_q,
-          DenseMatrixRowMajor<ValType>      &matrix_qbar
+void MCNLA_TMP::runImpl(
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
+    const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q,
+          DenseMatrixRowMajor<_Val>      &matrix_qbar
 ) noexcept {
 
   const auto mpi_comm        = parameters_.mpi_comm;
@@ -101,10 +107,10 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
   for ( index_t i = 0; i < num_sketch_each; ++i ) {
 
     // Gi := Bi * Bi'
-    la::rk(collection_bi_(i), collection_g_(i).viewSymmetric());
+    la::rk(collection_bi_(i), collection_g_(i).sym());
 
-    // Compute the eigen-decomposition of Gi -> Gi' * S * Gi
-    syev_driver_(collection_g_(i).viewSymmetric(), vector_s_);
+    // eig(Gi) = Gi' * S * Gi
+    syev_driver_(collection_g_(i).sym(), vector_s_);
 
   }
 
@@ -114,7 +120,7 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
 
   // Broadcast G0
   if ( mpi_rank == 0 ) {
-    la::omatcopy(collection_g_(0), matrix_g0_);
+    la::copy(collection_g_(0), matrix_g0_);
   }
   comm_moment = utility::getTime();
   mpi::bcast(matrix_g0_, 0, mpi_comm);
@@ -159,5 +165,7 @@ void RowBlockExtrinsicMeanIntegrator<_Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_EXTRINSIC_MEAN_INTEGRATOR_HPP_

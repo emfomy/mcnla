@@ -27,7 +27,6 @@ template <class _Base> class InverseView;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The invertible container wrapper.
 ///
 /// @tparam  _Derived  The derived type.
@@ -35,25 +34,26 @@ template <class _Base> class InverseView;
 template <class _Derived>
 class InvertibleWrapper {
 
+ private:
+
+  using InverseType = InverseView<_Derived>;
+
  public:
 
   // Constructors
   inline InvertibleWrapper() noexcept = default;
 
   // Change view
-  inline       InverseView<_Derived>& inv() noexcept;
-  inline const InverseView<_Derived>& inv() const noexcept;
+  inline       InverseType& inv() noexcept;
+  inline const InverseType& inv() const noexcept;
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The inverse view.
 ///
 /// @tparam  _Base  The base type.
@@ -63,14 +63,18 @@ class InverseView : private _Base {
 
   friend InvertibleWrapper<_Base>;
 
+ private:
+
+  using BaseType = _Base;
+
  public:
 
   // Constructors
   inline InverseView() noexcept = delete;
 
   // Change view
-  inline       _Base& inv() noexcept;
-  inline const _Base& inv() const noexcept;
+  inline       BaseType& inv() noexcept;
+  inline const BaseType& inv() const noexcept;
 
 };
 

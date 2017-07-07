@@ -23,18 +23,14 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The iterable container wrapper.
 ///
-/// @tparam  _Derived  The derived type.
+/// @tparam  _Derived    The derived type.
+/// @tparam  _Iter       The iterator type.
+/// @tparam  _ConstIter  The constant iterator type.
 ///
-template <class _Derived>
+template <class _Derived, class _Iter, class _ConstIter>
 class IterableWrapper {
-
- private:
-
-  using IteratorType      = IteratorT<_Derived>;
-  using ConstIteratorType = ConstIteratorT<_Derived>;
 
  protected:
 
@@ -44,18 +40,16 @@ class IterableWrapper {
  public:
 
   // Gets iterator
-  inline IteratorType      begin() noexcept;
-  inline ConstIteratorType begin() const noexcept;
-  inline ConstIteratorType cbegin() const noexcept;
-  inline IteratorType      end() noexcept;
-  inline ConstIteratorType end() const noexcept;
-  inline ConstIteratorType cend() const noexcept;
+  inline _Iter      begin() noexcept;
+  inline _ConstIter begin() const noexcept;
+  inline _ConstIter cbegin() const noexcept;
+  inline _Iter      end() noexcept;
+  inline _ConstIter end() const noexcept;
+  inline _ConstIter cend() const noexcept;
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 

@@ -55,7 +55,7 @@ int main( int argc, char **argv ) {
   int Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
   int m0        = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
   int n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
-  int k0        = ( argc > ++argi ) ? atof(argv[argi]) : 100;
+  int k0        = ( argc > ++argi ) ? atof(argv[argi]) : 10;
   int p         = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   int q         = ( argc > ++argi ) ? atof(argv[argi]) : 0;
   int num_test  = ( argc > ++argi ) ? atof(argv[argi]) : 10;
@@ -86,11 +86,11 @@ int main( int argc, char **argv ) {
          << ", tol = " << tol
          << ", maxiter = " << maxiter << endl;
     cout << mpi_size << " nodes / "
-#ifdef MCNLA_USE_OMP
+#ifdef _OPENMP
          << omp_get_max_threads()
-#else  //MCNLA_USE_OMP
+#else  // _OPENMP
          << 1
-#endif  // MCNLA_USE_OMP
+#endif  // _OPENMP
          << " threads per node" << endl << endl;
   }
 
@@ -369,11 +369,11 @@ void integrate( const int N, const int mj, const int k, const double *matrices_q
     cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, k, mj, k, 1.0, matrix_d, k, matrix_tmp, mj, 1.0, matrix_qjt, k);
 
     // ================================================================================================================== //
-    // Check convergence: || I - C ||_F / sqrt(k) < tol
+    // Check convergence: || I - C ||_F < tol
     for ( auto i = 0; i < k; ++i ) {
       vector_e[i] = vector_e[i] - 1.0;
     }
-    is_converged = !(cblas_dnrm2(k, vector_e, 1) / sqrt(k) > tol);
+    is_converged = !(cblas_dnrm2(k, vector_e, 1) > tol);
   }
 
   // Free memory

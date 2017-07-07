@@ -23,34 +23,31 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct SvdFormerTag {};
-template <typename _Val> using SvdFormer = Former<SvdFormerTag, _Val>;
+template <bool _jobv> struct SvdFormerTag {};
+template <typename _Val, bool _jobv = false> using SvdFormer = Former<SvdFormerTag<_jobv>, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_former_module
 /// The SVD former.
 ///
-/// @tparam  _Val  The value type.
+/// @tparam  _Val   The value type.
+/// @tparam  _jobv  Computes V or not.
 ///
-template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Former<SvdFormerTag, _Val>
+template <typename _Val, bool _jobv>
+class Former<SvdFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, bool _jobv = false>
 class SvdFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<SvdFormer<_Val>> {
+  : public StageWrapper<SvdFormer<_Val, _jobv>> {
 
-  friend StageWrapper<SvdFormer<_Val>>;
+  friend StageWrapper<SvdFormer<_Val, _jobv>>;
 
  private:
 
-  using BaseType = StageWrapper<SvdFormer<_Val>>;
-
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
+  using BaseType = StageWrapper<SvdFormer<_Val, _jobv>>;
 
  protected:
 
@@ -61,31 +58,31 @@ class SvdFormer
   static constexpr const char* names_ = "forming";
 
   /// The matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_;
+  DenseMatrixColMajor<_Val> matrix_w_;
 
   /// The cut matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_cut_;
+  DenseMatrixColMajor<_Val> matrix_w_cut_;
 
   /// The vector S.
-  DenseVector<RealValType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The cut vector S.
-  DenseVector<RealValType> vector_s_cut_;
+  DenseVector<RealValT<_Val>> vector_s_cut_;
 
   /// The cut matrix U.
-  DenseMatrixColMajor<ValType> matrix_u_cut_;
+  DenseMatrixColMajor<_Val> matrix_u_cut_;
 
   /// The matrix Vt.
-  DenseMatrixColMajor<ValType> matrix_vt_;
+  DenseMatrixColMajor<_Val> matrix_vt_;
 
   /// The cut matrix Vt.
-  DenseMatrixColMajor<ValType> matrix_vt_cut_;
+  DenseMatrixColMajor<_Val> matrix_vt_cut_;
 
   /// The empty matrix.
-  DenseMatrixColMajor<ValType> matrix_empty_;
+  DenseMatrixColMajor<_Val> matrix_empty_;
 
   /// The GESVD driver.
-  la::GesvdDriver<DenseMatrixColMajor<ValType>, 'S', 'O'> gesvd_driver_;
+  la::DenseGesvdDriverColMajor<'S', (_jobv ? 'O' : 'N'), _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -96,12 +93,12 @@ class SvdFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<ValType> &parameters ) noexcept;
+  inline Former( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealValType>& vectorS() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixU() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixVt() const noexcept;
+  inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
+  inline const DenseMatrixColMajor<_Val>& matrixU() const noexcept;
+  inline const DenseMatrixRowMajor<_Val>& matrixV() const noexcept;
 
  protected:
 
@@ -110,7 +107,7 @@ class SvdFormer
 
   // Forms SVD
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<_Val> &matrix_q ) noexcept;
 
 };
 

@@ -10,6 +10,7 @@
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/la/functor/mm_functor_wrapper.hpp>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -33,7 +34,10 @@ namespace la {
 ///
 template <class _Matrix, Trans _transb = Trans::NORMAL, Trans _transc = Trans::NORMAL>
 class MmFunctor
-  : public MmFunctorWrapper<ValT<_Matrix>, _transb, _transc> {
+  : public MmFunctorWrapper<ValT<_Matrix>, _transb, _transc>,
+    public MatrixWrapper<MmFunctor<_Matrix, _transb, _transc>> {
+
+  friend MatrixWrapper<MmFunctor<_Matrix, _transb, _transc>>;
 
  public:
 
@@ -49,12 +53,21 @@ class MmFunctor
 
  public:
 
+  // Constructors
   MmFunctor( const AType &matrix ) noexcept;
 
-  ~MmFunctor() noexcept override;
+  // Destructor
+  virtual ~MmFunctor() noexcept override;
 
+  // Operators
   virtual void operator()( const BType &b, CType &c,
                            const ValType alpha = 1, const ValType beta  = 0 ) const noexcept override;
+
+ protected:
+
+  // Gets information
+  inline index_t nrowImpl() const noexcept;
+  inline index_t ncolImpl() const noexcept;
 
 };
 

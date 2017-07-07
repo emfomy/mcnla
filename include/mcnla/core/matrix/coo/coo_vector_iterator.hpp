@@ -23,10 +23,10 @@ namespace matrix {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Output to stream.
 ///
-template <typename __Val, typename __Idx, class __Vector>
+template <typename ..._Args>
 std::ostream& operator<<(
     std::ostream &os,
-    const CooVectorIteratorBase<__Val, __Idx, __Vector> &it
+    const CooVectorIteratorBase<_Args...> &it
 ) noexcept {
   return os << "(" << std::setw(kOsIdxWidth) << it.idx() << ")  "
                    << std::setw(kOsValWidth) << it.val();

@@ -42,6 +42,8 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   using VectorStorageType = DenseVectorStorage<_Core, _Val>;
   using MatrixStorageType = DenseMatrixStorage<_Core, _Val>;
 
+  using VectorType        = GeVecS<_Core, DenseTag, _Val>;
+
   using BaseType          = DenseStorage<_Core, _Val>;
 
  protected:
@@ -78,8 +80,15 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   inline bool     isSquare() const noexcept;
   inline index_t  dim0() const noexcept;
   inline index_t  dim1() const noexcept;
+  inline index_t  mdim0() const noexcept;
+  inline index_t  mdim1() const noexcept;
   inline DimsType dims() const noexcept;
+  inline DimsType mdims() const noexcept;
   inline index_t  pitch() const noexcept;
+
+  // Gets the storage vector
+  inline       VectorType unfold() noexcept;
+  inline const VectorType unfold() const noexcept;
 
  protected:
 
@@ -102,10 +111,10 @@ class DenseMatrixStorage : public DenseStorage<_Core, _Val> {
   inline const VectorStorageType getVector0Impl( const IdxRange &range0, const index_t idx1 ) const noexcept;
   inline       VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) noexcept;
   inline const VectorStorageType getVector1Impl( const index_t idx0, const IdxRange &range1 ) const noexcept;
-  inline       VectorStorageType getDiagonalImpl( const index_t idx ) noexcept;
-  inline const VectorStorageType getDiagonalImpl( const index_t idx ) const noexcept;
-  inline       VectorStorageType vectorizeImpl() noexcept;
-  inline const VectorStorageType vectorizeImpl() const noexcept;
+  inline       VectorStorageType getDiagImpl( const index_t idx ) noexcept;
+  inline const VectorStorageType getDiagImpl( const index_t idx ) const noexcept;
+  inline       VectorStorageType vecImpl() noexcept;
+  inline const VectorStorageType vecImpl() const noexcept;
 
 };
 

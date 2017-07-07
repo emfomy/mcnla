@@ -23,8 +23,8 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockGramianFormerTag {};
-template <typename _Val> using RowBlockGramianFormer = Former<RowBlockGramianFormerTag, _Val>;
+template <bool _jobv> struct RowBlockGramianFormerTag {};
+template <typename _Val, bool _jobv = false> using RowBlockGramianFormer = Former<RowBlockGramianFormerTag<_jobv>, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,24 +33,20 @@ template <typename _Val> using RowBlockGramianFormer = Former<RowBlockGramianFor
 ///
 /// @tparam  _Val  The value type.
 ///
-template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Former<RowBlockGramianFormerTag, _Val>
+template <typename _Val, bool _jobv>
+class Former<RowBlockGramianFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, bool _jobv = false>
 class RowBlockGramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public StageWrapper<RowBlockGramianFormer<_Val>> {
+  : public StageWrapper<RowBlockGramianFormer<_Val, _jobv>> {
 
-  friend StageWrapper<RowBlockGramianFormer<_Val>>;
+  friend StageWrapper<RowBlockGramianFormer<_Val, _jobv>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockGramianFormer<_Val>>;
-
- public:
-
-  using ValType     = _Val;
-  using RealValType = RealValT<ValType>;
+  using BaseType = StageWrapper<RowBlockGramianFormer<_Val, _jobv>>;
 
  protected:
 
@@ -61,28 +57,34 @@ class RowBlockGramianFormer
   static constexpr const char* names_ = "forming";
 
   /// The matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_;
+  DenseMatrixRowMajor<_Val> matrix_w_;
 
   /// The cut matrix W.
-  DenseMatrixColMajor<ValType> matrix_w_cut_;
+  DenseMatrixRowMajor<_Val> matrix_w_cut_;
 
   /// The vector S.
-  DenseVector<RealValType> vector_s_;
+  DenseVector<RealValT<_Val>> vector_s_;
 
   /// The cut vector S.
-  DenseVector<RealValType> vector_s_cut_;
+  DenseVector<RealValT<_Val>> vector_s_cut_;
 
   /// The cut matrix U (row-block).
-  DenseMatrixRowMajor<ValType> matrix_uj_cut_;
+  DenseMatrixRowMajor<_Val> matrix_uj_cut_;
 
-  /// The matrix Q'*A.
-  DenseMatrixColMajor<ValType> matrix_qta_;
+  /// The cut matrix V (row-block).
+  DenseMatrixRowMajor<_Val> matrix_vj_cut_;
 
-  /// The matrix Q'*A (row-block).
-  DenseMatrixColMajor<ValType> matrix_qtaj_;
+  /// The matrix Z.
+  DenseMatrixRowMajor<_Val> matrix_z_;
 
-  /// The SYEV driver.
-  la::SyevDriver<DenseSymmetricMatrixColMajor<ValType>, 'V'> syev_driver_;
+  /// The matrix Z (row-block).
+  DenseMatrixRowMajor<_Val> matrix_zj_;
+
+  /// The empty matrix.
+  DenseMatrixRowMajor<_Val> matrix_empty_;
+
+  /// The GESVD driver.
+  la::DenseGesvdDriverRowMajor<'O', 'N', _Val> gesvd_driver_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -93,12 +95,12 @@ class RowBlockGramianFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<ValType> &parameters ) noexcept;
+  inline Former( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
-  inline const DenseVector<RealValType>& vectorS() const noexcept;
-  inline const DenseMatrixRowMajor<ValType>& matrixUj() const noexcept;
-  inline const DenseMatrixColMajor<ValType>& matrixVtj() const noexcept = delete;
+  inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
+  inline const DenseMatrixRowMajor<_Val>& matrixUj() const noexcept;
+  inline const DenseMatrixRowMajor<_Val>& matrixVj() const noexcept;
 
  protected:
 
@@ -107,7 +109,7 @@ class RowBlockGramianFormer
 
   // Forms SVD
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<ValType> &matrix_q ) noexcept;
+  void runImpl( const _Matrix &matrix_a, const DenseMatrixRowMajor<_Val> &matrix_q ) noexcept;
 
 };
 

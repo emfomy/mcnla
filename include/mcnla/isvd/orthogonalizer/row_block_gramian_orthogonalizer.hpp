@@ -11,6 +11,12 @@
 #include <mcnla/isvd/orthogonalizer/row_block_gramian_orthogonalizer.hh>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP RowBlockGramianOrthogonalizer<_Val>
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -25,8 +31,8 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-RowBlockGramianOrthogonalizer<_Val>::Orthogonalizer(
-    const Parameters<ValType> &parameters
+MCNLA_TMP::Orthogonalizer(
+    const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
 
@@ -34,7 +40,7 @@ RowBlockGramianOrthogonalizer<_Val>::Orthogonalizer(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void RowBlockGramianOrthogonalizer<_Val>::initializeImpl() noexcept {
+void MCNLA_TMP::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto num_sketch = parameters_.numSketch();
@@ -52,8 +58,8 @@ void RowBlockGramianOrthogonalizer<_Val>::initializeImpl() noexcept {
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void RowBlockGramianOrthogonalizer<_Val>::runImpl(
-    DenseMatrixCollection201<ValType> &collection_qj
+void MCNLA_TMP::runImpl(
+    DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
   const auto mpi_comm   = parameters_.mpi_comm;
@@ -86,9 +92,9 @@ void RowBlockGramianOrthogonalizer<_Val>::runImpl(
   for ( auto &v : matrix_s_ ) {
     v = std::sqrt(v);
   }
-  la::copy(matrix_qsj.vectorize(), collection_tmp_.unfold().vectorize());
+  la::copy(matrix_qsj.vec(), collection_tmp_.unfold().vec());
   for ( index_t i = 0; i < num_sketch; ++i ) {
-    la::sm(matrix_s_(""_, i).viewDiagonal().inv(), collection_w_(i));
+    la::sm(matrix_s_(""_, i).diag().inv(), collection_w_(i));
     la::mm(collection_tmp_(i), collection_w_(i).t(), collection_qj(i));
   }
 
@@ -98,5 +104,7 @@ void RowBlockGramianOrthogonalizer<_Val>::runImpl(
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_GRAMIAN_ORTHOGONALIZER_HPP_

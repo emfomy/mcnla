@@ -1,0 +1,72 @@
+namespace mcnla {
+
+namespace isvd {
+
+/**
+  @page tutorial_isvd_stage iSVD Stages
+
+  <h3>%Sketcher</h3>
+
+  The @ref Sketcher "sktecher" randomly sketches @ref Parameters::numSketch "N" rank-@ref Parameters::dimSketch "l" column subspaces @f$\boldsymbol{Y}_{[i]}@f$ of the input matrix @f$\boldsymbol{A}@f$.
+
+  <h4>Gaussian Projection %Sketcher</h4>
+
+  The @ref GaussianProjectionSketcher and @ref RowBlockGaussianProjectionSketcher multiples @f$\boldsymbol{A}@f$ by some random matrices using Gaussian normal distribution.
+
+  <h4>Column Sampling %Sketcher</h4>
+
+  The @ref ColumnSamplingSketcher and @ref RowBlockColumnSamplingSketcher randomly samples columns from @f$\boldsymbol{A}@f$.
+
+  Note that the accuracy of column sampling sketcher is not guaranteed.
+
+  <h3>%Orthogonalizer</h3>
+
+  The @ref Orthogonalizer "orthogonalizer" computes an approximate basis @f$\boldsymbol{Q}_{[i]}@f$ for the range of the input matrix from those @f$\boldsymbol{Y}_{[i]}@f$.
+
+  <h4>Canonical %Orthogonalization</h4>
+
+  The @ref SvdOrthogonalizer finds the orthonormal basis using canonical SVD of @f$\boldsymbol{Y}_{[i]}@f$.
+
+  <h4>Gramian %Orthogonalization</h4>
+
+  The @ref GramianOrthogonalizer and @ref RowBlockGramianOrthogonalizer finds the orthonormal basis using the eigen-decomposition of @f$\boldsymbol{Y}_{[i]}^\top \boldsymbol{Y}_{[i]}@f$ — the Gramiam of @f$\boldsymbol{Y}_{[i]}@f$.
+
+  <h3>%Integrator</h3>
+
+  The @ref Integrator "integrator" find an "average" @f$\overline{\boldsymbol{Q}}@f$ of those @f$\boldsymbol{Q}_{[i]}@f$.
+
+  <h4>Kolmogorov-Nagumo-Type %Integrator</h4>
+
+  The @ref KolmogorovNagumoIntegrator, @ref RowBlockKolmogorovNagumoIntegrator, and @ref RowBlockGramianKolmogorovNagumoIntegrator finds the average using Kolmogorov-Nagumo-type average.
+
+  Nota the Gramian version is slower unless the number of iteration is extreme large.
+
+  <h4>Wen-Yin Line Search %Integrator</h4>
+
+  The @ref RowBlockWenYinIntegrator and @ref RowBlockGramianWenYinIntegrator finds the average using line search proposed by Wen and Yin.
+
+  Nota the Gramian version is slower unless the number of iteration is extreme large.
+
+  <h4>Reduction %Integrator</h4>
+
+  The @ref RowBlockReductionIntegrator finds the average using divide and conquer algorithm.
+
+  Nota the reduction integrator is faster but less accurate.
+
+  <h3>%Former</h3>
+
+  The @ref Former "former" forms a rank-@ref Parameters::rank "k" approximate SVD of @f$\boldsymbol{A}@f$ in the range of @f$\overline{\boldsymbol{Q}}@f$.
+
+  <h4>Canonical %Former</h4>
+
+  The @ref SvdFormer forms the approximate SVD @f$\widehat{\boldsymbol{U}} \, \widehat{\boldsymbol{\Sigma}} \, \widehat{\boldsymbol{V}}^\top@f$ using canonical SVD of @f$\overline{\boldsymbol{Q}}^\top \boldsymbol{A}@f$.
+
+  <h4>Gramian %Former</h4>
+
+  The @ref GramianFormer and @ref RowBlockGramianFormer finds approximate SVD using the eigen-decomposition of @f$\overline{\boldsymbol{Q}}^\top \boldsymbol{A} \boldsymbol{A}^\top \overline{\boldsymbol{Q}}@f$.
+
+*/
+
+}  // namespace isvd
+
+}  // namespace mcnla

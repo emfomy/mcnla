@@ -9,7 +9,9 @@
 #define MCNLA_CORE_MATRIX_BASE_DENSE_MATRIX_WRAPPER_HH_
 
 #include <mcnla/core/matrix/def.hpp>
-#include <iostream>
+#include <tuple>
+#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
+#include <mcnla/core/utility/crtp.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
@@ -22,13 +24,16 @@ namespace mcnla {
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_base_module
 /// The dense matrix wrapper.
 ///
 /// @tparam  _Derived  The derived type.
 ///
 template <class _Derived>
-class DenseMatrixWrapper {
+class DenseMatrixWrapper : public MatrixWrapper<_Derived> {
+
+ private:
+
+  using SizesType = std::tuple<index_t, index_t>;
 
  protected:
 
@@ -37,15 +42,15 @@ class DenseMatrixWrapper {
 
  public:
 
-  // Operators
-  template <class __Derived>
-  friend inline std::ostream& operator<<( std::ostream &os, const DenseMatrixWrapper<__Derived> &wrapper ) noexcept;
+  // Gets information
+  inline index_t   mrow() const noexcept;
+  inline index_t   mcol() const noexcept;
+  inline index_t   melem() const noexcept;
+  inline SizesType msizes() const noexcept;
 
  protected:
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-  CRTP_DERIVED(_Derived);
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+  MCNLA_CRTP_DERIVED(_Derived)
 
 };
 
