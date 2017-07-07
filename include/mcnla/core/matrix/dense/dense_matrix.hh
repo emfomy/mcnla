@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_matrix.hh
-/// @brief   The definition of definition of dense matrix class.
+/// @brief   The definition of dense matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

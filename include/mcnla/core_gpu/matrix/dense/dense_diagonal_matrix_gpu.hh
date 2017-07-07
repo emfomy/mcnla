@@ -1,17 +1,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/matrix/dense/dense_diagonal_matrix.hh
-/// @brief   The definition of dense diagonal matrix class.
+/// @file    include/mcnla/core_gpu/matrix/dense/dense_diagonal_matrix_gpu.hh
+/// @brief   The definition of GPU dense diagonal matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
-#define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
+#ifndef MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_GPU_HH_
+#define MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_GPU_HH_
 
-#include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/matrix_ostream_wrapper.hpp>
+#include <mcnla/core_gpu/matrix/dense/def.hpp>
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix_base.hpp>
-#include <mcnla/core/matrix/dense/dense_vector.hpp>
+#include <mcnla/core_gpu/matrix/dense/dense_vector_gpu.hpp>
 #include <mcnla/core/utility/traits.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,21 +24,21 @@ namespace mcnla {
 namespace traits {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// The dense diagonal matrix instantiation type traits.
+/// The GPU dense diagonal matrix instantiation type traits.
 ///
 template <typename _Type>
-struct IsDenseDiagonalMatrix : std::false_type {};
+struct IsDenseDiagonalMatrixGpu : std::false_type {};
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
-struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Val>> : std::true_type {};
+struct IsDenseDiagonalMatrixGpu<matrix::DenseDiagonalMatrixGpu<_Val>> : std::true_type {};
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix assert.
 ///
-#define assertDenseDiagonalMatrix( Type ) \
-    static_assert(traits::IsDenseDiagonalMatrix<Type>::value, "'"#Type"' is not a dense diagonal matrix!")
+#define assertDenseDiagonalMatrixGpu( Type ) \
+    static_assert(traits::IsDenseDiagonalMatrixGpu<Type>::value, "'"#Type"' is not a GPU dense diagonal matrix!")
 
 }  // namespace traits
 
@@ -49,26 +48,26 @@ struct IsDenseDiagonalMatrix<matrix::DenseDiagonalMatrix<_Val>> : std::true_type
 namespace matrix {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  matrix_dense_module
+/// @ingroup  matrix_dense_gpu_module
 /// The dense diagonal matrix class.
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class DiMatS<CpuTag, DenseTag, _Val>
-  : public DenseDiagonalMatrixBase<CpuTag, _Val>,
+class DiMatS<GpuTag, DenseTag, _Val>
+  : public DenseDiagonalMatrixBase<GpuTag, _Val>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-class DenseDiagonalMatrix
-  : public DenseDiagonalMatrixBase_<CpuTag, _Val>,
+class DenseDiagonalMatrixGpu
+  : public DenseDiagonalMatrixBase_<GpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    public MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>> {
+    public MatrixOstreamWrapper<DenseDiagonalMatrixGpu<_Val>> {
 
-  friend MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>>;
+  friend MatrixOstreamWrapper<DenseDiagonalMatrixGpu<_Val>>;
 
  private:
 
-  using BaseType = DenseDiagonalMatrixBase<CpuTag, _Val>;
+  using BaseType = DenseDiagonalMatrixBase<GpuTag, _Val>;
 
  public:
 
@@ -76,8 +75,15 @@ class DenseDiagonalMatrix
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
   /// @copydoc DenseDiagonalMatrixBase_::operator=
-  DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other );
+  DenseDiagonalMatrixGpu& operator=( const DenseDiagonalMatrixGpu &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+  // Copy
+  inline void copy() const noexcept = delete;
+
+  // Gets element
+  inline void operator()( const index_t rowidx, const index_t colidx ) noexcept = delete;
+  inline void operator()( const index_t rowidx, const index_t colidx ) const noexcept = delete;
 
 };
 
@@ -85,4 +91,4 @@ class DenseDiagonalMatrix
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_HH_
+#endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_GPU_HH_

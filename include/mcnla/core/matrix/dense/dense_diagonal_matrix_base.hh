@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_diagonal_matrix_base.hh
-/// @brief   The definition of definition of dense diagonal matrix base class.
+/// @brief   The definition of dense diagonal matrix base class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
