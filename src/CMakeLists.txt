@@ -15,11 +15,11 @@ macro(SET_TARGET target files)
 endmacro()
 
 # Set target
-set_target(isvd_dense_mm isvd_dense.cpp)
+set_target(isvd_dense_mtx isvd_dense.cpp)
 set_target(isvd_dense_bin isvd_dense.cpp "-DFILETYPE=Binary")
 
 if(MCNLA_USE_GPU)
-  set_target(isvd_dense_mm_gpu isvd_dense.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
+  set_target(isvd_dense_mtx_gpu isvd_dense.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
   set_target(isvd_dense_bin_gpu isvd_dense.cpp "-DFILETYPE=Binary" "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
 endif(MCNLA_USE_GPU)
 
