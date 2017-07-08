@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    src/isvd.cpp
+/// @file    src/isvd_dense.cpp
 /// @brief   The iSVD driver for dense matrix
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
@@ -8,6 +8,22 @@
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
+
+#ifndef  STYPE
+#define STYPE RowBlockGaussianProjectionSketcher
+#endif  // STYPE
+
+#ifndef  OTYPE
+#define OTYPE RowBlockGramianOrthogonalizer
+#endif  // OTYPE
+
+#ifndef  ITYPE
+#define ITYPE RowBlockWenYinIntegrator
+#endif  // ITYPE
+
+#ifndef  FTYPE
+#define FTYPE RowBlockGramianFormer
+#endif  // FTYPE
 
 void check( const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
             const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_uj,
@@ -23,7 +39,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize MCNLA
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
   auto mpi_comm = MPI_COMM_WORLD;
   auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -94,19 +110,11 @@ int main( int argc, char **argv ) {
   parameters.sync();
 
   // ====================================================================================================================== //
-  // Load matrix
-  if ( mpi_rank == mpi_root ) {
-    std::cout << "Reading data from " << argv[1] << "." << std::endl;
-  }
-  mcnla::matrix::DenseMatrixRowMajor<double> matrix_aj;
-  mcnla::io::loadMatrixMarket(matrix_aj, argv[1], parameters.rowrange());
-
-  // ====================================================================================================================== //
   // Allocate stages
-  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters);
-  mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
-  mcnla::isvd::RowBlockWenYinIntegrator<double> integrator(parameters);
-  mcnla::isvd::RowBlockGramianFormer<double, true> former(parameters);
+  mcnla::isvd::STYPE<double> sketcher(parameters);
+  mcnla::isvd::OTYPE<double> orthogonalizer(parameters);
+  mcnla::isvd::ITYPE<double> integrator(parameters);
+  mcnla::isvd::FTYPE<double, true> former(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> fe_converter(parameters);
   mcnla::isvd::MatrixFromColBlockConverter<double> fe_converter2(parameters);
 
@@ -121,12 +129,6 @@ int main( int argc, char **argv ) {
   fe_converter.initialize();
   fe_converter2.initialize();
 
-  // Allocate variables
-  auto collection_qj = parameters.createCollectionQj();
-  auto matrix_qj     = parameters.createMatrixQbarj();
-  auto matrix_u      = parameters.createMatrixU();
-  auto matrix_v      = parameters.createMatrixV();
-
   // ====================================================================================================================== //
   // Display stage names
   if ( mpi_rank == mpi_root ) {
@@ -135,6 +137,29 @@ int main( int argc, char **argv ) {
     std::cout << "Uses " << integrator << "." << std::endl;
     std::cout << "Uses " << former << "." << std::endl << std::endl;
   }
+
+  // ====================================================================================================================== //
+  // Load matrix
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "Reading data from " << argv[1] << "." << std::endl;
+  }
+  mcnla::matrix::DenseMatrixRowMajor<double> matrix_aj;
+  {
+    double timer = 0;
+    if ( mpi_rank == mpi_root ) {
+      mcnla::utility::tic(timer);
+    }
+    mcnla::io::loadMatrixMarket(matrix_aj, argv[1], parameters.rowrange());
+    if ( mpi_rank == mpi_root ) {
+      mcnla::utility::dispToc(timer); std::cout << std::endl;
+    }
+  }
+
+  // Allocate variables
+  auto collection_qj = parameters.createCollectionQj();
+  auto matrix_qj     = parameters.createMatrixQbarj();
+  auto matrix_u      = parameters.createMatrixU();
+  auto matrix_v      = parameters.createMatrixV();
 
   // ====================================================================================================================== //
   // Run iSVD

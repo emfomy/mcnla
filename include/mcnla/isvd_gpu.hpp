@@ -1,0 +1,54 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file    include/mcnla/isvd_gpu.hpp
+/// @brief   The iSVD module header with GPU support.
+///
+/// @author  Mu Yang <<emfomy@gmail.com>>
+///
+
+#ifndef MCNLA_ISVD_GPU_HPP_
+#define MCNLA_ISVD_GPU_HPP_
+
+#include <mcnla/isvd_gpu/def.hpp>
+#include <mcnla/isvd_gpu/sketcher.hpp>
+// #include <mcnla/isvd_gpu/orthogonalizer.hpp>
+// #include <mcnla/isvd_gpu/integrator.hpp>
+// #include <mcnla/isvd_gpu/former.hpp>
+// #include <mcnla/isvd_gpu/converter.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_core_gpu_module  iSVD Core Module (GPU)
+/// @ingroup   isvd_gpu_module
+/// @brief     The iSVD Core Module (GPU Support)
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_sketcher_gpu_module  iSVD Sketcher Module (GPU)
+/// @ingroup   isvd_gpu_module
+/// @brief     The iSVD Sketcher Module (GPU Support)
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_orthogonalizer_gpu_module  iSVD Orthogonalizer Module (GPU)
+/// @ingroup   isvd_gpu_module
+/// @brief     The iSVD Orthogonalizer Module (GPU Support)
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_integrator_gpu_module  iSVD Integrator Module (GPU)
+/// @ingroup   isvd_gpu_module
+/// @brief     The iSVD Integrator Module (GPU Support)
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_former_gpu_module  iSVD Former Module (GPU)
+/// @ingroup   isvd_gpu_module
+/// @brief     The iSVD Former Module (GPU Support)
+///
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @defgroup  isvd_converter_gpu_module  iSVD Converter Module (GPU)
+/// @ingroup   isvd_gpu_module
+/// @brief     The iSVD Converter Module (GPU Support)
+///
+
+#endif  // MCNLA_ISVD_GPU_HPP_

@@ -46,7 +46,7 @@ using size_t = std::size_t;
 static constexpr size_t kOsValWidth = 14;
 static constexpr size_t kOsIdxWidth = 6;
 
-/// @ingroup  constexpr
+/// @ingroup  core_module
 /// The block size
 static constexpr index_t kBlockSize = 64;
 

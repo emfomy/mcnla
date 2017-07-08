@@ -8,6 +8,7 @@
 #ifndef MCNLA_CORE_UTILITY_TIME_HPP_
 #define MCNLA_CORE_UTILITY_TIME_HPP_
 
+#include <iostream>
 #include <sys/time.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,6 +29,45 @@ inline double getTime() noexcept {
   timeval tv;
   gettimeofday(&tv, NULL);
   return static_cast<double>(tv.tv_sec) + static_cast<double>(tv.tv_usec) * 1e-6;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Start stopwatch timer.
+///
+/// @param  timer  the timer.
+///
+/// @see  toc
+///
+inline void tic( double &timer ) noexcept {
+  timer = getTime();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Read elapsed time from stopwatch.
+///
+/// @param  timer  the timer.
+///
+/// @return  elapsed time.
+///
+/// @see  tic
+///
+inline double toc( const double timer ) noexcept {
+  return getTime() - timer;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Display the elapsed time from stopwatch.
+///
+/// @param  timer  the timer.
+///
+/// @return  elapsed time.
+///
+/// @see  toc
+///
+inline double dispToc( const double timer ) noexcept {
+  double time = toc(timer);
+  std::cout << "Elapsed time is " << time << " seconds." << std::endl;
+  return time;
 }
 
 }  // namespace utility

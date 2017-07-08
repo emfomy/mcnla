@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_diagonal_matrix.hh
-/// @brief   The definition of definition of dense diagonal matrix class.
+/// @brief   The definition of dense diagonal matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

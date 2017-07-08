@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/collection/dense/dense_matrix_collection_row_block.hpp
-/// @brief   The the dense matrix collection of row-blocks.
+/// @brief   The  dense matrix collection of row-blocks.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

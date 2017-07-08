@@ -37,6 +37,8 @@ int main( int argc, char **argv ) {
     std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
   }
 
+  magma_print_environment();
+
   mcnla::finalize();
 
   return 0;

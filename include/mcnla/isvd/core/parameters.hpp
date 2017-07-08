@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/isvd/core/parameters.hpp
-/// @brief   The the parameter structure of iSVD driver.
+/// @brief   The parameter structure of iSVD driver.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -265,6 +265,24 @@ Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
   params_.num_sketch_each_ = num_sketch_each;
   synchronized_ = false;
   return *this;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix A.
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixA() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(nrowTotal(), ncol());
+  return retval({0_i, nrow()}, ""_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix Aj (j-th row-block, where j is the MPI rank).
+///
+template<typename _Val>
+DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixAj() const noexcept {
+  DenseMatrixRowMajor<_Val> retval(nrowEach(), ncol());
+  return retval({0_i, nrowRank()}, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

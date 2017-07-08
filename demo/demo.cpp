@@ -35,7 +35,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize MCNLA
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
   auto mpi_comm = MPI_COMM_WORLD;
   auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -110,7 +110,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
   mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
-  mcnla::isvd::SvdFormer<double> former(parameters);
+  mcnla::isvd::SvdFormer<double, true> former(parameters);
   mcnla::isvd::DummyConverter<double> so_converter(parameters);
   mcnla::isvd::DummyConverter<double> oi_converter(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);

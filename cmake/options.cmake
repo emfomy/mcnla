@@ -10,6 +10,7 @@ option(MCNLA_BUILD_REPOET  "Build report codes."   "ON")
 option(MCNLA_BUILD_TEST    "Build test codes."     "OFF")
 option(MCNLA_BUILD_DOC     "Build documentation."  "OFF")
 option(MCNLA_INSTALL_DEMO  "Install demos."        "OFF")
+option(MCNLA_USE_GPU       "Enable GPU support."   "OFF")
 
 set(MCNLA_INT_SIZE "32" CACHE STRING "System integer size. [32/64]")
 set_property(CACHE MCNLA_INT_SIZE PROPERTY STRINGS "32;64")
@@ -28,8 +29,6 @@ set_property(CACHE MCNLA_OMP PROPERTY STRINGS "OFF;GOMP;IOMP")
 if(NOT MCNLA_OMP STREQUAL "OFF" AND NOT MCNLA_OMP STREQUAL "GOMP" AND NOT MCNLA_OMP STREQUAL "IOMP" )
   message(FATAL_ERROR "MCNLA_OMP must be either OFF, GOMP, or IOMP")
 endif()
-
-# option(MCNLA_USE_GPU       "Enable GPU support."   "OFF")
 
 set(MPI_PROCS 4 CACHE STRING "The number of MPI processes used in demo codes.")
 
@@ -60,12 +59,12 @@ endif()
 
 set(MKL_OMP ${MCNLA_OMP})
 
-# if(MCNLA_USE_GPU)
-#   list(APPEND DEFS "MCNLA_USE_GPU")
-#   if(MCNLA_USE_ILP64)
-#     list(APPEND DEFS "MAGMA_ILP64")
-#   endif()
-# endif()
+if(MCNLA_USE_GPU)
+  list(APPEND DEFS "MCNLA_USE_GPU")
+  if(MCNLA_USE_ILP64)
+    list(APPEND DEFS "MAGMA_ILP64")
+  endif()
+endif()
 
 # Enable testing
 if(MCNLA_BUILD_TEST)

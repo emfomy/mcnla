@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_matrix_iterator.hh
-/// @brief   The definition of definition of dense matrix iterator class.
+/// @brief   The definition of dense matrix iterator class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

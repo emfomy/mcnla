@@ -53,9 +53,9 @@ ccmake <path-to-source>
 * Set 'MCNLA_BUILD_REPORT'  to build report codes.
 * Set 'MCNLA_BUILD_TEST'    to build test codes.
 * Set 'MCNLA_INSTALL_DEMO'  to install demos.
-<!-- * Set `MCNLA_USE_GPU`       to enable GPU support. -->
 * Set 'MCNLA_INT_SIZE'      to select system integer size. \[32/64\]
 * Set 'MCNLA_OMP'           to select OpenMP library. \[OFF/GOMP/IOMP\] (Require 'MCNLA_BLAS = MKL')
+* Set `MCNLA_USE_GPU`       to enable GPU support.
 
 * Set 'GTEST_ROOT'          for the root path of Google Test.           (Require 'MCNLA_BUILD_TEST')
 * Set 'INTEL_ROOT'          for the root path of Intel libraries.       (Require 'MCNLA_BLAS = MKL')
@@ -77,7 +77,7 @@ ccmake <path-to-source>
 
 * Define `MCNLA_USE_ILP64`        to use 64-bit integer.
 * Define `MCNLA_USE_MKL`          to enable Intel MKL.
-<!-- * Define `MCNLA_USE_GPU`          to enable GPU support. -->
+* Define `MCNLA_USE_GPU`          to enable GPU support.
 * Define `MCNLA_DISABLE_LITERAL`  to disable literal definition in global namespace.
 
 ## Q&amp;A
