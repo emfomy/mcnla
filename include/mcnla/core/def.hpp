@@ -12,7 +12,7 @@
 #include <mpi.h>
 
 #ifdef MCNLA_USE_GPU
-  #include <magma.h>
+  #include <mcnla/core_gpu/def.hpp>
 #endif  // MCNLA_USE_GPU
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,10 +39,13 @@ struct CooTag {};
 /// @ingroup  core_module
 /// Initializes the environment (including MPI and MAGMA).
 ///
-static inline void init( int &argc, char **&argv ) {
+static inline void init( int &argc, char **&argv, const MPI_Comm mpi_comm ) noexcept {
+  static_cast<void>(mpi_comm);
   MPI_Init(&argc, &argv);
 #ifdef MCNLA_USE_GPU
-  magma_init();
+  int mpi_rank;
+  mcnla_assert_pass(MPI_Comm_rank(mpi_comm, &mpi_rank));
+  gpuInit(mpi_rank);
 #endif  // MCNLA_USE_GPU
 }
 
@@ -50,9 +53,9 @@ static inline void init( int &argc, char **&argv ) {
 /// @ingroup  core_module
 /// Finalizes the environment (including MPI and MAGMA).
 ///
-static inline void finalize() {
+static inline void finalize() noexcept {
 #ifdef MCNLA_USE_GPU
-  magma_finalize();
+  gpuFinalize();
 #endif  // MCNLA_USE_GPU
   MPI_Finalize();
 }

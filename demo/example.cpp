@@ -15,7 +15,7 @@ int main( int argc, char **argv ) {
 
   /// [init-mcnla]
   // Initialize MCNLA
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
   mcnla::mpi_int_t mpi_root = 0;
 
   // Initialize random seed

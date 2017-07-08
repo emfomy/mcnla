@@ -5,7 +5,7 @@
 
 int main( int argc, char **argv ) {
 
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
 
   if ( ! mcnla::mpi::isCommRoot(0, MPI_COMM_WORLD) ) {
     std::fclose(stdout);
