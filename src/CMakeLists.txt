@@ -20,7 +20,7 @@ set_target(isvd_dense_bin isvd_dense.cpp "-DFILETYPE=Binary")
 
 if(MCNLA_USE_GPU)
   set_target(isvd_dense_mm_gpu isvd_dense.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
-  set_target(isvd_dense_mm_bin isvd_dense.cpp "-DFILETYPE=Binary" "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
+  set_target(isvd_dense_bin_gpu isvd_dense.cpp "-DFILETYPE=Binary" "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
 endif(MCNLA_USE_GPU)
 
 # Set utility target
