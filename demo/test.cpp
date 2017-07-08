@@ -39,13 +39,6 @@ int main( int argc, char **argv ) {
     mcnla::printEnvironment();
   }
 
-  mcnla::matrix::DenseMatrixRowMajor<double> mtx;
-  mcnla::matrix::DenseMatrixRowMajor<double> bin;
-  mcnla::io::loadMatrixMarket(mtx, "/fast/fb/fb9111.mtx");
-  mcnla::io::loadBinary(bin, "../../fb9111.bin");
-  mcnla::la::axpy(mtx.vec(), bin.vec(), -1.0);
-  disp(mcnla::la::nrmf(bin));
-
   mcnla::finalize();
 
   return 0;
