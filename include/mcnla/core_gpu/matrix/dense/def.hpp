@@ -26,13 +26,13 @@ namespace matrix {
 template <typename _Val>
 using DenseVectorGpu = GeVecS<GpuTag, DenseTag, _Val>;
 
-template <typename _Val, Trans _trans = Trans::NORMAL>
+template <typename _Val, Trans _trans>
 using DenseMatrixGpu = GeMatS<GpuTag, DenseTag, _Val, _trans>;
 
-template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+template <typename _Val, Trans _trans, Uplo _uplo>
 using DenseSymmetricMatrixGpu = SyMatS<GpuTag, DenseTag, _Val, _trans, _uplo>;
 
-template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+template <typename _Val, Trans _trans, Uplo _uplo>
 using DenseTriangularMatrixGpu = TrMatS<GpuTag, DenseTag, _Val, _trans, _uplo>;
 
 template <typename _Val>

@@ -29,13 +29,13 @@ template <class _Core, typename _Val> class DenseMatrixStorage;
 template <typename _Val>
 using DenseVector = GeVecS<CpuTag, DenseTag, _Val>;
 
-template <typename _Val, Trans _trans = Trans::NORMAL>
+template <typename _Val, Trans _trans>
 using DenseMatrix = GeMatS<CpuTag, DenseTag, _Val, _trans>;
 
-template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+template <typename _Val, Trans _trans, Uplo _uplo>
 using DenseSymmetricMatrix = SyMatS<CpuTag, DenseTag, _Val, _trans, _uplo>;
 
-template <typename _Val, Trans _trans = Trans::NORMAL, Uplo _uplo = Uplo::UPPER ^ _trans>
+template <typename _Val, Trans _trans, Uplo _uplo>
 using DenseTriangularMatrix = TrMatS<CpuTag, DenseTag, _Val, _trans, _uplo>;
 
 template <typename _Val>

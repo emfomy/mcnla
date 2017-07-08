@@ -17,6 +17,15 @@
 //
 namespace mcnla {
 
+/// @ingroup  core_gpu_module
+/// The GPU block size
+static constexpr index_t kBlockSizeGpu = 64;
+
+/// @ingroup  core_gpu_module
+/// The memory size of GPU.
+/// @todo  Determine GPU memory size dynamically.
+size_t kGpuMemorySize = 16000000000;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The GPU Core tag.
 ///

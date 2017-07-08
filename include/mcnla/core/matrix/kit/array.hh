@@ -56,7 +56,7 @@ class Array
 
   // Constructors
   inline ArrS() noexcept;
-  inline ArrS( const index_t size, const index_t offset = 0 ) noexcept;
+  inline ArrS( const size_t size, const index_t offset = 0 ) noexcept;
 
   // Copy
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

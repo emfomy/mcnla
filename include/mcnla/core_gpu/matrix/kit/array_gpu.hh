@@ -56,7 +56,7 @@ class ArrayGpu
 
   // Constructors
   inline ArrS() noexcept;
-  inline ArrS( const index_t size, const index_t offset = 0 ) noexcept;
+  inline ArrS( const size_t size, const index_t offset = 0 ) noexcept;
 
   // Gets data
   inline       _Val& operator[]( const index_t idx ) noexcept = delete;

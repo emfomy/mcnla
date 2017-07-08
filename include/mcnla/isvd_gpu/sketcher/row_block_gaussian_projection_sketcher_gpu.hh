@@ -53,15 +53,18 @@ class RowBlockGaussianProjectionSketcherGpu
   static constexpr const char* name_ = "GPU Gaussian Projection Sketcher (Row-Block Version)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "random generating / send / projection / receive";
+  static constexpr const char* names_ = "random generating / projection / receive";
 
   /// The random seed.
   index_t seed_;
 
+  /// The number of columns of GPU matrix A.
+  index_t ncol_gpu_;
+
   /// The matrix Omega.
   DenseMatrixRowMajor<_Val> matrix_omegas_;
 
-  /// The GPU matrix A (row-block).
+  /// The GPU collection A (row-block).
   DenseMatrixGpuRowMajor<_Val> matrix_aj_gpu_;
 
   /// The GPU matrix Qs (row-block).

@@ -78,10 +78,6 @@ class DenseVectorGpu
   // Copy
   inline void copy() const noexcept = delete;
 
-  // Gets element
-  inline void operator()( const index_t idx ) noexcept = delete;
-  inline void operator()( const index_t idx ) const noexcept = delete;
-
 };
 
 }  // namespace matrix

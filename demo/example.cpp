@@ -35,7 +35,7 @@ int main( int argc, char **argv ) {
 
   /// [load-data]
   // Load matrix
-  mcnla::matrix::DenseMatrix<double> matrix_a;
+  mcnla::matrix::DenseMatrixRowMajor<double> matrix_a;
   mcnla::io::loadMatrixMarket(matrix_a, argv[1]);
   /// [load-data]
 

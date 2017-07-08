@@ -47,6 +47,7 @@ class VectorCollectionWrapper {
   inline bool    isEmpty() const noexcept;
   inline index_t len() const noexcept;
   inline index_t nvec() const noexcept;
+  inline index_t nelem() const noexcept;
   inline std::tuple<index_t, index_t> sizes() const noexcept;
 
   // Gets vector

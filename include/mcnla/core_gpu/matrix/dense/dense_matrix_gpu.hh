@@ -81,10 +81,6 @@ class DenseMatrixGpu
   // Copy
   inline void copy() const noexcept = delete;
 
-  // Gets element
-  inline void operator()( const index_t rowidx, const index_t colidx ) noexcept = delete;
-  inline void operator()( const index_t rowidx, const index_t colidx ) const noexcept = delete;
-
 };
 
 /// @ingroup  matrix_dense_gpu_module

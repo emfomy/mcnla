@@ -48,6 +48,7 @@ class MatrixCollectionWrapper {
   inline index_t nrow() const noexcept;
   inline index_t ncol() const noexcept;
   inline index_t nmat() const noexcept;
+  inline index_t nelem() const noexcept;
   inline std::tuple<index_t, index_t, index_t> sizes() const noexcept;
 
   // Gets matrix

@@ -39,10 +39,12 @@ MCNLA_TMP::ArrS() noexcept
 ///
 template <typename _Val>
 MCNLA_TMP::ArrS(
-    const index_t size,
+    const size_t size,
     const index_t offset
 ) noexcept
-  : BaseType(std::shared_ptr<_Val>(utility::malloc<_Val>(size), utility::free<_Val>), size, offset) {}
+  : BaseType(std::shared_ptr<_Val>(utility::malloc<_Val>(size), utility::free<_Val>), size, offset) {
+  mcnla_assert_true(bool(size) ==  bool(**this));
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Copies the array.

@@ -50,7 +50,10 @@ void MCNLA_TMP::initializeImpl() noexcept {
   const auto ncol             = parameters_.ncol();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
-  matrix_aj_gpu_.reconstruct(nrow_rank, ncol);
+  index_t ncol_gpu = (kGpuMemorySize / sizeof(_Val) - (nrow_rank * dim_sketch_total + ncol * dim_sketch_total)) / nrow_rank;
+  ncol_gpu_ = std::min((ncol_gpu/kBlockSizeGpu)*kBlockSizeGpu, ncol);
+
+  matrix_aj_gpu_.reconstruct(nrow_rank, ncol_gpu_);
   matrix_qjs_gpu_.reconstruct(nrow_rank, dim_sketch_total);
 
   matrix_omegas_.reconstruct(ncol, dim_sketch_total);
@@ -90,20 +93,33 @@ void MCNLA_TMP::runImpl(
 
   // Random sample Omega using normal Gaussian distribution
   random::gaussian(streams, matrix_omegas_.vec());
-
-  this->toc(comm_time);
-  // ====================================================================================================================== //
-  // Sending data to GPU
-
-  la::copy(matrix_aj, matrix_aj_gpu_);
   la::copy(matrix_omegas_, matrix_omegas_gpu_);
 
   this->toc(comm_time);
   // ====================================================================================================================== //
   // Projection
 
-  // Q := A * Omega
-  la::mm(matrix_aj_gpu_, matrix_omegas_gpu_, matrix_qjs_gpu_);
+  auto idxrange = I_{0, ncol_gpu_};
+  for ( auto i = 0; i < ncol / ncol_gpu_; ++i ) {
+    // Copy A
+    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_);
+
+    // Q := A * Omega
+    la::mm(matrix_aj_gpu_, matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_);
+
+    idxrange += ncol_gpu_;
+  }
+
+  idxrange.end = ncol;
+  if ( idxrange.len() > 0 ) {
+    // Copy A
+    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_(""_, {0_i, idxrange.len()}));
+
+    // Q := A * Omega
+    la::mm(matrix_aj_gpu_(""_, {0_i, idxrange.len()}), matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_);
+
+    idxrange += ncol_gpu_;
+  }
 
   this->toc(comm_time);
   // ====================================================================================================================== //

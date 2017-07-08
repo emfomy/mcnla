@@ -43,7 +43,6 @@ static inline void init( int &argc, char **&argv ) {
   MPI_Init(&argc, &argv);
 #ifdef MCNLA_USE_GPU
   magma_init();
-  magma_print_environment();
 #endif  // MCNLA_USE_GPU
 }
 
