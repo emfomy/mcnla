@@ -48,6 +48,14 @@ static inline void gpuFinalize() noexcept {
   magma_finalize();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  core_gpu_module
+/// Print the GPU environment
+///
+static inline void gpuPrintEnvironment() noexcept {
+  magma_print_environment();
+}
+
 }  // namespace mcnla
 
 #endif  // MCNLA_CORE_GPU_DEF_HPP_

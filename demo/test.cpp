@@ -14,7 +14,7 @@
 ///
 int main( int argc, char **argv ) {
 
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
 
   const auto mpi_comm = MPI_COMM_WORLD;
   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -35,9 +35,16 @@ int main( int argc, char **argv ) {
 #endif  // _OPENMP
               << " threads per node" << std::endl;
     std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
+
+    mcnla::printEnvironment();
   }
 
-  magma_print_environment();
+  mcnla::matrix::DenseMatrixRowMajor<double> mtx;
+  mcnla::matrix::DenseMatrixRowMajor<double> bin;
+  mcnla::io::loadMatrixMarket(mtx, "/fast/fb/fb9111.mtx");
+  mcnla::io::loadBinary(bin, "../../fb9111.bin");
+  mcnla::la::axpy(mtx.vec(), bin.vec(), -1.0);
+  disp(mcnla::la::nrmf(bin));
 
   mcnla::finalize();
 

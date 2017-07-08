@@ -9,19 +9,27 @@
 #include <mcnla.hpp>
 #include <omp.h>
 
-#ifndef  STYPE
+#ifndef FILETYPE
+#define FILETYPE MatrixMarket
+#endif  // FILETYPE
+#define MAKE_FN_NAME(prefix, name, suffix)  prefix ## name ## suffix
+#define FUNCTION_NAME(prefix, name, suffix) MAKE_FN_NAME(prefix, name, suffix)
+#define IO_LOAD_SIZE      FUNCTION_NAME(load, FILETYPE, Size)
+#define IO_LOAD_ROW_BLOCK FUNCTION_NAME(load, FILETYPE, RowBlock)
+
+#ifndef STYPE
 #define STYPE RowBlockGaussianProjectionSketcher
 #endif  // STYPE
 
-#ifndef  OTYPE
+#ifndef OTYPE
 #define OTYPE RowBlockGramianOrthogonalizer
 #endif  // OTYPE
 
-#ifndef  ITYPE
+#ifndef ITYPE
 #define ITYPE RowBlockWenYinIntegrator
 #endif  // ITYPE
 
-#ifndef  FTYPE
+#ifndef FTYPE
 #define FTYPE RowBlockGramianFormer
 #endif  // FTYPE
 
@@ -70,7 +78,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load matrix size
   mcnla::index_t m, n;
-  mcnla::io::loadMatrixMarketSize(m, n, argv[1]);
+  mcnla::io::IO_LOAD_SIZE(m, n, argv[1]);
 
   // ====================================================================================================================== //
   // Initialize random seed
@@ -100,6 +108,8 @@ int main( int argc, char **argv ) {
 #endif  // _OPENMP
               << " threads per node" << std::endl;
     std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
+
+    mcnla::printEnvironment();
   }
   assert((k+p) <= m && m <= n);
 
@@ -149,7 +159,7 @@ int main( int argc, char **argv ) {
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::tic(timer);
     }
-    mcnla::io::loadMatrixMarketRowBlock(matrix_aj, argv[1], parameters.rowrange());
+    mcnla::io::IO_LOAD_ROW_BLOCK(matrix_aj, argv[1], parameters.rowrange());
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::dispToc(timer); std::cout << std::endl;
     }
@@ -229,13 +239,13 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Save matrices
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Save S into " << argv[2] << "." << std::endl;
+    std::cout << "Write S into " << argv[2] << "." << std::endl;
     mcnla::io::saveMatrixMarket(vector_s, argv[2]);
 
-    std::cout << "Save U into " << argv[3] << "." << std::endl;
+    std::cout << "Write U into " << argv[3] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_u, argv[3]);
 
-    std::cout << "Save V into " << argv[4] << "." << std::endl;
+    std::cout << "Write V into " << argv[4] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_v, argv[4]);
 
     std::cout << std::endl;

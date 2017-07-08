@@ -14,12 +14,17 @@ macro(SET_TARGET target files)
   install(TARGETS ${target} RUNTIME DESTINATION ${BIN_FOLDER})
 endmacro()
 
-# Set target (isvd_dense)
-set_target(isvd_dense isvd_dense.cpp)
+# Set target
+set_target(isvd_dense_mm isvd_dense.cpp)
+set_target(isvd_dense_bin isvd_dense.cpp "-DFILETYPE=Binary")
 
 if(MCNLA_USE_GPU)
-  set_target(isvd_dense_gpu isvd_dense.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
+  set_target(isvd_dense_mm_gpu isvd_dense.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
+  set_target(isvd_dense_mm_bin isvd_dense.cpp "-DFILETYPE=Binary" "-DSTYPE=RowBlockGaussianProjectionSketcherGpu")
 endif(MCNLA_USE_GPU)
+
+# Set utility target
+set_target(mtx2bin mtx2bin.cpp)
 
 # Set target (isvd)
 add_custom_target(
