@@ -45,6 +45,17 @@ inline void gpuFree( _Type *&ptr ) noexcept {
   ptr = nullptr;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_gpu_module
+/// @copydoc  memset0
+///
+/// @attention  The pointer should be GPU pointer.
+///
+template <typename _Type>
+inline void gpuMemset0( _Type *ptr, const index_t num ) noexcept {
+  mcnla_assert_pass(cudaMemset(ptr, 0, num * sizeof(_Type)));
+}
+
 }  // namespace utility
 
 }  // namespace mcnla

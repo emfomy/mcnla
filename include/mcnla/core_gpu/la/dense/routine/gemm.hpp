@@ -95,7 +95,7 @@ inline void gemmImpl1(
 }  // namespace detail
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  la_dense_blas3_module
+/// @ingroup  la_dense_blas3_gpu_module
 /// @brief  Computes a matrix-matrix product with general matrices.
 ///
 template <typename _Val, Trans _transa, Trans _transb, Trans _transc>

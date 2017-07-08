@@ -18,6 +18,7 @@
 
 // BLAS-like
 #include <mcnla/core_gpu/la/dense/routine/set_get.hpp>
+#include <mcnla/core_gpu/la/dense/routine/memset0.hpp>
 
 // LAPACK linear equation
 

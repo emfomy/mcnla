@@ -99,13 +99,14 @@ void MCNLA_TMP::runImpl(
   // ====================================================================================================================== //
   // Projection
 
+  la::memset0(matrix_qjs_gpu_);
   auto idxrange = I_{0, ncol_gpu_};
   for ( auto i = 0; i < ncol / ncol_gpu_; ++i ) {
     // Copy A
     la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_);
 
     // Q := A * Omega
-    la::mm(matrix_aj_gpu_, matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_);
+    la::mm(matrix_aj_gpu_, matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_, 1.0, 1.0);
 
     idxrange += ncol_gpu_;
   }
@@ -116,7 +117,7 @@ void MCNLA_TMP::runImpl(
     la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_(""_, {0_i, idxrange.len()}));
 
     // Q := A * Omega
-    la::mm(matrix_aj_gpu_(""_, {0_i, idxrange.len()}), matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_);
+    la::mm(matrix_aj_gpu_(""_, {0_i, idxrange.len()}), matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_, 1.0, 1.0);
 
     idxrange += ncol_gpu_;
   }

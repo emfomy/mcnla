@@ -118,6 +118,19 @@ inline void memcpy( _Type *dst, const _Type *src, const index_t num ) noexcept {
   std::memcpy(dst, src, num * sizeof(_Type));
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  utility_module
+/// @brief  Sets the memory to zero.
+///
+/// @tparam  _Type  The type of the array.
+/// @param   ptr  The destination pointer to the array.
+/// @param   num  The number of objects.
+///
+template <typename _Type>
+inline void memset0( _Type *ptr, const index_t num ) noexcept {
+  std::memset(ptr, 0, num * sizeof(_Type));
+}
+
 }  // namespace utility
 
 }  // namespace mcnla

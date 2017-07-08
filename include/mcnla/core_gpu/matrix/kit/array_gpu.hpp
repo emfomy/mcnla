@@ -43,7 +43,7 @@ MCNLA_TMP::ArrS(
     const index_t offset
 ) noexcept
   : BaseType(std::shared_ptr<_Val>(utility::gpuMalloc<_Val>(size), utility::gpuFree<_Val>), size, offset) {
-  mcnla_assert_true(bool(size) ==  bool(**this));
+  mcnla_assert_eq(bool(size), bool(**this));
 }
 
 }  // namespace matrix
