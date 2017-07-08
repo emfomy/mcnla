@@ -15,7 +15,7 @@
 #define MAKE_FN_NAME(prefix, name, suffix)  prefix ## name ## suffix
 #define FUNCTION_NAME(prefix, name, suffix) MAKE_FN_NAME(prefix, name, suffix)
 #define IO_LOAD_SIZE      FUNCTION_NAME(load, FILETYPE, Size)
-#define IO_LOAD_ROW_BLOCK FUNCTION_NAME(load, FILETYPE, RowBlock)
+#define IO_LOAD_COL_BLOCK FUNCTION_NAME(load, FILETYPE, ColBlock)
 
 #ifndef STYPE
 #define STYPE RowBlockGaussianProjectionSketcher
@@ -159,7 +159,7 @@ int main( int argc, char **argv ) {
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::tic(timer);
     }
-    mcnla::io::IO_LOAD_ROW_BLOCK(matrix_aj, argv[1], parameters.rowrange());
+    mcnla::io::IO_LOAD_COL_BLOCK(matrix_aj.t(), argv[1], parameters.rowrange());
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::dispToc(timer); std::cout << std::endl;
     }

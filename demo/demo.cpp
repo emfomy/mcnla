@@ -83,6 +83,8 @@ int main( int argc, char **argv ) {
 #endif  // _OPENMP
               << " threads per node" << std::endl;
     std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
+
+    mcnla::printEnvironment();
   }
   assert((k+p) <= m && m <= n);
 

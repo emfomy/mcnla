@@ -49,13 +49,13 @@ void loadBinary(
 
   // Get size
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
-  index_t m = num;
+  index_t dim0 = num;
 
   // Allocate memory
   if ( vector.isEmpty() ) {
-    vector.reconstruct(m);
+    vector.reconstruct(dim0);
   } else {
-    mcnla_assert_eq(vector.sizes(), std::make_tuple(m));
+    mcnla_assert_eq(vector.sizes(), std::make_tuple(dim0));
     mcnla_assert_true(vector.isShrunk());
   }
 
@@ -103,19 +103,19 @@ void loadBinary(
 
   // Get size
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
-  index_t m = num;
+  index_t dim0 = num;
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
-  index_t n = num;
+  index_t dim1 = num;
 
   // Allocate memory
   if ( matrix.isEmpty() ) {
     if ( !isTrans(_trans) ) {
-      matrix.reconstruct(m, n);
+      matrix.reconstruct(dim0, dim1);
     } else {
-      matrix.reconstruct(n, m);
+      matrix.reconstruct(dim1, dim0);
     }
   } else {
-    mcnla_assert_eq(matrix.dims(), std::make_tuple(m, n));
+    mcnla_assert_eq(matrix.dims(), std::make_tuple(dim0, dim1));
     mcnla_assert_true(matrix.isShrunk());
   }
 
