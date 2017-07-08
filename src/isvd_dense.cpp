@@ -149,7 +149,7 @@ int main( int argc, char **argv ) {
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::tic(timer);
     }
-    mcnla::io::loadMatrixMarket(matrix_aj, argv[1], parameters.rowrange());
+    mcnla::io::loadMatrixMarketRowBlock(matrix_aj, argv[1], parameters.rowrange());
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::dispToc(timer); std::cout << std::endl;
     }

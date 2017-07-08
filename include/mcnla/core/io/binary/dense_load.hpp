@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_market/coo_load.hpp
-/// @brief   Load COO data from a Matrix Market file.
+/// @file    include/mcnla/core/io/binary/dense_load.hpp
+/// @brief   Load dense data from a binary file.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_IO_MATRIX_MARKET_COO_LOAD_HPP_
-#define MCNLA_CORE_IO_MATRIX_MARKET_COO_LOAD_HPP_
+#ifndef MCNLA_CORE_IO_BINARY_DENSE_LOAD_HPP_
+#define MCNLA_CORE_IO_BINARY_DENSE_LOAD_HPP_
 
 #include <mcnla/core/io/def.hpp>
 #include <fstream>
@@ -24,45 +24,43 @@ namespace io {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a COO vector from a Matrix Market file.
+/// Load a dense vector from a binary file.
 ///
 /// @note  If @a vector is empty, the memory will be allocated.
-/// @note  The file storage major should be the same as @a vector.
-///
-/// @todo  Read banner
+  /// @note  The data will be loaded in storage layout.
 ///
 template <typename _Val>
-void loadMatrixMarket(
-    CooVector<_Val> &vector,
+void loadBinary(
+    DenseVector<_Val> &vector,
     const char *file
 ) noexcept {
   // Open file
-  std::ifstream fin(file);
+  std::ifstream fin(file, std::ios::binary);
   mcnla_assert_false(fin.fail());
 
-  // Skip comment
-  while ( fin.peek() == '%' ) {
-    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  }
+  std::int64_t num;
+
+  // Skip format
+  fin.seekg(4, std::ios_base::cur);
+
+  // Get dimension
+  fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
+  mcnla_assert_eq(num, 1);
 
   // Get size
-  index_t m, n, nnz;
-  fin >> m >> n >> nnz;
+  fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
+  index_t m = num;
 
   // Allocate memory
   if ( vector.isEmpty() ) {
-    vector.reconstruct(m, nnz);
+    vector.reconstruct(m);
   } else {
-    mcnla_assert_eq(vector.dims(), std::make_tuple(m));
-    mcnla_assert_eq(vector.nnz(), nnz);
+    mcnla_assert_eq(vector.sizes(), std::make_tuple(m));
+    mcnla_assert_true(vector.isShrunk());
   }
 
-  // Read values
-  index_t x, y;
-  for ( index_t i = 0; i < nnz; ++i ) {
-    fin >> x >> y >> vector.valPtr()[i];
-    vector.idx0Ptr()[i] = x-1;
-  }
+  // Get values
+  fin.read(static_cast<char*>(static_cast<void*>(vector.valPtr())), vector.nelem() * sizeof(_Val));
 
   // Close file
   fin.close();
@@ -70,60 +68,59 @@ void loadMatrixMarket(
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val>
-inline void loadMatrixMarket(
-    CooVector<_Val> &&vector,
+inline void loadBinary(
+    DenseVector<_Val> &&vector,
     const char *file
 ) noexcept {
-  loadMatrixMarket(vector, file);
+  loadBinary(vector, file);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  io_module
-/// Load a COO matrix from a Matrix Market file.
+/// Load a dense matrix from a binary file.
 ///
 /// @note  If @a matrix is empty, the memory will be allocated.
-/// @note  The file storage major should be the same as @a matrix.
-///
-/// @todo  Read banner
+/// @note  The data will be loaded in storage layout.
 ///
 template <typename _Val, Trans _trans>
-void loadMatrixMarket(
-    CooMatrix<_Val, _trans> &matrix,
+void loadBinary(
+    DenseMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
   // Open file
-  std::ifstream fin(file);
+  std::ifstream fin(file, std::ios::binary);
   mcnla_assert_false(fin.fail());
 
-  // Skip comment
-  while ( fin.peek() == '%' ) {
-    fin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  }
+  std::int64_t num;
+
+  // Skip format
+  fin.seekg(4, std::ios_base::cur);
+
+  // Get dimension
+  fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
+  mcnla_assert_eq(num, 2);
 
   // Get size
-  index_t m, n, nnz;
-  fin >> m >> n >> nnz;
+  fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
+  index_t m = num;
+  fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
+  index_t n = num;
 
   // Allocate memory
   if ( matrix.isEmpty() ) {
     if ( !isTrans(_trans) ) {
-      matrix.reconstruct(m, n, nnz);
+      matrix.reconstruct(m, n);
     } else {
-      matrix.reconstruct(n, m, nnz);
+      matrix.reconstruct(n, m);
     }
   } else {
     mcnla_assert_eq(matrix.dims(), std::make_tuple(m, n));
-    mcnla_assert_eq(matrix.nnz(), nnz);
+    mcnla_assert_true(matrix.isShrunk());
   }
 
-  // Read values
-  index_t x, y;
-  for ( index_t i = 0; i < nnz; ++i ) {
-    fin >> x >> y >> matrix.valPtr()[i];
-    matrix.idx0Ptr()[i] = x-1;
-    matrix.idx1Ptr()[i] = y-1;
-  }
+  // Get values
+  fin.read(static_cast<char*>(static_cast<void*>(matrix.valPtr())), matrix.nelem() * sizeof(_Val));
 
   // Close file
   fin.close();
@@ -131,11 +128,11 @@ void loadMatrixMarket(
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans>
-inline void loadMatrixMarket(
-    CooMatrix<_Val, _trans> &&matrix,
+inline void loadBinary(
+    DenseMatrix<_Val, _trans> &&matrix,
     const char *file
 ) noexcept {
-  loadMatrixMarket(matrix, file);
+  loadBinary(matrix, file);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -143,4 +140,4 @@ inline void loadMatrixMarket(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_IO_MATRIX_MARKET_COO_LOAD_HPP_
+#endif  // MCNLA_CORE_IO_BINARY_DENSE_LOAD_HPP_
