@@ -71,11 +71,15 @@ if(MCNLA_OMP)
 
   unset(OpenMP)
 elseif(MCNLA_USE_GPU)
+  set(OpenMP "GOMP")
+
   find_package(OpenMP ${findtype})
-  if(OpenMP_FOUND)
-    set(COMFLGS "${COMFLGS} ${OpenMP_CXX_FLAGS}")
-    set(LNKFLGS "${LNKFLGS} ${OpenMP_CXX_FLAGS}")
+  find_package(OpenMPLib ${findtype})
+  if(OpenMPLib_FOUND)
+    list(APPEND LIBS "${OpenMP_LIBRARIES}")
   endif()
+
+  unset(OMP_LIBRARY)
   unset(OpenMP)
 endif()
 
