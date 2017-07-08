@@ -141,10 +141,19 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load matrix
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Reading data from " << argv[1] << "." << std::endl << std::endl;
+    std::cout << "Reading data from " << argv[1] << "." << std::endl;
   }
   mcnla::matrix::DenseMatrixRowMajor<double> matrix_aj;
-  mcnla::io::loadMatrixMarket(matrix_aj, argv[1], parameters.rowrange());
+  {
+    double timer = 0;
+    if ( mpi_rank == mpi_root ) {
+      mcnla::utility::tic(timer);
+    }
+    mcnla::io::loadMatrixMarket(matrix_aj, argv[1], parameters.rowrange());
+    if ( mpi_rank == mpi_root ) {
+      mcnla::utility::dispToc(timer); std::cout << std::endl;
+    }
+  }
 
   // Allocate variables
   auto collection_qj = parameters.createCollectionQj();
