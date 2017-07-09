@@ -12,9 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Former<GramianFormerTag<_jobv>, _Val>
+  #define MCNLA_TMP  Former<GramianFormerTag<_jobv>, _Val>
+  #define MCNLA_TMP0 Former
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP GramianFormer<_Val, _jobv>
+  #define MCNLA_TMP  GramianFormer<_Val, _jobv>
+  #define MCNLA_TMP0 GramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val, bool _jobv>
-MCNLA_TMP::Former(
+MCNLA_TMP::MCNLA_TMP0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -153,5 +155,6 @@ const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixV() const noexcept {
 }  // namespace mcnla
 
 #undef MCNLA_TMP
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_ISVD_FORMER_GRAMIAN_FORMER_HPP_

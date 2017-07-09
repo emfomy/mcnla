@@ -8,6 +8,10 @@
 #ifndef MCNLA_CORE_GPU_DEF_HPP_
 #define MCNLA_CORE_GPU_DEF_HPP_
 
+#ifndef MCNLA_USE_GPU
+  #error 'MCNLA_USE_GPU' should not be set!.
+#endif
+
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <magma.h>

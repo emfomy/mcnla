@@ -13,6 +13,12 @@
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseVectorBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseVector
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -23,11 +29,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifdef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Core, typename _Val>
-using DenseVectorBase = DenseVectorBase_<_Core, _Val>;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense vector base class.
 ///
@@ -35,11 +36,7 @@ using DenseVectorBase = DenseVectorBase_<_Core, _Val>;
 /// @tparam  _Val   The value type.
 ///
 template <class _Core, typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseVectorBase
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class DenseVectorBase_
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
     public DenseVectorWrapper<GeVecS<_Core, DenseTag, _Val>>,
     public InvertibleWrapper<GeVecS<_Core, DenseTag, _Val>> {
@@ -69,14 +66,14 @@ class DenseVectorBase_
  public:
 
   // Constructors
-  inline DenseVectorBase() noexcept;
-  inline DenseVectorBase( const index_t len, const index_t stride = 1 ) noexcept;
-  inline DenseVectorBase( const SizesType sizes, const index_t stride = 1 ) noexcept;
-  inline DenseVectorBase( const index_t len, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseVectorBase( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
-  inline DenseVectorBase( const index_t len, const index_t stride,
+  inline MCNLA_TMP0() noexcept;
+  inline MCNLA_TMP0( const index_t len, const index_t stride = 1 ) noexcept;
+  inline MCNLA_TMP0( const SizesType sizes, const index_t stride = 1 ) noexcept;
+  inline MCNLA_TMP0( const index_t len, const index_t stride, const index_t capacity ) noexcept;
+  inline MCNLA_TMP0( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
+  inline MCNLA_TMP0( const index_t len, const index_t stride,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseVectorBase( const DenseVectorBase &other ) noexcept;
+  inline MCNLA_TMP0( const DenseVectorBase &other ) noexcept;
 
   // Operators
   inline DerivedType& operator=( const DenseVectorBase &other ) noexcept;
@@ -125,5 +122,7 @@ class DenseVectorBase_
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_BASE_HH_

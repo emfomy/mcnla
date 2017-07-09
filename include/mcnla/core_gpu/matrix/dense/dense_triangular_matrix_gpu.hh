@@ -58,11 +58,10 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class TrMatS<GpuTag, DenseTag, _Val, _trans, _uplo>
-  : public DenseTriangularMatrixBase<GpuTag, _Val, _trans, _uplo> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrixGpu
-  : public DenseTriangularMatrixBase_<GpuTag, _Val, _trans, _uplo> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseTriangularMatrixBase<GpuTag, _Val, _trans, _uplo> {
 
  private:
 
@@ -71,14 +70,19 @@ class DenseTriangularMatrixGpu
  public:
 
   using BaseType::DenseTriangularMatrixBase;
+  using BaseType::operator();
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseTriangularMatrixBase_::operator=
+  /// @copydoc DenseTriangularMatrixBase::operator=
   DenseTriangularMatrixGpu& operator=( const DenseTriangularMatrixGpu &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Copy
   inline void copy() const noexcept = delete;
+
+  // Gets element
+  inline void operator()( const index_t rowidx, const index_t colidx ) noexcept = delete;
+  inline void operator()( const index_t rowidx, const index_t colidx ) const noexcept = delete;
 
 };
 

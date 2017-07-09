@@ -57,11 +57,10 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeVecS<GpuTag, DenseTag, _Val>
-  : public DenseVectorBase<GpuTag, _Val> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseVectorGpu
-  : public DenseVectorBase_<GpuTag, _Val> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseVectorBase<GpuTag, _Val> {
 
  private:
 
@@ -70,11 +69,16 @@ class DenseVectorGpu
  public:
 
   using BaseType::DenseVectorBase;
+  using BaseType::operator();
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseVectorBase_::operator=
+  /// @copydoc DenseVectorBase::operator=
   DenseVectorGpu& operator=( const DenseVectorGpu &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+  // Gets element
+  inline void operator()( const index_t idx ) noexcept = delete;
+  inline void operator()( const index_t idx ) const noexcept = delete;
 
   // Copy
   inline void copy() const noexcept = delete;

@@ -12,6 +12,14 @@
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Orthogonalizer
+  #define MCNLA_TMP1 Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockGramianOrthogonalizer
+  #define MCNLA_TMP1 RowBlockGramianOrthogonalizer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -34,11 +42,7 @@ template <typename _Val> using RowBlockGramianOrthogonalizer = Orthogonalizer<Ro
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockGramianOrthogonalizer
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockGramianOrthogonalizer<_Val>> {
 
   friend StageWrapper<RowBlockGramianOrthogonalizer<_Val>>;
@@ -79,7 +83,7 @@ class RowBlockGramianOrthogonalizer
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -94,5 +98,8 @@ class RowBlockGramianOrthogonalizer
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_GRAMIAN_ORTHOGONALIZER_HH_

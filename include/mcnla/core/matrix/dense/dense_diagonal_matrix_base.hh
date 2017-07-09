@@ -13,6 +13,12 @@
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 #include <mcnla/core/utility/crtp.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseDiagonalMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseDiagonalMatrix
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -23,11 +29,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifdef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Core, typename _Val>
-using DenseDiagonalMatrixBase = DenseDiagonalMatrixBase_<_Core, _Val>;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense diagonal matrix base class.
 ///
@@ -35,11 +36,7 @@ using DenseDiagonalMatrixBase = DenseDiagonalMatrixBase_<_Core, _Val>;
 /// @tparam  _Val    The value type.
 ///
 template <class _Core, typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseDiagonalMatrixBase
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class DenseDiagonalMatrixBase_
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseVectorStorage<_Core, _Val>,
     public DenseMatrixWrapper<DiMatS<_Core, DenseTag, _Val>>,
     public InvertibleWrapper<DiMatS<_Core, DenseTag, _Val>> {
@@ -69,13 +66,13 @@ class DenseDiagonalMatrixBase_
  public:
 
   // Constructors
-  inline DenseDiagonalMatrixBase() noexcept;
-  inline DenseDiagonalMatrixBase( const index_t size ) noexcept;
-  inline DenseDiagonalMatrixBase( const index_t size, const index_t pitch ) noexcept;
-  inline DenseDiagonalMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseDiagonalMatrixBase( const index_t size, const index_t pitch,
+  inline MCNLA_TMP0() noexcept;
+  inline MCNLA_TMP0( const index_t size ) noexcept;
+  inline MCNLA_TMP0( const index_t size, const index_t pitch ) noexcept;
+  inline MCNLA_TMP0( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
+  inline MCNLA_TMP0( const index_t size, const index_t pitch,
                                   const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseDiagonalMatrixBase( const DenseDiagonalMatrixBase &other ) noexcept;
+  inline MCNLA_TMP0( const DenseDiagonalMatrixBase &other ) noexcept;
 
   // Operators
   inline DerivedType& operator=( const DenseDiagonalMatrixBase &other ) noexcept;
@@ -119,5 +116,7 @@ class DenseDiagonalMatrixBase_
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_BASE_HH_

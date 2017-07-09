@@ -13,6 +13,12 @@
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseTriangularMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseTriangularMatrix
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -23,11 +29,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifdef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-using DenseTriangularMatrixBase = DenseTriangularMatrixBase_<_Core, _Val, _trans, _uplo>;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The dense triangular matrix base class.
 ///
@@ -37,11 +38,7 @@ using DenseTriangularMatrixBase = DenseTriangularMatrixBase_<_Core, _Val, _trans
 /// @tparam  _uplo   The triangular storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrixBase
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class DenseTriangularMatrixBase_
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public DenseMatrixStorage<_Core, _Val>,
     public DenseMatrixWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>>,
     public InvertibleWrapper<TrMatS<_Core, DenseTag, _Val, _trans, _uplo>> {
@@ -78,13 +75,13 @@ class DenseTriangularMatrixBase_
  public:
 
   // Constructors
-  inline DenseTriangularMatrixBase() noexcept;
-  inline DenseTriangularMatrixBase( const index_t size ) noexcept;
-  inline DenseTriangularMatrixBase( const index_t size, const index_t pitch ) noexcept;
-  inline DenseTriangularMatrixBase( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline DenseTriangularMatrixBase( const index_t size, const index_t pitch,
+  inline MCNLA_TMP0() noexcept;
+  inline MCNLA_TMP0( const index_t size ) noexcept;
+  inline MCNLA_TMP0( const index_t size, const index_t pitch ) noexcept;
+  inline MCNLA_TMP0( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
+  inline MCNLA_TMP0( const index_t size, const index_t pitch,
                                     const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline DenseTriangularMatrixBase( const DenseTriangularMatrixBase &other ) noexcept;
+  inline MCNLA_TMP0( const DenseTriangularMatrixBase &other ) noexcept;
 
   // Operators
   inline DerivedType& operator=( const DenseTriangularMatrixBase &other ) noexcept;
@@ -128,5 +125,7 @@ class DenseTriangularMatrixBase_
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_BASE_MATRIX_HH_

@@ -11,6 +11,14 @@
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Sketcher
+  #define MCNLA_TMP1 Sketcher<ColumnSamplingSketcherTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 ColumnSamplingSketcher
+  #define MCNLA_TMP1 ColumnSamplingSketcher
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -33,11 +41,7 @@ template <typename _Val> using ColumnSamplingSketcher = Sketcher<ColumnSamplingS
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Sketcher<ColumnSamplingSketcherTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class ColumnSamplingSketcher
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<ColumnSamplingSketcher<_Val>> {
 
   friend StageWrapper<ColumnSamplingSketcher<_Val>>;
@@ -69,13 +73,13 @@ class ColumnSamplingSketcher
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<_Val> &parameters, const index_t seed = rand() ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters, const index_t seed = rand() ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
 
   // Sets parameters
-  inline Sketcher& setSeed( const index_t seed ) noexcept;
+  inline MCNLA_TMP1& setSeed( const index_t seed ) noexcept;
 
  protected:
 
@@ -91,5 +95,8 @@ class ColumnSamplingSketcher
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HH_

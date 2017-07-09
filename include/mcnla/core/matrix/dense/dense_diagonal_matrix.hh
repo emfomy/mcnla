@@ -57,11 +57,10 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DiMatS<CpuTag, DenseTag, _Val>
-  : public DenseDiagonalMatrixBase<CpuTag, _Val>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseDiagonalMatrix
-  : public DenseDiagonalMatrixBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseDiagonalMatrixBase<CpuTag, _Val>,
     public MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>> {
 
   friend MatrixOstreamWrapper<DenseDiagonalMatrix<_Val>>;
@@ -75,7 +74,7 @@ class DenseDiagonalMatrix
   using BaseType::DenseDiagonalMatrixBase;
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseDiagonalMatrixBase_::operator=
+  /// @copydoc DenseDiagonalMatrixBase::operator=
   DenseDiagonalMatrix& operator=( const DenseDiagonalMatrix &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

@@ -21,12 +21,6 @@ if(MCNLA_BUILD_BIN)
   endif()
 endif()
 
-# Set default variables
-set(INCS "")
-set(LIBS "")
-set(COMFLGS "")
-set(LNKFLGS "")
-
 # MPI
 find_package(MPI ${findtype})
 if(MPI_FOUND)

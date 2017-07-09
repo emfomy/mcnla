@@ -12,6 +12,14 @@
 #include <mcnla/isvd/former/former.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Former
+  #define MCNLA_TMP1 Former<GramianFormerTag<_jobv>, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 GramianFormer
+  #define MCNLA_TMP1 GramianFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -35,11 +43,10 @@ template <typename _Val, bool _jobv = false> using GramianFormer = Former<Gramia
 ///
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv>
-class Former<GramianFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv = false>
-class GramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<GramianFormer<_Val, _jobv>> {
 
   friend StageWrapper<GramianFormer<_Val, _jobv>>;
@@ -92,7 +99,7 @@ class GramianFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
@@ -113,5 +120,8 @@ class GramianFormer
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_FORMER_GRAMIAN_FORMER_HH_

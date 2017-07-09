@@ -59,11 +59,10 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeVecS<CpuTag, DenseTag, _Val>
-  : public DenseVectorBase<CpuTag, _Val>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseVector
-  : public DenseVectorBase_<CpuTag, _Val>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseVectorBase<CpuTag, _Val>,
     public VectorOstreamWrapper<DenseVector<_Val>>,
     public IterableWrapper<DenseVector<_Val>, DenseVectorIterator<_Val>, DenseVectorConstIterator<_Val>> {
 
@@ -82,7 +81,7 @@ class DenseVector
   using BaseType::DenseVectorBase;
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseVectorBase_::operator=
+  /// @copydoc DenseVectorBase::operator=
   DenseVector& operator=( const DenseVector &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

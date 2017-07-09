@@ -12,6 +12,14 @@
 #include <mcnla/isvd/former/former.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Former
+  #define MCNLA_TMP1 Former<RowBlockGramianFormerTag<_jobv>, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockGramianFormer
+  #define MCNLA_TMP1 RowBlockGramianFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -35,11 +43,10 @@ template <typename _Val, bool _jobv = false> using RowBlockGramianFormer = Forme
 ///
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv>
-class Former<RowBlockGramianFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv = false>
-class RowBlockGramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockGramianFormer<_Val, _jobv>> {
 
   friend StageWrapper<RowBlockGramianFormer<_Val, _jobv>>;
@@ -95,7 +102,7 @@ class RowBlockGramianFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
@@ -116,5 +123,8 @@ class RowBlockGramianFormer
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HH_

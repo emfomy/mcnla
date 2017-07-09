@@ -59,11 +59,10 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class SyMatS<GpuTag, DenseTag, _Val, _trans, _uplo>
-  : public DenseSymmetricMatrixBase<GpuTag, _Val, _trans, _uplo> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrixGpu
-  : public DenseSymmetricMatrixBase_<GpuTag, _Val, _trans, _uplo> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseSymmetricMatrixBase<GpuTag, _Val, _trans, _uplo> {
 
  private:
 
@@ -72,14 +71,19 @@ class DenseSymmetricMatrixGpu
  public:
 
   using BaseType::DenseSymmetricMatrixBase;
+  using BaseType::operator();
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseSymmetricMatrixBase_::operator=
+  /// @copydoc DenseSymmetricMatrixBase::operator=
   DenseSymmetricMatrixGpu& operator=( const DenseSymmetricMatrixGpu &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Copy
   inline void copy() const noexcept = delete;
+
+  // Gets element
+  inline void operator()( const index_t rowidx, const index_t colidx ) noexcept = delete;
+  inline void operator()( const index_t rowidx, const index_t colidx ) const noexcept = delete;
 
 };
 

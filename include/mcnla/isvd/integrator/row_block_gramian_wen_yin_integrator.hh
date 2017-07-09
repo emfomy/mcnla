@@ -12,6 +12,14 @@
 #include <mcnla/isvd/integrator/integrator.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Integrator
+  #define MCNLA_TMP1 Integrator<RowBlockGramianWenYinIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockGramianWenYinIntegrator
+  #define MCNLA_TMP1 RowBlockGramianWenYinIntegrator
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -35,11 +43,7 @@ using RowBlockGramianWenYinIntegrator = Integrator<RowBlockGramianWenYinIntegrat
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockGramianWenYinIntegratorTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockGramianWenYinIntegrator
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockGramianWenYinIntegrator<_Val>> {
 
   friend StageWrapper<RowBlockGramianWenYinIntegrator<_Val>>;
@@ -145,7 +149,7 @@ class RowBlockGramianWenYinIntegrator
  public:
 
   // Constructor
-  inline Integrator( const Parameters<_Val> &parameters,
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters,
                      const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-3 ) noexcept;
 
   // Gets parameters
@@ -154,8 +158,8 @@ class RowBlockGramianWenYinIntegrator
   inline index_t        iteration() const noexcept;
 
   // Sets parameters
-  inline Integrator& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline Integrator& setTolerance( const RealValT<_Val> tolerance ) noexcept;
+  inline MCNLA_TMP1& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline MCNLA_TMP1& setTolerance( const RealValT<_Val> tolerance ) noexcept;
 
  protected:
 
@@ -171,5 +175,8 @@ class RowBlockGramianWenYinIntegrator
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_WEN_YIN_INTEGRATOR_HH_
