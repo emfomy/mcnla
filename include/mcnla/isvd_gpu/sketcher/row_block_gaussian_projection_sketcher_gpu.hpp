@@ -51,7 +51,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
   index_t ncol_gpu = (kGpuMemorySize / sizeof(_Val) - (nrow_rank * dim_sketch_total + ncol * dim_sketch_total)) / nrow_rank;
-  ncol_gpu_ = std::min((ncol_gpu/kBlockSizeGpu)*kBlockSizeGpu, ncol);
+  ncol_gpu_ = std::min((ncol_gpu / kBlockSizeGpu) * kBlockSizeGpu, ncol);
 
   matrix_aj_gpu_.reconstruct(nrow_rank, ncol_gpu_);
   matrix_qjs_gpu_.reconstruct(nrow_rank, dim_sketch_total);

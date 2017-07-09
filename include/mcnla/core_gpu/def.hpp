@@ -36,8 +36,10 @@ struct GpuTag {};
 /// Initializes the GPU environment.
 ///
 static inline void gpuInit( const index_t device_id ) noexcept {
+  int count;
+  cudaGetDeviceCount(&count);
   magma_init();
-  magma_setdevice(device_id);
+  magma_setdevice(device_id % count);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

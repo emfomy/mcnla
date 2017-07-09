@@ -182,7 +182,7 @@ index_t Parameters<_Val>::dimSketchTotal() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::numSketch() const noexcept {
-  return params_.num_sketch_each_ * mpi_size;
+  return params_.num_sketch_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,8 @@ index_t Parameters<_Val>::numSketch() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::numSketchEach() const noexcept {
-  return params_.num_sketch_each_;
+  mcnla_assert_eq(params_.num_sketch_ % mpi_size, 0)
+  return params_.num_sketch_ / mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,13 +245,14 @@ Parameters<_Val>& Parameters<_Val>::setOverRank(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of total random sketches.
 ///
-/// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size".
+/// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size"
+///             unless all stages are row-block version.
 ///
 template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setNumSketch(
     const index_t num_sketch
 ) noexcept {
-  params_.num_sketch_each_ = num_sketch / mpi_rank;
+  params_.num_sketch_ = num_sketch;
   synchronized_ = false;
   return *this;
 }
@@ -262,7 +264,7 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
     const index_t num_sketch_each
 ) noexcept {
-  params_.num_sketch_each_ = num_sketch_each;
+  params_.num_sketch_ = num_sketch_each * mpi_size;
   synchronized_ = false;
   return *this;
 }
