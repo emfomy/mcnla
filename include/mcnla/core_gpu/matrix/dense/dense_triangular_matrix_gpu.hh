@@ -58,10 +58,11 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class TrMatS<GpuTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseTriangularMatrixBase<GpuTag, _Val, _trans, _uplo> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrixGpu
+  : public DenseTriangularMatrixBase_<GpuTag, _Val, _trans, _uplo> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseTriangularMatrixBase<GpuTag, _Val, _trans, _uplo> {
 
  private:
 

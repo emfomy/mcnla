@@ -60,10 +60,11 @@ namespace matrix {
 template <typename _Val, Trans _trans>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeMatS<GpuTag, DenseTag, _Val, _trans>
+  : public DenseMatrixBase<GpuTag, _Val, _trans> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrixGpu
+  : public DenseMatrixBase_<GpuTag, _Val, _trans> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseMatrixBase<GpuTag, _Val, _trans> {
 
  private:
 

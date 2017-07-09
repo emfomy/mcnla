@@ -9,7 +9,7 @@
 #define MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_BASE_MATRIX_HH_
 
 #include <mcnla/core/matrix/dense/def.hpp>
-#include <mcnla/core/matrix/base/matrix_wrapper.hpp>
+#include <mcnla/core/matrix/base/dense_matrix_wrapper.hpp>
 #include <mcnla/core/matrix/base/invertible_wrapper.hpp>
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 

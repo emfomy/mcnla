@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
-#pragma warning
-// #include <mcnla/isvd_gpu/sketcher/row_block_gaussian_projection_sketcher_gpu.hpp>
-#include <mcnla.hpp>
+#include <mcnla/isvd_gpu/sketcher/row_block_gaussian_projection_sketcher_gpu.hpp>
 #include <mcnla/isvd/converter.hpp>
 #include <mcnla/core/io/matrix_market.hpp>
 

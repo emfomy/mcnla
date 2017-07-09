@@ -59,10 +59,11 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class SyMatS<GpuTag, DenseTag, _Val, _trans, _uplo>
+  : public DenseSymmetricMatrixBase<GpuTag, _Val, _trans, _uplo> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseSymmetricMatrixGpu
+  : public DenseSymmetricMatrixBase_<GpuTag, _Val, _trans, _uplo> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public DenseSymmetricMatrixBase<GpuTag, _Val, _trans, _uplo> {
 
  private:
 

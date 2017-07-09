@@ -56,14 +56,11 @@ namespace matrix {
 template <typename _Val>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class DiMatS<GpuTag, DenseTag, _Val>
-  : public DenseDiagonalMatrixBase<GpuTag, _Val>,
+  : public DenseDiagonalMatrixBase<GpuTag, _Val> {
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseDiagonalMatrixGpu
-  : public DenseDiagonalMatrixBase_<GpuTag, _Val>,
+  : public DenseDiagonalMatrixBase_<GpuTag, _Val> {
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-    public MatrixOstreamWrapper<DenseDiagonalMatrixGpu<_Val>> {
-
-  friend MatrixOstreamWrapper<DenseDiagonalMatrixGpu<_Val>>;
 
  private:
 
