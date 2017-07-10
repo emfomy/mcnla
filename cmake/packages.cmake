@@ -48,6 +48,20 @@ if(NOT MCNLA_USE_MKL)
   endif()
 endif()
 
+# CUDA & MAGMA
+if(MCNLA_USE_GPU)
+  find_package(CUDA ${findtype})
+  find_package(MAGMA ${findtype})
+  if(MAGMA_FOUND)
+    list(APPEND INCS "${MAGMA_INCLUDES}")
+    list(APPEND LIBS "${MAGMA_SPARSE_LIBRARY}" "${MAGMA_LIBRARY}")
+  endif()
+  if(CUDA_FOUND)
+    list(APPEND INCS "${CUDA_INCLUDE_DIRS}")
+    list(APPEND LIBS "${CUDA_cusparse_LIBRARY}" "${CUDA_cublas_LIBRARY}" "${CUDA_CUDART_LIBRARY}")
+  endif()
+endif()
+
 # OpenMP
 if(MCNLA_OMP)
   set(OpenMP ${MCNLA_OMP})
@@ -70,25 +84,11 @@ elseif(MCNLA_USE_GPU)
   find_package(OpenMP ${findtype})
   find_package(OpenMPLib ${findtype})
   if(OpenMPLib_FOUND)
-    list(APPEND LIBS "${OpenMP_LIBRARIES}")
+    list(APPEND LIBS "pthread" "${OpenMP_LIBRARIES}")
   endif()
 
   unset(OMP_LIBRARY)
   unset(OpenMP)
-endif()
-
-# CUDA & MAGMA
-if(MCNLA_USE_GPU)
-  find_package(CUDA ${findtype})
-  find_package(MAGMA ${findtype})
-  if(MAGMA_FOUND)
-    list(APPEND INCS "${MAGMA_INCLUDES}")
-    list(APPEND LIBS "${MAGMA_SPARSE_LIBRARY}" "${MAGMA_LIBRARY}" "pthread")
-  endif()
-  if(CUDA_FOUND)
-    list(APPEND INCS "${CUDA_INCLUDE_DIRS}")
-    list(APPEND LIBS "${CUDA_cusparse_LIBRARY}" "${CUDA_cublas_LIBRARY}" "${CUDA_CUDART_LIBRARY}")
-  endif()
 endif()
 
 # GTest
