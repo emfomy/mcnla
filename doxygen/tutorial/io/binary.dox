@@ -3,9 +3,15 @@ namespace mcnla {
 /**
   @page tutorial_io_binary Binary File
 
-  <h3>Binary File</h3>
+  <h3>Dense Binary File</h3>
 
-  @todo Write tutorial!
+  <table>
+  <tr><th> Name   <th> Bytes  <th> Type   <th> Detail
+  <tr><td> format <td> 4      <td> char*4 <td> storage format ("DEN\n")
+  <tr><td> ndim   <td> 8      <td> int64  <td> number of dimension
+  <tr><td> sizes  <td> 8*ndim <td> int64  <td> the sizes of each dimension
+  <tr><td> val    <td> ?      <td> ?      <td> the values
+  </table>
 
 */
 
