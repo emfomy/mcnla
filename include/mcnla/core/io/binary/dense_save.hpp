@@ -33,8 +33,10 @@ void saveBinary(
     const matrix::DenseVector<_Val> &vector,
     const char *file
 ) noexcept {
+  mcnla_assert_true(vector.isShrunk());
+
   // Open file
-  std::ofstream fout(file, std::ios::binary);
+  std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
 
   std::int64_t num;
@@ -69,8 +71,10 @@ void saveBinary(
     const matrix::DenseMatrix<_Val, _trans> &matrix,
     const char *file
 ) noexcept {
+  mcnla_assert_true(matrix.isShrunk());
+
   // Open file
-  std::ofstream fout(file, std::ios::binary);
+  std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
 
   std::int64_t num;

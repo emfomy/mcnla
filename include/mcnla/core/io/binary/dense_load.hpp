@@ -35,7 +35,7 @@ void loadBinary(
     const char *file
 ) noexcept {
   // Open file
-  std::ifstream fin(file, std::ios::binary);
+  std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
 
   std::int64_t num;
@@ -89,7 +89,7 @@ void loadBinary(
     const char *file
 ) noexcept {
   // Open file
-  std::ifstream fin(file, std::ios::binary);
+  std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
 
   std::int64_t num;

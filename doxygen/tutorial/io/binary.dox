@@ -1,0 +1,12 @@
+namespace mcnla {
+
+/**
+  @page tutorial_io_binary Binary File
+
+  <h3>Binary File</h3>
+
+  @todo Write tutorial!
+
+*/
+
+}  // namespace mcnla

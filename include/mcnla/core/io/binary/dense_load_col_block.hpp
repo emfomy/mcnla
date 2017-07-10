@@ -34,7 +34,7 @@ inline void loadBinarySize(
     const char *file
 ) noexcept {
   // Open file
-  std::ifstream fin(file, std::ios::binary);
+  std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
 
   std::int64_t num;
@@ -78,7 +78,7 @@ void loadBinaryColBlock(
   auto js = colrange.len();
 
   // Open file
-  std::ifstream fin(file, std::ios::binary);
+  std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
 
   std::int64_t num;
