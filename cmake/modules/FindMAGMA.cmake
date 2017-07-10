@@ -5,10 +5,12 @@
 # Locate the MAGMA Library.
 #
 
-################################################################################
-
-if(NOT MAGMA_ROOT AND NOT $ENV{MAGMA_ROOT} STREQUAL "")
-  set(MAGMA_ROOT "$ENV{MAGMA_ROOT}")
+if(NOT MAGMA_ROOT)
+  if(DEFINED ENV{MAGMADIR})
+    set(MAGMA_ROOT "$ENV{MAGMADIR}")
+  elseif(DEFINED ENV{MAGMA_ROOT})
+    set(MAGMA_ROOT "$ENV{MAGMA_ROOT}")
+  endif()
 endif()
 
 ################################################################################
@@ -35,6 +37,13 @@ find_library(
 
 ################################################################################
 
+if(NOT MAGMA_ROOT AND DEFINED MAGMA_INCLUDE)
+  get_filename_component(MAGMA_ROOT "${MAGMA_INCLUDE}/.." REALPATH)
+endif()
+set(MAGMA_ROOT "${MAGMA_ROOT}" CACHE PATH "The root path of MAGMA." FORCE)
+
+################################################################################
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
   MAGMA DEFAULT_MSG MAGMA_LIBRARY MAGMA_SPARSE_LIBRARY MAGMA_INCLUDE
@@ -45,8 +54,4 @@ mark_as_advanced(MAGMA_LIBRARY MAGMA_SPARSE_LIBRARY MAGMA_INCLUDE)
 ################################################################################
 
 set(MAGMA_INCLUDES  "${MAGMA_INCLUDE}")
-if(MAGMA_ROOT STREQUAL "" AND DEFINED MAGMA_INCLUDE)
-  get_filename_component(MAGMA_ROOT "${MAGMA_INCLUDE}/.." REALPATH)
-endif()
-
-set(MAGMA_ROOT "${MAGMA_ROOT}" CACHE PATH "The root path of MAGMA." FORCE)
+set(MAGMA_LIBRARIES "${MAGMA_SPARSE_LIBRARY}" "${MAGMA_LIBRARY}")
