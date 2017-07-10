@@ -31,15 +31,15 @@ include(cmake/options.cmake)
 # Sets the packages
 include(cmake/packages.cmake)
 
-# Sets the flags
-include(cmake/flags.cmake)
-
 # Add subdirectories
 add_subdirectory(src)
 add_subdirectory(demo)
 add_subdirectory(report)
 add_subdirectory(check)
 add_subdirectory(doxygen)
+
+# Sets the flags
+include(cmake/flags.cmake)
 
 # Create configure files
 include(cmake/configure.cmake)
