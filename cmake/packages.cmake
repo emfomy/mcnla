@@ -50,6 +50,14 @@ endif()
 
 # CUDA & MAGMA
 if(MCNLA_USE_GPU)
+  if(NOT CUDA_TOOLKIT_ROOT_DIR)
+    if(DEFINED ENV{CUDA_TOOLKIT_ROOT_DIR})
+      set(CUDA_TOOLKIT_ROOT_DIR "$ENV{CUDA_TOOLKIT_ROOT_DIR}")
+    elseif(DEFINED ENV{CUDADIR})
+      set(CUDA_TOOLKIT_ROOT_DIR "$ENV{CUDADIR}")
+    endif()
+  endif()
+
   find_package(CUDA ${findtype})
   find_package(MAGMA ${findtype})
   if(MAGMA_FOUND)

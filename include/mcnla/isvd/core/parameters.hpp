@@ -39,9 +39,9 @@ Parameters<_Val>::Parameters(
 ///
 template<typename _Val>
 void Parameters<_Val>::sync() noexcept {
-  mcnla_assert_gt(nrow_, 0);
-  mcnla_assert_gt(ncol_, 0);
-  mcnla_assert_gt(rank_, 0);
+  mcnla_assert_gt(params_.nrow_, 0);
+  mcnla_assert_gt(params_.ncol_, 0);
+  mcnla_assert_gt(params_.rank_, 0);
   MPI_Bcast(&params_, sizeof(params_), MPI_BYTE, mpi_root, mpi_comm);
   synchronized_ = true;
 }
