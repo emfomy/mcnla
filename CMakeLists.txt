@@ -31,6 +31,9 @@ include(cmake/options.cmake)
 # Sets the packages
 include(cmake/packages.cmake)
 
+# Sets the flags
+include(cmake/flags.cmake)
+
 # Add subdirectories
 add_subdirectory(src)
 add_subdirectory(demo)
