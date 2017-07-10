@@ -39,6 +39,9 @@ Parameters<_Val>::Parameters(
 ///
 template<typename _Val>
 void Parameters<_Val>::sync() noexcept {
+  mcnla_assert_gt(nrow_, 0);
+  mcnla_assert_gt(ncol_, 0);
+  mcnla_assert_gt(rank_, 0);
   MPI_Bcast(&params_, sizeof(params_), MPI_BYTE, mpi_root, mpi_comm);
   synchronized_ = true;
 }
@@ -212,6 +215,8 @@ Parameters<_Val>& Parameters<_Val>::setSize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
+  mcnla_assert_gt(nrow, 0);
+  mcnla_assert_gt(ncol, 0);
   params_.nrow_ = nrow;
   params_.ncol_ = ncol;
   synchronized_ = false;
@@ -225,6 +230,7 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setRank(
     const index_t rank
 ) noexcept {
+  mcnla_assert_gt(rank, 0);
   params_.rank_ = rank;
   synchronized_ = false;
   return *this;
@@ -237,6 +243,7 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setOverRank(
     const index_t over_rank
   ) noexcept {
+  mcnla_assert_ge(over_rank, 0);
   params_.over_rank_ = over_rank;
   synchronized_ = false;
   return *this;
@@ -252,6 +259,7 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setNumSketch(
     const index_t num_sketch
 ) noexcept {
+  mcnla_assert_gt(num_sketch, 0);
   params_.num_sketch_ = num_sketch;
   synchronized_ = false;
   return *this;
@@ -264,6 +272,7 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
     const index_t num_sketch_each
 ) noexcept {
+  mcnla_assert_gt(num_sketch_each, 0);
   params_.num_sketch_ = num_sketch_each * mpi_size;
   synchronized_ = false;
   return *this;
