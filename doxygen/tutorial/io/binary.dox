@@ -3,14 +3,48 @@ namespace mcnla {
 /**
   @page tutorial_io_binary Binary File
 
+  <h3>The Type Name Conversion</h3>
+
+  The type are stored in an char for type and a number of bits. For example, `"I64"` represents 64-bit integer, `"R32"` represents 32-bit floating number, and `"C128"` represents 128-bit complex number (with two 64-bit real numbers for real and complex parts).
+
+  <table>
+  <tr><th> Char <th> Detail
+  <tr><td> `'I'`  <td> Integer
+  <tr><td> `'R'`  <td> Real
+  <tr><td> `'C'`  <td> Complex
+  </table>
+
   <h3>Dense Binary File</h3>
 
   <table>
-  <tr><th> Name   <th> Bytes  <th> Type   <th> Detail
-  <tr><td> format <td> 4      <td> char*4 <td> storage format (`"DEN\n"` for dense)
-  <tr><td> ndim   <td> 8      <td> int64  <td> number of dimension
-  <tr><td> sizes  <td> 8*ndim <td> int64  <td> the sizes of each dimension
-  <tr><td> val    <td> ?      <td> ?      <td> the values
+  <tr><th> Name           <th> Bytes          <th> Type           <th> Detail
+  <tr><td> header         <td> 32             <td> char*32        <td> `"##MCNLABinaryFileFormat"` (ending with a `'\n'`)
+  <tr><td> comment        <td> 64             <td> char*64        <td> the comment of this file (ending with a `'\n'`)
+  <tr><td> format         <td> 8              <td> char*8         <td> `"DEN"` (the storage format)
+  <tr><td> val_type       <td> 8              <td> char*8         <td> the value type
+  <tr><td> reserved       <td> 8              <td> char*8         <td> unused
+  <tr><td> reserved       <td> 8              <td> char*8         <td> unused (ending with a `'\n'`)
+  <tr><td> ndim           <td> ?              <td> int64_t        <td> the number of dimension
+  <tr><td> sizes          <td> ?*ndim         <td> int64_t*ndim   <td> the sizes of each dimension
+  <tr><td> val            <td> ?              <td> val_type*size  <td> the values
+  </table>
+
+  <h3>COO Binary File</h3>
+
+  <table>
+  <tr><th> Name           <th> Bytes          <th> Type           <th> Detail
+  <tr><td> header         <td> 32             <td> char*32        <td> `"##MCNLABinaryFileFormat"` (ending with a `'\n'`)
+  <tr><td> comment        <td> 64             <td> char*64        <td> the comment of this file (ending with a `'\n'`)
+  <tr><td> format         <td> 8              <td> char*8         <td> `"COO"` (the storage format)
+  <tr><td> val_type       <td> 8              <td> char*8         <td> the value type
+  <tr><td> idx_type       <td> 8              <td> char*8         <td> the index type
+  <tr><td> reserved       <td> 8              <td> char*8         <td> unused (ending with a `'\n'`)
+  <tr><td> ndim           <td> ?              <td> int64_t        <td> the number of dimension
+  <tr><td> sizes          <td> ?*ndim         <td> int64_t*ndim   <td> the sizes of each dimension
+  <tr><td> val            <td> ?              <td> val_type*size  <td> the values
+  <tr><td> idx0           <td> ?              <td> idx_type*size  <td> the first indices
+  <tr><td> idx1           <td> ?              <td> idx_type*size  <td> the second indices (if exist)
+  <tr><td> ...            <td> ?              <td> idx_type*size  <td> ...
   </table>
 
 */

@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_IO_BINARY_DENSE_LOAD_COL_BLOCK_HPP_
 #define MCNLA_CORE_IO_BINARY_DENSE_LOAD_COL_BLOCK_HPP_
 
-#include <mcnla/core/io/def.hpp>
+#include <mcnla/core/io/binary/def.hpp>
 #include <fstream>
 #include <mcnla/core/matrix.hpp>
 
@@ -37,10 +37,9 @@ inline void loadBinarySize(
   std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
 
+  // Check header
+  detail::checkHeader<DenseTag, void>(fin);
   std::int64_t num;
-
-  // Skip format
-  fin.seekg(4, std::ios_base::cur);
 
   // Get dimension
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
@@ -81,10 +80,9 @@ void loadBinaryColBlock(
   std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
 
+  // Check header
+  detail::checkHeader<DenseTag, _Val>(fin);
   std::int64_t num;
-
-  // Skip format
-  fin.seekg(4, std::ios_base::cur);
 
   // Get dimension
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));

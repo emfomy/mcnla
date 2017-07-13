@@ -8,6 +8,7 @@
 #ifndef MCNLA_CORE_IO_BINARY_HPP_
 #define MCNLA_CORE_IO_BINARY_HPP_
 
+#include <mcnla/core/io/binary/def.hpp>
 #include <mcnla/core/io/binary/dense_load.hpp>
 #include <mcnla/core/io/binary/dense_save.hpp>
 #include <mcnla/core/io/binary/dense_load_col_block.hpp>
