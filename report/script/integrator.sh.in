@@ -3,12 +3,11 @@
 bin=$1
 
 function run() {
-	Nj=$((N/P))
 	echo ================================================================
 	echo
 	echo P = $P, N = $N, m = $m, k = $k
 	echo
-	@MPIEXEC@ @MPIEXEC_NUMPROC_FLAG@ $P $bin $Nj $m $k
+	@MPIEXEC@ @MPIEXEC_NUMPROC_FLAG@ $P $bin $N $m $k
 	echo
 	echo ================================================================
 }

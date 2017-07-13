@@ -60,7 +60,7 @@ namespace matrix {
 
   Note that @ref DenseMatrix::pitch "pitch" is the variable `ld?` (e.g. `lda` for matrix `a`) in BLAS.
 
-  <h3>Coordinate List (COO)  Containers</h3>
+  <h3>Coordinate List (COO) Containers</h3>
 
   There are two primary @ref CooStorage "COO data structures" in MCNLA --- @ref CooVector and @ref CooMatrix. Both of them uses an @ref Array --- @ref CooStorage::val "val" --- to store the values and several @ref Array "Array"s to stores the indices. An addition variable @ref DenseVector::nnz "nnz" stores the number of nonzero elements; that is, the length of value array and index arrays.
 

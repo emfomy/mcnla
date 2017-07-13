@@ -68,7 +68,7 @@ int main( int argc, char **argv ) {
     if ( mpi_rank == mpi_root ) {
       std::cout << "Usage: " << argv[0]
                 << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <V-mtx-file>"
-                   " [#sketch-per-node] [rank] [over-sampling-rank] [tolerance] [maxiter]"
+                   " [#sketch] [rank] [over-sampling-rank] [tolerance] [maxiter]"
                 << std::endl << std::endl;
       MPI_Abort(mpi_comm, 1);
     }
@@ -87,7 +87,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load parameters
   int argi = 4;
-  mcnla::index_t Nj      = ( argc > ++argi ) ? atof(argv[argi]) : 4;
+  mcnla::index_t N       = ( argc > ++argi ) ? atof(argv[argi]) : 16;
   mcnla::index_t k       = ( argc > ++argi ) ? atof(argv[argi]) : 20;
   mcnla::index_t p       = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   double         tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-3;
@@ -97,7 +97,7 @@ int main( int argc, char **argv ) {
             << ", n = " << n
             << ", k = " << k
             << ", p = " << p
-            << ", N = " << Nj*mpi_size
+            << ", N = " << N
             << ", tol = " << tol
             << ", maxiter = " << maxiter << std::endl;
     std::cout << mpi_size << " nodes / "
@@ -116,7 +116,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Initialize parameters
   mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
-  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketch(N);
   parameters.sync();
 
   // ====================================================================================================================== //

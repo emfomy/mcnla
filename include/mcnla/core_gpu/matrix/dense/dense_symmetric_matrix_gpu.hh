@@ -71,14 +71,19 @@ class DenseSymmetricMatrixGpu
  public:
 
   using BaseType::DenseSymmetricMatrixBase;
+  using BaseType::operator();
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseSymmetricMatrixBase_::operator=
+  /// @copydoc DenseSymmetricMatrixBase::operator=
   DenseSymmetricMatrixGpu& operator=( const DenseSymmetricMatrixGpu &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Copy
   inline void copy() const noexcept = delete;
+
+  // Gets element
+  inline void operator()( const index_t rowidx, const index_t colidx ) noexcept = delete;
+  inline void operator()( const index_t rowidx, const index_t colidx ) const noexcept = delete;
 
 };
 

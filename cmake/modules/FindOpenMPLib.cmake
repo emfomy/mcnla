@@ -6,7 +6,7 @@
 #
 
 if(OpenMP STREQUAL "GOMP")
-  set(GOMP_LIBRARY "-lgomp" CACHE STRING "The GNU thread library." FORCE)
+  set(GOMP_LIBRARY "gomp" CACHE STRING "The GNU thread library." FORCE)
   set(OMP_LIBRARY ${GOMP_LIBRARY})
 elseif(OpenMP STREQUAL "IOMP")
   find_library(

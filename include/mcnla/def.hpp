@@ -9,9 +9,9 @@
 #define MCNLA_DEF_HPP_
 
 #ifndef __cplusplus
-#error C++ is required.
+  #error C++ is required.
 #elif __cplusplus < 201103L
-#warning C++11 is required.
+  #warning C++11 is required.
 #endif
 
 #include <cassert>

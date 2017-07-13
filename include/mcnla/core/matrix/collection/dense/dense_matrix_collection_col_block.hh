@@ -11,6 +11,14 @@
 #include <mcnla/core/matrix/collection/dense/def.hpp>
 #include <mcnla/core/matrix/collection/base/matrix_collection_wrapper.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 GeMatCollS
+  #define MCNLA_TMP1 GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseMatrixCollectionColBlockBase
+  #define MCNLA_TMP1 DenseMatrixCollectionColBlockBase
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -21,6 +29,11 @@ namespace mcnla {
 //
 namespace matrix {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <class _Core, typename _Val, Trans _trans>
+using DenseMatrixCollectionColBlockBase = GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>;
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  matrix_collection_module
 /// dense matrix collection of column-blocks.
@@ -30,24 +43,20 @@ namespace matrix {
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class DenseMatrixCollectionColBlockBase
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-  : public MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>> {
+class MCNLA_TMP1
+  : public MatrixCollectionWrapper<DenseMatrixCollectionColBlockBase<_Core, _Val, _trans>> {
 
-  friend MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>>;
+  friend MatrixCollectionWrapper<DenseMatrixCollectionColBlockBase<_Core, _Val, _trans>>;
 
  public:
 
   using ValType        = _Val;
-  using CollectionType = GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>;
+  using CollectionType = DenseMatrixCollectionColBlockBase<_Core, _Val, _trans>;
   using MatrixType     = GeMatS<_Core, DenseTag, _Val, _trans>;
 
  private:
 
-  using BaseType  = MatrixCollectionWrapper<GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>>;
+  using BaseType  = MatrixCollectionWrapper<DenseMatrixCollectionColBlockBase<_Core, _Val, _trans>>;
   using SizesType = std::tuple<index_t, index_t, index_t>;
 
  protected:
@@ -64,14 +73,14 @@ class DenseMatrixCollectionColBlockBase
  public:
 
   // Constructors
-  inline GeMatCollS() noexcept;
-  inline GeMatCollS( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline GeMatCollS( const SizesType sizes ) noexcept;
-  inline GeMatCollS( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mcol ) noexcept;
-  inline GeMatCollS( const SizesType sizes, const index_t mcol ) noexcept;
-  inline GeMatCollS( const index_t ncol, const MatrixType &data ) noexcept;
-  inline GeMatCollS( const index_t ncol, const index_t mcol, const MatrixType &data ) noexcept;
-  inline GeMatCollS( const CollectionType &other ) noexcept;
+  inline MCNLA_TMP0() noexcept;
+  inline MCNLA_TMP0( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline MCNLA_TMP0( const SizesType sizes ) noexcept;
+  inline MCNLA_TMP0( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mcol ) noexcept;
+  inline MCNLA_TMP0( const SizesType sizes, const index_t mcol ) noexcept;
+  inline MCNLA_TMP0( const index_t ncol, const MatrixType &data ) noexcept;
+  inline MCNLA_TMP0( const index_t ncol, const index_t mcol, const MatrixType &data ) noexcept;
+  inline MCNLA_TMP0( const CollectionType &other ) noexcept;
 
   // Operators
   inline CollectionType& operator=( const CollectionType &other ) noexcept;
@@ -118,11 +127,6 @@ class DenseMatrixCollectionColBlockBase
 
 };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Core, typename _Val, Trans _trans>
-using DenseMatrixCollectionColBlockBase = GeMatCollS<ColBlockTag, _Core, DenseTag, _Val, _trans>;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 /// @ingroup  matrix_collection_module
 /// @see  DenseMatrixCollectionColBlockBase
 template <typename _Val, Trans _trans>
@@ -141,5 +145,8 @@ using DenseMatrixCollectionColBlockRowMajor = DenseMatrixCollectionColBlock<_Val
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_DENSE_MATRIX_COLLECTION_COL_BLOCK_HH_

@@ -12,9 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
+  #define MCNLA_TMP  Integrator<RowBlockKolmogorovNagumoIntegratorTag, _Val>
+  #define MCNLA_TMP0 Integrator
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP RowBlockKolmogorovNagumoIntegrator<_Val>
+  #define MCNLA_TMP  RowBlockKolmogorovNagumoIntegrator<_Val>
+  #define MCNLA_TMP0 RowBlockKolmogorovNagumoIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Integrator(
+MCNLA_TMP::MCNLA_TMP0(
     const Parameters<_Val> &parameters,
     const index_t max_iteration,
     const RealValT<_Val> tolerance
@@ -233,7 +235,7 @@ index_t MCNLA_TMP::iteration() const noexcept {
 /// @brief  Sets the maximum number of iteration.
 ///
 template <typename _Val>
-RowBlockKolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setMaxIteration(
+MCNLA_TMP& MCNLA_TMP::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
@@ -247,7 +249,7 @@ RowBlockKolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setMaxIteration(
 /// @brief  Sets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RowBlockKolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setTolerance(
+MCNLA_TMP& MCNLA_TMP::setTolerance(
     const RealValT<_Val> tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
@@ -262,5 +264,6 @@ RowBlockKolmogorovNagumoIntegrator<_Val>& MCNLA_TMP::setTolerance(
 }  // namespace mcnla
 
 #undef MCNLA_TMP
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_KOLMOGOROV_NAGUMO_INTEGRATOR_HPP_

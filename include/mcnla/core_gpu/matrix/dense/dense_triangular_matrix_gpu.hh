@@ -70,14 +70,19 @@ class DenseTriangularMatrixGpu
  public:
 
   using BaseType::DenseTriangularMatrixBase;
+  using BaseType::operator();
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseTriangularMatrixBase_::operator=
+  /// @copydoc DenseTriangularMatrixBase::operator=
   DenseTriangularMatrixGpu& operator=( const DenseTriangularMatrixGpu &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Copy
   inline void copy() const noexcept = delete;
+
+  // Gets element
+  inline void operator()( const index_t rowidx, const index_t colidx ) noexcept = delete;
+  inline void operator()( const index_t rowidx, const index_t colidx ) const noexcept = delete;
 
 };
 

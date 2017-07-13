@@ -10,6 +10,12 @@
 
 #include <mcnla/core/matrix/dense/dense_triangular_matrix_base.hh>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseTriangularMatrixBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 DenseTriangularMatrix
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -24,14 +30,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase() noexcept
+DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase(
+DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
     const index_t size
 ) noexcept
   : BaseType(size, size) {
@@ -41,7 +47,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase(
+DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -51,7 +57,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase(
+DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -62,7 +68,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 /// @brief  Construct with given raw data.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase(
+DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
     const index_t size,
     const index_t pitch,
     const ValArrayType &val,
@@ -76,7 +82,7 @@ DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::DenseTriangularMatrixBase(
+DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
     const DenseTriangularMatrixBase &other
 ) noexcept
   : BaseType(other) {}
@@ -231,5 +237,7 @@ index_t DenseTriangularMatrixBase<_Core, _Val, _trans, _uplo>::mcolImpl() const 
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_MATRIX_BASE_HPP_

@@ -1,0 +1,9 @@
+/**
+  @page tutorial_io I/O Tutorial
+
+  @see  @ref io_module
+
+  <h4>Subpages</h4>
+
+  - @subpage tutorial_io_binary
+*/

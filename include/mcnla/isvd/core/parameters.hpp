@@ -39,6 +39,9 @@ Parameters<_Val>::Parameters(
 ///
 template<typename _Val>
 void Parameters<_Val>::sync() noexcept {
+  mcnla_assert_gt(params_.nrow_, 0);
+  mcnla_assert_gt(params_.ncol_, 0);
+  mcnla_assert_gt(params_.rank_, 0);
   MPI_Bcast(&params_, sizeof(params_), MPI_BYTE, mpi_root, mpi_comm);
   synchronized_ = true;
 }
@@ -182,7 +185,7 @@ index_t Parameters<_Val>::dimSketchTotal() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::numSketch() const noexcept {
-  return params_.num_sketch_each_ * mpi_size;
+  return params_.num_sketch_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +193,8 @@ index_t Parameters<_Val>::numSketch() const noexcept {
 ///
 template<typename _Val>
 index_t Parameters<_Val>::numSketchEach() const noexcept {
-  return params_.num_sketch_each_;
+  mcnla_assert_eq(params_.num_sketch_ % mpi_size, 0)
+  return params_.num_sketch_ / mpi_size;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,6 +215,8 @@ Parameters<_Val>& Parameters<_Val>::setSize(
     const index_t nrow,
     const index_t ncol
 ) noexcept {
+  mcnla_assert_gt(nrow, 0);
+  mcnla_assert_gt(ncol, 0);
   params_.nrow_ = nrow;
   params_.ncol_ = ncol;
   synchronized_ = false;
@@ -224,6 +230,7 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setRank(
     const index_t rank
 ) noexcept {
+  mcnla_assert_gt(rank, 0);
   params_.rank_ = rank;
   synchronized_ = false;
   return *this;
@@ -236,6 +243,7 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setOverRank(
     const index_t over_rank
   ) noexcept {
+  mcnla_assert_ge(over_rank, 0);
   params_.over_rank_ = over_rank;
   synchronized_ = false;
   return *this;
@@ -244,13 +252,15 @@ Parameters<_Val>& Parameters<_Val>::setOverRank(
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Sets the number of total random sketches.
 ///
-/// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size".
+/// @attention  @a num_sketch must be a multiple of @ref mcnla::mpi::commSize "mpi_size"
+///             unless all stages are row-block version.
 ///
 template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setNumSketch(
     const index_t num_sketch
 ) noexcept {
-  params_.num_sketch_each_ = num_sketch / mpi_rank;
+  mcnla_assert_gt(num_sketch, 0);
+  params_.num_sketch_ = num_sketch;
   synchronized_ = false;
   return *this;
 }
@@ -262,7 +272,8 @@ template<typename _Val>
 Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
     const index_t num_sketch_each
 ) noexcept {
-  params_.num_sketch_each_ = num_sketch_each;
+  mcnla_assert_gt(num_sketch_each, 0);
+  params_.num_sketch_ = num_sketch_each * mpi_size;
   synchronized_ = false;
   return *this;
 }

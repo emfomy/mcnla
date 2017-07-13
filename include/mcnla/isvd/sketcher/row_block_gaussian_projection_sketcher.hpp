@@ -13,9 +13,11 @@
 #include <mcnla/core/random.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
+  #define MCNLA_TMP  Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
+  #define MCNLA_TMP0 Sketcher
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP RowBlockGaussianProjectionSketcher<_Val>
+  #define MCNLA_TMP  RowBlockGaussianProjectionSketcher<_Val>
+  #define MCNLA_TMP0 RowBlockGaussianProjectionSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Sketcher(
+MCNLA_TMP::MCNLA_TMP0(
     const Parameters<_Val> &parameters,
     const index_t seed,
     const index_t exponent
@@ -136,7 +138,7 @@ index_t MCNLA_TMP::exponent() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-RowBlockGaussianProjectionSketcher<_Val>& MCNLA_TMP::setSeed(
+MCNLA_TMP& MCNLA_TMP::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -150,7 +152,7 @@ RowBlockGaussianProjectionSketcher<_Val>& MCNLA_TMP::setSeed(
 /// @attention  Row-block version supports zero exponent only.
 ///
 template <typename _Val>
-RowBlockGaussianProjectionSketcher<_Val>& MCNLA_TMP::setExponent(
+MCNLA_TMP& MCNLA_TMP::setExponent(
     const index_t exponent
 ) noexcept {
   mcnla_assert_eq(exponent, 0);
@@ -164,5 +166,6 @@ RowBlockGaussianProjectionSketcher<_Val>& MCNLA_TMP::setExponent(
 }  // namespace mcnla
 
 #undef MCNLA_TMP
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HPP_

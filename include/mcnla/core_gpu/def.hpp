@@ -8,6 +8,10 @@
 #ifndef MCNLA_CORE_GPU_DEF_HPP_
 #define MCNLA_CORE_GPU_DEF_HPP_
 
+#ifndef MCNLA_USE_GPU
+  #error 'MCNLA_USE_GPU' should not be set!.
+#endif
+
 #include <mcnla/def.hpp>
 #include <mcnla/core/def.hpp>
 #include <magma.h>
@@ -36,8 +40,10 @@ struct GpuTag {};
 /// Initializes the GPU environment.
 ///
 static inline void gpuInit( const index_t device_id ) noexcept {
+  int count;
+  cudaGetDeviceCount(&count);
   magma_init();
-  magma_setdevice(device_id);
+  magma_setdevice(device_id % count);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

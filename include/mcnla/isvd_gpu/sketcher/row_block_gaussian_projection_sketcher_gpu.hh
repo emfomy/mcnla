@@ -12,6 +12,14 @@
 #include <mcnla/core_gpu/matrix.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Sketcher
+  #define MCNLA_TMP1 Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockGaussianProjectionSketcherGpu
+  #define MCNLA_TMP1 RowBlockGaussianProjectionSketcherGpu
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -28,17 +36,13 @@ template <typename _Val> using RowBlockGaussianProjectionSketcherGpu = Sketcher<
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @ingroup  isvd_sketcher_module
+/// @ingroup  isvd_sketcher_gpu_module
 /// The Gaussian projection sketcher (row-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockGaussianProjectionSketcherGpu
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockGaussianProjectionSketcherGpu<_Val>> {
 
   friend StageWrapper<RowBlockGaussianProjectionSketcherGpu<_Val>>;
@@ -82,13 +86,13 @@ class RowBlockGaussianProjectionSketcherGpu
  public:
 
   // Constructor
-  inline Sketcher( const Parameters<_Val> &parameters, const index_t seed = rand() ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters, const index_t seed = rand() ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
 
   // Sets parameters
-  inline Sketcher& setSeed( const index_t seed ) noexcept;
+  inline MCNLA_TMP1& setSeed( const index_t seed ) noexcept;
 
 
  protected:
@@ -107,5 +111,8 @@ class RowBlockGaussianProjectionSketcherGpu
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_

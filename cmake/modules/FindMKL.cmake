@@ -5,20 +5,23 @@
 # Locate the Intel Math Kernel Library.
 #
 
-set(MKL_ROOT "${MKL_ROOT}")
-if(MKL_ROOT STREQUAL "")
-  if(DEFINED ENV{MKLROOT})
-    set(MKL_ROOT "$ENV{MKLROOT}")
+if(NOT INTEL_ROOT)
+  if(DEFINED ENV{INTELROOT})
+    set(INTEL_ROOT "$ENV{INTELROOT}")
+  elseif(DEFINED ENV{INTEL_ROOT})
+    set(INTEL_ROOT "$ENV{INTEL_ROOT}")
   endif()
 endif()
 
-if(NOT MKL_ROOT STREQUAL "")
-  get_filename_component(MKL_ROOT "${MKL_ROOT}" REALPATH)
-  get_filename_component(INTEL_ROOT "${MKL_ROOT}/../compiler" REALPATH)
+if(NOT MKL_ROOT)
+  if(DEFINED ENV{MKLROOT})
+    set(MKL_ROOT "$ENV{MKLROOT}")
+  elseif(DEFINED ENV{MKL_ROOT})
+    set(MKL_ROOT "$ENV{MKL_ROOT}")
+  elseif(DEFINED INTEL_ROOT)
+    get_filename_component(MKL_ROOT "${INTEL_ROOT}/../mkl" REALPATH)
+  endif()
 endif()
-
-set(MKL_ROOT "${MKL_ROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
-set(INTEL_ROOT "${INTEL_ROOT}" CACHE PATH "The root path of Intel Parallel Studio.")
 
 unset(MKL_FLAG CACHE)
 unset(MKL_INCLUDE CACHE)
@@ -92,6 +95,19 @@ find_library(
 
 ################################################################################
 
+if(NOT MKL_ROOT AND MKL_INCLUDE)
+  get_filename_component(MKL_ROOT "${MKL_INCLUDE}/.." REALPATH)
+endif()
+
+if(NOT INTEL_ROOT AND MKL_ROOT)
+  get_filename_component(INTEL_ROOT "${MKL_ROOT}/../compiler" REALPATH)
+endif()
+
+set(MKL_ROOT "${MKL_ROOT}" CACHE PATH "The root path of Intel MKL." FORCE)
+set(INTEL_ROOT "${INTEL_ROOT}" CACHE PATH "The root path of Intel Parallel Studio." FORCE)
+
+################################################################################
+
 include(FindPackageHandleStandardArgs)
 set(MKL_LIBS "${MKL_LIBRARY_LP};${MKL_LIBRARY_THREAD};${MKL_LIBRARY_CORE}")
 if(MKL_OMP)
@@ -107,5 +123,5 @@ endif()
 mark_as_advanced(MKL_LIBRARY_CORE MKL_LIBRARY_GNU_THREAD MKL_LIBRARY_INTEL_THREAD MKL_LIBRARY_SEQUENTIAL MKL_LIBRARY_LP MKL_INCLUDE MKL_FLAG)
 
 set(MKL_INCLUDES  "${MKL_INCLUDE}")
-set(MKL_LIBRARIES "-Wl,--no-as-needed" "${MKL_LIBRARY_CORE}" "${MKL_LIBRARY_THREAD}" "${MKL_LIBRARY_LP}" "pthread" "m" "dl")
+set(MKL_LIBRARIES "-Wl,--no-as-needed" "${MKL_LIBRARY_CORE}" "${MKL_LIBRARY_THREAD}" "${MKL_LIBRARY_LP}" "m" "dl")
 set(MKL_FLAGS     "${MKL_FLAG}")

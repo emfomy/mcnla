@@ -12,9 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
+  #define MCNLA_TMP  Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
+  #define MCNLA_TMP0 Orthogonalizer
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP RowBlockGramianOrthogonalizer<_Val>
+  #define MCNLA_TMP  RowBlockGramianOrthogonalizer<_Val>
+  #define MCNLA_TMP0 RowBlockGramianOrthogonalizer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Orthogonalizer(
+MCNLA_TMP::MCNLA_TMP0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -106,5 +108,6 @@ void MCNLA_TMP::runImpl(
 }  // namespace mcnla
 
 #undef MCNLA_TMP
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_GRAMIAN_ORTHOGONALIZER_HPP_

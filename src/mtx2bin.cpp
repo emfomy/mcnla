@@ -23,9 +23,10 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Check input
   if ( argc < 4 ) {
-    std::cout << "Usage: " << argv[0] << " <mtx-file> <bin-file> <storage major (0/1)>" << std::endl << std::endl;
+    std::cout << "Usage: " << argv[0] << " <mtx-file> <bin-file> <storage major (0/1)> [comment]" << std::endl << std::endl;
     abort();
   }
+  disp(argv[4])
 
   // ====================================================================================================================== //
   // Load/save matrix
@@ -36,7 +37,7 @@ int main( int argc, char **argv ) {
     mcnla::io::loadMatrixMarket(mat, argv[1]);
 
     std::cout << "Writing data into " << argv[2] << "." << std::endl;
-    mcnla::io::saveBinary(mat, argv[2]);
+    mcnla::io::saveBinary(mat, argv[2], argv[4]);
 
   } else {
     mcnla::matrix::DenseMatrixRowMajor<double> mat;
@@ -45,7 +46,7 @@ int main( int argc, char **argv ) {
     mcnla::io::loadMatrixMarket(mat, argv[1]);
 
     std::cout << "Writing data into " << argv[2] << "." << std::endl;
-    mcnla::io::saveBinary(mat, argv[2]);
+    mcnla::io::saveBinary(mat, argv[2], argv[4]);
   }
 
 }

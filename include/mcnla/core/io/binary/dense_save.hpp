@@ -8,7 +8,7 @@
 #ifndef MCNLA_CORE_IO_BINARY_DENSE_SAVE_HPP_
 #define MCNLA_CORE_IO_BINARY_DENSE_SAVE_HPP_
 
-#include <mcnla/core/io/def.hpp>
+#include <mcnla/core/io/binary/def.hpp>
 #include <fstream>
 #include <mcnla/core/matrix.hpp>
 
@@ -31,19 +31,20 @@ namespace io {
 template <typename _Val>
 void saveBinary(
     const matrix::DenseVector<_Val> &vector,
-    const char *file
+    const char *file,
+    const char *comment = ""
 ) noexcept {
+  mcnla_assert_true(vector.isShrunk());
+
   // Open file
-  std::ofstream fout(file, std::ios::binary);
+  std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
 
-  std::int64_t num;
-
-  // Write format
-  fout.write("DEN\n", 4);
+  // Write header
+  detail::writeHeader<DenseTag, _Val>(fout, comment);
+  std::int64_t num = 1;
 
   // Write dimension
-  num = 1;
   fout.write(static_cast<const char*>(static_cast<const void*>(&num)), sizeof(num));
 
   // Write size
@@ -67,19 +68,20 @@ void saveBinary(
 template <typename _Val, Trans _trans>
 void saveBinary(
     const matrix::DenseMatrix<_Val, _trans> &matrix,
-    const char *file
+    const char *file,
+    const char *comment = ""
 ) noexcept {
+  mcnla_assert_true(matrix.isShrunk());
+
   // Open file
-  std::ofstream fout(file, std::ios::binary);
+  std::ofstream fout(file);
   mcnla_assert_false(fout.fail());
 
-  std::int64_t num;
-
-  // Write format
-  fout.write("DEN\n", 4);
+  // Write header
+  detail::writeHeader<DenseTag, _Val>(fout, comment);
+  std::int64_t num = 2;
 
   // Write dimension
-  num = 2;
   fout.write(static_cast<const char*>(static_cast<const void*>(&num)), sizeof(num));
 
   // Write size

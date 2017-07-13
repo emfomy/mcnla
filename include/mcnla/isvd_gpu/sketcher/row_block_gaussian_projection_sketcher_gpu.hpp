@@ -13,9 +13,11 @@
 #include <mcnla/core/random.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>
+  #define MCNLA_TMP  Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>
+  #define MCNLA_TMP0 Sketcher
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP RowBlockGaussianProjectionSketcherGpu<_Val>
+  #define MCNLA_TMP  RowBlockGaussianProjectionSketcherGpu<_Val>
+  #define MCNLA_TMP0 RowBlockGaussianProjectionSketcherGpu
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Sketcher(
+MCNLA_TMP::MCNLA_TMP0(
     const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
@@ -51,7 +53,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
   index_t ncol_gpu = (kGpuMemorySize / sizeof(_Val) - (nrow_rank * dim_sketch_total + ncol * dim_sketch_total)) / nrow_rank;
-  ncol_gpu_ = std::min((ncol_gpu/kBlockSizeGpu)*kBlockSizeGpu, ncol);
+  ncol_gpu_ = std::min((ncol_gpu / kBlockSizeGpu) * kBlockSizeGpu, ncol);
 
   matrix_aj_gpu_.reconstruct(nrow_rank, ncol_gpu_);
   matrix_qjs_gpu_.reconstruct(nrow_rank, dim_sketch_total);
@@ -154,7 +156,7 @@ index_t MCNLA_TMP::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-RowBlockGaussianProjectionSketcherGpu<_Val>& MCNLA_TMP::setSeed(
+MCNLA_TMP& MCNLA_TMP::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -167,5 +169,6 @@ RowBlockGaussianProjectionSketcherGpu<_Val>& MCNLA_TMP::setSeed(
 }  // namespace mcnla
 
 #undef MCNLA_TMP
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HPP_
