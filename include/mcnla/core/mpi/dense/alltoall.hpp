@@ -33,7 +33,7 @@ inline void alltoallImpl(
     const mpi_int_t count,
     const MPI_Comm comm
 ) noexcept {
-  mcnla_assert_mpi_count(count);
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Alltoall(send.valPtr(), count, datatype, recv.valPtr(), count, datatype, comm);
 }
@@ -44,7 +44,7 @@ inline void alltoallImpl(
     const mpi_int_t count,
     const MPI_Comm comm
 ) noexcept {
-  mcnla_assert_mpi_count(count);
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Alltoall(MPI_IN_PLACE, count, datatype, buffer.valPtr(), count, datatype, comm);
 }

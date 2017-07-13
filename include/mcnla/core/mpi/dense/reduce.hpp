@@ -35,7 +35,7 @@ inline void reduceImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  mcnla_assert_mpi_count(count);
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Reduce(send.valPtr(), recv.valPtr(), count, datatype, op, root, comm);
 }
@@ -48,7 +48,7 @@ inline void reduceImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
-  mcnla_assert_mpi_count(count);
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   if ( isCommRoot(root, comm) ) {
     MPI_Reduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, root, comm);

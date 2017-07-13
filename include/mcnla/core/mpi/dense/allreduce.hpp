@@ -34,7 +34,7 @@ inline void allreduceImpl(
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
-  mcnla_assert_mpi_count(count);
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Allreduce(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
 }
@@ -46,7 +46,7 @@ inline void allreduceImpl(
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
-  mcnla_assert_mpi_count(count);
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Allreduce(MPI_IN_PLACE, buffer.valPtr(), count, datatype, op, comm);
 }
