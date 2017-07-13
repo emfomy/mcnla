@@ -12,6 +12,14 @@
 #include <mcnla/isvd/integrator/integrator.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Integrator
+  #define MCNLA_TMP1 Integrator<RowBlockReductionIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockReductionIntegrator
+  #define MCNLA_TMP1 RowBlockReductionIntegrator
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -34,11 +42,7 @@ template <typename _Val> using RowBlockReductionIntegrator = Integrator<RowBlock
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockReductionIntegratorTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockReductionIntegrator
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockReductionIntegrator<_Val>> {
 
   friend StageWrapper<RowBlockReductionIntegrator<_Val>>;
@@ -82,7 +86,7 @@ class RowBlockReductionIntegrator
  public:
 
   // Constructor
-  inline Integrator( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -97,5 +101,8 @@ class RowBlockReductionIntegrator
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HH_

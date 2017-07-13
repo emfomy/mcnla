@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    src/isvd.cpp
+/// @file    src/isvd_dense.cpp
 /// @brief   The iSVD driver for dense matrix
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
@@ -8,6 +8,30 @@
 #include <iostream>
 #include <mcnla.hpp>
 #include <omp.h>
+
+#ifndef FILETYPE
+#define FILETYPE MatrixMarket
+#endif  // FILETYPE
+#define MAKE_FN_NAME(prefix, name, suffix)  prefix ## name ## suffix
+#define FUNCTION_NAME(prefix, name, suffix) MAKE_FN_NAME(prefix, name, suffix)
+#define IO_LOAD_SIZE      FUNCTION_NAME(load, FILETYPE, Size)
+#define IO_LOAD_COL_BLOCK FUNCTION_NAME(load, FILETYPE, ColBlock)
+
+#ifndef STYPE
+#define STYPE RowBlockGaussianProjectionSketcher
+#endif  // STYPE
+
+#ifndef OTYPE
+#define OTYPE RowBlockGramianOrthogonalizer
+#endif  // OTYPE
+
+#ifndef ITYPE
+#define ITYPE RowBlockWenYinIntegrator
+#endif  // ITYPE
+
+#ifndef FTYPE
+#define FTYPE RowBlockGramianFormer
+#endif  // FTYPE
 
 void check( const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
             const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_uj,
@@ -23,7 +47,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize MCNLA
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
   auto mpi_comm = MPI_COMM_WORLD;
   auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -44,7 +68,7 @@ int main( int argc, char **argv ) {
     if ( mpi_rank == mpi_root ) {
       std::cout << "Usage: " << argv[0]
                 << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <V-mtx-file>"
-                   " [#sketch-per-node] [rank] [over-sampling-rank] [tolerance] [maxiter]"
+                   " [#sketch] [rank] [over-sampling-rank] [tolerance] [maxiter]"
                 << std::endl << std::endl;
       MPI_Abort(mpi_comm, 1);
     }
@@ -54,7 +78,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load matrix size
   mcnla::index_t m, n;
-  mcnla::io::loadMatrixMarketSize(m, n, argv[1]);
+  mcnla::io::IO_LOAD_SIZE(m, n, argv[1]);
 
   // ====================================================================================================================== //
   // Initialize random seed
@@ -63,7 +87,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load parameters
   int argi = 4;
-  mcnla::index_t Nj      = ( argc > ++argi ) ? atof(argv[argi]) : 4;
+  mcnla::index_t N       = ( argc > ++argi ) ? atof(argv[argi]) : 16;
   mcnla::index_t k       = ( argc > ++argi ) ? atof(argv[argi]) : 20;
   mcnla::index_t p       = ( argc > ++argi ) ? atof(argv[argi]) : 12;
   double         tol     = ( argc > ++argi ) ? atof(argv[argi]) : 1e-3;
@@ -73,7 +97,7 @@ int main( int argc, char **argv ) {
             << ", n = " << n
             << ", k = " << k
             << ", p = " << p
-            << ", N = " << Nj*mpi_size
+            << ", N = " << N
             << ", tol = " << tol
             << ", maxiter = " << maxiter << std::endl;
     std::cout << mpi_size << " nodes / "
@@ -84,29 +108,23 @@ int main( int argc, char **argv ) {
 #endif  // _OPENMP
               << " threads per node" << std::endl;
     std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
+
+    mcnla::printEnvironment();
   }
   assert((k+p) <= m && m <= n);
 
   // ====================================================================================================================== //
   // Initialize parameters
   mcnla::isvd::Parameters<double> parameters(mpi_root, mpi_comm);
-  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.setSize(m, n).setRank(k).setOverRank(p).setNumSketch(N);
   parameters.sync();
 
   // ====================================================================================================================== //
-  // Load matrix
-  if ( mpi_rank == mpi_root ) {
-    std::cout << "Reading data from " << argv[1] << "." << std::endl;
-  }
-  mcnla::matrix::DenseMatrixRowMajor<double> matrix_aj;
-  mcnla::io::loadMatrixMarket(matrix_aj, argv[1], parameters.rowrange());
-
-  // ====================================================================================================================== //
   // Allocate stages
-  mcnla::isvd::RowBlockGaussianProjectionSketcher<double> sketcher(parameters);
-  mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
-  mcnla::isvd::RowBlockWenYinIntegrator<double> integrator(parameters);
-  mcnla::isvd::RowBlockGramianFormer<double, true> former(parameters);
+  mcnla::isvd::STYPE<double> sketcher(parameters);
+  mcnla::isvd::OTYPE<double> orthogonalizer(parameters);
+  mcnla::isvd::ITYPE<double> integrator(parameters);
+  mcnla::isvd::FTYPE<double, true> former(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> fe_converter(parameters);
   mcnla::isvd::MatrixFromColBlockConverter<double> fe_converter2(parameters);
 
@@ -121,12 +139,6 @@ int main( int argc, char **argv ) {
   fe_converter.initialize();
   fe_converter2.initialize();
 
-  // Allocate variables
-  auto collection_qj = parameters.createCollectionQj();
-  auto matrix_qj     = parameters.createMatrixQbarj();
-  auto matrix_u      = parameters.createMatrixU();
-  auto matrix_v      = parameters.createMatrixV();
-
   // ====================================================================================================================== //
   // Display stage names
   if ( mpi_rank == mpi_root ) {
@@ -135,6 +147,29 @@ int main( int argc, char **argv ) {
     std::cout << "Uses " << integrator << "." << std::endl;
     std::cout << "Uses " << former << "." << std::endl << std::endl;
   }
+
+  // ====================================================================================================================== //
+  // Load matrix
+  if ( mpi_rank == mpi_root ) {
+    std::cout << "Reading data from " << argv[1] << "." << std::endl;
+  }
+  mcnla::matrix::DenseMatrixRowMajor<double> matrix_aj;
+  {
+    double timer = 0;
+    if ( mpi_rank == mpi_root ) {
+      mcnla::utility::tic(timer);
+    }
+    mcnla::io::IO_LOAD_COL_BLOCK(matrix_aj.t(), argv[1], parameters.rowrange());
+    if ( mpi_rank == mpi_root ) {
+      mcnla::utility::dispToc(timer); std::cout << std::endl;
+    }
+  }
+
+  // Allocate variables
+  auto collection_qj = parameters.createCollectionQj();
+  auto matrix_qj     = parameters.createMatrixQbarj();
+  auto matrix_u      = parameters.createMatrixU();
+  auto matrix_v      = parameters.createMatrixV();
 
   // ====================================================================================================================== //
   // Run iSVD
@@ -204,13 +239,13 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Save matrices
   if ( mpi_rank == mpi_root ) {
-    std::cout << "Save S into " << argv[2] << "." << std::endl;
+    std::cout << "Write S into " << argv[2] << "." << std::endl;
     mcnla::io::saveMatrixMarket(vector_s, argv[2]);
 
-    std::cout << "Save U into " << argv[3] << "." << std::endl;
+    std::cout << "Write U into " << argv[3] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_u, argv[3]);
 
-    std::cout << "Save V into " << argv[4] << "." << std::endl;
+    std::cout << "Write V into " << argv[4] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_v, argv[4]);
 
     std::cout << std::endl;

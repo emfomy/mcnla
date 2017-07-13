@@ -100,6 +100,8 @@
 
 set(GTEST_ROOT "${GTEST_ROOT}" CACHE PATH "The root path of Google Test." FORCE)
 
+################################################################################
+
 function(GTEST_ADD_TESTS executable extra_args)
   if(NOT ARGN)
     message(FATAL_ERROR "Missing ARGN: Read the documentation for GTEST_ADD_TESTS")
@@ -260,12 +262,12 @@ if(GTEST_FOUND)
   endif()
 endif()
 
-#
+################################################################################
 
-if(GTEST_ROOT STREQUAL "")
+if(NOT GTEST_ROOT)
   set(GTEST_ROOT "$ENV{GTEST_ROOT}")
 endif()
-if(GTEST_ROOT STREQUAL "" AND DEFINED GTEST_INCLUDE_DIR)
+if(NOT GTEST_ROOT AND DEFINED GTEST_INCLUDE_DIR)
   get_filename_component(GTEST_ROOT "${GTEST_INCLUDE_DIR}/.." REALPATH)
 endif()
 set(GTEST_ROOT "${GTEST_ROOT}" CACHE PATH "The root path of Google Test." FORCE)

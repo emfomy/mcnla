@@ -35,7 +35,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize MCNLA
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
   auto mpi_comm = MPI_COMM_WORLD;
   auto mpi_size = mcnla::mpi::commSize(mpi_comm);
   auto mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -57,7 +57,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Set parameters
   int argi = 0;
-  mcnla::index_t Nj        = ( argc > ++argi ) ? atof(argv[argi]) : 4;
+  mcnla::index_t N         = ( argc > ++argi ) ? atof(argv[argi]) : 16;
   mcnla::index_t m         = ( argc > ++argi ) ? atof(argv[argi]) : 1000;
   mcnla::index_t n         = ( argc > ++argi ) ? atof(argv[argi]) : 10000;
   mcnla::index_t k         = ( argc > ++argi ) ? atof(argv[argi]) : 10;
@@ -72,7 +72,7 @@ int main( int argc, char **argv ) {
             << ", n = " << n
             << ", k = " << k
             << ", p = " << p
-            << ", N = " << Nj*mpi_size
+            << ", N = " << N
             << ", tol = " << tol
             << ", maxiter = " << maxiter << std::endl;
     std::cout << mpi_size << " nodes / "
@@ -83,6 +83,8 @@ int main( int argc, char **argv ) {
 #endif  // _OPENMP
               << " threads per node" << std::endl;
     std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
+
+    mcnla::printEnvironment();
   }
   assert((k+p) <= m && m <= n);
 
@@ -110,7 +112,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::RowBlockColumnSamplingSketcher<double> sketcher(parameters);
   mcnla::isvd::RowBlockGramianOrthogonalizer<double> orthogonalizer(parameters);
   mcnla::isvd::RowBlockKolmogorovNagumoIntegrator<double> integrator(parameters);
-  mcnla::isvd::SvdFormer<double> former(parameters);
+  mcnla::isvd::SvdFormer<double, true> former(parameters);
   mcnla::isvd::DummyConverter<double> so_converter(parameters);
   mcnla::isvd::DummyConverter<double> oi_converter(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> if_converter(parameters);
@@ -125,7 +127,7 @@ int main( int argc, char **argv ) {
 
   // ====================================================================================================================== //
   // Initialize parameters
-  parameters.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketchEach(Nj);
+  parameters.setSize(matrix_a).setRank(k).setOverRank(p).setNumSketch(N);
   integrator.setMaxIteration(maxiter).setTolerance(tol);
   parameters.sync();
   sketcher.initialize();

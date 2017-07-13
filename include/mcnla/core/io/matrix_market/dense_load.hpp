@@ -48,6 +48,8 @@ void loadMatrixMarket(
   // Get size
   index_t m, n;
   fin >> m >> n;
+
+  // Allocate memory
   if ( vector.isEmpty() ) {
     vector.reconstruct(m);
   } else {
@@ -99,6 +101,8 @@ void loadMatrixMarket(
   // Get size
   index_t m, n;
   fin >> m >> n;
+
+  // Allocate memory
   if ( matrix.isEmpty() ) {
     matrix.reconstruct(m, n);
   } else {
@@ -152,6 +156,8 @@ void loadMatrixMarket(
   // Get size
   index_t m, n;
   fin >> m >> n;
+
+  // Allocate memory
   if ( collection.isEmpty() ) {
     collection.reconstruct(m, n);
   } else {
@@ -206,6 +212,8 @@ void loadMatrixMarket(
   // Get size
   index_t m, n, l;
   fin >> m >> n >> l;
+
+  // Allocate memory
   if ( collection.isEmpty() ) {
     collection.reconstruct(m, n, l);
   } else {

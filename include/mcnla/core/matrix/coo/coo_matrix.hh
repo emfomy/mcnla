@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/coo/coo_matrix.hh
-/// @brief   The definition of definition of COO matrix class.
+/// @brief   The definition of COO matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///

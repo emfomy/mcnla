@@ -12,6 +12,14 @@
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Orthogonalizer
+  #define MCNLA_TMP1 Orthogonalizer<QrOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 QrOrthogonalizer
+  #define MCNLA_TMP1 QrOrthogonalizer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -34,11 +42,7 @@ template <typename _Val> using QrOrthogonalizer = Orthogonalizer<QrOrthogonalize
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Orthogonalizer<QrOrthogonalizerTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class QrOrthogonalizer
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<QrOrthogonalizer<_Val>> {
 
   friend StageWrapper<QrOrthogonalizer<_Val>>;
@@ -73,7 +77,7 @@ class QrOrthogonalizer
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -88,5 +92,8 @@ class QrOrthogonalizer
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_QR_ORTHOGONALIZER_HH_

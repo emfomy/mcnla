@@ -9,8 +9,8 @@
 #define MCNLA_CORE_LA_DENSE_ROUTINE_MEMSET0_HPP_
 
 #include <mcnla/core/la/def.hpp>
-#include <cstring>
 #include <mcnla/core/matrix.hpp>
+#include <mcnla/core/utility.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -26,13 +26,12 @@ namespace la {
 /// @ingroup  la_dense_blas1_module
 /// @brief  Set a vector to zero.
 ///
-/// @attention  the out-of-range spaces are also changed.
-///
 template <typename _Val>
 inline void memset0(
   DenseVector<_Val> &x
 ) noexcept {
-  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Val));
+  mcnla_assert_true(x.isShrunk());
+  std::memset(x.valPtr(), x.nelem());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -48,21 +47,20 @@ inline void memset0(
 /// @ingroup  la_dense_blas1m_module
 /// @brief  Set a matrix to zero.
 ///
-/// @attention  the out-of-range spaces are also changed.
-///
 template <typename _Val, Trans _trans>
 inline void memset0(
-  DenseMatrix<_Val, _trans> &x
+  DenseMatrix<_Val, _trans> &a
 ) noexcept {
-  std::memset(x.valPtr(), 0, x.nelem() * sizeof(_Val));
+  mcnla_assert_true(a.isShrunk());
+  utility::memset0(a.valPtr(), a.nelem());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans>
 inline void memset0(
-  DenseMatrix<_Val, _trans> &&x
+  DenseMatrix<_Val, _trans> &&a
 ) noexcept {
-  memset0(x);
+  memset0(a);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

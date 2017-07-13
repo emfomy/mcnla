@@ -12,6 +12,14 @@
 #include <mcnla/isvd/orthogonalizer/orthogonalizer.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Orthogonalizer
+  #define MCNLA_TMP1 Orthogonalizer<GramianOrthogonalizerTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 GramianOrthogonalizer
+  #define MCNLA_TMP1 GramianOrthogonalizer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -34,11 +42,7 @@ template <typename _Val> using GramianOrthogonalizer = Orthogonalizer<GramianOrt
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Orthogonalizer<GramianOrthogonalizerTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class GramianOrthogonalizer
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<GramianOrthogonalizer<_Val>> {
 
   friend StageWrapper<GramianOrthogonalizer<_Val>>;
@@ -79,7 +83,7 @@ class GramianOrthogonalizer
  public:
 
   // Constructor
-  inline Orthogonalizer( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -94,5 +98,8 @@ class GramianOrthogonalizer
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_GRAMIAN_ORTHOGONALIZER_HH_

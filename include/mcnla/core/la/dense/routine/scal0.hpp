@@ -9,7 +9,6 @@
 #define MCNLA_CORE_LA_DENSE_ROUTINE_SCAL0_HPP_
 
 #include <mcnla/core/la/def.hpp>
-#include <cstring>
 #include <mcnla/core/matrix.hpp>
 #include <mcnla/core/la/dense/routine/scal.hpp>
 #include <mcnla/core/la/dense/routine/memset0.hpp>

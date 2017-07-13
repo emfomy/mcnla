@@ -12,6 +12,14 @@
 #include <mcnla/isvd/former/former.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Former
+  #define MCNLA_TMP1 Former<SvdFormerTag<_jobv>, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 SvdFormer
+  #define MCNLA_TMP1 SvdFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -36,11 +44,10 @@ template <typename _Val, bool _jobv = false> using SvdFormer = Former<SvdFormerT
 ///
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv>
-class Former<SvdFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv = false>
-class SvdFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<SvdFormer<_Val, _jobv>> {
 
   friend StageWrapper<SvdFormer<_Val, _jobv>>;
@@ -93,7 +100,7 @@ class SvdFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
@@ -114,5 +121,8 @@ class SvdFormer
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_FORMER_SVD_FORMER_HH_

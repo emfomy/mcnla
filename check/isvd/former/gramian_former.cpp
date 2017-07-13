@@ -14,7 +14,7 @@ TEST(GramianFormerTest, Test) {
   const auto mpi_root = 0;
 
   // Reads data
-  mcnla::matrix::DenseMatrixColMajor<ValType> a;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> a;
   mcnla::matrix::DenseMatrixRowMajor<ValType> q_true;
   mcnla::matrix::DenseMatrixColMajor<ValType> u_true;
   mcnla::io::loadMatrixMarket(a, MATRIX_A_PATH);

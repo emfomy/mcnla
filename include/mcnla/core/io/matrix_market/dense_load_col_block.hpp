@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/matrix_market/dense_load_row_block.hpp
+/// @file    include/mcnla/core/io/matrix_market/dense_load_col_block.hpp
 /// @brief   Load dense data from a Matrix Market file (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_ROW_BLOCK_HPP_
-#define MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_ROW_BLOCK_HPP_
+#ifndef MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_COL_BLOCK_HPP_
+#define MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_COL_BLOCK_HPP_
 
 #include <mcnla/core/io/def.hpp>
 #include <fstream>
@@ -53,17 +53,21 @@ inline void loadMatrixMarketSize(
 /// @ingroup  io_module
 /// Load a dense sub-matrix from a Matrix Market file.
 ///
-/// @note  If @a matrix is empty, the memory will be allocated.
+/// @note  If @a col_block is empty, the memory will be allocated.
 /// @note  The file should be stored in column-major.
 ///
 /// @todo  Implement for other routines
 ///
 template <typename _Val, Trans _trans>
-void loadMatrixMarket(
-    DenseMatrix<_Val, _trans> &row_block,
+void loadMatrixMarketColBlock(
+    DenseMatrix<_Val, _trans> &col_block,
     const char *file,
-    const IdxRange &rowrange
+    const IdxRange &colrange
 ) noexcept {
+  auto j0 = colrange.begin;
+  auto j1 = colrange.end;
+  auto js = colrange.len();
+
   // Open file
   std::ifstream fin(file);
   mcnla_assert_false(fin.fail());
@@ -76,23 +80,31 @@ void loadMatrixMarket(
   // Get size
   index_t m, n;
   fin >> m >> n;
-  if ( row_block.isEmpty() ) {
-    row_block.reconstruct(rowrange.len(), n);
+  mcnla_assert_ge(j0, 0);
+  mcnla_assert_le(j1, n);
+
+  // Allocate memory
+  if ( col_block.isEmpty() ) {
+    col_block.reconstruct(m, js);
   } else {
-    mcnla_assert_eq(row_block.sizes(), std::make_tuple(rowrange.len(), n));
+    mcnla_assert_eq(col_block.sizes(), std::make_tuple(m, js));
   }
 
   // Read values
   _Val tmp;
-  auto i0 = rowrange.begin;
-  auto i1 = rowrange.end;
-  for ( index_t j = 0; j < n; ++j ) {
+  for ( index_t j = 0; j < j0; ++j ) {
     for ( index_t i = 0; i < m; ++i ) {
-      if ( i >= i0 && i < i1 ) {
-        fin >> row_block(i - i0, j);
-      } else {
-        fin >> tmp;
-      }
+      fin >> tmp;
+    }
+  }
+  for ( index_t j = 0; j < js; ++j ) {
+    for ( index_t i = 0; i < m; ++i ) {
+        fin >> col_block(i, j);
+    }
+  }
+  for ( index_t j = 0; j < n-j1; ++j ) {
+    for ( index_t i = 0; i < m; ++i ) {
+      fin >> tmp;
     }
   }
 
@@ -102,12 +114,12 @@ void loadMatrixMarket(
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans>
-inline void loadMatrixMarket(
-    DenseMatrix<_Val, _trans> &&row_block,
+inline void loadMatrixMarketColBlock(
+    DenseMatrix<_Val, _trans> &&col_block,
     const char *file,
-    const IdxRange &rowrange
+    const IdxRange &colrange
 ) noexcept {
-  loadMatrixMarket(row_block, file, rowrange);
+  loadMatrixMarketColBlock(col_block, file, colrange);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -115,4 +127,4 @@ inline void loadMatrixMarket(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_ROW_BLOCK_HPP_
+#endif  // MCNLA_CORE_IO_MATRIX_MARKET_DENSE_LOAD_COL_BLOCK_HPP_

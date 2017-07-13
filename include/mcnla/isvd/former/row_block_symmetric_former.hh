@@ -12,6 +12,14 @@
 #include <mcnla/isvd/former/former.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Former
+  #define MCNLA_TMP1 Former<RowBlockSymmetricFormerTag<_jobv>, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockSymmetricFormer
+  #define MCNLA_TMP1 RowBlockSymmetricFormer
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -37,12 +45,11 @@ template <typename _Val, bool _jobv = false> using RowBlockSymmetricFormer = For
 /// @attention  The eigenvalues are sorted in ascending order.
 ///
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  template <typename _Val, bool _jobv>
-class Former<RowBlockSymmetricFormerTag<_jobv>, _Val>
+template <typename _Val, bool _jobv>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv = false>
-class RowBlockSymmetricFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockSymmetricFormer<_Val, _jobv>> {
 
   friend StageWrapper<RowBlockSymmetricFormer<_Val, _jobv>>;
@@ -92,7 +99,7 @@ class RowBlockSymmetricFormer
  public:
 
   // Constructor
-  inline Former( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
@@ -113,5 +120,8 @@ class RowBlockSymmetricFormer
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_SYMMETRIC_FORMER_HH_

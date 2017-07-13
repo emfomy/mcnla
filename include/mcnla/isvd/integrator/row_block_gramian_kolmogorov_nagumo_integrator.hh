@@ -12,6 +12,14 @@
 #include <mcnla/isvd/integrator/integrator.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Integrator
+  #define MCNLA_TMP1 Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockGramianKolmogorovNagumoIntegrator
+  #define MCNLA_TMP1 RowBlockGramianKolmogorovNagumoIntegrator
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -35,11 +43,7 @@ using RowBlockGramianKolmogorovNagumoIntegrator = Integrator<RowBlockGramianKolm
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockGramianKolmogorovNagumoIntegratorTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockGramianKolmogorovNagumoIntegrator
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>> {
 
   friend StageWrapper<RowBlockGramianKolmogorovNagumoIntegrator<_Val>>;
@@ -112,7 +116,7 @@ class RowBlockGramianKolmogorovNagumoIntegrator
  public:
 
   // Constructor
-  inline Integrator( const Parameters<_Val> &parameters,
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters,
                      const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-4 ) noexcept;
 
   // Gets parameters
@@ -121,8 +125,8 @@ class RowBlockGramianKolmogorovNagumoIntegrator
   inline index_t        iteration() const noexcept;
 
   // Sets parameters
-  inline Integrator& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline Integrator& setTolerance( const RealValT<_Val> tolerance ) noexcept;
+  inline MCNLA_TMP1& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline MCNLA_TMP1& setTolerance( const RealValT<_Val> tolerance ) noexcept;
 
  protected:
 
@@ -138,5 +142,8 @@ class RowBlockGramianKolmogorovNagumoIntegrator
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_

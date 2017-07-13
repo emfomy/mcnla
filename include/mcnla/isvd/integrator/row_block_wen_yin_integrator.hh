@@ -12,6 +12,14 @@
 #include <mcnla/isvd/integrator/integrator.hpp>
 #include <mcnla/core/la.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Integrator
+  #define MCNLA_TMP1 Integrator<RowBlockWenYinIntegratorTag, _Val>
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 RowBlockWenYinIntegrator
+  #define MCNLA_TMP1 RowBlockWenYinIntegrator
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -36,11 +44,7 @@ template <typename _Val> using RowBlockWenYinIntegrator = Integrator<RowBlockWen
 /// @todo  Add methods of parameters.
 ///
 template <typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-class Integrator<RowBlockWenYinIntegratorTag, _Val>
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class RowBlockWenYinIntegrator
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
+class MCNLA_TMP1
   : public StageWrapper<RowBlockWenYinIntegrator<_Val>> {
 
   friend StageWrapper<RowBlockWenYinIntegrator<_Val>>;
@@ -128,7 +132,7 @@ class RowBlockWenYinIntegrator
  public:
 
   // Constructor
-  inline Integrator( const Parameters<_Val> &parameters,
+  inline MCNLA_TMP0( const Parameters<_Val> &parameters,
                      const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-3 ) noexcept;
 
   // Gets parameters
@@ -137,8 +141,8 @@ class RowBlockWenYinIntegrator
   inline index_t        iteration() const noexcept;
 
   // Sets parameters
-  inline Integrator& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline Integrator& setTolerance( const RealValT<_Val> tolerance ) noexcept;
+  inline MCNLA_TMP1& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline MCNLA_TMP1& setTolerance( const RealValT<_Val> tolerance ) noexcept;
 
  protected:
 
@@ -154,5 +158,8 @@ class RowBlockWenYinIntegrator
 }  // namespace isvd
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
+#undef MCNLA_TMP1
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_WEN_YIN_INTEGRATOR_HH_

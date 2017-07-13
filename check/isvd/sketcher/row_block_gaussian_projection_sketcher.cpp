@@ -11,7 +11,7 @@ TEST(RowBlockGaussianProjectionSketcherTest, Test) {
   const auto mpi_root = 0;
 
   // Reads data
-  mcnla::matrix::DenseMatrixColMajor<ValType> a;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> a;
   mcnla::io::loadMatrixMarket(a, MATRIX_A_PATH);
 
   // Gets size

@@ -48,6 +48,8 @@ void loadMatrixMarket(
   // Get size
   index_t m, n, nnz;
   fin >> m >> n >> nnz;
+
+  // Allocate memory
   if ( vector.isEmpty() ) {
     vector.reconstruct(m, nnz);
   } else {
@@ -102,6 +104,8 @@ void loadMatrixMarket(
   // Get size
   index_t m, n, nnz;
   fin >> m >> n >> nnz;
+
+  // Allocate memory
   if ( matrix.isEmpty() ) {
     if ( !isTrans(_trans) ) {
       matrix.reconstruct(m, n, nnz);

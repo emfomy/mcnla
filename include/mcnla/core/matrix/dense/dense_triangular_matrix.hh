@@ -60,11 +60,10 @@ namespace matrix {
 template <typename _Val, Trans _trans, Uplo _uplo>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class TrMatS<CpuTag, DenseTag, _Val, _trans, _uplo>
-  : public DenseTriangularMatrixBase<CpuTag, _Val, _trans, _uplo>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseTriangularMatrix
-  : public DenseTriangularMatrixBase_<CpuTag, _Val, _trans, _uplo>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseTriangularMatrixBase<CpuTag, _Val, _trans, _uplo>,
     public MatrixOstreamWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>> {
 
   friend MatrixOstreamWrapper<DenseTriangularMatrix<_Val, _trans, _uplo>>;
@@ -78,7 +77,7 @@ class DenseTriangularMatrix
   using BaseType::DenseTriangularMatrixBase;
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseTriangularMatrixBase_::operator=
+  /// @copydoc DenseTriangularMatrixBase::operator=
   DenseTriangularMatrix& operator=( const DenseTriangularMatrix &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

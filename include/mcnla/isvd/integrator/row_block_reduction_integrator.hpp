@@ -12,9 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Integrator<RowBlockReductionIntegratorTag, _Val>
+  #define MCNLA_TMP  Integrator<RowBlockReductionIntegratorTag, _Val>
+  #define MCNLA_TMP0 Integrator
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP RowBlockReductionIntegrator<_Val>
+  #define MCNLA_TMP  RowBlockReductionIntegrator<_Val>
+  #define MCNLA_TMP0 RowBlockReductionIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Integrator(
+MCNLA_TMP::MCNLA_TMP0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -124,5 +126,6 @@ void MCNLA_TMP::runImpl(
 }  // namespace mcnla
 
 #undef MCNLA_TMP
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HPP_

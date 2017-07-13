@@ -35,7 +35,7 @@ namespace isvd {
 template <class _Derived>
 class StageWrapper {
 
- public:
+ private:
 
   using _Val = ValT<_Derived>;
 

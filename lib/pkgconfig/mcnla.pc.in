@@ -1,0 +1,7 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+
+Name: mcnla-@MCNLA_VERSION@
+Description: @MCNLA_NAME@
+Version: @MCNLA_VERSION@
+Cflags: @MCNLA_COMFLGS@ @MCNLA_INCS@
+Libs: @MCNLA_LNKFLGS@ @MCNLA_LIBS@

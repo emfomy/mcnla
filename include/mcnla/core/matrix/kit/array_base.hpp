@@ -10,6 +10,12 @@
 
 #include <mcnla/core/matrix/kit/array_base.hh>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 ArrayBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Array
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -24,7 +30,7 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Core, typename _Val>
-ArrayBase<_Core, _Val>::ArrayBase() noexcept
+ArrayBase<_Core, _Val>::MCNLA_TMP0() noexcept
   : BaseType(),
     size_(0),
     offset_(0) {}
@@ -33,7 +39,7 @@ ArrayBase<_Core, _Val>::ArrayBase() noexcept
 /// @brief  Construct with given raw data.
 ///
 template <class _Core, typename _Val>
-ArrayBase<_Core, _Val>::ArrayBase(
+ArrayBase<_Core, _Val>::MCNLA_TMP0(
     const BaseType &ptr,
     const index_t size,
     const index_t offset
@@ -50,7 +56,7 @@ ArrayBase<_Core, _Val>::ArrayBase(
 /// @attention  It is shallow copy (creates an alias).
 ///
 template <class _Core, typename _Val>
-ArrayBase<_Core, _Val>::ArrayBase(
+ArrayBase<_Core, _Val>::MCNLA_TMP0(
     const ArrayBase &other
 ) noexcept
   : BaseType(other),
@@ -223,5 +229,7 @@ const _Val& ArrayBase<_Core, _Val>::operator[](
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_CORE_MATRIX_KIT_ARRAY_BASE_HPP_

@@ -12,6 +12,12 @@
 #include <memory>
 #include <mcnla/core/utility/crtp.hpp>
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 ArrayBase
+#else  // DOXYGEN_SHOULD_SKIP_THIS
+  #define MCNLA_TMP0 Array
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace.
 //
@@ -22,11 +28,6 @@ namespace mcnla {
 //
 namespace matrix {
 
-#ifdef DOXYGEN_SHOULD_SKIP_THIS
-template <class _Core, typename _Val>
-using ArrayBase = ArrayBase_<_Core, _Val>;
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// The base array.
 ///
@@ -34,11 +35,7 @@ using ArrayBase = ArrayBase_<_Core, _Val>;
 /// @tparam  _Val   The value type.
 ///
 template <class _Core, typename _Val>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class ArrayBase
-#else  // DOXYGEN_SHOULD_SKIP_THIS
-class ArrayBase_
-#endif  // DOXYGEN_SHOULD_SKIP_THIS
   : public std::shared_ptr<_Val> {
 
  private:
@@ -57,9 +54,9 @@ class ArrayBase_
  public:
 
   // Constructors
-  inline ArrayBase() noexcept;
-  inline ArrayBase( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline ArrayBase( const ArrayBase &other ) noexcept;
+  inline MCNLA_TMP0() noexcept;
+  inline MCNLA_TMP0( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
+  inline MCNLA_TMP0( const ArrayBase &other ) noexcept;
 
   // Operators
   inline       DerivedType& operator=( const ArrayBase &other ) noexcept;
@@ -91,5 +88,7 @@ class ArrayBase_
 }  // namespace matrix
 
 }  // namespace mcnla
+
+#undef MCNLA_TMP0
 
 #endif  // MCNLA_CORE_MATRIX_KIT_ARRAY_BASE_HH_

@@ -11,9 +11,9 @@
 #include <mcnla/def.hpp>
 #include <mpi.h>
 
-// #ifdef MCNLA_USE_GPU
-//   #include <magma.h>
-// #endif  // MCNLA_USE_GPU
+#ifdef MCNLA_USE_GPU
+  #include <mcnla/core_gpu/def.hpp>
+#endif  // MCNLA_USE_GPU
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -39,22 +39,35 @@ struct CooTag {};
 /// @ingroup  core_module
 /// Initializes the environment (including MPI and MAGMA).
 ///
-static inline void init( int &argc, char **&argv ) {
+static inline void init( int &argc, char **&argv, const MPI_Comm mpi_comm ) noexcept {
+  static_cast<void>(mpi_comm);
   MPI_Init(&argc, &argv);
-// #ifdef MCNLA_USE_GPU
-//   magma_init();
-// #endif  // MCNLA_USE_GPU
+#ifdef MCNLA_USE_GPU
+  int mpi_rank;
+  mcnla_assert_pass(MPI_Comm_rank(mpi_comm, &mpi_rank));
+  gpuInit(mpi_rank);
+#endif  // MCNLA_USE_GPU
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  core_module
 /// Finalizes the environment (including MPI and MAGMA).
 ///
-static inline void finalize() {
-// #ifdef MCNLA_USE_GPU
-//   magma_finalize();
-// #endif  // MCNLA_USE_GPU
+static inline void finalize() noexcept {
+#ifdef MCNLA_USE_GPU
+  gpuFinalize();
+#endif  // MCNLA_USE_GPU
   MPI_Finalize();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  core_module
+/// Print the environment (including MPI and MAGMA).
+///
+static inline void printEnvironment() noexcept {
+#ifdef MCNLA_USE_GPU
+  gpuPrintEnvironment();
+#endif  // MCNLA_USE_GPU
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

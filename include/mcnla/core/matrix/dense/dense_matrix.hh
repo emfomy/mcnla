@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file    include/mcnla/core/matrix/dense/dense_matrix.hh
-/// @brief   The definition of definition of dense matrix class.
+/// @brief   The definition of dense matrix class.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -63,11 +63,10 @@ namespace matrix {
 template <typename _Val, Trans _trans>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 class GeMatS<CpuTag, DenseTag, _Val, _trans>
-  : public DenseMatrixBase<CpuTag, _Val, _trans>,
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 class DenseMatrix
-  : public DenseMatrixBase_<CpuTag, _Val, _trans>,
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
+  : public DenseMatrixBase<CpuTag, _Val, _trans>,
     public MatrixOstreamWrapper<DenseMatrix<_Val, _trans>>,
     public IterableWrapper<DenseMatrix<_Val, _trans>,
                            DenseMatrixIterator<_Val, _trans>, DenseMatrixConstIterator<_Val, _trans>> {
@@ -89,7 +88,7 @@ class DenseMatrix
   using BaseType::DenseMatrixBase;
 
 #ifdef DOXYGEN_SHOULD_SKIP_THIS
-  /// @copydoc DenseMatrixBase_::operator=
+  /// @copydoc DenseMatrixBase::operator=
   DenseMatrix& operator=( const DenseMatrix &other );
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 

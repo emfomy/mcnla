@@ -14,7 +14,7 @@
 ///
 int main( int argc, char **argv ) {
 
-  mcnla::init(argc, argv);
+  mcnla::init(argc, argv, MPI_COMM_WORLD);
 
   const auto mpi_comm = MPI_COMM_WORLD;
   mcnla::mpi_int_t mpi_rank = mcnla::mpi::commRank(mpi_comm);
@@ -35,6 +35,8 @@ int main( int argc, char **argv ) {
 #endif  // _OPENMP
               << " threads per node" << std::endl;
     std::cout << sizeof(mcnla::index_t)*8 << "bit integer" << std::endl << std::endl;
+
+    mcnla::printEnvironment();
   }
 
   mcnla::finalize();
