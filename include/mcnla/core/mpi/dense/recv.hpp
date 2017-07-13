@@ -35,6 +35,7 @@ inline void recvImpl(
     const MPI_Comm comm,
           MPI_Status &status
 ) noexcept {
+  mcnla_assert_mpi_count(count);
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Recv(buffer.valPtr(), count, datatype, source, tag, comm, &status);
 }

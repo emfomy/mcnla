@@ -36,6 +36,7 @@ inline void gathervImpl(
     const mpi_int_t root,
     const MPI_Comm comm
 ) noexcept {
+  mcnla_assert_mpi_count(sendcount);
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Gatherv(send.valPtr(), sendcount, datatype, recv.valPtr(), recvcounts, displs, datatype, root, comm);
 }
