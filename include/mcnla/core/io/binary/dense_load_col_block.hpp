@@ -29,8 +29,8 @@ namespace io {
 /// @todo  Implement for other routines
 ///
 inline void loadBinarySize(
-          index_t &nrow,
-          index_t &ncol,
+          index_t &dim0,
+          index_t &dim1,
     const char *file
 ) noexcept {
   // Open file
@@ -47,9 +47,9 @@ inline void loadBinarySize(
 
   // Get size
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
-  nrow = num;
+  dim0 = num;
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
-  ncol = num;
+  dim1 = num;
 
   // Close file
   fin.close();
