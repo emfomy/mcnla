@@ -126,7 +126,7 @@ int main( int argc, char **argv ) {
   mcnla::isvd::ITYPE<double> integrator(parameters);
   mcnla::isvd::FTYPE<double, true> former(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> fe_converter(parameters);
-  mcnla::isvd::MatrixFromColBlockConverter<double> fe_converter2(parameters);
+  mcnla::isvd::MatrixFromColBlockToAllConverter<double> fe_converter2(parameters);
 
   // ====================================================================================================================== //
   // Initialize stages
@@ -206,7 +206,6 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Display results
   double frerr;
-  mcnla::mpi::bcast(matrix_v, mpi_root, mpi_comm);
   check(matrix_aj, matrix_uj, matrix_v, vector_s, frerr, mpi_comm);
   if ( mpi_rank == mpi_root ) {
     auto iter    = integrator.iteration();

@@ -15,8 +15,10 @@
 
 #include <mcnla/isvd/converter/matrix_to_row_block_converter.hpp>
 #include <mcnla/isvd/converter/matrix_from_row_block_converter.hpp>
+#include <mcnla/isvd/converter/matrix_from_row_block_to_all_converter.hpp>
 
 #include <mcnla/isvd/converter/matrix_from_col_block_converter.hpp>
+#include <mcnla/isvd/converter/matrix_from_col_block_to_all_converter.hpp>
 
 #include <mcnla/isvd/converter/dummy_converter.hpp>
 
