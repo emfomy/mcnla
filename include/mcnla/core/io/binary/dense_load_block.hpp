@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/io/binary/dense_load_col_block.hpp
+/// @file    include/mcnla/core/io/binary/dense_load_block.hpp
 /// @brief   Load dense data from a binary file (row-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_CORE_IO_BINARY_DENSE_LOAD_COL_BLOCK_HPP_
-#define MCNLA_CORE_IO_BINARY_DENSE_LOAD_COL_BLOCK_HPP_
+#ifndef MCNLA_CORE_IO_BINARY_DENSE_LOAD_BLOCK_HPP_
+#define MCNLA_CORE_IO_BINARY_DENSE_LOAD_BLOCK_HPP_
 
 #include <mcnla/core/io/binary/def.hpp>
 #include <fstream>
@@ -26,11 +26,10 @@ namespace io {
 /// @ingroup  io_module
 /// Load a size information from a binary file.
 ///
-/// @todo  Implement for other routines
-///
+template <Trans _trans>
 inline void loadBinarySize(
-          index_t &dim0,
-          index_t &dim1,
+          index_t &nrow,
+          index_t &ncol,
     const char *file
 ) noexcept {
   // Open file
@@ -47,9 +46,12 @@ inline void loadBinarySize(
 
   // Get size
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
-  dim0 = num;
+  index_t dim0 = num;
   fin.read(static_cast<char*>(static_cast<void*>(&num)), sizeof(num));
-  dim1 = num;
+  index_t dim1 = num;
+
+  nrow = !isTrans(_trans) ? dim0 : dim1;
+  ncol = !isTrans(_trans) ? dim1 : dim0;
 
   // Close file
   fin.close();
@@ -59,18 +61,16 @@ inline void loadBinarySize(
 /// @ingroup  io_module
 /// Load a dense sub-matrix from a binary file.
 ///
-/// @note  If @a col_block is empty, the memory will be allocated.
-/// @note  The file should be stored in column-major.
-///
-/// @todo  Implement for other routines
+/// @note  If @a colblock is empty, the memory will be allocated.
+/// @note  The data will be loaded in storage layout.
 ///
 template <typename _Val, Trans _trans>
 void loadBinaryColBlock(
-    DenseMatrix<_Val, _trans> &col_block,
+    DenseMatrix<_Val, _trans> &colblock,
     const char *file,
     const IdxRange &colrange
 ) noexcept {
-  static_assert(_trans == Trans::NORMAL, "This routine is only available in col-major matrices.");
+  static_assert(_trans == Trans::NORMAL, "This routine is only available in column-major matrices.");
 
   auto j0 = colrange.begin;
   auto j1 = colrange.end;
@@ -97,16 +97,16 @@ void loadBinaryColBlock(
   mcnla_assert_le(j1, dim1);
 
   // Allocate memory
-  if ( col_block.isEmpty() ) {
-    col_block.reconstruct(dim0, js);
+  if ( colblock.isEmpty() ) {
+    colblock.reconstruct(dim0, js);
   } else {
-    mcnla_assert_eq(col_block.dims(), std::make_tuple(dim0, js));
-    mcnla_assert_true(col_block.isShrunk());
+    mcnla_assert_eq(colblock.dims(), std::make_tuple(dim0, js));
+    mcnla_assert_true(colblock.isShrunk());
   }
 
   // Get values
   fin.seekg(dim0 * j0 * sizeof(_Val), std::ios_base::cur);
-  fin.read(static_cast<char*>(static_cast<void*>(col_block.valPtr())), col_block.nelem() * sizeof(_Val));
+  fin.read(static_cast<char*>(static_cast<void*>(colblock.valPtr())), colblock.nelem() * sizeof(_Val));
 
   // Close file
   fin.close();
@@ -115,11 +115,39 @@ void loadBinaryColBlock(
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, Trans _trans>
 inline void loadBinaryColBlock(
-    DenseMatrix<_Val, _trans> &&col_block,
+    DenseMatrix<_Val, _trans> &&colblock,
     const char *file,
     const IdxRange &colrange
 ) noexcept {
-  loadBinaryColBlock(col_block, file, colrange);
+  loadBinaryColBlock(colblock, file, colrange);
+}
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @ingroup  io_module
+/// Load a dense sub-matrix from a binary file.
+///
+/// @note  If @a rowblock is empty, the memory will be allocated.
+/// @note  The data will be loaded in storage layout.
+///
+template <typename _Val, Trans _trans>
+void loadBinaryRowBlock(
+    DenseMatrix<_Val, _trans> &rowblock,
+    const char *file,
+    const IdxRange &rowrange
+) noexcept {
+  static_assert(_trans == Trans::TRANS, "This routine is only available in row-major matrices.");
+  loadBinaryColBlock(rowblock.t(), file, rowrange);
+}
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+template <typename _Val, Trans _trans>
+inline void loadBinaryRowBlock(
+    DenseMatrix<_Val, _trans> &&rowblock,
+    const char *file,
+    const IdxRange &rowrange
+) noexcept {
+  loadBinaryRowBlock(rowblock, file, rowrange);
 }
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
@@ -127,4 +155,4 @@ inline void loadBinaryColBlock(
 
 }  // namespace mcnla
 
-#endif  // MCNLA_CORE_IO_BINARY_DENSE_LOAD_COL_BLOCK_HPP_
+#endif  // MCNLA_CORE_IO_BINARY_DENSE_LOAD_BLOCK_HPP_

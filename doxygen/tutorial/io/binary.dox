@@ -25,7 +25,7 @@ namespace mcnla {
   <tr><td> reserved       <td> 8              <td> char*8         <td> unused
   <tr><td> reserved       <td> 8              <td> char*8         <td> unused (ending with a `'\n'`)
   <tr><td> ndim           <td> ?              <td> int64_t        <td> the number of dimension
-  <tr><td> sizes          <td> ?*ndim         <td> int64_t*ndim   <td> the sizes of each dimension
+  <tr><td> dims           <td> ?*ndim         <td> int64_t*ndim   <td> the sizes of each dimension
   <tr><td> val            <td> ?              <td> val_type*size  <td> the values
   </table>
 
@@ -40,7 +40,7 @@ namespace mcnla {
   <tr><td> idx_type       <td> 8              <td> char*8         <td> the index type
   <tr><td> reserved       <td> 8              <td> char*8         <td> unused (ending with a `'\n'`)
   <tr><td> ndim           <td> ?              <td> int64_t        <td> the number of dimension
-  <tr><td> sizes          <td> ?*ndim         <td> int64_t*ndim   <td> the sizes of each dimension
+  <tr><td> dims           <td> ?*ndim         <td> int64_t*ndim   <td> the sizes of each dimension
   <tr><td> val            <td> ?              <td> val_type*size  <td> the values
   <tr><td> idx0           <td> ?              <td> idx_type*size  <td> the first indices
   <tr><td> idx1           <td> ?              <td> idx_type*size  <td> the second indices (if exist)
