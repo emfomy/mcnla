@@ -57,6 +57,7 @@ if(MCNLA_USE_GPU)
       set(CUDA_TOOLKIT_ROOT_DIR "$ENV{CUDADIR}")
     endif()
   endif()
+  set(CUDA_TOOLKIT_ROOT_DIR "${CUDA_TOOLKIT_ROOT_DIR}" CACHE PATH "The root path of CUDA toolkit." FORCE)
 
   find_package(CUDA ${findtype})
   find_package(MAGMA ${findtype})
