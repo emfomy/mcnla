@@ -10,7 +10,8 @@
 
 #include <mcnla/core/la/def.hpp>
 #include <mcnla/core/matrix.hpp>
-#include <mcnla/core/la/raw/lapack/lange.hpp>
+// #include <mcnla/core/la/raw/lapack/lange.hpp>
+#include <mcnla/core/la/dense/routine/nrm2.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  The MCNLA namespace
@@ -30,7 +31,9 @@ template <typename _Val, Trans _trans>
 inline RealValT<_Val> nrmf(
     const DenseMatrix<_Val, _trans> &a
 ) noexcept {
-  return detail::lange('F', a.dim0(), a.dim1(), a.valPtr(), a.pitch(), nullptr);
+  /// @todo  Use LAPACK LANGE after MKL fix the bug with GNU OpenMP.
+  // return detail::lange('F', a.dim0(), a.dim1(), a.valPtr(), a.pitch(), nullptr);
+  return nrm2(a.vec());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
