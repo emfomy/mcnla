@@ -46,3 +46,4 @@ endif(MCNLA_USE_GPU)
 
 # Set utility target
 set_target(mtx2bin mtx2bin.cpp)
+set_target(bin2bin bin2bin.cpp)
