@@ -67,7 +67,8 @@ void MCNLA_ALIAS::runImpl(
 
   mcnla_assert_eq(collection_q.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch_each));
 
-  this->tic(); double comm_time = 0;
+  double comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Start
 

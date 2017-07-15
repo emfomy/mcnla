@@ -90,7 +90,8 @@ void MCNLA_ALIAS::runImpl(
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  this->tic(); double comm_time = 0.0;
+  double comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Start
 

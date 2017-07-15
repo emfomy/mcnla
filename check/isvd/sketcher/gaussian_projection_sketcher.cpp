@@ -33,6 +33,6 @@ TEST(GaussianProjectionSketcherTest, Test) {
   // Creates matrices
   auto qi = parameters.createCollectionQ();
 
-  // Integrates
+  // Sketches
   sketcher(a, qi);
 }

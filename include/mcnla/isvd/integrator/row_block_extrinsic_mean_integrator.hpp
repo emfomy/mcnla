@@ -96,7 +96,8 @@ void MCNLA_ALIAS::runImpl(
 
   auto &matrix_qsj = collection_qj.unfold();  // matrix Qs.
 
-  this->tic(); double comm_moment, comm_time = 0;
+  double comm_moment, comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Rotate
 

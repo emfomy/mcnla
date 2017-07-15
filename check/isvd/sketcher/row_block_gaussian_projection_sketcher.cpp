@@ -34,6 +34,6 @@ TEST(RowBlockGaussianProjectionSketcherTest, Test) {
   auto aj  = a(parameters.rowrange(), ""_);
   auto qij = parameters.createCollectionQj();
 
-  // Integrates
+  // Sketches
   sketcher(aj, qij);
 }

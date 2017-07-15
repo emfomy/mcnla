@@ -78,7 +78,8 @@ void MCNLA_ALIAS::runImpl(
 
   random::Streams streams(seed_, mpi_root, mpi_comm);
 
-  this->tic(); double comm_time = 0;
+  double comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Random generating
 

@@ -75,7 +75,8 @@ void MCNLA_ALIAS::runImpl(
 
   auto &matrix_qs = collection_q.unfold();  // matrix Qs.
 
-  this->tic(); double comm_time = 0;
+  double comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Start
 

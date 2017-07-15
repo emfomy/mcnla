@@ -95,7 +95,8 @@ void MCNLA_ALIAS::runImpl(
   auto &matrix_qs = collection_q.unfold();  // matrix Qs.
   auto &matrix_qc = matrix_qbar;  // matrix Qc.
 
-  this->tic(); double comm_moment, comm_time = 0;
+  double comm_moment, comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Copying Qc
 

@@ -97,7 +97,8 @@ void MCNLA_ALIAS::runImpl(
   _Val one_n = 1.0/num_sketch, one_2n = 0.5/num_sketch;
   _Val taug, zeta, phi, mu;
 
-  this->tic(); double comm_moment, comm_time = 0;
+  double comm_moment, comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Initializing
 

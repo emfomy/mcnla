@@ -92,15 +92,20 @@ void MCNLA_ALIAS::runImpl(
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  this->tic(); double comm_time = 0;
+  double comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
-  // Start
+  // Compute Gramian
 
   // Z := A' * Q
   la::mm(matrix_a.t(), matrix_q, matrix_z_);
 
   // W := Z * Z'
   la::mm(matrix_z_.t(), matrix_z_, matrix_w_);
+
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Compute eigen-decomposition
 
   // eig(W) = W * S * W'
   gesvd_driver_(matrix_w_, vector_s_, matrix_empty_, matrix_empty_);
@@ -109,6 +114,10 @@ void MCNLA_ALIAS::runImpl(
   for ( auto &v : vector_s_ ) {
     v = std::sqrt(v);
   }
+
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Form singular vectors
 
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);

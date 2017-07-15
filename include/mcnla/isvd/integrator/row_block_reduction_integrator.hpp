@@ -79,7 +79,8 @@ void MCNLA_ALIAS::runImpl(
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
   mcnla_assert_eq(matrix_qbarj.sizes(),  std::make_tuple(nrow_rank, dim_sketch));
 
-  this->tic(); double comm_moment, comm_time = 0;
+  double comm_moment, comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Loop
   for ( auto N = num_sketch; N > 1; N = (N+1)/2 ) {

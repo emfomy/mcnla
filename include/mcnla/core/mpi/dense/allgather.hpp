@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/core/mpi/dense/all_gather.hpp
+/// @file    include/mcnla/core/mpi/dense/allgather.hpp
 /// @brief   The MPI ALLGATHER routine.
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>

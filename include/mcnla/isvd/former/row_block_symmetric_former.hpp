@@ -102,9 +102,10 @@ void MCNLA_ALIAS::runImpl(
   auto matrix_zj_full = matrix_zj_;
   matrix_zj_full.resize(nrow_each, ""_);
 
-  this->tic(); double comm_moment, comm_time = 0;
+  double comm_moment, comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
-  // Start
+  // Compute Gramian
 
   // Z := sum( Aj' * Qj )
   la::mm(matrix_aj.t(), matrix_qj, matrix_z_);
@@ -117,6 +118,10 @@ void MCNLA_ALIAS::runImpl(
   comm_moment = utility::getTime();
   mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
+
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Compute eigen-decomposition
 
   // eig(W) = W * S * W'
   syev_driver_(matrix_w_.sym(), vector_s_);

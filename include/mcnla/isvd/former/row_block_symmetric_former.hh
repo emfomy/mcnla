@@ -61,10 +61,11 @@ class MCNLA_ALIAS1
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Symmetric Former (Row-Block Version)";
+  static constexpr const char* name_ = _jobv ? "Symmetric Former (Row-Block Version)"
+                                             : "Symmetric Former (Row-Block Version) (without V)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "forming";
+  static constexpr const char* names_ = "Gramian / eigen / forming";
 
   /// The matrix W.
   DenseMatrixColMajor<_Val> matrix_w_;

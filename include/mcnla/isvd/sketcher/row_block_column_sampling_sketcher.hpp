@@ -81,7 +81,8 @@ void MCNLA_ALIAS::runImpl(
   MPI_Bcast(&seed_tmp, 1, datatype, mpi_root, mpi_comm);
   random::Streams streams(seed_tmp);
 
-  this->tic(); double comm_time = 0;
+  double comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Random generating
 

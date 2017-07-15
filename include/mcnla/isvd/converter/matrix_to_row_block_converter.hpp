@@ -74,7 +74,8 @@ void MCNLA_ALIAS::runImpl(
   auto matrix_j_full = matrix_j;
   matrix_j_full.resize(nrow_each, ""_);
 
-  this->tic(); double comm_moment, comm_time = 0.0;
+  double comm_moment, comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Start
 

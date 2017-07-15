@@ -126,7 +126,9 @@ int main( int argc, char **argv ) {
   mcnla::isvd::ITYPE<double> integrator(parameters);
   mcnla::isvd::FTYPE<double, true> former(parameters);
   mcnla::isvd::MatrixFromRowBlockConverter<double> fe_converter(parameters);
+#ifndef NJOBV
   mcnla::isvd::MatrixFromColBlockToAllConverter<double> fe_converter2(parameters);
+#endif  // NJOBV
 
   // ====================================================================================================================== //
   // Initialize stages
@@ -137,7 +139,9 @@ int main( int argc, char **argv ) {
   integrator.initialize();
   former.initialize();
   fe_converter.initialize();
+#ifndef NJOBV
   fe_converter2.initialize();
+#endif  // NJOBV
 
   // ====================================================================================================================== //
   // Display stage names
@@ -169,7 +173,9 @@ int main( int argc, char **argv ) {
   auto collection_qj = parameters.createCollectionQj();
   auto matrix_qj     = parameters.createMatrixQbarj();
   auto matrix_u      = parameters.createMatrixU();
+#ifndef NJOBV
   auto matrix_v      = parameters.createMatrixV();
+#endif  // NJOBV
 
   // ====================================================================================================================== //
   // Run iSVD
@@ -196,17 +202,23 @@ int main( int argc, char **argv ) {
 
   auto &&vector_s  = former.vectorS();
   auto &&matrix_uj = former.matrixUj();
+#ifndef NJOBV
   auto &&matrix_vj = former.matrixVj();
+#endif  // NJOBV
 
   if ( mpi_rank == mpi_root ) { std::cout << "Gathering ............................. " << std::flush; }
   fe_converter(matrix_uj, matrix_u);
+#ifndef NJOBV
   fe_converter2(matrix_vj.t(), matrix_v.t());
+#endif  // NJOBV
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
   // ====================================================================================================================== //
   // Display results
+#ifndef NJOBV
   double frerr;
   check(matrix_aj, matrix_uj, matrix_v, vector_s, frerr, mpi_comm);
+#endif  // NJOBV
   if ( mpi_rank == mpi_root ) {
     auto iter    = integrator.iteration();
     auto time_s  = sketcher.time();
@@ -229,9 +241,11 @@ int main( int argc, char **argv ) {
     std::cout << "Average converting time (F->@): " << time_if << " seconds." << std::endl;
     std::cout << std::endl;
     std::cout << "Iteration = " << iter << std::endl;
+#ifndef NJOBV
     std::cout << "Error     = " << frerr << std::endl;
     std::cout << std::endl;
     std::cout << "Error := norm(A - Uk Sk Vk')_F / norm(A)_F" << std::endl;
+#endif  // NJOBV
     std::cout << std::endl;
   }
 
@@ -244,6 +258,9 @@ int main( int argc, char **argv ) {
     std::cout << "Write U into " << argv[3] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_u, argv[3]);
 
+#ifdef NJOBV
+    mcnla::matrix::DenseMatrixRowMajor<double> matrix_v;
+#endif  // NJOBV
     std::cout << "Write V into " << argv[4] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_v, argv[4]);
 
