@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd_gpu/sketcher/row_block_gaussian_projection_sketcher_gpu.hh
-/// @brief   The definition of Gaussian projection sketcher with GPU support (row-block version).
+/// @file    include/mcnla/isvd_gpu/sketcher/col_block_gaussian_projection_sketcher_gpu.hh
+/// @brief   The definition of Gaussian projection sketcher with GPU support (column-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_
-#define MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_
+#ifndef MCNLA_ISVD_GPU_SKETCHER_COL_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_
+#define MCNLA_ISVD_GPU_SKETCHER_COL_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_
 
 #include <mcnla/isvd_gpu/def.hpp>
 #include <mcnla/core_gpu/matrix.hpp>
@@ -14,10 +14,10 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   #define MCNLA_ALIAS0 Sketcher
-  #define MCNLA_ALIAS1 Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>
+  #define MCNLA_ALIAS1 Sketcher<ColBlockGaussianProjectionSketcherGpuTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_ALIAS0 RowBlockGaussianProjectionSketcherGpu
-  #define MCNLA_ALIAS1 RowBlockGaussianProjectionSketcherGpu
+  #define MCNLA_ALIAS0 ColBlockGaussianProjectionSketcherGpu
+  #define MCNLA_ALIAS1 ColBlockGaussianProjectionSketcherGpu
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,30 +31,30 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct RowBlockGaussianProjectionSketcherGpuTag {};
-template <typename _Val> using RowBlockGaussianProjectionSketcherGpu = Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>;
+struct ColBlockGaussianProjectionSketcherGpuTag {};
+template <typename _Val> using ColBlockGaussianProjectionSketcherGpu = Sketcher<ColBlockGaussianProjectionSketcherGpuTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_gpu_module
-/// The Gaussian projection sketcher (row-block version).
+/// The Gaussian projection sketcher (column-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 class MCNLA_ALIAS1
-  : public StageWrapper<RowBlockGaussianProjectionSketcherGpu<_Val>> {
+  : public StageWrapper<ColBlockGaussianProjectionSketcherGpu<_Val>> {
 
-  friend StageWrapper<RowBlockGaussianProjectionSketcherGpu<_Val>>;
+  friend StageWrapper<ColBlockGaussianProjectionSketcherGpu<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<RowBlockGaussianProjectionSketcherGpu<_Val>>;
+  using BaseType = StageWrapper<ColBlockGaussianProjectionSketcherGpu<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "GPU Gaussian Projection Sketcher (Row-Block Version)";
+  static constexpr const char* name_ = "GPU Gaussian Projection Sketcher (Column-Block Version)";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "random generating / projection / receive";
@@ -66,16 +66,16 @@ class MCNLA_ALIAS1
   index_t ncol_gpu_;
 
   /// The matrix Omegas.
-  DenseMatrixRowMajor<_Val> matrix_omegas_;
+  DenseMatrixRowMajor<_Val> matrix_omegajs_;
 
   /// The GPU collection A (column-block).
-  DenseMatrixGpuRowMajor<_Val> matrix_aj_gpu_;
+  DenseMatrixGpuColMajor<_Val> matrix_ajc_gpu_;
 
-  /// The GPU matrix Qs.
-  DenseMatrixGpuRowMajor<_Val> matrix_qjs_gpu_;
+  /// The GPU matrix Qs (row-block).
+  DenseMatrixGpuRowMajor<_Val> matrix_qjp_gpu_;
 
-  /// The GPU matrix Omegas (row-block).
-  DenseMatrixGpuRowMajor<_Val> matrix_omegas_gpu_;
+  /// The GPU matrix Omegas.
+  DenseMatrixGpuRowMajor<_Val> matrix_omegajs_gpu_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -101,8 +101,8 @@ class MCNLA_ALIAS1
   void initializeImpl() noexcept;
 
   // Random sketches
-  void runImpl( const DenseMatrixRowMajor<_Val> &matrix_aj,
-                      DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj ) noexcept;
+  void runImpl( const DenseMatrixColMajor<_Val> &matrix_ajc,
+                      DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qjp ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
@@ -116,4 +116,4 @@ class MCNLA_ALIAS1
 #undef MCNLA_ALIAS0
 #undef MCNLA_ALIAS1
 
-#endif  // MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_
+#endif  // MCNLA_ISVD_GPU_SKETCHER_COL_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_

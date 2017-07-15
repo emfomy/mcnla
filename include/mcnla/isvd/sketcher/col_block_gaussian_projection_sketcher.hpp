@@ -51,7 +51,7 @@ void MCNLA_ALIAS::initializeImpl() noexcept {
   const auto ncol_rank        = parameters_.ncolRank();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
-  matrix_omegasj_.reconstruct(ncol_rank, dim_sketch_total);
+  matrix_omegajs_.reconstruct(ncol_rank, dim_sketch_total);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +66,8 @@ void MCNLA_ALIAS::runImpl(
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qjp
 ) noexcept {
 
+  const auto mpi_comm   = parameters_.mpi_comm;
+  const auto mpi_root   = parameters_.mpi_root;
   const auto nrow       = parameters_.nrow();
   const auto ncol_rank  = parameters_.ncolRank();
   const auto dim_sketch = parameters_.dimSketch();
@@ -74,7 +76,7 @@ void MCNLA_ALIAS::runImpl(
   mcnla_assert_eq(matrix_ajc.sizes(),     std::make_tuple(nrow, ncol_rank));
   mcnla_assert_eq(collection_qjp.sizes(), std::make_tuple(nrow, dim_sketch, num_sketch));
 
-  random::Streams streams(seed_);
+  random::Streams streams(seed_, mpi_root, mpi_comm);
 
   double comm_time;
   this->tic(comm_time);
@@ -82,14 +84,14 @@ void MCNLA_ALIAS::runImpl(
   // Random generating
 
   // Random sample Omega using normal Gaussian distribution
-  random::gaussian(streams, matrix_omegasj_.vec());
+  random::gaussian(streams, matrix_omegajs_.vec());
 
   this->toc(comm_time);
   // ====================================================================================================================== //
   // Projection
 
   // Q := A * Omega
-  la::mm(matrix_ajc, matrix_omegasj_, collection_qjp.unfold());
+  la::mm(matrix_ajc, matrix_omegajs_, collection_qjp.unfold());
 
   this->toc(comm_time);
 }

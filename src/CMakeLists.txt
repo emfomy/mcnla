@@ -37,6 +37,11 @@ if(MCNLA_USE_GPU)
   set_target(isvd_dense_rb_bin_gpu isvd_dense_rb.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu" "-DFILETYPE=Binary")
   set_target(isvd_dense_rb_nv_mtx_gpu isvd_dense_rb.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu" "-DNJOBV")
   set_target(isvd_dense_rb_nv_bin_gpu isvd_dense_rb.cpp "-DSTYPE=RowBlockGaussianProjectionSketcherGpu" "-DFILETYPE=Binary" "-DNJOBV")
+
+  set_target(isvd_dense_cb_mtx_gpu isvd_dense_cb.cpp "-DSTYPE=ColBlockGaussianProjectionSketcherGpu")
+  set_target(isvd_dense_cb_bin_gpu isvd_dense_cb.cpp "-DSTYPE=ColBlockGaussianProjectionSketcherGpu" "-DFILETYPE=Binary")
+  set_target(isvd_dense_cb_nv_mtx_gpu isvd_dense_cb.cpp "-DSTYPE=ColBlockGaussianProjectionSketcherGpu" "-DNJOBV")
+  set_target(isvd_dense_cb_nv_bin_gpu isvd_dense_cb.cpp "-DSTYPE=ColBlockGaussianProjectionSketcherGpu" "-DFILETYPE=Binary" "-DNJOBV")
 endif(MCNLA_USE_GPU)
 
 # Set utility target

@@ -64,7 +64,7 @@ class MCNLA_ALIAS1
   /// The exponent of power method.
   index_t exponent_;
 
-  /// The matrix Omega.
+  /// The matrix Omegas.
   DenseMatrixRowMajor<_Val> matrix_omegas_;
 
   using BaseType::parameters_;

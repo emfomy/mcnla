@@ -61,8 +61,8 @@ class MCNLA_ALIAS1
   /// The random seed.
   index_t seed_;
 
-  /// The matrix Omega.
-  DenseMatrixRowMajor<_Val> matrix_omegasj_;
+  /// The matrix Omegas.
+  DenseMatrixRowMajor<_Val> matrix_omegajs_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
