@@ -13,11 +13,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 Integrator
-  #define MCNLA_TMP1 Integrator<RowBlockReductionIntegratorTag, _Val>
+  #define MCNLA_ALIAS0 Integrator
+  #define MCNLA_ALIAS1 Integrator<RowBlockReductionIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 RowBlockReductionIntegrator
-  #define MCNLA_TMP1 RowBlockReductionIntegrator
+  #define MCNLA_ALIAS0 RowBlockReductionIntegrator
+  #define MCNLA_ALIAS1 RowBlockReductionIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ template <typename _Val> using RowBlockReductionIntegrator = Integrator<RowBlock
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public StageWrapper<RowBlockReductionIntegrator<_Val>> {
 
   friend StageWrapper<RowBlockReductionIntegrator<_Val>>;
@@ -86,7 +86,7 @@ class MCNLA_TMP1
  public:
 
   // Constructor
-  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -102,7 +102,7 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HH_

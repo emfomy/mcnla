@@ -5,16 +5,16 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_MATRIX_FROM_COL_BLOCK_TOALL_CONVERTER_HPP_
-#define MCNLA_ISVD_CONVERTER_MATRIX_FROM_COL_BLOCK_TOALL_CONVERTER_HPP_
+#ifndef MCNLA_ISVD_CONVERTER_MATRIX_FROM_COL_BLOCK_TO_ALL_CONVERTER_HPP_
+#define MCNLA_ISVD_CONVERTER_MATRIX_FROM_COL_BLOCK_TO_ALL_CONVERTER_HPP_
 
 #include <mcnla/isvd/converter/matrix_from_col_block_to_all_converter.hh>
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Converter<MatrixFromColBlockToAllConverterTag, _Val>
+  #define MCNLA_ALIAS Converter<MatrixFromColBlockToAllConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP MatrixFromColBlockToAllConverter<_Val>
+  #define MCNLA_ALIAS MatrixFromColBlockToAllConverter<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Converter(
+MCNLA_ALIAS::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -40,7 +40,7 @@ MCNLA_TMP::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {}
+void MCNLA_ALIAS::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -49,7 +49,7 @@ void MCNLA_TMP::initializeImpl() noexcept {}
 /// @param  matrix    The matrix.
 ///
 template <typename _Val>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const DenseMatrixColMajor<_Val> &matrix_j,
           DenseMatrixColMajor<_Val> &matrix
 ) noexcept {
@@ -88,6 +88,6 @@ void MCNLA_TMP::runImpl(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
+#undef MCNLA_ALIAS
 
-#endif  // MCNLA_ISVD_CONVERTER_MATRIX_FROM_COL_BLOCK_TOALL_CONVERTER_HPP_
+#endif  // MCNLA_ISVD_CONVERTER_MATRIX_FROM_COL_BLOCK_TO_ALL_CONVERTER_HPP_

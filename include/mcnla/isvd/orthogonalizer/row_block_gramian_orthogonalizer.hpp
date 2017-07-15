@@ -12,11 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
-  #define MCNLA_TMP0 Orthogonalizer
+  #define MCNLA_ALIAS  Orthogonalizer<RowBlockGramianOrthogonalizerTag, _Val>
+  #define MCNLA_ALIAS0 Orthogonalizer
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  RowBlockGramianOrthogonalizer<_Val>
-  #define MCNLA_TMP0 RowBlockGramianOrthogonalizer
+  #define MCNLA_ALIAS  RowBlockGramianOrthogonalizer<_Val>
+  #define MCNLA_ALIAS0 RowBlockGramianOrthogonalizer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -42,7 +42,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto num_sketch = parameters_.numSketch();
@@ -60,7 +60,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
@@ -107,7 +107,7 @@ void MCNLA_TMP::runImpl(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_ROW_BLOCK_GRAMIAN_ORTHOGONALIZER_HPP_

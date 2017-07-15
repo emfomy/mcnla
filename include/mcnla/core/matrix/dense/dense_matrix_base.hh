@@ -14,9 +14,9 @@
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseMatrixBase
+  #define MCNLA_ALIAS0 DenseMatrixBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseMatrix
+  #define MCNLA_ALIAS0 DenseMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,16 +85,16 @@ class DenseMatrixBase
  public:
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const index_t ncol ) noexcept;
-  inline MCNLA_TMP0( const SizesType sizes ) noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
-  inline MCNLA_TMP0( const SizesType sizes, const index_t pitch ) noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capacity ) noexcept;
-  inline MCNLA_TMP0( const SizesType sizes, const index_t pitch, const index_t capacity ) noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const index_t ncol, const index_t pitch,
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const index_t ncol ) noexcept;
+  inline MCNLA_ALIAS0( const SizesType sizes ) noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const index_t ncol, const index_t pitch ) noexcept;
+  inline MCNLA_ALIAS0( const SizesType sizes, const index_t pitch ) noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const index_t ncol, const index_t pitch, const index_t capacity ) noexcept;
+  inline MCNLA_ALIAS0( const SizesType sizes, const index_t pitch, const index_t capacity ) noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const index_t ncol, const index_t pitch,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline MCNLA_TMP0( const DenseMatrixBase &other ) noexcept;
+  inline MCNLA_ALIAS0( const DenseMatrixBase &other ) noexcept;
 
   // Operators
   inline DerivedType& operator=( const DenseMatrixBase &other ) noexcept;
@@ -198,6 +198,6 @@ class DenseMatrixBase
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_BASE_HH_

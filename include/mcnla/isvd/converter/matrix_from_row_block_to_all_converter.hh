@@ -5,8 +5,8 @@
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROW_BLOCK_TO_ALLCONVERTER_HH_
-#define MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROW_BLOCK_TO_ALLCONVERTER_HH_
+#ifndef MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROW_BLOCK_TO_ALL_CONVERTER_HH_
+#define MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROW_BLOCK_TO_ALL_CONVERTER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/converter/converter.hpp>
@@ -73,4 +73,4 @@ class MatrixFromRowBlockToAllConverter
 
 }  // namespace mcnla
 
-#endif  // MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROW_BLOCK_TO_ALLCONVERTER_HH_
+#endif  // MCNLA_ISVD_CONVERTER_MATRIX_FROM_ROW_BLOCK_TO_ALL_CONVERTER_HH_

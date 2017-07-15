@@ -14,9 +14,9 @@
 #include <mcnla/core/matrix/dense/dense_matrix_storage.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseTriangularMatrixBase
+  #define MCNLA_ALIAS0 DenseTriangularMatrixBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseTriangularMatrix
+  #define MCNLA_ALIAS0 DenseTriangularMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,13 +75,13 @@ class DenseTriangularMatrixBase
  public:
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const index_t size ) noexcept;
-  inline MCNLA_TMP0( const index_t size, const index_t pitch ) noexcept;
-  inline MCNLA_TMP0( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline MCNLA_TMP0( const index_t size, const index_t pitch,
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const index_t size ) noexcept;
+  inline MCNLA_ALIAS0( const index_t size, const index_t pitch ) noexcept;
+  inline MCNLA_ALIAS0( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
+  inline MCNLA_ALIAS0( const index_t size, const index_t pitch,
                                     const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline MCNLA_TMP0( const DenseTriangularMatrixBase &other ) noexcept;
+  inline MCNLA_ALIAS0( const DenseTriangularMatrixBase &other ) noexcept;
 
   // Operators
   inline DerivedType& operator=( const DenseTriangularMatrixBase &other ) noexcept;
@@ -126,6 +126,6 @@ class DenseTriangularMatrixBase
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_TRIANGULAR_BASE_MATRIX_HH_

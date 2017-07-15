@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Converter<DummyConverterTag, _Val>
+  #define MCNLA_ALIAS Converter<DummyConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP DummyConverter<_Val>
+  #define MCNLA_ALIAS DummyConverter<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Converter(
+MCNLA_ALIAS::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -40,7 +40,7 @@ MCNLA_TMP::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {}
+void MCNLA_ALIAS::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -48,7 +48,7 @@ void MCNLA_TMP::initializeImpl() noexcept {}
 /// @note  Do nothing.
 ///
 template <typename _Val> template <typename ..._Args>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     _Args...
 ) noexcept {
   this->tic();
@@ -58,6 +58,6 @@ void MCNLA_TMP::runImpl(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
+#undef MCNLA_ALIAS
 
 #endif  // MCNLA_ISVD_CONVERTER_DUMMY_CONVERTER_HPP_

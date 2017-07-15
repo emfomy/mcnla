@@ -11,9 +11,9 @@
 #include <mcnla/core/matrix/dense/dense_symmetric_matrix_base.hh>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseSymmetricMatrixBase
+  #define MCNLA_ALIAS0 DenseSymmetricMatrixBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseSymmetricMatrix
+  #define MCNLA_ALIAS0 DenseSymmetricMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,14 +30,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0() noexcept
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_ALIAS0() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_ALIAS0(
     const index_t size
 ) noexcept
   : BaseType(size, size) {
@@ -47,7 +47,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_ALIAS0(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -57,7 +57,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_ALIAS0(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -68,7 +68,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
 /// @brief  Construct with given raw data.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_ALIAS0(
     const index_t size,
     const index_t pitch,
     const ValArrayType &val,
@@ -82,7 +82,7 @@ DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val, Trans _trans, Uplo _uplo>
-DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_TMP0(
+DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::MCNLA_ALIAS0(
     const DenseSymmetricMatrixBase &other
 ) noexcept
   : BaseType(other) {}
@@ -234,6 +234,6 @@ index_t DenseSymmetricMatrixBase<_Core, _Val, _trans, _uplo>::mcolImpl() const n
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_SYMMETRIC_MATRIX_BASE_HPP_

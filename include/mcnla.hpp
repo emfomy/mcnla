@@ -17,17 +17,17 @@
   #include <mcnla/isvd_gpu.hpp>
 #endif  // MCNLA_USE_GPU
 
-#ifdef MCNLA_TMP
-  #error MCNLA_TMP should not be defined!
-#endif  // MCNLA_TMP
+#ifdef MCNLA_ALIAS
+  #error MCNLA_ALIAS should not be defined!
+#endif  // MCNLA_ALIAS
 
-#ifdef MCNLA_TMP0
-  #error MCNLA_TMP0 should not be defined!
-#endif  // MCNLA_TMP0
+#ifdef MCNLA_ALIAS0
+  #error MCNLA_ALIAS0 should not be defined!
+#endif  // MCNLA_ALIAS0
 
-#ifdef MCNLA_TMP1
-  #error MCNLA_TMP1 should not be defined!
-#endif  // MCNLA_TMP1
+#ifdef MCNLA_ALIAS1
+  #error MCNLA_ALIAS1 should not be defined!
+#endif  // MCNLA_ALIAS1
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @defgroup  core_module  Core Module

@@ -13,11 +13,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 Orthogonalizer
-  #define MCNLA_TMP1 Orthogonalizer<SvdOrthogonalizerTag, _Val>
+  #define MCNLA_ALIAS0 Orthogonalizer
+  #define MCNLA_ALIAS1 Orthogonalizer<SvdOrthogonalizerTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 SvdOrthogonalizer
-  #define MCNLA_TMP1 SvdOrthogonalizer
+  #define MCNLA_ALIAS0 SvdOrthogonalizer
+  #define MCNLA_ALIAS1 SvdOrthogonalizer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ template <typename _Val> using SvdOrthogonalizer = Orthogonalizer<SvdOrthogonali
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public StageWrapper<SvdOrthogonalizer<_Val>> {
 
   friend StageWrapper<SvdOrthogonalizer<_Val>>;
@@ -77,7 +77,7 @@ class MCNLA_TMP1
  public:
 
   // Constructor
-  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -93,7 +93,7 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_ISVD_ORTHOGONALIZER_SVD_ORTHOGONALIZER_HH_

@@ -11,9 +11,9 @@
 #include <mcnla/core/matrix/dense/dense_vector_base.hh>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseVectorBase
+  #define MCNLA_ALIAS0 DenseVectorBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseVector
+  #define MCNLA_ALIAS0 DenseVector
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,14 +30,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::MCNLA_TMP0() noexcept
+DenseVectorBase<_Core, _Val>::MCNLA_ALIAS0() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
+DenseVectorBase<_Core, _Val>::MCNLA_ALIAS0(
     const index_t len,
     const index_t stride
 ) noexcept
@@ -47,7 +47,7 @@ DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
+DenseVectorBase<_Core, _Val>::MCNLA_ALIAS0(
     const SizesType sizes,
     const index_t stride
 ) noexcept
@@ -57,7 +57,7 @@ DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
+DenseVectorBase<_Core, _Val>::MCNLA_ALIAS0(
     const index_t len,
     const index_t stride,
     const index_t capacity
@@ -68,7 +68,7 @@ DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
+DenseVectorBase<_Core, _Val>::MCNLA_ALIAS0(
     const SizesType sizes,
     const index_t stride,
     const index_t capacity
@@ -79,7 +79,7 @@ DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
 /// @brief  Construct with given raw data.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
+DenseVectorBase<_Core, _Val>::MCNLA_ALIAS0(
     const index_t len,
     const index_t stride,
     const ValArrayType &val,
@@ -93,7 +93,7 @@ DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val>
-DenseVectorBase<_Core, _Val>::MCNLA_TMP0(
+DenseVectorBase<_Core, _Val>::MCNLA_ALIAS0(
     const DenseVectorBase &other
 ) noexcept
   : BaseType(other) {}
@@ -256,6 +256,6 @@ index_t DenseVectorBase<_Core, _Val>::toDim0(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_BASE_HPP_

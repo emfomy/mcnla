@@ -11,9 +11,9 @@
 #include <mcnla/core/matrix/dense/dense_diagonal_matrix_base.hh>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseDiagonalMatrixBase
+  #define MCNLA_ALIAS0 DenseDiagonalMatrixBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseDiagonalMatrix
+  #define MCNLA_ALIAS0 DenseDiagonalMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,14 +30,14 @@ namespace matrix {
 /// @brief  Default constructor.
 ///
 template <class _Core, typename _Val>
-DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0() noexcept
+DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_ALIAS0() noexcept
   : BaseType() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val>
-DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
+DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_ALIAS0(
     const index_t size
 ) noexcept
   : BaseType(size) {
@@ -47,7 +47,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val>
-DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
+DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_ALIAS0(
     const index_t size,
     const index_t pitch
 ) noexcept
@@ -57,7 +57,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
 /// @brief  Construct with given size information.
 ///
 template <class _Core, typename _Val>
-DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
+DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_ALIAS0(
     const index_t size,
     const index_t pitch,
     const index_t capacity
@@ -68,7 +68,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
 /// @brief  Construct with given raw data.
 ///
 template <class _Core, typename _Val>
-DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
+DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_ALIAS0(
     const index_t size,
     const index_t pitch,
     const ValArrayType &val,
@@ -82,7 +82,7 @@ DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
 /// @attention  It is shallow copy (creates an alias). For deep copy, uses mcnla::la::copy.
 ///
 template <class _Core, typename _Val>
-DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_TMP0(
+DenseDiagonalMatrixBase<_Core, _Val>::MCNLA_ALIAS0(
     const DenseDiagonalMatrixBase &other
 ) noexcept
   : BaseType(other) {}
@@ -226,6 +226,6 @@ index_t DenseDiagonalMatrixBase<_Core, _Val>::mcolImpl() const noexcept {
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_BASE_HPP_

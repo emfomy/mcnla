@@ -1,22 +1,22 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    include/mcnla/isvd/sketcher/gaussian_projection_sketcher.hh
-/// @brief   The definition of Gaussian projection sketcher.
+/// @file    include/mcnla/isvd/sketcher/col_block_gaussian_projection_sketcher.hh
+/// @brief   The definition of Gaussian projection sketcher (column-block version).
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
 
-#ifndef MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
-#define MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
+#ifndef MCNLA_ISVD_SKETCHER_COLUMN_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HH_
+#define MCNLA_ISVD_SKETCHER_COLUMN_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HH_
 
 #include <mcnla/isvd/def.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
   #define MCNLA_ALIAS0 Sketcher
-  #define MCNLA_ALIAS1 Sketcher<GaussianProjectionSketcherTag, _Val>
+  #define MCNLA_ALIAS1 Sketcher<ColBlockGaussianProjectionSketcherTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_ALIAS0 GaussianProjectionSketcher
-  #define MCNLA_ALIAS1 GaussianProjectionSketcher
+  #define MCNLA_ALIAS0 ColBlockGaussianProjectionSketcher
+  #define MCNLA_ALIAS1 ColBlockGaussianProjectionSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,30 +30,30 @@ namespace mcnla {
 namespace isvd {
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-struct GaussianProjectionSketcherTag {};
-template <typename _Val> using GaussianProjectionSketcher = Sketcher<GaussianProjectionSketcherTag, _Val>;
+struct ColBlockGaussianProjectionSketcherTag {};
+template <typename _Val> using ColBlockGaussianProjectionSketcher = Sketcher<ColBlockGaussianProjectionSketcherTag, _Val>;
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  isvd_sketcher_module
-/// The Gaussian projection sketcher.
+/// The Gaussian projection sketcher (column-block version).
 ///
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
 class MCNLA_ALIAS1
-  : public StageWrapper<GaussianProjectionSketcher<_Val>> {
+  : public StageWrapper<ColBlockGaussianProjectionSketcher<_Val>> {
 
-  friend StageWrapper<GaussianProjectionSketcher<_Val>>;
+  friend StageWrapper<ColBlockGaussianProjectionSketcher<_Val>>;
 
  private:
 
-  using BaseType = StageWrapper<GaussianProjectionSketcher<_Val>>;
+  using BaseType = StageWrapper<ColBlockGaussianProjectionSketcher<_Val>>;
 
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Gaussian Projection Sketcher";
+  static constexpr const char* name_ = "Gaussian Projection Sketcher (Column-Block Version)";
 
   /// The name of each part of the stage.
   static constexpr const char* names_ = "random generating / projection";
@@ -61,11 +61,8 @@ class MCNLA_ALIAS1
   /// The random seed.
   index_t seed_;
 
-  /// The exponent of power method.
-  index_t exponent_;
-
   /// The matrix Omega.
-  DenseMatrixRowMajor<_Val> matrix_omegas_;
+  DenseMatrixRowMajor<_Val> matrix_omegasj_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;
@@ -76,15 +73,13 @@ class MCNLA_ALIAS1
  public:
 
   // Constructor
-  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
+  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters, const index_t seed = rand() ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
-  inline index_t exponent() const noexcept;
 
   // Sets parameters
   inline MCNLA_ALIAS1& setSeed( const index_t seed ) noexcept;
-  inline MCNLA_ALIAS1& setExponent( const index_t exponent ) noexcept;
 
 
  protected:
@@ -94,7 +89,7 @@ class MCNLA_ALIAS1
 
   // Random sketches
   template <class _Matrix>
-  void runImpl( const _Matrix &matrix_a, DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q ) noexcept;
+  void runImpl( const _Matrix &matrix_ajc, DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qjp ) noexcept;
 
   // Outputs name
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
@@ -108,4 +103,4 @@ class MCNLA_ALIAS1
 #undef MCNLA_ALIAS0
 #undef MCNLA_ALIAS1
 
-#endif  // MCNLA_ISVD_SKETCHER_GAUSSIAN_PROJECTION_SKETCHER_HH_
+#endif  // MCNLA_ISVD_SKETCHER_COLUMN_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HH_

@@ -12,13 +12,13 @@
 #include <mcnla/core/matrix/kit/array_base.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  ArrS<CpuTag, _Val>
-  #define MCNLA_TMP0 ArrS
-  #define MCNLA_TMP1 ArrS<CpuTag, _Val>
+  #define MCNLA_ALIAS  ArrS<CpuTag, _Val>
+  #define MCNLA_ALIAS0 ArrS
+  #define MCNLA_ALIAS1 ArrS<CpuTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Array<_Val>
-  #define MCNLA_TMP0 Array
-  #define MCNLA_TMP1 Array
+  #define MCNLA_ALIAS  Array<_Val>
+  #define MCNLA_ALIAS0 Array
+  #define MCNLA_ALIAS1 Array
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public ArrayBase<CpuTag, _Val> {
 
  private:
@@ -60,11 +60,11 @@ class MCNLA_TMP1
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const size_t size, const index_t offset = 0 ) noexcept;
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const size_t size, const index_t offset = 0 ) noexcept;
 
   // Copy
-  inline MCNLA_TMP copy() const noexcept;
+  inline MCNLA_ALIAS copy() const noexcept;
 
 };
 
@@ -72,8 +72,8 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_CORE_MATRIX_KIT_ARRAY_HH_

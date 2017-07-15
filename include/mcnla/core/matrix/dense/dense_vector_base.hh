@@ -14,9 +14,9 @@
 #include <mcnla/core/matrix/dense/dense_vector_storage.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseVectorBase
+  #define MCNLA_ALIAS0 DenseVectorBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseVector
+  #define MCNLA_ALIAS0 DenseVector
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,14 +66,14 @@ class DenseVectorBase
  public:
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const index_t len, const index_t stride = 1 ) noexcept;
-  inline MCNLA_TMP0( const SizesType sizes, const index_t stride = 1 ) noexcept;
-  inline MCNLA_TMP0( const index_t len, const index_t stride, const index_t capacity ) noexcept;
-  inline MCNLA_TMP0( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
-  inline MCNLA_TMP0( const index_t len, const index_t stride,
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const index_t len, const index_t stride = 1 ) noexcept;
+  inline MCNLA_ALIAS0( const SizesType sizes, const index_t stride = 1 ) noexcept;
+  inline MCNLA_ALIAS0( const index_t len, const index_t stride, const index_t capacity ) noexcept;
+  inline MCNLA_ALIAS0( const SizesType sizes, const index_t stride, const index_t capacity ) noexcept;
+  inline MCNLA_ALIAS0( const index_t len, const index_t stride,
                           const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline MCNLA_TMP0( const DenseVectorBase &other ) noexcept;
+  inline MCNLA_ALIAS0( const DenseVectorBase &other ) noexcept;
 
   // Operators
   inline DerivedType& operator=( const DenseVectorBase &other ) noexcept;
@@ -123,6 +123,6 @@ class DenseVectorBase
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_VECTOR_BASE_HH_

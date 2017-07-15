@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    src/isvd_dense.cpp
-/// @brief   The iSVD driver for dense matrix
+/// @file    src/isvd_dense_rb.cpp
+/// @brief   The iSVD driver for dense matrix (row-block version)
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -33,7 +33,7 @@
 #define FTYPE RowBlockGramianFormer
 #endif  // FTYPE
 
-void check( const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
+void check(       mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
             const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_uj,
             const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_v,
             const mcnla::matrix::DenseVector<double> &vector_s,
@@ -59,7 +59,7 @@ int main( int argc, char **argv ) {
     std::cout << "MCNLA "
               << MCNLA_MAJOR_VERSION << "."
               << MCNLA_MINOR_VERSION << "."
-              << MCNLA_PATCH_VERSION << " iSVD driver for DenseMatrix" << std::endl << std::endl;
+              << MCNLA_PATCH_VERSION << " iSVD driver for DenseMatrix (row-block version)" << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -260,7 +260,7 @@ int main( int argc, char **argv ) {
 /// Check the result (A)
 ///
 void check(
-    const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
+          mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
     const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_uj,
     const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_v,
     const mcnla::matrix::DenseVector<double>         &vector_s,
@@ -268,18 +268,19 @@ void check(
     const MPI_Comm mpi_comm
 ) noexcept {
 
-  // A_tmp := A, U_tmp = U
-  auto matrix_aj_tmp = matrix_aj.copy();
+  // Compute norm(A)_F
+  mcnla::matrix::DenseVector<double> nrms(2);
+  nrms(1) = mcnla::la::dot(matrix_aj.vec());
+
+  // U_tmp = U
   auto matrix_uj_tmp = matrix_uj.copy();
 
-  // A_tmp -= U * S * V'
+  // A -= U * S * V'
   mcnla::la::mm(""_, vector_s.diag(), matrix_uj_tmp);
-  mcnla::la::mm(matrix_uj_tmp, matrix_v.t(), matrix_aj_tmp, -1.0, 1.0);
+  mcnla::la::mm(matrix_uj_tmp, matrix_v.t(), matrix_aj, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
-  mcnla::matrix::DenseVector<double> nrms(2);
-  nrms(0) = mcnla::la::dot(matrix_aj_tmp.vec());
-  nrms(1) = mcnla::la::dot(matrix_aj.vec());
+  nrms(0) = mcnla::la::dot(matrix_aj.vec());
   mcnla::mpi::allreduce(nrms, MPI_SUM, mpi_comm);
   frerr = std::sqrt(nrms(0)) / std::sqrt(nrms(1));
 }

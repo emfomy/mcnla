@@ -13,11 +13,11 @@
 #include <mcnla/core/random.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
-  #define MCNLA_TMP0 Sketcher
+  #define MCNLA_ALIAS  Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
+  #define MCNLA_ALIAS0 Sketcher
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  RowBlockGaussianProjectionSketcher<_Val>
-  #define MCNLA_TMP0 RowBlockGaussianProjectionSketcher
+  #define MCNLA_ALIAS  RowBlockGaussianProjectionSketcher<_Val>
+  #define MCNLA_ALIAS0 RowBlockGaussianProjectionSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters,
     const index_t seed,
     const index_t exponent
@@ -48,7 +48,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto ncol             = parameters_.ncol();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
@@ -63,7 +63,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val> template <class _Matrix>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const _Matrix &matrix_aj,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
@@ -112,7 +112,7 @@ void MCNLA_TMP::runImpl(
 ///
 ///
 template <typename _Val>
-std::ostream& MCNLA_TMP::outputNameImpl(
+std::ostream& MCNLA_ALIAS::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_ << " (Power " << exponent_ << ")");
@@ -122,7 +122,7 @@ std::ostream& MCNLA_TMP::outputNameImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t MCNLA_TMP::seed() const noexcept {
+index_t MCNLA_ALIAS::seed() const noexcept {
   return seed_;
 }
 
@@ -130,7 +130,7 @@ index_t MCNLA_TMP::seed() const noexcept {
 /// @brief  Gets the exponent of power method.
 ///
 template <typename _Val>
-index_t MCNLA_TMP::exponent() const noexcept {
+index_t MCNLA_ALIAS::exponent() const noexcept {
   return exponent_;
 }
 
@@ -138,7 +138,7 @@ index_t MCNLA_TMP::exponent() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-MCNLA_TMP& MCNLA_TMP::setSeed(
+MCNLA_ALIAS& MCNLA_ALIAS::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -152,7 +152,7 @@ MCNLA_TMP& MCNLA_TMP::setSeed(
 /// @attention  Row-block version supports zero exponent only.
 ///
 template <typename _Val>
-MCNLA_TMP& MCNLA_TMP::setExponent(
+MCNLA_ALIAS& MCNLA_ALIAS::setExponent(
     const index_t exponent
 ) noexcept {
   mcnla_assert_eq(exponent, 0);
@@ -165,7 +165,7 @@ MCNLA_TMP& MCNLA_TMP::setExponent(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HPP_

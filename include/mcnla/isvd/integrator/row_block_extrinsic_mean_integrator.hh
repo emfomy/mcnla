@@ -13,11 +13,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 Integrator
-  #define MCNLA_TMP1 Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>
+  #define MCNLA_ALIAS0 Integrator
+  #define MCNLA_ALIAS1 Integrator<RowBlockExtrinsicMeanIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 RowBlockExtrinsicMeanIntegrator
-  #define MCNLA_TMP1 RowBlockExtrinsicMeanIntegrator
+  #define MCNLA_ALIAS0 RowBlockExtrinsicMeanIntegrator
+  #define MCNLA_ALIAS1 RowBlockExtrinsicMeanIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ template <typename _Val> using RowBlockExtrinsicMeanIntegrator = Integrator<RowB
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public StageWrapper<RowBlockExtrinsicMeanIntegrator<_Val>> {
 
   friend StageWrapper<RowBlockExtrinsicMeanIntegrator<_Val>>;
@@ -98,7 +98,7 @@ class MCNLA_TMP1
  public:
 
   // Constructor
-  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters ) noexcept;
 
  protected:
 
@@ -116,7 +116,7 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_EXTRINSIC_MEAN_INTEGRATOR_HH_

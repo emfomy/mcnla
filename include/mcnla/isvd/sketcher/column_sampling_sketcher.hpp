@@ -13,11 +13,11 @@
 #include <mcnla/core/random.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Sketcher<ColumnSamplingSketcherTag, _Val>
-  #define MCNLA_TMP0 Sketcher
+  #define MCNLA_ALIAS  Sketcher<ColumnSamplingSketcherTag, _Val>
+  #define MCNLA_ALIAS0 Sketcher
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  ColumnSamplingSketcher<_Val>
-  #define MCNLA_TMP0 ColumnSamplingSketcher
+  #define MCNLA_ALIAS  ColumnSamplingSketcher<_Val>
+  #define MCNLA_ALIAS0 ColumnSamplingSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
@@ -46,7 +46,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto dim_sketch_each = parameters_.dimSketchEach();
 
@@ -60,7 +60,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  collection_q  The matrix collection Q.
 ///
 template <typename _Val> template <class _Matrix>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const _Matrix &matrix_a,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
@@ -101,7 +101,7 @@ void MCNLA_TMP::runImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t MCNLA_TMP::seed() const noexcept {
+index_t MCNLA_ALIAS::seed() const noexcept {
   return seed_;
 }
 
@@ -109,7 +109,7 @@ index_t MCNLA_TMP::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-MCNLA_TMP& MCNLA_TMP::setSeed(
+MCNLA_ALIAS& MCNLA_ALIAS::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -121,7 +121,7 @@ MCNLA_TMP& MCNLA_TMP::setSeed(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_SKETCHER_COLUMN_SAMPLING_SKETCHER_HPP_

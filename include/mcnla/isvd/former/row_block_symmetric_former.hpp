@@ -12,11 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Former<RowBlockSymmetricFormerTag<_jobv>, _Val>
-  #define MCNLA_TMP0 Former
+  #define MCNLA_ALIAS  Former<RowBlockSymmetricFormerTag<_jobv>, _Val>
+  #define MCNLA_ALIAS0 Former
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  RowBlockSymmetricFormer<_Val, _jobv>
-  #define MCNLA_TMP0 RowBlockSymmetricFormer
+  #define MCNLA_ALIAS  RowBlockSymmetricFormer<_Val, _jobv>
+  #define MCNLA_ALIAS0 RowBlockSymmetricFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val, bool _jobv>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -42,7 +42,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val, bool _jobv>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto nrow_rank  = parameters_.nrowRank();
@@ -75,7 +75,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @attention  The full matrix A must be symmetric.
 ///
 template <typename _Val, bool _jobv> template <class _Matrix>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const _Matrix &matrix_aj,
     const DenseMatrixRowMajor<_Val> &matrix_qj
 ) noexcept {
@@ -133,7 +133,7 @@ void MCNLA_TMP::runImpl(
 /// @attention  The eigenvalues are sorted in ascending order.
 ///
 template <typename _Val, bool _jobv>
-const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& MCNLA_ALIAS::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -144,7 +144,7 @@ const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
 /// @attention  The eigenvalues are sorted in ascending order.
 ///
 template <typename _Val, bool _jobv>
-const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixUj() const noexcept {
+const DenseMatrixRowMajor<_Val>& MCNLA_ALIAS::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_uj_cut_;
 }
@@ -153,7 +153,7 @@ const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixUj() const noexcept {
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HPP_

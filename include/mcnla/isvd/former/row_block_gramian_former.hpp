@@ -12,11 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Former<RowBlockGramianFormerTag<_jobv>, _Val>
-  #define MCNLA_TMP0 Former
+  #define MCNLA_ALIAS  Former<RowBlockGramianFormerTag<_jobv>, _Val>
+  #define MCNLA_ALIAS0 Former
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  RowBlockGramianFormer<_Val, _jobv>
-  #define MCNLA_TMP0 RowBlockGramianFormer
+  #define MCNLA_ALIAS  RowBlockGramianFormer<_Val, _jobv>
+  #define MCNLA_ALIAS0 RowBlockGramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val, bool _jobv>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -42,7 +42,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val, bool _jobv>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto nrow_each  = parameters_.nrowEach();
@@ -76,7 +76,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  matrix_qj  The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val, bool _jobv> template <class _Matrix>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const _Matrix &matrix_aj,
     const DenseMatrixRowMajor<_Val> &matrix_qj
 ) noexcept {
@@ -140,7 +140,7 @@ void MCNLA_TMP::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val, bool _jobv>
-const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& MCNLA_ALIAS::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -149,7 +149,7 @@ const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
 /// @brief  Gets the left singular vectors (row-block).
 ///
 template <typename _Val, bool _jobv>
-const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixUj() const noexcept {
+const DenseMatrixRowMajor<_Val>& MCNLA_ALIAS::matrixUj() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_uj_cut_;
 }
@@ -158,7 +158,7 @@ const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixUj() const noexcept {
 /// @brief  Gets the right singular vectors (row-block).
 ///
 template <typename _Val, bool _jobv>
-const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixVj() const noexcept {
+const DenseMatrixRowMajor<_Val>& MCNLA_ALIAS::matrixVj() const noexcept {
   mcnla_assert_true(this->isComputed());
   mcnla_assert_true(_jobv);
   return matrix_vj_cut_;
@@ -168,7 +168,7 @@ const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixVj() const noexcept {
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HPP_

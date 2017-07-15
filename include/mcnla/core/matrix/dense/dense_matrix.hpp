@@ -11,9 +11,9 @@
 #include <mcnla/core/matrix/dense/dense_matrix.hh>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP GeMatS<CpuTag, DenseTag, _Val, _trans>
+  #define MCNLA_ALIAS GeMatS<CpuTag, DenseTag, _Val, _trans>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP DenseMatrix<_Val, _trans>
+  #define MCNLA_ALIAS DenseMatrix<_Val, _trans>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ namespace matrix {
 /// @brief  Finds the iterator to element
 ///
 template <typename _Val, Trans _trans>
-DenseMatrixIterator<_Val, _trans> MCNLA_TMP::find(
+DenseMatrixIterator<_Val, _trans> MCNLA_ALIAS::find(
     const index_t rowidx,
     const index_t colidx
 ) noexcept {
@@ -44,7 +44,7 @@ DenseMatrixIterator<_Val, _trans> MCNLA_TMP::find(
 /// @copydoc  find
 ///
 template <typename _Val, Trans _trans>
-DenseMatrixConstIterator<_Val, _trans> MCNLA_TMP::find(
+DenseMatrixConstIterator<_Val, _trans> MCNLA_ALIAS::find(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -58,7 +58,7 @@ DenseMatrixConstIterator<_Val, _trans> MCNLA_TMP::find(
 /// @copydoc  find
 ///
 template <typename _Val, Trans _trans>
-DenseMatrixConstIterator<_Val, _trans> MCNLA_TMP::cfind(
+DenseMatrixConstIterator<_Val, _trans> MCNLA_ALIAS::cfind(
     const index_t rowidx,
     const index_t colidx
 ) const noexcept {
@@ -69,6 +69,6 @@ DenseMatrixConstIterator<_Val, _trans> MCNLA_TMP::cfind(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
+#undef MCNLA_ALIAS
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_MATRIX_HPP_

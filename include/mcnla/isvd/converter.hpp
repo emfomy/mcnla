@@ -12,6 +12,7 @@
 
 #include <mcnla/isvd/converter/collection_to_row_block_converter.hpp>
 #include <mcnla/isvd/converter/collection_from_row_block_converter.hpp>
+#include <mcnla/isvd/converter/collection_from_partial_sum_to_row_block_converter.hpp>
 
 #include <mcnla/isvd/converter/matrix_to_row_block_converter.hpp>
 #include <mcnla/isvd/converter/matrix_from_row_block_converter.hpp>

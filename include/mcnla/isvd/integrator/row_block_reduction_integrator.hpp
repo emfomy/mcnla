@@ -12,11 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Integrator<RowBlockReductionIntegratorTag, _Val>
-  #define MCNLA_TMP0 Integrator
+  #define MCNLA_ALIAS  Integrator<RowBlockReductionIntegratorTag, _Val>
+  #define MCNLA_ALIAS0 Integrator
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  RowBlockReductionIntegrator<_Val>
-  #define MCNLA_TMP0 RowBlockReductionIntegrator
+  #define MCNLA_ALIAS  RowBlockReductionIntegrator<_Val>
+  #define MCNLA_ALIAS0 RowBlockReductionIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -42,7 +42,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto nrow_rank  = parameters_.nrowRank();
   const auto dim_sketch = parameters_.dimSketch();
@@ -64,7 +64,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  matrix_qbarj   The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
     DenseMatrixRowMajor<_Val> &matrix_qbarj
 ) noexcept {
@@ -125,7 +125,7 @@ void MCNLA_TMP::runImpl(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_REDUCTION_INTEGRATOR_HPP_

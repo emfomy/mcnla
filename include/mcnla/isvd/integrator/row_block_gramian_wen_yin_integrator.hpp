@@ -12,11 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Integrator<RowBlockGramianWenYinIntegratorTag, _Val>
-  #define MCNLA_TMP0 Integrator
+  #define MCNLA_ALIAS  Integrator<RowBlockGramianWenYinIntegratorTag, _Val>
+  #define MCNLA_ALIAS0 Integrator
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  RowBlockGramianWenYinIntegrator<_Val>
-  #define MCNLA_TMP0 RowBlockGramianWenYinIntegrator
+  #define MCNLA_ALIAS  RowBlockGramianWenYinIntegrator<_Val>
+  #define MCNLA_ALIAS0 RowBlockGramianWenYinIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters,
     const index_t max_iteration,
     const RealValT<_Val> tolerance
@@ -47,7 +47,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto dim_sketch       = parameters_.dimSketch();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
@@ -84,7 +84,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  matrix_qbarj   The matrix Qbarj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
           DenseMatrixRowMajor<_Val> &matrix_qbarj
 ) noexcept {
@@ -333,7 +333,7 @@ void MCNLA_TMP::runImpl(
 /// @brief  Gets the maximum number of iteration.
 ///
 template <typename _Val>
-index_t MCNLA_TMP::maxIteration() const noexcept {
+index_t MCNLA_ALIAS::maxIteration() const noexcept {
   return max_iteration_;
 }
 
@@ -341,7 +341,7 @@ index_t MCNLA_TMP::maxIteration() const noexcept {
 /// @brief  Gets the tolerance of convergence condition.
 ///
 template <typename _Val>
-RealValT<_Val> MCNLA_TMP::tolerance() const noexcept {
+RealValT<_Val> MCNLA_ALIAS::tolerance() const noexcept {
   return tolerance_;
 }
 
@@ -349,7 +349,7 @@ RealValT<_Val> MCNLA_TMP::tolerance() const noexcept {
 /// @brief  Gets the number of iteration.
 ///
 template <typename _Val>
-index_t MCNLA_TMP::iteration() const noexcept {
+index_t MCNLA_ALIAS::iteration() const noexcept {
   mcnla_assert_true(this->isComputed());
   return iteration_;
 }
@@ -358,7 +358,7 @@ index_t MCNLA_TMP::iteration() const noexcept {
 /// @brief  Sets the maximum number of iteration.
 ///
 template <typename _Val>
-MCNLA_TMP& MCNLA_TMP::setMaxIteration(
+MCNLA_ALIAS& MCNLA_ALIAS::setMaxIteration(
     const index_t max_iteration
 ) noexcept {
   mcnla_assert_ge(max_iteration, 0);
@@ -372,7 +372,7 @@ MCNLA_TMP& MCNLA_TMP::setMaxIteration(
 /// @brief  Sets the tolerance of convergence condition.
 ///
 template <typename _Val>
-MCNLA_TMP& MCNLA_TMP::setTolerance(
+MCNLA_ALIAS& MCNLA_ALIAS::setTolerance(
     const RealValT<_Val> tolerance
 ) noexcept {
   mcnla_assert_ge(tolerance, 0);
@@ -386,7 +386,7 @@ MCNLA_TMP& MCNLA_TMP::setTolerance(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_INTEGRATOR_ROW_BLOCK_GRAMIAN_WEN_YIN_INTEGRATOR_HPP_

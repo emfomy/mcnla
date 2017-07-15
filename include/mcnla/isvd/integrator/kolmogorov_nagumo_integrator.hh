@@ -13,11 +13,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 Integrator
-  #define MCNLA_TMP1 Integrator<KolmogorovNagumoIntegratorTag, _Val>
+  #define MCNLA_ALIAS0 Integrator
+  #define MCNLA_ALIAS1 Integrator<KolmogorovNagumoIntegratorTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 KolmogorovNagumoIntegrator
-  #define MCNLA_TMP1 KolmogorovNagumoIntegrator
+  #define MCNLA_ALIAS0 KolmogorovNagumoIntegrator
+  #define MCNLA_ALIAS1 KolmogorovNagumoIntegrator
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ template <typename _Val> using KolmogorovNagumoIntegrator = Integrator<Kolmogoro
 /// @tparam  _Val  The scalar type.
 ///
 template <typename _Val>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public StageWrapper<KolmogorovNagumoIntegrator<_Val>> {
 
   friend StageWrapper<KolmogorovNagumoIntegrator<_Val>>;
@@ -106,7 +106,7 @@ class MCNLA_TMP1
  public:
 
   // Constructor
-  inline MCNLA_TMP0( const Parameters<_Val> &parameters,
+  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters,
                      const index_t max_iteration = 256, const RealValT<_Val> tolerance = 1e-4 ) noexcept;
 
   // Gets parameters
@@ -115,8 +115,8 @@ class MCNLA_TMP1
   inline index_t        iteration() const noexcept;
 
   // Sets parameters
-  inline MCNLA_TMP1& setMaxIteration( const index_t max_iteration ) noexcept;
-  inline MCNLA_TMP1& setTolerance( const RealValT<_Val> tolerance ) noexcept;
+  inline MCNLA_ALIAS1& setMaxIteration( const index_t max_iteration ) noexcept;
+  inline MCNLA_ALIAS1& setTolerance( const RealValT<_Val> tolerance ) noexcept;
 
  protected:
 
@@ -133,7 +133,7 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_ISVD_INTEGRATOR_KOLMOGOROV_NAGUMO_INTEGRATOR_HH_
