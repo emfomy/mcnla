@@ -169,7 +169,7 @@ int main( int argc, char **argv ) {
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::tic(timer);
     }
-    mcnla::io::IO_LOAD_COL_BLOCK(matrix_ajc, argv[1], parameters.rowrange());
+    mcnla::io::IO_LOAD_COL_BLOCK(matrix_ajc, argv[1], parameters.colrange());
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::dispToc(timer); std::cout << std::endl;
     }
