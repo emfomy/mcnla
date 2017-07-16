@@ -57,7 +57,7 @@ class MCNLA_ALIAS1
   static constexpr const char* name_ = "GPU Gaussian Projection Sketcher (Row-Block Version)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "random generating / projection / receive";
+  static constexpr const char* names_ = "allocation / random generating / projection / receive";
 
   /// The random seed.
   index_t seed_;

@@ -57,7 +57,7 @@ class MCNLA_ALIAS1
   static constexpr const char* name_ = "GPU Gaussian Projection Sketcher (Column-Block Version)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "random generating / projection / receive";
+  static constexpr const char* names_ = "allocation / random generating / projection / receive";
 
   /// The random seed.
   index_t seed_;
@@ -67,15 +67,6 @@ class MCNLA_ALIAS1
 
   /// The matrix Omegas.
   DenseMatrixRowMajor<_Val> matrix_omegajs_;
-
-  /// The GPU collection A (column-block).
-  DenseMatrixGpuColMajor<_Val> matrix_ajc_gpu_;
-
-  /// The GPU matrix Qs (row-block).
-  DenseMatrixGpuRowMajor<_Val> matrix_qjp_gpu_;
-
-  /// The GPU matrix Omegas.
-  DenseMatrixGpuRowMajor<_Val> matrix_omegajs_gpu_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

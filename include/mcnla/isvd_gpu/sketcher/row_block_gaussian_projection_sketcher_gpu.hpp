@@ -60,10 +60,6 @@ void MCNLA_ALIAS::initializeImpl() noexcept {
   ncol_gpu_ = std::min((ncol_gpu / kBlockSizeGpu) * kBlockSizeGpu, ncol);
 
   matrix_omegas_.reconstruct(ncol, dim_sketch_total);
-
-  matrix_aj_gpu_.reconstruct(nrow_rank, ncol_gpu_);
-  matrix_qjs_gpu_.reconstruct(nrow_rank, dim_sketch_total);
-  matrix_omegas_gpu_.reconstruct(ncol_gpu_, dim_sketch_total);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,12 +74,13 @@ void MCNLA_ALIAS::runImpl(
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
-  const auto mpi_comm   = parameters_.mpi_comm;
-  const auto mpi_root   = parameters_.mpi_root;
-  const auto nrow_rank  = parameters_.nrowRank();
-  const auto ncol       = parameters_.ncol();
-  const auto dim_sketch = parameters_.dimSketch();
-  const auto num_sketch = parameters_.numSketch();
+  const auto mpi_comm         = parameters_.mpi_comm;
+  const auto mpi_root         = parameters_.mpi_root;
+  const auto nrow_rank        = parameters_.nrowRank();
+  const auto ncol             = parameters_.ncol();
+  const auto dim_sketch       = parameters_.dimSketch();
+  const auto num_sketch       = parameters_.numSketch();
+  const auto dim_sketch_total = parameters_.dimSketchTotal();
 
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
@@ -96,6 +93,13 @@ void MCNLA_ALIAS::runImpl(
   double comm_time;
   this->tic(comm_time);
   // ====================================================================================================================== //
+  // Allocate GPU memory
+
+  DenseMatrixGpuRowMajor<_Val> matrix_aj_gpu(nrow_rank, ncol_gpu_);
+  DenseMatrixGpuRowMajor<_Val> matrix_qjs_gpu(nrow_rank, dim_sketch_total);
+  DenseMatrixGpuRowMajor<_Val> matrix_omegas_gpu(ncol_gpu_, dim_sketch_total);
+
+  // ====================================================================================================================== //
   // Random generating
 
   // Random sample Omega using normal Gaussian distribution
@@ -105,15 +109,15 @@ void MCNLA_ALIAS::runImpl(
   // ====================================================================================================================== //
   // Projection
 
-  la::memset0(matrix_qjs_gpu_);
+  la::memset0(matrix_qjs_gpu);
   auto idxrange = I_{0, ncol_gpu_};
   for ( auto i = 0; i < ncol / ncol_gpu_; ++i ) {
     // Copy A and Omega
-    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_);
-    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu_);
+    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu);
+    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu);
 
     // Q := A * Omega
-    la::mm(matrix_aj_gpu_, matrix_omegas_gpu_, matrix_qjs_gpu_, 1.0, 1.0);
+    la::mm(matrix_aj_gpu, matrix_omegas_gpu, matrix_qjs_gpu, 1.0, 1.0);
 
     idxrange += ncol_gpu_;
   }
@@ -121,19 +125,19 @@ void MCNLA_ALIAS::runImpl(
   idxrange.end = ncol;
   if ( idxrange.len() > 0 ) {
     // Copy A and Omega
-    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_(""_, {0_i, idxrange.len()}));
-    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu_({0_i, idxrange.len()}, ""_));
+    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu(""_, {0_i, idxrange.len()}));
+    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu({0_i, idxrange.len()}, ""_));
 
     // Q := A * Omega
-    la::mm(matrix_aj_gpu_(""_, {0_i, idxrange.len()}),
-           matrix_omegas_gpu_({0_i, idxrange.len()}, ""_), matrix_qjs_gpu_, 1.0, 1.0);
+    la::mm(matrix_aj_gpu(""_, {0_i, idxrange.len()}),
+           matrix_omegas_gpu({0_i, idxrange.len()}, ""_), matrix_qjs_gpu, 1.0, 1.0);
   }
 
   this->toc(comm_time);
   // ====================================================================================================================== //
   // Receiving data from GPU
 
-  la::copy(matrix_qjs_gpu_, collection_qj.unfold());
+  la::copy(matrix_qjs_gpu, collection_qj.unfold());
 
   this->toc(comm_time);
 }
