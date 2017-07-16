@@ -63,7 +63,7 @@ class MCNLA_ALIAS1
                                              : "SVD Former (without V)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "forming";
+  static constexpr const char* names_ = "Projection / SVD / forming";
 
   /// The matrix W.
   DenseMatrixColMajor<_Val> matrix_w_;

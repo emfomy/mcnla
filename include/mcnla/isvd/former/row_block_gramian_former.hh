@@ -62,7 +62,7 @@ class MCNLA_ALIAS1
                                              : "Gramian Former (Row-Block Version) (without V)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "Gramian / eigen / forming";
+  static constexpr const char* names_ = "Projection / eigen / forming";
 
   /// The matrix W.
   DenseMatrixRowMajor<_Val> matrix_w_;

@@ -59,18 +59,26 @@ add_mpi_check(isvd/integrator/row_block_extrinsic_mean_integrator "Row-Block Ext
 add_mpi_check(isvd/former/svd_former "SVD Former test" "SvdFormerTest" 1)
 
 add_mpi_check(isvd/former/gramian_former "Gramian Former test" "GramianFormerTest" 1)
-add_mpi_check(isvd/former/row_block_gramian_former "Row-BLock Gramian Former test" "RowBlockGramianFormerTest" 1 2 3 4 6 12)
-add_mpi_check(isvd/former/col_block_gramian_former "Column-BLock Gramian Former test" "ColBlockGramianFormerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/former/row_block_gramian_former "Row-Block Gramian Former test" "RowBlockGramianFormerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/former/col_block_gramian_former "Column-Block Gramian Former test" "ColBlockGramianFormerTest" 1 2 3 4 6 12)
 
-add_mpi_check(isvd/former/row_block_symmetric_former "Row-BLock Symmetric Former test" "RowBlockSymmetricFormerTest" 1 2 3 4 6 12)
+add_mpi_check(isvd/former/row_block_symmetric_former "Row-Block Symmetric Former test" "RowBlockSymmetricFormerTest" 1 2 3 4 6 12)
 
 set(DEFS "${DEFS_TMP}")
 unset(DEFS_TMP)
 
 # GPU tests
 if(MCNLA_USE_GPU)
-  add_mpi_check(isvd_gpu/sketcher/row_block_gaussian_projection_sketcher_gpu "GPU Row-Block Gaussian Projection Sketcher test" "RowBlockGaussianProjectionSketcherGPUTest" 1 2 3 4 6 12)
-  add_mpi_check(isvd_gpu/sketcher/col_block_gaussian_projection_sketcher_gpu "GPU Column-Block Gaussian Projection Sketcher test" "ColBlockGaussianProjectionSketcherGPUTest" 1 2 3 4 6 12)
+
+  # integrator
+  add_mpi_check(isvd_gpu/sketcher/row_block_gaussian_projection_sketcher_gpu "GPU Row-Block Gaussian Projection Sketcher test" "RowBlockGaussianProjectionSketcherGpuTest" 1 2 3 4 6 12)
+  add_mpi_check(isvd_gpu/sketcher/col_block_gaussian_projection_sketcher_gpu "GPU Column-Block Gaussian Projection Sketcher test" "ColBlockGaussianProjectionSketcherGpuTest" 1 2 3 4 6 12)
+
+  # former
+  add_mpi_check(isvd_gpu/former/row_block_gramian_former_gpu "GPU Row-Block Gramian Former test" "RowBlockGramianFormerGpuTest" 1 2 3 4 6 12)
+  add_mpi_check(isvd_gpu/former/col_block_gramian_former_gpu "GPU Column-Block Gramian Former test" "ColBlockGramianFormerGpuTest" 1 2 3 4 6 12)
+
+  add_mpi_check(isvd_gpu/former/row_block_symmetric_former_gpu "GPU Row-Block Symmetric Former test" "RowBlockSymmetricFormerGpuTest" 1 2 3 4 6 12)
 endif()
 
 # Add rule 'build_test'

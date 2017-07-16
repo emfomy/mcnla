@@ -9,7 +9,6 @@
 #define MCNLA_ISVD_GPU_SKETCHER_COL_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_
 
 #include <mcnla/isvd_gpu/def.hpp>
-#include <mcnla/core_gpu/matrix.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

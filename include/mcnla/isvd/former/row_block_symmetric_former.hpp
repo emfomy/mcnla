@@ -105,23 +105,23 @@ void MCNLA_ALIAS::runImpl(
   double comm_moment, comm_time;
   this->tic(comm_time);
   // ====================================================================================================================== //
-  // Compute Gramian
+  // Projection
 
-  // Z := sum( Aj' * Qj )
+  // Z := A' * Q
   la::mm(matrix_aj.t(), matrix_qj, matrix_z_);
   comm_moment = utility::getTime();
   mpi::reduceScatterBlock(matrix_z_full, matrix_zj_full, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
 
-  // W := sum( Zj' * Qj )
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Compute eigen-decomposition
+
+  // W := Z' * Q
   la::mm(matrix_zj_.t(), matrix_qj, matrix_w_.sym());
   comm_moment = utility::getTime();
   mpi::allreduce(matrix_w_, MPI_SUM, mpi_comm);
   comm_time += utility::getTime() - comm_moment;
-
-  this->toc(comm_time);
-  // ====================================================================================================================== //
-  // Compute eigen-decomposition
 
   // eig(W) = W * S * W'
   syev_driver_(matrix_w_.sym(), vector_s_);

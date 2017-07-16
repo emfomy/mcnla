@@ -9,7 +9,6 @@
 #define MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HH_
 
 #include <mcnla/isvd_gpu/def.hpp>
-#include <mcnla/core_gpu/matrix.hpp>
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -67,15 +66,6 @@ class MCNLA_ALIAS1
 
   /// The matrix Omegas.
   DenseMatrixRowMajor<_Val> matrix_omegas_;
-
-  /// The GPU collection A (column-block).
-  DenseMatrixGpuRowMajor<_Val> matrix_aj_gpu_;
-
-  /// The GPU matrix Qs.
-  DenseMatrixGpuRowMajor<_Val> matrix_qjs_gpu_;
-
-  /// The GPU matrix Omegas (row-block).
-  DenseMatrixGpuRowMajor<_Val> matrix_omegas_gpu_;
 
   using BaseType::parameters_;
   using BaseType::initialized_;

@@ -93,13 +93,21 @@ void MCNLA_ALIAS::runImpl(
   double comm_time;
   this->tic(comm_time);
   // ====================================================================================================================== //
-  // Start
+  // Projection
 
   // Vt := Q' * A
   la::mm(matrix_q.t(), matrix_a, matrix_vt_);
 
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Compute SVD
+
   // svd(Vt) = W * S * Vt
   gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
+
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Form singular vectors
 
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
