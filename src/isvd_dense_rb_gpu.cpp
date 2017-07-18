@@ -6,6 +6,6 @@
 ///
 
 #define STYPE RowBlockGaussianProjectionSketcherGpu
-#define FTYPE RowBlockGramianFormerGpu
+// #define FTYPE RowBlockGramianFormerGpu
 
 #include "isvd_dense_rb.cpp"

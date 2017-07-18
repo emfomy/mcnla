@@ -6,6 +6,6 @@
 ///
 
 #define STYPE ColBlockGaussianProjectionSketcherGpu
-#define FTYPE ColBlockGramianFormerGpu
+// #define FTYPE ColBlockGramianFormerGpu
 
 #include "isvd_dense_cb.cpp"
