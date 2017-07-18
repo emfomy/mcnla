@@ -21,6 +21,8 @@ namespace mcnla {
 /// The type of MPI integer.
 using mpi_int_t = int;
 
+#define mcnla_assert_mpi_count(count)  mcnla_assert_le(count, std::numeric_limits<mpi_int_t>::max());
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @ingroup  mpi_module
 /// The MPI namespace.

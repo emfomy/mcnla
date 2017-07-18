@@ -92,7 +92,7 @@ class StageWrapper {
   inline std::ostream& outputNameImpl( std::ostream& os ) const noexcept;
 
   // Record time
-  inline void tic() noexcept;
+  inline void tic( double &comm_time ) noexcept;
   inline void toc( double &comm_time ) noexcept;
 
   MCNLA_CRTP_DERIVED(_Derived)

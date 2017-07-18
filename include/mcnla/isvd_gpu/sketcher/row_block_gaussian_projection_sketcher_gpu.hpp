@@ -9,15 +9,16 @@
 #define MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HPP_
 
 #include <mcnla/isvd_gpu/sketcher/row_block_gaussian_projection_sketcher_gpu.hh>
+#include <mcnla/core_gpu/matrix.hpp>
 #include <mcnla/core_gpu/la.hpp>
 #include <mcnla/core/random.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>
-  #define MCNLA_TMP0 Sketcher
+  #define MCNLA_ALIAS  Sketcher<RowBlockGaussianProjectionSketcherGpuTag, _Val>
+  #define MCNLA_ALIAS0 Sketcher
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  RowBlockGaussianProjectionSketcherGpu<_Val>
-  #define MCNLA_TMP0 RowBlockGaussianProjectionSketcherGpu
+  #define MCNLA_ALIAS  RowBlockGaussianProjectionSketcherGpu<_Val>
+  #define MCNLA_ALIAS0 RowBlockGaussianProjectionSketcherGpu
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +35,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters,
     const index_t seed
 ) noexcept
@@ -46,20 +47,20 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto nrow_rank        = parameters_.nrowRank();
   const auto ncol             = parameters_.ncol();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
-  index_t ncol_gpu = (kGpuMemorySize / sizeof(_Val) - (nrow_rank * dim_sketch_total + ncol * dim_sketch_total)) / nrow_rank;
+  index_t melem     = kGpuMemorySize / sizeof(_Val);
+  index_t nelem_used = nrow_rank * dim_sketch_total;
+
+  mcnla_assert_ge(melem, nelem_used);
+  index_t ncol_gpu = (melem - nelem_used) / (nrow_rank + dim_sketch_total);
   ncol_gpu_ = std::min((ncol_gpu / kBlockSizeGpu) * kBlockSizeGpu, ncol);
 
-  matrix_aj_gpu_.reconstruct(nrow_rank, ncol_gpu_);
-  matrix_qjs_gpu_.reconstruct(nrow_rank, dim_sketch_total);
-
   matrix_omegas_.reconstruct(ncol, dim_sketch_total);
-  matrix_omegas_gpu_.reconstruct(ncol, dim_sketch_total);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,17 +70,18 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const DenseMatrixRowMajor<_Val> &matrix_aj,
           DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj
 ) noexcept {
 
-  const auto mpi_comm   = parameters_.mpi_comm;
-  const auto mpi_root   = parameters_.mpi_root;
-  const auto nrow_rank  = parameters_.nrowRank();
-  const auto ncol       = parameters_.ncol();
-  const auto dim_sketch = parameters_.dimSketch();
-  const auto num_sketch = parameters_.numSketch();
+  const auto mpi_comm         = parameters_.mpi_comm;
+  const auto mpi_root         = parameters_.mpi_root;
+  const auto nrow_rank        = parameters_.nrowRank();
+  const auto ncol             = parameters_.ncol();
+  const auto dim_sketch       = parameters_.dimSketch();
+  const auto num_sketch       = parameters_.numSketch();
+  const auto dim_sketch_total = parameters_.dimSketchTotal();
 
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
@@ -89,46 +91,54 @@ void MCNLA_TMP::runImpl(
   MPI_Bcast(&seed_tmp, 1, datatype, mpi_root, mpi_comm);
   random::Streams streams(seed_tmp);
 
-  this->tic(); double comm_time = 0;
+  double comm_time;
+  this->tic(comm_time);
+  // ====================================================================================================================== //
+  // Allocate GPU memory
+
+  DenseMatrixGpuRowMajor<_Val> matrix_aj_gpu(nrow_rank, ncol_gpu_);
+  DenseMatrixGpuRowMajor<_Val> matrix_qjs_gpu(nrow_rank, dim_sketch_total);
+  DenseMatrixGpuRowMajor<_Val> matrix_omegas_gpu(ncol_gpu_, dim_sketch_total);
+
   // ====================================================================================================================== //
   // Random generating
 
   // Random sample Omega using normal Gaussian distribution
   random::gaussian(streams, matrix_omegas_.vec());
-  la::copy(matrix_omegas_, matrix_omegas_gpu_);
 
   this->toc(comm_time);
   // ====================================================================================================================== //
   // Projection
 
-  la::memset0(matrix_qjs_gpu_);
+  la::memset0(matrix_qjs_gpu);
   auto idxrange = I_{0, ncol_gpu_};
   for ( auto i = 0; i < ncol / ncol_gpu_; ++i ) {
-    // Copy A
-    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_);
+    // Copy A and Omega
+    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu);
+    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu);
 
     // Q := A * Omega
-    la::mm(matrix_aj_gpu_, matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_, 1.0, 1.0);
+    la::mm(matrix_aj_gpu, matrix_omegas_gpu, matrix_qjs_gpu, 1.0, 1.0);
 
     idxrange += ncol_gpu_;
   }
 
   idxrange.end = ncol;
   if ( idxrange.len() > 0 ) {
-    // Copy A
-    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu_(""_, {0_i, idxrange.len()}));
+    // Copy A and Omega
+    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu(""_, {0_i, idxrange.len()}));
+    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu({0_i, idxrange.len()}, ""_));
 
     // Q := A * Omega
-    la::mm(matrix_aj_gpu_(""_, {0_i, idxrange.len()}), matrix_omegas_gpu_(idxrange, ""_), matrix_qjs_gpu_, 1.0, 1.0);
-
-    idxrange += ncol_gpu_;
+    la::mm(matrix_aj_gpu(""_, {0_i, idxrange.len()}),
+           matrix_omegas_gpu({0_i, idxrange.len()}, ""_), matrix_qjs_gpu, 1.0, 1.0);
   }
 
   this->toc(comm_time);
   // ====================================================================================================================== //
   // Receiving data from GPU
 
-  la::copy(matrix_qjs_gpu_, collection_qj.unfold());
+  la::copy(matrix_qjs_gpu, collection_qj.unfold());
 
   this->toc(comm_time);
 }
@@ -138,7 +148,7 @@ void MCNLA_TMP::runImpl(
 ///
 ///
 template <typename _Val>
-std::ostream& MCNLA_TMP::outputNameImpl(
+std::ostream& MCNLA_ALIAS::outputNameImpl(
     std::ostream &os
 ) const noexcept {
   return (os << name_ << " (Power 0)");
@@ -148,7 +158,7 @@ std::ostream& MCNLA_TMP::outputNameImpl(
 /// @brief  Gets the random seed.
 ///
 template <typename _Val>
-index_t MCNLA_TMP::seed() const noexcept {
+index_t MCNLA_ALIAS::seed() const noexcept {
   return seed_;
 }
 
@@ -156,7 +166,7 @@ index_t MCNLA_TMP::seed() const noexcept {
 /// @brief  Sets the random seed.
 ///
 template <typename _Val>
-MCNLA_TMP& MCNLA_TMP::setSeed(
+MCNLA_ALIAS& MCNLA_ALIAS::setSeed(
     const index_t seed
 ) noexcept {
   seed_ = seed;
@@ -168,7 +178,7 @@ MCNLA_TMP& MCNLA_TMP::setSeed(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_GPU_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_GPU_HPP_

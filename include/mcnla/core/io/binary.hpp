@@ -11,6 +11,7 @@
 #include <mcnla/core/io/binary/def.hpp>
 #include <mcnla/core/io/binary/dense_load.hpp>
 #include <mcnla/core/io/binary/dense_save.hpp>
-#include <mcnla/core/io/binary/dense_load_col_block.hpp>
+
+#include <mcnla/core/io/binary/dense_load_block.hpp>
 
 #endif  // MCNLA_CORE_IO_BINARY_HPP_

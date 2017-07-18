@@ -36,6 +36,7 @@ inline void reduceScatterBlockImpl(
     const MPI_Op op,
     const MPI_Comm comm
 ) noexcept {
+  mcnla_assert_mpi_count(count * commSize(comm) * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Reduce_scatter_block(send.valPtr(), recv.valPtr(), count, datatype, op, comm);
 }

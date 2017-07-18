@@ -12,11 +12,11 @@
 #include <mcnla/core/matrix/kit/array_base.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 ArrS
-  #define MCNLA_TMP1 ArrS<GpuTag, _Val>
+  #define MCNLA_ALIAS0 ArrS
+  #define MCNLA_ALIAS1 ArrS<GpuTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 ArrayGpu
-  #define MCNLA_TMP1 ArrayGpu
+  #define MCNLA_ALIAS0 ArrayGpu
+  #define MCNLA_ALIAS1 ArrayGpu
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ namespace matrix {
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public ArrayBase<GpuTag, _Val> {
 
  private:
@@ -58,8 +58,8 @@ class MCNLA_TMP1
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const size_t size, const index_t offset = 0 ) noexcept;
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const size_t size, const index_t offset = 0 ) noexcept;
 
   // Gets data
   inline       _Val& operator[]( const index_t idx ) noexcept = delete;
@@ -71,7 +71,7 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_CORE_GPU_MATRIX_KIT_ARRAY_GPU_HH_

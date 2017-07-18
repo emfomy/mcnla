@@ -48,7 +48,7 @@ TEST(SvdOrthogonalizerTest, Test) {
     mcnla::la::copy(yi_true(mpi_rank*Nj + i), qi(i));
   }
 
-  // Integrates
+  // Orthogonalizes
   orthogonalizer(qi);
 
   // Gather result

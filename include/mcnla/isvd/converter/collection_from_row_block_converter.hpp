@@ -12,9 +12,9 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP Converter<CollectionFromRowBlockConverterTag, _Val>
+  #define MCNLA_ALIAS Converter<CollectionFromRowBlockConverterTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP CollectionFromRowBlockConverter<_Val>
+  #define MCNLA_ALIAS CollectionFromRowBlockConverter<_Val>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val>
-MCNLA_TMP::Converter(
+MCNLA_ALIAS::Converter(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -40,7 +40,7 @@ MCNLA_TMP::Converter(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val>
-void MCNLA_TMP::initializeImpl() noexcept {}
+void MCNLA_ALIAS::initializeImpl() noexcept {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Converts data.
@@ -49,7 +49,7 @@ void MCNLA_TMP::initializeImpl() noexcept {}
 /// @param  collection_qj  The matrix collection Qj (j-th row-block, where j is the MPI rank).
 ///
 template <typename _Val>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_qj,
     DenseMatrixCollectionColBlockRowMajor<_Val> &collection_q
 ) noexcept {
@@ -76,7 +76,8 @@ void MCNLA_TMP::runImpl(
   DenseMatrixCollectionColBlockRowMajor<_Val> collection_qj_tmp(dim_sketch_each, collection_qj.unfold());
   DenseMatrixCollectionRowBlockRowMajor<_Val> collection_q_tmp(nrow_rank, nrow_each, matrix_qs_full);
 
-  this->tic(); double comm_moment, comm_time = 0.0;
+  double comm_moment, comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
   // Start
 
@@ -97,6 +98,6 @@ void MCNLA_TMP::runImpl(
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
+#undef MCNLA_ALIAS
 
 #endif  // MCNLA_ISVD_CONVERTER_COLLECTION_FORM_ROW_BLOCK_CONVERTER_HPP_

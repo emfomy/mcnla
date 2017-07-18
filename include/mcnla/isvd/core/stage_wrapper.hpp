@@ -167,10 +167,13 @@ const char* StageWrapper<_Derived>::names() const noexcept {
 /// @brief  Record the starting time.
 ///
 template <class _Derived>
-void StageWrapper<_Derived>::tic() noexcept {
+void StageWrapper<_Derived>::tic(
+    double &comm_time
+) noexcept {
   mcnla_assert_true(moments_.empty());
   mcnla_assert_true(comm_times_.empty());
   moments_.emplace_back(utility::getTime());
+  comm_time = 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

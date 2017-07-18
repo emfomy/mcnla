@@ -33,6 +33,7 @@ inline void bcastImpl(
     const MPI_Comm comm,
     const mpi_int_t count
 ) noexcept {
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   constexpr const MPI_Datatype datatype = traits::MpiValTraits<_Val>::datatype;
   MPI_Bcast(buffer.valPtr(), count, datatype, root, comm);
 }
@@ -54,6 +55,7 @@ inline void bcast(
     const MPI_Comm comm
 ) noexcept {
   const mpi_int_t count = buffer.nelem();
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   MPI_Bcast(buffer.valPtr(),  count, traits::MpiValTraits<_Val>::datatype, root, comm);
   MPI_Bcast(buffer.idx0Ptr(), count, traits::MpiValTraits<index_t>::datatype, root, comm);
 }
@@ -65,6 +67,7 @@ inline void bcast(
     const MPI_Comm comm
 ) noexcept {
   const mpi_int_t count = buffer.nelem();
+  mcnla_assert_mpi_count(count * sizeof(_Val));
   MPI_Bcast(buffer.valPtr(),  count, traits::MpiValTraits<_Val>::datatype, root, comm);
   MPI_Bcast(buffer.idx0Ptr(), count, traits::MpiValTraits<index_t>::datatype, root, comm);
   MPI_Bcast(buffer.idx1Ptr(), count, traits::MpiValTraits<index_t>::datatype, root, comm);

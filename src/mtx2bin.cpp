@@ -23,7 +23,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Check input
   if ( argc < 4 ) {
-    std::cout << "Usage: " << argv[0] << " <mtx-file> <bin-file> <storage major (0/1)> [comment]" << std::endl << std::endl;
+    std::cout << "Usage: " << argv[0] << " <mtx file> <bin file> <storage major (0/1)> [comment]" << std::endl << std::endl;
     abort();
   }
   disp(argv[4])
@@ -33,20 +33,24 @@ int main( int argc, char **argv ) {
   if ( atoi(argv[3]) == 0 ) {
     mcnla::matrix::DenseMatrixColMajor<double> mat;
 
-    std::cout << "Reading data from " << argv[1] << "." << std::endl;
+    std::cout << "Reading data from " << argv[1] << " ........ " << std::flush;
     mcnla::io::loadMatrixMarket(mat, argv[1]);
+    std::cout << "Done!" << std::endl;
 
-    std::cout << "Writing data into " << argv[2] << "." << std::endl;
+    std::cout << "Writing data into " << argv[2] << " ........ " << std::flush;
     mcnla::io::saveBinary(mat, argv[2], argv[4]);
+    std::cout << "Done!" << std::endl;
 
   } else {
     mcnla::matrix::DenseMatrixRowMajor<double> mat;
 
-    std::cout << "Reading data from " << argv[1] << "." << std::endl;
+    std::cout << "Reading data from " << argv[1] << " ........ " << std::flush;
     mcnla::io::loadMatrixMarket(mat, argv[1]);
+    std::cout << "Done!" << std::endl;
 
-    std::cout << "Writing data into " << argv[2] << "." << std::endl;
+    std::cout << "Writing data into " << argv[2] << " ........ " << std::flush;
     mcnla::io::saveBinary(mat, argv[2], argv[4]);
+    std::cout << "Done!" << std::endl;
   }
 
 }

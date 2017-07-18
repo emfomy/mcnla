@@ -12,11 +12,11 @@
 #include <mcnla/core/matrix/collection/base/matrix_collection_wrapper.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 GeMatCollS
-  #define MCNLA_TMP1 GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>
+  #define MCNLA_ALIAS0 GeMatCollS
+  #define MCNLA_ALIAS1 GeMatCollS<RowBlockTag, _Core, DenseTag, _Val, _trans>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseMatrixCollectionRowBlockBase
-  #define MCNLA_TMP1 DenseMatrixCollectionRowBlockBase
+  #define MCNLA_ALIAS0 DenseMatrixCollectionRowBlockBase
+  #define MCNLA_ALIAS1 DenseMatrixCollectionRowBlockBase
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ using DenseMatrixCollectionRowBlockBase = GeMatCollS<RowBlockTag, _Core, DenseTa
 /// @tparam  _trans  The transpose storage layout.
 ///
 template <class _Core, typename _Val, Trans _trans>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public MatrixCollectionWrapper<DenseMatrixCollectionRowBlockBase<_Core, _Val, _trans>> {
 
   friend MatrixCollectionWrapper<DenseMatrixCollectionRowBlockBase<_Core, _Val, _trans>>;
@@ -73,14 +73,14 @@ class MCNLA_TMP1
  public:
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
-  inline MCNLA_TMP0( const SizesType sizes ) noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mrow ) noexcept;
-  inline MCNLA_TMP0( const SizesType sizes, const index_t mrow ) noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const MatrixType &data ) noexcept;
-  inline MCNLA_TMP0( const index_t nrow, const index_t mrow, const MatrixType &data ) noexcept;
-  inline MCNLA_TMP0( const CollectionType &other ) noexcept;
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const index_t ncol, const index_t nmat ) noexcept;
+  inline MCNLA_ALIAS0( const SizesType sizes ) noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const index_t ncol, const index_t nmat, const index_t mrow ) noexcept;
+  inline MCNLA_ALIAS0( const SizesType sizes, const index_t mrow ) noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const MatrixType &data ) noexcept;
+  inline MCNLA_ALIAS0( const index_t nrow, const index_t mrow, const MatrixType &data ) noexcept;
+  inline MCNLA_ALIAS0( const CollectionType &other ) noexcept;
 
   // Operators
   inline CollectionType& operator=( const CollectionType &other ) noexcept;
@@ -146,7 +146,7 @@ using DenseMatrixCollectionRowBlockRowMajor = DenseMatrixCollectionRowBlock<_Val
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_CORE_MATRIX_COLLECTION_DENSE_DENSE_MATRIX_COLLECTION_ROW_BLOCK_HH_

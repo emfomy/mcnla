@@ -14,9 +14,9 @@
 #include <mcnla/core/utility/crtp.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseDiagonalMatrixBase
+  #define MCNLA_ALIAS0 DenseDiagonalMatrixBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 DenseDiagonalMatrix
+  #define MCNLA_ALIAS0 DenseDiagonalMatrix
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,13 +66,13 @@ class DenseDiagonalMatrixBase
  public:
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const index_t size ) noexcept;
-  inline MCNLA_TMP0( const index_t size, const index_t pitch ) noexcept;
-  inline MCNLA_TMP0( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
-  inline MCNLA_TMP0( const index_t size, const index_t pitch,
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const index_t size ) noexcept;
+  inline MCNLA_ALIAS0( const index_t size, const index_t pitch ) noexcept;
+  inline MCNLA_ALIAS0( const index_t size, const index_t pitch, const index_t capacity ) noexcept;
+  inline MCNLA_ALIAS0( const index_t size, const index_t pitch,
                                   const ValArrayType &val, const index_t offset = 0 ) noexcept;
-  inline MCNLA_TMP0( const DenseDiagonalMatrixBase &other ) noexcept;
+  inline MCNLA_ALIAS0( const DenseDiagonalMatrixBase &other ) noexcept;
 
   // Operators
   inline DerivedType& operator=( const DenseDiagonalMatrixBase &other ) noexcept;
@@ -117,6 +117,6 @@ class DenseDiagonalMatrixBase
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_DENSE_DENSE_DIAGONAL_MATRIX_BASE_HH_

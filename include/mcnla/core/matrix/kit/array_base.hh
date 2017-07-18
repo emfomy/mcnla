@@ -13,9 +13,9 @@
 #include <mcnla/core/utility/crtp.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 ArrayBase
+  #define MCNLA_ALIAS0 ArrayBase
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 Array
+  #define MCNLA_ALIAS0 Array
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,9 +54,9 @@ class ArrayBase
  public:
 
   // Constructors
-  inline MCNLA_TMP0() noexcept;
-  inline MCNLA_TMP0( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
-  inline MCNLA_TMP0( const ArrayBase &other ) noexcept;
+  inline MCNLA_ALIAS0() noexcept;
+  inline MCNLA_ALIAS0( const BaseType &ptr, const index_t size, const index_t offset = 0 ) noexcept;
+  inline MCNLA_ALIAS0( const ArrayBase &other ) noexcept;
 
   // Operators
   inline       DerivedType& operator=( const ArrayBase &other ) noexcept;
@@ -89,6 +89,6 @@ class ArrayBase
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_CORE_MATRIX_KIT_ARRAY_BASE_HH_

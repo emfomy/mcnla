@@ -279,24 +279,6 @@ Parameters<_Val>& Parameters<_Val>::setNumSketchEach(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Creates matrix A.
-///
-template<typename _Val>
-DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixA() const noexcept {
-  DenseMatrixRowMajor<_Val> retval(nrowTotal(), ncol());
-  return retval({0_i, nrow()}, ""_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Creates matrix Aj (j-th row-block, where j is the MPI rank).
-///
-template<typename _Val>
-DenseMatrixRowMajor<_Val> Parameters<_Val>::createMatrixAj() const noexcept {
-  DenseMatrixRowMajor<_Val> retval(nrowEach(), ncol());
-  return retval({0_i, nrowRank()}, ""_);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Creates matrix collection Q.
 ///
 template<typename _Val>
@@ -312,6 +294,15 @@ template<typename _Val>
 DenseMatrixCollectionColBlockRowMajor<_Val> Parameters<_Val>::createCollectionQj() const noexcept {
   DenseMatrixCollectionColBlockRowMajor<_Val> retval(nrowEach(), dimSketch(), numSketch());
   return retval({0_i, nrowRank()}, ""_, ""_);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Creates matrix collection Qjp (j-th partial-sum, where j is the MPI rank).
+///
+template<typename _Val>
+DenseMatrixCollectionColBlockRowMajor<_Val> Parameters<_Val>::createCollectionQjp() const noexcept {
+  DenseMatrixCollectionColBlockRowMajor<_Val> retval(nrowTotal(), dimSketch(), numSketch());
+  return retval({0_i, nrow()}, ""_, ""_);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

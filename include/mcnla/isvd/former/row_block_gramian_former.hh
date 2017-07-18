@@ -13,11 +13,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 Former
-  #define MCNLA_TMP1 Former<RowBlockGramianFormerTag<_jobv>, _Val>
+  #define MCNLA_ALIAS0 Former
+  #define MCNLA_ALIAS1 Former<RowBlockGramianFormerTag<_jobv>, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 RowBlockGramianFormer
-  #define MCNLA_TMP1 RowBlockGramianFormer
+  #define MCNLA_ALIAS0 RowBlockGramianFormer
+  #define MCNLA_ALIAS1 RowBlockGramianFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ template <typename _Val, bool _jobv>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
 template <typename _Val, bool _jobv = false>
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public StageWrapper<RowBlockGramianFormer<_Val, _jobv>> {
 
   friend StageWrapper<RowBlockGramianFormer<_Val, _jobv>>;
@@ -58,10 +58,11 @@ class MCNLA_TMP1
  protected:
 
   /// The name.
-  static constexpr const char* name_ = "Gramian Former (Row-Block Version)";
+  static constexpr const char* name_ = _jobv ? "Gramian Former (Row-Block Version)"
+                                             : "Gramian Former (Row-Block Version) (without V)";
 
   /// The name of each part of the stage.
-  static constexpr const char* names_ = "forming";
+  static constexpr const char* names_ = "Projection / eigen / forming";
 
   /// The matrix W.
   DenseMatrixRowMajor<_Val> matrix_w_;
@@ -102,7 +103,7 @@ class MCNLA_TMP1
  public:
 
   // Constructor
-  inline MCNLA_TMP0( const Parameters<_Val> &parameters ) noexcept;
+  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters ) noexcept;
 
   // Gets matrices
   inline const DenseVector<RealValT<_Val>>& vectorS() const noexcept;
@@ -124,7 +125,7 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_ISVD_FORMER_ROW_BLOCK_GRAMIAN_FORMER_HH_

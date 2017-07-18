@@ -12,7 +12,7 @@
 #include <mcnla/isvd_gpu/sketcher.hpp>
 // #include <mcnla/isvd_gpu/orthogonalizer.hpp>
 // #include <mcnla/isvd_gpu/integrator.hpp>
-// #include <mcnla/isvd_gpu/former.hpp>
+#include <mcnla/isvd_gpu/former.hpp>
 // #include <mcnla/isvd_gpu/converter.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

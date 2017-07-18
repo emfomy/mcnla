@@ -15,21 +15,21 @@ TEST(GramianFormerTest, Test) {
 
   // Reads data
   mcnla::matrix::DenseMatrixRowMajor<ValType> a;
-  mcnla::matrix::DenseMatrixRowMajor<ValType> q_true;
+  mcnla::matrix::DenseMatrixRowMajor<ValType> q;
   mcnla::matrix::DenseMatrixColMajor<ValType> u_true;
   mcnla::io::loadMatrixMarket(a, MATRIX_A_PATH);
-  mcnla::io::loadMatrixMarket(q_true, MATRIX_Q_PATH);
+  mcnla::io::loadMatrixMarket(q, MATRIX_Q_PATH);
   mcnla::io::loadMatrixMarket(u_true, MATRIX_U_PATH);
 
   // Checks size
-  ASSERT_EQ(a.nrow(), q_true.nrow());
-  ASSERT_EQ(q_true.sizes(), u_true.sizes());
+  ASSERT_EQ(a.nrow(), q.nrow());
+  ASSERT_EQ(q.sizes(), u_true.sizes());
 
   // Gets size
   const mcnla::index_t m  = a.nrow();
   const mcnla::index_t n  = a.ncol();
-  const mcnla::index_t k  = q_true.ncol() / 2;
-  const mcnla::index_t p  = q_true.ncol() - k;
+  const mcnla::index_t k  = q.ncol() / 2;
+  const mcnla::index_t p  = q.ncol() - k;
   const mcnla::index_t Nj = 1;
 
   // Sets parameters
@@ -42,13 +42,9 @@ TEST(GramianFormerTest, Test) {
   former.initialize();
 
   // Creates matrices
-  auto q = parameters.createMatrixQbar();
   auto u_true_cut = u_true(""_, {0_i, k});
 
-  // Copies data
-  mcnla::la::copy(q_true, q);
-
-  // Integrates
+  // Forms
   former(a, q);
 
   // Gets results

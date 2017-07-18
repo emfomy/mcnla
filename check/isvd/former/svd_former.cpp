@@ -48,7 +48,7 @@ TEST(SvdFormerTest, Test) {
   // Copies data
   mcnla::la::copy(q_true, q);
 
-  // Integrates
+  // Forms
   former(a, q);
 
   // Gets results

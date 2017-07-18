@@ -12,11 +12,11 @@
 #include <mcnla/isvd/sketcher/sketcher.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 Sketcher
-  #define MCNLA_TMP1 Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
+  #define MCNLA_ALIAS0 Sketcher
+  #define MCNLA_ALIAS1 Sketcher<RowBlockGaussianProjectionSketcherTag, _Val>
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP0 RowBlockGaussianProjectionSketcher
-  #define MCNLA_TMP1 RowBlockGaussianProjectionSketcher
+  #define MCNLA_ALIAS0 RowBlockGaussianProjectionSketcher
+  #define MCNLA_ALIAS1 RowBlockGaussianProjectionSketcher
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ template <typename _Val> using RowBlockGaussianProjectionSketcher = Sketcher<Row
 /// @tparam  _Val  The value type.
 ///
 template <typename _Val>
-class MCNLA_TMP1
+class MCNLA_ALIAS1
   : public StageWrapper<RowBlockGaussianProjectionSketcher<_Val>> {
 
   friend StageWrapper<RowBlockGaussianProjectionSketcher<_Val>>;
@@ -64,7 +64,7 @@ class MCNLA_TMP1
   /// The exponent of power method.
   index_t exponent_;
 
-  /// The matrix Omega.
+  /// The matrix Omegas.
   DenseMatrixRowMajor<_Val> matrix_omegas_;
 
   using BaseType::parameters_;
@@ -76,15 +76,15 @@ class MCNLA_TMP1
  public:
 
   // Constructor
-  inline MCNLA_TMP0( const Parameters<_Val> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
+  inline MCNLA_ALIAS0( const Parameters<_Val> &parameters, const index_t seed = rand(), const index_t exponent = 0 ) noexcept;
 
   // Gets parameters
   inline index_t seed() const noexcept;
   inline index_t exponent() const noexcept;
 
   // Sets parameters
-  inline MCNLA_TMP1& setSeed( const index_t seed ) noexcept;
-  inline MCNLA_TMP1& setExponent( const index_t exponent ) noexcept;
+  inline MCNLA_ALIAS1& setSeed( const index_t seed ) noexcept;
+  inline MCNLA_ALIAS1& setExponent( const index_t exponent ) noexcept;
 
 
  protected:
@@ -105,7 +105,7 @@ class MCNLA_TMP1
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP0
-#undef MCNLA_TMP1
+#undef MCNLA_ALIAS0
+#undef MCNLA_ALIAS1
 
 #endif  // MCNLA_ISVD_SKETCHER_ROW_BLOCK_GAUSSIAN_PROJECTION_SKETCHER_HH_

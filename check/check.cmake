@@ -53,7 +53,7 @@ macro(_ADD_MPI_CHECK checktype)
     # Add rule
     add_custom_target(
       run_test_${checkname}_${procs}
-      COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} $<TARGET_FILE:${checktarget}>
+      COMMAND OMP_NUM_THREADS=4 ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} ${procs} $<TARGET_FILE:${checktarget}>
       DEPENDS ${checktarget}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Run test ${checkpath}"

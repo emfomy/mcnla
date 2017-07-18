@@ -12,11 +12,11 @@
 #include <mcnla/core/la.hpp>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  Former<SvdFormerTag<_jobv>, _Val>
-  #define MCNLA_TMP0 Former
+  #define MCNLA_ALIAS  Former<SvdFormerTag<_jobv>, _Val>
+  #define MCNLA_ALIAS0 Former
 #else  // DOXYGEN_SHOULD_SKIP_THIS
-  #define MCNLA_TMP  SvdFormer<_Val, _jobv>
-  #define MCNLA_TMP0 SvdFormer
+  #define MCNLA_ALIAS  SvdFormer<_Val, _jobv>
+  #define MCNLA_ALIAS0 SvdFormer
 #endif  // DOXYGEN_SHOULD_SKIP_THIS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace isvd {
 /// @copydoc  mcnla::isvd::StageWrapper::StageWrapper
 ///
 template <typename _Val, bool _jobv>
-MCNLA_TMP::MCNLA_TMP0(
+MCNLA_ALIAS::MCNLA_ALIAS0(
     const Parameters<_Val> &parameters
 ) noexcept
   : BaseType(parameters) {}
@@ -42,7 +42,7 @@ MCNLA_TMP::MCNLA_TMP0(
 /// @copydoc  mcnla::isvd::StageWrapper::initialize
 ///
 template <typename _Val, bool _jobv>
-void MCNLA_TMP::initializeImpl() noexcept {
+void MCNLA_ALIAS::initializeImpl() noexcept {
 
   const auto nrow       = parameters_.nrow();
   const auto ncol       = parameters_.ncol();
@@ -68,7 +68,7 @@ void MCNLA_TMP::initializeImpl() noexcept {
 /// @param  matrix_q  The matrix Q.
 ///
 template <typename _Val, bool _jobv> template <class _Matrix>
-void MCNLA_TMP::runImpl(
+void MCNLA_ALIAS::runImpl(
     const _Matrix &matrix_a,
     const DenseMatrixRowMajor<_Val> &matrix_q
 ) noexcept {
@@ -90,15 +90,24 @@ void MCNLA_TMP::runImpl(
   mcnla_assert_eq(matrix_a.sizes(), std::make_tuple(nrow, ncol));
   mcnla_assert_eq(matrix_q.sizes(), std::make_tuple(nrow, dim_sketch));
 
-  this->tic(); double comm_time = 0.0;
+  double comm_time;
+  this->tic(comm_time);
   // ====================================================================================================================== //
-  // Start
+  // Projection
 
   // Vt := Q' * A
   la::mm(matrix_q.t(), matrix_a, matrix_vt_);
 
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Compute SVD
+
   // svd(Vt) = W * S * Vt
   gesvd_driver_(matrix_vt_, vector_s_, matrix_w_, matrix_empty_);
+
+  this->toc(comm_time);
+  // ====================================================================================================================== //
+  // Form singular vectors
 
   // U := Q * W
   la::mm(matrix_q, matrix_w_cut_, matrix_u_cut_);
@@ -110,7 +119,7 @@ void MCNLA_TMP::runImpl(
 /// @brief  Gets the singular values.
 ///
 template <typename _Val, bool _jobv>
-const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
+const DenseVector<RealValT<_Val>>& MCNLA_ALIAS::vectorS() const noexcept {
   mcnla_assert_true(this->isComputed());
   return vector_s_cut_;
 }
@@ -119,7 +128,7 @@ const DenseVector<RealValT<_Val>>& MCNLA_TMP::vectorS() const noexcept {
 /// @brief  Gets the left singular vectors.
 ///
 template <typename _Val, bool _jobv>
-const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
+const DenseMatrixColMajor<_Val>& MCNLA_ALIAS::matrixU() const noexcept {
   mcnla_assert_true(this->isComputed());
   return matrix_u_cut_;
 }
@@ -128,7 +137,7 @@ const DenseMatrixColMajor<_Val>& MCNLA_TMP::matrixU() const noexcept {
 /// @brief  Gets the right singular vectors.
 ///
 template <typename _Val, bool _jobv>
-const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixV() const noexcept {
+const DenseMatrixRowMajor<_Val>& MCNLA_ALIAS::matrixV() const noexcept {
   mcnla_assert_true(this->isComputed());
   mcnla_assert_true(_jobv);
   return matrix_vt_cut_.t();
@@ -138,7 +147,7 @@ const DenseMatrixRowMajor<_Val>& MCNLA_TMP::matrixV() const noexcept {
 
 }  // namespace mcnla
 
-#undef MCNLA_TMP
-#undef MCNLA_TMP0
+#undef MCNLA_ALIAS
+#undef MCNLA_ALIAS0
 
 #endif  // MCNLA_ISVD_FORMER_SVD_FORMER_HPP_

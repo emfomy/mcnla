@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file    src/isvd_dense.cpp
-/// @brief   The iSVD driver for dense matrix
+/// @file    src/isvd_dense_cb.cpp
+/// @brief   The iSVD driver for dense matrix (column-block version)
 ///
 /// @author  Mu Yang <<emfomy@gmail.com>>
 ///
@@ -18,7 +18,7 @@
 #define IO_LOAD_COL_BLOCK FUNCTION_NAME(load, FILETYPE, ColBlock)
 
 #ifndef STYPE
-#define STYPE RowBlockGaussianProjectionSketcher
+#define STYPE ColBlockGaussianProjectionSketcher
 #endif  // STYPE
 
 #ifndef OTYPE
@@ -30,12 +30,12 @@
 #endif  // ITYPE
 
 #ifndef FTYPE
-#define FTYPE RowBlockGramianFormer
+#define FTYPE ColBlockGramianFormer
 #endif  // FTYPE
 
-void check( const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
-            const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_uj,
-            const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_v,
+void check(       mcnla::matrix::DenseMatrixColMajor<double> &matrix_ajc,
+            const mcnla::matrix::DenseMatrixColMajor<double> &matrix_u,
+            const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_vj,
             const mcnla::matrix::DenseVector<double> &vector_s,
                   double &frerr,
             const MPI_Comm mpi_comm ) noexcept;
@@ -59,7 +59,7 @@ int main( int argc, char **argv ) {
     std::cout << "MCNLA "
               << MCNLA_MAJOR_VERSION << "."
               << MCNLA_MINOR_VERSION << "."
-              << MCNLA_PATCH_VERSION << " iSVD driver for DenseMatrix" << std::endl << std::endl;
+              << MCNLA_PATCH_VERSION << " iSVD driver for DenseMatrix (column-block version)" << std::endl << std::endl;
   }
 
   // ====================================================================================================================== //
@@ -67,7 +67,7 @@ int main( int argc, char **argv ) {
   if ( argc < 5 ) {
     if ( mpi_rank == mpi_root ) {
       std::cout << "Usage: " << argv[0]
-                << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <V-mtx-file>"
+                << " <A-mtx-file> <S-mtx-file> <U-mtx-file> <skip>"
                    " [#sketch] [rank] [over-sampling-rank] [tolerance] [maxiter]"
                 << std::endl << std::endl;
       MPI_Abort(mpi_comm, 1);
@@ -78,7 +78,7 @@ int main( int argc, char **argv ) {
   // ====================================================================================================================== //
   // Load matrix size
   mcnla::index_t m, n;
-  mcnla::io::IO_LOAD_SIZE(m, n, argv[1]);
+  mcnla::io::IO_LOAD_SIZE<mcnla::Trans::NORMAL>(m, n, argv[1]);
 
   // ====================================================================================================================== //
   // Initialize random seed
@@ -124,9 +124,16 @@ int main( int argc, char **argv ) {
   mcnla::isvd::STYPE<double> sketcher(parameters);
   mcnla::isvd::OTYPE<double> orthogonalizer(parameters);
   mcnla::isvd::ITYPE<double> integrator(parameters);
+#ifndef NJOBV
   mcnla::isvd::FTYPE<double, true> former(parameters);
-  mcnla::isvd::MatrixFromRowBlockConverter<double> fe_converter(parameters);
-  mcnla::isvd::MatrixFromColBlockConverter<double> fe_converter2(parameters);
+#else  // NJOBV
+  mcnla::isvd::FTYPE<double, false> former(parameters);
+#endif  // NJOBV
+  mcnla::isvd::CollectionFromPartialSumToRowBlockConverter<double> so_converter(parameters);
+  mcnla::isvd::MatrixFromRowBlockToAllConverter<double> if_converter(parameters);
+#ifndef NJOBV
+  mcnla::isvd::MatrixFromColBlockToAllConverter<double> fe_converter2(parameters);
+#endif  // NJOBV
 
   // ====================================================================================================================== //
   // Initialize stages
@@ -136,8 +143,11 @@ int main( int argc, char **argv ) {
   orthogonalizer.initialize();
   integrator.initialize();
   former.initialize();
-  fe_converter.initialize();
+  so_converter.initialize();
+  if_converter.initialize();
+#ifndef NJOBV
   fe_converter2.initialize();
+#endif  // NJOBV
 
   // ====================================================================================================================== //
   // Display stage names
@@ -153,23 +163,26 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     std::cout << "Reading data from " << argv[1] << "." << std::endl;
   }
-  mcnla::matrix::DenseMatrixRowMajor<double> matrix_aj;
+  mcnla::matrix::DenseMatrixColMajor<double> matrix_ajc;
   {
     double timer = 0;
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::tic(timer);
     }
-    mcnla::io::IO_LOAD_COL_BLOCK(matrix_aj.t(), argv[1], parameters.rowrange());
+    mcnla::io::IO_LOAD_COL_BLOCK(matrix_ajc, argv[1], parameters.colrange());
     if ( mpi_rank == mpi_root ) {
       mcnla::utility::dispToc(timer); std::cout << std::endl;
     }
   }
 
   // Allocate variables
-  auto collection_qj = parameters.createCollectionQj();
-  auto matrix_qj     = parameters.createMatrixQbarj();
-  auto matrix_u      = parameters.createMatrixU();
+  auto collection_qj  = parameters.createCollectionQj();
+  auto collection_qjp = parameters.createCollectionQjp();
+  auto matrix_q       = parameters.createMatrixQbar();
+  auto matrix_qj      = parameters.createMatrixQbarj();
+#ifndef NJOBV
   auto matrix_v      = parameters.createMatrixV();
+#endif  // NJOBV
 
   // ====================================================================================================================== //
   // Run iSVD
@@ -179,7 +192,11 @@ int main( int argc, char **argv ) {
   }
 
   if ( mpi_rank == mpi_root ) { std::cout << "Sketching ............................. " << std::flush; }
-  sketcher(matrix_aj, collection_qj);
+  sketcher(matrix_ajc, collection_qjp);
+  if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+
+  if ( mpi_rank == mpi_root ) { std::cout << "Scattering ............................ " << std::flush; }
+  so_converter(collection_qjp, collection_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
   if ( mpi_rank == mpi_root ) { std::cout << "Orthogonalization ..................... " << std::flush; }
@@ -190,34 +207,43 @@ int main( int argc, char **argv ) {
   integrator(collection_qj, matrix_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
-  if ( mpi_rank == mpi_root ) { std::cout << "Forming ............................... " << std::flush; }
-  former(matrix_aj, matrix_qj);
+  if ( mpi_rank == mpi_root ) { std::cout << "Gathering ............................. " << std::flush; }
+  if_converter(matrix_qj, matrix_q);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
-  auto &&vector_s  = former.vectorS();
-  auto &&matrix_uj = former.matrixUj();
-  auto &&matrix_vj = former.matrixVj();
+  if ( mpi_rank == mpi_root ) { std::cout << "Forming ............................... " << std::flush; }
+  former(matrix_ajc, matrix_q);
+  if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
-  if ( mpi_rank == mpi_root ) { std::cout << "Gathering ............................. " << std::flush; }
-  fe_converter(matrix_uj, matrix_u);
+  auto &&vector_s = former.vectorS();
+  auto &&matrix_u = former.matrixU();
+
+#ifndef NJOBV
+  auto &&matrix_vj = former.matrixVj();
+#endif  // NJOBV
+
+#ifndef NJOBV
+  if ( mpi_rank == mpi_root ) { std::cout << "Gathering V ........................... " << std::flush; }
   fe_converter2(matrix_vj.t(), matrix_v.t());
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+#endif  // NJOBV
 
   // ====================================================================================================================== //
   // Display results
+#ifndef NJOBV
   double frerr;
-  mcnla::mpi::bcast(matrix_v, mpi_root, mpi_comm);
-  check(matrix_aj, matrix_uj, matrix_v, vector_s, frerr, mpi_comm);
+  check(matrix_ajc, matrix_u, matrix_vj, vector_s, frerr, mpi_comm);
+#endif  // NJOBV
   if ( mpi_rank == mpi_root ) {
     auto iter    = integrator.iteration();
     auto time_s  = sketcher.time();
     auto time_o  = orthogonalizer.time();
     auto time_i  = integrator.time();
     auto time_f  = former.time();
-    auto time_so = 0.0;
+    auto time_so = so_converter.time();
     auto time_oi = 0.0;
-    auto time_if = 0.0;
-    auto time_fe = fe_converter.time();
+    auto time_if = if_converter.time();
+    auto time_fe = 0.0;
     auto time    = time_s + time_o + time_i + time_if + time_f + time_fe;
     std::cout << "Average total computing time:   " << time    << " seconds." << std::endl;
     std::cout << "Average sketching time:         " << time_s  << " seconds." << std::endl;
@@ -230,9 +256,11 @@ int main( int argc, char **argv ) {
     std::cout << "Average converting time (F->@): " << time_if << " seconds." << std::endl;
     std::cout << std::endl;
     std::cout << "Iteration = " << iter << std::endl;
+#ifndef NJOBV
     std::cout << "Error     = " << frerr << std::endl;
     std::cout << std::endl;
     std::cout << "Error := norm(A - Uk Sk Vk')_F / norm(A)_F" << std::endl;
+#endif  // NJOBV
     std::cout << std::endl;
   }
 
@@ -245,6 +273,9 @@ int main( int argc, char **argv ) {
     std::cout << "Write U into " << argv[3] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_u, argv[3]);
 
+#ifdef NJOBV
+    mcnla::matrix::DenseMatrixRowMajor<double> matrix_v;
+#endif  // NJOBV
     std::cout << "Write V into " << argv[4] << "." << std::endl;
     mcnla::io::saveMatrixMarket(matrix_v, argv[4]);
 
@@ -261,26 +292,27 @@ int main( int argc, char **argv ) {
 /// Check the result (A)
 ///
 void check(
-    const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_aj,
-    const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_uj,
-    const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_v,
+          mcnla::matrix::DenseMatrixColMajor<double> &matrix_ajc,
+    const mcnla::matrix::DenseMatrixColMajor<double> &matrix_u,
+    const mcnla::matrix::DenseMatrixRowMajor<double> &matrix_vj,
     const mcnla::matrix::DenseVector<double>         &vector_s,
           double &frerr,
     const MPI_Comm mpi_comm
 ) noexcept {
 
-  // A_tmp := A, U_tmp = U
-  auto matrix_aj_tmp = matrix_aj.copy();
-  auto matrix_uj_tmp = matrix_uj.copy();
+  // Compute norm(A)_F
+  mcnla::matrix::DenseVector<double> nrms(2);
+  nrms(1) = mcnla::la::dot(matrix_ajc.vec());
 
-  // A_tmp -= U * S * V'
-  mcnla::la::mm(""_, vector_s.diag(), matrix_uj_tmp);
-  mcnla::la::mm(matrix_uj_tmp, matrix_v.t(), matrix_aj_tmp, -1.0, 1.0);
+  // U_tmp = U
+  auto matrix_u_tmp = matrix_u.copy();
+
+  // A -= U * S * V'
+  mcnla::la::mm(""_, vector_s.diag(), matrix_u_tmp);
+  mcnla::la::mm(matrix_u_tmp, matrix_vj.t(), matrix_ajc, -1.0, 1.0);
 
   // frerr := norm(A_tmp)_F / norm(A)_F
-  mcnla::matrix::DenseVector<double> nrms(2);
-  nrms(0) = mcnla::la::dot(matrix_aj_tmp.vec());
-  nrms(1) = mcnla::la::dot(matrix_aj.vec());
+  nrms(0) = mcnla::la::dot(matrix_ajc.vec());
   mcnla::mpi::allreduce(nrms, MPI_SUM, mpi_comm);
   frerr = std::sqrt(nrms(0)) / std::sqrt(nrms(1));
 }

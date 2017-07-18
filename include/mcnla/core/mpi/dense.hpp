@@ -8,6 +8,7 @@
 #ifndef MCNLA_CORE_MATRIX_MPI_DENSE_HPP_
 #define MCNLA_CORE_MATRIX_MPI_DENSE_HPP_
 
+#include <mcnla/core/mpi/dense/allgather.hpp>
 #include <mcnla/core/mpi/dense/allreduce.hpp>
 #include <mcnla/core/mpi/dense/alltoall.hpp>
 #include <mcnla/core/mpi/dense/bcast.hpp>

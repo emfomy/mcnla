@@ -80,8 +80,7 @@ template <typename _Val>
 inline void omatcopy(
     const char ordering, const char trans, const index_t rows, const index_t cols, const _Val alpha,
     const _Val* a, const index_t lda, _Val* b, index_t ldb
-) noexcept {
-}
+) noexcept;
 
 #endif  // MCNLA_USE_MKL
 //@}
