@@ -83,7 +83,7 @@ if(MCNLA_OMP)
 
   find_package(OpenMPLib ${findtype})
   if(OpenMPLib_FOUND)
-    list(APPEND LIBS "${OpenMP_LIBRARIES}")
+    list(APPEND LIBS "${OpenMP_LIBRARIES}" "pthread")
   endif()
 
   unset(OpenMP)
@@ -93,7 +93,7 @@ elseif(MCNLA_USE_GPU)
   find_package(OpenMP ${findtype})
   find_package(OpenMPLib ${findtype})
   if(OpenMPLib_FOUND)
-    list(APPEND LIBS "pthread" "${OpenMP_LIBRARIES}")
+    list(APPEND LIBS "${OpenMP_LIBRARIES}" "pthread")
   endif()
 
   unset(OMP_LIBRARY)
