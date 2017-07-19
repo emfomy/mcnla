@@ -189,9 +189,9 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     std::cout << "Start iSVD." << std::endl << std::endl;
     std::cout << std::fixed << std::setprecision(6);
+  }
 
   MPI_Barrier(mpi_comm);
-  }
 
   if ( mpi_rank == mpi_root ) { std::cout << "Sketching ............................. " << std::flush; }
   sketcher(matrix_ajc, collection_qjp);

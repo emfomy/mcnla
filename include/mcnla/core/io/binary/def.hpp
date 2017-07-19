@@ -115,13 +115,16 @@ void checkHeader(
     std::istream &fin
 ) noexcept {
 
+  const char* str0;
+  static_cast<void>(str0);
+
   // Skip header & comment & storage
   fin.seekg(kHeaderLen + kCommentLen, std::ios_base::cur);
 
   // Check storage type
   {
     char str[kStorageLen];
-    auto str0 = traits::IoCoreTraits<_Core>::str;
+    str0 = traits::IoCoreTraits<_Core>::str;
     fin.read(str, kStorageLen);
     mcnla_assert_false(strncmp(str, str0, strlen(str0)));
   }
@@ -129,7 +132,7 @@ void checkHeader(
   // Check value type
   if ( !std::is_same<_Val, void>::value ) {
     char str[kTypeLen];
-    auto str0 = traits::IoValTraits<_Val>::str;
+    str0 = traits::IoValTraits<_Val>::str;
     fin.read(str, kTypeLen);
     mcnla_assert_false(strncmp(str, str0, strlen(str0)));
   } else {
@@ -139,7 +142,7 @@ void checkHeader(
   // Check index type
   if ( !std::is_same<_Core, DenseTag>::value ) {
     char str[kTypeLen];
-    auto str0 = traits::IoValTraits<index_t>::str;
+    str0 = traits::IoValTraits<index_t>::str;
     fin.read(str, kTypeLen);
     mcnla_assert_false(strncmp(str, str0, strlen(str0)));
   } else {

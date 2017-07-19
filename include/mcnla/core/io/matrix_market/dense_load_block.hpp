@@ -68,6 +68,7 @@ void loadMatrixMarketColBlock(
   auto j0 = colrange.begin;
   auto j1 = colrange.end;
   auto js = colrange.len();
+  static_cast<void>(j1);
 
   // Open file
   std::ifstream fin(file);

@@ -75,6 +75,7 @@ void loadBinaryColBlock(
   auto j0 = colrange.begin;
   auto j1 = colrange.end;
   auto js = colrange.len();
+  static_cast<void>(j1);
 
   // Open file
   std::ifstream fin(file);
@@ -95,6 +96,7 @@ void loadBinaryColBlock(
   index_t dim1 = num;
   mcnla_assert_ge(j0, 0);
   mcnla_assert_le(j1, dim1);
+  static_cast<void>(dim1);
 
   // Allocate memory
   if ( colblock.isEmpty() ) {
