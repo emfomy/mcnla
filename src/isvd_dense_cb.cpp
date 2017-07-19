@@ -189,31 +189,45 @@ int main( int argc, char **argv ) {
   if ( mpi_rank == mpi_root ) {
     std::cout << "Start iSVD." << std::endl << std::endl;
     std::cout << std::fixed << std::setprecision(6);
+
+  MPI_Barrier(mpi_comm);
   }
 
   if ( mpi_rank == mpi_root ) { std::cout << "Sketching ............................. " << std::flush; }
   sketcher(matrix_ajc, collection_qjp);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
+  MPI_Barrier(mpi_comm);
+
   if ( mpi_rank == mpi_root ) { std::cout << "Scattering ............................ " << std::flush; }
   so_converter(collection_qjp, collection_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+
+  MPI_Barrier(mpi_comm);
 
   if ( mpi_rank == mpi_root ) { std::cout << "Orthogonalization ..................... " << std::flush; }
   orthogonalizer(collection_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
+  MPI_Barrier(mpi_comm);
+
   if ( mpi_rank == mpi_root ) { std::cout << "Integration ........................... " << std::flush; }
   integrator(collection_qj, matrix_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+
+  MPI_Barrier(mpi_comm);
 
   if ( mpi_rank == mpi_root ) { std::cout << "Gathering ............................. " << std::flush; }
   if_converter(matrix_qj, matrix_q);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
+  MPI_Barrier(mpi_comm);
+
   if ( mpi_rank == mpi_root ) { std::cout << "Forming ............................... " << std::flush; }
   former(matrix_ajc, matrix_q);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+
+  MPI_Barrier(mpi_comm);
 
   auto &&vector_s = former.vectorS();
   auto &&matrix_u = former.matrixU();
