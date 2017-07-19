@@ -201,7 +201,11 @@ index_t Parameters<_Val>::numSketchEach() const noexcept {
 /// @brief  Sets the sizes of the matrix.
 ///
 template<typename _Val> template <class _Matrix>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 Parameters<_Val>& Parameters<_Val>::setSize(
+#else
+Parameters& Parameters<_Val>::setSize(
+#endif  // DOXYGEN_SHOULD_SKIP_THIS
     const _Matrix &matrix
 ) noexcept {
   return setSize(matrix.nrow(), matrix.ncol());

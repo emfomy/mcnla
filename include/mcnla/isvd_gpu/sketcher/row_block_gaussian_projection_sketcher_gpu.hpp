@@ -83,6 +83,9 @@ void MCNLA_ALIAS::runImpl(
   const auto num_sketch       = parameters_.numSketch();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
+  static_cast<void>(dim_sketch);
+  static_cast<void>(num_sketch);
+
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
