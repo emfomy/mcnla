@@ -16,7 +16,7 @@ if(MCNLA_BUILD_BIN)
     message(
       FATAL_ERROR
       "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. "
-      "Please use a diffferent C++ compiler."
+      "Please use a different C++ compiler."
     )
   endif()
 endif()

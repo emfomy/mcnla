@@ -33,7 +33,7 @@ namespace detail {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Convert transpose option to char.
 ///
-template<typename _Val>
+template <typename _Val>
 static constexpr char toTransChar( const Trans trans ) {
   return !isTrans(trans) ? ((isConj(trans) && traits::ValTraits<_Val>::is_complex) ? 'R' : 'N')
                          : ((isConj(trans) && traits::ValTraits<_Val>::is_complex) ? 'C' : 'T');
