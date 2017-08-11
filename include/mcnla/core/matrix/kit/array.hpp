@@ -45,7 +45,7 @@ MCNLA_ALIAS::MCNLA_ALIAS0(
     const index_t offset
 ) noexcept
   : BaseType(std::shared_ptr<_Val>(utility::malloc<_Val>(size), utility::free<_Val>), size, offset) {
-  mcnla_assert_eq(bool(size), bool(**this));
+  mcnla_assert_false(bool(size) && !bool(**this));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
