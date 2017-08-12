@@ -184,21 +184,31 @@ int main( int argc, char **argv ) {
     std::cout << std::fixed << std::setprecision(6);
   }
 
+  MPI_Barrier(mpi_comm);
+
   if ( mpi_rank == mpi_root ) { std::cout << "Sketching ............................. " << std::flush; }
   sketcher(matrix_aj, collection_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+
+  MPI_Barrier(mpi_comm);
 
   if ( mpi_rank == mpi_root ) { std::cout << "Orthogonalization ..................... " << std::flush; }
   orthogonalizer(collection_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
+  MPI_Barrier(mpi_comm);
+
   if ( mpi_rank == mpi_root ) { std::cout << "Integration ........................... " << std::flush; }
   integrator(collection_qj, matrix_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
 
+  MPI_Barrier(mpi_comm);
+
   if ( mpi_rank == mpi_root ) { std::cout << "Forming ............................... " << std::flush; }
   former(matrix_aj, matrix_qj);
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+
+  MPI_Barrier(mpi_comm);
 
   auto &&vector_s  = former.vectorS();
   auto &&matrix_uj = former.matrixUj();
@@ -212,6 +222,8 @@ int main( int argc, char **argv ) {
   fe_converter2(matrix_vj.t(), matrix_v.t());
 #endif  // NJOBV
   if ( mpi_rank == mpi_root ) { std::cout << "Done!" << std::endl; }
+
+  MPI_Barrier(mpi_comm);
 
   // ====================================================================================================================== //
   // Display results

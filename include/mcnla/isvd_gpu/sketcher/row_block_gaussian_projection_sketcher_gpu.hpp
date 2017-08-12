@@ -59,8 +59,6 @@ void MCNLA_ALIAS::initializeImpl() noexcept {
   mcnla_assert_ge(melem, nelem_used);
   index_t ncol_gpu = (melem - nelem_used) / (nrow_rank + dim_sketch_total);
   ncol_gpu_ = std::min((ncol_gpu / kBlockSizeGpu) * kBlockSizeGpu, ncol);
-
-  matrix_omegas_.reconstruct(ncol, dim_sketch_total);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +81,9 @@ void MCNLA_ALIAS::runImpl(
   const auto num_sketch       = parameters_.numSketch();
   const auto dim_sketch_total = parameters_.dimSketchTotal();
 
+  static_cast<void>(dim_sketch);
+  static_cast<void>(num_sketch);
+
   mcnla_assert_eq(matrix_aj.sizes(),     std::make_tuple(nrow_rank, ncol));
   mcnla_assert_eq(collection_qj.sizes(), std::make_tuple(nrow_rank, dim_sketch, num_sketch));
 
@@ -99,12 +100,7 @@ void MCNLA_ALIAS::runImpl(
   DenseMatrixGpuRowMajor<_Val> matrix_aj_gpu(nrow_rank, ncol_gpu_);
   DenseMatrixGpuRowMajor<_Val> matrix_qjs_gpu(nrow_rank, dim_sketch_total);
   DenseMatrixGpuRowMajor<_Val> matrix_omegas_gpu(ncol_gpu_, dim_sketch_total);
-
-  // ====================================================================================================================== //
-  // Random generating
-
-  // Random sample Omega using normal Gaussian distribution
-  random::gaussian(streams, matrix_omegas_.vec());
+  DenseMatrixRowMajor<_Val>    matrix_omegas(ncol_gpu_, dim_sketch_total);
 
   this->toc(comm_time);
   // ====================================================================================================================== //
@@ -113,9 +109,12 @@ void MCNLA_ALIAS::runImpl(
   la::memset0(matrix_qjs_gpu);
   auto idxrange = I_{0, ncol_gpu_};
   for ( auto i = 0; i < ncol / ncol_gpu_; ++i ) {
+    // Random sample Omega using normal Gaussian distribution
+    random::gaussian(streams, matrix_omegas.vec());
+
     // Copy A and Omega
     la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu);
-    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu);
+    la::copy(matrix_omegas, matrix_omegas_gpu);
 
     // Q := A * Omega
     la::mm(matrix_aj_gpu, matrix_omegas_gpu, matrix_qjs_gpu, 1.0, 1.0);
@@ -125,13 +124,17 @@ void MCNLA_ALIAS::runImpl(
 
   idxrange.end = ncol;
   if ( idxrange.len() > 0 ) {
+    auto idxrange0 = I_{0_i, idxrange.len()};
+
+    // Random sample Omega using normal Gaussian distribution
+    random::gaussian(streams, matrix_omegas.vec());
+
     // Copy A and Omega
-    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu(""_, {0_i, idxrange.len()}));
-    la::copy(matrix_omegas_(idxrange, ""_), matrix_omegas_gpu({0_i, idxrange.len()}, ""_));
+    la::copy(matrix_aj(""_, idxrange), matrix_aj_gpu(""_, idxrange0));
+    la::copy(matrix_omegas(idxrange0, ""_), matrix_omegas_gpu(idxrange0, ""_));
 
     // Q := A * Omega
-    la::mm(matrix_aj_gpu(""_, {0_i, idxrange.len()}),
-           matrix_omegas_gpu({0_i, idxrange.len()}, ""_), matrix_qjs_gpu, 1.0, 1.0);
+    la::mm(matrix_aj_gpu(""_, idxrange0), matrix_omegas_gpu(idxrange0, ""_), matrix_qjs_gpu, 1.0, 1.0);
   }
 
   this->toc(comm_time);

@@ -14,6 +14,9 @@ macro(SET_TARGET target files)
   install(TARGETS ${target} RUNTIME DESTINATION ${BIN_FOLDER})
 endmacro()
 
+# Disable asserts
+list(APPEND DEFS "NDEBUG")
+
 # Set target
 set(DEFS_TMP "${DEFS}")
 list(REMOVE_ITEM DEFS "MCNLA_USE_GPU")

@@ -25,7 +25,7 @@ macro(_ADD_REPORT)
   # Add rule
   add_custom_target(
     run_report_${reportname}
-    COMMAND bash script/${reporttype}.sh $<TARGET_FILE:${reporttarget}>
+    COMMAND bash ${CMAKE_CURRENT_BINARY_DIR}/script/${reporttype}.sh $<TARGET_FILE:${reporttarget}>
     DEPENDS ${reporttarget}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Run report ${reportname}"

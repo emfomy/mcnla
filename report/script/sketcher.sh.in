@@ -1,0 +1,36 @@
+#!/bin/bash
+
+bin=$1
+
+function run() {
+	echo ================================================================
+	echo
+	echo P = $P, N = $N, m = $m, n = $n, k = $k
+	echo
+	@MPIEXEC@ @MPIEXEC_NUMPROC_FLAG@ $P $bin $N $m $n $k
+	echo
+	echo ================================================================
+}
+
+Ps=( 1 2 4 )
+m0=e3
+n=${Ps[-1]}$m0
+k=100
+
+for P in ${Ps[@]}; do
+	N=${Ps[-1]}
+	m=1$m0
+	run
+done
+
+for P in ${Ps[@]::${#Ps[@]}-1}; do
+	N=$P
+	m=1$m0
+	run
+done
+
+for P in ${Ps[@]:1}; do
+	N=${Ps[-1]}
+	m=$P$m0
+	run
+done
