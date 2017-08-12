@@ -270,8 +270,8 @@ void create(
   mcnla::random::gaussian(streams, matrix_v.vec());
 
   // Orthogonalize U & V
-  mcnla::la::gesvd<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
-  mcnla::la::gesvd<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
+  mcnla::la::geqrfg<'O', 'N'>(matrix_u, vector_s, matrix_empty, matrix_empty);
+  mcnla::la::geqrfg<'O', 'N'>(matrix_v, vector_s, matrix_empty, matrix_empty);
 
   // Copy U
   mcnla::la::copy(matrix_u(""_, {0_i, rank}), matrix_u_true);
