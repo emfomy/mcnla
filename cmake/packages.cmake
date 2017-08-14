@@ -1,6 +1,6 @@
 # Set complier flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall -Wextra -pedantic")
-# set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -pedantic")
+set(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall -Wextra -pedantic -Wl,--no-as-needed")
+# set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -g -fsanitize=address -Wall -Wextra -pedantic -Wl,--no-as-needed")
 
 if(MCNLA_BUILD_BIN)
   set(findtype REQUIRED)
