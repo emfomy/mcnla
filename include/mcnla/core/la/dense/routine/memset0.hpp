@@ -31,7 +31,7 @@ inline void memset0(
   DenseVector<_Val> &x
 ) noexcept {
   mcnla_assert_true(x.isShrunk());
-  std::memset(x.valPtr(), x.nelem());
+  utility::memset0(x.valPtr(), x.nelem());
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
