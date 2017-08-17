@@ -136,10 +136,10 @@ void MCNLA_ALIAS::runImpl(
     la::copy(matrix_gcj_, matrix_xcj);
     la::mm(matrix_qcj, matrix_dc_, matrix_xcj, -1.0, 1.0);
 
-    // taug := tau0; zeta := 1; phi := 1/2N * norm( Bc )_F
+    // taug := tau0; zeta := 1; phi := 1/2N * norm( Bc )_F^2
     taug = tau0_, zeta = 1.0, phi = one_2n * la::dot(matrix_bc.vec());
 
-    // mu := tr( Dgc ) - norm( Dc )_F
+    // mu := tr( Dgc ) - norm( Dc )_F^2
     mu = la::asum(matrix_dgc_.diag().vec()) - la::dot(matrix_dc_.vec());
 
   }
@@ -197,7 +197,7 @@ void MCNLA_ALIAS::runImpl(
       la::mm(matrix_bc,   matrix_fc, matrix_bp);
       la::mm(matrix_bgc_, matrix_fgc, matrix_bp, 1.0, 1.0);
 
-      // ~phi := 1/2N * norm( Bp )_F
+      // ~phi := 1/2N * norm( B+ )_F^2
       phit = one_2n * la::dot(matrix_bp.vec());
 
       // Check condition
@@ -232,11 +232,11 @@ void MCNLA_ALIAS::runImpl(
     // Dg+ [in Dgc] := 1/N * B+' * Bg+ [in Bgc]
     la::mm(matrix_bp.t(), matrix_bgc_, matrix_dgc_, one_n);
 
-    // mu := tr( Dg+ [in Dgc] ) - norm( D+ [in Dc] )_F
+    // mu := tr( Dg+ [in Dgc] ) - norm( D+ [in Dc] )_F^2
     mu = la::asum(matrix_dgc_.diag().vec()) - la::dot(matrix_dc_.vec());
 
     // ================================================================================================================== //
-    // Check convergence: mu  < tol^2
+    // Check convergence: mu < tol^2
     if ( mu < tolerance_ * tolerance_ ) {
       ++iteration_;
       break;

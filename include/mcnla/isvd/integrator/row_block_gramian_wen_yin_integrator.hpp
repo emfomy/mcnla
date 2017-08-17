@@ -209,7 +209,7 @@ void MCNLA_ALIAS::runImpl(
       la::mm(matrix_bc,   matrix_fc, matrix_bp);
       la::mm(matrix_bgc_, matrix_fgc, matrix_bp, 1.0, 1.0);
 
-      // ~phi := 1/2N * norm( Bp )_F^2
+      // ~phi := 1/2N * norm( B+ )_F^2
       phit = one_2n * la::nrmf2(matrix_bp);
 
       // Check condition
@@ -248,7 +248,7 @@ void MCNLA_ALIAS::runImpl(
     mu = la::asum(matrix_dgc_.diag().vec()) - la::nrmf2(matrix_dp);
 
     // ================================================================================================================== //
-    // Check convergence: mu  < tol^2
+    // Check convergence: mu < tol^2
     if ( mu < tolerance_ * tolerance_ ) {
       ++iteration_;
       break;

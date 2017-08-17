@@ -13,7 +13,7 @@
 
 #ifdef _OPENMP
   #include <omp.h>
-#endif  // MCNLA_USE_MKL
+#endif  // _OPENMP
 
 #ifdef MCNLA_USE_MKL
   #include <mcnla/core/random/routine/gaussian_detail_mkl.hh>

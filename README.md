@@ -24,8 +24,7 @@ Monte Carlo Numerical Linear Algebra Package
 
 ### Optional
 * [Intel&reg; Math Kernel Library](https://software.intel.com/en-us/intel-mkl) (**Recommended** for better performance, used for BLAS & LAPACK).
-<!-- * [MAGMA](http://icl.cs.utk.edu/magma/) 2+ (Used for BLAS & LAPACK with GPU support). -->
-* [DOxygen](http://www.stack.nl/~dimitri/doxygen/) (Used for documentation).
+* [MAGMA](http://icl.cs.utk.edu/magma/) 2+ (Used for BLAS & LAPACK with GPU supportI* [DOxygen](http://www.stack.nl/~dimitri/doxygen/) (Used for documentation).
 * [Google Test Library](https://github.com/google/googletest) (Used for code testing).
 
 ## Installation
@@ -111,6 +110,7 @@ ccmake <path-to-source>
 
 ## Reference
 * [Ting-Li Chen, Dawei D. Chang, Su-Yun Huang, Hung Chen, Chienyao Lin, Weichung Wang, “Integrating Multiple Random Sketches for Singular Value Decomposition”](https://arxiv.org/abs/1608.08285)
+* [Mu Yang., “Highly Scalable Parallelism of Integrated Randomized Singular Value Decomposition with Big Data Applications”](http://doi.org/10.6342/NTU201702960)
 
 ## License
 @include LICENSE.md

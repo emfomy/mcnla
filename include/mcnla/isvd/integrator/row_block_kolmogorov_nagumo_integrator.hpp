@@ -174,7 +174,7 @@ void MCNLA_ALIAS::runImpl(
     la::sm(vector_ss_.diag().inv(), matrix_sinvz);
 
     // C := Z' * S * Z
-    la::mm(matrix_sz.t(), symatrix_cinv_.full(), matrix_c_);
+    la::mm(matrix_sz.t(), matrix_sz, matrix_c_);
 
     // inv(C) := Z' * inv(S) * Z
     la::rk(matrix_sinvz.t(), symatrix_cinv_);
