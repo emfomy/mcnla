@@ -61,7 +61,7 @@ _Derived& IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operato
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Indirection operator
+/// @brief  Indirection operator.
 ///
 /// @attention  Never call this method when the iterator is at the end.
 ///
@@ -71,7 +71,7 @@ _ElemRef IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Indirection operator
+/// @brief  Indirection operator.
 ///
 /// @attention  Never call this method when the iterator is at the end.
 ///
@@ -124,16 +124,6 @@ bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator<(
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief  Less-than or equal-to operator.
-///
-template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
-bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator<=(
-    const IteratorBase &other
-) const noexcept {
-  return !(*this > other);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  Greater-than or equal-to operator.
 ///
 template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
@@ -141,6 +131,16 @@ bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator>=(
     const IteratorBase &other
 ) const noexcept {
   return !(*this < other);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  Less-than or equal-to operator.
+///
+template <class _Derived, class _Container, typename _Elem, typename _ElemRef, typename _ElemPtr>
+bool IteratorBase<_Derived, _Container, _Elem, _ElemRef, _ElemPtr>::operator<=(
+    const IteratorBase &other
+) const noexcept {
+  return !(*this > other);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

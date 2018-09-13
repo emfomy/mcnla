@@ -28,7 +28,7 @@ namespace la {
 template <class _A, class _C, typename _Val>
 inline void rk(
     const MatrixWrapper<_A> &a,
-		      MatrixWrapper<_C> &c,
+          MatrixWrapper<_C> &c,
     const _Val alpha = 1,
     const _Val beta = 0
 ) noexcept;

@@ -28,8 +28,8 @@ namespace la {
 template <class _A, class _B, class _C, typename _Val>
 inline void r2k(
     const MatrixWrapper<_A> &a,
-		const MatrixWrapper<_B> &b,
-		      MatrixWrapper<_C> &c,
+    const MatrixWrapper<_B> &b,
+          MatrixWrapper<_C> &c,
     const _Val alpha = 1,
     const _Val beta = 0
 ) noexcept;
